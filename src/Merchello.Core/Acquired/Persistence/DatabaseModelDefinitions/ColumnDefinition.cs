@@ -6,7 +6,7 @@ namespace Merchello.Core.Acquired.Persistence.DatabaseModelDefinitions
 
     using Merchello.Core.Acquired.Persistence.DatabaseAnnotations;
 
-    internal class ColumnDefinition
+    public class ColumnDefinition
     {
         public virtual string Name { get; set; }
         //This type is typically used as part of a migration

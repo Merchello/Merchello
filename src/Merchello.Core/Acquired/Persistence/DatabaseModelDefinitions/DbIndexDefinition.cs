@@ -4,7 +4,7 @@ namespace Merchello.Core.Acquired.Persistence.DatabaseModelDefinitions
     /// <summary>
     /// Represents a database index definition retreived by querying the database
     /// </summary>
-    internal class DbIndexDefinition
+    public class DbIndexDefinition
     {
         public virtual string IndexName { get; set; }
         public virtual string TableName { get; set; }

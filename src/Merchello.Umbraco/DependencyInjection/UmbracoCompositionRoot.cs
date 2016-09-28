@@ -36,12 +36,12 @@
             container.Register<IMerchelloDatabase, UmbracoDatabaseAdapter>();
             container.Register<IDatabaseSchemaManager, DatabaseSchemaHelperAdapter>();
             container.RegisterSingleton<IPluginManager, PluginManagerAdapter>();
-            container.RegisterSingleton<ISqlSyntaxProvider, SqlSyntaxProviderAdapter>();
+            container.RegisterSingleton<ISqlSyntaxProviderAdapter, SqlSyntaxProviderAdapter>();
             container.RegisterSingleton<ICacheHelper, CacheHelperAdapter>();
             container.RegisterSingleton<IProfilingLogger, ProfilingLoggerAdapter>();
             container.RegisterSingleton<ILogger, LoggerAdapter>();
 
-            container.RegisterSingleton(factory => new CacheHelperAdapter(CacheHelper.CreateDisabledCacheHelper()), Core.Constants.Repository.DisabledCache);
+            container.RegisterSingleton<ICacheHelper>(factory => new CacheHelperAdapter(CacheHelper.CreateDisabledCacheHelper()), Core.Constants.Repository.DisabledCache);
         }
     }
 }

@@ -8,7 +8,7 @@
     /// Represents a query for building lambda expression translated SQL queries
     /// </summary>
     /// <typeparam name="T">The entity type</typeparam>
-    internal interface IQuery<T>
+    public interface IQuery<T>
     {
         /// <summary>
         /// Adds a where clause to the query

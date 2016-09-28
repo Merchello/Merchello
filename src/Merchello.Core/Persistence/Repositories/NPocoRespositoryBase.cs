@@ -40,7 +40,7 @@
         /// <param name="mappingResolver">
         /// The mapping resolver.
         /// </param>
-        protected NPocoRespositoryBase(IUnitOfWork work, ICacheHelper cache, ILogger logger, IMappingResolver mappingResolver)
+        protected NPocoRespositoryBase(IDatabaseUnitOfWork work, ICacheHelper cache, ILogger logger, IMappingResolver mappingResolver)
             : base(work, cache, logger)
         {
             QueryFactory = new QueryFactory(SqlSyntax, mappingResolver);
@@ -60,7 +60,7 @@
         /// <summary>
         /// Gets the repository's database sql syntax.
         /// </summary>
-        public ISqlSyntaxProvider SqlSyntax => UnitOfWork.Database.SqlSyntax;
+        public ISqlSyntaxProviderAdapter SqlSyntax => UnitOfWork.Database.SqlSyntax;
 
         /// <summary>
         /// Gets the repository's unit of work.

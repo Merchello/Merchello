@@ -7,6 +7,8 @@
     using Merchello.Core.DependencyInjection;
     using Merchello.Core.Persistence;
     using Merchello.Core.Persistence.Mappers;
+    using Merchello.Core.Persistence.Repositories;
+    using Merchello.Core.Persistence.UnitOfWork;
     using Merchello.Tests.Umbraco.TestHelpers.Base;
 
     using NUnit.Framework;
@@ -32,7 +34,15 @@
             var dbFactory = IoC.Container.GetInstance<IDatabaseFactory>();
             Assert.NotNull(dbFactory);
 
-            Console.WriteLine(dbFactory.CanConnect);
+            var uowProvider = IoC.Container.GetInstance<IDatabaseUnitOfWorkProvider>();
+            using (var uow = uowProvider.CreateUnitOfWork())
+            {
+                var repo = uow.CreateRepository<IMigrationStatusRepository>();
+                Assert.NotNull(repo);
+            }
+            
+
+            //var unitOfWork = IoC.Container.GetInstance<IUnitOfWork>();
 
             var manager = IoC.Container.GetInstance<IDatabaseSchemaManager>();
             manager.UninstallDatabaseSchema();

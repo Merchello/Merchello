@@ -23,7 +23,7 @@
         /// <param name="databaseType">
         /// The database type.
         /// </param>
-        public SqlContext(ISqlSyntaxProvider sqlSyntax, IPocoDataFactory pocoDataFactory, DatabaseType databaseType)
+        public SqlContext(ISqlSyntaxProviderAdapter sqlSyntax, IPocoDataFactory pocoDataFactory, DatabaseType databaseType)
         {
             if (sqlSyntax == null) throw new ArgumentNullException(nameof(sqlSyntax));
             if (pocoDataFactory == null) throw new ArgumentNullException(nameof(pocoDataFactory));
@@ -61,6 +61,6 @@
         /// <summary>
         /// Gets the sql syntax.
         /// </summary>
-        public ISqlSyntaxProvider SqlSyntax { get; }
+        public ISqlSyntaxProviderAdapter SqlSyntax { get; }
     }
 }

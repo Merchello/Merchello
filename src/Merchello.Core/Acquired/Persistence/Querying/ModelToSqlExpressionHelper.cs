@@ -11,14 +11,14 @@ namespace Merchello.Core.Acquired.Persistence.Querying
     {
         private readonly BaseMapper _mapper;
 
-        public ModelToSqlExpressionHelper(ISqlSyntaxProvider sqlSyntax, BaseMapper mapper)
+        public ModelToSqlExpressionHelper(ISqlSyntaxProviderAdapter sqlSyntax, BaseMapper mapper)
             : base(sqlSyntax)
         {
             if (mapper == null) throw new ArgumentNullException("mapper");
             this._mapper = mapper;
         }
 
-        public ModelToSqlExpressionHelper(ISqlSyntaxProvider sqlSyntax, IMappingResolver mappingResolver)
+        public ModelToSqlExpressionHelper(ISqlSyntaxProviderAdapter sqlSyntax, IMappingResolver mappingResolver)
             : base(sqlSyntax)
         {
             this._mapper = mappingResolver.ResolveMapperByType(typeof(T));

@@ -17,7 +17,7 @@ namespace Merchello.Core.Persistence.SqlSyntax
     /// This is an internal representation of Umbraco's interface with the same name.
     /// </remarks>
     /// <seealso cref="https://github.com/umbraco/Umbraco-CMS/blob/dev-v8/src/Umbraco.Core/Persistence/SqlSyntax/ISqlSyntaxProvider.cs"/>
-    internal interface ISqlSyntaxProvider
+    public interface ISqlSyntaxProviderAdapter
     {
         string EscapeString(string val);
 

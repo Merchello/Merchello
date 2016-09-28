@@ -10,7 +10,6 @@
         /// </summary>
         public static class DbProviderNames
         {
-
             /// <summary>
             /// Gets the MS Sql Server.
             /// </summary>

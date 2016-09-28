@@ -17,7 +17,7 @@ namespace Merchello.Core.Acquired.Persistence.Mappers
 
     internal abstract class BaseExpressionHelper<T> : BaseExpressionHelper
     {
-        protected BaseExpressionHelper(ISqlSyntaxProvider sqlSyntax)
+        protected BaseExpressionHelper(ISqlSyntaxProviderAdapter sqlSyntax)
             : base(sqlSyntax)
         {
         }
@@ -585,9 +585,9 @@ namespace Merchello.Core.Acquired.Persistence.Mappers
     /// </summary>
     internal abstract class BaseExpressionHelper
     {
-        public ISqlSyntaxProvider SqlSyntax { get; private set; }
+        public ISqlSyntaxProviderAdapter SqlSyntax { get; private set; }
 
-        protected BaseExpressionHelper(ISqlSyntaxProvider sqlSyntax)
+        protected BaseExpressionHelper(ISqlSyntaxProviderAdapter sqlSyntax)
         {
             this.SqlSyntax = sqlSyntax;
         }
@@ -694,7 +694,7 @@ namespace Merchello.Core.Acquired.Persistence.Mappers
         //               : value.ToString();
         //}
 
-        public virtual string EscapeParam(object paramValue, ISqlSyntaxProvider sqlSyntax)
+        public virtual string EscapeParam(object paramValue, ISqlSyntaxProviderAdapter sqlSyntax)
         {
             return paramValue == null
                 ? string.Empty

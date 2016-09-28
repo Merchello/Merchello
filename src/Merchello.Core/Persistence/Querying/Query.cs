@@ -19,7 +19,7 @@
         /// <summary>
         /// The sql syntax provider.
         /// </summary>
-        private readonly ISqlSyntaxProvider _sqlSyntax;
+        private readonly ISqlSyntaxProviderAdapter _sqlSyntax;
 
         /// <summary>
         /// The Merchello's mapping resolver.
@@ -40,7 +40,7 @@
         /// <param name="mappingResolver">
         /// The Merchello's mapping resolver.
         /// </param>
-        public Query(ISqlSyntaxProvider sqlSyntax, IMappingResolver mappingResolver)
+        public Query(ISqlSyntaxProviderAdapter sqlSyntax, IMappingResolver mappingResolver)
         {
             _sqlSyntax = sqlSyntax;
             _mappingResolver = mappingResolver;

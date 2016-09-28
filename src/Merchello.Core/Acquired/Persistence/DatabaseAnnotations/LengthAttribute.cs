@@ -8,7 +8,7 @@ namespace Merchello.Core.Acquired.Persistence.DatabaseAnnotations
     /// </summary>
     /// <remarks>Used to define the length of fixed sized columns - typically used for nvarchar</remarks>
     [AttributeUsage(AttributeTargets.Property)]
-    internal class LengthAttribute : Attribute
+    public class LengthAttribute : Attribute
     {
         public LengthAttribute(int length)
         {

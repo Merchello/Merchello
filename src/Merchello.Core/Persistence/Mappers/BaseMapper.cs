@@ -18,7 +18,7 @@
     /// for Merchello specific mappings.
     /// </remarks>
     /// <seealso cref="https://github.com/umbraco/Umbraco-CMS/blob/dev-v8/src/Umbraco.Core/Persistence/Mappers/BaseMapper.cs"/>
-    internal abstract class BaseMapper
+    public abstract class BaseMapper
     {
         /// <summary>
         /// Gets the thread safe dictionary of property info used.
@@ -43,7 +43,7 @@
         /// <exception cref="InvalidOperationException">
         /// Conditionally throws an exception if the mapping fails
         /// </exception>
-        internal string Map(ISqlSyntaxProvider sqlSyntax, string propertyName, bool throws = false)
+        internal string Map(ISqlSyntaxProviderAdapter sqlSyntax, string propertyName, bool throws = false)
         {
             DtoMapModel dtoTypeProperty;
 
@@ -126,7 +126,7 @@
         /// <returns>
         /// The Sql specific formatted column name.
         /// </returns>
-        internal virtual string GetColumnName(ISqlSyntaxProvider sqlSyntax, Type dtoType, PropertyInfo dtoProperty)
+        internal virtual string GetColumnName(ISqlSyntaxProviderAdapter sqlSyntax, Type dtoType, PropertyInfo dtoProperty)
         {
             var tableNameAttribute = dtoType.FirstAttribute<TableNameAttribute>();
             var tableName = tableNameAttribute.Value;

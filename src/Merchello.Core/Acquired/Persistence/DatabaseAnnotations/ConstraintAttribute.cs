@@ -7,7 +7,7 @@ namespace Merchello.Core.Acquired.Persistence.DatabaseAnnotations
     /// Attribute that represents a db constraint
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
-    internal class ConstraintAttribute : Attribute
+    public class ConstraintAttribute : Attribute
     {
         /// <summary>
         /// Gets or sets the name of the constraint

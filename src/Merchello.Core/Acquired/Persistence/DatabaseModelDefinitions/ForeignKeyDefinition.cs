@@ -4,7 +4,7 @@ namespace Merchello.Core.Acquired.Persistence.DatabaseModelDefinitions
     using System.Collections.Generic;
     using System.Data;
 
-    internal class ForeignKeyDefinition
+    public class ForeignKeyDefinition
     {
         public ForeignKeyDefinition()
         {

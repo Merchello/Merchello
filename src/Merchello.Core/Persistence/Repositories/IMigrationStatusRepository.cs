@@ -7,7 +7,7 @@
     /// <summary>
     /// Represents a migration status repository.
     /// </summary>
-    public interface IMigrationStatusRepository : IRepositoryWritable<IMigrationStatus>
+    public interface IMigrationStatusRepository : IRepository
     {
         /// <summary>
         /// Finds a <see cref="IMigrationStatus"/>.

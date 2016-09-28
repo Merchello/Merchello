@@ -7,6 +7,7 @@
     using Merchello.Core.Persistence.Mappers;
     using Merchello.Core.Persistence.Migrations.Initial;
     using Merchello.Core.Persistence.Querying;
+    using Merchello.Core.Persistence.Repositories;
     using Merchello.Core.Persistence.UnitOfWork;
     using Merchello.Core.Plugins;
 
@@ -15,11 +16,6 @@
     /// </summary>
     public sealed class RepositoryCompositionRoot : ICompositionRoot
     {
-        /// <summary>
-        /// Injection parameter for repositories to indicate disabled CacheHelper.
-        /// </summary>
-        public const string DisabledCache = "DisabledCache";
-
         /// <summary>
         /// Composes configuration services by adding services to the <paramref name="container"/>.
         /// </summary>
@@ -46,19 +42,21 @@
             // Query Factory
             container.Register<IQueryFactory, QueryFactory>();
 
+            // container.Register<IDatabaseUnitOfWork, NPocoUnitOfWork>();
+
             // resolve ctor dependency from GetInstance() runtimeArguments, if possible - 'factory' is
             // the container, 'info' describes the ctor argument, and 'args' contains the args that
             // were passed to GetInstance() - use first arg if it is the right type,
             //
             // for IDatabaseUnitOfWork
             container.RegisterConstructorDependency((factory, info, args) => args.Length > 0 ? args[0] as IDatabaseUnitOfWork : null);
-
             // for IUnitOfWork
             container.RegisterConstructorDependency((factory, info, args) => args.Length > 0 ? args[0] as IUnitOfWork : null);
 
             // register repositories
             // repos depend on various things, and a IDatabaseUnitOfWork (registered above)
             // some repositories have an annotated ctor parameter to pick the right cache helper
+            container.Register<IMigrationStatusRepository, MigrationStatusRepository>();
         }
     }
 }

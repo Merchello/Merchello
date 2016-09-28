@@ -22,6 +22,6 @@
         /// <summary>
         /// Gets the sql syntax.
         /// </summary>
-        ISqlSyntaxProvider SqlSyntax { get; }
+        ISqlSyntaxProviderAdapter SqlSyntax { get; }
     }
 }

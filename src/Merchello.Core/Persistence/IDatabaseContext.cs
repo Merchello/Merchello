@@ -34,6 +34,6 @@
         /// <summary>
         /// Gets the the sql syntax provider.
         /// </summary>
-        ISqlSyntaxProvider SqlSyntax { get; }
+        ISqlSyntaxProviderAdapter SqlSyntax { get; }
     }
 }

@@ -11,15 +11,9 @@
         internal static class Repository
         {
             /// <summary>
-            /// Gets the disabled cache.
+            /// Injection parameter for repositories to indicate disabled CacheHelper.
             /// </summary>
-            public static string DisabledCache
-            {
-                get
-                {
-                    return "DisabledCache";
-                }
-            }
+            public const string DisabledCache = "DisabledCache";
         }
     }
 }

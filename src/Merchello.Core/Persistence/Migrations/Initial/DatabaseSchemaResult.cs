@@ -18,17 +18,17 @@ namespace Merchello.Core.Persistence.Migrations.Initial
     internal class DatabaseSchemaResult
     {
         /// <summary>
-        /// The <see cref="ISqlSyntaxProvider"/>.
+        /// The <see cref="ISqlSyntaxProviderAdapter"/>.
         /// </summary>
-        private readonly ISqlSyntaxProvider _sqlSyntax;
+        private readonly ISqlSyntaxProviderAdapter _sqlSyntax;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DatabaseSchemaResult"/> class.
         /// </summary>
         /// <param name="sqlSyntax">
-        /// The <see cref="ISqlSyntaxProvider"/>.
+        /// The <see cref="ISqlSyntaxProviderAdapter"/>.
         /// </param>
-        public DatabaseSchemaResult(ISqlSyntaxProvider sqlSyntax)
+        public DatabaseSchemaResult(ISqlSyntaxProviderAdapter sqlSyntax)
         {
             this._sqlSyntax = sqlSyntax;
             this.Errors = new List<Tuple<string, string>>();

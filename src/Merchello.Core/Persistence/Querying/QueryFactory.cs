@@ -17,7 +17,7 @@
         /// <param name="mappingResolver">
         /// The mapping resolver.
         /// </param>
-        public QueryFactory(ISqlSyntaxProvider sqlSyntax, IMappingResolver mappingResolver)
+        public QueryFactory(ISqlSyntaxProviderAdapter sqlSyntax, IMappingResolver mappingResolver)
         {
             SqlSyntax = sqlSyntax;
             MappingResolver = mappingResolver;
@@ -31,7 +31,7 @@
         /// <summary>
         /// Gets the sql syntax provider.
         /// </summary>
-        public ISqlSyntaxProvider SqlSyntax { get; }
+        public ISqlSyntaxProviderAdapter SqlSyntax { get; }
 
         /// <summary>
         /// Creates a lambda expression query.

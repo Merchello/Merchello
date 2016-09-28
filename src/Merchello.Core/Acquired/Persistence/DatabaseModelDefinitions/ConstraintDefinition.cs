@@ -3,7 +3,7 @@ namespace Merchello.Core.Acquired.Persistence.DatabaseModelDefinitions
 {
     using System.Collections.Generic;
 
-    internal class ConstraintDefinition
+    public class ConstraintDefinition
     {
         public ConstraintDefinition(ConstraintType type)
         {

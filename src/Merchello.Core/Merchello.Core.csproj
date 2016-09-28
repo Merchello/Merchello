@@ -83,6 +83,9 @@
     <Compile Include="Constants.InvoiceStatus.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
+    <Compile Include="Constants.Locks.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
     <Compile Include="Constants.Migrations.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
@@ -168,6 +171,7 @@
     <Compile Include="Models\IDeepCloneable.cs" />
     <Compile Include="Models\Migrations\IMigrationStatus.cs" />
     <Compile Include="Models\Migrations\MigrationStatus.cs" />
+    <Compile Include="Models\Rdbms\LockDto.cs" />
     <Compile Include="Models\Rdbms\MigrationStatusDto.cs" />
     <Compile Include="Persistence\DatabaseSchemaManagerBase.cs" />
     <Compile Include="Persistence\Factories\IEntityFactory.cs" />
@@ -230,7 +234,7 @@
     <Compile Include="Acquired\Persistence\Querying\TextColumnType.cs" />
     <Compile Include="Persistence\Querying\Query.cs" />
     <Compile Include="Persistence\Querying\QueryFactory.cs" />
-    <Compile Include="Persistence\SqlSyntax\ISqlSyntaxProvider.cs" />
+    <Compile Include="Persistence\SqlSyntax\ISqlSyntaxProviderAdapter.cs" />
     <Compile Include="Acquired\Plugins\TypeFinder.cs" />
     <Compile Include="Acquired\Plugins\TypeHelper.cs" />
     <Compile Include="Acquired\Threading\MonitorLock.cs" />

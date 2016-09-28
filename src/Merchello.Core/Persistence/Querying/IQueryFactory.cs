@@ -6,7 +6,7 @@
     /// <summary>
     /// Represents a factory responsible for translating entity queries.
     /// </summary>
-    internal interface IQueryFactory : IExposeSqlSyntax
+    public interface IQueryFactory : IExposeSqlSyntax
     {
         /// <summary>
         /// Gets the resolver for mapping properties between entities and DTO (POCO) classes.

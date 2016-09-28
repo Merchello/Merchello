@@ -47,7 +47,7 @@
         /// <param name="mappingResolver">
         /// The mapping resolver.
         /// </param>
-        protected NPocoEntityRepositoryBase(IUnitOfWork work, ICacheHelper cache, ILogger logger, IMappingResolver mappingResolver)
+        protected NPocoEntityRepositoryBase(IDatabaseUnitOfWork work, ICacheHelper cache, ILogger logger, IMappingResolver mappingResolver)
             : base(work, cache, logger, mappingResolver)
         {
         }

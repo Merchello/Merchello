@@ -5,7 +5,7 @@ namespace Merchello.Core.Persistence.Mappers
     /// <summary>
     /// Represents a resolver for mapping properties between entities and DTO (POCO) classes.
     /// </summary>
-    internal interface IMappingResolver
+    public interface IMappingResolver
     {
         /// <summary>
         /// Return a mapper by type

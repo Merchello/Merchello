@@ -18,7 +18,7 @@
         /// <summary>
         /// The adapted SqlSyntaxProvider.
         /// </summary>
-        private readonly Lazy<ISqlSyntaxProvider> _sqlSyntax;
+        private readonly Lazy<ISqlSyntaxProviderAdapter> _sqlSyntax;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UmbracoDatabaseAdapter"/> class.
@@ -35,7 +35,7 @@
 
             this._db = database;
 
-            this._sqlSyntax = new Lazy<ISqlSyntaxProvider>(() => new SqlSyntaxProviderAdapter(this._db.SqlSyntax));
+            this._sqlSyntax = new Lazy<ISqlSyntaxProviderAdapter>(() => new SqlSyntaxProviderAdapter(this._db.SqlSyntax));
         }
 
         /// <inheritdoc/>
@@ -48,7 +48,7 @@
         }
 
         /// <inheritdoc/>
-        public ISqlSyntaxProvider SqlSyntax
+        public ISqlSyntaxProviderAdapter SqlSyntax
         {
             get
             {

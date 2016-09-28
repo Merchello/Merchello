@@ -7,7 +7,7 @@ namespace Merchello.Core.Acquired.Persistence.DatabaseAnnotations
     /// Attribute that represents a Foreign Key reference
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
-    internal class ForeignKeyAttribute : ReferencesAttribute
+    public class ForeignKeyAttribute : ReferencesAttribute
     {
         public ForeignKeyAttribute(Type type) : base(type)
         {

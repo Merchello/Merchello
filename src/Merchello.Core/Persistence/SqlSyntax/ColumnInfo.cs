@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents column information.
     /// </summary>
-    internal class ColumnInfo
+    public class ColumnInfo
     {
         /// <summary>
         /// Gets or sets the table name.

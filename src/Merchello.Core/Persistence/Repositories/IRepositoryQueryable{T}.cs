@@ -10,7 +10,7 @@
     /// <typeparam name="TEntity">
     /// The type of entity.
     /// </typeparam>
-    internal interface IRepositoryQueryable<TEntity>
+    public interface IRepositoryQueryable<TEntity>
     {
         /// <summary>
         /// Gets the query instance

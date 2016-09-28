@@ -7,7 +7,7 @@ namespace Merchello.Core.Acquired.Persistence.DatabaseAnnotations
     /// Attribute that represents a reference between two tables/DTOs
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property)]
-    internal class ReferencesAttribute : Attribute
+    public class ReferencesAttribute : Attribute
     {
         public ReferencesAttribute(Type type)
         {

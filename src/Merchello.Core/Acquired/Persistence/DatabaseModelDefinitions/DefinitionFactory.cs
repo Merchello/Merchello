@@ -12,7 +12,7 @@ namespace Merchello.Core.Acquired.Persistence.DatabaseModelDefinitions
 
     internal static class DefinitionFactory
     {
-        public static TableDefinition GetTableDefinition(Type modelType, ISqlSyntaxProvider sqlSyntax)
+        public static TableDefinition GetTableDefinition(Type modelType, ISqlSyntaxProviderAdapter sqlSyntax)
         {
             //Looks for NPoco's TableNameAtribute for the name of the table
             //If no attribute is set we use the name of the Type as the default convention
@@ -61,7 +61,7 @@ namespace Merchello.Core.Acquired.Persistence.DatabaseModelDefinitions
             return tableDefinition;
         }
 
-        public static ColumnDefinition GetColumnDefinition(Type modelType, PropertyInfo propertyInfo, string columnName, string tableName, ISqlSyntaxProvider sqlSyntax)
+        public static ColumnDefinition GetColumnDefinition(Type modelType, PropertyInfo propertyInfo, string columnName, string tableName, ISqlSyntaxProviderAdapter sqlSyntax)
         {
             var definition = new ColumnDefinition{ Name = columnName, TableName = tableName, ModificationType = ModificationType.Create };
 

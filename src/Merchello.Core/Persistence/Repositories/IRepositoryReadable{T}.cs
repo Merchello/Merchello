@@ -11,7 +11,7 @@ namespace Merchello.Core.Persistence.Repositories
     /// <typeparam name="TEntity">
     /// The type of the entity
     /// </typeparam>
-    internal interface IRepositoryReadable<out TEntity> : IRepository
+    public interface IRepositoryReadable<out TEntity>
         where TEntity : class, IEntity
     {
         /// <summary>

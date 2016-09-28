@@ -2,9 +2,15 @@ namespace Merchello.Core.Persistence.Repositories
 {
     using System;
 
+    using LightInject;
+
+    using Merchello.Core.Acquired.Persistence;
     using Merchello.Core.Cache;
+    using Merchello.Core.DependencyInjection;
     using Merchello.Core.Logging;
     using Merchello.Core.Models.Migrations;
+    using Merchello.Core.Models.Rdbms;
+    using Merchello.Core.Persistence.Factories;
     using Merchello.Core.Persistence.Mappers;
     using Merchello.Core.Persistence.UnitOfWork;
 
@@ -28,16 +34,25 @@ namespace Merchello.Core.Persistence.Repositories
         /// <param name="mappingResolver">
         /// The mapping resolver.
         /// </param>
-        public MigrationStatusRepository(IUnitOfWork work, ICacheHelper cache, ILogger logger, IMappingResolver mappingResolver)
+        public MigrationStatusRepository(IDatabaseUnitOfWork work, [Inject(Constants.Repository.DisabledCache)] ICacheHelper cache, ILogger logger, IMappingResolver mappingResolver)
             : base(work, cache, logger, mappingResolver)
         {
         }
 
-
         /// <inheritdoc/>
         public IMigrationStatus FindStatus(string migrationName, SemVersion version)
         {
-            throw new NotImplementedException();
+            var versionString = version.ToString();
+
+            var sql = Sql().SelectAll()
+                .From<MigrationStatusDto>()
+                .Where<MigrationStatusDto>(x => x.Name.InvariantEquals(migrationName) && x.Version == versionString);
+
+            var result = Database.FirstOrDefault<MigrationStatusDto>(sql);
+
+            var factory = new MigrationStatusFactory();
+
+            return result == null ? null : factory.BuildEntity(result);
         }
     }
 }

@@ -5,7 +5,7 @@ namespace Merchello.Core.Acquired.Persistence.DatabaseModelDefinitions
 
     using Merchello.Core.Acquired.Persistence.DatabaseAnnotations;
 
-    internal class IndexDefinition
+    public class IndexDefinition
     {
         public IndexDefinition()
         {

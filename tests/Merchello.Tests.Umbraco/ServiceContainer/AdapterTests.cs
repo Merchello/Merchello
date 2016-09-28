@@ -45,7 +45,7 @@
         [Test]
         public void ISqlSyntaxProvider()
         {
-            Assert.NotNull(IoC.Container.GetInstance<ISqlSyntaxProvider>());
+            Assert.NotNull(IoC.Container.GetInstance<ISqlSyntaxProviderAdapter>());
         }
 
         [Test]

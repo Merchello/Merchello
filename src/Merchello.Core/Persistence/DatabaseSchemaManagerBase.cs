@@ -32,7 +32,7 @@ namespace Merchello.Core.Persistence
         /// <summary>
         /// The SQL syntax provider for translating SQL specific to the database.
         /// </summary>
-        private readonly ISqlSyntaxProvider _sqlSyntax;
+        private readonly ISqlSyntaxProviderAdapter _sqlSyntax;
 
         /// <summary>
         /// A class for adding the default data.
@@ -113,15 +113,6 @@ namespace Merchello.Core.Persistence
                         this._logger.Info<Database>($"Primary Key sql {createdPk}:\n {createPrimaryKeySql}");
                     }
 
-                    // Turn on identity insert if db provider is not mysql
-                    if (this._sqlSyntax.SupportsIdentityInsert() && tableDefinition.Columns.Any(x => x.IsIdentity))
-                        this._db.Database.Execute(new Sql($"SET IDENTITY_INSERT {this._sqlSyntax.GetQuotedTableName(tableName)} ON "));
-
-                    // Turn off identity insert if db provider is not mysql
-                    if (this._sqlSyntax.SupportsIdentityInsert() && tableDefinition.Columns.Any(x => x.IsIdentity))
-                        this._db.Database.Execute(new Sql($"SET IDENTITY_INSERT {this._sqlSyntax.GetQuotedTableName(tableName)} OFF;"));
-
-
                     // Loop through index statements and execute sql
                     foreach (var sql in indexSql)
                     {
@@ -138,8 +129,6 @@ namespace Merchello.Core.Persistence
 
                     transaction.Complete();
                 }
-
-                //this._baseDataCreation.Value.InitializeBaseData(tableName);
             }
 
             this._logger.Info<Database>($"New table '{tableName}' was created");
@@ -187,7 +176,7 @@ namespace Merchello.Core.Persistence
         /// </summary>
         private void Initialize()
         {
-            _baseDataCreation = new Lazy<BaseDataCreation>(() => new BaseDataCreation(_db.Database, _logger));
+            _baseDataCreation = new Lazy<BaseDataCreation>(() => new BaseDataCreation(_db, _logger));
         }
     }
 }
