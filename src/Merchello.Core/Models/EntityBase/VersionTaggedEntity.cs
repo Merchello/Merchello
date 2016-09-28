@@ -12,10 +12,10 @@
     public abstract class VersionTaggedEntity : Entity, IVersionTaggedEntity
     {
         /// <summary>
-        /// The version key selector.
+        /// The property selectors.
         /// </summary>
-        private static readonly PropertyInfo VersionKeySelector = ExpressionHelper.GetPropertyInfo<VersionTaggedEntity, Guid>(x => x.VersionKey);
-        
+        private static readonly Lazy<PropertySelectors> _ps = new Lazy<PropertySelectors>();
+
         /// <summary>
         /// The version key.
         /// </summary>
@@ -34,15 +34,19 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _versionKey = value;
-                    return _versionKey;
-                }, 
-                _versionKey, 
-                VersionKeySelector);
+                SetPropertyValueAndDetectChanges(value, ref _versionKey, _ps.Value.VersionKeySelector);
             }
+        }
+
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private class PropertySelectors
+        {
+            /// <summary>
+            /// The version key selector.
+            /// </summary>
+            public readonly PropertyInfo VersionKeySelector = ExpressionHelper.GetPropertyInfo<VersionTaggedEntity, Guid>(x => x.VersionKey);
         }
     }
 }

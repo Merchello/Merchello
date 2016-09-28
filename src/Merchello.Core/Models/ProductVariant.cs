@@ -8,9 +8,6 @@
     using System.Runtime.Serialization;
 
     using Merchello.Core.Models.DetachedContent;
-    using Merchello.Core.Models.Interfaces;
-
-    using Umbraco.Core;
 
     /// <summary>
     /// Defines a product variant
@@ -20,20 +17,9 @@
     internal class ProductVariant : ProductBase, IProductVariant
     {
         /// <summary>
-        /// The product key selector.
+        /// The property selectors.
         /// </summary>
-        private static readonly PropertyInfo ProductKeySelector = ExpressionHelper.GetPropertyInfo<ProductVariant, Guid>(x => x.ProductKey);
-
-        /// <summary>
-        /// The master selector.
-        /// </summary>
-        private static readonly PropertyInfo MasterSelector = ExpressionHelper.GetPropertyInfo<ProductVariant, bool>(x => x.Master);
-
-        /// <summary>
-        /// The attributes changed selector.
-        /// </summary>
-        private static readonly PropertyInfo AttributesChangedSelector = ExpressionHelper.GetPropertyInfo<ProductVariant, ProductAttributeCollection>(x => x.ProductAttributes);
-        
+        private static readonly Lazy<PropertySelectors> _ps = new Lazy<PropertySelectors>();
 
         /// <summary>
         /// The product key.
@@ -194,8 +180,8 @@
         internal ProductVariant(Guid productKey, ProductAttributeCollection attributes, CatalogInventoryCollection catalogInventoryCollection, DetachedContentCollection<IProductVariantDetachedContent> detachedContents,  bool master, string name, string sku, decimal price)
             : base(name, sku, price, catalogInventoryCollection, detachedContents)
         {
-            Mandate.ParameterNotNull(attributes, "attributes");
-            Mandate.ParameterNotNull(catalogInventoryCollection, "warehouseInventory");
+            Ensure.ParameterNotNull(attributes, "attributes");
+            Ensure.ParameterNotNull(catalogInventoryCollection, "warehouseInventory");
            
             _productKey = productKey;
             _attibutes = attributes;
@@ -204,9 +190,7 @@
 
         #endregion
 
-        /// <summary>
-        /// Gets or sets the key for the defining product
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public Guid ProductKey
         {
@@ -217,20 +201,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _productKey = value;
-                    return _productKey;
-                }, 
-                _productKey, 
-                ProductKeySelector);
+                SetPropertyValueAndDetectChanges(value, ref _productKey, _ps.Value.ProductKeySelector);
             }
         }
 
-        /// <summary>
-        /// Gets the total inventory count.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public int TotalInventoryCount
         {
@@ -240,18 +215,14 @@
             }
         }
 
-        /// <summary>
-        /// Gets the collection of attributes that makes this variant different from other variants of the same product
-        /// </summary>
+        /// <inheritdoc/>
         [IgnoreDataMember]
         public IEnumerable<IProductAttribute> Attributes 
         {
             get { return _attibutes; }            
         }
 
-        /// <summary>
-        /// Gets or sets the product attributes.
-        /// </summary>
+        /// <inheritdoc/>
         [IgnoreDataMember]
         internal ProductAttributeCollection ProductAttributes
         {
@@ -267,9 +238,7 @@
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether or not this variant is the "master" variant for the product.  All products (even products without options) have a master variant.
-        /// </summary>
+        /// <inheritdoc/>
         [IgnoreDataMember]
         internal bool Master
         {
@@ -280,20 +249,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _master = value;
-                    return _master;
-                }, 
-                _master, 
-                MasterSelector);
+                SetPropertyValueAndDetectChanges(value, ref _master, _ps.Value.MasterSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the examine id.
-        /// </summary>
+        /// <inheritdoc/>
         [IgnoreDataMember]
         internal int ExamineId 
         {
@@ -303,7 +263,7 @@
 
 
         /// <summary>
-        /// The product attributes changed.
+        /// Handles the product attributes collection changed.
         /// </summary>
         /// <param name="sender">
         /// The sender.
@@ -313,7 +273,28 @@
         /// </param>
         private void ProductAttributesChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            OnPropertyChanged(AttributesChangedSelector);
+            OnPropertyChanged(_ps.Value.AttributesChangedSelector);
+        }
+
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private class PropertySelectors
+        {
+            /// <summary>
+            /// The product key selector.
+            /// </summary>
+            public readonly PropertyInfo ProductKeySelector = ExpressionHelper.GetPropertyInfo<ProductVariant, Guid>(x => x.ProductKey);
+
+            /// <summary>
+            /// The master selector.
+            /// </summary>
+            public readonly PropertyInfo MasterSelector = ExpressionHelper.GetPropertyInfo<ProductVariant, bool>(x => x.Master);
+
+            /// <summary>
+            /// The attributes changed selector.
+            /// </summary>
+            public readonly PropertyInfo AttributesChangedSelector = ExpressionHelper.GetPropertyInfo<ProductVariant, ProductAttributeCollection>(x => x.ProductAttributes);
         }
     }
 }

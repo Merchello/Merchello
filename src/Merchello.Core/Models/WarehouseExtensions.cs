@@ -34,11 +34,15 @@
         /// <summary>
         /// Helper extension that returns the first <see cref="IWarehouseCatalog"/> for the warehouse
         /// </summary>
+        /// <param name="warehouse">
+        /// The warehouse.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IWarehouseCatalog"/>.
+        /// </returns>
         internal static IWarehouseCatalog DefaultCatalog(this IWarehouse warehouse)
         {
             return ((Warehouse) warehouse).WarehouseCatalogs.FirstOrDefault();
         }
-
-
     }
 }

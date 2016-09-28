@@ -549,7 +549,8 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(value, ref _notes, _ps.Value.NotesSelector);
+                // REFACTOR Should be a notify collection
+                _notes = value;
             }
         }
 
@@ -707,11 +708,6 @@
             /// The orders changed selector.
             /// </summary>
             public readonly PropertyInfo OrdersChangedSelector = ExpressionHelper.GetPropertyInfo<Invoice, OrderCollection>(x => x.Orders);
-
-            /// <summary>
-            /// The notes selector.
-            /// </summary>
-            public readonly PropertyInfo NotesSelector = ExpressionHelper.GetPropertyInfo<Invoice, IEnumerable<INote>>(x => x.Notes);
         }
     }
 }

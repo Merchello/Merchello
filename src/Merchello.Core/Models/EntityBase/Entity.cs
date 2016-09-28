@@ -8,9 +8,6 @@
     using System.Reflection;
     using System.Runtime.Serialization;
 
-    using Merchello.Core.Acquired;
-    using Merchello.Core.Acquired.Plugins;
-
     /// <summary>
     /// Defines a Merchello entity.
     /// </summary>
@@ -18,12 +15,12 @@
     [DataContract(IsReference = true)]
     public abstract class Entity : IEntity
     {
-        #region Fields
-
         /// <summary>
         /// The property selectors.
         /// </summary>
         private static readonly Lazy<PropertySelectors> _ps = new Lazy<PropertySelectors>();
+
+        #region Fields
 
         /// <summary>
         /// Tracks the properties that have changed
@@ -127,6 +124,7 @@
             set
             {
                 SetPropertyValueAndDetectChanges(value, ref _key, _ps.Value.KeySelector);
+                _hasIdentity = true;
             }
         }
 

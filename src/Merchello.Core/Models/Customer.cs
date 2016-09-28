@@ -172,7 +172,8 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(value, ref _notes, _ps.Value.NotesSelector);
+                // REFACTOR Should be a notify collection
+                _notes = value;
             }
         }
 
@@ -187,7 +188,8 @@
 
             internal set
             {
-                SetPropertyValueAndDetectChanges(value, ref _addresses, _ps.Value.AddressSelector);
+                // REFACTOR Should be a notify collection
+                _addresses = value;
             }
         }
 
@@ -230,16 +232,6 @@
             /// The tax exempt selector.
             /// </summary>
             public readonly PropertyInfo TaxExemptSelector = ExpressionHelper.GetPropertyInfo<Customer, bool>(x => x.TaxExempt);
-
-            /// <summary>
-            /// The notes selector.
-            /// </summary>
-            public readonly PropertyInfo NotesSelector = ExpressionHelper.GetPropertyInfo<Customer, IEnumerable<INote>>(x => x.Notes);
-
-            /// <summary>
-            /// The address selector.
-            /// </summary>
-            public readonly PropertyInfo AddressSelector = ExpressionHelper.GetPropertyInfo<Customer, IEnumerable<ICustomerAddress>>(x => x.Addresses);
 
         }
     }

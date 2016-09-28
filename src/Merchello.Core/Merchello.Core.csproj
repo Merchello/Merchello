@@ -549,7 +549,6 @@
     <Compile Include="Models\OfferSettings.cs" />
     <Compile Include="Models\DetachedContent\ProductVariantDetachedContent.cs" />
     <Compile Include="Models\ProductOptionExtensions.cs" />
-    <Compile Include="Models\PropertyDataCollection.cs" />
     <Compile Include="Models\Rdbms\Customer2EntityCollectionDto.cs" />
     <Compile Include="Models\Rdbms\DistinctCurrencyCodeDto.cs" />
     <Compile Include="Models\Rdbms\DtoExtensions.cs" />

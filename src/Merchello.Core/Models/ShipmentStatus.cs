@@ -4,7 +4,7 @@
     using System.Runtime.Serialization;
 
     /// <summary>
-    /// The shipment status.
+    /// Represents a shipment status.
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]

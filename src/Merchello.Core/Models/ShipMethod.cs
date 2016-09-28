@@ -1,144 +1,187 @@
-﻿using System;
-using System.Collections.Specialized;
-using System.Reflection;
-using System.Runtime.Serialization;
-using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Models.Interfaces;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Collections.Specialized;
+    using System.Reflection;
+    using System.Runtime.Serialization;
+
+    using Merchello.Core.Models.EntityBase;
+    using Merchello.Core.Models.Interfaces;
+
     using Umbraco.Core;
 
+    /// <inheritdoc/>
     [Serializable]
     [DataContract(IsReference = true)]
     internal class ShipMethod : Entity, IShipMethod
     {
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private static readonly Lazy<PropertySelectors> _ps = new Lazy<PropertySelectors>();
+
+        /// <summary>
+        /// The name.
+        /// </summary>
         private string _name;
+
+        /// <summary>
+        /// The provider key.
+        /// </summary>
         private readonly Guid _providerKey;
+
+        /// <summary>
+        /// The ship country key.
+        /// </summary>
         private readonly Guid _shipCountryKey;
+
+        /// <summary>
+        /// The surcharge.
+        /// </summary>
         private decimal _surcharge;
+
+        /// <summary>
+        /// The service code.
+        /// </summary>
         private string _serviceCode;
+
+        /// <summary>
+        /// The taxable.
+        /// </summary>
         private bool _taxable;
+
+        /// <summary>
+        /// The ship provinces.
+        /// </summary>
         private ProvinceCollection<IShipProvince> _shipProvinces;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipMethod"/> class.
+        /// </summary>
+        /// <param name="providerKey">
+        /// The provider key.
+        /// </param>
+        /// <param name="shipCountryKey">
+        /// The ship country key.
+        /// </param>
         internal ShipMethod(Guid providerKey, Guid shipCountryKey)
-            : this(providerKey,shipCountryKey, new ProvinceCollection<IShipProvince>())
-        {}
+            : this(providerKey, shipCountryKey, new ProvinceCollection<IShipProvince>())
+        {
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipMethod"/> class.
+        /// </summary>
+        /// <param name="providerKey">
+        /// The provider key.
+        /// </param>
+        /// <param name="shipCountryKey">
+        /// The ship country key.
+        /// </param>
+        /// <param name="shipProvinces">
+        /// The ship provinces.
+        /// </param>
         internal ShipMethod(Guid providerKey, Guid shipCountryKey, ProvinceCollection<IShipProvince> shipProvinces)
         {
-            Mandate.ParameterCondition(Guid.Empty != providerKey, "providerKey");
-            Mandate.ParameterCondition(Guid.Empty != shipCountryKey, "shipCountryKey");
-            Mandate.ParameterNotNull(shipProvinces, "provinces");
+            Ensure.ParameterCondition(Guid.Empty != providerKey, "providerKey");
+            Ensure.ParameterCondition(Guid.Empty != shipCountryKey, "shipCountryKey");
+            Ensure.ParameterNotNull(shipProvinces, "provinces");
 
             _providerKey = providerKey;
             _shipCountryKey = shipCountryKey;
             _shipProvinces = shipProvinces;
         }
-
-        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<ShipMethod, string>(x => x.Name); 
-        private static readonly PropertyInfo SurchargeSelector = ExpressionHelper.GetPropertyInfo<ShipMethod, decimal>(x => x.Surcharge);  
-        private static readonly PropertyInfo ServiceCodeSelector = ExpressionHelper.GetPropertyInfo<ShipMethod, string>(x => x.ServiceCode);
-        private static readonly PropertyInfo TaxableSelector = ExpressionHelper.GetPropertyInfo<ShipMethod, bool>(x => x.Taxable);
-        private static readonly PropertyInfo ProvincesChangedSelector = ExpressionHelper.GetPropertyInfo<ShipMethod, ProvinceCollection<IShipProvince>>(x => x.Provinces);
-
-        private void ShipProvincesChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            OnPropertyChanged(ProvincesChangedSelector);
-        }
         
-        /// <summary>
-        /// The name associated with the ShipMethod
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Name
         {
-            get { return _name; }
-                set 
-                { 
-                    SetPropertyValueAndDetectChanges(o =>
-                    {
-                        _name = value;
-                        return _name;
-                    }, _name, NameSelector); 
-                }
+            get
+            {
+                return _name;
+            }
+
+            set 
+            { 
+                SetPropertyValueAndDetectChanges(value, ref _name, _ps.Value.NameSelector); 
+            }
         }
 
 
-        /// <summary>
-        /// The provider key associated with the ship method
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public Guid ProviderKey
         {
-            get { return _providerKey; }           
+            get
+            {
+                return _providerKey;
+            }           
         }
 
-        /// <summary>
-        /// The key associated with the ship country for the Ship Method
-        /// </summary>
+        /// <inheritdoc/>
+        [DataMember]
         public Guid ShipCountryKey
         {
-            get { return _shipCountryKey; }           
+            get
+            {
+                return _shipCountryKey;
+            }           
         }
 
-        /// <summary>
-        /// The surcharge associated with the ShipMethod
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public decimal Surcharge
         {
-            get { return _surcharge; }
-            set 
-            { 
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _surcharge = value;
-                    return _surcharge;
-                }, _surcharge, SurchargeSelector); 
+            get
+            {
+                return _surcharge;
             }
-        }
-    
-        /// <summary>
-        /// The serviceCode associated with the ShipMethod
-        /// </summary>
-        [DataMember]
-        public string ServiceCode
-        {
-            get { return _serviceCode; }
+
             set 
             { 
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _serviceCode = value;
-                    return _serviceCode;
-                }, _serviceCode, ServiceCodeSelector); 
+                SetPropertyValueAndDetectChanges(value, ref _surcharge, _ps.Value.SurchargeSelector); 
             }
         }
 
-        /// <summary>
-        /// True/false indicating whether or not this shipmethod is taxable
-        /// </summary>
+        /// <inheritdoc/>
+        [DataMember]
+        public string ServiceCode
+        {
+            get
+            {
+                return _serviceCode;
+            }
+
+            set 
+            { 
+                SetPropertyValueAndDetectChanges(value, ref _serviceCode, _ps.Value.ServiceCodeSelector); 
+            }
+        }
+
+        /// <inheritdoc/>
         [DataMember]
         public bool Taxable
         {
-            get { return _taxable; }
+            get
+            {
+                return _taxable;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _taxable = value;
-                    return _taxable;
-                }, _taxable, TaxableSelector);
+                SetPropertyValueAndDetectChanges(value, ref _taxable, _ps.Value.TaxableSelector);
             }
         }
-        /// <summary>
-        /// A collection of provinces 
-        /// </summary>
+
+        /// <inheritdoc/>
         [DataMember]
         public ProvinceCollection<IShipProvince> Provinces
         {
-            get { return _shipProvinces; }
+            get
+            {
+                return _shipProvinces;
+            }
+
             set
             {
                 _shipProvinces = value;
@@ -146,6 +189,49 @@ namespace Merchello.Core.Models
             }
         }
 
-                    
+        /// <summary>
+        /// Handles the ship provinces changed.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void ShipProvincesChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(_ps.Value.ProvincesChangedSelector);
+        }
+
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private class PropertySelectors
+        {
+            /// <summary>
+            /// The name selector.
+            /// </summary>
+            public readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<ShipMethod, string>(x => x.Name);
+
+            /// <summary>
+            /// The surcharge selector.
+            /// </summary>
+            public readonly PropertyInfo SurchargeSelector = ExpressionHelper.GetPropertyInfo<ShipMethod, decimal>(x => x.Surcharge);
+
+            /// <summary>
+            /// The service code selector.
+            /// </summary>
+            public readonly PropertyInfo ServiceCodeSelector = ExpressionHelper.GetPropertyInfo<ShipMethod, string>(x => x.ServiceCode);
+
+            /// <summary>
+            /// The taxable selector.
+            /// </summary>
+            public readonly PropertyInfo TaxableSelector = ExpressionHelper.GetPropertyInfo<ShipMethod, bool>(x => x.Taxable);
+
+            /// <summary>
+            /// The provinces changed selector.
+            /// </summary>
+            public readonly PropertyInfo ProvincesChangedSelector = ExpressionHelper.GetPropertyInfo<ShipMethod, ProvinceCollection<IShipProvince>>(x => x.Provinces);
+        }
     }
 }

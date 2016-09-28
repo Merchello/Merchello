@@ -6,29 +6,15 @@
 
     using Merchello.Core.Models.EntityBase;
 
-    using Umbraco.Core;
-
-    /// <summary>
-    /// The product variant detached content.
-    /// </summary>
+    /// <inheritdoc/>
     [Serializable]
     [DataContract(IsReference = true)]
     public class ProductVariantDetachedContent : Entity, IProductVariantDetachedContent
     {
         /// <summary>
-        /// The template id selector.
+        /// The property selectors.
         /// </summary>
-        private static readonly PropertyInfo TemplateIdSelector = ExpressionHelper.GetPropertyInfo<ProductVariantDetachedContent, int?>(x => x.TemplateId);
-
-        /// <summary>
-        /// The slug selector.
-        /// </summary>
-        private static readonly PropertyInfo SlugSelector = ExpressionHelper.GetPropertyInfo<ProductVariantDetachedContent, string>(x => x.Slug);
-
-        /// <summary>
-        /// The can be rendered selector.
-        /// </summary>
-        private static readonly PropertyInfo CanBeRenderedSelector = ExpressionHelper.GetPropertyInfo<ProductVariantDetachedContent, bool>(x => x.CanBeRendered);
+        private static readonly Lazy<PropertySelectors> _ps = new Lazy<PropertySelectors>();
 
         /// <summary>
         /// The template id.
@@ -83,9 +69,9 @@
             string cultureName,
             DetachedDataValuesCollection detachedDataValuesCollection)
         {
-            Mandate.ParameterCondition(!Guid.Empty.Equals(productVariantKey), "productVariantKey");
-            Mandate.ParameterNotNull(detachedContentType, "detachedContentType");
-            Mandate.ParameterNotNullOrEmpty(cultureName, "cultureName");
+            Ensure.ParameterCondition(!Guid.Empty.Equals(productVariantKey), "productVariantKey");
+            Ensure.ParameterNotNull(detachedContentType, "detachedContentType");
+            Ensure.ParameterNotNullOrEmpty(cultureName, "cultureName");
 
             this.ProductVariantKey = productVariantKey;
             this.DetachedContentType = detachedContentType;
@@ -94,33 +80,23 @@
         }
 
 
-        /// <summary>
-        /// Gets the detached content type.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public IDetachedContentType DetachedContentType { get; private set; }
 
-        /// <summary>
-        /// Gets the culture name.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string CultureName { get; private set; }
 
-        /// <summary>
-        /// Gets the <see cref="DetachedDataValuesCollection"/>.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public DetachedDataValuesCollection DetachedDataValues { get; private set; }
 
-        /// <summary>
-        /// Gets the product variant key.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public Guid ProductVariantKey { get; private set; }
 
-        /// <summary>
-        /// Gets or sets the template id.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public int? TemplateId
         {
@@ -131,20 +107,11 @@
 
             set
             {
-                this.SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        this._templateId = value;
-                        return this._templateId;
-                    },
-                    this._templateId,
-                    TemplateIdSelector);
+                this.SetPropertyValueAndDetectChanges(value, ref _templateId, _ps.Value.TemplateIdSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the slug.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Slug
         {
@@ -155,20 +122,11 @@
 
             set
             {
-                this.SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        this._slug = value;
-                        return this._slug;
-                    },
-                    this._slug,
-                    SlugSelector);
+                this.SetPropertyValueAndDetectChanges(value, ref _slug, _ps.Value.SlugSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether virtual content can be rendered.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public bool CanBeRendered
         {
@@ -179,15 +137,29 @@
 
             set
             {
-                this.SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        this._canBeRendered = value;
-                        return this._canBeRendered;
-                    },
-                    this._canBeRendered,
-                    CanBeRenderedSelector);
+                this.SetPropertyValueAndDetectChanges(value, ref _canBeRendered, _ps.Value.CanBeRenderedSelector);
             }
+        }
+
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private class PropertySelectors
+        {
+            /// <summary>
+            /// The template id selector.
+            /// </summary>
+            public readonly PropertyInfo TemplateIdSelector = ExpressionHelper.GetPropertyInfo<ProductVariantDetachedContent, int?>(x => x.TemplateId);
+
+            /// <summary>
+            /// The slug selector.
+            /// </summary>
+            public readonly PropertyInfo SlugSelector = ExpressionHelper.GetPropertyInfo<ProductVariantDetachedContent, string>(x => x.Slug);
+
+            /// <summary>
+            /// The can be rendered selector.
+            /// </summary>
+            public readonly PropertyInfo CanBeRenderedSelector = ExpressionHelper.GetPropertyInfo<ProductVariantDetachedContent, bool>(x => x.CanBeRendered);
         }
     }
 }
