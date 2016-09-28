@@ -1,5 +1,8 @@
 ﻿namespace Merchello.Core.Persistence.UnitOfWork
 {
+    using System;
+    using System.Data;
+
     using Merchello.Core.Persistence;
 
     using NPoco;
@@ -34,13 +37,39 @@
         /// <inheritdoc/>
         public void ReadLock(params int[] lockIds)
         {
-            throw new System.NotImplementedException();
+            Begin(); // we need a transaction
+
+            if (Database.Database.Transaction.IsolationLevel < IsolationLevel.RepeatableRead)
+                throw new InvalidOperationException("A transaction with minimum RepeatableRead isolation level is required.");
+
+            // *not* using a unique 'WHERE IN' query here because the *order* of lockIds is important to avoid deadlocks
+            foreach (var lockId in lockIds)
+            {
+                var i = Database.Database.ExecuteScalar<int?>(
+                    "SELECT value FROM merchLock WHERE id=@id",
+                    new { @id = lockId });
+                if (i == null) // ensure we are actually locking!
+                    throw new Exception($"LockObject with id={lockId} does not exist.");
+            }
         }
 
         /// <inheritdoc/>
         public void WriteLock(params int[] lockIds)
         {
-            throw new System.NotImplementedException();
+            Begin(); // we need a transaction
+
+            if (Database.Database.Transaction.IsolationLevel < IsolationLevel.RepeatableRead)
+                throw new InvalidOperationException("A transaction with minimum RepeatableRead isolation level is required.");
+
+            // *not* using a unique 'WHERE IN' query here because the *order* of lockIds is important to avoid deadlocks
+            foreach (var lockId in lockIds)
+            {
+                var i = Database.Database.Execute(
+                    "UPDATE merchLock SET value = (CASE WHEN (value=1) THEN -1 ELSE 1 END) WHERE id=@id",
+                    new { @id = lockId });
+                if (i == 0) // ensure we are actually locking!
+                    throw new Exception($"LockObject with id={lockId} does not exist.");
+            }
         }
 
         /// <summary>
