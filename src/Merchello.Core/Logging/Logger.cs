@@ -9,15 +9,18 @@
     using log4net;
     using log4net.Config;
 
+    using Merchello.Core;
+
     /// <summary>
     /// Represents logging service.
     /// </summary>
     /// <remarks>
     /// Class ported to Merchello core so that we can reduce the number of dependencies on the UmbracoCms.Core package.
+    /// <para>This class is not used when Merchello is running within Umbraco.  Umbraco's ILogger is adapted and used directly instead.</para>
     /// </remarks>
     /// UMBRACO
     /// <seealso cref="https://github.com/umbraco/Umbraco-CMS/blob/dev-v7/src/Umbraco.Core/Logging/Logger.cs"/>
-    public class Logger : ILogger
+    internal class Logger : ILogger
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Logger"/> class.

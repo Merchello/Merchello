@@ -64,9 +64,6 @@
     <Compile Include="Configurations\MerchelloSettings\MigrationsElementTests.cs" />
     <Compile Include="Configurations\MerchelloSettings\ProductsElementTests.cs" />
     <Compile Include="Configurations\MerchelloSettings\SalesElement.cs" />
-    <Compile Include="Logging\DebugAppender.cs" />
-    <Compile Include="Logging\ParallelForwarderTest.cs" />
-    <Compile Include="Logging\RingBufferTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScratchTests.cs" />
     <Compile Include="TestHelpers\TestHelper.cs" />

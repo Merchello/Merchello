@@ -1,11 +1,12 @@
 ﻿{
   "dependencies": {
+    "AutoMapper": "4.2.*",
     "LightInject": "4.1.0",
     "LightInject.Annotation": "1.0.0.4",
     "MiniProfiler": "2.1.0",
     "Newtonsoft.Json": "8.0.*",
-    "NPoco": "3.4.1",
-    "SqlServerCE": "4.0.0.1"
+    "npoco": "3.3.4",
+    "semver": "1.*"
   },
   "frameworks": {
     "net461": {}

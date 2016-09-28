@@ -62,7 +62,7 @@
             if (_associatedCFT.ContainsKey(typeof(T)))
             {
                 var cft = _associatedCFT[typeof(T)];
-                return MerchelloConfig.For.Extensibility.TypeFields.CustomTypeFields[cft];
+                return MerchelloConfig.For.MerchelloExtensibility().TypeFields.CustomTypeFields[cft];
             }
 
             var nullRef = new NullReferenceException("The associated type of enum was not found or is not supported as a custom type field");

@@ -4,14 +4,15 @@ namespace Merchello.Core.Acquired
     using System;
     using System.Diagnostics;
 
-    using Merchello.Core.Acquired.Logging;
+    using Merchello.Core;
     using Merchello.Core.Logging;
+    using Logging;
 
     /// <summary>
-	/// Starts the timer and invokes a  callback upon disposal. Provides a simple way of timing an operation by wrapping it in a <code>using</code> (C#) statement.
-	/// </summary>
-	internal class DisposableTimer : DisposableObject
-	{
+    /// Starts the timer and invokes a  callback upon disposal. Provides a simple way of timing an operation by wrapping it in a <code>using</code> (C#) statement.
+    /// </summary>
+    public class DisposableTimer : DisposableObject, IDisposableTimer
+    {
         #region Fields
 
         /// <summary>

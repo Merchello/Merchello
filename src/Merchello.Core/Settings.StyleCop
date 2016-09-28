@@ -1,16 +1,26 @@
 <StyleCopSettings Version="105">
   <GlobalSettings>
     <CollectionProperty Name="RecognizedWords">
+      <Value>Cms</Value>
+      <Value>Db</Value>
+      <Value>dll</Value>
       <Value>dto</Value>
+      <Value>ioc</Value>
+      <Value>Linq</Value>
       <Value>Lucene</Value>
       <Value>merch</Value>
       <Value>Merchello</Value>
       <Value>Merchello's</Value>
+      <Value>nullable</Value>
       <Value>PetaPoco</Value>
+      <Value>poco</Value>
       <Value>Queryable</Value>
-      <Value>Smtp</Value>
-      <Value>Umbraco</Value>
       <Value>sku</Value>
+      <Value>Smtp</Value>
+      <Value>Sql</Value>
+      <Value>SqlCe</Value>
+      <Value>UaaS</Value>
+      <Value>Umbraco</Value>
       <Value>Umbraco's</Value>
       <Value>YouTrack</Value>
     </CollectionProperty>

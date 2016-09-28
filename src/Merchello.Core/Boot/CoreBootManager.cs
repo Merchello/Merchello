@@ -2,25 +2,24 @@
 {
     using System;
 
+    using AutoMapper;
+
+    using LightInject;
+
     using Merchello.Core.Acquired;
+    using Merchello.Core.Acquired.ObjectResolution;
+    using Merchello.Core.Cache;
+    using Merchello.Core.Configuration;
+    using Merchello.Core.DependencyInjection;
     using Merchello.Core.Logging;
+    using Merchello.Core.Mapping;
+    using Merchello.Core.Persistence;
+    using Merchello.Core.Persistence.Mappers;
+    using Merchello.Core.Persistence.Migrations.Initial;
     using Merchello.Core.Services;
 
-    using NPoco;
-    //using Cache;
-    //using Configuration;
-    //using Gateways;
+    using Ensure = Merchello.Core.Ensure;
 
-    //using Merchello.Core.Chains.OfferConstraints;
-    //using Merchello.Core.EntityCollections;
-    //using Merchello.Core.Events;
-    //using Merchello.Core.Logging;
-    //using Merchello.Core.ValueConverters;
-
-    //using Observation;
-    //using Persistence.UnitOfWork;
-
-    //using RepositoryFactory = Merchello.Core.Persistence.RepositoryFactory;
 
     /// <summary>
     /// Application boot strap for the Merchello Plugin which initializes all objects to be used in the Merchello Core
@@ -33,30 +32,26 @@
         #region Fields
 
         /// <summary>
-        /// The <see cref="ILogger"/>
+        /// The multi log resolver.
         /// </summary>
-        private readonly ILogger _logger;
+        private MultiLogResolver _muliLogResolver;
+
+        /// <summary>
+        /// The Logger.
+        /// </summary>
+        private ILogger _logger;
 
         /// <summary>
         /// The timer.
         /// </summary>
-        private DisposableTimer _timer;
+        private IDisposableTimer _timer;
+
 
         /// <summary>
         /// The is complete.
         /// </summary>
         private bool _isComplete;
 
-        ///// <summary>
-        ///// The merchello context.
-        ///// </summary>
-        //private MerchelloContext _merchelloContext;
-
-        ///// <summary>
-        ///// The peta poco unit of work provider.
-        ///// </summary>
-        //[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
-        //private PetaPocoUnitOfWorkProvider _unitOfWorkProvider;
 
         #endregion
 
@@ -70,12 +65,14 @@
         {
             Ensure.ParameterNotNull(settings, nameof(settings));
 
-            this._logger = settings.Logger;
+            this.CoreBootSettings = settings;
+
+            // "Service Registry" - singleton to for required application objects needed for the Merchello instance
+            var container = new ServiceContainer();
+            container.EnableAnnotatedConstructorInjection();
+            IoC.Current = new IoC(container);
+
             this.IsForTesting = settings.IsForTesting;
-
-            //_sqlSyntaxProvider = sqlSyntaxProvider;
-
-            this.SetUnitOfWorkProvider();
         }
 
         /// <summary>
@@ -93,27 +90,10 @@
         /// </summary>
         internal bool IsForTesting { get; }
 
-        ///// <summary>
-        ///// Gets the logger.
-        ///// </summary>
-        //internal ILogger Logger
-        //{
-        //    get
-        //    {
-        //        return _logger;
-        //    }
-        //}
-
-        ///// <summary>
-        ///// Gets the sql syntax.
-        ///// </summary>
-        //internal ISqlSyntaxProvider SqlSyntax
-        //{
-        //    get
-        //    {
-        //        return _sqlSyntaxProvider;
-        //    }
-        //}
+        /// <summary>
+        /// Gets the core boot settings.
+        /// </summary>
+        protected ICoreBootSettings CoreBootSettings { get; }
 
         /// <summary>
         /// The initialize.
@@ -130,38 +110,30 @@
                 throw new InvalidOperationException("The Merchello core boot manager has already been initialized");
 
             OnMerchelloInit();
-            
-            //// create the service context for the MerchelloAppContext          
 
-            //var logger = GetMultiLogger();
+            // Grab everythin we need from Umbraco
+            ConfigureCmsServices(IoC.Container);
 
-            //var cache = ApplicationContext.Current == null
-            //    ? new CacheHelper(
-            //            new ObjectCacheRuntimeCacheProvider(),
-            //            new StaticCacheProvider(),
-            //            new NullCacheProvider())
-            //    : ApplicationContext.Current.ApplicationCache;
+            _timer =
+                IoC.Container.GetInstance<IProfilingLogger>()
+                    .TraceDuration<CoreBootManager>(
+                        $"Merchello {MerchelloVersion.GetSemanticVersion()} application starting on {NetworkHelper.MachineName}",
+                        "Merchello application startup complete");
+
+            _logger = IoC.Container.GetInstance<ILogger>();
+
+            _muliLogResolver = new MultiLogResolver(GetMultiLogger(_logger));
+
+            ConfigureCoreServices(IoC.Container);
+
+            InitializeAutoMapperMappers();
 
 
-            //var serviceContext = new ServiceContext(new RepositoryFactory(cache, logger, _sqlSyntaxProvider), _unitOfWorkProvider, logger, new TransientMessageFactory());
+            // Ensure the Merchello database is installed.
+            this.EnsureDatabase(IoC.Container);
 
+            InitializeResolvers();
 
-            //InitializeLoggerResolver(logger);
-
-
-            //InitializeGatewayResolver(serviceContext, cache);
-            
-            //CreateMerchelloContext(serviceContext, cache);
-
-            //InitialCurrencyContext(serviceContext.StoreSettingService);
-
-            //InitializeResolvers();
-
-            //InitializeValueConverters();
-
-            //InitializeObserverSubscriptions();
-
-            //this.InitializeEntityCollectionProviderResolver(MerchelloContext.Current);
 
             this.IsInitialized = true;   
 
@@ -182,8 +154,8 @@
             if (this.IsStarted)
                 throw new InvalidOperationException("The boot manager has already been initialized");
 
-            //if (afterStartup != null)
-            //    afterStartup(MerchelloContext.Current);
+            //// if (afterStartup != null)
+            ////    afterStartup(MerchelloContext.Current);
 
             this.IsStarted = true;
 
@@ -204,6 +176,8 @@
             if (this._isComplete)
                 throw new InvalidOperationException("The boot manager has already been completed");
 
+            FreezeResolution();
+
             //if (afterComplete != null)
             //{
             //    afterComplete(MerchelloContext.Current);
@@ -211,69 +185,96 @@
 
             this._isComplete = true;
 
+            // stop the timer and log the output
+            _timer.Dispose();
             return this;
         }
 
         /// <summary>
-        /// Creates the MerchelloPluginContext (singleton)
+        /// Allows for injection of CMS Foundation services that Merchello relies on.
         /// </summary>
-        /// <param name="serviceContext">The service context</param>
-        /// <param name="cache">The cache helper</param>
-        /// <remarks>
-        /// Since we load fire our boot manager after Umbraco fires its "started" even, Merchello gets the benefit
-        /// of allowing Umbraco to manage the various caching providers via the Umbraco CoreBootManager or WebBootManager
-        /// depending on the context.
-        /// </remarks>
-        /// QFIX-from   (IServiceContext serviceContext, CacheHelper cache)
-        /// QFIX-to     (IServiceContext serviceContext, object cache)
-        protected void CreateMerchelloContext(IServiceContext serviceContext, object cache)
+        /// <param name="container">
+        /// The container.
+        /// </param>
+        internal virtual void ConfigureCmsServices(IServiceContainer container)
         {
-            //var gateways = new GatewayContext(serviceContext, GatewayProviderResolver.Current);
-            //_merchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext, gateways, cache);
+            // Container
+            container.Register<IServiceContainer>(factory => container);
         }
 
-        ///// <summary>
-        ///// Initializes the <see cref="CurrencyContext"/>.
-        ///// </summary>
-        ///// <param name="storeSettingService">
-        ///// The store setting service.
-        ///// </param>
-        //protected virtual void InitialCurrencyContext(IStoreSettingService storeSettingService)
-        //{
-        //    CurrencyContext.Current = new CurrencyContext(storeSettingService);
-        //}
+        /// <summary>
+        /// Build the core container which contains all core things required to build the MerchelloContext
+        /// </summary>
+        /// <param name="container">
+        /// The container.
+        /// </param>
+        internal virtual void ConfigureCoreServices(IServiceContainer container)
+        {
+            // Logger
+            container.RegisterSingleton<MultiLogResolver>(factory => _muliLogResolver);
 
-        ///// <summary>
-        ///// Initializes the logger resolver.
-        ///// </summary>
-        ///// <param name="logger">
-        ///// The logger.
-        ///// </param>
-        //protected virtual void InitializeLoggerResolver(IMultiLogger logger)
-        //{
-        //    if (MultiLogResolver.HasCurrent)
-        //    MultiLogResolver.Current = new MultiLogResolver(logger);
-        //}
 
-        ///// <summary>
-        ///// Gets the <see cref="MultiLogger"/>.
-        ///// </summary>
-        ///// <returns>
-        ///// The <see cref="IMultiLogger"/>.
-        ///// </returns>
-        ///// <remarks>
-        ///// We need to do this outside of the resolver due to internal resolution "Freeze"
-        ///// </remarks>
-        //protected virtual IMultiLogger GetMultiLogger()
-        //{
-        //    return new MultiLogger();
-        //}
+            // Configuration
+            container.RegisterFrom<ConfigurationCompositionRoot>();
+
+            // Cache
+            // FYI-ICacheHelper registered in ConfigureSmsServices
+            container.RegisterSingleton<IRuntimeCacheProvider>(factory => factory.GetInstance<ICacheHelper>().RuntimeCache);
+
+
+            // Database related
+            container.RegisterFrom<RepositoryCompositionRoot>();
+        }
+
+        /// <summary>
+        /// The initializes the AutoMapper mappings.
+        /// </summary>
+        protected void InitializeAutoMapperMappers()
+        {
+            var container = IoC.Container;
+
+            Mapper.Initialize(configuration =>
+                {
+                    foreach (var mc in container.GetAllInstances<MerchelloMapperConfiguration>())
+                    {
+                        mc.ConfigureMappings(configuration);
+                    }
+                });
+        }
+
+        protected virtual void CreateMerchelloContext()
+        {
+
+        }
+
+        protected virtual void InitialCurrencyContext()
+        {
+
+        }
+
+        /// <summary>
+        /// Initializes the logger resolver.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        protected virtual void InitializeLoggerResolver(IMultiLogger logger)
+        {
+            if (!MultiLogResolver.HasCurrent)
+                MultiLogResolver.Current = new MultiLogResolver(logger);
+        }
+
+
 
         /// <summary>
         /// Responsible for initializing resolvers.
         /// </summary>
         protected virtual void InitializeResolvers()
         {
+            var container = IoC.Container;
+
+            MappingResolver.Current = (MappingResolver)container.GetInstance<IMappingResolver>();
+
             //if (!TriggerResolver.HasCurrent)
             //TriggerResolver.Current = new TriggerResolver(PluginManager.Current.ResolveObservableTriggers());
 
@@ -289,9 +290,10 @@
         /// </summary>
         protected virtual void InitializeValueConverters()
         {
-            //// initialize the DetachedPublishedPropertyConverter singleton
-            //if (!DetachedValuesConverter.HasCurrent)
-            //    DetachedValuesConverter.Current = new DetachedValuesConverter(ApplicationContext.Current, PluginManager.Current.ResolveDetachedValueOverriders());
+        }
+
+        protected virtual void InitializeGatewayResolver()
+        {
         }
 
         /// <summary>
@@ -314,69 +316,63 @@
         }
 
         /// <summary>
-        /// Gets the database.
+        /// Ensures the Merchello database is present.
         /// </summary>
-        /// <returns>
-        /// The <see cref="Database"/>.
-        /// </returns>
-        protected Database GetDatabase()
-        {
-            //if (_unitOfWorkProvider == null) throw new NullReferenceException("Unit of work provider has not been set");
-            return new Database("umbracoDbDSN"); //_unitOfWorkProvider.GetUnitOfWork().Database;
-        }
-
-        /// <summary>
-        /// Responsible for the special case initialization of the gateway resolver.
-        /// </summary>
-        /// <param name="serviceContext">
-        /// The service context.
-        /// </param>
-        /// <param name="cache">
-        /// The cache.
+        /// <param name="container">
+        /// The IoC container.
         /// </param>
         /// <remarks>
-        /// This is a special case due to the fact we need this singleton instantiated prior to 
-        /// building the <see cref="MerchelloContext"/>
+        /// We actually removed the package action to install the database in around version 1.12(?) so that we 
+        /// could push installs to UAAS more easily.  For this version, we are going a bit further and getting rid
+        /// of ALL package actions so that we can more easily offer straight NuGet based install (without requiring installation through
+        /// the CMS back office).
         /// </remarks>
-        //// FYI changed [ CacheHelper cache ] param to [ object cache]
-        private void InitializeGatewayResolver(IServiceContext serviceContext, object cache)
+        protected virtual void EnsureDatabase(IServiceContainer container)
         {
-            //_logger.Info<CoreBootManager>("Initializing Merchello GatewayResolver");
+            MultiLogHelper.Info<CoreBootManager>("Verifying Merchello database is present.");
+            var schemaCreation = container.GetInstance<IDatabaseSchemaCreation>();
+            var result = schemaCreation.ValidateSchema();
 
-            //if (!GatewayProviderResolver.HasCurrent)
-            //    GatewayProviderResolver.Current = new GatewayProviderResolver(
-            //    PluginManager.Current.ResolveGatewayProviders(),
-            //    serviceContext.GatewayProviderService,
-            //    cache.RuntimeCache);
+            var dbVersion = result.DetermineInstalledVersion();
+
+            if (dbVersion != MerchelloVersion.Current)
+            {
+                // TODO initial migration
+                if (dbVersion == new Version(0, 0, 0))
+                {
+                    _logger.Info<CoreBootManager>("Merchello database not installed.  Initial migration");
+                }
+                else
+                {
+                    _logger.Info<CoreBootManager>("Merchello version did not match, find migration(s).");
+                }
+            }
+            else
+            {
+                _logger.Info<CoreBootManager>("Merchello database is the current version");
+            }
         }
 
         /// <summary>
-        /// The initialize entity collection provider resolver.
+        /// Gets the <see cref="MultiLogger"/>.
         /// </summary>
-        /// <param name="merchelloContext">
-        /// The <see cref="IMerchelloContext"/>.
+        /// <param name="logger">
+        /// The logger.
         /// </param>
-        /// REFACTOR - start changing use of 'merchelloContext' to mc -> e.g.  mc.Current.Servies - for convention
-        private void InitializeEntityCollectionProviderResolver(IMerchelloContext merchelloContext)
+        /// <returns>
+        /// The <see cref="IMultiLogger"/>.
+        /// </returns>
+        protected virtual IMultiLogger GetMultiLogger(ILogger logger)
         {
-            //if (!EntityCollectionProviderResolver.HasCurrent)
-            //{
-            //    LogHelper.Info<CoreBootManager>("Initializing EntityCollectionProviders");
-
-            //    EntityCollectionProviderResolver.Current = new EntityCollectionProviderResolver(
-            //       PluginManager.Current.ResolveEnityCollectionProviders(),
-            //       merchelloContext);                 
-            //}
+            return new MultiLogger(logger);
         }
 
         /// <summary>
-        /// Sets up unit of work provider.
+        /// Freeze resolution to not allow Resolvers to be modified
         /// </summary>
-        private void SetUnitOfWorkProvider()
+        protected virtual void FreezeResolution()
         {
-            //var connString = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ConnectionString;
-            //var providerName = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ProviderName;
-            //_unitOfWorkProvider = new PetaPocoUnitOfWorkProvider(_logger, connString, providerName);
+            Resolution.Freeze();
         }
     }
 }

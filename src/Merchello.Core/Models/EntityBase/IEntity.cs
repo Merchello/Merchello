@@ -7,25 +7,13 @@
     /// Defines an Entity.
     /// Entities should always have an Id, Created and Modified date
     /// </summary>
-    public interface IEntity : IHasKeyId, ITracksDirty
+    public interface IEntity : IHasKeyId, ITracksDirty, IDateStamped
     {
         /// <summary>
         /// Gets or sets the GUID based Id
         /// </summary>
         [DataMember]
         new Guid Key { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Created Date
-        /// </summary>
-        [DataMember]
-        DateTime CreateDate { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Modified Date
-        /// </summary>
-        [DataMember]
-        DateTime UpdateDate { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether the current entity has an identity, e.g. Id.

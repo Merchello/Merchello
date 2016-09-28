@@ -1,6 +1,8 @@
 <StyleCopSettings Version="105">
   <GlobalSettings>
     <CollectionProperty Name="RecognizedWords">
+      <Value>cloneable</Value>
+      <Value>db</Value>
       <Value>dto</Value>
       <Value>Lucene</Value>
       <Value>merch</Value>
@@ -8,11 +10,12 @@
       <Value>Merchello's</Value>
       <Value>PetaPoco</Value>
       <Value>Queryable</Value>
-      <Value>Smtp</Value>
-      <Value>Umbraco</Value>
       <Value>sku</Value>
-      <Value>Umbraco's</Value>
+      <Value>Smtp</Value>
+      <Value>sql</Value>
       <Value>Umb</Value>
+      <Value>Umbraco</Value>
+      <Value>Umbraco's</Value>
       <Value>YouTrack</Value>
     </CollectionProperty>
   </GlobalSettings>

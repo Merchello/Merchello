@@ -10,7 +10,8 @@ var release = 'bin/Release/';
 var allSrc = 'src/**/*.js';
 var configs = 'src/config/';
 var dist = './build/App_Plugins/Merchello/';
-var tests = '../../tests/Merchello.Tests.Unit/'
+var tests = '../../tests/Merchello.Tests.Unit/';
+var umbTests = '../../tests/Merchello.Tests.Umbraco/';
 var concatenated = [];
 
 
@@ -40,11 +41,21 @@ gulp.task('copy:tests', function() {
     var paths = {
         settings: 'Configurations/MerchelloSettings/',
         extensibility: 'Configurations/ExtensibilitySettings/',
-        countries: 'Configurations/CountrySettings/'
+        countries: 'Configurations/CountrySettings/',
+        umbraco: 'Config/'
     }
 
+    var utdebug = umbTests + debug;
+    var utrelease = umbTests + release;
     var tdebug = tests + debug;
     var trelease = tests + release;
+
+    /// ------------------
+    //  Umbraco
+    /// ------------------
+    gulp.src(configs + '/log4net/log4net.config')
+        .pipe(gulp.dest(utdebug + paths.umbraco))
+        .pipe(gulp.dest(utrelease + paths.umbraco));
 
     // -------------------
     // setttings
@@ -52,7 +63,7 @@ gulp.task('copy:tests', function() {
     // merchelloSettings.config
     gulp.src(configs + 'merchelloSettings.config')
         .pipe(gulp.dest(tdebug + paths.settings))
-        .pipe(gulp.dest(tdebug + paths.settings));
+        .pipe(gulp.dest(trelease + paths.settings));
 
     // web.config
     gulp.src(configs + 'tests/web.settings.config')
@@ -77,8 +88,8 @@ gulp.task('copy:tests', function() {
     // countries
     // -------------------
     gulp.src(configs + 'merchelloCountries.config')
-        .pipe(gulp.dest(tests + 'bin/debug/Configurations/MerchelloCountries/'))
-        .pipe(gulp.dest(tests + 'bin/release/Configurations/MerchelloCountries/'));
+        .pipe(gulp.dest(tdebug + 'Configurations/MerchelloCountries/'))
+        .pipe(gulp.dest(trelease + 'Configurations/MerchelloCountries/'));
 
     // web.config
     gulp.src(configs + 'tests/web.countries.config')

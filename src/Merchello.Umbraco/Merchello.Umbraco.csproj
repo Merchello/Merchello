@@ -41,20 +41,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Adapters\CacheHelperAdapter.cs" />
-    <Compile Include="Adapters\CacheProviderAdapter.cs" />
+    <Compile Include="Adapters\Cache\CacheHelperAdapter.cs" />
+    <Compile Include="Adapters\Cache\CacheProviderAdapter.cs" />
+    <Compile Include="Adapters\Persistence\DatabaseContextAdapter.cs" />
+    <Compile Include="Adapters\Persistence\DatabaseSchemaHelperAdapter.cs" />
+    <Compile Include="Adapters\DisposableTimerAdapter.cs" />
+    <Compile Include="Adapters\Cache\IsolatedCacheProviderAdapter.cs" />
+    <Compile Include="Adapters\PluginManagerAdapter.cs" />
+    <Compile Include="Adapters\Logging\ProfilingLoggerAdapter.cs" />
+    <Compile Include="Adapters\Persistence\UmbracoDatabaseAdapter.cs" />
+    <Compile Include="Converter.cs" />
     <Compile Include="Adapters\IUmbracoAdapter.cs" />
-    <Compile Include="Adapters\ProfileLoggerAdapter.cs" />
-    <Compile Include="Adapters\RuntimeCacheProviderAdapter.cs" />
-    <Compile Include="Adapters\LoggerAdapter.cs" />
+    <Compile Include="Adapters\Logging\ProfileLoggerAdapter.cs" />
+    <Compile Include="Adapters\Cache\RuntimeCacheProviderAdapter.cs" />
+    <Compile Include="Adapters\Logging\LoggerAdapter.cs" />
+    <Compile Include="Adapters\Persistence\SqlSyntaxProviderAdapter.cs" />
     <Compile Include="Adapters\UmbracoAttemptExtensions.cs" />
-    <Compile Include="Boot\Boot-SettingsAndAdapters.cs">
-      <DependentUpon>Boot.cs</DependentUpon>
+    <Compile Include="Boot\UmbracoBoot-MapperConfigurations.cs">
+      <DependentUpon>UmbracoBoot.cs</DependentUpon>
     </Compile>
-    <Compile Include="Boot\Boot.cs" />
+    <Compile Include="Boot\UmbracoBoot-SettingsAndAdapters.cs">
+      <DependentUpon>UmbracoBoot.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Boot\UmbracoBoot.cs" />
     <Compile Include="Boot\UmbracoBootManager.cs" />
     <Compile Include="Boot\BootSettings.cs" />
     <Compile Include="Boot\IBootSettings.cs" />
+    <Compile Include="DependencyInjection\UmbracoCompositionRoot.cs" />
+    <Compile Include="Mapping\UmbracoAdapterAutoMapperMappings.cs" />
+    <Compile Include="Models\ICacheSurrogate.cs" />
+    <Compile Include="Models\CacheSurrogate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyVisibility.cs" />
   </ItemGroup>

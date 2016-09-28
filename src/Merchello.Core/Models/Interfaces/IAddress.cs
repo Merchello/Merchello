@@ -3,7 +3,7 @@
     using System.Runtime.Serialization;
 
     /// <summary>
-    /// Defines a standard address
+    /// Represents a standard address
     /// </summary>
     public interface IAddress
     {

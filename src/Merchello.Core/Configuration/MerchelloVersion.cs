@@ -3,6 +3,8 @@
     using System;
     using System.Reflection;
 
+    using Semver;
+
     /// <summary>
     /// The merchello version.
     /// </summary>
@@ -29,10 +31,7 @@
         /// Gets the version comment (like beta or RC).
         /// </summary>
         /// <value>The version comment.</value>
-        public static string CurrentComment
-        {
-            get { return "0"; }
-        }
+        public static string CurrentComment => "alpha0000";
 
         /// <summary>
         /// Gets the assembly version.
@@ -48,6 +47,22 @@
             {
                 return new AssemblyName(typeof(MerchelloVersion).Assembly.FullName).Version.ToString();
             }
+        }
+
+        /// <summary>
+        /// Gets the semantic version.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="SemVersion"/>.
+        /// </returns>
+        public static SemVersion GetSemanticVersion()
+        {
+            return new SemVersion(
+                Current.Major,
+                Current.Minor,
+                Current.Build,
+                CurrentComment.IsNullOrWhiteSpace() ? null : CurrentComment,
+                Current.Revision > 0 ? Current.Revision.ToInvariantString() : null);
         }
     }
 }

@@ -8,7 +8,7 @@
     /// <summary>
     /// Methods for getting boot manager settings and adapting Umbraco's instantiated objects.
     /// </summary>
-    public partial class Boot
+    public partial class UmbracoBoot
     {
         /// <summary>
         /// Gets <see cref="IBootSettings"/> for Merchello startup.
@@ -31,7 +31,6 @@
                 // Adapt Umbraco's logger
                 Logger = new LoggerAdapter(appContext.ProfilingLogger.Logger),
 
-                // Adapt Umbraco's CacheHelper 
                 CacheHelper = new CacheHelperAdapter(appContext.ApplicationCache)
             };
         }

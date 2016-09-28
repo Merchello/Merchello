@@ -166,3 +166,8 @@ src/.vs/*
 scrap/
 *project.lock.json
 src/Merchello.Umbraco.Ui.Client/.idea/
+src/Merchello.FastTrack.Ui/bin/
+src/Merchello.FastTrack.Ui/App_Browsers/
+src/Merchello.FastTrack.Ui/umbraco_client/
+src/Merchello.FastTrack.Ui/umbraco/
+src/Merchello.FastTrack.Ui/Config/splashes/

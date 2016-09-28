@@ -19,5 +19,14 @@
         /// Gets the <see cref="ICacheProvider"/> used for static (in memory) caches.
         /// </summary>
         ICacheProvider StaticCache { get; }
+
+        /// <summary>
+        /// Gets the  <see cref="IIsolatedRuntimeCache"/> cache.
+        /// </summary>
+        /// <remarks>
+        /// Useful for repository level caches to ensure that cache lookups by key are fast so 
+        /// that the repository doesn't need to search through all keys on a global scale.
+        /// </remarks>
+        IIsolatedRuntimeCache IsolatedRuntimeCache { get; }
     }
 }

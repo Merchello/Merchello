@@ -46,30 +46,214 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Acquired\DisposableTimer.cs" />
+    <Compile Include="Acquired\Logging\LogProfiler.cs" />
+    <Compile Include="Acquired\Logging\ProfilerExtensions.cs" />
+    <Compile Include="Acquired\NetworkHelper.cs" />
+    <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\DefinitionFactory.cs" />
+    <Compile Include="Acquired\Persistence\NPocoSqlExtensions.cs" />
+    <Compile Include="Acquired\Persistence\Querying\BaseExpressionHelper.cs" />
+    <Compile Include="Acquired\Persistence\Querying\ModelToSqlExpressionHelper.cs" />
+    <Compile Include="Acquired\Persistence\Querying\PocoToSqlExpressionHelper.cs" />
+    <Compile Include="Acquired\Persistence\Querying\SqlTranslator.cs" />
+    <Compile Include="ActivatorServiceProvider.cs" />
+    <Compile Include="Cache\CacheRefresherBase.cs" />
+    <Compile Include="Cache\DefaultRepositoryCachePolicy.cs" />
+    <Compile Include="Cache\ICacheRefresher.cs" />
+    <Compile Include="Cache\IJsonCacheRefresher.cs" />
+    <Compile Include="Cache\IPayloadCacheRefresher.cs" />
+    <Compile Include="Cache\JsonCacheRefresherBase.cs" />
+    <Compile Include="Cache\RepositoryCachePolicyBase.cs" />
+    <Compile Include="Cache\RepositoryCachePolicyOptions.cs" />
+    <Compile Include="Constants.CountryCodes.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.Database.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.DetachedPublishedContent.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.DistributedCache.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.ExtendedDataKeys.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.InvoiceStatus.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.Locks.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.Migrations.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.NotificationTriggers.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.OrderStatus.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.Providers.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.Repositories.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.ShipmentStatus.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.StoreSettings.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.Strategies.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.TaskChains.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.TypeFields.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.Warehouse.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="Events\CacheRefresherEventArgs.cs" />
+    <Compile Include="Events\TypedEventHandler.cs" />
+    <Compile Include="IAttempt.cs" />
+    <Compile Include="Cache\IIsolatedRuntimeCache.cs" />
+    <Compile Include="Acquired\ObjectExtensions.cs" />
+    <Compile Include="Acquired\ObjectResolution\ContainerLazyManyObjectsResolver.cs" />
+    <Compile Include="Acquired\ObjectResolution\ContainerManyObjectsResolver.cs" />
+    <Compile Include="Acquired\ObjectResolution\ContainerSingleObjectResolver.cs" />
+    <Compile Include="Acquired\ObjectResolution\LazyManyObjectsResolverbase.cs" />
+    <Compile Include="Acquired\ObjectResolution\ManyObjectsResolverBase.cs" />
+    <Compile Include="Acquired\ObjectResolution\ObjectLifetimeScope.cs" />
+    <Compile Include="Acquired\ObjectResolution\Resolution.cs" />
+    <Compile Include="Acquired\ObjectResolution\ResolverBase.cs" />
+    <Compile Include="Acquired\ObjectResolution\ResolverCollection.cs" />
+    <Compile Include="Acquired\ObjectResolution\SingleObjectResolverBase.cs" />
+    <Compile Include="Acquired\ObjectResolution\WeightedPluginAttribute.cs" />
+    <Compile Include="Acquired\Persistence\DatabaseAnnotations\ConstraintAttribute.cs" />
+    <Compile Include="Acquired\Persistence\DatabaseAnnotations\ForeignKeyAttribute.cs" />
+    <Compile Include="Acquired\Persistence\DatabaseAnnotations\IndexAttribute.cs" />
+    <Compile Include="Acquired\Persistence\DatabaseAnnotations\IndexTypes.cs" />
+    <Compile Include="Acquired\Persistence\DatabaseAnnotations\LengthAttribute.cs" />
+    <Compile Include="Acquired\Persistence\DatabaseAnnotations\NullSettingAttribute.cs" />
+    <Compile Include="Acquired\Persistence\DatabaseAnnotations\NullSettings.cs" />
+    <Compile Include="Acquired\Persistence\DatabaseAnnotations\PrimaryKeyColumnAttribute.cs" />
+    <Compile Include="Acquired\Persistence\DatabaseAnnotations\ReferencesAttribute.cs" />
+    <Compile Include="Acquired\Persistence\DatabaseAnnotations\SpecialDbTypeAttribute.cs" />
+    <Compile Include="Acquired\Persistence\DatabaseAnnotations\SpecialDbTypes.cs" />
+    <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\ColumnDefinition.cs" />
+    <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\ConstraintDefinition.cs" />
+    <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\ConstraintType.cs" />
+    <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\DbIndexDefinition.cs" />
+    <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\DeletionDataDefinition.cs" />
+    <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\Direction.cs" />
+    <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\ForeignKeyDefinition.cs" />
+    <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\IndexColumnDefinition.cs" />
+    <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\IndexDefinition.cs" />
+    <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\InsertionDataDefinition.cs" />
+    <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\ModificationType.cs" />
+    <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\SystemMethods.cs" />
+    <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\TableDefinition.cs" />
+    <Compile Include="Acquired\Persistence\DbConnectionExtensions.cs" />
+    <Compile Include="Logging\IProfilingLogger.cs" />
+    <Compile Include="Models\Address.cs" />
+    <Compile Include="Models\AnonymousCustomer.cs" />
+    <Compile Include="Models\Cache\CacheModelBase.cs" />
+    <Compile Include="Models\Cache\ICacheModel.cs" />
+    <Compile Include="Models\CustomerBase.cs" />
+    <Compile Include="Models\EntityBase\IDateStamped.cs" />
+    <Compile Include="Models\IDeepCloneable.cs" />
+    <Compile Include="Models\Migrations\IMigrationStatus.cs" />
+    <Compile Include="Models\Migrations\MigrationStatus.cs" />
+    <Compile Include="Models\Rdbms\LockDto.cs" />
+    <Compile Include="Models\Rdbms\MigrationStatusDto.cs" />
+    <Compile Include="Persistence\DatabaseSchemaManagerBase.cs" />
+    <Compile Include="Persistence\Factories\IEntityFactory.cs" />
+    <Compile Include="Persistence\Factories\MigrationStatusFactory.cs" />
+    <Compile Include="Persistence\IDatabaseSchemaManager.cs" />
+    <Compile Include="Persistence\IExposeSqlSyntax.cs" />
+    <Compile Include="Persistence\IMerchelloDatabase.cs" />
+    <Compile Include="Persistence\ISqlContext.cs" />
+    <Compile Include="Persistence\Mappers\AnonymousCustomerMapper.cs" />
+    <Compile Include="Persistence\MerchelloDatabaseExtensions.cs" />
+    <Compile Include="Persistence\Migrations\Initial\DatabaseSchemaCreation.cs" />
+    <Compile Include="Persistence\Migrations\Initial\DatabaseSchemaResult.cs" />
+    <Compile Include="Persistence\Migrations\Initial\IDatabaseSchemaCreation.cs" />
+    <Compile Include="Persistence\Repositories\IMigrationStatusRepository.cs" />
+    <Compile Include="Persistence\Repositories\IStaticEntityCollectionRepository{T}.cs" />
+    <Compile Include="Persistence\Repositories\IRepositoryReadable{T}.cs" />
+    <Compile Include="Persistence\Repositories\IRepository.cs" />
+    <Compile Include="Cache\IRepositoryCachePolicy.cs" />
+    <Compile Include="Persistence\Repositories\IRepositoryQueryable{T}.cs" />
+    <Compile Include="Persistence\Repositories\IRepositoryWritable{T}.cs" />
+    <Compile Include="Persistence\Repositories\MigrationStatusRepository.baseimp.cs">
+      <DependentUpon>MigrationStatusRepository.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Persistence\Repositories\MigrationStatusRepository.cs" />
+    <Compile Include="Persistence\Repositories\NPocoEntityRepositoryBase.cs" />
+    <Compile Include="Persistence\Repositories\NPocoRespositoryBase.cs" />
+    <Compile Include="Persistence\Repositories\RepositoryQueryableBase.cs" />
+    <Compile Include="Persistence\Repositories\RepositoryReadableBase.cs" />
+    <Compile Include="Persistence\Repositories\RepositoryBase.cs" />
+    <Compile Include="Persistence\Repositories\RepositoryWritableBase.cs" />
+    <Compile Include="Persistence\RepositoryFactory.cs" />
+    <Compile Include="Persistence\SqlContext.cs" />
+    <Compile Include="Persistence\SqlSyntax\ColumnInfo.cs" />
+    <Compile Include="Acquired\ServiceProviderExtensions.cs" />
+    <Compile Include="DependencyInjection\ConfigurationCompositionRoot .cs" />
+    <Compile Include="DependencyInjection\LightInjectExtensions.cs" />
+    <Compile Include="DependencyInjection\RepositoryCompositionRoot.cs" />
+    <Compile Include="Logging\ExtendedLoggerData.cs" />
+    <Compile Include="Logging\MultiLogger.cs" />
+    <Compile Include="Mapping\MerchelloMapperConfiguration.cs" />
+    <Compile Include="Persistence\UnitOfWork\IDatabaseUnitOfWork.cs" />
+    <Compile Include="Persistence\UnitOfWork\IDatabaseUnitOfWorkProvider.cs" />
+    <Compile Include="Persistence\UnitOfWork\IUnitOfWork.cs" />
+    <Compile Include="Persistence\UnitOfWork\IUnitOfWorkProvider.cs" />
+    <Compile Include="Persistence\UnitOfWork\IUnitOfWorkRepository.cs" />
+    <Compile Include="Persistence\UnitOfWork\NPocoUnitOfWork.cs" />
+    <Compile Include="Persistence\UnitOfWork\NPocoUnitOfWorkProvider.cs" />
+    <Compile Include="Persistence\UnitOfWork\UnitOfWorkBase.cs" />
+    <Compile Include="Plugins\IPluginManager.cs" />
+    <Compile Include="DependencyInjection\IoC.cs" />
+    <Compile Include="Persistence\IDatabaseContext.cs" />
+    <Compile Include="Acquired\Persistence\Mappers\BaseExpressionHelper.cs" />
+    <Compile Include="Persistence\Mappers\IMappingResolver.cs" />
+    <Compile Include="Acquired\Persistence\Mappers\PocoMapper.cs" />
+    <Compile Include="Acquired\Persistence\Mappers\ModelToSqlExpressionHelper.cs" />
+    <Compile Include="Persistence\Mappers\MapperForAttribute.cs" />
+    <Compile Include="Persistence\Mappers\MappingResolver.cs" />
+    <Compile Include="Persistence\Querying\IQuery.cs" />
+    <Compile Include="Persistence\Querying\IQueryFactory.cs" />
+    <Compile Include="Acquired\Persistence\Querying\TextColumnType.cs" />
+    <Compile Include="Persistence\Querying\Query.cs" />
+    <Compile Include="Persistence\Querying\QueryFactory.cs" />
+    <Compile Include="Persistence\SqlSyntax\ISqlSyntaxProviderAdapter.cs" />
+    <Compile Include="Acquired\Plugins\TypeFinder.cs" />
+    <Compile Include="Acquired\Plugins\TypeHelper.cs" />
     <Compile Include="Acquired\Threading\MonitorLock.cs" />
     <Compile Include="Acquired\Threading\ReadLock.cs" />
     <Compile Include="Acquired\Threading\UpgradeableReadLock.cs" />
     <Compile Include="Acquired\Threading\WriteLock.cs" />
+    <Compile Include="Acquired\TypeExtensions.cs" />
     <Compile Include="ActivatorHelper.cs" />
     <Compile Include="Acquired\AssemblyExtensions.cs" />
     <Compile Include="Acquired\Attempt.cs" />
     <Compile Include="Acquired\Attempt{T}.cs" />
+    <Compile Include="Adapters\DatabaseContextAdapterBase.cs" />
     <Compile Include="Boot\BootManagerBase.cs" />
     <Compile Include="Boot\CoreBootSettings.cs" />
     <Compile Include="Boot\ICoreBootSettings.cs" />
-    <Compile Include="Cache\CacheHelper.cs" />
     <Compile Include="Cache\ICacheHelper.cs" />
-    <Compile Include="Acquired\Cache\Providers\CacheProviderExtensions.cs" />
-    <Compile Include="Acquired\Cache\Providers\DictionaryCacheProviderBase.cs">
-      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
-    </Compile>
-    <Compile Include="Acquired\Cache\Providers\HttpRequestCacheProvider.cs" />
-    <Compile Include="Acquired\Cache\Providers\HttpRuntimeCacheProvider.cs" />
+    <Compile Include="Acquired\Cache\CacheProviderExtensions.cs" />
     <Compile Include="Cache\ICacheProvider.cs" />
     <Compile Include="Cache\IRuntimeCacheProvider.cs" />
-    <Compile Include="Acquired\Cache\Providers\NullCacheProvider.cs" />
-    <Compile Include="Acquired\Cache\Providers\ObjectCacheRuntimeCacheProvider.cs" />
-    <Compile Include="Acquired\Cache\Providers\StaticCacheProvider.cs" />
     <Compile Include="Acquired\Configuration\CaseInsensitiveEnumConfigConverter.cs" />
     <Compile Include="Acquired\Configuration\CommaDelimitedConfigurationElement.cs" />
     <Compile Include="Configuration\BackOffice\DashboardTreeNode.cs" />
@@ -128,15 +312,6 @@
     <Compile Include="Configuration\Sections\MerchelloSettingsSection.cs" />
     <Compile Include="Configuration\Sections\IMerchelloSettingsSection.cs" />
     <Compile Include="Configuration\Elements\ProductsElement.cs" />
-    <Compile Include="Constants-ActivatorTypes.cs">
-      <DependentUpon>Constants.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Constants-ExtendedDataKeys.cs">
-      <DependentUpon>Constants.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Constants-Keys.cs">
-      <DependentUpon>Constants.cs</DependentUpon>
-    </Compile>
     <Compile Include="Constants.cs" />
     <Compile Include="Boot\CoreBootManager.cs" />
     <Compile Include="Acquired\CustomBooleanTypeConverter.cs" />
@@ -145,8 +320,6 @@
     <Compile Include="Acquired\EnumerableExtensions.cs" />
     <Compile Include="Acquired\IfExtensions.cs" />
     <Compile Include="Acquired\IntExtensions.cs" />
-    <Compile Include="Acquired\Logging\AsyncForwardingAppenderBase.cs" />
-    <Compile Include="Acquired\DisposableTimer.cs" />
     <Compile Include="Ensure.cs" />
     <Compile Include="EntityCollections\EntityCollectionProviderAttribute.cs" />
     <Compile Include="EntityCollections\IEntityCollectionProvider.cs" />
@@ -176,6 +349,7 @@
     <Compile Include="Events\ValidationEventArgs.cs" />
     <Compile Include="Acquired\ExpressionHelper.cs" />
     <Compile Include="Boot\IBootManager.cs" />
+    <Compile Include="IDisposableTimer.cs" />
     <Compile Include="IMerchelloContext.cs" />
     <Compile Include="Integration\IAdapter.cs" />
     <Compile Include="Acquired\IO\IOHelper.cs" />
@@ -186,19 +360,17 @@
     <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Logging\IMultiLogger.cs" />
     <Compile Include="Logging\IProfiler.cs" />
-    <Compile Include="Acquired\Logging\IQueue.cs" />
     <Compile Include="Logging\IRemoteLogger.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Logging\LoggerExtensions.cs" />
-    <Compile Include="Acquired\Logging\LoggingEventContext.cs" />
-    <Compile Include="Acquired\Logging\LoggingEventHelper.cs" />
-    <Compile Include="Acquired\Logging\ParallelForwardingAppender.cs" />
-    <Compile Include="Logging\ProfileLogger.cs" />
-    <Compile Include="Acquired\Logging\ProfilerExtensions.cs" />
-    <Compile Include="Acquired\Logging\RingBuffer.cs" />
+    <Compile Include="Logging\MultiLogHelper.cs" />
+    <Compile Include="Logging\MultiLogResolver.cs" />
     <Compile Include="Marketing\Offer\OfferComponentConfiguration.cs" />
     <Compile Include="Marketing\Offer\OfferComponentDefinition.cs" />
     <Compile Include="Boot\MerchelloBootstrapper.cs" />
+    <Compile Include="Models\Counting\EntityUseCount.cs" />
+    <Compile Include="Models\Counting\IProductOptionUseCount.cs" />
+    <Compile Include="Models\Counting\ProductOptionUseCount.cs" />
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\CountryBase.cs" />
     <Compile Include="Models\CurrencyFormat.cs" />
@@ -251,6 +423,20 @@
     <Compile Include="Models\ProductVariantCollection.cs" />
     <Compile Include="Models\Province.cs" />
     <Compile Include="Models\ProvinceCollection.cs" />
+    <Compile Include="Models\Rdbms\AnonymousCustomerDto.cs" />
+    <Compile Include="Models\Rdbms\AppliedPaymentDto.cs" />
+    <Compile Include="Models\Rdbms\AuditLogDto.cs" />
+    <Compile Include="Models\Rdbms\CatalogInventoryDto.cs" />
+    <Compile Include="Models\Rdbms\Customer2EntityCollectionDto.cs" />
+    <Compile Include="Models\Rdbms\CustomerAddressDto.cs" />
+    <Compile Include="Models\Rdbms\CustomerDto.cs" />
+    <Compile Include="Models\Rdbms\DetachedContentTypeDto.cs" />
+    <Compile Include="Models\Rdbms\DtoExtensions.cs" />
+    <Compile Include="Models\Rdbms\EntityCollectionDto.cs" />
+    <Compile Include="Models\Rdbms\EntityDto.cs" />
+    <Compile Include="Models\Rdbms\EntityUseCountDto.cs" />
+    <Compile Include="Models\Rdbms\GatewayProviderSettingsDto.cs" />
+    <Compile Include="Models\Rdbms\IDto.cs" />
     <Compile Include="Models\Rdbms\IEntityDto.cs" />
     <Compile Include="Models\Rdbms\IExtendedDataDto.cs" />
     <Compile Include="Models\Rdbms\IKeyDto.cs" />
@@ -290,6 +476,48 @@
     <Compile Include="Models\LineItemCollection.cs" />
     <Compile Include="Models\NotifiyCollectionBase.cs" />
     <Compile Include="Models\OrderCollection.cs" />
+    <Compile Include="Models\Rdbms\Invoice2EntityCollectionDto.cs" />
+    <Compile Include="Models\Rdbms\InvoiceDto.cs" />
+    <Compile Include="Models\Rdbms\InvoiceItemDto.cs" />
+    <Compile Include="Models\Rdbms\InvoiceStatusDto.cs" />
+    <Compile Include="Models\Rdbms\IPageableDto.cs" />
+    <Compile Include="Models\Rdbms\ItemCacheDto.cs" />
+    <Compile Include="Models\Rdbms\ItemCacheItemDto.cs" />
+    <Compile Include="Models\Rdbms\KeyDto.cs" />
+    <Compile Include="Models\Rdbms\LineItemDto.cs" />
+    <Compile Include="Models\Rdbms\NoteDto.cs" />
+    <Compile Include="Models\Rdbms\NotificationMessageDto.cs" />
+    <Compile Include="Models\Rdbms\NotificationMethodDto.cs" />
+    <Compile Include="Models\Rdbms\OfferRedeemedDto.cs" />
+    <Compile Include="Models\Rdbms\OfferSettngsDto.cs" />
+    <Compile Include="Models\Rdbms\OrderDto.cs" />
+    <Compile Include="Models\Rdbms\OrderItemDto.cs" />
+    <Compile Include="Models\Rdbms\OrderStatusDto.cs" />
+    <Compile Include="Models\Rdbms\PaymentDto.cs" />
+    <Compile Include="Models\Rdbms\PaymentMethodDto.cs" />
+    <Compile Include="Models\Rdbms\Product2EntityCollectionDto.cs" />
+    <Compile Include="Models\Rdbms\Product2ProductOptionDto.cs" />
+    <Compile Include="Models\Rdbms\ProductAttributeDto.cs" />
+    <Compile Include="Models\Rdbms\ProductDto.cs" />
+    <Compile Include="Models\Rdbms\ProductOptionAttributeShareDto.cs" />
+    <Compile Include="Models\Rdbms\ProductOptionDto.cs" />
+    <Compile Include="Models\Rdbms\ProductVariant2ProductAttributeDto.cs" />
+    <Compile Include="Models\Rdbms\ProductVariantDetachedContentDto.cs" />
+    <Compile Include="Models\Rdbms\ProductVariantDto.cs" />
+    <Compile Include="Models\Rdbms\ProductVariantIndexDto.cs" />
+    <Compile Include="Models\Rdbms\ShipCountryDto.cs" />
+    <Compile Include="Models\Rdbms\ShipmentDto.cs" />
+    <Compile Include="Models\Rdbms\ShipmentStatusDto.cs" />
+    <Compile Include="Models\Rdbms\ShipMethodDto.cs" />
+    <Compile Include="Models\Rdbms\ShipRateTierDto.cs" />
+    <Compile Include="Models\Rdbms\StoreSettingDto.cs" />
+    <Compile Include="Models\Rdbms\TaxMethodDto.cs" />
+    <Compile Include="Models\Rdbms\TypeFieldDto.cs" />
+    <Compile Include="Models\Rdbms\User2AppDto.cs" />
+    <Compile Include="Models\Rdbms\UserDto.cs" />
+    <Compile Include="Models\Rdbms\WarehouseCatalogDto.cs" />
+    <Compile Include="Models\Rdbms\WarehouseDto.cs" />
+    <Compile Include="Models\Rdbms\WarehouseInventoryDto.cs" />
     <Compile Include="Models\TypeFields\AddressTypeField.cs" />
     <Compile Include="Models\TypeFields\AppliedPaymentTypeField.cs" />
     <Compile Include="Models\TypeFields\EntityTypeField.cs" />
@@ -308,7 +536,6 @@
     <Compile Include="Models\TypeFields\IProductTypeField.cs" />
     <Compile Include="Models\TypeFields\ITypeField.cs" />
     <Compile Include="Models\TypeFields\ITypeFieldMapper.cs" />
-    <Compile Include="Acquired\ObjectExtensions.cs" />
     <Compile Include="Models\TypeFields\ItemCacheTypeField.cs" />
     <Compile Include="Models\TypeFields\LineItemTypeField.cs" />
     <Compile Include="Models\TypeFields\PaymentMethodTypeField.cs" />
@@ -316,17 +543,22 @@
     <Compile Include="Models\TypeFields\TypeField.cs" />
     <Compile Include="Models\TypeFields\TypeFieldMapper.cs" />
     <Compile Include="Models\TypeFields\TypeFieldMapperBase.cs" />
-    <Compile Include="Persistence\Migrations\Analytics\MigrationRecord.cs" />
-    <Compile Include="Acquired\Plugins\TypeFinder.cs" />
+    <Compile Include="Persistence\DatabaseFactoryBase.cs" />
+    <Compile Include="Persistence\IDatabaseFactory.cs" />
+    <Compile Include="Persistence\Mappers\BaseMapper.cs" />
+    <Compile Include="Persistence\Mappers\DtoMapModel.cs" />
+    <Compile Include="Models\Migrations\MigrationRecord.cs" />
+    <Compile Include="Persistence\Migrations\Initial\BaseDataCreation.cs" />
+    <Compile Include="Plugins\PluginManagerExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyVisibility.cs" />
     <Compile Include="RateAdjustmentType.cs" />
-    <Compile Include="Acquired\Plugins\TypeHelper.cs" />
+    <Compile Include="Services\Interfaces\IMigrationStatusService.cs" />
     <Compile Include="Services\Interfaces\IServiceContext.cs" />
     <Compile Include="StringExtensions.cs" />
+    <Compile Include="Sync\MessageType.cs" />
     <Compile Include="Trees\FirstByValueTreeNodeVisitor.cs" />
     <Compile Include="Trees\ITreeNodeVisitor.cs" />
-    <Compile Include="Trees\LambdaTreeNodeVisitor.cs" />
     <Compile Include="Trees\NodeAggregatorTreeNodeVisitor.cs" />
     <Compile Include="Trees\TreeNode.cs" />
     <Compile Include="Trees\TreeNodeExtensions.cs" />
@@ -335,10 +567,13 @@
     <Compile Include="Enums.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Acquired\ObjectResolution\readme.md" />
     <None Include="Cache\readme.md" />
     <None Include="project.json" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Persistence\Repositories\Interfaces\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -3,7 +3,7 @@
     using Merchello.Core.Models.Interfaces;
 
     /// <summary>
-    /// Defines a TreeNode Visitor.
+    /// Represents a TreeNode Visitor.
     /// </summary>
     /// <typeparam name="TNode">
     /// The type of the tree node value

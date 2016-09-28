@@ -1,6 +1,5 @@
 ﻿namespace Merchello.Umbraco.Adapters
 {
-    using Merchello.Core;
     using Merchello.Core.Acquired;
 
     /// <summary>

@@ -5,7 +5,6 @@
     /// <summary>
     /// Extension methods of <see cref="ILogger"/>.
     /// </summary>
-    /// REFACTOR - Change name when ILogger name has been changed
     public static class LoggerExtensions
     {
         /// <summary>
