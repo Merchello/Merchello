@@ -9,8 +9,6 @@
 
     using Merchello.Core.Models.DetachedContent;
 
-    using Umbraco.Core;
-
     /// <summary>
     /// Represents an abstract class for base Product properties and methods
     /// </summary>
@@ -18,122 +16,12 @@
     [DataContract(IsReference = true)]
     public abstract class ProductBase : Entity, IProductBase
     {
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private static readonly Lazy<PropertySelectors> _ps = new Lazy<PropertySelectors>();
+
         #region Fields
-
-        /// <summary>
-        /// The SKU selector.
-        /// </summary>
-        private static readonly PropertyInfo SkuSelector = ExpressionHelper.GetPropertyInfo<ProductBase, string>(x => x.Sku);
-
-        /// <summary>
-        /// The name selector.
-        /// </summary>
-        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<ProductBase, string>(x => x.Name);
-
-        /// <summary>
-        /// The price selector.
-        /// </summary>
-        private static readonly PropertyInfo PriceSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal>(x => x.Price);
-
-        /// <summary>
-        /// The cost of goods selector.
-        /// </summary>
-        private static readonly PropertyInfo CostOfGoodsSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.CostOfGoods);
-
-        /// <summary>
-        /// The sale price selector.
-        /// </summary>
-        private static readonly PropertyInfo SalePriceSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.SalePrice);
-
-        /// <summary>
-        /// The on sale selector.
-        /// </summary>
-        private static readonly PropertyInfo OnSaleSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.OnSale);
-
-        /// <summary>
-        /// The manufacturer selector.
-        /// </summary>
-        private static readonly PropertyInfo ManufacturerSelector = ExpressionHelper.GetPropertyInfo<ProductBase, string>(x => x.Manufacturer);
-
-        /// <summary>
-        /// The manufacturer model number selector.
-        /// </summary>
-        private static readonly PropertyInfo ManufacturerModelNumberSelector = ExpressionHelper.GetPropertyInfo<ProductBase, string>(x => x.ManufacturerModelNumber);
-
-        /// <summary>
-        /// The weight selector.
-        /// </summary>
-        private static readonly PropertyInfo WeightSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.Weight);
-
-        /// <summary>
-        /// The length selector.
-        /// </summary>
-        private static readonly PropertyInfo LengthSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.Length);
-
-        /// <summary>
-        /// The width selector.
-        /// </summary>
-        private static readonly PropertyInfo WidthSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.Width);
-
-        /// <summary>
-        /// The height selector.
-        /// </summary>
-        private static readonly PropertyInfo HeightSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.Height);
-
-        /// <summary>
-        /// The barcode selector.
-        /// </summary>
-        private static readonly PropertyInfo BarcodeSelector = ExpressionHelper.GetPropertyInfo<ProductBase, string>(x => x.Barcode);
-
-        /// <summary>
-        /// The available selector.
-        /// </summary>
-        private static readonly PropertyInfo AvailableSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.Available);
-
-        /// <summary>
-        /// The track inventory selector.
-        /// </summary>
-        private static readonly PropertyInfo TrackInventorySelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.TrackInventory);
-
-        /// <summary>
-        /// The out of stock purchase selector.
-        /// </summary>
-        private static readonly PropertyInfo OutOfStockPurchaseSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.OutOfStockPurchase);
-
-        /// <summary>
-        /// The taxable selector.
-        /// </summary>
-        private static readonly PropertyInfo TaxableSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.Taxable);
-
-        /// <summary>
-        /// The shippable selector.
-        /// </summary>
-        private static readonly PropertyInfo ShippableSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.Shippable);
-
-        /// <summary>
-        /// The download selector.
-        /// </summary>
-        private static readonly PropertyInfo DownloadSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.Download);
-
-        /// <summary>
-        /// The download media id selector.
-        /// </summary>
-        private static readonly PropertyInfo DownloadMediaIdSelector = ExpressionHelper.GetPropertyInfo<ProductBase, int?>(x => x.DownloadMediaId);
-
-        /// <summary>
-        /// The version key selector.
-        /// </summary>
-        private static readonly PropertyInfo VersionKeySelector = ExpressionHelper.GetPropertyInfo<ProductBase, Guid>(x => x.VersionKey);
-
-        /// <summary>
-        /// The warehouse inventory changed selector.
-        /// </summary>
-        private static readonly PropertyInfo WarehouseInventoryChangedSelector = ExpressionHelper.GetPropertyInfo<ProductBase, CatalogInventoryCollection>(x => x.CatalogInventoryCollection);
-
-        /// <summary>
-        /// The detached contents selector.
-        /// </summary>
-        private static readonly PropertyInfo DetachedContentsSelector = ExpressionHelper.GetPropertyInfo<ProductVariant, DetachedContentCollection<IProductVariantDetachedContent>>(x => x.DetachedContents);
 
         /// <summary>
         /// The SKU.
@@ -272,10 +160,10 @@
         /// </param>
         internal ProductBase(string name, string sku, decimal price, CatalogInventoryCollection catalogInventoryCollection, DetachedContentCollection<IProductVariantDetachedContent> detachedContents)
         {
-            Mandate.ParameterNotNullOrEmpty(name, "name");
-            Mandate.ParameterNotNullOrEmpty(sku, "sku");
-            Mandate.ParameterNotNull(catalogInventoryCollection, "warehouseInventory");
-            Mandate.ParameterNotNull(detachedContents, "detachedContents");
+            Ensure.ParameterNotNullOrEmpty(name, "name");
+            Ensure.ParameterNotNullOrEmpty(sku, "sku");
+            Ensure.ParameterNotNull(catalogInventoryCollection, "warehouseInventory");
+            Ensure.ParameterNotNull(detachedContents, "detachedContents");
             _name = name;
             _sku = sku;
             _price = price;
@@ -301,18 +189,17 @@
         }
         
 
-        /// <summary>
-        /// Gets a Product variant inventory across all warehouses
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public IEnumerable<ICatalogInventory> CatalogInventories
         {
-            get { return _catalogInventoryCollection; }
+            get
+            {
+                return _catalogInventoryCollection;
+            }
         }
 
-        /// <summary>
-        /// Gets the detached contents.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public virtual DetachedContentCollection<IProductVariantDetachedContent> DetachedContents
         {
@@ -333,9 +220,7 @@
             }
         }
 
-        /// <summary>
-        /// Gets or sets SKU associated with the Product
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Sku
         {
@@ -346,20 +231,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _sku = value;
-                    return _sku;
-                }, 
-                _sku, 
-                SkuSelector);
+                SetPropertyValueAndDetectChanges(value, ref _sku, _ps.Value.SkuSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the name associated with the Product
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Name
         {
@@ -370,20 +246,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _name = value;
-                    return _name;
-                }, 
-                _name, 
-                NameSelector);
+                SetPropertyValueAndDetectChanges(value, ref _name, _ps.Value.NameSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the price associated with the Product
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public decimal Price
         {
@@ -394,20 +261,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _price = value;
-                    return _price;
-                }, 
-                _price, 
-                PriceSelector);
+                SetPropertyValueAndDetectChanges(value, ref _price, _ps.Value.PriceSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the costOfGoods associated with the Product
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public decimal? CostOfGoods
         {
@@ -418,20 +276,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                        {
-                    _costOfGoods = value;
-                    return _costOfGoods;
-                }, 
-                _costOfGoods, 
-                CostOfGoodsSelector);
+                SetPropertyValueAndDetectChanges(value, ref _costOfGoods, _ps.Value.CostOfGoodsSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the sale price associated with the Product
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public decimal? SalePrice
         {
@@ -442,20 +291,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                        {
-                    _salePrice = value;
-                    return _salePrice;
-                }, 
-                _salePrice, 
-                SalePriceSelector);
+                SetPropertyValueAndDetectChanges(value, ref _salePrice, _ps.Value.SalePriceSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether or not this product is on sale
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public bool OnSale
         {
@@ -466,21 +306,12 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _onSale = value;
-                    return _onSale;
-                }, 
-                _onSale, 
-                OnSaleSelector);
+                SetPropertyValueAndDetectChanges(value, ref _onSale, _ps.Value.OnSaleSelector);
             }
         }
 
 
-        /// <summary>
-        /// Gets or sets the manufacturer of the product
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Manufacturer
         {
@@ -491,20 +322,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _manufacturer = value;
-                    return _manufacturer;
-                }, 
-                _manufacturer, 
-                ManufacturerSelector);
+                SetPropertyValueAndDetectChanges(value, ref _manufacturer, _ps.Value.ManufacturerSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the manufacturer model number of the product
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string ManufacturerModelNumber
         {
@@ -515,21 +337,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _manufacturerModelNumber = value;
-                    return _manufacturerModelNumber;
-                }, 
-                _manufacturerModelNumber, 
-                ManufacturerModelNumberSelector);
+                SetPropertyValueAndDetectChanges(value, ref _manufacturerModelNumber, _ps.Value.ManufacturerModelNumberSelector);
             }
         }
 
-
-        /// <summary>
-        /// Gets or sets the weight associated with the Product
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public decimal? Weight
         {
@@ -540,20 +352,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _weight = value;
-                    return _weight;
-                }, 
-                _weight, 
-                WeightSelector);
+                SetPropertyValueAndDetectChanges(value, ref _weight, _ps.Value.WeightSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the length associated with the Product
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public decimal? Length
         {
@@ -564,20 +367,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _length = value;
-                    return _length;
-                }, 
-                _length, 
-                LengthSelector);
+                SetPropertyValueAndDetectChanges(value, ref _length, _ps.Value.LengthSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the width associated with the Product
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public decimal? Width
         {
@@ -588,20 +382,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                        {
-                    _width = value;
-                    return _width;
-                }, 
-                _width, 
-                WidthSelector);
+                SetPropertyValueAndDetectChanges(value, ref _width, _ps.Value.WidthSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the height associated with the Product
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public decimal? Height
         {
@@ -612,20 +397,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _height = value;
-                    return _height;
-                }, 
-                _height, 
-                HeightSelector);
+                SetPropertyValueAndDetectChanges(value, ref _height, _ps.Value.HeightSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the barcode of the product
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Barcode
         {
@@ -636,20 +412,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _barcode = value;
-                    return _barcode;
-                }, 
-                _barcode, 
-                BarcodeSelector);
+                SetPropertyValueAndDetectChanges(value, ref _barcode, _ps.Value.BarcodeSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether or not this product is available
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public bool Available
         {
@@ -660,20 +427,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _available = value;
-                    return _available;
-                }, 
-                _available, 
-                AvailableSelector);
+                SetPropertyValueAndDetectChanges(value, ref _available, _ps.Value.AvailableSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether or not to track inventory on this product
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public bool TrackInventory
         {
@@ -684,21 +442,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _trackInventory = value;
-                    return _trackInventory;
-                }, 
-                _trackInventory, 
-                TrackInventorySelector);
+                SetPropertyValueAndDetectChanges(value, ref _trackInventory, _ps.Value.TrackInventorySelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether or not this product can be purchased when inventory levels are 
-        /// 0 or below.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public bool OutOfStockPurchase
         {
@@ -709,20 +457,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _outOfStockPurchase = value;
-                    return _outOfStockPurchase;
-                }, 
-                _outOfStockPurchase, 
-                OutOfStockPurchaseSelector);
+                SetPropertyValueAndDetectChanges(value, ref _outOfStockPurchase, _ps.Value.OutOfStockPurchaseSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether or not the product is taxable
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public bool Taxable
         {
@@ -733,20 +472,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _taxable = value;
-                    return _taxable;
-                }, 
-                _taxable, 
-                TaxableSelector);
+                SetPropertyValueAndDetectChanges(value, ref _taxable, _ps.Value.TaxableSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether or not the product is shippable
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public bool Shippable
         {
@@ -757,20 +487,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _shippable = value;
-                    return _shippable;
-                }, 
-                _shippable, 
-                ShippableSelector);
+                SetPropertyValueAndDetectChanges(value, ref _shippable, _ps.Value.ShippableSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether or not this is a downloadable product
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public bool Download
         {
@@ -781,20 +502,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _download = value;
-                    return _download;
-                }, 
-                _download, 
-                DownloadSelector);
+                SetPropertyValueAndDetectChanges(value, ref _download, _ps.Value.DownloadSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the Umbraco media id of the downloadable media
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public int? DownloadMediaId
         {
@@ -805,20 +517,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _downloadMediaId = value;
-                    return _downloadMediaId;
-                }, 
-                _downloadMediaId, 
-                DownloadMediaIdSelector);
+                SetPropertyValueAndDetectChanges(value, ref _downloadMediaId, _ps.Value.DownloadMediaIdSelector);
             }
         }
 
-        /// <summary>
-        /// Gets the version key.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public Guid VersionKey
         {
@@ -829,20 +532,11 @@
 
             internal set
             {
-                SetPropertyValueAndDetectChanges(
-                o =>
-                {
-                    _versionKey = value;
-                    return _versionKey;
-                }, 
-                _versionKey, 
-                VersionKeySelector);
+                SetPropertyValueAndDetectChanges(value, ref _versionKey, _ps.Value.VersionKeySelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the catalog inventory collection.
-        /// </summary>
+        /// <inheritdoc/>
         [IgnoreDataMember]
         internal CatalogInventoryCollection CatalogInventoryCollection
         {
@@ -859,7 +553,7 @@
         }
 
         /// <summary>
-        /// The catalog inventory collection changed.
+        /// Handles the catalog inventory collection changed.
         /// </summary>
         /// <param name="sender">
         /// The sender.
@@ -869,11 +563,11 @@
         /// </param>
         private void CatalogInventoryCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            OnPropertyChanged(WarehouseInventoryChangedSelector);
+            OnPropertyChanged(_ps.Value.WarehouseInventoryChangedSelector);
         }
 
         /// <summary>
-        /// The detached contents on collection changed.
+        /// Handles the detached contents on collection changed.
         /// </summary>
         /// <param name="sender">
         /// The sender.
@@ -883,7 +577,128 @@
         /// </param>
         private void DetachedContentsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
         {
-            this.OnPropertyChanged(DetachedContentsSelector);
+            this.OnPropertyChanged(_ps.Value.DetachedContentsSelector);
+        }
+
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private class PropertySelectors
+        {
+            /// <summary>
+            /// The SKU selector.
+            /// </summary>
+            public readonly PropertyInfo SkuSelector = ExpressionHelper.GetPropertyInfo<ProductBase, string>(x => x.Sku);
+
+            /// <summary>
+            /// The name selector.
+            /// </summary>
+            public readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<ProductBase, string>(x => x.Name);
+
+            /// <summary>
+            /// The price selector.
+            /// </summary>
+            public readonly PropertyInfo PriceSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal>(x => x.Price);
+
+            /// <summary>
+            /// The cost of goods selector.
+            /// </summary>
+            public readonly PropertyInfo CostOfGoodsSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.CostOfGoods);
+
+            /// <summary>
+            /// The sale price selector.
+            /// </summary>
+            public readonly PropertyInfo SalePriceSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.SalePrice);
+
+            /// <summary>
+            /// The on sale selector.
+            /// </summary>
+            public readonly PropertyInfo OnSaleSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.OnSale);
+
+            /// <summary>
+            /// The manufacturer selector.
+            /// </summary>
+            public readonly PropertyInfo ManufacturerSelector = ExpressionHelper.GetPropertyInfo<ProductBase, string>(x => x.Manufacturer);
+
+            /// <summary>
+            /// The manufacturer model number selector.
+            /// </summary>
+            public readonly PropertyInfo ManufacturerModelNumberSelector = ExpressionHelper.GetPropertyInfo<ProductBase, string>(x => x.ManufacturerModelNumber);
+
+            /// <summary>
+            /// The weight selector.
+            /// </summary>
+            public readonly PropertyInfo WeightSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.Weight);
+
+            /// <summary>
+            /// The length selector.
+            /// </summary>
+            public readonly PropertyInfo LengthSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.Length);
+
+            /// <summary>
+            /// The width selector.
+            /// </summary>
+            public readonly PropertyInfo WidthSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.Width);
+
+            /// <summary>
+            /// The height selector.
+            /// </summary>
+            public readonly PropertyInfo HeightSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.Height);
+
+            /// <summary>
+            /// The barcode selector.
+            /// </summary>
+            public readonly PropertyInfo BarcodeSelector = ExpressionHelper.GetPropertyInfo<ProductBase, string>(x => x.Barcode);
+
+            /// <summary>
+            /// The available selector.
+            /// </summary>
+            public readonly PropertyInfo AvailableSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.Available);
+
+            /// <summary>
+            /// The track inventory selector.
+            /// </summary>
+            public readonly PropertyInfo TrackInventorySelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.TrackInventory);
+
+            /// <summary>
+            /// The out of stock purchase selector.
+            /// </summary>
+            public readonly PropertyInfo OutOfStockPurchaseSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.OutOfStockPurchase);
+
+            /// <summary>
+            /// The taxable selector.
+            /// </summary>
+            public readonly PropertyInfo TaxableSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.Taxable);
+
+            /// <summary>
+            /// The shippable selector.
+            /// </summary>
+            public readonly PropertyInfo ShippableSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.Shippable);
+
+            /// <summary>
+            /// The download selector.
+            /// </summary>
+            public readonly PropertyInfo DownloadSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.Download);
+
+            /// <summary>
+            /// The download media id selector.
+            /// </summary>
+            public readonly PropertyInfo DownloadMediaIdSelector = ExpressionHelper.GetPropertyInfo<ProductBase, int?>(x => x.DownloadMediaId);
+
+            /// <summary>
+            /// The version key selector.
+            /// </summary>
+            public readonly PropertyInfo VersionKeySelector = ExpressionHelper.GetPropertyInfo<ProductBase, Guid>(x => x.VersionKey);
+
+            /// <summary>
+            /// The warehouse inventory changed selector.
+            /// </summary>
+            public readonly PropertyInfo WarehouseInventoryChangedSelector = ExpressionHelper.GetPropertyInfo<ProductBase, CatalogInventoryCollection>(x => x.CatalogInventoryCollection);
+
+            /// <summary>
+            /// The detached contents selector.
+            /// </summary>
+            public readonly PropertyInfo DetachedContentsSelector = ExpressionHelper.GetPropertyInfo<ProductVariant, DetachedContentCollection<IProductVariantDetachedContent>>(x => x.DetachedContents);
         }
     }
 }

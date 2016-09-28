@@ -1,10 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
     using System;
     using System.Collections.Generic;
     using System.Collections.Specialized;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
     using System.Net.Configuration;

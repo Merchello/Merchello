@@ -8,8 +8,6 @@
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.TypeFields;
 
-    using Umbraco.Core;
-
     /// <summary>
     /// Represents a payment.
     /// </summary>
@@ -17,62 +15,12 @@
     [DataContract(IsReference = true)]
     public class Payment : Entity, IPayment
     {
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private static readonly Lazy<PropertySelectors> _ps = new Lazy<PropertySelectors>();
+
         #region Fields
-
-        /// <summary>
-        /// The customer key selector.
-        /// </summary>
-        private static readonly PropertyInfo CustomerKeySelector = ExpressionHelper.GetPropertyInfo<Payment, Guid?>(x => x.CustomerKey);
-
-        /// <summary>
-        /// The payment method key selector.
-        /// </summary>
-        private static readonly PropertyInfo PaymentMethodKeySelector = ExpressionHelper.GetPropertyInfo<Payment, Guid?>(x => x.PaymentMethodKey);
-
-        /// <summary>
-        /// The payment type field key selector.
-        /// </summary>
-        private static readonly PropertyInfo PaymentTypeFieldKeySelector = ExpressionHelper.GetPropertyInfo<Payment, Guid>(x => x.PaymentTypeFieldKey);
-
-        /// <summary>
-        /// The payment method name selector.
-        /// </summary>
-        private static readonly PropertyInfo PaymentMethodNameSelector = ExpressionHelper.GetPropertyInfo<Payment, string>(x => x.PaymentMethodName);
-
-        /// <summary>
-        /// The reference number selector.
-        /// </summary>
-        private static readonly PropertyInfo ReferenceNumberSelector = ExpressionHelper.GetPropertyInfo<Payment, string>(x => x.ReferenceNumber);
-
-        /// <summary>
-        /// The amount selector.
-        /// </summary>
-        private static readonly PropertyInfo AmountSelector = ExpressionHelper.GetPropertyInfo<Payment, decimal>(x => x.Amount);
-
-        /// <summary>
-        /// The authorized selector.
-        /// </summary>
-        private static readonly PropertyInfo AuthorizedSelector = ExpressionHelper.GetPropertyInfo<Payment, bool>(x => x.Authorized);
-
-        /// <summary>
-        /// The collected selector.
-        /// </summary>
-        private static readonly PropertyInfo CollectedSelector = ExpressionHelper.GetPropertyInfo<Payment, bool>(x => x.Collected);
-
-        /// <summary>
-        /// The voided selector.
-        /// </summary>
-        private static readonly PropertyInfo VoidedSelector = ExpressionHelper.GetPropertyInfo<Payment, bool>(x => x.Voided);
-
-        /// <summary>
-        /// The exported selector.
-        /// </summary>
-        private static readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<Payment, bool>(x => x.Exported);
-
-        /// <summary>
-        /// The extended data changed selector.
-        /// </summary>
-        private static readonly PropertyInfo ExtendedDataChangedSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, ExtendedDataCollection>(x => x.ExtendedData);
 
         /// <summary>
         /// The customer key.
@@ -199,19 +147,16 @@
         /// </param>
         internal Payment(Guid paymentTypeFieldKey, decimal amount, Guid? paymentMethodKey, ExtendedDataCollection extendedData)  
         {
-            Mandate.ParameterCondition(!Guid.Empty.Equals(paymentTypeFieldKey), "paymentTypeFieldKey");
-            Mandate.ParameterNotNull(extendedData, "extendedData");
+            Ensure.ParameterCondition(!Guid.Empty.Equals(paymentTypeFieldKey), "paymentTypeFieldKey");
+            Ensure.ParameterNotNull(extendedData, "extendedData");
             
-
             _amount = amount;
             _paymentMethodKey = paymentMethodKey;
             _paymentTypeFieldKey = paymentTypeFieldKey;
             _extendedData = extendedData;
         }        
 
-        /// <summary>
-        /// Gets or sets the customerKey associated with the Payment
-        /// </summary>
+        /// <inheritdoc/>
         [IgnoreDataMember]
         public Guid? CustomerKey
         {
@@ -222,21 +167,12 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _customerKey = value;
-                        return _customerKey;
-                    }, 
-                    _customerKey, 
-                    CustomerKeySelector);
+                SetPropertyValueAndDetectChanges(value, ref _customerKey, _ps.Value.CustomerKeySelector);
             }
         }
-   
 
-        /// <summary>
-        /// Gets or sets the payment method key associated with the fulfillment provider for this payment
-        /// </summary>
+
+        /// <inheritdoc/>
         [DataMember]
         public Guid? PaymentMethodKey
         {
@@ -247,20 +183,11 @@
 
             set 
             { 
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _paymentMethodKey = value;
-                        return _paymentMethodKey;
-                    }, 
-                    _paymentMethodKey, 
-                    PaymentMethodKeySelector); 
+                SetPropertyValueAndDetectChanges(value, ref _paymentMethodKey, _ps.Value.PaymentMethodKeySelector); 
             }
         }
-    
-        /// <summary>
-        /// Gets or sets the paymentTypeFieldKey associated with the Payment
-        /// </summary>
+
+        /// <inheritdoc/>
         [DataMember]
         public Guid PaymentTypeFieldKey
         {
@@ -271,20 +198,11 @@
 
             set 
             { 
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _paymentTypeFieldKey = value;
-                        return _paymentTypeFieldKey;
-                    }, 
-                    _paymentTypeFieldKey, 
-                    PaymentTypeFieldKeySelector); 
+                SetPropertyValueAndDetectChanges(value, ref _paymentTypeFieldKey, _ps.Value.PaymentTypeFieldKeySelector); 
             }
         }
-    
-        /// <summary>
-        /// Gets or sets the paymentMethodName associated with the Payment
-        /// </summary>
+
+        /// <inheritdoc/>
         [DataMember]
         public string PaymentMethodName
         {
@@ -295,20 +213,11 @@
 
             set 
             { 
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _paymentMethodName = value;
-                        return _paymentMethodName;
-                    }, 
-                    _paymentMethodName, 
-                    PaymentMethodNameSelector); 
+                SetPropertyValueAndDetectChanges(value, ref _paymentMethodName, _ps.Value.PaymentMethodNameSelector); 
             }
         }
-    
-        /// <summary>
-        /// Gets or sets the referenceNumber associated with the Payment
-        /// </summary>
+
+        /// <inheritdoc/>
         [DataMember]
         public string ReferenceNumber
         {
@@ -319,20 +228,11 @@
 
             set 
             { 
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _referenceNumber = value;
-                        return _referenceNumber;
-                    }, 
-                    _referenceNumber, 
-                    ReferenceNumberSelector); 
+                SetPropertyValueAndDetectChanges(value, ref _referenceNumber, _ps.Value.ReferenceNumberSelector); 
             }
         }
-    
-        /// <summary>
-        /// Gets or sets the amount associated with the Payment
-        /// </summary>
+
+        /// <inheritdoc/>
         [DataMember]
         public decimal Amount
         {
@@ -343,20 +243,11 @@
 
             set 
             { 
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _amount = value;
-                        return _amount;
-                    }, 
-                    _amount, 
-                    AmountSelector); 
+                SetPropertyValueAndDetectChanges(value, ref _amount, _ps.Value.AmountSelector); 
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether or not this payment has been authorized with the payment gateway provider
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public bool Authorized
         {
@@ -367,20 +258,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _authorized = value;
-                        return _authorized;
-                    }, 
-                    _authorized, 
-                    AuthorizedSelector);
+                SetPropertyValueAndDetectChanges(value, ref _authorized, _ps.Value.AuthorizedSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether or not this payment has been collected by the merchant
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public bool Collected
         {
@@ -391,20 +273,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _collected = value;
-                        return _collected;
-                    }, 
-                    _collected, 
-                    CollectedSelector);
+                SetPropertyValueAndDetectChanges(value, ref _collected, _ps.Value.CollectedSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether or not the payment has been voided
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public bool Voided
         {
@@ -415,20 +288,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _voided = value;
-                        return _voided;
-                    }, 
-                    _voided, 
-                    VoidedSelector);
+                SetPropertyValueAndDetectChanges(value, ref _voided, _ps.Value.VoidedSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the payment has been exported
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public bool Exported
         {
@@ -439,20 +303,11 @@
 
             set 
             { 
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _exported = value;
-                        return _exported;
-                    }, 
-                    _exported, 
-                    ExportedSelector); 
+                SetPropertyValueAndDetectChanges(value, ref _exported, _ps.Value.ExportedSelector); 
             }
         }
 
-        /// <summary>
-        /// Gets the collection to store custom/extended data for the payment
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public ExtendedDataCollection ExtendedData
         {
@@ -468,9 +323,7 @@
             }
         }
 
-        /// <summary>
-        /// Gets or sets the payment method type.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public PaymentMethodType PaymentMethodType
         {
@@ -491,7 +344,7 @@
         }
 
         /// <summary>
-        /// The extended data changed.
+        /// Handles the extended data collection changed.
         /// </summary>
         /// <param name="sender">
         /// The sender.
@@ -501,8 +354,68 @@
         /// </param>
         private void ExtendedDataChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            OnPropertyChanged(ExtendedDataChangedSelector);
+            OnPropertyChanged(_ps.Value.ExtendedDataChangedSelector);
+        }
+
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private class PropertySelectors
+        {
+            /// <summary>
+            /// The customer key selector.
+            /// </summary>
+            public readonly PropertyInfo CustomerKeySelector = ExpressionHelper.GetPropertyInfo<Payment, Guid?>(x => x.CustomerKey);
+
+            /// <summary>
+            /// The payment method key selector.
+            /// </summary>
+            public readonly PropertyInfo PaymentMethodKeySelector = ExpressionHelper.GetPropertyInfo<Payment, Guid?>(x => x.PaymentMethodKey);
+
+            /// <summary>
+            /// The payment type field key selector.
+            /// </summary>
+            public readonly PropertyInfo PaymentTypeFieldKeySelector = ExpressionHelper.GetPropertyInfo<Payment, Guid>(x => x.PaymentTypeFieldKey);
+
+            /// <summary>
+            /// The payment method name selector.
+            /// </summary>
+            public readonly PropertyInfo PaymentMethodNameSelector = ExpressionHelper.GetPropertyInfo<Payment, string>(x => x.PaymentMethodName);
+
+            /// <summary>
+            /// The reference number selector.
+            /// </summary>
+            public readonly PropertyInfo ReferenceNumberSelector = ExpressionHelper.GetPropertyInfo<Payment, string>(x => x.ReferenceNumber);
+
+            /// <summary>
+            /// The amount selector.
+            /// </summary>
+            public readonly PropertyInfo AmountSelector = ExpressionHelper.GetPropertyInfo<Payment, decimal>(x => x.Amount);
+
+            /// <summary>
+            /// The authorized selector.
+            /// </summary>
+            public readonly PropertyInfo AuthorizedSelector = ExpressionHelper.GetPropertyInfo<Payment, bool>(x => x.Authorized);
+
+            /// <summary>
+            /// The collected selector.
+            /// </summary>
+            public readonly PropertyInfo CollectedSelector = ExpressionHelper.GetPropertyInfo<Payment, bool>(x => x.Collected);
+
+            /// <summary>
+            /// The voided selector.
+            /// </summary>
+            public readonly PropertyInfo VoidedSelector = ExpressionHelper.GetPropertyInfo<Payment, bool>(x => x.Voided);
+
+            /// <summary>
+            /// The exported selector.
+            /// </summary>
+            public readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<Payment, bool>(x => x.Exported);
+
+            /// <summary>
+            /// The extended data changed selector.
+            /// </summary>
+            public readonly PropertyInfo ExtendedDataChangedSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, ExtendedDataCollection>(x => x.ExtendedData);
         }
     }
-
 }

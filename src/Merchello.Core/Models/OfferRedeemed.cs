@@ -8,8 +8,6 @@
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.Interfaces;
 
-    using Umbraco.Core;
-
     /// <summary>
     /// Represents an offer redemption record.
     /// </summary>
@@ -17,43 +15,13 @@
     [DataContract(IsReference = true)]
     internal class OfferRedeemed : Entity, IOfferRedeemed
     {
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private static readonly Lazy<PropertySelectors> _ps = new Lazy<PropertySelectors>();
+
         #region Fields
 
-        /// <summary>
-        /// The offer settings key selector.
-        /// </summary>
-        private static readonly PropertyInfo OfferSettingsKeySelector = ExpressionHelper.GetPropertyInfo<OfferRedeemed, Guid?>(x => x.OfferSettingsKey);
-
-        /// <summary>
-        /// The offer code selector.
-        /// </summary>
-        private static readonly PropertyInfo OfferCodeSelector = ExpressionHelper.GetPropertyInfo<OfferRedeemed, string>(x => x.OfferCode);
-
-        /// <summary>
-        /// The offer provider key selector.
-        /// </summary>
-        private static readonly PropertyInfo OfferProviderKeySelector = ExpressionHelper.GetPropertyInfo<OfferRedeemed, Guid>(x => x.OfferProviderKey);
-
-        /// <summary>
-        /// The customer key selector.
-        /// </summary>
-        private static readonly PropertyInfo CustomerKeySelector = ExpressionHelper.GetPropertyInfo<OfferRedeemed, Guid?>(x => x.CustomerKey);
-
-        /// <summary>
-        /// The redeemed date selector.
-        /// </summary>
-        private static readonly PropertyInfo RedeemedDateSelector = ExpressionHelper.GetPropertyInfo<OfferRedeemed, DateTime>(x => x.RedeemedDate);
-
-        /// <summary>
-        /// The invoice key selector.
-        /// </summary>
-        private static readonly PropertyInfo InvoiceKeySelector = ExpressionHelper.GetPropertyInfo<OfferRedeemed, Guid>(x => x.InvoiceKey);
-
-        /// <summary>
-        /// The extended data changed selector.
-        /// </summary>
-        private static readonly PropertyInfo ExtendedDataChangedSelector = ExpressionHelper.GetPropertyInfo<OfferRedeemed, ExtendedDataCollection>(x => x.ExtendedData);
-       
         /// <summary>
         /// The offer settings key.
         /// </summary>
@@ -108,7 +76,7 @@
         /// </param>
         public OfferRedeemed(string offerCode, Guid offerProviderKey, Guid invoiceKey, Guid? offerSettingsKey)
         {
-            Mandate.ParameterNotNullOrEmpty(offerCode, "offerCode");
+            Ensure.ParameterNotNullOrEmpty(offerCode, "offerCode");
             offerProviderKey.ParameterNotEmptyGuid("offerProviderKey");
             invoiceKey.ParameterNotEmptyGuid("invoiceKey");
 
@@ -119,9 +87,7 @@
             _extendedData = new ExtendedDataCollection();
         }
 
-        /// <summary>
-        /// Gets or sets the offer settings key.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public Guid? OfferSettingsKey
         {
@@ -132,20 +98,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _offerSettingsKey = value;
-                    return _offerSettingsKey;
-                }, 
-                _offerSettingsKey, 
-                OfferSettingsKeySelector);
+                SetPropertyValueAndDetectChanges(value, ref _offerSettingsKey, _ps.Value.OfferSettingsKeySelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the offer code.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string OfferCode
         {
@@ -156,20 +113,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _offerCode = value;
-                        return _offerCode;
-                    },
-                _offerCode,
-                OfferCodeSelector);
+                SetPropertyValueAndDetectChanges(value, ref _offerCode, _ps.Value.OfferCodeSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the offer provider key.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public Guid OfferProviderKey
         {
@@ -180,20 +128,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _offerProviderKey = value;
-                        return _offerProviderKey;
-                    },
-                _offerProviderKey,
-                OfferProviderKeySelector);
+                SetPropertyValueAndDetectChanges(value, ref _offerProviderKey, _ps.Value.OfferProviderKeySelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the customer key.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public Guid? CustomerKey
         {
@@ -204,20 +143,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _customerKey = value;
-                        return _customerKey;
-                    },
-                _customerKey,
-                CustomerKeySelector);
+                SetPropertyValueAndDetectChanges(value, ref _customerKey, _ps.Value.CustomerKeySelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the redeemed date.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public DateTime RedeemedDate
         {
@@ -228,20 +158,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _redeemedDate = value;
-                        return _redeemedDate;
-                    },
-                _redeemedDate,
-                RedeemedDateSelector);
+                SetPropertyValueAndDetectChanges(value, ref _redeemedDate, _ps.Value.RedeemedDateSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the invoice key.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public Guid InvoiceKey
         {
@@ -252,20 +173,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _invoiceKey = value;
-                        return _invoiceKey;
-                    },
-                _invoiceKey,
-                InvoiceKeySelector);
+                SetPropertyValueAndDetectChanges(value, ref _invoiceKey, _ps.Value.InvoiceKeySelector);
             }
         }
 
-        /// <summary>
-        /// Gets a collection for storing custom/extended line item data
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public ExtendedDataCollection ExtendedData
         {
@@ -281,9 +193,7 @@
             }
         }
 
-        /// <summary>
-        /// Overrides the AddingEntity method.
-        /// </summary>
+        /// <inheritdoc/>
         internal override void AddingEntity()
         {
             base.AddingEntity();
@@ -291,7 +201,7 @@
         }
 
         /// <summary>
-        /// Event handled for the OnPropertyChanged event.
+        /// Handles the extended data collection changed.
         /// </summary>
         /// <param name="sender">
         /// The sender.
@@ -301,7 +211,48 @@
         /// </param>
         private void ExtendedDataChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            OnPropertyChanged(ExtendedDataChangedSelector);
+            OnPropertyChanged(_ps.Value.ExtendedDataChangedSelector);
+        }
+
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private class PropertySelectors
+        {
+            /// <summary>
+            /// The offer settings key selector.
+            /// </summary>
+            public readonly PropertyInfo OfferSettingsKeySelector = ExpressionHelper.GetPropertyInfo<OfferRedeemed, Guid?>(x => x.OfferSettingsKey);
+
+            /// <summary>
+            /// The offer code selector.
+            /// </summary>
+            public readonly PropertyInfo OfferCodeSelector = ExpressionHelper.GetPropertyInfo<OfferRedeemed, string>(x => x.OfferCode);
+
+            /// <summary>
+            /// The offer provider key selector.
+            /// </summary>
+            public readonly PropertyInfo OfferProviderKeySelector = ExpressionHelper.GetPropertyInfo<OfferRedeemed, Guid>(x => x.OfferProviderKey);
+
+            /// <summary>
+            /// The customer key selector.
+            /// </summary>
+            public readonly PropertyInfo CustomerKeySelector = ExpressionHelper.GetPropertyInfo<OfferRedeemed, Guid?>(x => x.CustomerKey);
+
+            /// <summary>
+            /// The redeemed date selector.
+            /// </summary>
+            public readonly PropertyInfo RedeemedDateSelector = ExpressionHelper.GetPropertyInfo<OfferRedeemed, DateTime>(x => x.RedeemedDate);
+
+            /// <summary>
+            /// The invoice key selector.
+            /// </summary>
+            public readonly PropertyInfo InvoiceKeySelector = ExpressionHelper.GetPropertyInfo<OfferRedeemed, Guid>(x => x.InvoiceKey);
+
+            /// <summary>
+            /// The extended data changed selector.
+            /// </summary>
+            public readonly PropertyInfo ExtendedDataChangedSelector = ExpressionHelper.GetPropertyInfo<OfferRedeemed, ExtendedDataCollection>(x => x.ExtendedData);
         }
     }
 }

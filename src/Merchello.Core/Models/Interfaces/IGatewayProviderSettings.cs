@@ -48,7 +48,5 @@
         /// </summary>
         [DataMember]
         GatewayProviderType GatewayProviderType { get; }
-
-
     }
 }

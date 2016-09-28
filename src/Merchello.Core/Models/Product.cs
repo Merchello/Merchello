@@ -10,8 +10,6 @@
 
     using Merchello.Core.Models.DetachedContent;
 
-    using Umbraco.Core;
-
     /// <summary>
     /// Defines a product variant
     /// </summary>
@@ -20,14 +18,9 @@
     internal class Product : Entity, IProduct
     {
         /// <summary>
-        /// The product options changed selector.
+        /// The property selectors.
         /// </summary>
-        private static readonly PropertyInfo ProductOptionsChangedSelector = ExpressionHelper.GetPropertyInfo<Product, ProductOptionCollection>(x => x.ProductOptions);
-
-        /// <summary>
-        /// The product variants changed selector.
-        /// </summary>
-        private static readonly PropertyInfo ProductVariantsChangedSelector = ExpressionHelper.GetPropertyInfo<Product, ProductVariantCollection>(x => x.ProductVariants);        
+        private static readonly Lazy<PropertySelectors> _ps = new Lazy<PropertySelectors>();
 
         /// <summary>
         /// The master product variant.
@@ -72,9 +65,9 @@
             ProductOptionCollection productOptions,
             ProductVariantCollection productVariants)
         {
-            Mandate.ParameterNotNull(variant, "variantMaster");
-            Mandate.ParameterNotNull(productOptions, "optionCollection");
-            Mandate.ParameterNotNull(productVariants, "productVariants");
+            Ensure.ParameterNotNull(variant, "variantMaster");
+            Ensure.ParameterNotNull(productOptions, "optionCollection");
+            Ensure.ParameterNotNull(productVariants, "productVariants");
 
             _variant = variant;
             _productOptions = productOptions;
@@ -84,18 +77,17 @@
         #region Overrides IProduct
         
 
-        /// <summary>
-        /// Gets a value indicating whether or not this group defines options
-        /// </summary>
+        /// <inheritdoc/>
         [IgnoreDataMember]
         public bool DefinesOptions
         {
-            get { return _productOptions.Any(); }            
+            get
+            {
+                return _productOptions.Any();
+            }            
         }
 
-        /// <summary>
-        /// Gets or sets the options that define the product attributes which 
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public ProductOptionCollection ProductOptions 
         {
@@ -111,9 +103,7 @@
             }
         }
 
-        /// <summary>
-        /// Gets or sets the Product variants available for this product
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public ProductVariantCollection ProductVariants
         {
@@ -133,237 +123,342 @@
 
         #region Overrides IProductBase
 
-        /// <summary>
-        /// Gets the product variant template's key
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public Guid ProductVariantKey
         {
-            get { return _variant.Key; }
-            private set { _variant.Key = value; }
+            get
+            {
+                return _variant.Key;
+            }
+
+            private set
+            {
+                _variant.Key = value;
+            }
         }
 
-        /// <summary>
-        /// Gets or sets the product variant template's name
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Name
         {
-            get { return _variant.Name; }
-            set { _variant.Name = value; }
+            get
+            {
+                return _variant.Name;
+            }
+
+            set
+            {
+                _variant.Name = value;
+            }
         }
 
-        /// <summary>
-        /// Gets or sets the product variant template's SKU
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Sku
         {
-            get { return _variant.Sku; }
-            set { _variant.Sku = value; }
+            get
+            {
+                return _variant.Sku;
+            }
+
+            set
+            {
+                _variant.Sku = value;
+            }
         }
 
-        /// <summary>
-        /// Gets or sets the product variant template's price
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public decimal Price
         {
-            get { return _variant.Price; }
-            set { _variant.Price = value; }
+            get
+            {
+                return _variant.Price;
+            }
+
+            set
+            {
+                _variant.Price = value;
+            }
         }
 
-        /// <summary>
-        /// Gets or sets the product variant template's cost of goods
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public decimal? CostOfGoods
         {
-            get { return _variant.CostOfGoods; }
-            set { _variant.CostOfGoods = value; }
+            get
+            {
+                return _variant.CostOfGoods;
+            }
+
+            set
+            {
+                _variant.CostOfGoods = value;
+            }
         }
 
-        /// <summary>
-        /// Gets or sets the product variant template's sale price
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public decimal? SalePrice
         {
-            get { return _variant.SalePrice; }
-            set { _variant.SalePrice = value; }
+            get
+            {
+                return _variant.SalePrice;
+            }
+
+            set
+            {
+                _variant.SalePrice = value;
+            }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether or not the product variant template's on sale value
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public bool OnSale
         {
-            get { return _variant.OnSale; }
-            set { _variant.OnSale = value; }
+            get
+            {
+                return _variant.OnSale;
+            }
+
+            set
+            {
+                _variant.OnSale = value;
+            }
         }
 
-        /// <summary>
-        /// Gets or sets the product variant template's manufacturer
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Manufacturer
         {
-            get { return _variant.Manufacturer; }
-            set { _variant.Manufacturer = value; }
+            get
+            {
+                return _variant.Manufacturer;
+            }
+
+            set
+            {
+                _variant.Manufacturer = value;
+            }
         }
 
-        /// <summary>
-        /// Gets or sets the product variant template's manufacturer
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string ManufacturerModelNumber
         {
-            get { return _variant.ManufacturerModelNumber; }
-            set { _variant.ManufacturerModelNumber = value; }
+            get
+            {
+                return _variant.ManufacturerModelNumber;
+            }
+
+            set
+            {
+                _variant.ManufacturerModelNumber = value;
+            }
         }
 
-        /// <summary>
-        /// Gets or sets the product variant template's weight
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public decimal? Weight
         {
-            get { return _variant.Weight; }
-            set { _variant.Weight = value; }
+            get
+            {
+                return _variant.Weight;
+            }
+
+            set
+            {
+                _variant.Weight = value;
+            }
         }
 
-        /// <summary>
-        /// Gets or sets the product variant template's length
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public decimal? Length
         {
-            get { return _variant.Length; }
-            set { _variant.Length = value; }
+            get
+            {
+                return _variant.Length;
+            }
+
+            set
+            {
+                _variant.Length = value;
+            }
         }
 
-        /// <summary>
-        /// Gets or sets the product variant template's width
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public decimal? Width
         {
-            get { return _variant.Width; }
-            set { _variant.Width = value; }
+            get
+            {
+                return _variant.Width;
+            }
+
+            set
+            {
+                _variant.Width = value;
+            }
         }
 
-        /// <summary>
-        /// Gets or sets the product variant template's height
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public decimal? Height
         {
-            get { return _variant.Height; }
-            set { _variant.Height = value; }
+            get
+            {
+                return _variant.Height;
+            }
+
+            set
+            {
+                _variant.Height = value;
+            }
         }
 
-        /// <summary>
-        /// Gets or sets the product variant template's barcode
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Barcode
         {
-            get { return _variant.Barcode; }
-            set { _variant.Barcode = value; }
+            get
+            {
+                return _variant.Barcode;
+            }
+
+            set
+            {
+                _variant.Barcode = value;
+            }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether or not the product variant template's available value is true
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public bool Available
         {
-            get { return _variant.Available; }
-            set { _variant.Available = value; }
+            get
+            {
+                return _variant.Available;
+            }
+
+            set
+            {
+                _variant.Available = value;
+            }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the product variant template's tracks inventory value is true
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public bool TrackInventory
         {
-            get { return _variant.TrackInventory; }
-            set { _variant.TrackInventory = value; }
+            get
+            {
+                return _variant.TrackInventory;
+            }
+
+            set
+            {
+                _variant.TrackInventory = value;
+            }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the product variant template's out of stock purchase value is true
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public bool OutOfStockPurchase
         {
-            get { return _variant.OutOfStockPurchase; }
-            set { _variant.OutOfStockPurchase = value; }
+            get
+            {
+                return _variant.OutOfStockPurchase;
+            }
+
+            set
+            {
+                _variant.OutOfStockPurchase = value;
+            }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the product variant template's taxable value is true
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public bool Taxable
         {
-            get { return _variant.Taxable; }
-            set { _variant.Taxable = value; }
+            get
+            {
+                return _variant.Taxable;
+            }
+
+            set
+            {
+                _variant.Taxable = value;
+            }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the product variant template's shippable value is true
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public bool Shippable
         {
-            get { return _variant.Shippable; }
-            set { _variant.Shippable = value; }
+            get
+            {
+                return _variant.Shippable;
+            }
+
+            set
+            {
+                _variant.Shippable = value;
+            }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the product variant template's download value is true
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public bool Download
         {
-            get { return _variant.Download; }
-            set { _variant.Download = value; }
+            get
+            {
+                return _variant.Download;
+            }
+
+            set
+            {
+                _variant.Download = value;
+            }
         }
 
-        /// <summary>
-        /// Gets or sets the product variant template's download media id value
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public int? DownloadMediaId
         {
-            get { return _variant.DownloadMediaId; }
-            set { _variant.DownloadMediaId = value; }
+            get
+            {
+                return _variant.DownloadMediaId;
+            }
+
+            set
+            {
+                _variant.DownloadMediaId = value;
+            }
         }
 
-        /// <summary>
-        /// Gets the version key.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public Guid VersionKey
         {
-            get { return _variant.VersionKey; }
+            get
+            {
+                return _variant.VersionKey;
+            }
         }
 
-        /// <summary>
-        /// Gets the product variant template's inventory collection
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public IEnumerable<ICatalogInventory> CatalogInventories
         {
-            get { return _variant.CatalogInventories; }
+            get
+            {
+                return _variant.CatalogInventories;
+            }
         }
 
-        /// <summary>
-        /// Gets the detached contents.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public DetachedContentCollection<IProductVariantDetachedContent> DetachedContents
         {
@@ -373,28 +468,25 @@
             }
         }
 
-        /// <summary>
-        /// Gets the master variant.
-        /// </summary>
+        /// <inheritdoc/>
         internal IProductVariant MasterVariant
         {
-            get { return _variant; }
+            get
+            {
+                return _variant;
+            }
         }
 
         #endregion
 
-        /// <summary>
-        /// The reset dirty properties.
-        /// </summary>
+        /// <inheritdoc/>
         public override void ResetDirtyProperties()
         {
             base.ResetDirtyProperties();
             _variant.ResetDirtyProperties();
         }
 
-        /// <summary>
-        /// The adding entity.
-        /// </summary>
+        /// <inheritdoc/>
         internal override void AddingEntity()
         {
             base.AddingEntity();
@@ -402,9 +494,7 @@
             ((ProductVariant)_variant).AddingEntity();
         }
 
-        /// <summary>
-        /// The updating entity.
-        /// </summary>
+        /// <inheritdoc/>
         internal override void UpdatingEntity()
         {
             base.UpdatingEntity();
@@ -422,7 +512,7 @@
         /// </param>
         private void ProductOptionsChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            OnPropertyChanged(ProductOptionsChangedSelector);
+            OnPropertyChanged(_ps.Value.ProductOptionsChangedSelector);
         }
 
         /// <summary>
@@ -436,7 +526,23 @@
         /// </param>
         private void ProductVariantsChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            OnPropertyChanged(ProductVariantsChangedSelector);
+            OnPropertyChanged(_ps.Value.ProductVariantsChangedSelector);
+        }
+
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private class PropertySelectors
+        {
+            /// <summary>
+            /// The product options changed selector.
+            /// </summary>
+            public readonly PropertyInfo ProductOptionsChangedSelector = ExpressionHelper.GetPropertyInfo<Product, ProductOptionCollection>(x => x.ProductOptions);
+
+            /// <summary>
+            /// The product variants changed selector.
+            /// </summary>
+            public readonly PropertyInfo ProductVariantsChangedSelector = ExpressionHelper.GetPropertyInfo<Product, ProductVariantCollection>(x => x.ProductVariants);
         }
     }
 }

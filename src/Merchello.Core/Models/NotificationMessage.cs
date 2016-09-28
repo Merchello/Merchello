@@ -6,8 +6,6 @@
 
     using Merchello.Core.Models.EntityBase;
 
-    using Umbraco.Core;
-
     /// <summary>
     /// Defines a notification message
     /// </summary>
@@ -15,62 +13,12 @@
     [DataContract(IsReference = true)]
     public class NotificationMessage : Entity, INotificationMessage
     {
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private static readonly Lazy<PropertySelectors> _ps = new Lazy<PropertySelectors>();
+
         #region Fields
-
-        /// <summary>
-        /// The name selector.
-        /// </summary>
-        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.Name);
-
-        /// <summary>
-        /// The description selector.
-        /// </summary>
-        private static readonly PropertyInfo DescriptionSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.Description);
-
-        /// <summary>
-        /// The from selector.
-        /// </summary>
-        private static readonly PropertyInfo FromSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.FromAddress);
-
-        /// <summary>
-        /// The reply to selector.
-        /// </summary>
-        private static readonly PropertyInfo ReplyToSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.ReplyTo);
-
-        /// <summary>
-        /// The max length selector.
-        /// </summary>
-        private static readonly PropertyInfo MaxLengthSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, int>(x => x.MaxLength);
-
-        /// <summary>
-        /// The message selector.
-        /// </summary>
-        private static readonly PropertyInfo MessageSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.BodyText);
-
-        /// <summary>
-        /// The message is file path selector.
-        /// </summary>
-        private static readonly PropertyInfo MessageIsFilePathSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, bool>(x => x.BodyTextIsFilePath);
-
-        /// <summary>
-        /// The monitor key selector.
-        /// </summary>
-        private static readonly PropertyInfo MonitorKeySelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, Guid?>(x => x.MonitorKey);
-
-        /// <summary>
-        /// The recipients selector.
-        /// </summary>
-        private static readonly PropertyInfo RecipientsSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.Recipients);
-
-        /// <summary>
-        /// The send to customer selector.
-        /// </summary>
-        private static readonly PropertyInfo SendToCustomerSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, bool>(x => x.SendToCustomer);
-
-        /// <summary>
-        /// The disabled selector.
-        /// </summary>
-        private static readonly PropertyInfo DisabledSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, bool>(x => x.Disabled);
 
         /// <summary>
         /// The notification method key.
@@ -148,9 +96,9 @@
         /// </param>
         public NotificationMessage(Guid notificationMethodKey, string name, string fromAddress)
         {
-            Mandate.ParameterCondition(!Guid.Empty.Equals(notificationMethodKey), "notificationMethodKey");
-            Mandate.ParameterNotNullOrEmpty(fromAddress, "from");
-            Mandate.ParameterNotNullOrEmpty(name, "name");
+            Ensure.ParameterCondition(!Guid.Empty.Equals(notificationMethodKey), "notificationMethodKey");
+            Ensure.ParameterNotNullOrEmpty(fromAddress, "from");
+            Ensure.ParameterNotNullOrEmpty(name, "name");
 
             _methodKey = notificationMethodKey;
             _fromAddress = fromAddress;
@@ -159,17 +107,17 @@
         }
 
 
-        /// <summary>
-        /// Gets the <see cref="INotificationMethod"/> key
-        /// </summary>
+        /// <inheritdoc/>
+        [DataMember]
         public Guid MethodKey
         {
-            get { return _methodKey; }
+            get
+            {
+                return _methodKey;
+            }
         }
 
-        /// <summary>
-        /// Gets or sets the name of the notification.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Name
         {
@@ -180,20 +128,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _name = value;
-                    return _name;
-                }, 
-                _name, 
-                NameSelector);
+                SetPropertyValueAndDetectChanges(value, ref _name, _ps.Value.NameSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the brief description of the notification
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Description
         {
@@ -204,20 +143,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _description = value;
-                    return _description;
-                }, 
-                _description, 
-                DescriptionSelector);
+                SetPropertyValueAndDetectChanges(value, ref _description, _ps.Value.DescriptionSelector);
             }
         }
 
-        /// <summary>
-        /// Gets the sender's from address
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string FromAddress
         {
@@ -228,20 +158,11 @@
 
             internal set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _fromAddress = value;
-                    return _fromAddress;
-                }, 
-                _fromAddress, 
-                FromSelector);
+                SetPropertyValueAndDetectChanges(value, ref _fromAddress, _ps.Value.FromSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the reply to 
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string ReplyTo
         {
@@ -252,20 +173,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _replyTo = value;
-                    return _replyTo;
-                }, 
-                _replyTo, 
-                ReplyToSelector);
+                SetPropertyValueAndDetectChanges(value, ref _replyTo, _ps.Value.ReplyToSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the path or text source
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string BodyText
         {
@@ -276,20 +188,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _bodyText = value;
-                    return _bodyText;
-                }, 
-                _bodyText, 
-                MessageSelector);
+                SetPropertyValueAndDetectChanges(value, ref _bodyText, _ps.Value.MessageSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the maximum length of the message
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public int MaxLength
         {
@@ -300,20 +203,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _maxLength = value;
-                    return _maxLength;
-                }, 
-                _maxLength, 
-                MaxLengthSelector);
+                SetPropertyValueAndDetectChanges(value, ref _maxLength, _ps.Value.MaxLengthSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether or not the string value of Message is actually a path to a file to read
-        /// </summary>
+        /// <inheritdoc/>
         public bool BodyTextIsFilePath
         {
             get
@@ -323,20 +217,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _bodyTextIsFilePath = value;
-                    return _bodyTextIsFilePath;
-                }, 
-                _bodyTextIsFilePath, 
-                MessageIsFilePathSelector);
+                SetPropertyValueAndDetectChanges(value, ref _bodyTextIsFilePath, _ps.Value.MessageIsFilePathSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the optional key for Notification Monitor
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public Guid? MonitorKey
         {
@@ -347,20 +232,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _monitorKey = value;
-                    return _monitorKey;
-                }, 
-                _monitorKey, 
-                MonitorKeySelector);
+                SetPropertyValueAndDetectChanges(value, ref _monitorKey, _ps.Value.MonitorKeySelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the recipients of the notification
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Recipients
         {
@@ -371,20 +247,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _recipients = value;
-                    return _recipients;
-                }, 
-                _recipients, 
-                RecipientsSelector);
+                SetPropertyValueAndDetectChanges(value, ref _recipients, _ps.Value.RecipientsSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether or not this notification should be sent to the customer
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public bool SendToCustomer
         {
@@ -395,20 +262,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _sendToCustomer = value;
-                    return _sendToCustomer;
-                }, 
-                _sendToCustomer, 
-                SendToCustomerSelector);
+                SetPropertyValueAndDetectChanges(value, ref _sendToCustomer, _ps.Value.SendToCustomerSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether or not this notification is disabled
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public bool Disabled
         {
@@ -419,26 +277,75 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                o =>
-                {
-                    _disabled = value;
-                    return _disabled;
-                }, 
-                _disabled, 
-                DisabledSelector);
+                SetPropertyValueAndDetectChanges(value, ref _disabled, _ps.Value.DisabledSelector);
             }
         }
 
-        /// <summary>
-        /// The shallow copy.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="INotificationMessage"/>.
-        /// </returns>
+        /// <inheritdoc/>
         public INotificationMessage ShallowCopy()
         {
             return (INotificationMessage)this.MemberwiseClone();
+        }
+
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private class PropertySelectors
+        {
+            /// <summary>
+            /// The name selector.
+            /// </summary>
+            public readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.Name);
+
+            /// <summary>
+            /// The description selector.
+            /// </summary>
+            public readonly PropertyInfo DescriptionSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.Description);
+
+            /// <summary>
+            /// The from selector.
+            /// </summary>
+            public readonly PropertyInfo FromSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.FromAddress);
+
+            /// <summary>
+            /// The reply to selector.
+            /// </summary>
+            public readonly PropertyInfo ReplyToSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.ReplyTo);
+
+            /// <summary>
+            /// The max length selector.
+            /// </summary>
+            public readonly PropertyInfo MaxLengthSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, int>(x => x.MaxLength);
+
+            /// <summary>
+            /// The message selector.
+            /// </summary>
+            public readonly PropertyInfo MessageSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.BodyText);
+
+            /// <summary>
+            /// The message is file path selector.
+            /// </summary>
+            public readonly PropertyInfo MessageIsFilePathSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, bool>(x => x.BodyTextIsFilePath);
+
+            /// <summary>
+            /// The monitor key selector.
+            /// </summary>
+            public readonly PropertyInfo MonitorKeySelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, Guid?>(x => x.MonitorKey);
+
+            /// <summary>
+            /// The recipients selector.
+            /// </summary>
+            public readonly PropertyInfo RecipientsSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.Recipients);
+
+            /// <summary>
+            /// The send to customer selector.
+            /// </summary>
+            public readonly PropertyInfo SendToCustomerSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, bool>(x => x.SendToCustomer);
+
+            /// <summary>
+            /// The disabled selector.
+            /// </summary>
+            public readonly PropertyInfo DisabledSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, bool>(x => x.Disabled);
         }
     }
 }

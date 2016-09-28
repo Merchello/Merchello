@@ -1,10 +1,11 @@
-﻿using System;
-using System.Reflection;
-using System.Runtime.Serialization;
-using Merchello.Core.Models.EntityBase;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Reflection;
+    using System.Runtime.Serialization;
+
+    using Merchello.Core.Models.EntityBase;
+
     using Umbraco.Core;
 
     /// <summary>
@@ -14,80 +15,117 @@ namespace Merchello.Core.Models
     [DataContract(IsReference = true)]
     public class NotificationMethod : Entity, INotificationMethod
     {
-        private string _name;
-        private string _description;
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private static readonly Lazy<PropertySelectors> _ps = new Lazy<PropertySelectors>();
+
+        /// <summary>
+        /// The provider key.
+        /// </summary>
         private readonly Guid _providerKey;
+
+        /// <summary>
+        /// The name.
+        /// </summary>
+        private string _name;
+
+        /// <summary>
+        /// The description.
+        /// </summary>
+        private string _description;
+
+        /// <summary>
+        /// The service code.
+        /// </summary>
         private string _serviceCode;
 
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NotificationMethod"/> class.
+        /// </summary>
+        /// <param name="providerKey">
+        /// The provider key.
+        /// </param>
         internal NotificationMethod(Guid providerKey)
         {
-            Mandate.ParameterCondition(!Guid.Empty.Equals(providerKey), "providerKey");
+            Ensure.ParameterCondition(!Guid.Empty.Equals(providerKey), "providerKey");
             _providerKey = providerKey;
         }
 
-        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<NotificationMethod, string>(x => x.Name);
-        private static readonly PropertyInfo DescriptionSelector = ExpressionHelper.GetPropertyInfo<NotificationMethod, string>(x => x.Description);
-        private static readonly PropertyInfo ServiceCodeSelector = ExpressionHelper.GetPropertyInfo<NotificationMethod, string>(x => x.ServiceCode);
-
-        /// <summary>
-        /// The key associated with the gateway provider for the notification method
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public Guid ProviderKey
         {
-            get { return _providerKey; }
+            get
+            {
+                return _providerKey;
+            }
         }
 
-        /// <summary>
-        /// The name assoicated with the notification method
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Name
         {
-            get { return _name; }
+            get
+            {
+                return _name;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _name = value;
-                    return _name;
-                }, _name, NameSelector);
+                SetPropertyValueAndDetectChanges(value, ref _name, _ps.Value.NameSelector);
             }
         }
 
-        /// <summary>
-        /// The description of the notification method
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Description
         {
-            get { return _description; }
+            get
+            {
+                return _description;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _description = value;
-                    return _description;
-                }, _description, DescriptionSelector);
+                SetPropertyValueAndDetectChanges(value, ref _description, _ps.Value.DescriptionSelector);
+            }
+        }
+
+        /// <inheritdoc/>
+        [DataMember]
+        public string ServiceCode
+        {
+            get
+            {
+                return _serviceCode;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(value, ref _serviceCode, _ps.Value.ServiceCodeSelector);
             }
         }
 
         /// <summary>
-        /// The service code of the notification method
+        /// The property selectors.
         /// </summary>
-        [DataMember]
-        public string ServiceCode
+        private class PropertySelectors
         {
-            get { return _serviceCode; }
-            set
-            {
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _serviceCode = value;
-                    return _serviceCode;
-                }, _serviceCode, ServiceCodeSelector);
-            }
+            /// <summary>
+            /// The name selector.
+            /// </summary>
+            public readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<NotificationMethod, string>(x => x.Name);
+
+            /// <summary>
+            /// The description selector.
+            /// </summary>
+            public readonly PropertyInfo DescriptionSelector = ExpressionHelper.GetPropertyInfo<NotificationMethod, string>(x => x.Description);
+
+            /// <summary>
+            /// The service code selector.
+            /// </summary>
+            public readonly PropertyInfo ServiceCodeSelector = ExpressionHelper.GetPropertyInfo<NotificationMethod, string>(x => x.ServiceCode);
         }
     }
 }

@@ -1,12 +1,15 @@
 ﻿namespace Merchello.Core.Models.EntityBase
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Reflection;
     using System.Runtime.Serialization;
+
+    using Merchello.Core.Acquired;
+    using Merchello.Core.Acquired.Plugins;
 
     /// <summary>
     /// Defines a Merchello entity.
@@ -18,29 +21,9 @@
         #region Fields
 
         /// <summary>
-        /// The key selector.
+        /// The property selectors.
         /// </summary>
-        private static readonly PropertyInfo KeySelector = ExpressionHelper.GetPropertyInfo<Entity, Guid>(x => x.Key);
-
-        /// <summary>
-        /// The was cancelled selector.
-        /// </summary>
-        private static readonly PropertyInfo WasCancelledSelector = ExpressionHelper.GetPropertyInfo<Entity, bool>(x => x.WasCancelled);
-
-        /// <summary>
-        /// The create date selector.
-        /// </summary>
-        private static readonly PropertyInfo CreateDateSelector = ExpressionHelper.GetPropertyInfo<Entity, DateTime>(x => x.CreateDate);
-
-        /// <summary>
-        /// The update date selector.
-        /// </summary>
-        private static readonly PropertyInfo UpdateDateSelector = ExpressionHelper.GetPropertyInfo<Entity, DateTime>(x => x.UpdateDate);
-
-        /// <summary>
-        /// The has identity selector.
-        /// </summary>
-        private static readonly PropertyInfo HasIdentitySelector = ExpressionHelper.GetPropertyInfo<Entity, bool>(x => x.HasIdentity);
+        private static readonly Lazy<PropertySelectors> _ps = new Lazy<PropertySelectors>();
 
         /// <summary>
         /// Tracks the properties that have changed
@@ -92,14 +75,7 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                o =>
-                {
-                    _createDate = value;
-                    return _createDate;
-                }, 
-                _createDate, 
-                CreateDateSelector);
+                SetPropertyValueAndDetectChanges(value, ref _createDate, _ps.Value.CreateDateSelector);
             }
         }
 
@@ -116,14 +92,7 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _updateDate = value;
-                    return _updateDate;
-                }, 
-                _updateDate, 
-                UpdateDateSelector);
+                SetPropertyValueAndDetectChanges(value, ref _updateDate, _ps.Value.UpdateDateSelector);
             }
         }
 
@@ -140,14 +109,7 @@
 
             protected set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _hasIdentity = value;
-                        return _hasIdentity;
-                    },
-                _hasIdentity,
-                HasIdentitySelector);
+                SetPropertyValueAndDetectChanges(value, ref _hasIdentity, _ps.Value.HasIdentitySelector);
             }
         }
 
@@ -164,15 +126,7 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _key = value;
-                        HasIdentity = true;
-                        return _key;
-                    },
-                _key,
-                KeySelector);
+                SetPropertyValueAndDetectChanges(value, ref _key, _ps.Value.KeySelector);
             }
         }
 
@@ -190,14 +144,7 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _wasCancelled = value;
-                    return _wasCancelled;
-                }, 
-                _wasCancelled, 
-                WasCancelledSelector);
+                SetPropertyValueAndDetectChanges(value, ref _wasCancelled, _ps.Value.WasCancelledSelector);
             }
         }
 
@@ -232,77 +179,6 @@
 
         #endregion
 
-        /// <summary>
-        /// Utility "equals" method.
-        /// </summary>
-        /// <param name="other">
-        /// The other.
-        /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
-        public virtual bool SameIdentityAs(IEntity other)
-        {
-            if (ReferenceEquals(null, other))
-                return false;
-            if (ReferenceEquals(this, other))
-                return true;
-
-            return SameIdentityAs(other as Entity);
-        }
-
-        /// <summary>
-        /// Utility "equals" method.
-        /// </summary>
-        /// <param name="other">
-        /// The other.
-        /// </param>
-        /// <returns>
-        /// A value indicating whether or not the identity matches.
-        /// </returns>
-        public virtual bool SameIdentityAs(Entity other)
-        {
-            if (ReferenceEquals(null, other))
-                return false;
-
-            if (ReferenceEquals(this, other))
-                return true;
-
-            if (GetType() == other.GetRealType() && HasIdentity && other.HasIdentity)
-                return other.Key.Equals(Key);
-
-            return false;
-        }
-
-        /// <summary>
-        /// Represents an equal comparison between to objects that sub class <see cref="Entity"/>.
-        /// </summary>
-        /// <param name="other">
-        /// The other.
-        /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
-        public virtual bool Equals(Entity other)
-        {
-            if (ReferenceEquals(null, other))
-                return false;
-            if (ReferenceEquals(this, other))
-                return true;
-
-            return SameIdentityAs(other);
-        }
-
-        /// <summary>
-        /// Gets the type of the entity.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="Type"/>.
-        /// </returns>
-        public virtual Type GetRealType()
-        {
-            return GetType();
-        }
 
 
         /// <summary>
@@ -346,28 +222,66 @@
         /// Used by inheritors to set the value of properties, this will detect if the property value actually changed and if it did
         /// it will ensure that the property has a dirty flag set.
         /// </summary>
-        /// <returns>
-        /// returns true if the value changed
-        /// </returns>
+        /// <typeparam name="T">
+        /// The type of the property
+        /// </typeparam>
+        /// <param name="newVal">
+        /// The new value
+        /// </param>
+        /// <param name="origVal">
+        /// The original value
+        /// </param>
+        /// <param name="propertySelector">
+        /// The property selector
+        /// </param>
         /// <remarks>
-        /// This is required because we don't want a property to show up as "dirty" if the value is the same. For example, when we 
-        /// save a document type, nearly all properties are flagged as dirty just because we've 'reset' them, but they are all set 
+        /// This is required because we don't want a property to show up as "dirty" if the value is the same. For example, when we
+        /// save a document type, nearly all properties are flagged as dirty just because we've 'reset' them, but they are all set
         /// to the same value, so it's really not dirty.
         /// </remarks>
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1611:ElementParametersMustBeDocumented", Justification = "Reviewed. Suppression is OK here."),
-        SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1618:GenericTypeParametersMustBeDocumented", Justification = "Reviewed. Suppression is OK here.")]
-        internal bool SetPropertyValueAndDetectChanges<T>(Func<T, T> setValue, T value, PropertyInfo propertySelector)
+        internal void SetPropertyValueAndDetectChanges<T>(T newVal, ref T origVal, PropertyInfo propertySelector)
         {
-            var initVal = value;
-            var newVal = setValue(value);
-            if (Equals(initVal, newVal))
+            if ((typeof(T) == typeof(string) == false) && TypeHelper.IsTypeAssignableFrom<IEnumerable>(typeof(T)))
             {
-                return false;
+                throw new InvalidOperationException("This method does not support IEnumerable instances. For IEnumerable instances a manual custom equality check will be required");
             }
 
-            this.OnPropertyChanged(propertySelector);
-            return true;
-        }  
+            SetPropertyValueAndDetectChanges(newVal, ref origVal, propertySelector, EqualityComparer<T>.Default);
+        }
+
+        /// <summary>
+        /// The set property value and detect changes.
+        /// </summary>
+        /// <param name="newVal">
+        /// The new value.
+        /// </param>
+        /// <param name="origVal">
+        /// The original value.
+        /// </param>
+        /// <param name="propertySelector">
+        /// The property selector.
+        /// </param>
+        /// <param name="comparer">
+        /// The equality comparer.
+        /// </param>
+        /// <typeparam name="T">
+        /// The type of the property
+        /// </typeparam>
+        internal void SetPropertyValueAndDetectChanges<T>(T newVal, ref T origVal, PropertyInfo propertySelector, IEqualityComparer<T> comparer)
+        {
+            // check changed
+            var changed = comparer.Equals(origVal, newVal) == false;
+
+            // set the original value
+            origVal = newVal;
+
+            // raise the event if it was changed
+            if (changed)
+            {
+                OnPropertyChanged(propertySelector);
+            }
+        }
+
 
         /// <summary>
         /// Method to call on a property setter.
@@ -381,6 +295,37 @@
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyInfo.Name));
             }
-        }     
+        }
+
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private class PropertySelectors
+        {
+            /// <summary>
+            /// The key selector.
+            /// </summary>
+            public readonly PropertyInfo KeySelector = ExpressionHelper.GetPropertyInfo<Entity, Guid>(x => x.Key);
+
+            /// <summary>
+            /// The was cancelled selector.
+            /// </summary>
+            public readonly PropertyInfo WasCancelledSelector = ExpressionHelper.GetPropertyInfo<Entity, bool>(x => x.WasCancelled);
+
+            /// <summary>
+            /// The create date selector.
+            /// </summary>
+            public readonly PropertyInfo CreateDateSelector = ExpressionHelper.GetPropertyInfo<Entity, DateTime>(x => x.CreateDate);
+
+            /// <summary>
+            /// The update date selector.
+            /// </summary>
+            public readonly PropertyInfo UpdateDateSelector = ExpressionHelper.GetPropertyInfo<Entity, DateTime>(x => x.UpdateDate);
+
+            /// <summary>
+            /// The has identity selector.
+            /// </summary>
+            public readonly PropertyInfo HasIdentitySelector = ExpressionHelper.GetPropertyInfo<Entity, bool>(x => x.HasIdentity);
+        }
     }
 }

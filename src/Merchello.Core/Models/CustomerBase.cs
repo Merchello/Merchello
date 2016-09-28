@@ -15,14 +15,9 @@
     public abstract class CustomerBase : Entity, ICustomerBase
     {
         /// <summary>
-        /// The last activity date selector.
+        /// The property selectors.
         /// </summary>
-        private static readonly PropertyInfo LastActivityDateSelector = ExpressionHelper.GetPropertyInfo<CustomerBase, DateTime>(x => x.LastActivityDate);
-
-        /// <summary>
-        /// The extended data changed selector.
-        /// </summary>
-        private static readonly PropertyInfo ExtendedDataChangedSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, ExtendedDataCollection>(x => x.ExtendedData);
+        private static readonly Lazy<PropertySelectors> _ps = new Lazy<PropertySelectors>();
 
         /// <summary>
         /// The last activity date.
@@ -73,14 +68,7 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _lastActivityDate = value;
-                    return _lastActivityDate;
-                }, 
-                _lastActivityDate, 
-                LastActivityDateSelector);
+                SetPropertyValueAndDetectChanges(value, ref _lastActivityDate, _ps.Value.LastActivityDateSelector);
             }
         }
 
@@ -138,7 +126,23 @@
         /// </param>
         private void ExtendedDataChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            OnPropertyChanged(ExtendedDataChangedSelector);
+            OnPropertyChanged(_ps.Value.ExtendedDataChangedSelector);
+        }
+
+        /// <summary>
+        /// Property selectors.
+        /// </summary>
+        private class PropertySelectors
+        {
+            /// <summary>
+            /// The last activity date selector.
+            /// </summary>
+            public readonly PropertyInfo LastActivityDateSelector = ExpressionHelper.GetPropertyInfo<CustomerBase, DateTime>(x => x.LastActivityDate);
+
+            /// <summary>
+            /// The extended data changed selector.
+            /// </summary>
+            public readonly PropertyInfo ExtendedDataChangedSelector = ExpressionHelper.GetPropertyInfo<CustomerBase, ExtendedDataCollection>(x => x.ExtendedData);
         }
     }
 }

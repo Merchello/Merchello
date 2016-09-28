@@ -13,7 +13,12 @@
         /// Gets the collection of <see cref="ILineItem"/>
         /// </summary>
         [DataMember]
-        LineItemCollection Items { get; } 
+        LineItemCollection Items { get; }
 
+        /// <summary>
+        /// Accepts visitor class to visit invoice line items
+        /// </summary>
+        /// <param name="visitor">The <see cref="ILineItemVisitor"/> class</param>
+        void Accept(ILineItemVisitor visitor);
     }
 }

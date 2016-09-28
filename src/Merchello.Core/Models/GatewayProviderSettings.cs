@@ -15,32 +15,12 @@
     [DataContract(IsReference = true)]
     public class GatewayProviderSettings : Entity, IGatewayProviderSettings
     {
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private static readonly Lazy<PropertySelectors> _ps = new Lazy<PropertySelectors>();
+
         #region Fields
-
-        /// <summary>
-        /// The name selector.
-        /// </summary>
-        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<GatewayProviderSettings, string>(x => x.Name);
-
-        /// <summary>
-        /// The description selector.
-        /// </summary>
-        private static readonly PropertyInfo DescriptionSelector = ExpressionHelper.GetPropertyInfo<GatewayProviderSettings, string>(x => x.Description);
-
-        /// <summary>
-        /// The provider type field key selector.
-        /// </summary>
-        private static readonly PropertyInfo ProviderTfKeySelector = ExpressionHelper.GetPropertyInfo<GatewayProviderSettings, Guid>(x => x.ProviderTfKey);
-
-        /// <summary>
-        /// The extended data changed selector.
-        /// </summary>
-        private static readonly PropertyInfo ExtendedDataChangedSelector = ExpressionHelper.GetPropertyInfo<GatewayProviderSettings, ExtendedDataCollection>(x => x.ExtendedData);
-
-        /// <summary>
-        /// The encrypt extended data selector.
-        /// </summary>
-        private static readonly PropertyInfo EncryptExtendedDataSelector = ExpressionHelper.GetPropertyInfo<GatewayProviderSettings, bool>(x => x.EncryptExtendedData);
 
         /// <summary>
         /// The name.
@@ -69,10 +49,7 @@
 
         #endregion
 
-
-        /// <summary>
-        /// Gets or sets the descriptive name or label for the provider
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Name
         {
@@ -83,21 +60,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _name = value;
-                    return _name;
-                }, 
-                _name, 
-                NameSelector);
+                SetPropertyValueAndDetectChanges(value, ref _name, _ps.Value.NameSelector);
             }
         }
 
-
-        /// <summary>
-        /// Gets or sets the description of the provider
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Description
         {
@@ -108,21 +75,12 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _description = value;
-                    return _description;
-                }, 
-                _description, 
-                DescriptionSelector);
+                SetPropertyValueAndDetectChanges(value, ref _description, _ps.Value.DescriptionSelector);
             }
         }
 
 
-        /// <summary>
-        /// Gets or sets the type field key for the provider
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public Guid ProviderTfKey
         {
@@ -133,20 +91,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _providerTfKey = value;
-                    return _providerTfKey;
-                }, 
-                _providerTfKey, 
-                ProviderTfKeySelector);
+                SetPropertyValueAndDetectChanges(value, ref _providerTfKey, _ps.Value.ProviderTfKeySelector);
             }
         }
 
-        /// <summary>
-        /// Gets the extended data for the provider
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public ExtendedDataCollection ExtendedData
         {
@@ -162,9 +111,7 @@
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether or the ExtendedData collection should be encrypted before persisted.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public bool EncryptExtendedData
         {
@@ -175,31 +122,17 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _encryptExtendedData = value;
-                    return _encryptExtendedData;
-                }, 
-                _encryptExtendedData, 
-                EncryptExtendedDataSelector); 
+                SetPropertyValueAndDetectChanges(value, ref _encryptExtendedData, _ps.Value.EncryptExtendedDataSelector); 
             }
         }
 
-        /// <summary>
-        /// Gets a value indicating whether or not this provider is a "registered" and active provider.
-        /// </summary>
-        /// <remarks>
-        /// Any persisted provider is an activated provider
-        /// </remarks>
+        /// <inheritdoc/>
         public bool Activated 
         {
             get { return HasIdentity; }
         }
 
-        /// <summary>
-        /// Gets the type of the Gateway Provider
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public GatewayProviderType GatewayProviderType 
         {
@@ -209,9 +142,7 @@
             }
         }
 
-        /// <summary>
-        /// Method to call on entity saved when first added
-        /// </summary>
+        /// <inheritdoc/>
         internal override void AddingEntity()
         {
             if (Key == Guid.Empty)
@@ -225,7 +156,7 @@
         }
 
         /// <summary>
-        /// The extended data changed.
+        /// Handles the extended data collection changed.
         /// </summary>
         /// <param name="sender">
         /// The sender.
@@ -235,7 +166,39 @@
         /// </param>
         private void ExtendedDataChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            OnPropertyChanged(ExtendedDataChangedSelector);
+            OnPropertyChanged(_ps.Value.ExtendedDataChangedSelector);
+        }
+
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private class PropertySelectors
+        {
+            /// <summary>
+            /// The name selector.
+            /// </summary>
+            public readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<GatewayProviderSettings, string>(x => x.Name);
+
+            /// <summary>
+            /// The description selector.
+            /// </summary>
+            public readonly PropertyInfo DescriptionSelector = ExpressionHelper.GetPropertyInfo<GatewayProviderSettings, string>(x => x.Description);
+
+            /// <summary>
+            /// The provider type field key selector.
+            /// </summary>
+            public readonly PropertyInfo ProviderTfKeySelector = ExpressionHelper.GetPropertyInfo<GatewayProviderSettings, Guid>(x => x.ProviderTfKey);
+
+            /// <summary>
+            /// The extended data changed selector.
+            /// </summary>
+            public readonly PropertyInfo ExtendedDataChangedSelector = ExpressionHelper.GetPropertyInfo<GatewayProviderSettings, ExtendedDataCollection>(x => x.ExtendedData);
+
+            /// <summary>
+            /// The encrypt extended data selector.
+            /// </summary>
+            public readonly PropertyInfo EncryptExtendedDataSelector = ExpressionHelper.GetPropertyInfo<GatewayProviderSettings, bool>(x => x.EncryptExtendedData);
+
         }
     }
 }

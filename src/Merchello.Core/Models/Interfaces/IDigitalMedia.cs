@@ -6,8 +6,6 @@ namespace Merchello.Core.Models.Interfaces
 
     using Merchello.Core.Models.EntityBase;
 
-    ///// TODO SR - This is just a scaffold for example.  Do whatever you need to do =)
-
     /// <summary>
     /// Defines DigitalMedia.
     /// </summary>
@@ -20,7 +18,7 @@ namespace Merchello.Core.Models.Interfaces
         Guid ProductVariantKey { get; set; }
 
         /// <summary>
-        /// Reference to an order
+        /// Gets or sets the first accessed date
         /// </summary>
         [DataMember]
         DateTime? FirstAccessed { get; set; }

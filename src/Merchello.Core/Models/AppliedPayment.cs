@@ -7,8 +7,6 @@
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.TypeFields;
 
-    using Umbraco.Core;
-
     /// <summary>
     /// The applied payment.
     /// </summary>
@@ -17,24 +15,9 @@
     internal class AppliedPayment : Entity, IAppliedPayment
     {
         /// <summary>
-        /// The applied payment type field selector.
+        /// The property selectors.
         /// </summary>
-        private static readonly PropertyInfo AppliedPaymentTypeFieldSelector = ExpressionHelper.GetPropertyInfo<AppliedPayment, Guid>(x => x.AppliedPaymentTfKey);
-
-        /// <summary>
-        /// The description selector.
-        /// </summary>
-        private static readonly PropertyInfo DescriptionSelector = ExpressionHelper.GetPropertyInfo<AppliedPayment, string>(x => x.Description);
-
-        /// <summary>
-        /// The amount selector.
-        /// </summary>
-        private static readonly PropertyInfo AmountSelector = ExpressionHelper.GetPropertyInfo<AppliedPayment, decimal>(x => x.Amount);
-
-        /// <summary>
-        /// The exported selector.
-        /// </summary>
-        private static readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<AppliedPayment, bool>(x => x.Exported);
+        private static readonly Lazy<PropertySelectors> _ps = new Lazy<PropertySelectors>();
 
         /// <summary>
         /// The invoice key.
@@ -84,7 +67,6 @@
                 invoiceKey,
                 EnumTypeFieldConverter.AppliedPayment.GetTypeField(appliedPaymentType).TypeKey)
         {
-            
         }
 
         /// <summary>
@@ -101,108 +83,107 @@
         /// </param>
         internal AppliedPayment(Guid paymentKey, Guid invoiceKey, Guid appliedPaymentTfKey)
         {
-            Mandate.ParameterCondition(!Guid.Empty.Equals(paymentKey), "paymentKey");
-            Mandate.ParameterCondition(!Guid.Empty.Equals(invoiceKey), "invoiceKey");
-            Mandate.ParameterCondition(!Guid.Empty.Equals(appliedPaymentTfKey), "appliedPaymentTfKey");
+            Ensure.ParameterCondition(!Guid.Empty.Equals(paymentKey), "paymentKey");
+            Ensure.ParameterCondition(!Guid.Empty.Equals(invoiceKey), "invoiceKey");
+            Ensure.ParameterCondition(!Guid.Empty.Equals(appliedPaymentTfKey), "appliedPaymentTfKey");
 
             _paymentKey = paymentKey;
             _invoiceKey = invoiceKey;
             _appliedPaymentTfKey = appliedPaymentTfKey;
         }
-        
-        /// <summary>
-        /// The payment key associated with the Transaction
-        /// </summary>
+
+        /// <inheritdoc/>
         [DataMember]
         public Guid PaymentKey
         {
-            get { return _paymentKey; }
+            get
+            {
+                return _paymentKey;
+            }
         }
 
-        /// <summary>
-        /// The invoice key associated with the Transaction
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public Guid InvoiceKey
         {
-            get { return _invoiceKey; }
+            get
+            {
+                return _invoiceKey;
+            }
         }
-    
-        /// <summary>
-        /// The type associated with the Transaction
-        /// </summary>
+
+        /// <inheritdoc/>
         [DataMember]
         public Guid AppliedPaymentTfKey
         {
-            get { return _appliedPaymentTfKey; }
-            internal set 
-            { 
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _appliedPaymentTfKey = value;
-                    return _appliedPaymentTfKey;
-                }, _appliedPaymentTfKey, AppliedPaymentTypeFieldSelector); 
+            get
+            {
+                return _appliedPaymentTfKey;
+            }
+
+            internal set
+            {
+                SetPropertyValueAndDetectChanges(
+                    value,
+                    ref _appliedPaymentTfKey,
+                    _ps.Value.AppliedPaymentTypeFieldSelector);
             }
         }
-    
-        /// <summary>
-        /// The description associated with the Transaction
-        /// </summary>
+
+        /// <inheritdoc/>
         [DataMember]
         public string Description
         {
-            get { return _description; }
-            set 
-            { 
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _description = value;
-                    return _description;
-                }, _description, DescriptionSelector); 
+            get
+            {
+                return _description;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(value, ref _description, _ps.Value.DescriptionSelector);
             }
         }
-    
-        /// <summary>
-        /// The amount associated with the Transaction
-        /// </summary>
+
+        /// <inheritdoc/>
         [DataMember]
         public decimal Amount
         {
-            get { return _amount; }
-            set 
-            { 
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _amount = value;
-                    return _amount;
-                }, _amount, AmountSelector); 
+            get
+            {
+                return _amount;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(value, ref _amount, _ps.Value.AmountSelector);
             }
         }
-    
-        /// <summary>
-        /// True/false indicating whether or not this transaction has been exported to a 3rd party system
-        /// </summary>
+
+        /// <inheritdoc/>
         [DataMember]
         public bool Exported
         {
-            get { return _exported; }
-            set 
-            { 
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _exported = value;
-                    return _exported;
-                }, _exported, ExportedSelector); 
+            get
+            {
+                return _exported;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(value, ref _exported, _ps.Value.ExportedSelector);
             }
         }
-        
-        /// <summary>
-        /// The transaction type associated with this transaction
-        /// </summary>
+
+        /// <inheritdoc/>
         [DataMember]
         public AppliedPaymentType TransactionType
         {
-            get { return EnumTypeFieldConverter.AppliedPayment.GetTypeField(_appliedPaymentTfKey); }
+            get
+            {
+                return EnumTypeFieldConverter.AppliedPayment.GetTypeField(_appliedPaymentTfKey);
+            }
+
             set
             {
                 var reference = EnumTypeFieldConverter.AppliedPayment.GetTypeField(value);
@@ -213,6 +194,35 @@
                 }
             }
         }
-    }
 
+        /// <summary>
+        /// Property selectors.
+        /// </summary>
+        private class PropertySelectors
+        {
+            /// <summary>
+            /// The applied payment type field selector.
+            /// </summary>
+            public readonly PropertyInfo AppliedPaymentTypeFieldSelector =
+                ExpressionHelper.GetPropertyInfo<AppliedPayment, Guid>(x => x.AppliedPaymentTfKey);
+
+            /// <summary>
+            /// The description selector.
+            /// </summary>
+            public readonly PropertyInfo DescriptionSelector =
+                ExpressionHelper.GetPropertyInfo<AppliedPayment, string>(x => x.Description);
+
+            /// <summary>
+            /// The amount selector.
+            /// </summary>
+            public readonly PropertyInfo AmountSelector =
+                ExpressionHelper.GetPropertyInfo<AppliedPayment, decimal>(x => x.Amount);
+
+            /// <summary>
+            /// The exported selector.
+            /// </summary>
+            public readonly PropertyInfo ExportedSelector =
+                ExpressionHelper.GetPropertyInfo<AppliedPayment, bool>(x => x.Exported);
+        }
+    }
 }

@@ -1,33 +1,32 @@
-﻿using System;
-using System.Runtime.Serialization;
-using Merchello.Core.Models.EntityBase;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+
+    using Merchello.Core.Models.EntityBase;
+
+    /// <summary>
+    /// Represents a notification method.
+    /// </summary>
     public interface INotificationMethod : IEntity
     {
         /// <summary>
-        /// The name of the notification
+        /// Gets or sets the name of the notification
         /// </summary>
-        [DataMember]
         string Name { get; set; }
 
         /// <summary>
-        /// A brief description of the notification
+        /// Gets or sets a brief description of the notification
         /// </summary>
-        [DataMember]
         string Description { get; set; }
 
         /// <summary>
-        /// The <see cref="IGatewayProviderSettings"/> key
+        /// Gets the <see cref="IGatewayProviderSettings"/> key
         /// </summary>
-        [DataMember]
         Guid ProviderKey { get; }
 
         /// <summary>
-        /// The service code
+        /// Gets or sets the service code
         /// </summary>
-        [DataMember]
         string ServiceCode { get; set; }
     }
 }
