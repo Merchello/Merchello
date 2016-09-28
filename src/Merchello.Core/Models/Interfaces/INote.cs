@@ -39,6 +39,5 @@
         /// </summary>
         [DataMember]
         bool InternalOnly { get; set; }
-
     }
 }

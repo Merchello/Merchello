@@ -5,8 +5,6 @@
     using System.Runtime.Serialization;
     using EntityBase;
 
-    using Umbraco.Core;
-
     /// <summary>
     /// Represents an Order
     /// </summary>
@@ -14,37 +12,12 @@
     [DataContract(IsReference = true)]
     public class Order : VersionTaggedEntity, IOrder
     {
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private static readonly Lazy<PropertySelectors> _ps = new Lazy<PropertySelectors>();
+
         #region Fields
-
-        /// <summary>
-        /// The invoice key selector.
-        /// </summary>
-        private static readonly PropertyInfo InvoiceKeySelector = ExpressionHelper.GetPropertyInfo<Order, Guid>(x => x.InvoiceKey);
-
-        /// <summary>
-        /// The order number prefix selector.
-        /// </summary>
-        private static readonly PropertyInfo OrderNumberPrefixSelector = ExpressionHelper.GetPropertyInfo<Order, string>(x => x.OrderNumberPrefix);
-
-        /// <summary>
-        /// The order number selector.
-        /// </summary>
-        private static readonly PropertyInfo OrderNumberSelector = ExpressionHelper.GetPropertyInfo<Order, int>(x => x.OrderNumber);
-
-        /// <summary>
-        /// The order date selector.
-        /// </summary>
-        private static readonly PropertyInfo OrderDateSelector = ExpressionHelper.GetPropertyInfo<Order, DateTime>(x => x.OrderDate);
-
-        /// <summary>
-        /// The order status selector.
-        /// </summary>
-        private static readonly PropertyInfo OrderStatusSelector = ExpressionHelper.GetPropertyInfo<Order, IOrderStatus>(x => x.OrderStatus);
-
-        /// <summary>
-        /// The exported selector.
-        /// </summary>
-        private static readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<Order, bool>(x => x.Exported);
 
         /// <summary>
         /// The invoice key.
@@ -116,9 +89,9 @@
         /// </param>
         internal Order(IOrderStatus orderStatus, Guid invoiceKey, LineItemCollection lineItemCollection)
         {
-            Mandate.ParameterNotNull(orderStatus, "orderStatus");
-            Mandate.ParameterCondition(!Guid.Empty.Equals(invoiceKey), "invoiceKey");
-            Mandate.ParameterNotNull(lineItemCollection, "lineItemCollection");
+            Ensure.ParameterNotNull(orderStatus, "orderStatus");
+            Ensure.ParameterCondition(!Guid.Empty.Equals(invoiceKey), "invoiceKey");
+            Ensure.ParameterNotNull(lineItemCollection, "lineItemCollection");
 
             _invoiceKey = invoiceKey;
             _orderStatus = orderStatus;
@@ -128,9 +101,7 @@
         }
 
 
-        /// <summary>
-        /// Gets the invoice 'key'
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public Guid InvoiceKey 
         {
@@ -141,20 +112,11 @@
 
             internal set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _invoiceKey = value;
-                    return _invoiceKey;
-                }, 
-                _invoiceKey,
-                InvoiceKeySelector);
+                SetPropertyValueAndDetectChanges(value, ref _invoiceKey, _ps.Value.InvoiceKeySelector);
             }
-        }        
+        }
 
-        /// <summary>
-        /// Gets or sets The order number prefix
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string OrderNumberPrefix 
         {
@@ -165,20 +127,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                    _orderNumberPrefix = value;
-                    return _orderNumberPrefix;
-                }, 
-                _orderNumberPrefix,
-                OrderNumberPrefixSelector);
+                SetPropertyValueAndDetectChanges(value, ref _orderNumberPrefix, _ps.Value.OrderNumberPrefixSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the unique OrderNumber
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public int OrderNumber
         {
@@ -189,20 +142,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                    _orderNumber = value;
-                    return _orderNumber;
-                }, 
-                _orderNumber,
-                OrderNumberSelector);
+                SetPropertyValueAndDetectChanges(value, ref _orderNumber, _ps.Value.OrderNumberSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the date of the order
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public DateTime OrderDate
         {
@@ -213,29 +157,18 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                    _orderDate = value;
-                    return _orderDate;
-                }, 
-                _orderDate, 
-                OrderDateSelector);
+                SetPropertyValueAndDetectChanges(value, ref _orderDate, _ps.Value.OrderDateSelector);
             }
         }
 
-        /// <summary>
-        /// Gets the order status key
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public Guid OrderStatusKey 
         {
             get { return _orderStatus.Key; }            
         }
 
-        /// <summary>
-        /// Gets or sets the order status
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public IOrderStatus OrderStatus
         {
@@ -246,20 +179,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                    _orderStatus = value;
-                    return _orderStatus;
-                }, 
-                _orderStatus, 
-                OrderStatusSelector);
+                SetPropertyValueAndDetectChanges(value, ref _orderStatus, _ps.Value.OrderStatusSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether or not this order has been exported to an external system
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public bool Exported
         {
@@ -270,20 +194,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                    _exported = value;
-                    return _exported;
-                }, 
-                _exported, 
-                ExportedSelector);
+                SetPropertyValueAndDetectChanges(value, ref _exported, _ps.Value.ExportedSelector);
             }
         }
 
-                /// <summary>
-        /// Gets the <see cref="ILineItem"/>s in the order
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public LineItemCollection Items
         {
@@ -298,9 +213,7 @@
             }
         }
 
-        /// <summary>
-        /// Gets or sets the examine id.
-        /// </summary>
+        /// <inheritdoc/>
         [IgnoreDataMember]
         internal int ExamineId
         {
@@ -308,14 +221,46 @@
             set { _examineId = value; }
         }
 
-        /// <summary>
-        /// Accepts visitor class to visit order line items
-        /// </summary>
-        /// <param name="visitor">The <see cref="ILineItemVisitor"/> class</param>
+        /// <inheritdoc/>
         public void Accept(ILineItemVisitor visitor)
         {
             Items.Accept(visitor);
         }
 
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private class PropertySelectors
+        {
+            /// <summary>
+            /// The invoice key selector.
+            /// </summary>
+            public readonly PropertyInfo InvoiceKeySelector = ExpressionHelper.GetPropertyInfo<Order, Guid>(x => x.InvoiceKey);
+
+            /// <summary>
+            /// The order number prefix selector.
+            /// </summary>
+            public readonly PropertyInfo OrderNumberPrefixSelector = ExpressionHelper.GetPropertyInfo<Order, string>(x => x.OrderNumberPrefix);
+
+            /// <summary>
+            /// The order number selector.
+            /// </summary>
+            public readonly PropertyInfo OrderNumberSelector = ExpressionHelper.GetPropertyInfo<Order, int>(x => x.OrderNumber);
+
+            /// <summary>
+            /// The order date selector.
+            /// </summary>
+            public readonly PropertyInfo OrderDateSelector = ExpressionHelper.GetPropertyInfo<Order, DateTime>(x => x.OrderDate);
+
+            /// <summary>
+            /// The order status selector.
+            /// </summary>
+            public readonly PropertyInfo OrderStatusSelector = ExpressionHelper.GetPropertyInfo<Order, IOrderStatus>(x => x.OrderStatus);
+
+            /// <summary>
+            /// The exported selector.
+            /// </summary>
+            public readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<Order, bool>(x => x.Exported);
+        }
     }
 }

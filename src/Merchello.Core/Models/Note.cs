@@ -6,8 +6,6 @@
 
     using Merchello.Core.Models.EntityBase;
 
-    using Umbraco.Core;
-
     /// <summary>
     /// The note.
     /// </summary>
@@ -15,32 +13,12 @@
     [DataContract(IsReference = true)]
     public class Note : Entity, INote
     {
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private static readonly Lazy<PropertySelectors> _ps = new Lazy<PropertySelectors>();
+
         #region Fields
-
-        /// <summary>
-        /// The entity key selector.
-        /// </summary>
-        private static readonly PropertyInfo EntityKeySelector = ExpressionHelper.GetPropertyInfo<Note, Guid?>(x => x.EntityKey);
-
-        /// <summary>
-        /// The author selector.
-        /// </summary>
-        private static readonly PropertyInfo AuthorSelector = ExpressionHelper.GetPropertyInfo<Note, string>(x => x.Author);
-
-        /// <summary>
-        /// The message selector.
-        /// </summary>
-        private static readonly PropertyInfo MessageSelector = ExpressionHelper.GetPropertyInfo<Note, string>(x => x.Message);
-
-        /// <summary>
-        /// The reference type selector.
-        /// </summary>
-        private static readonly PropertyInfo EntityTfKeySelector = ExpressionHelper.GetPropertyInfo<Note, Guid?>(x => x.EntityTfKey);
-
-        /// <summary>
-        /// The internal only selector.
-        /// </summary>
-        private static readonly PropertyInfo InternalOnlySelector = ExpressionHelper.GetPropertyInfo<Note, bool>(x => x.InternalOnly);
 
         /// <summary>
         /// The entity key.
@@ -80,7 +58,7 @@
         /// </param>
         public Note(Guid entityKey, Guid entityTfKey)
         {
-            Mandate.ParameterCondition(entityTfKey != Guid.Empty, "entityTfKey");
+            Ensure.ParameterCondition(entityTfKey != Guid.Empty, "entityTfKey");
             Message = string.Empty;
             CreateDate = DateTime.Now;
             UpdateDate = DateTime.Now;
@@ -90,9 +68,7 @@
             Author = string.Empty;
         }
 
-        /// <summary>
-        /// Gets or sets the entity key.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public Guid EntityKey 
         { 
@@ -103,20 +79,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _entityKey = value;
-                        return _entityKey;
-                    }, 
-                    _entityKey, 
-                    EntityKeySelector);
+                SetPropertyValueAndDetectChanges(value, ref _entityKey, _ps.Value.EntityKeySelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the reference type.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public Guid EntityTfKey
         {
@@ -127,20 +94,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _entityTfKey = value;
-                        return _entityTfKey;
-                    },
-                    _entityTfKey,
-                    EntityTfKeySelector);
+                SetPropertyValueAndDetectChanges(value, ref _entityTfKey, _ps.Value.EntityTfKeySelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the author.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Author
         {
@@ -151,20 +109,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _author = value;
-                        return _author;
-                    },
-                    _author,
-                    AuthorSelector);
+                SetPropertyValueAndDetectChanges(value, ref _author, _ps.Value.AuthorSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the message.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Message
         {
@@ -175,20 +124,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _message = value;
-                        return _message;
-                    },
-                    _message,
-                    MessageSelector);
+                SetPropertyValueAndDetectChanges(value, ref _message, _ps.Value.MessageSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the note should be used for internal use only.
-        /// </summary>
+        /// <inheritdoc/>
         public bool InternalOnly
         {
             get
@@ -198,15 +138,39 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _internalOnly = value;
-                        return _internalOnly;
-                    },
-                    _internalOnly,
-                    InternalOnlySelector);
+                SetPropertyValueAndDetectChanges(value, ref _internalOnly, _ps.Value.InternalOnlySelector);
             }
+        }
+
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private class PropertySelectors
+        {
+            /// <summary>
+            /// The entity key selector.
+            /// </summary>
+            public readonly PropertyInfo EntityKeySelector = ExpressionHelper.GetPropertyInfo<Note, Guid?>(x => x.EntityKey);
+
+            /// <summary>
+            /// The author selector.
+            /// </summary>
+            public readonly PropertyInfo AuthorSelector = ExpressionHelper.GetPropertyInfo<Note, string>(x => x.Author);
+
+            /// <summary>
+            /// The message selector.
+            /// </summary>
+            public readonly PropertyInfo MessageSelector = ExpressionHelper.GetPropertyInfo<Note, string>(x => x.Message);
+
+            /// <summary>
+            /// The reference type selector.
+            /// </summary>
+            public readonly PropertyInfo EntityTfKeySelector = ExpressionHelper.GetPropertyInfo<Note, Guid?>(x => x.EntityTfKey);
+
+            /// <summary>
+            /// The internal only selector.
+            /// </summary>
+            public readonly PropertyInfo InternalOnlySelector = ExpressionHelper.GetPropertyInfo<Note, bool>(x => x.InternalOnly);
         }
     }
 }

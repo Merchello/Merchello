@@ -5,8 +5,6 @@
     using System.Reflection;
     using System.Runtime.Serialization;
 
-    using Umbraco.Core;
-
     /// <summary>
     /// The customer.
     /// </summary>
@@ -14,43 +12,13 @@
     [DataContract(IsReference = true)]
     internal class Customer : CustomerBase, ICustomer
     {
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private static readonly Lazy<PropertySelectors> _ps = new Lazy<PropertySelectors>();
+
         #region fields
 
-        /// <summary>
-        /// The login name selector.
-        /// </summary>
-        private static readonly PropertyInfo LoginNameSelector = ExpressionHelper.GetPropertyInfo<Customer, string>(x => x.LoginName);
-
-        /// <summary>
-        /// The first name selector.
-        /// </summary>
-        private static readonly PropertyInfo FirstNameSelector = ExpressionHelper.GetPropertyInfo<Customer, string>(x => x.FirstName);
-
-        /// <summary>
-        /// The last name selector.
-        /// </summary>
-        private static readonly PropertyInfo LastNameSelector = ExpressionHelper.GetPropertyInfo<Customer, string>(x => x.LastName);
-
-        /// <summary>
-        /// The email selector.
-        /// </summary>
-        private static readonly PropertyInfo EmailSelector = ExpressionHelper.GetPropertyInfo<Customer, string>(x => x.Email);
-
-        /// <summary>
-        /// The tax exempt selector.
-        /// </summary>
-        private static readonly PropertyInfo TaxExemptSelector = ExpressionHelper.GetPropertyInfo<Customer, bool>(x => x.TaxExempt);
-
-        /// <summary>
-        /// The notes selector.
-        /// </summary>
-        private static readonly PropertyInfo NotesSelector = ExpressionHelper.GetPropertyInfo<Customer, IEnumerable<INote>>(x => x.Notes);
-
-        /// <summary>
-        /// The address selector.
-        /// </summary>
-        private static readonly PropertyInfo AddressSelector = ExpressionHelper.GetPropertyInfo<Customer, IEnumerable<ICustomerAddress>>(x => x.Addresses);
-        
         /// <summary>
         /// The first name.
         /// </summary>
@@ -101,7 +69,7 @@
         /// </param>
         internal Customer(string loginName) : base(false)
         {
-            Mandate.ParameterNotNullOrEmpty(loginName, "loginName");
+            Ensure.ParameterNotNullOrEmpty(loginName, "loginName");
 
             _loginName = loginName;
 
@@ -118,9 +86,7 @@
             get { return string.Format("{0} {1}", _firstName, _lastName).Trim(); }
         }
 
-        /// <summary>
-        /// Gets or sets the first name
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string FirstName
         {
@@ -131,20 +97,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _firstName = value;
-                        return _firstName;
-                    }, 
-                    _firstName, 
-                    FirstNameSelector);
+                SetPropertyValueAndDetectChanges(value, ref _firstName, _ps.Value.FirstNameSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the last name
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string LastName
         {
@@ -155,20 +112,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _lastName = value;
-                        return _lastName;
-                    }, 
-                    _lastName, 
-                    LastNameSelector);
+                SetPropertyValueAndDetectChanges(value, ref _lastName, _ps.Value.LastNameSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the email address of the customer
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Email
         {
@@ -179,20 +127,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o => 
-                    {
-                        _email = value;
-                        return _email;
-                    }, 
-                    _email, 
-                    EmailSelector);                    
+                SetPropertyValueAndDetectChanges(value, ref _email, _ps.Value.EmailSelector);                    
             }
         }
 
-        /// <summary>
-        /// Gets or sets the login name.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string LoginName
         {
@@ -203,20 +142,11 @@
 
             internal set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _loginName = value;
-                        return _loginName;
-                    },
-                    _loginName,
-                    LoginNameSelector);
+                SetPropertyValueAndDetectChanges(value, ref _loginName, _ps.Value.LoginNameSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the customer is tax exempt.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public bool TaxExempt
         {
@@ -227,45 +157,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _taxExempt = value;
-                        return _taxExempt;
-                    },
-                    _taxExempt,
-                    TaxExemptSelector);
+                SetPropertyValueAndDetectChanges(value, ref _taxExempt, _ps.Value.TaxExemptSelector);
             }
         }
 
-        ///// <summary>
-        ///// Gets or sets the notes.
-        ///// </summary>
-        //[DataMember]
-        //public string Notes
-        //{
-        //    get
-        //    {
-        //        return _notes;
-        //    }
-
-        //    set
-        //    {
-        //        SetPropertyValueAndDetectChanges(
-        //            o =>
-        //            {
-        //                _notes = value;
-        //                return _notes;
-        //            },
-        //            _notes,
-        //            NotesSelector);
-        //    }
-        //}
-
-
-        /// <summary>
-        /// Gets or sets the collection of notes associated with the invoice
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public IEnumerable<INote> Notes
         {
@@ -276,20 +172,12 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _notes = value;
-                        return _notes;
-                    },
-                _notes,
-                NotesSelector);
+                // REFACTOR Should be a notify collection
+                _notes = value;
             }
         }
 
-        /// <summary>
-        /// Gets or sets the collection of addresses.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public IEnumerable<ICustomerAddress> Addresses
         {
@@ -300,14 +188,8 @@
 
             internal set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _addresses = value;
-                        return _addresses;
-                    },
-                    _addresses,
-                    AddressSelector);
+                // REFACTOR Should be a notify collection
+                _addresses = value;
             }
         }
 
@@ -319,6 +201,38 @@
         {
             get { return _examineId; }
             set { _examineId = value; }
+        }
+
+        /// <summary>
+        /// Property selectors.
+        /// </summary>
+        private class PropertySelectors
+        {
+            /// <summary>
+            /// The login name selector.
+            /// </summary>
+            public readonly PropertyInfo LoginNameSelector = ExpressionHelper.GetPropertyInfo<Customer, string>(x => x.LoginName);
+
+            /// <summary>
+            /// The first name selector.
+            /// </summary>
+            public readonly PropertyInfo FirstNameSelector = ExpressionHelper.GetPropertyInfo<Customer, string>(x => x.FirstName);
+
+            /// <summary>
+            /// The last name selector.
+            /// </summary>
+            public readonly PropertyInfo LastNameSelector = ExpressionHelper.GetPropertyInfo<Customer, string>(x => x.LastName);
+
+            /// <summary>
+            /// The email selector.
+            /// </summary>
+            public readonly PropertyInfo EmailSelector = ExpressionHelper.GetPropertyInfo<Customer, string>(x => x.Email);
+
+            /// <summary>
+            /// The tax exempt selector.
+            /// </summary>
+            public readonly PropertyInfo TaxExemptSelector = ExpressionHelper.GetPropertyInfo<Customer, bool>(x => x.TaxExempt);
+
         }
     }
 }

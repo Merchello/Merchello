@@ -145,11 +145,5 @@
         /// </summary>
         [DataMember]
         OrderCollection Orders { get; set; }
-
-        /// <summary>
-        /// Accepts visitor class to visit invoice line items
-        /// </summary>
-        /// <param name="visitor">The <see cref="ILineItemVisitor"/> class</param>
-        void Accept(ILineItemVisitor visitor);  
     }
 }

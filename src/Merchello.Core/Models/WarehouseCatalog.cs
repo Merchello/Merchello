@@ -4,70 +4,98 @@
     using System.Reflection;
     using System.Runtime.Serialization;
     using EntityBase;
-    using Interfaces;
 
-    using Umbraco.Core;
-
-    /// <summary>
-    /// Represents a warehouse catalog
-    /// </summary>
+    /// <inheritdoc/>
     [Serializable]
     [DataContract(IsReference = true)]
     public class WarehouseCatalog : Entity, IWarehouseCatalog
     {
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private static readonly Lazy<PropertySelectors> _ps = new Lazy<PropertySelectors>();
+
+        /// <summary>
+        /// The warehouse key.
+        /// </summary>
         private readonly Guid _warehouseKey;
+
+        /// <summary>
+        /// The name.
+        /// </summary>
         private string _name;
+
+        /// <summary>
+        /// The description.
+        /// </summary>
         private string _description;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WarehouseCatalog"/> class.
+        /// </summary>
+        /// <param name="warehouseKey">
+        /// The warehouse key.
+        /// </param>
         public WarehouseCatalog(Guid warehouseKey)
         {
-            Mandate.ParameterCondition(warehouseKey != Guid.Empty, "warehouseKey");
+            Ensure.ParameterCondition(warehouseKey != Guid.Empty, "warehouseKey");
             _warehouseKey = warehouseKey;
         }
 
-        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<WarehouseCatalog, string>(x => x.Name);
-        private static readonly PropertyInfo DescriptionSelector = ExpressionHelper.GetPropertyInfo<WarehouseCatalog, string>(x => x.Description);
-
-        /// <summary>
-        /// The warhouse key (identifier) 
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
-        public Guid WarehouseKey {
-            get { return _warehouseKey; }
+        public Guid WarehouseKey
+        {
+            get
+            {
+                return _warehouseKey;
+            }
         }
 
-        /// <summary>
-        /// The optional name or title of the catalog
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Name
         {
-            get { return _name; }
+            get
+            {
+                return _name;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _name = value;
-                    return _name;
-                }, _name, NameSelector);
+                SetPropertyValueAndDetectChanges(value, ref _name, _ps.Value.NameSelector);
+            }
+        }
+
+        /// <inheritdoc/>
+        [DataMember]
+        public string Description
+        {
+            get
+            {
+                return _description;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(value, ref _description, _ps.Value.DescriptionSelector);
             }
         }
 
         /// <summary>
-        /// The optional description of the catalog
+        /// The property selectors.
         /// </summary>
-        [DataMember]
-        public string Description
+        private class PropertySelectors
         {
-            get { return _description; }
-            set
-            {
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _description = value;
-                    return _description;
-                }, _description, DescriptionSelector);
-            }
+            /// <summary>
+            /// The name selector.
+            /// </summary>
+            public readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<WarehouseCatalog, string>(x => x.Name);
+
+            /// <summary>
+            /// The description selector.
+            /// </summary>
+            public readonly PropertyInfo DescriptionSelector = ExpressionHelper.GetPropertyInfo<WarehouseCatalog, string>(x => x.Description);
         }
     }
 }

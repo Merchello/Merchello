@@ -8,8 +8,6 @@
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.Interfaces;
 
-    using Umbraco.Core;
-
     /// <summary>
     /// Represents marketing Offer Settings.
     /// </summary>
@@ -17,42 +15,12 @@
     [DataContract(IsReference = true)]
     internal class OfferSettings : Entity, IOfferSettings
     {
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private static readonly Lazy<PropertySelectors> _ps = new Lazy<PropertySelectors>();
+
         #region Fields
-
-        /// <summary>
-        /// The name selector.
-        /// </summary>
-        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<OfferSettings, string>(x => x.Name);
-
-        /// <summary>
-        /// The offer code selector.
-        /// </summary>
-        private static readonly PropertyInfo OfferCodeSelector = ExpressionHelper.GetPropertyInfo<OfferSettings, string>(x => x.OfferCode);
-
-        /// <summary>
-        /// The offer provider key selector.
-        /// </summary>
-        private static readonly PropertyInfo OfferProviderKeySelector = ExpressionHelper.GetPropertyInfo<OfferSettings, Guid>(x => x.OfferProviderKey);
-
-        /// <summary>
-        /// The offer starts date selector.
-        /// </summary>
-        private static readonly PropertyInfo OfferStartsDateSelector = ExpressionHelper.GetPropertyInfo<OfferSettings, DateTime>(x => x.OfferStartsDate);
-
-        /// <summary>
-        /// The offer ends date selector.
-        /// </summary>
-        private static readonly PropertyInfo OfferEndsDateSelector = ExpressionHelper.GetPropertyInfo<OfferSettings, DateTime>(x => x.OfferEndsDate);
-
-        /// <summary>
-        /// The active selector.
-        /// </summary>
-        private static readonly PropertyInfo ActiveSelector = ExpressionHelper.GetPropertyInfo<OfferSettings, bool>(x => x.Active);
-
-        /// <summary>
-        /// The component configurations changed selector.
-        /// </summary>
-        private static readonly PropertyInfo ComponentDefinitionsChangedSelector = ExpressionHelper.GetPropertyInfo<OfferSettings, OfferComponentDefinitionCollection>(x => x.ComponentDefinitions);
 
         /// <summary>
         /// The offer name.
@@ -126,10 +94,10 @@
         /// </param>
         internal OfferSettings(string name, string offerCode, Guid offerProviderKey, OfferComponentDefinitionCollection componentDefinitions)
         {
-            Mandate.ParameterNotNullOrEmpty(name, "name");
-            Mandate.ParameterNotNullOrEmpty(offerCode, "offerCode");
-            Mandate.ParameterCondition(!Guid.Empty.Equals(offerProviderKey), "offerProviderKey");
-            Mandate.ParameterNotNull(componentDefinitions, "ComponentDefinitions");
+            Ensure.ParameterNotNullOrEmpty(name, "name");
+            Ensure.ParameterNotNullOrEmpty(offerCode, "offerCode");
+            Ensure.ParameterCondition(!Guid.Empty.Equals(offerProviderKey), "offerProviderKey");
+            Ensure.ParameterNotNull(componentDefinitions, "ComponentDefinitions");
             _name = name;
             _offerCode = offerCode;
             _offerProviderKey = offerProviderKey;
@@ -139,9 +107,7 @@
             this._componentDefinitions = componentDefinitions;
         }
 
-        /// <summary>
-        /// Gets or sets the name.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Name
         {
@@ -152,20 +118,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _name = value;
-                        return _name;
-                    }, 
-                    _name, 
-                    NameSelector);
+                SetPropertyValueAndDetectChanges(value, ref _name, _ps.Value.NameSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the offer code.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string OfferCode
         {
@@ -176,20 +133,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _offerCode = value;
-                        return _offerCode;
-                    },
-                    _offerCode,
-                    OfferCodeSelector);
+                SetPropertyValueAndDetectChanges(value, ref _offerCode, _ps.Value.OfferCodeSelector);
             }            
         }
 
-        /// <summary>
-        /// Gets or sets the offer provider key.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public Guid OfferProviderKey
         {
@@ -200,20 +148,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _offerProviderKey = value;
-                        return _offerProviderKey;
-                    },
-                    _offerProviderKey,
-                    OfferProviderKeySelector);
+                SetPropertyValueAndDetectChanges(value, ref _offerProviderKey, _ps.Value.OfferProviderKeySelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the offer starts date.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public DateTime OfferStartsDate
         {
@@ -224,20 +163,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _offerStartsDate = value;
-                        return _offerStartsDate;
-                    },
-                    _offerStartsDate,
-                    OfferStartsDateSelector);
+                SetPropertyValueAndDetectChanges(value, ref _offerStartsDate, _ps.Value.OfferStartsDateSelector);
             }                
         }
 
-        /// <summary>
-        /// Gets or sets the offer ends date.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public DateTime OfferEndsDate
         {
@@ -248,20 +178,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _offerEndsDate = value;
-                        return _offerEndsDate;
-                    },
-                    _offerEndsDate,
-                    OfferEndsDateSelector);
+                SetPropertyValueAndDetectChanges(value, ref _offerEndsDate, _ps.Value.OfferEndsDateSelector);
             }      
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether active.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public bool Active
         {
@@ -272,20 +193,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _active = value;
-                        return _active;
-                    },
-                    _active,
-                    ActiveSelector);
+                SetPropertyValueAndDetectChanges(value, ref _active, _ps.Value.ActiveSelector);
             }      
         }
 
-        /// <summary>
-        /// Gets a value indicating whether the offer has expired.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public bool Expired
         {
@@ -296,9 +208,7 @@
             }
         }
 
-        /// <summary>
-        /// Gets a value indicating whether has started.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public bool HasStarted
         {
@@ -308,9 +218,7 @@
             }
         }
 
-        /// <summary>
-        /// Gets or sets the <see cref="OfferComponentDefinitionCollection"/>.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public OfferComponentDefinitionCollection ComponentDefinitions
         {
@@ -327,7 +235,7 @@
         }
 
         /// <summary>
-        /// Event handler for the <see cref="OfferComponentDefinitionCollection"/>.
+        /// Handlers the <see cref="OfferComponentDefinitionCollection"/> changed.
         /// </summary>
         /// <param name="sender">
         /// The sender.
@@ -337,7 +245,48 @@
         /// </param>
         private void ComponentDefinitionsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
         {
-            OnPropertyChanged(ComponentDefinitionsChangedSelector);
+            OnPropertyChanged(_ps.Value.ComponentDefinitionsChangedSelector);
+        }
+
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private class PropertySelectors
+        {
+            /// <summary>
+            /// The name selector.
+            /// </summary>
+            public readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<OfferSettings, string>(x => x.Name);
+
+            /// <summary>
+            /// The offer code selector.
+            /// </summary>
+            public readonly PropertyInfo OfferCodeSelector = ExpressionHelper.GetPropertyInfo<OfferSettings, string>(x => x.OfferCode);
+
+            /// <summary>
+            /// The offer provider key selector.
+            /// </summary>
+            public readonly PropertyInfo OfferProviderKeySelector = ExpressionHelper.GetPropertyInfo<OfferSettings, Guid>(x => x.OfferProviderKey);
+
+            /// <summary>
+            /// The offer starts date selector.
+            /// </summary>
+            public readonly PropertyInfo OfferStartsDateSelector = ExpressionHelper.GetPropertyInfo<OfferSettings, DateTime>(x => x.OfferStartsDate);
+
+            /// <summary>
+            /// The offer ends date selector.
+            /// </summary>
+            public readonly PropertyInfo OfferEndsDateSelector = ExpressionHelper.GetPropertyInfo<OfferSettings, DateTime>(x => x.OfferEndsDate);
+
+            /// <summary>
+            /// The active selector.
+            /// </summary>
+            public readonly PropertyInfo ActiveSelector = ExpressionHelper.GetPropertyInfo<OfferSettings, bool>(x => x.Active);
+
+            /// <summary>
+            /// The component configurations changed selector.
+            /// </summary>
+            public readonly PropertyInfo ComponentDefinitionsChangedSelector = ExpressionHelper.GetPropertyInfo<OfferSettings, OfferComponentDefinitionCollection>(x => x.ComponentDefinitions);
         }
     }
 }

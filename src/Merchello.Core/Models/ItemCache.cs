@@ -6,8 +6,6 @@
     using EntityBase;
     using TypeFields;
 
-    using Umbraco.Core;
-
     /// <summary>
     /// Defines a customer item register
     /// </summary>
@@ -15,17 +13,12 @@
     [DataContract(IsReference = true)]
     public class ItemCache : VersionTaggedEntity, IItemCache
     {
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private static readonly Lazy<PropertySelectors> _ps = new Lazy<PropertySelectors>();
+
         #region Fields
-
-        /// <summary>
-        /// The entity key selector.
-        /// </summary>
-        private static readonly PropertyInfo EntityKeySelector = ExpressionHelper.GetPropertyInfo<ItemCache, Guid>(x => x.EntityKey);
-
-        /// <summary>
-        /// The item cache tf key selector.
-        /// </summary>
-        private static readonly PropertyInfo ItemCacheTfKeySelector = ExpressionHelper.GetPropertyInfo<ItemCache, Guid>(x => x.ItemCacheTfKey);
 
         /// <summary>
         /// The entity key.
@@ -82,7 +75,7 @@
         /// The entity key.
         /// </param>
         /// <param name="itemCacheTfKey">
-        /// The item cache tf key.
+        /// The item cache type field key.
         /// </param>
         internal ItemCache(Guid entityKey, Guid itemCacheTfKey)
             : this(entityKey, itemCacheTfKey, new LineItemCollection())
@@ -97,25 +90,23 @@
         /// The entity key.
         /// </param>
         /// <param name="itemCacheTfKey">
-        /// The item cache tf key.
+        /// The item cache type field key.
         /// </param>
         /// <param name="items">
         /// The items.
         /// </param>
         internal ItemCache(Guid entityKey, Guid itemCacheTfKey, LineItemCollection items)
         {
-            Mandate.ParameterCondition(entityKey != Guid.Empty, "entityKey");
-            Mandate.ParameterCondition(itemCacheTfKey != Guid.Empty, "itemCacheTfKey");
-            Mandate.ParameterNotNull(items, "items");
+            Ensure.ParameterCondition(entityKey != Guid.Empty, "entityKey");
+            Ensure.ParameterCondition(itemCacheTfKey != Guid.Empty, "itemCacheTfKey");
+            Ensure.ParameterNotNull(items, "items");
 
             _entityKey = entityKey;
             _itemCacheTfKey = itemCacheTfKey;
             _items = items;
         }               
         
-        /// <summary>
-        /// Gets or sets key of the entity associated with the item cache
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public Guid EntityKey
         {
@@ -126,20 +117,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _entityKey = value;
-                    return _entityKey;
-                }, 
-                _entityKey, 
-                EntityKeySelector);
+                SetPropertyValueAndDetectChanges(value, ref _entityKey, _ps.Value.EntityKeySelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the item cache type field <see cref="ITypeField"/> guid typeKey
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public Guid ItemCacheTfKey
         {
@@ -150,20 +132,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                    _itemCacheTfKey = value;
-                    return _itemCacheTfKey;
-                }, 
-                _itemCacheTfKey, 
-                ItemCacheTfKeySelector);
+                SetPropertyValueAndDetectChanges(value, ref _itemCacheTfKey, _ps.Value.ItemCacheTfKeySelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the <see cref="ItemCacheType"/> of the item cache
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public ItemCacheType ItemCacheType
         {
@@ -183,9 +156,7 @@
             }
         }
 
-        /// <summary>
-        /// Gets the <see cref="ILineItem"/>s in the customer registry
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public LineItemCollection Items 
         {
@@ -198,6 +169,29 @@
             {
                 _items = value;
             }
+        }
+
+        /// <inheritdoc/>
+        public void Accept(ILineItemVisitor visitor)
+        {
+            this.Items.Accept(visitor);
+        }
+
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private class PropertySelectors
+        {
+            /// <summary>
+            /// The entity key selector.
+            /// </summary>
+            public readonly PropertyInfo EntityKeySelector = ExpressionHelper.GetPropertyInfo<ItemCache, Guid>(x => x.EntityKey);
+
+            /// <summary>
+            /// The item cache type field key selector.
+            /// </summary>
+            public readonly PropertyInfo ItemCacheTfKeySelector = ExpressionHelper.GetPropertyInfo<ItemCache, Guid>(x => x.ItemCacheTfKey);
+
         }
     }
 }

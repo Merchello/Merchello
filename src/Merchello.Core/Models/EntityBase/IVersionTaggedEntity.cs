@@ -3,7 +3,7 @@
     using System;
 
     /// <summary>
-    /// Defines an entity that can be "tagged" with a versioning GUID
+    /// Represents an entity that can be "tagged" with a versioning GUID
     /// </summary>
     /// <remarks>
     /// 

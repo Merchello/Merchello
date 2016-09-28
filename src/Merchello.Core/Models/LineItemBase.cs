@@ -8,11 +8,9 @@
     using System.Runtime.Serialization;
     using System.Xml;
 
+    using Merchello.Core.Logging;
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.TypeFields;
-
-    using Umbraco.Core;
-    using Umbraco.Core.Logging;
 
     using Constants = Merchello.Core.Constants;
 
@@ -23,6 +21,11 @@
     [DataContract(IsReference = true)]
     public abstract class LineItemBase : Entity, ILineItem
     {
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private static readonly Lazy<PropertySelectors> _ps = new Lazy<PropertySelectors>();
+
         /// <summary>
         /// The container key.
         /// </summary>
@@ -87,6 +90,21 @@
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LineItemBase"/> class.
+        /// </summary>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="sku">
+        /// The SKU.
+        /// </param>
+        /// <param name="quantity">
+        /// The quantity.
+        /// </param>
+        /// <param name="amount">
+        /// The amount.
+        /// </param>
         protected LineItemBase(string name, string sku, int quantity, decimal amount)
             : this(LineItemType.Product, name, sku, quantity, amount)
         {
@@ -163,7 +181,7 @@
         /// Initializes a new instance of the <see cref="LineItemBase"/> class.
         /// </summary>
         /// <param name="lineItemTfKey">
-        /// The line item tf key.
+        /// The line item type field key.
         /// </param>
         /// <param name="name">
         /// The name.
@@ -185,13 +203,13 @@
             if (lineItemTfKey.Equals(Guid.Empty))
             {
                 // This could be a custom type field
-                LogHelper.Debug<LineItemBase>("LineItemType.Custom cannot be added to a collection.  You need to pass the type field key directly.");
+                MultiLogHelper.Debug<LineItemBase>("LineItemType.Custom cannot be added to a collection.  You need to pass the type field key directly.");
             }
 
-            Mandate.ParameterCondition(lineItemTfKey != Guid.Empty, "lineItemTfKey");
-            Mandate.ParameterNotNull(extendedData, "extendedData");
-            Mandate.ParameterNotNullOrEmpty(name, "name");
-            Mandate.ParameterNotNullOrEmpty(sku, "sku");
+            Ensure.ParameterCondition(lineItemTfKey != Guid.Empty, "lineItemTfKey");
+            Ensure.ParameterNotNull(extendedData, "extendedData");
+            Ensure.ParameterNotNullOrEmpty(name, "name");
+            Ensure.ParameterNotNullOrEmpty(sku, "sku");
                         
             _lineItemTfKey = lineItemTfKey;
             _name = name;
@@ -201,139 +219,114 @@
             _extendedData = extendedData;
         }
 
-        private static readonly PropertyInfo ContainerKeySelector = ExpressionHelper.GetPropertyInfo<LineItemBase, Guid>(x => x.ContainerKey);
-        private static readonly PropertyInfo LineItemTfKeySelector = ExpressionHelper.GetPropertyInfo<LineItemBase, Guid>(x => x.LineItemTfKey);
-        private static readonly PropertyInfo SkuSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, string>(x => x.Sku);
-        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, string>(x => x.Name);
-        private static readonly PropertyInfo BaseQuantitySelector = ExpressionHelper.GetPropertyInfo<LineItemBase, int>(x => x.Quantity);
-        private static readonly PropertyInfo AmountSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, decimal>(x => x.Price);
-        private static readonly PropertyInfo ExtendedDataChangedSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, ExtendedDataCollection>(x => x.ExtendedData);
-        private static readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, bool>(x => x.Exported);
 
-        private void ExtendedDataChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            OnPropertyChanged(ExtendedDataChangedSelector);
-        }
-
-
-        /// <summary>
-        /// The "container" or parent of collection's primary 'key' (Guid)
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public Guid ContainerKey
         {
-            get { return _containerKey; }
+            get
+            {
+                return _containerKey;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _containerKey = value;
-                    return _containerKey;
-                }, _containerKey, ContainerKeySelector); 
+                SetPropertyValueAndDetectChanges(value, ref _containerKey, _ps.Value.ContainerKeySelector); 
             }
         }
-    
-        /// <summary>
-        /// The line item type field Key
-        /// </summary>
+
+        /// <inheritdoc/>
         [DataMember]
         public Guid LineItemTfKey
         {
-            get { return _lineItemTfKey; }
+            get
+            {
+                return _lineItemTfKey;
+            }
+
             set 
             { 
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _lineItemTfKey = value;
-                    return _lineItemTfKey;
-                }, _lineItemTfKey, LineItemTfKeySelector); 
+                SetPropertyValueAndDetectChanges(value, ref _lineItemTfKey, _ps.Value.LineItemTfKeySelector); 
             }
         }
-    
-        /// <summary>
-        /// The sku associated with the line item in the customer registry
-        /// </summary>
+
+        /// <inheritdoc/>
         [DataMember]
         public string Sku
         {
-            get { return _sku; }
-                set 
-                { 
-                    SetPropertyValueAndDetectChanges(o =>
-                    {
-                        _sku = value;
-                        return _sku;
-                    }, _sku, SkuSelector); 
-                }
+            get
+            {
+                return _sku;
+            }
+
+            set 
+            { 
+                SetPropertyValueAndDetectChanges(value, ref _sku, _ps.Value.SkuSelector); 
+            }
         }
-    
-        /// <summary>
-        /// The name or title of the item
-        /// </summary>
+
+        /// <inheritdoc/>
         [DataMember]
         public string Name
         {
-            get { return _name; }
-                set 
-                { 
-                    SetPropertyValueAndDetectChanges(o =>
-                    {
-                        _name = value;
-                        return _name;
-                    }, _name, NameSelector); 
-                }
+            get
+            {
+                return _name;
+            }
+
+            set 
+            { 
+                SetPropertyValueAndDetectChanges(value, ref _name, _ps.Value.NameSelector); 
+            }
         }
-    
-        /// <summary>
-        /// The quantity of items to be ordered
-        /// </summary>
+
+        /// <inheritdoc/>
         [DataMember]
         public int Quantity
         {
-            get { return _quantity; }
-                set 
-                { 
-                    SetPropertyValueAndDetectChanges(o =>
-                    {
-                        _quantity = value;
-                        return _quantity;
-                    }, _quantity, BaseQuantitySelector); 
-                }
+            get
+            {
+                return _quantity;
+            }
+
+            set 
+            { 
+                SetPropertyValueAndDetectChanges(value, ref _quantity, _ps.Value.QuantitySelector); 
+            }
         }
     
-        /// <summary>
-        /// The amount (cost) of the line item
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public decimal Price
         {
-            get { return _price; }
-                set 
-                { 
-                    SetPropertyValueAndDetectChanges(o =>
-                    {
-                        _price = value;
-                        return _price;
-                    }, _price, AmountSelector); 
-                }
+            get
+            {
+                return _price;
+            }
+
+            set 
+            { 
+                SetPropertyValueAndDetectChanges(value, ref _price, _ps.Value.PriceSelector); 
+            }
         }
 
-        /// <summary>
-        /// A collection for storing custom/extended line item data
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public ExtendedDataCollection ExtendedData
         {
-            get { return _extendedData; }
-            internal set { 
+            get
+            {
+                return _extendedData;
+            }
+
+            internal set
+            { 
                 _extendedData = value;
                 _extendedData.CollectionChanged += ExtendedDataChanged;
             }
         }
 
-        /// <summary>
-        /// Converts the LineItemTfKey to it's enum equivalent
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public LineItemType LineItemType
         {
@@ -343,37 +336,33 @@
             }
         }
 
-        /// <summary>
-        /// The total price of the line item (quantity * price)
-        /// </summary>
+        /// <inheritdoc/>
         [IgnoreDataMember]
         public decimal TotalPrice 
-        { 
-            get { return _price *_quantity; }
-        }
-
-
-        /// <summary>
-        /// True/false indicating whether or not this line item has been exported to an external system
-        /// </summary>
-        [DataMember]
-        public bool Exported
         {
-            get { return _exported; }
-            set
+            get
             {
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _exported = value;
-                    return _exported;
-                }, _exported, ExportedSelector);
+                return _price * _quantity;
             }
         }
 
-        /// <summary>
-        /// Accept for visitor operations
-        /// </summary>
-        /// <param name="vistor"><see cref="ILineItemVisitor"/></param>
+
+        /// <inheritdoc/>
+        [DataMember]
+        public bool Exported
+        {
+            get
+            {
+                return _exported;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(value, ref _exported, _ps.Value.ExportedSelector);
+            }
+        }
+
+        /// <inheritdoc/>
         public virtual void Accept(ILineItemVisitor vistor)
         {
             vistor.Visit(this);
@@ -383,6 +372,7 @@
         /// Serializes the current instance to an Xml representation - intended to be persisted in an <see cref="ExtendedDataCollection"/>  
         /// </summary>
         /// <returns>An Xml string</returns>
+        [Obsolete("TODO this should serialize to JSON and be an extension")]
         internal string SerializeToXml()
         {
             string xml;
@@ -417,6 +407,65 @@
 
             return xml;
         }
-        
+
+        /// <summary>
+        /// Handles the extended data collection changed.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void ExtendedDataChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(_ps.Value.ExtendedDataChangedSelector);
+        }
+
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private class PropertySelectors
+        {
+            /// <summary>
+            /// The container key selector.
+            /// </summary>
+            public readonly PropertyInfo ContainerKeySelector = ExpressionHelper.GetPropertyInfo<LineItemBase, Guid>(x => x.ContainerKey);
+
+            /// <summary>
+            /// The line item type field key selector.
+            /// </summary>
+            public readonly PropertyInfo LineItemTfKeySelector = ExpressionHelper.GetPropertyInfo<LineItemBase, Guid>(x => x.LineItemTfKey);
+
+            /// <summary>
+            /// The SKU selector.
+            /// </summary>
+            public readonly PropertyInfo SkuSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, string>(x => x.Sku);
+
+            /// <summary>
+            /// The name selector.
+            /// </summary>
+            public readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, string>(x => x.Name);
+
+            /// <summary>
+            /// The quantity selector.
+            /// </summary>
+            public readonly PropertyInfo QuantitySelector = ExpressionHelper.GetPropertyInfo<LineItemBase, int>(x => x.Quantity);
+
+            /// <summary>
+            /// The price selector.
+            /// </summary>
+            public readonly PropertyInfo PriceSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, decimal>(x => x.Price);
+
+            /// <summary>
+            /// The extended data changed selector.
+            /// </summary>
+            public readonly PropertyInfo ExtendedDataChangedSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, ExtendedDataCollection>(x => x.ExtendedData);
+
+            /// <summary>
+            /// The exported selector.
+            /// </summary>
+            public readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, bool>(x => x.Exported);
+        }
     }
 }

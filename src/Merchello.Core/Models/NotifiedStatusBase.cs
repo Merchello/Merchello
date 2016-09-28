@@ -13,32 +13,12 @@
     [DataContract(IsReference = true)]
     public abstract class NotifiedStatusBase : Entity, INotifyStatus
     {
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private static readonly Lazy<PropertySelectors> _ps = new Lazy<PropertySelectors>();
+
         #region Fields
-
-        /// <summary>
-        /// The name selector.
-        /// </summary>
-        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<InvoiceStatus, string>(x => x.Name);
-
-        /// <summary>
-        /// The alias selector.
-        /// </summary>
-        private static readonly PropertyInfo AliasSelector = ExpressionHelper.GetPropertyInfo<InvoiceStatus, string>(x => x.Alias);
-
-        /// <summary>
-        /// The reportable selector.
-        /// </summary>
-        private static readonly PropertyInfo ReportableSelector = ExpressionHelper.GetPropertyInfo<InvoiceStatus, bool>(x => x.Reportable);
-
-        /// <summary>
-        /// The active selector.
-        /// </summary>
-        private static readonly PropertyInfo ActiveSelector = ExpressionHelper.GetPropertyInfo<InvoiceStatus, bool>(x => x.Active);
-
-        /// <summary>
-        /// The sort order selector.
-        /// </summary>
-        private static readonly PropertyInfo SortOrderSelector = ExpressionHelper.GetPropertyInfo<InvoiceStatus, int>(x => x.SortOrder);
 
         /// <summary>
         /// The name.
@@ -67,9 +47,7 @@
 
         #endregion
 
-        /// <summary>
-        /// Gets or sets the name of the order status
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Name
         {
@@ -80,20 +58,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _name = value;
-                    return _name;
-                }, 
-                _name, 
-                NameSelector);
+                SetPropertyValueAndDetectChanges(value, ref _name, _ps.Value.NameSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the alias of the order status
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Alias
         {
@@ -104,20 +73,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _alias = value;
-                    return _alias;
-                }, 
-                _alias, 
-                AliasSelector);
+                SetPropertyValueAndDetectChanges(value, ref _alias, _ps.Value.AliasSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether or not to report on this order status
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public bool Reportable
         {
@@ -128,20 +88,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _reportable = value;
-                    return _reportable;
-                },
-                _reportable, 
-                ReportableSelector);
+                SetPropertyValueAndDetectChanges(value, ref _reportable, _ps.Value.ReportableSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether or not this order status is active
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public bool Active
         {
@@ -152,20 +103,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _active = value;
-                    return _active;
-                }, 
-                _active, 
-                ActiveSelector);
+                SetPropertyValueAndDetectChanges(value, ref _active, _ps.Value.ActiveSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the sort order of the order status
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public int SortOrder
         {
@@ -176,15 +118,39 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _sortOrder = value;
-                    return _sortOrder;
-                }, 
-                _sortOrder, 
-                SortOrderSelector);
+                SetPropertyValueAndDetectChanges(value, ref _sortOrder, _ps.Value.SortOrderSelector);
             }
+        }
+
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private class PropertySelectors
+        {
+            /// <summary>
+            /// The name selector.
+            /// </summary>
+            public readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<InvoiceStatus, string>(x => x.Name);
+
+            /// <summary>
+            /// The alias selector.
+            /// </summary>
+            public readonly PropertyInfo AliasSelector = ExpressionHelper.GetPropertyInfo<InvoiceStatus, string>(x => x.Alias);
+
+            /// <summary>
+            /// The reportable selector.
+            /// </summary>
+            public readonly PropertyInfo ReportableSelector = ExpressionHelper.GetPropertyInfo<InvoiceStatus, bool>(x => x.Reportable);
+
+            /// <summary>
+            /// The active selector.
+            /// </summary>
+            public readonly PropertyInfo ActiveSelector = ExpressionHelper.GetPropertyInfo<InvoiceStatus, bool>(x => x.Active);
+
+            /// <summary>
+            /// The sort order selector.
+            /// </summary>
+            public readonly PropertyInfo SortOrderSelector = ExpressionHelper.GetPropertyInfo<InvoiceStatus, int>(x => x.SortOrder);
         }
     }
 }

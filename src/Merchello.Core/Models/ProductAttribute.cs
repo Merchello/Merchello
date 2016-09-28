@@ -6,8 +6,6 @@
 
     using Merchello.Core.Models.DetachedContent;
 
-    using Umbraco.Core;
-
     /// <summary>
     /// Defines a product attribute
     /// </summary>
@@ -26,8 +24,8 @@
         /// </param>
         public ProductAttribute(string name, string sku)
         {
-            Mandate.ParameterNotNullOrEmpty(name, "name");
-            Mandate.ParameterNotNullOrEmpty(sku, "sku");
+            Ensure.ParameterNotNullOrEmpty(name, "name");
+            Ensure.ParameterNotNullOrEmpty(sku, "sku");
             
             // This is required so that we can create attributes from the WebApi without a lot of 
             // round trip traffic to the db to generate the Key(s).  Key is virtual so also forces
@@ -39,50 +37,33 @@
             Sku = sku;
         }
 
-        /// <summary>
-        /// Gets or sets id of the option which defines the attribute group this attribute belongs to
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public Guid OptionKey { get; set; }
 
 
-        /// <summary>
-        /// Gets or sets the name of the attribute
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Name { get; set; }
-        
 
-        /// <summary>
-        /// Gets or sets suggested SKU concatenation
-        /// </summary>
+
+        /// <inheritdoc/>
         [DataMember]
         public string Sku { get; set; }
 
-        /// <summary>
-        /// Gets or sets order in which to list the product attribute with respect to the product option
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public int SortOrder { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether is default choice.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public bool IsDefaultChoice { get; set; }
 
-        /// <summary>
-        /// Gets the detached data values.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public DetachedDataValuesCollection DetachedDataValues { get; internal set; }
 
-        /// <summary>
-        /// Creates a cloned copy of this object.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IProductAttribute"/>.
-        /// </returns>
+        /// <inheritdoc/>
         public IProductAttribute Clone()
         {
             return (ProductAttribute)this.MemberwiseClone();
