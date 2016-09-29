@@ -371,7 +371,9 @@
 
                 EntityCollectionProviderResolver.Current = new EntityCollectionProviderResolver(
                    PluginManager.Current.ResolveEnityCollectionProviders(),
-                   merchelloContext);                 
+                   merchelloContext);
+                // REFACTOR HACK FIX - this resolver
+                EntityCollectionProviderResolver.Current.EnsureInitialized();
             }
         }
 
