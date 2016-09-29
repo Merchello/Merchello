@@ -46,11 +46,11 @@
         /// <summary>
         /// Gets the <see cref="IEntityFilterGroup"/>.
         /// </summary>
-        public new virtual IEntityFilterGroup EntityGroup
+        public virtual IEntityFilterGroup EntityGroup
         {
             get
             {
-                return (IEntityFilterGroup)base.EntityCollection;
+                return (IEntityFilterGroup)this.EntityCollection;
             }
         }
 

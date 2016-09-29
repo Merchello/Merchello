@@ -27,7 +27,7 @@
         /// <summary>
         /// The activated gateway provider cache.
         /// </summary>
-        private readonly ConcurrentDictionary<Guid, Type> _entityCollectionProviderCache = new ConcurrentDictionary<Guid, Type>();
+        private static readonly ConcurrentDictionary<Guid, Type> _entityCollectionProviderCache = new ConcurrentDictionary<Guid, Type>();
 
         /// <summary>
         /// The instance types.
@@ -311,6 +311,23 @@
         }
 
         /// <summary>
+        /// The ensure initialized.
+        /// </summary>
+        internal void EnsureInitialized()
+        {
+            var defined =
+                _instanceTypes
+                    .Select(x => x.GetCustomAttribute<EntityCollectionProviderAttribute>(false).Key).Distinct().Count();
+
+            var registered =
+                _entityCollectionProviderCache.Select(
+                    x => x.Value.GetCustomAttribute<EntityCollectionProviderAttribute>(false).Key).Distinct().Count();
+
+            if (defined < registered) IsInitialized = false;
+            if (!IsInitialized) this.Initialize();
+        }
+
+        /// <summary>
         /// Gets the provider attributes of providers with matching types
         /// </summary>
         /// <param name="type">
@@ -363,23 +380,6 @@
             return 
                 _instanceTypes.FirstOrDefault(
                     x => x.GetCustomAttribute<EntityCollectionProviderAttribute>(true).Key == providerKey);
-        }
-
-        /// <summary>
-        /// The ensure initialized.
-        /// </summary>
-        private void EnsureInitialized()
-        {
-            var defined =
-                _instanceTypes
-                    .Select(x => x.GetCustomAttribute<EntityCollectionProviderAttribute>(false).Key).Distinct().Count();
-
-            var registered =
-                _entityCollectionProviderCache.Select(
-                    x => x.Value.GetCustomAttribute<EntityCollectionProviderAttribute>(false).Key).Distinct().Count();
-
-            if (defined < registered) IsInitialized = false;
-            if (!IsInitialized) this.Initialize();
         }
 
         /// <summary>
