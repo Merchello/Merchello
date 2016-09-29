@@ -91,8 +91,10 @@ angular.module('merchello.directives').directive('entityFilterGroupList', [
                                 entityType: scope.entityType
                             };
 
+                            // TODO SWAP TEMPLATE
                             var template = provider.dialogEditorView.editorView !== '' ?
-                                provider.dialogEditorView.editorView : '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/filtergroupfilters.addedit.html';
+                                provider.dialogEditorView.editorView :
+                                '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/filtergroupfilters.addedit.html';
 
 
                             dialogService.open({
