@@ -434,11 +434,13 @@
 
                 if (EnusureUniqueProvider(att.Key))
                 {
-                    var collection = ((EntityCollectionService)_merchelloContext.Services.EntityCollectionService).CreateEntityCollectionWithKey(
+                    var collection = ((EntityCollectionService)_merchelloContext.Services.EntityCollectionService).CreateEntityCollection(
                         att.EntityTfKey,
                         att.Key,
                         att.Name);
 
+                    if (typeof(IEntityFilterGroupProvider).IsAssignableFrom(reg)) collection.IsFilter = true;
+                    _merchelloContext.Services.EntityCollectionService.Save(collection);
                     this.AddOrUpdateCache(collection.Key, reg);
                 }
             }
