@@ -89,7 +89,7 @@
         public IProductFilterGroup GetByKey(Guid key)
         {
             // This will be in the Runtime Cache from the underlying service
-            return Map(((EntityCollectionService)this.Service).GetEntityFilterGroup(key));
+            return Map(((EntityCollectionService)this.Service).GetEntityFilterGroupByKey(key));
         }
 
         /// <summary>
