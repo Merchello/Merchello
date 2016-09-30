@@ -98,7 +98,7 @@ angular.module('merchello.directives').directive('entityFilterGroupList', [
 
 
                             dialogService.open({
-                                template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/filtergroupfilters.addedit.html',
+                                template: template,
                                 show: true,
                                 callback: processEditCollection,
                                 dialogData: dialogData

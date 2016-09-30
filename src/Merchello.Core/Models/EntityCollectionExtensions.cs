@@ -241,6 +241,27 @@
         }
 
         /// <summary>
+        /// Resolves the provider for the collection.
+        /// </summary>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        /// <returns>
+        /// The <see cref="EntityCollectionProviderBase"/>.
+        /// </returns>
+        public static EntityCollectionProviderBase ResolveProvider(this IEntityCollection collection)
+        {
+            if (!EntityCollectionProviderResolver.HasCurrent) return null;
+
+            var attempt = EntityCollectionProviderResolver.Current.GetProviderForCollection(collection.Key);
+
+            if (attempt.Success) return attempt.Result;
+
+            MultiLogHelper.Error(typeof(EntityCollectionExtensions), "Resolver failed to resolve collection provider", attempt.Exception);
+            return null;
+        }
+
+        /// <summary>
         /// The save as child of.
         /// </summary>
         /// <param name="collection">
@@ -272,27 +293,6 @@
             MerchelloContext.Current.Services.EntityCollectionService.Save(collection);
         }
 
-
-        /// <summary>
-        /// Resolves the provider for the collection.
-        /// </summary>
-        /// <param name="collection">
-        /// The collection.
-        /// </param>
-        /// <returns>
-        /// The <see cref="EntityCollectionProviderBase"/>.
-        /// </returns>
-        internal static EntityCollectionProviderBase ResolveProvider(this IEntityCollection collection)
-        {
-            if (!EntityCollectionProviderResolver.HasCurrent) return null;
-
-            var attempt = EntityCollectionProviderResolver.Current.GetProviderForCollection(collection.Key);
-
-            if (attempt.Success) return attempt.Result;
-
-            MultiLogHelper.Error(typeof(EntityCollectionExtensions), "Resolver failed to resolve collection provider", attempt.Exception);
-            return null;
-        }
 
         /// <summary>
         /// The resolve provider.
