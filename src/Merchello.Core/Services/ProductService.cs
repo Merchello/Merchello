@@ -891,6 +891,22 @@
             }
         }
 
+        //// Hack fix for ATP
+        //// This should not be public
+        //// REFACTOR
+        public Page<Guid> GetKeysThatExistInAnyCollections(
+           IEnumerable<Guid> collectionKeys,
+           long page,
+           long itemsPerPage,
+           string sortBy = "",
+           SortDirection sortDirection = SortDirection.Descending)
+                {
+                    using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
+                    {
+                        return repository.GetKeysThatExistInAnyCollections(collectionKeys.ToArray(), page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+                    }
+        }
+
         /// <summary>
         /// The get product keys from collection.
         /// </summary>
@@ -1179,18 +1195,6 @@
             }
         }
 
-        internal Page<Guid> GetKeysThatExistInAnyCollections(
-           IEnumerable<Guid> collectionKeys,
-           long page,
-           long itemsPerPage,
-           string sortBy = "",
-           SortDirection sortDirection = SortDirection.Descending)
-        {
-            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
-            {
-                return repository.GetKeysThatExistInAnyCollections(collectionKeys.ToArray(), page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
-            }
-        }
 
         internal Page<Guid> GetKeysThatExistInAnyCollections(
            IEnumerable<Guid> collectionKeys,
