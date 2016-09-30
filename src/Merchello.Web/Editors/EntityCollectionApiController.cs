@@ -666,7 +666,7 @@
         [HttpPut, HttpPost]
         public EntityFilterGroupDisplay PutEntityFilterGroup(EntityFilterGroupDisplay collection)
         {
-            var currentVersion = ((EntityCollectionService)_entityCollectionService).GetEntityFilterGroup(collection.Key);
+            var currentVersion = ((EntityCollectionService)_entityCollectionService).GetEntityFilterGroupByKey(collection.Key);
             if (currentVersion == null) throw new NullReferenceException("Collection was not found");
 
             // update the root (filter) collection
@@ -713,7 +713,7 @@
 
 
             return
-                ((EntityCollectionService)_entityCollectionService).GetEntityFilterGroup(collection.Key)
+                ((EntityCollectionService)_entityCollectionService).GetEntityFilterGroupByKey(collection.Key)
                     .ToEntitySpecificationCollectionDisplay();
         }
 
