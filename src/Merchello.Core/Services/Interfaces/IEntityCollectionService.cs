@@ -183,7 +183,17 @@
         /// </returns>
         IEnumerable<IEntityCollection> GetByProviderKey(Guid providerKey);
 
-    
+        /// <summary>
+        /// Gets an entity filter group by key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEntityFilterGroup"/>.
+        /// </returns>
+        IEntityFilterGroup GetEntityFilterGroupByKey(Guid key);
+
         /// <summary>
         /// The get all.
         /// </summary>

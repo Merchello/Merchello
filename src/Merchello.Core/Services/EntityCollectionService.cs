@@ -355,6 +355,24 @@
             }
         }
 
+
+        /// <summary>
+        /// Gets <see cref="IEntityFilterGroup"/> by it's key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEntityFilterGroup"/>.
+        /// </returns>
+        public IEntityFilterGroup GetEntityFilterGroupByKey(Guid key)
+        {
+            using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetEntityFilterGroup(key);
+            }
+        }
+
         /// <summary>
         /// The get all.
         /// </summary>
@@ -829,22 +847,6 @@
             }
         }
 
-        /// <summary>
-        /// Gets <see cref="IEntityFilterGroup"/> by it's key.
-        /// </summary>
-        /// <param name="key">
-        /// The key.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IEntityFilterGroup"/>.
-        /// </returns>
-        internal IEntityFilterGroup GetEntityFilterGroup(Guid key)
-        {
-            using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
-            {
-                return repository.GetEntityFilterGroup(key);
-            }
-        }
 
         /// <summary>
         /// The validate sort by field.
