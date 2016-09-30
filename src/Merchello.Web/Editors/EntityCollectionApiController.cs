@@ -697,6 +697,10 @@
 
                     ec.ParentKey = op.ParentKey ?? collection.Key;
                     ec.IsFilter = collection.IsFilter;
+                    foreach (var val in op.ExtendedData)
+                    {
+                        ec.ExtendedData.SetValue(val.Key, val.Value);
+                    }
 
                     operations.Add(ec);
                 }
