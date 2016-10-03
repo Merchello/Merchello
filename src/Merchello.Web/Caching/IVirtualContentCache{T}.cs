@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
 
+    using Merchello.Core;
     using Merchello.Core.Models.EntityBase;
     using Merchello.Web.Models;
 

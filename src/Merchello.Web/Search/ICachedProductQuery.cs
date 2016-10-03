@@ -5,6 +5,7 @@
 
     using Core.Persistence.Querying;
 
+    using Merchello.Core;
     using Merchello.Web.Models;
     using Merchello.Web.Models.VirtualContent;
 
