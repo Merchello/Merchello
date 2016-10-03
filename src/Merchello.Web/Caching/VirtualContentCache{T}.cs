@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Text;
 
+    using Merchello.Core;
     using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Core.Models.EntityBase;

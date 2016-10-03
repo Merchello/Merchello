@@ -1,4 +1,4 @@
-﻿namespace Merchello.Web.Models
+﻿namespace Merchello.Core
 {
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;

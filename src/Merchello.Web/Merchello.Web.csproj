@@ -374,7 +374,6 @@
     <Compile Include="Models\MapperResolvers\DialogEditorViews\EntityCollectionProviderDialogEditorViewResolver.cs" />
     <Compile Include="Models\MapperResolvers\EntityCollections\EntityFilterGroupFiltersValueResolver.cs" />
     <Compile Include="Models\MapperResolvers\ProductOptions\ProductOptionSharedCountResolver.cs" />
-    <Compile Include="Models\PagedCollection.cs" />
     <Compile Include="Models\PrimedProductFilterGroup.cs" />
     <Compile Include="Models\Ui\Async\PaymentResultAsyncResponse.cs" />
     <Compile Include="Models\Ui\IItemCacheModel.cs" />
