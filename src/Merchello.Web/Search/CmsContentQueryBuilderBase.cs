@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Merchello.Core;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Web.Models;
     using Merchello.Web.Models.Ui.Rendering;

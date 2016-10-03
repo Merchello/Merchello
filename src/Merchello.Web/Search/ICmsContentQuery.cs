@@ -2,6 +2,7 @@
 {
     using System;
 
+    using Merchello.Core;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Web.Models;
     using Merchello.Web.Models.VirtualContent;
