@@ -156,6 +156,9 @@
     <key alias="noQualifyingEntities">Нет других элементов для добавления в данный список.</key>
     <key alias="collectionPickerTitle">Категории</key>
     <key alias="collectionPickerInfo">Добавить этот товар в одну или несколько категорий.</key>
+    <key alias="filterPickerTitle">Specified Filters</key>
+    <key alias="filterPickerInfo">Add this item to one or more specified filters.</key>
+    <key alias="filterAssociateFilters">Associate Filters</key>
     <key alias="allItems">Все элементы</key>
     <key alias="allProduct">Все товары</key>
     <key alias="allCustomer">Все покупатели</key>
@@ -192,6 +195,18 @@
     <key alias="optionValues">Значения свойства</key>
     <key alias="shared">Совместное</key>
     <key alias="sharedCount">К-во совмещений</key>
+    <key alias="filterGroup">Filter Group</key>
+    <key alias="filters">Filters</key>
+  </area>
+  <area alias="merchelloNotes">
+    <key alias="notes">Заметки</key>
+    <key alias="note">Заметка</key>
+    <key alias="saleNotes">Заметки об этой покупке</key>
+    <key alias="customerNotes">Заметки по этому покупателю</key>
+    <key alias="paymentNotes">Заметки по этому платежу</key>
+    <key alias="addNote">Добавить заметку</key>
+    <key alias="editNote">Изменить заметку</key>
+    <key alias="internalOnly">Эта заметка только для внутреннего пользования.</key>
   </area>
   <area alias="merchelloProducts">
     <key alias="emptyProductCollection">В этом списке сейчас нет ни одного товара</key>
@@ -201,6 +216,20 @@
     <key alias="copyProduct">Создать копию</key>
     <key alias="newProductName">Задайте наименование товара</key>
     <key alias="newProductSku">Задайте артикул товара</key>
+  </area>
+  <area alias="merchelloSpecFilters">
+    <key alias="manageProductFilters">Manage Product Filters</key>
+    <key alias="editSpecFilter">
+      <![CDATA[
+      <strong>Edit Filters</strong>
+      <small>Add or edit filters, which can be used to enhance product filtering and nagivation.</small>
+      ]]>
+    </key>
+    <key alias="noSpecFilters">
+      <![CDATA[
+      <h5>You have not setup any specification filters</h5>
+      ]]>
+    </key>
   </area>
   <area alias="merchelloProductOptions">
     <key alias="newOption">Новое свойство</key>
@@ -299,16 +328,6 @@
     <key alias="adjustments">Корректировки</key>
     <key alias="adjustmentAssignedBy">Кем сделана</key>
   </area>
-  <area alias="merchelloNotes">
-    <key alias="notes">Заметки</key>
-    <key alias="note">Заметка</key>
-    <key alias="saleNotes">Заметки об этой покупке</key>
-    <key alias="customerNotes">Заметки по этому покупателю</key>
-    <key alias="paymentNotes">Заметки по этому платежу</key>
-    <key alias="addNote">Добавить заметку</key>
-    <key alias="editNote">Изменить заметку</key>
-    <key alias="internalOnly">Эта заметка только для внутреннего пользования.</key>
-  </area>
   <area alias="merchelloCustomers">
     <key alias="loginName">Логин</key>
     <key alias="newCustomer">Новый покупатель</key>
@@ -317,6 +336,7 @@
     <key alias="lastInvoiceTotal">Сумма последнего счета</key>
     <key alias="lastActivityDate">Дата последней активности</key>
     <key alias="location">Местоположение</key>
+      <key alias="customerBaskets">Customer Baskets</key>
     <key alias="noCustomers">
       <![CDATA[
         <h5>Покупателей пока нет</h5>
@@ -513,7 +533,6 @@
     <!-- actions -->
     <!-- phrases -->
   </area>
-
   <!-- TODO KEEP THE MERCHELLO SHIPPING AREA -->
   <area alias="merchelloShipping">
     <!-- things -->
@@ -706,6 +725,7 @@
     <key alias="dragAndReorderHelper">Если Вы пересортируете свойства и варианты, изменится порядок их отображения в магазине. Перетаскивайте свойства (напр. 'цвет' или 'размер') вертикально, а варианты (напр. 'мужской' или 'женский') горизонтально.</key>
     <key alias="changePrices">Изменить цены</key>
     <key alias="updateInventory">Обновить количество</key>
+    <key alias="toggleTracksInventory">Toggle Tracks Inventory</key>
     <key alias="toggleAvailable">Товар доступен</key>
     <key alias="toggleOnSale">В распродаже</key>
     <key alias="duplicateVariant"> Скопировать вариант</key>
