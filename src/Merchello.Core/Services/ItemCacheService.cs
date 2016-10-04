@@ -187,7 +187,7 @@
         /// </returns>
         public IItemCache GetItemCacheWithKey(ICustomerBase customer, ItemCacheType itemCacheType, Guid versionKey)
         {
-            Mandate.ParameterCondition(Guid.Empty != versionKey, "versionKey");
+            Ensure.ParameterCondition(Guid.Empty != versionKey, "versionKey");
 
             // determine if the consumer already has a item cache of this type, if so return it.
             var itemCache = GetItemCacheByCustomer(customer, itemCacheType);
@@ -332,6 +332,26 @@
             }
         }
 
+
+        /// <inheritdoc/>
+        public IEnumerable<IItemCache> GetItemCaches(Guid entityKey)
+        {
+            using (var repository = RepositoryFactory.CreateItemCacheRepository(UowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IItemCache>.Builder.Where(x => x.EntityKey == entityKey);
+                return repository.GetByQuery(query);
+            }
+        }
+
+        /// <inheritdoc/>
+        public IEnumerable<IItemCache> GetEntityItemCaches(Guid entityKey, Guid itemCacheTfKey)
+        {
+            using (var repository = RepositoryFactory.CreateItemCacheRepository(UowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IItemCache>.Builder.Where(x => x.EntityKey == entityKey && x.ItemCacheTfKey == itemCacheTfKey);
+                return repository.GetByQuery(query);
+            }
+        }
 
         /// <summary>
         /// Gets a page of <see cref="IItemCache"/>

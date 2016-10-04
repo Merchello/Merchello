@@ -1,7 +1,6 @@
 ﻿namespace Merchello.Core.Persistence.Repositories
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -13,10 +12,7 @@
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
 
-    using umbraco.cms.presentation;
-
     using Umbraco.Core;
-    using Umbraco.Core.Cache;
     using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
