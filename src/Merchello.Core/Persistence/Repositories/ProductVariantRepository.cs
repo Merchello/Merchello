@@ -459,7 +459,7 @@
         }
 
         /// <summary>
-        /// Updates SqlCe database where bulk update is not available.
+        /// Updates SQLCE database where bulk update is not available.
         /// </summary>
         /// <param name="inv">
         /// The inventory.
@@ -989,6 +989,7 @@
                 ((ProductBase)entity).UpdatingEntity();
             }
         }
+
 
         /// <summary>
         /// The mandate product variant rules.
