@@ -151,7 +151,7 @@
         /// </returns>
         internal static string ShippingGatewayProviderShippingRateQuoteCacheKey(Guid shipmentKey, Guid shipMethodKey, Guid versionKey, string addressArgs)
         {
-            return string.Format("merchello.shippingratequote.{0}.{1}.{2}", shipmentKey, shipMethodKey, versionKey);
+            return string.Format("merchello.shippingratequote.{0}.{1}.{2}.{3}", shipmentKey, shipMethodKey, versionKey, addressArgs);
         }
 
         /// <summary>
@@ -180,15 +180,13 @@
             SortDirection sortDirection = SortDirection.Descending,
             IDictionary<string, string> args = null)
         {
-            var hash = string.Format("{0}.{1}.{2}.{3}.{4}", methodName, page, itemsPerPage, orderExpression, sortDirection);
+            var cacheKEy = string.Format("{0}.{1}.{2}.{3}.{4}", methodName, page, itemsPerPage, orderExpression, sortDirection);
             if (args != null)
             {
-                hash = args.Aggregate(hash, (current, item) => current + string.Format(".{0}-{1}", item.Key, item.Value));
+                cacheKEy = args.Aggregate(cacheKEy, (current, item) => current + string.Format(".{0}-{1}", item.Key, item.Value));
             }
 
-            hash = hash.GetHashCode().ToString();
-
-            return string.Format("{0}.{1}", typeof(TDto), hash);
+            return string.Format("{0}.{1}", typeof(TDto), cacheKEy);
         }
 
 

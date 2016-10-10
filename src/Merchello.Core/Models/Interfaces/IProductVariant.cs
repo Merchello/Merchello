@@ -27,7 +27,6 @@
         /// <summary>
         /// Gets the total (sum) of inventory "counts" across all associated warehouses
         /// </summary>
-        /// <returns></returns>
         int TotalInventoryCount { get; }
     }
 }

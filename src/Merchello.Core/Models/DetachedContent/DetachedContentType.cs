@@ -5,10 +5,7 @@
     using System.Runtime.Serialization;
 
     using Merchello.Core.Models.EntityBase;
-    using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.TypeFields;
-
-    using Umbraco.Core;
 
     /// <summary>
     /// The detached content type.
@@ -18,24 +15,9 @@
     internal class DetachedContentType : Entity, IDetachedContentType
     {
         /// <summary>
-        /// The entity type field key selector.
+        /// The property selectors.
         /// </summary>
-        private static readonly PropertyInfo EntityTfKeySelector = ExpressionHelper.GetPropertyInfo<DetachedContentType, Guid>(x => x.EntityTfKey);
-
-        /// <summary>
-        /// The name selector.
-        /// </summary>
-        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<DetachedContentType, string>(x => x.Name);
-
-        /// <summary>
-        /// The description selector.
-        /// </summary>
-        private static readonly PropertyInfo DescriptionSelector = ExpressionHelper.GetPropertyInfo<DetachedContentType, string>(x => x.Description);
-
-        /// <summary>
-        /// The content type id selector.
-        /// </summary>
-        private static readonly PropertyInfo ContentTypeKeySelector = ExpressionHelper.GetPropertyInfo<DetachedContentType, Guid?>(x => x.ContentTypeKey);
+        private static readonly Lazy<PropertySelectors> _ps = new Lazy<PropertySelectors>();
 
         /// <summary>
         /// The entity type field key.
@@ -68,14 +50,12 @@
         /// </param>
         public DetachedContentType(Guid entityTfKey, Guid? contentTypeKey)
         {
-            Mandate.ParameterCondition(!Guid.Empty.Equals(entityTfKey), "entityTfKey");
+            Ensure.ParameterCondition(!Guid.Empty.Equals(entityTfKey), "entityTfKey");
             this._contentTypeKey = contentTypeKey;
             this._entityTfKey = entityTfKey;
         }
 
-        /// <summary>
-        /// Gets or sets the entity type field key.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public Guid EntityTfKey
         {
@@ -86,20 +66,11 @@
 
             set
             {
-                this.SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        this._entityTfKey = value;
-                        return this._entityTfKey;
-                    },
-                    this._entityTfKey,
-                    EntityTfKeySelector);
+                this.SetPropertyValueAndDetectChanges(value, ref _entityTfKey, _ps.Value.EntityTfKeySelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the name.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Name
         {
@@ -110,20 +81,11 @@
 
             set
             {
-                this.SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        this._name = value;
-                        return this._name;
-                    },
-                    this._name,
-                    NameSelector);
+                this.SetPropertyValueAndDetectChanges(value, ref _name, _ps.Value.NameSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the description.
-        /// </summary>
+        /// <inheritdoc/>
         [IgnoreDataMember]
         public string Description
         {
@@ -134,20 +96,11 @@
 
             set
             {
-                this.SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        this._description = value;
-                        return this._description;
-                    },
-                    this._description,
-                    DescriptionSelector);
+                this.SetPropertyValueAndDetectChanges(value, ref _description, _ps.Value.DescriptionSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the content type key.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public Guid? ContentTypeKey
         {
@@ -158,20 +111,11 @@
 
             set
             {
-                this.SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        this._contentTypeKey = value;
-                        return this._contentTypeKey;
-                    },
-                    this._contentTypeKey,
-                    ContentTypeKeySelector);
+                this.SetPropertyValueAndDetectChanges(value, ref _contentTypeKey, _ps.Value.ContentTypeKeySelector);
             }
         }
 
-        /// <summary>
-        /// Gets the entity type.
-        /// </summary>
+        /// <inheritdoc/>
         [IgnoreDataMember]
         public EntityType EntityType
         {
@@ -179,6 +123,32 @@
             {
                 return EnumTypeFieldConverter.EntityType.GetTypeField(EntityTfKey);
             }
+        }
+
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private class PropertySelectors
+        {
+            /// <summary>
+            /// The entity type field key selector.
+            /// </summary>
+            public readonly PropertyInfo EntityTfKeySelector = ExpressionHelper.GetPropertyInfo<DetachedContentType, Guid>(x => x.EntityTfKey);
+
+            /// <summary>
+            /// The name selector.
+            /// </summary>
+            public readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<DetachedContentType, string>(x => x.Name);
+
+            /// <summary>
+            /// The description selector.
+            /// </summary>
+            public readonly PropertyInfo DescriptionSelector = ExpressionHelper.GetPropertyInfo<DetachedContentType, string>(x => x.Description);
+
+            /// <summary>
+            /// The content type id selector.
+            /// </summary>
+            public readonly PropertyInfo ContentTypeKeySelector = ExpressionHelper.GetPropertyInfo<DetachedContentType, Guid?>(x => x.ContentTypeKey);
         }
     }
 }

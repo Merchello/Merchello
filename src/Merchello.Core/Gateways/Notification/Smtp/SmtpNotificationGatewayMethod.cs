@@ -16,6 +16,7 @@
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
 
     /// <summary>
     /// Represents a SmtpNotificationGatewayMethod
@@ -69,7 +70,8 @@
                 IsBodyHtml = true
             };
 
-            MultiLogHelper.Info<SmtpNotificationGatewayMethod>("Sending an email to " + string.Join(", ", message.Recipients));
+            // REFACTOR update to MultiLogHelper when we control Resolution Freeze
+            LogHelper.Info<SmtpNotificationGatewayMethod>("Sending an email to " + string.Join(", ", message.Recipients));
 
             foreach (var to in message.Recipients)
             {
@@ -114,7 +116,8 @@
             }
             catch (Exception ex)
             {
-                MultiLogHelper.Error<SmtpNotificationGatewayMethod>("Merchello.Core.Gateways.Notification.Smtp.SmtpNotificationGatewayMethod  failed sending email", ex);
+                // REFACTOR update to MultiLogHelper when we control resolution
+                LogHelper.Error<SmtpNotificationGatewayMethod>("Merchello.Core.Gateways.Notification.Smtp.SmtpNotificationGatewayMethod  failed sending email", ex);
                 return false;
             }
         }

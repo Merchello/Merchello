@@ -14,6 +14,8 @@
 
     using Umbraco.Core;
 
+    using StringExtensions = Merchello.Core.StringExtensions;
+
     /// <summary>
     /// A payment method for facilitating PayPal Express Checkouts.
     /// </summary>
@@ -46,7 +48,7 @@
         public PayPalExpressCheckoutPaymentGatewayMethod(IGatewayProviderService gatewayProviderService, IPaymentMethod paymentMethod, IPayPalApiService paypalApiService)
             : base(gatewayProviderService, paymentMethod)
         {
-            Mandate.ParameterNotNull(paypalApiService, "payPalApiService");
+            Ensure.ParameterNotNull(paypalApiService, "payPalApiService");
             this._paypalApiService = paypalApiService;
         }
 
@@ -179,7 +181,7 @@
         {
             var record = payment.GetPayPalTransactionRecord();
 
-            if (record.Data.CaptureTransactionId.IsNullOrWhiteSpace())
+            if (StringExtensions.IsNullOrWhiteSpace(record.Data.CaptureTransactionId))
             {
                 var error = new NullReferenceException("PayPal transaction could not be found and/or deserialized from payment extended data collection");
                 return new PaymentResult(Attempt<IPayment>.Fail(payment, error), invoice, false);

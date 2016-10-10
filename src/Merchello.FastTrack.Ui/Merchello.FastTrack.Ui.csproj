@@ -385,6 +385,7 @@
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\productoption.add.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\productoption.choicecontent.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\productoption.edit.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\productoptions.choicecontent.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\productvariant.bulk.changeprice.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\productvariant.bulk.updateinventory.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\sales.create.shipment.html" />
@@ -690,6 +691,27 @@
     <Content Include="bin\roslyn\Microsoft.VisualBasic.Core.targets" />
     <Content Include="bin\roslyn\VBCSCompiler.exe.config" />
     <Content Include="bin\x86\Microsoft.VC90.CRT\Microsoft.VC90.CRT.manifest" />
+    <Content Include="App_Plugins\Merchello\assets\css\Merchello.css.map" />
+    <Content Include="App_Plugins\Merchello\client\css\merchello.ui.css.map" />
+    <Content Include="App_Plugins\Merchello\client\css\merchello.ui.min.css.map" />
+    <Content Include="App_Plugins\Merchello\client\js\merchello.ui.js.map" />
+    <Content Include="App_Plugins\Merchello\config\merchello.config" />
+    <Content Include="App_Plugins\Merchello\Package.manifest" />
+    <Content Include="App_Plugins\Merchello\views\StoreBasket\AddToBasketForm.cshtml" />
+    <Content Include="App_Plugins\Merchello\views\StoreBasket\BasketForm.cshtml" />
+    <Content Include="App_Plugins\Merchello\views\CashPayment\PaymentForm.cshtml" />
+    <Content Include="App_Plugins\Merchello\views\CheckoutAddress\BillingAddressForm.cshtml" />
+    <Content Include="App_Plugins\Merchello\views\CheckoutAddress\ShippingAddressForm.cshtml" />
+    <Content Include="App_Plugins\Merchello\views\CheckoutDiscount\DiscountForm.cshtml" />
+    <Content Include="App_Plugins\Merchello\views\CheckoutPaymentMethod\PaymentMethodForm.cshtml" />
+    <Content Include="App_Plugins\Merchello\views\CheckoutPaymentMethod\ResolvePayment.cshtml" />
+    <Content Include="App_Plugins\Merchello\views\CheckoutShipRateQuote\ShipRateQuoteForm.old.cshtml" />
+    <Content Include="App_Plugins\Merchello\views\CheckoutSummary\BasketSummary.cshtml" />
+    <Content Include="App_Plugins\Merchello\views\Partials\InvalidCheckoutStage.cshtml" />
+    <Content Include="App_Plugins\Merchello\views\PayPalExpressPayment\PaymentForm.cshtml" />
+    <Content Include="App_Plugins\Merchello\views\Shared\_RequireJsSubmitBtn.cshtml" />
+    <Content Include="App_Plugins\Merchello\views\web.config" />
+    <Content Include="App_Plugins\Merchello\views\StoreWishList\WishListForm.cshtml" />
     <Content Include="App_Plugins\FastTrack\Views\BraintreePayPal\PaymentForm.cshtml" />
     <Content Include="App_Plugins\FastTrack\Views\BraintreeStandardCc\PaymentForm.cshtml" />
     <Content Include="App_Plugins\FastTrack\Views\CashPayment\PaymentForm.cshtml" />
@@ -723,27 +745,8 @@
     <Content Include="Config\EmbeddedMedia.config" />
     <Content Include="Config\BaseRestExtensions.config" />
     <Content Include="Config\404handlers.config" />
-    <Content Include="App_Plugins\Merchello\assets\css\Merchello.css.map" />
-    <Content Include="App_Plugins\Merchello\client\css\merchello.ui.css.map" />
-    <Content Include="App_Plugins\Merchello\client\css\merchello.ui.min.css.map" />
-    <Content Include="App_Plugins\Merchello\client\js\merchello.ui.js.map" />
-    <Content Include="App_Plugins\Merchello\config\merchello.config" />
-    <Content Include="App_Plugins\Merchello\Package.manifest" />
-    <Content Include="App_Plugins\Merchello\views\CashPayment\PaymentForm.cshtml" />
-    <Content Include="App_Plugins\Merchello\views\CheckoutAddress\BillingAddressForm.cshtml" />
-    <Content Include="App_Plugins\Merchello\views\CheckoutAddress\ShippingAddressForm.cshtml" />
-    <Content Include="App_Plugins\Merchello\views\CheckoutDiscount\DiscountForm.cshtml" />
-    <Content Include="App_Plugins\Merchello\views\CheckoutPaymentMethod\PaymentMethodForm.cshtml" />
-    <Content Include="App_Plugins\Merchello\views\CheckoutPaymentMethod\ResolvePayment.cshtml" />
-    <Content Include="App_Plugins\Merchello\views\CheckoutShipRateQuote\ShipRateQuoteForm.old.cshtml" />
-    <Content Include="App_Plugins\Merchello\views\CheckoutSummary\BasketSummary.cshtml" />
-    <Content Include="App_Plugins\Merchello\views\Partials\InvalidCheckoutStage.cshtml" />
-    <Content Include="App_Plugins\Merchello\views\PayPalExpressPayment\PaymentForm.cshtml" />
-    <Content Include="App_Plugins\Merchello\views\Shared\_RequireJsSubmitBtn.cshtml" />
-    <Content Include="App_Plugins\Merchello\views\StoreBasket\AddToBasketForm.cshtml" />
-    <Content Include="App_Plugins\Merchello\views\StoreBasket\BasketForm.cshtml" />
-    <Content Include="App_Plugins\Merchello\views\StoreWishList\WishListForm.cshtml" />
-    <Content Include="App_Plugins\Merchello\views\web.config" />
+    <Content Include="App_Plugins\FastTrack\config\fasttrack.config" />
+    <Content Include="App_Plugins\FastTrack\Views\PurchaseOrderPayment\PaymentForm.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\jquery.creditCardValidator.js" />
@@ -805,6 +808,9 @@
     <Content Include="Views\Partials\Grid\Editors\Base.cshtml" />
     <Content Include="Views\Partials\Grid\Bootstrap3.cshtml" />
     <Content Include="Views\Partials\Grid\Bootstrap2.cshtml" />
+    <Content Include="Views\Merchello\Notification\OrderConfirmation.cshtml" />
+    <Content Include="Views\Merchello\Notification\OrderShipped.cshtml" />
+    <Content Include="Views\Partials\CategoryFilterCollections.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -852,9 +858,7 @@
       <Name>Merchello.Web</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Code\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

@@ -12,10 +12,7 @@
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
 
-    using umbraco.cms.presentation;
-
     using Umbraco.Core;
-    using Umbraco.Core.Cache;
     using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
@@ -52,10 +49,13 @@
         /// <param name="productKey">
         /// The product key.
         /// </param>
+        /// <param name="isFilter">
+        /// A value indicating whether or not to this should return collections that represent filters.
+        /// </param>
         /// <returns>
         /// The <see cref="IEnumerable{IEntityCollection}"/>.
         /// </returns>
-        public IEnumerable<IEntityCollection> GetEntityCollectionsByProductKey(Guid productKey)
+        public IEnumerable<IEntityCollection> GetEntityCollectionsByProductKey(Guid productKey, bool isFilter = false)
         {
             var sql =
                 this.GetBaseQuery(false)
@@ -63,7 +63,9 @@
                     .Append("SELECT DISTINCT([entityCollectionKey])")
                     .Append("FROM [merchProduct2EntityCollection]")
                     .Append("WHERE [merchProduct2EntityCollection].[productKey] = @pkey", new { @pkey = productKey })
-                    .Append(")");
+                    .Append(")")
+                    .Append("AND [merchEntityCollection].[isFilter] = @isfilter", new { @isfilter = isFilter });
+
             var dtos = Database.Fetch<EntityCollectionDto>(sql);
 
             return dtos.DistinctBy(x => x.Key).Select(x => Get(x.Key));
@@ -114,9 +116,6 @@
 
             var dtos = Database.Fetch<EntityCollectionDto>(sql);
             return dtos.DistinctBy(x => x.Key).Select(x => Get(x.Key));
-            //var factory = new EntityCollectionFactory();
-
-            //return dtos.Select(factory.BuildEntity);
         }
 
         /// <summary>
@@ -173,6 +172,130 @@
         }
 
         /// <summary>
+        /// Gets a collection of <see cref="IEntityFilterGroup"/> by a collection of keys.
+        /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntitySpecificationCollection}"/>.
+        /// </returns>
+        /// <remarks>
+        /// TODO this is pretty brittle since it assumes the collection will be intended to be used as the special filter group.
+        /// However, it merely builds a filter group using whatever collection and it's children - so Service should definitely
+        /// have this as an internal method until we can refactor
+        /// </remarks>
+        public IEnumerable<IEntityFilterGroup> GetEntityFilterGroupsByProviderKeys(Guid[] keys)
+        {
+            var sql = new Sql("SELECT pk").From<EntityCollectionDto>(SqlSyntax)
+                .Where<EntityCollectionDto>(x => x.ParentKey == null)
+                .Where("providerKey IN (@keys)", new { @keys = keys });
+
+            var matches = Database.Fetch<KeyDto>(sql);
+
+            return !matches.Any() ? 
+                Enumerable.Empty<IEntityFilterGroup>() : 
+                matches.Select(x => this.GetEntityFilterGroup(x.Key)).Where(x => x != null);
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="IEntityFilterGroup"/> by a collection of keys that are associated
+        /// with a product
+        /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntitySpecifiedFilterCollection}"/>.
+        /// </returns>
+        public IEnumerable<IEntityFilterGroup> GetEntityFilterGroupsContainingProduct(Guid[] keys, Guid productKey)
+        {
+            var sql =
+                new Sql("SELECT pk").From<EntityCollectionDto>(SqlSyntax)
+                    .Where("providerKey IN (@keys)", new { @keys = keys })
+                    .Append(" AND [merchEntityCollection].[pk] IN (")
+                    .Append("SELECT DISTINCT(entityCollectionKey)")
+                    .Append("FROM	merchProduct2EntityCollection")
+                    .Append("WHERE productKey = @prodKey", new { @prodKey = productKey })
+                    .Append(")");
+
+            var matches = Database.Fetch<KeyDto>(sql);
+
+            return !matches.Any() ?
+                Enumerable.Empty<IEntityFilterGroup>() :
+                matches.Select(x => this.GetEntityFilterGroup(x.Key)).Where(x => x != null);
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="IEntityFilterGroup"/> by a collection of keys that are not associated
+        /// with a product
+        /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntitySpecifiedFilterCollection}"/>.
+        /// </returns>
+        public IEnumerable<IEntityFilterGroup> GetEntityFilterGroupsNotContainingProduct(Guid[] keys, Guid productKey)
+        {
+            var sql =
+                new Sql("SELECT pk").From<EntityCollectionDto>(SqlSyntax)
+                    .Where("providerKey IN (@keys)", new { @keys = keys })
+                    .Append(" AND [merchEntityCollection].[pk] NOT IN (")
+                    .Append("SELECT DISTINCT(entityCollectionKey)")
+                    .Append("FROM	merchProduct2EntityCollection")
+                    .Append("WHERE productKey = @prodKey", new { @prodKey = productKey })
+                    .Append(")");
+
+            var matches = Database.Fetch<KeyDto>(sql);
+
+            return !matches.Any() ?
+                Enumerable.Empty<IEntityFilterGroup>() :
+                matches.Select(x => this.GetEntityFilterGroup(x.Key)).Where(x => x != null);
+        }
+
+        /// <summary>
+        /// Gets <see cref="IEntityFilterGroup"/> by it's key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEntityFilterGroup"/>.
+        /// </returns>
+        /// <remarks>
+        /// TODO this is pretty brittle since it assumes the collection will be intended to be used as the special filter group.
+        /// However, it merely builds a filter group using whatever collection and it's children - so Service should definitely
+        /// have this as an internal method until we can refactor
+        /// </remarks>
+        public IEntityFilterGroup GetEntityFilterGroup(Guid key)
+        {
+            var cacheKey = Cache.CacheKeys.GetEntityCacheKey<IEntityFilterGroup>(key);
+            var cached = (IEntityFilterGroup)RuntimeCache.GetCacheItem(cacheKey);
+
+            if (cached != null) return cached;
+
+            var collection = Get(key);
+            if (collection == null) return null;
+            var query = Querying.Query<IEntityCollection>.Builder.Where(x => x.ParentKey == key);
+            var children = GetByQuery(query);
+
+            var filterGroup = new EntityFilterGroup(collection);
+            foreach (var child in children)
+            {
+                filterGroup.Filters.Add(child);
+            }
+
+            return (IEntityFilterGroup)RuntimeCache.GetCacheItem(cacheKey, () => filterGroup);
+        }
+
+        /// <summary>
         /// The perform get.
         /// </summary>
         /// <param name="key">
@@ -205,7 +328,7 @@
         /// The keys.
         /// </param>
         /// <returns>
-        /// The <see cref="IEnumerable{IEntityCollection"/>.
+        /// The <see cref="IEnumerable{IEntityCollection}"/>.
         /// </returns>
         protected override IEnumerable<IEntityCollection> PerformGetAll(params Guid[] keys)
         {
@@ -295,6 +418,20 @@
         }
 
         /// <summary>
+        /// The persist deleted item.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        protected override void PersistDeletedItem(IEntityCollection entity)
+        {
+            base.PersistDeletedItem(entity);
+
+            if (entity.ParentKey != null)
+                RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IEntityFilterGroup>(entity.ParentKey.Value));
+        }
+
+        /// <summary>
         /// The persist new item.
         /// </summary>
         /// <param name="entity">
@@ -317,6 +454,9 @@
             Database.Insert(dto);
             entity.Key = dto.Key;
             entity.ResetDirtyProperties();
+
+            if (entity.ParentKey != null)
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IEntityFilterGroup>(entity.ParentKey.Value));
         }
 
         /// <summary>
@@ -335,6 +475,8 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IEntityCollection>(entity.Key));
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IEntityFilterGroup>(entity.Key));
         }
     }
 }

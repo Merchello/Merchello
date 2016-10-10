@@ -9,6 +9,7 @@
     using Merchello.Core.Persistence.DatabaseModelDefinitions;
 
     using Umbraco.Core;
+    using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Migrations.Initial;
 
     using Constants = Merchello.Core.Constants;
@@ -18,11 +19,35 @@
     /// </summary>
     public class MerchelloDatabaseSchemaResult : DatabaseSchemaResult
     {
+		/// <summary>
+		/// The <see cref="Database"/>.
+		/// </summary>
+		private readonly Database _database;
 
         /// <summary>
-        /// Gets or sets the merchello errors.
+        /// Initializes a new instance of the <see cref="MerchelloDatabaseSchemaResult"/> class.
         /// </summary>
-        public IEnumerable<Tuple<string, string>> MerchelloErrors 
+        public MerchelloDatabaseSchemaResult()
+            : this(ApplicationContext.Current.DatabaseContext.Database)
+        {
+        }
+
+        /// <summary>
+		/// Initializes a new instance of the <see cref="MerchelloDatabaseSchemaResult"/> class.
+		/// </summary>
+		/// <param name="database">
+		/// The database.
+		/// </param>
+		public MerchelloDatabaseSchemaResult(Database database)
+		{
+		    Ensure.ParameterNotNull(database, "database");
+		    this._database = database;
+		}
+
+		/// <summary>
+		/// Gets or sets the merchello errors.
+		/// </summary>
+		public IEnumerable<Tuple<string, string>> MerchelloErrors 
         {
             get
             {
@@ -49,7 +74,7 @@
         /// <remarks>
         /// These can be helpful when determining the Merchello Version
         /// </remarks>
-        internal IEnumerable<StoreSettingDto> StoreSettings { get; set; } 
+        internal IEnumerable<StoreSettingDto> StoreSettings { get; set; }
 
         /// <summary>
         /// Determines the version of the currently installed database.
@@ -58,6 +83,9 @@
         /// A <see cref="Version"/> with Major and Minor values for 
         /// non-empty database, otherwise "0.0.0" for empty databases.
         /// </returns>
+        /// <remarks>
+        /// TODO these checks could be moved into a task chain for easier maintenance
+        /// </remarks>
         public new Version DetermineInstalledVersion()
         {
             //// If (ValidTables.Count == 0) database is empty and we return -> new Version(0, 0, 0);
@@ -112,8 +140,20 @@
                 return new Version(2, 1, 0);
             }
 
+			// SD: Not a very elegant solution to the problem of discovering the size of an existing column
+			// Should perhaps look to refactor this into something reusable
+            // RSS: Added a DatabaseExtensions class and moved SD code into extension method GetDbTableColumnSize using 
+            // parameratized SQL query  
+            var merchAppliedPaymentDescriptionSize = _database.GetDbTableColumnSize("merchAppliedPayment", "description");
+					
+            if (!this.ValidColumns.Contains("merchEntityCollection,isFilter")
+                || !this.ValidColumns.Contains("merchEntityCollection,extendedData") 
+				|| merchAppliedPaymentDescriptionSize != 500)
+			{
+				return new Version(2, 2, 0);
+	        }
 
-            //// If Errors is empty or if TableDefinitions tables + columns correspond to valid tables + columns then we're at current version
+	        // If Errors is empty or if TableDefinitions tables + columns correspond to valid tables + columns then we're at current version
             if (this.MerchelloErrors.Any() == false ||
                 (this.TableDefinitions.All(x => this.ValidTables.Contains(x.Name))
                  && this.TableDefinitions.SelectMany(definition => definition.Columns).All(x => this.ValidColumns.Contains(x.Name))))

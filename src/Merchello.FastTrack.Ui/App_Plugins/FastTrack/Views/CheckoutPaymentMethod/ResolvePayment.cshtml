@@ -16,5 +16,8 @@
         case "PayPal.ExpressCheckout":
             @Html.Action("PaymentForm", "PayPalExpressPayment", new { area = "Merchello" })
             break;
+        case "PurchaseOrder.PurchaseOrder":
+            @Html.Action("PaymentForm", "PurchaseOrderPayment", new { area = "FastTrack" })
+            break;
     }
 }

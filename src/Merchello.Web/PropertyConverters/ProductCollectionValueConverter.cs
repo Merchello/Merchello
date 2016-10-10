@@ -1,21 +1,20 @@
 ﻿namespace Merchello.Web.PropertyConverters
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
 
     using Merchello.Core;
     using Merchello.Core.Logging;
-    using Merchello.Web.Models.Ui;
+    using Merchello.Web.Models;
     using Merchello.Web.Models.Ui.Rendering;
-    using Merchello.Web.Models.VirtualContent;
-
-    using Newtonsoft.Json;
 
     using Umbraco.Core.Models.PublishedContent;
     using Umbraco.Core.PropertyEditors;
 
-    [PropertyValueType(typeof(ProductCollection))]
+    /// <summary>
+    /// A property value converter for the Merchello.ProductcollectionPicker.
+    /// </summary>
+    [PropertyValueType(typeof(IProductCollection))]
     [PropertyValueCache(PropertyCacheValue.All, PropertyCacheLevel.Content)]
     public class ProductCollectionValueConverter : PropertyValueConverterBase
     {

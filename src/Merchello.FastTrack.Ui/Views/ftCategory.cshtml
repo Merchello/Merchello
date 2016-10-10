@@ -1,8 +1,14 @@
-﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<FtCategory>
+﻿@using System.Web.Mvc.Html
+@using Merchello.Web
+@using Merchello.Web.Search
+@inherits Umbraco.Web.Mvc.UmbracoViewPage<FtCategory>
 @{
 	Layout = "FastTrack.cshtml";
 }
 
 @Html.Partial("_Headline")
 
-@Html.Partial("_ProductBoxList", Model.Products)
+<div class="container-fluid">
+    @Html.Partial("CategoryFilterCollections", Model.Products.CollectionKey)
+    @Html.Partial("_ProductBoxList", Model.Products)
+</div>

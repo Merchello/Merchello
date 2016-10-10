@@ -92,7 +92,7 @@
         {
             _services = ApplicationContext.Current.Services;
 
-            var templates = new[] { "ftProduct", "ftPayment", "ftPaymentMethod", "ftBillingAddress", "ftShipRateQuote", "ftShippingAddress" };
+            var templates = new[] { "ftProduct", "ftPayment", "ftPaymentMethod", "ftBillingAddress", "ftShipRateQuote", "ftShippingAddress", "ftChangePassword", "ftForgotPassword" };
 
             _templates = ApplicationContext.Current.Services.FileService.GetTemplates(templates);
         }
@@ -273,12 +273,17 @@
             var login = _services.ContentService.CreateContent("Login", storeRoot.Id, "ftLogin");
             _services.ContentService.SaveAndPublishWithStatus(login);
 
-            var account = _services.ContentService.CreateContent("Account", storeRoot.Id, "ftAccount");
+			var forgotPassword = _services.ContentService.CreateContent("Forgot Password", storeRoot.Id, "ftForgotPassword");
+			_services.ContentService.SaveAndPublishWithStatus(forgotPassword);
+
+			var account = _services.ContentService.CreateContent("Account", storeRoot.Id, "ftAccount");
             _services.ContentService.SaveAndPublishWithStatus(account);
 
+			var changePassword = _services.ContentService.CreateContent("Change Password", account.Id, "ftChangePassword");
+			_services.ContentService.SaveAndPublishWithStatus(changePassword);
 
-            //// Protect the page
-            var entry = new PublicAccessEntry(account, login, login, new List<PublicAccessRule>());
+			//// Protect the page
+			var entry = new PublicAccessEntry(account, login, login, new List<PublicAccessRule>());
             ApplicationContext.Current.Services.PublicAccessService.Save(entry);
 
             //// Add the role to the document

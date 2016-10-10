@@ -1,21 +1,14 @@
 ﻿namespace Merchello.Web
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
 
     using Core;
     using Core.Services;
-    
-    using global::Examine.SearchCriteria;
 
-    using Merchello.Core.Persistence.Querying;
+    using Merchello.Core.EntityCollections;
     using Merchello.Core.ValueConverters;
-    using Merchello.Web.Caching;
-    using Merchello.Web.Models.VirtualContent;
     using Merchello.Web.Validation;
 
-    using Models.ContentEditing;
     using Search;
     using Umbraco.Core;
 
@@ -35,15 +28,9 @@
         private readonly Lazy<IValidationHelper> _validationHelper;
 
         /// <summary>
-        /// The <see cref="ProductContentFactory"/>.
-        /// </summary>
-        private readonly Lazy<ProductContentFactory> _productContentFactory;
-
-        /// <summary>
         /// A value indicating whether or not data modifiers are enabled.
         /// </summary>
-        private readonly bool _enableDataModifiers;
-
+        private bool _enableDataModifiers;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MerchelloHelper"/> class.
@@ -107,14 +94,54 @@
         /// The conversion type for detached values.
         /// </param>
         internal MerchelloHelper(IMerchelloContext merchelloContext, bool enableDataModifiers, DetachedValuesConversionType conversionType)
+            : this(merchelloContext, enableDataModifiers, conversionType, ProxyQueryManager.Current, EntityCollectionProviderResolver.Current)
         {
-            Mandate.ParameterNotNull(merchelloContext, "ServiceContext cannot be null");
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MerchelloHelper"/> class.
+        /// </summary>
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
+        /// <param name="enableDataModifiers">
+        /// The enable data modifiers.
+        /// </param>
+        /// <param name="conversionType">
+        /// The conversion type.
+        /// </param>
+        /// <param name="queryManager">
+        /// The proxy service resolver.
+        /// </param>
+        /// <param name="collectionProviderResolver">
+        /// The <see cref="IEntityCollectionProviderResolver"/>
+        /// </param>
+        internal MerchelloHelper(
+            IMerchelloContext merchelloContext,
+            bool enableDataModifiers,
+            DetachedValuesConversionType conversionType,
+            IProxyQueryManager queryManager,
+            IEntityCollectionProviderResolver collectionProviderResolver)
+        {
+            Ensure.ParameterNotNull(merchelloContext, "ServiceContext cannot be null");
+            Ensure.ParameterNotNull(queryManager, "The query manager was null");
+            Ensure.ParameterNotNull(collectionProviderResolver, "The IEntityCollectionProviderResolver was null");
             _enableDataModifiers = enableDataModifiers;
             _queryProvider = new Lazy<ICachedQueryProvider>(() => new CachedQueryProvider(merchelloContext, _enableDataModifiers, conversionType));
             _validationHelper = new Lazy<IValidationHelper>(() => new ValidationHelper());
-            _productContentFactory = new Lazy<ProductContentFactory>(() => new ProductContentFactory());
+
+            this.Initialize(merchelloContext, queryManager, collectionProviderResolver);
         }
+
+        /// <summary>
+        /// Gets the <see cref="ICollectionManager"/>.
+        /// </summary>
+        public ICollectionManager Collections { get; private set; }
+
+        /// <summary>
+        /// Gets the <see cref="IFilterGroupManager"/>.
+        /// </summary>
+        public IFilterGroupManager Filters { get; private set; }
 
         /// <summary>
         /// Gets the <see cref="ICachedQueryProvider"/>
@@ -122,6 +149,17 @@
         public ICachedQueryProvider Query
         {
             get { return _queryProvider.Value; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether data modifiers are enabled.
+        /// </summary>
+        public bool DataModifiersEnabled
+        {
+            get
+            {
+                return _enableDataModifiers;
+            }
         }
 
         /// <summary>
@@ -133,118 +171,6 @@
             {
                 return _validationHelper.Value;
             }
-        }
-
-        /// <summary>
-        /// Gets a <see cref="IProductContent"/> by it's key.
-        /// </summary>
-        /// <param name="key">
-        /// The key.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IProductContent"/>.
-        /// </returns>
-        public IProductContent TypedProductContent(string key)
-        {
-            return this.TypedProductContent(new Guid(key));
-        }
-
-        /// <summary>
-        /// Gets a <see cref="IProductContent"/> by it's key.
-        /// </summary>
-        /// <param name="key">
-        /// The key.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IProductContent"/>.
-        /// </returns>
-        public IProductContent TypedProductContent(Guid key)
-        {
-            return Query.Product.TypedProductContent(key);
-        }
-
-        /// <summary>
-        /// Gets a <see cref="IProductContent"/> by it's slug.
-        /// </summary>
-        /// <param name="slug">
-        /// The slug.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IProductContent"/>.
-        /// </returns>
-        public IProductContent TypedProductContentBySlug(string slug)
-        {
-            return Query.Product.TypedProductContentBySlug(slug);
-        }
-
-        /// <summary>
-        /// Gets a <see cref="IProductContent"/> by it's SKU.
-        /// </summary>
-        /// <param name="sku">
-        /// The SKU.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IProductContent"/>.
-        /// </returns>
-        public IProductContent TypeProductContentBySku(string sku)
-        {
-            return Query.Product.TypedProductContentBySku(sku);
-        }
-
-        /// <summary>
-        /// The typed product content from collection.
-        /// </summary>
-        /// <param name="collectionKey">
-        /// The collection key.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IEnumerable{IProductContent}"/>.
-        /// </returns>
-        public IEnumerable<IProductContent> TypedProductContentFromCollection(Guid collectionKey)
-        {
-            return Query.Product.TypedProductContentFromCollection(collectionKey);
-        }
-
-        /// <summary>
-        /// The typed product content from collection.
-        /// </summary>
-        /// <param name="collectionKey">
-        /// The collection key.
-        /// </param>
-        /// <param name="page">
-        /// The current page.
-        /// </param>
-        /// <param name="itemsPerPage">
-        /// The items Per Page.
-        /// </param>
-        /// <param name="sortBy">
-        /// The sort field (valid values are "sku", "name", "price").
-        /// </param>
-        /// <param name="sortDirection">
-        /// The sort direction.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IEnumerable{IProductContent}"/>.
-        /// </returns>
-        public IEnumerable<IProductContent> TypedProductContentFromCollection(Guid collectionKey, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending)
-        {
-            if (page <= 0) page = 1;
-
-            return Query.Product.TypedProductContentFromCollection(collectionKey, page, itemsPerPage, sortBy, sortDirection);
-        }
-
-        /// <summary>
-        /// The type product content.
-        /// </summary>
-        /// <param name="keys">
-        /// The keys.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IEnumerable{IProductContent}"/>.
-        /// </returns>
-        public IEnumerable<IProductContent> TypeProductContent(IEnumerable<Guid> keys) // productKeys not productVariantKeys
-        {
-            return keys.Select(TypedProductContent);
         }
 
         /// <summary>
@@ -261,5 +187,35 @@
             return CurrencyHelper.FormatCurrency(amount);
         }
 
+        /// <summary>
+        /// Sets the data modifiers.
+        /// </summary>
+        /// <param name="enabled">
+        /// The enabled.
+        /// </param>
+        public void SetDataModifiers(bool enabled = true)
+        {
+            _enableDataModifiers = enabled;
+            ((CachedQueryProvider)_queryProvider.Value).SetDataModifiers(enabled);
+        }
+
+        /// <summary>
+        /// Initializes the MerchelloHelper.
+        /// </summary>
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
+        /// <param name="queryManager">
+        /// The resolver.
+        /// </param>
+        /// <param name="collectionProviderResolver">
+        /// The collection Provider Resolver.
+        /// </param>
+        private void Initialize(IMerchelloContext merchelloContext, IProxyQueryManager queryManager, IEntityCollectionProviderResolver collectionProviderResolver)
+        {
+            this.Collections = new CollectionManager(merchelloContext, queryManager);
+
+            this.Filters = new FilterGroupManager(merchelloContext, queryManager, collectionProviderResolver);
+        }
     }
 }

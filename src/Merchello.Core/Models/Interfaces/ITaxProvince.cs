@@ -1,16 +1,15 @@
-﻿using System.Runtime.Serialization;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System.Runtime.Serialization;
+
     /// <summary>
-    /// Defines a Tax Province
+    /// Represents a Tax Province
     /// </summary>
     public interface ITaxProvince : IProvince
     {
         /// <summary>
-        /// The percentage rate adjustment to the tax rate
+        /// Gets or sets the percentage rate adjustment to the tax rate
         /// </summary>
-        [DataMember]
         decimal PercentAdjustment { get; set; }
     }
 }

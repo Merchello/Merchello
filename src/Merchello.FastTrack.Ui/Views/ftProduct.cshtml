@@ -1,5 +1,7 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<Merchello.Web.Models.VirtualContent.IProductContent>
 @using Merchello.FastTrack.Ui
+@using Merchello.Web
+@using Merchello.Web.Models
 @using Merchello.Web.Models.Ui.Rendering
 @using Merchello.Web.Models.VirtualContent
 @{
@@ -49,30 +51,6 @@
         }
     </div>
 
-    @*@if (Model.Options.Any())
-        {
-            <ul>
-                @foreach (var o in Model.Options)
-                {
-                    <li>
-                        @o.Name
-                        <ul>
-                            @foreach (var c in o.Choices)
-                            {
-                                <li>
-                                    @c.Name
-                                    @if (c.HasProperty("label") && c.HasValue("label"))
-                                    {
-                                        <span>@c.GetPropertyValue("label")</span>
-                                    }
-                                </li>
-                            }
-                        </ul>
-                    </li>
-                }
-            </ul>
-        }*@
-
 </div>
 
 @helper Categories(IProductContent product)
@@ -80,13 +58,13 @@
 var collections = product.Collections().ToArray();
 if (collections.Any())
 {
-    var pages = new List<Tuple<ProductCollection, IPublishedContent>>();
+    var pages = new List<Tuple<IProductCollection, IPublishedContent>>();
     foreach (var col in collections)
     {
-        var page = ExampleUiHelper.Content.GetCategoryPageForCollection(col.CollectionKey);
+        var page = ExampleUiHelper.Content.GetCategoryPageForCollection(col.Key);
         if (page != null)
         {
-            pages.Add(new Tuple<ProductCollection, IPublishedContent>(col, page));
+            pages.Add(new Tuple<IProductCollection, IPublishedContent>(col, page));
         }
     }
     var needsComma = false;

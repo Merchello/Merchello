@@ -15,37 +15,12 @@
     [DataContract(IsReference = true)]
     internal class AuditLog : Entity, IAuditLog
     {
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private static readonly Lazy<PropertySelectors> _ps = new Lazy<PropertySelectors>();
+
         #region Fields
-
-        /// <summary>
-        /// The extended data changed selector.
-        /// </summary>
-        private static readonly PropertyInfo ExtendedDataChangedSelector = ExpressionHelper.GetPropertyInfo<AuditLog, ExtendedDataCollection>(x => x.ExtendedData);
-
-        /// <summary>
-        /// The entity key selector.
-        /// </summary>
-        private static readonly PropertyInfo EntityKeySelector = ExpressionHelper.GetPropertyInfo<AuditLog, Guid?>(x => x.EntityKey);
-
-        /// <summary>
-        /// The message selector.
-        /// </summary>
-        private static readonly PropertyInfo MessageSelector = ExpressionHelper.GetPropertyInfo<AuditLog, string>(x => x.Message);
-
-        /// <summary>
-        /// The reference type selector.
-        /// </summary>
-        private static readonly PropertyInfo EntityTfKeySelector = ExpressionHelper.GetPropertyInfo<AuditLog, Guid?>(x => x.EntityTfKey);
-
-        /// <summary>
-        /// The verbosity selector.
-        /// </summary>
-        private static readonly PropertyInfo VerbositySelector = ExpressionHelper.GetPropertyInfo<AuditLog, int>(x => x.Verbosity);
-
-        /// <summary>
-        /// The is error selector.
-        /// </summary>
-        private static readonly PropertyInfo IsErrorSelector = ExpressionHelper.GetPropertyInfo<AuditLog, bool>(x => x.IsError);
 
         /// <summary>
         /// The entity key.
@@ -79,12 +54,10 @@
 
         #endregion
 
-        /// <summary>
-        /// Gets or sets the entity key.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
-        public Guid? EntityKey 
-        { 
+        public Guid? EntityKey
+        {
             get
             {
                 return _entityKey;
@@ -92,20 +65,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _entityKey = value;
-                        return _entityKey;
-                    }, 
-                    _entityKey, 
-                    EntityKeySelector);
+                SetPropertyValueAndDetectChanges(value, ref _entityKey, _ps.Value.EntityKeySelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the reference type.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public Guid? EntityTfKey
         {
@@ -116,20 +80,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _entityTfKey = value;
-                        return _entityTfKey;
-                    },
-                    _entityTfKey,
-                    EntityTfKeySelector);
+                SetPropertyValueAndDetectChanges(value, ref _entityTfKey, _ps.Value.EntityTfKeySelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the message.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Message
         {
@@ -140,23 +95,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _message = value;
-                        return _message;
-                    },
-                    _message,
-                    MessageSelector);
+                SetPropertyValueAndDetectChanges(value, ref _message, _ps.Value.MessageSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the verbosity.
-        /// </summary>
-        /// <remarks>
-        /// Currently not used
-        /// </remarks>
+        /// <inheritdoc/>
         [DataMember]
         public int Verbosity
         {
@@ -167,22 +110,13 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _verbosity = value;
-                        return _verbosity;
-                    },
-                    _verbosity,
-                    VerbositySelector);
+                SetPropertyValueAndDetectChanges(value, ref _verbosity, _ps.Value.VerbositySelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the extended data.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
-        public ExtendedDataCollection ExtendedData 
+        public ExtendedDataCollection ExtendedData
         {
             get
             {
@@ -209,14 +143,7 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _isError = value;
-                        return _isError;
-                    },
-                    _isError,
-                    IsErrorSelector);
+                SetPropertyValueAndDetectChanges(value, ref _isError, _ps.Value.IsErrorSelector);
             }
         }
 
@@ -231,7 +158,49 @@
         /// </param>
         private void ExtendedDataChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            OnPropertyChanged(ExtendedDataChangedSelector);
+            OnPropertyChanged(_ps.Value.ExtendedDataChangedSelector);
+        }
+
+        /// <summary>
+        /// Property selectors.
+        /// </summary>
+        private class PropertySelectors
+        {
+            /// <summary>
+            /// The extended data changed selector.
+            /// </summary>
+            public readonly PropertyInfo ExtendedDataChangedSelector =
+                ExpressionHelper.GetPropertyInfo<AuditLog, ExtendedDataCollection>(x => x.ExtendedData);
+
+            /// <summary>
+            /// The entity key selector.
+            /// </summary>
+            public readonly PropertyInfo EntityKeySelector =
+                ExpressionHelper.GetPropertyInfo<AuditLog, Guid?>(x => x.EntityKey);
+
+            /// <summary>
+            /// The message selector.
+            /// </summary>
+            public readonly PropertyInfo MessageSelector =
+                ExpressionHelper.GetPropertyInfo<AuditLog, string>(x => x.Message);
+
+            /// <summary>
+            /// The reference type selector.
+            /// </summary>
+            public readonly PropertyInfo EntityTfKeySelector =
+                ExpressionHelper.GetPropertyInfo<AuditLog, Guid?>(x => x.EntityTfKey);
+
+            /// <summary>
+            /// The verbosity selector.
+            /// </summary>
+            public readonly PropertyInfo VerbositySelector =
+                ExpressionHelper.GetPropertyInfo<AuditLog, int>(x => x.Verbosity);
+
+            /// <summary>
+            /// The is error selector.
+            /// </summary>
+            public readonly PropertyInfo IsErrorSelector =
+                ExpressionHelper.GetPropertyInfo<AuditLog, bool>(x => x.IsError);
         }
     }
 }

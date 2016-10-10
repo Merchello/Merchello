@@ -1,5 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <language>
+  <area alias="sections">
+    <key alias="merchello">Merchello</key>
+  </area>
   <area alias="merchelloGeneral">
     <key alias="apply">Apply</key>
     <key alias="price">Price</key>
@@ -80,6 +83,7 @@
     <key alias="gateways">Gateway Providers</key>
   </area>
   <area alias="merchelloTabs">
+    <key alias="filterGroups">Filter Groups</key>
     <key alias="productListing">Product Listing</key>
     <key alias="productContentTypes">Product Content Types</key>
     <key alias="product">Product</key>
@@ -153,6 +157,9 @@
     <key alias="noQualifyingEntities">There are no other items that can be added to the collection.</key>
     <key alias="collectionPickerTitle">Collections</key>
     <key alias="collectionPickerInfo">Add this item to one or more collections.</key>
+    <key alias="filterPickerTitle">Specified Filters</key>
+    <key alias="filterPickerInfo">Add this item to one or more specified filters.</key>
+    <key alias="filterAssociateFilters">Associate Filters</key>
     <key alias="allItems">All items</key>
     <key alias="allProduct">All Products</key>
     <key alias="allCustomer">All Customers</key>
@@ -190,6 +197,8 @@
     <key alias="optionValues">Option Values</key>
     <key alias="shared">Shared</key>
     <key alias="sharedCount">Shared Count</key>
+    <key alias="filterGroup">Filter Group</key>
+    <key alias="filters">Filters</key>
   </area>
   <area alias="merchelloNotes">
     <key alias="notes">Notes</key>
@@ -210,13 +219,27 @@
     <key alias="newProductName">New Product Name</key>
     <key alias="newProductSku">New Product SKU</key>
   </area>
+  <area alias="merchelloSpecFilters">
+    <key alias="manageProductFilters">Manage Product Filters</key>
+    <key alias="editSpecFilter">
+      <![CDATA[
+      <strong>Edit Filters</strong>
+      <small>Add or edit filters, which can be used to enhance product filtering and nagivation.</small>
+      ]]>
+    </key>
+    <key alias="noSpecFilters">
+      <![CDATA[
+      <h5>You have not setup any specification filters</h5>
+      ]]>
+    </key>
+  </area>
   <area alias="merchelloProductOptions">
     <key alias="newOption">New Option</key>
     <key alias="sharedOption">Shared Options</key>
     <key alias="editOptions">
       <![CDATA[
       <strong>Edit Options</strong>
-      <small>Edit or add options, which will auto-update your variants</small>
+      <small>Add or edit options, which will auto-update your variants</small>
       ]]>
     </key>
     <key alias="sharedCount">Share Count</key>
@@ -519,7 +542,6 @@
     <!-- actions -->
     <!-- phrases -->
   </area>
-
   <!-- TODO KEEP THE MERCHELLO SHIPPING AREA -->
   <area alias="merchelloShipping">
     <!-- things -->
@@ -639,7 +661,7 @@
     <key alias="notificationSettings" >Notification Settings</key>
     <key alias="notificationSettingsHelper" >Set who to send your notification to and when</key>
     <key alias="description" >Description</key>
-    <key alias="attachedEvent" >Attached Event</key>
+    <key alias="attachedEvent" >Attached Trigger</key>
     <key alias="resourceType"></key>
     <key alias="eventAlias" >Event Alias:</key>
     <key alias="sendTo" ><![CDATA[Send To <small>(i.e. orders@yourdomain.com)</small>]]></key>

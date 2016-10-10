@@ -8,13 +8,13 @@
     /// <summary>
     /// The EntityCollection interface.
     /// </summary>
-    public interface IEntityCollection : IHasEntityTypeField, IEntity
+    public interface IEntityCollection : IHasParent, IHasEntityTypeField, IHasExtendedData, IEntity
     {
         /// <summary>
         /// Gets or sets the parent key.
         /// </summary>
         [DataMember]
-        Guid? ParentKey { get; set; }
+        new Guid? ParentKey { get; set; }
 
         /// <summary>
         /// Gets the entity type.
@@ -40,5 +40,11 @@
         /// </summary>
         [DataMember]
         Guid ProviderKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is filter.
+        /// </summary>
+        [DataMember]
+        bool IsFilter { get; set; }
     }
 }

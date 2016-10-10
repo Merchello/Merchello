@@ -48,6 +48,32 @@
         IItemCache GetItemCacheWithKey(ICustomerBase customer, ItemCacheType itemCacheType, Guid versionKey);
 
         /// <summary>
+        /// Gets a collection of <see cref="IItemCache"/> for by an entity Key.
+        /// </summary>
+        /// <param name="entityKey">
+        /// The entity key (usually the customer key).
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IItemCache}"/>.
+        /// </returns>
+        IEnumerable<IItemCache> GetItemCaches(Guid entityKey);
+
+
+        /// <summary>
+        /// Gets a collection of <see cref="IItemCache"/> for by an entity Key (usually the customer key).
+        /// </summary>
+        /// <param name="entityKey">
+        /// The entity key (usually the customer key).
+        /// </param>
+        /// <param name="itemCacheTfKey">
+        /// The item cache type field Key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IItemCache}"/>.
+        /// </returns>
+        IEnumerable<IItemCache> GetEntityItemCaches(Guid entityKey, Guid itemCacheTfKey);
+
+        /// <summary>
         /// Saves a single <see cref="IItemCache"/> object
         /// </summary>
         /// <param name="itemCache">The <see cref="IItemCache"/> to save</param>

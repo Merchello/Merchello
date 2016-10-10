@@ -52,11 +52,14 @@
 
                 if (rateQuote == null)
                 {
+                    // REFACTOR-v3 this would only need happen if an attempt was to get cached, then not, then cached again
+                    // without any changes.
                     RuntimeCache.ClearCacheItem(GetShipmentRateQuoteCacheKey(Shipment, gwShipMethod));
 
                     //// http://issues.merchello.com/youtrack/issue/M-458
                     //// Clones the shipment so that with each iteration so that we can have the same shipment
                     //// with different ship methods
+                    //// REFACTOR-v3 clone should be inherent on ICloneableEntity
                     var attempt = gwShipMethod.QuoteShipment(Shipment.Clone());
                     if (attempt.Success)
                     {

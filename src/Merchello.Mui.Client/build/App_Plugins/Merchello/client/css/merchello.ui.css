@@ -27,7 +27,8 @@ html, body {
 .footer {
   background-color: #000000;
   color: #9d9d9d;
-  padding-top: 20px; }
+  padding-top: 20px;
+  margin-top: 20px; }
   .footer .merchello-version {
     clear: both;
     margin-top: 1em;
@@ -63,7 +64,7 @@ form .mui-requirejs {
   font-weight: bold; }
 
 .basket-summary .h-card {
-  height: 180px; }
+  min-height: 180px; }
 
 .product-box {
   clear: both; }

@@ -16,34 +16,11 @@
     public sealed class ProductOption : Entity, IProductOption
     {
         /// <summary>
-        /// The name selector.
+        /// The property selectors.
         /// </summary>
-        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<ProductOption, string>(x => x.Name);
+        private static readonly Lazy<PropertySelectors> _ps = new Lazy<PropertySelectors>();
 
-        /// <summary>
-        /// The required selector.
-        /// </summary>
-        private static readonly PropertyInfo RequiredSelector = ExpressionHelper.GetPropertyInfo<ProductOption, bool>(x => x.Required);
-
-        /// <summary>
-        /// The shared selector.
-        /// </summary>
-        private static readonly PropertyInfo SharedSelector = ExpressionHelper.GetPropertyInfo<ProductOption, bool>(x => x.Shared);
-
-        /// <summary>
-        /// The UI option selector.
-        /// </summary>
-        private static readonly PropertyInfo UiOptionSelector = ExpressionHelper.GetPropertyInfo<ProductOption, string>(x => x.UiOption);
-
-        /// <summary>
-        /// The detached content type key selector.
-        /// </summary>
-        private static readonly PropertyInfo DetachedContentTypeKeySelector = ExpressionHelper.GetPropertyInfo<ProductOption, Guid?>(x => x.DetachedContentTypeKey);
-
-        /// <summary>
-        /// The product attribute collection changed selector.
-        /// </summary>
-        private static readonly PropertyInfo ProductAttributesChangedSelector = ExpressionHelper.GetPropertyInfo<ProductOption, ProductAttributeCollection>(x => x.Choices);
+        #region
 
         /// <summary>
         /// The name.
@@ -61,9 +38,19 @@
         private bool _shared;
 
         /// <summary>
+        /// The sort order.
+        /// </summary>
+        private int _sortOrder;
+
+        /// <summary>
         /// The UI option.
         /// </summary>
         private string _uiOption;
+
+        /// <summary>
+        /// The use name.
+        /// </summary>
+        private string _useName;
 
         /// <summary>
         /// The detached content type key.
@@ -74,6 +61,8 @@
         /// The option choices collection.
         /// </summary>
         private ProductAttributeCollection _choices;
+
+        #endregion
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductOption"/> class.
@@ -126,9 +115,7 @@
             _choices = choices;
         }
 
-        /// <summary>
-        /// Gets or sets the name.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Name
         {
@@ -139,32 +126,26 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _name = value;
-                        return _name;
-                    },
-                _name,
-                NameSelector);
+                SetPropertyValueAndDetectChanges(value, ref _name, _ps.Value.NameSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the use name.
-        /// </summary>
-        /// <remarks>
-        /// This is the name associated with the product option when the option is shared.
-        /// Provides an alternate, per use naming of the option.
-        /// </remarks>
-        public string UseName { get; set; }
+        /// <inheritdoc/>
+        [DataMember]
+        public string UseName
+        {
+            get
+            {
+                return _useName;
+            }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether or not it is required to select an option in order to purchase the associated product.
-        /// </summary>
-        /// <remarks>
-        /// If true - a product item to product attribute relation is created defines the composition of a product item
-        /// </remarks>
+            set
+            {
+                SetPropertyValueAndDetectChanges(value, ref _useName, _ps.Value.UseNameSelector);
+            }
+        }
+
+        /// <inheritdoc/>
         [DataMember]
         public bool Required
         {
@@ -175,29 +156,26 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _required = value;
-                        return _required;
-                    },
-                _required,
-                RequiredSelector);
+                SetPropertyValueAndDetectChanges(value, ref _required, _ps.Value.RequiredSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the order in which to list product option with respect to its product association
-        /// </summary>
-        /// <remarks>
-        /// This field is stored in the product 2 product option association and is not valid for shared option list (it is populated when associated with a product) - cache value should always be 0.
-        /// </remarks>
+        /// <inheritdoc/>
         [DataMember]
-        public int SortOrder { get; set; }
+        public int SortOrder
+        {
+            get
+            {
+                return _sortOrder;
+            }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the option is shared.
-        /// </summary>
+            set
+            {
+                SetPropertyValueAndDetectChanges(value, ref _sortOrder, _ps.Value.SortOrderSelector);
+            }
+        }
+
+        /// <inheritdoc/>
         [DataMember]
         public bool Shared
         {
@@ -208,20 +186,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _shared = value;
-                        return _shared;
-                    },
-                _shared,
-                SharedSelector);
+                SetPropertyValueAndDetectChanges(value, ref _shared, _ps.Value.SharedSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the detached content type key.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public Guid? DetachedContentTypeKey
         {
@@ -232,20 +201,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _detachedContentTypeKey = value;
-                        return _detachedContentTypeKey;
-                    },
-                _detachedContentTypeKey,
-                DetachedContentTypeKeySelector);
+                SetPropertyValueAndDetectChanges(value, ref _detachedContentTypeKey, _ps.Value.DetachedContentTypeKeySelector);
             }
         }
-        
-        /// <summary>
-        /// Gets or sets the UI option.
-        /// </summary>
+
+        /// <inheritdoc/>
         [DataMember]
         public string UiOption
         {
@@ -256,20 +216,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _uiOption = value;
-                        return _uiOption;
-                    },
-                _uiOption,
-                UiOptionSelector);
+                SetPropertyValueAndDetectChanges(value, ref _uiOption, _ps.Value.UiOptionSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the choices (product attributes) associated with this option
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public ProductAttributeCollection Choices
         {
@@ -291,12 +242,7 @@
             }
         }
 
-        /// <summary>
-        /// Creates a clone of this option.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IProductOption"/>.
-        /// </returns>
+        /// <inheritdoc/>
         public IProductOption Clone()
         {
             var choices = this.Choices.Select(x => x.Clone()).OrderBy(x => x.SortOrder);
@@ -326,7 +272,53 @@
         /// </param>
         private void ChoiceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            this.OnPropertyChanged(ProductAttributesChangedSelector);
+            this.OnPropertyChanged(_ps.Value.ProductAttributesChangedSelector);
+        }
+
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private class PropertySelectors
+        {
+            /// <summary>
+            /// The name selector.
+            /// </summary>
+            public readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<ProductOption, string>(x => x.Name);
+
+            /// <summary>
+            /// The required selector.
+            /// </summary>
+            public readonly PropertyInfo RequiredSelector = ExpressionHelper.GetPropertyInfo<ProductOption, bool>(x => x.Required);
+
+            /// <summary>
+            /// The sort order selector.
+            /// </summary>
+            public readonly PropertyInfo SortOrderSelector = ExpressionHelper.GetPropertyInfo<ProductOption, int>(x => x.SortOrder);
+
+            /// <summary>
+            /// The shared selector.
+            /// </summary>
+            public readonly PropertyInfo SharedSelector = ExpressionHelper.GetPropertyInfo<ProductOption, bool>(x => x.Shared);
+
+            /// <summary>
+            /// The use name selector.
+            /// </summary>
+            public readonly PropertyInfo UseNameSelector = ExpressionHelper.GetPropertyInfo<ProductOption, string>(x => x.UseName);
+
+            /// <summary>
+            /// The UI option selector.
+            /// </summary>
+            public readonly PropertyInfo UiOptionSelector = ExpressionHelper.GetPropertyInfo<ProductOption, string>(x => x.UiOption);
+
+            /// <summary>
+            /// The detached content type key selector.
+            /// </summary>
+            public readonly PropertyInfo DetachedContentTypeKeySelector = ExpressionHelper.GetPropertyInfo<ProductOption, Guid?>(x => x.DetachedContentTypeKey);
+
+            /// <summary>
+            /// The product attribute collection changed selector.
+            /// </summary>
+            public readonly PropertyInfo ProductAttributesChangedSelector = ExpressionHelper.GetPropertyInfo<ProductOption, ProductAttributeCollection>(x => x.Choices);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿namespace Merchello.Core.Models.Interfaces
 {
     using System;
-    using System.Runtime.Serialization;
 
     using Merchello.Core.Models.EntityBase;
 
@@ -13,7 +12,6 @@
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
-        [DataMember]
         string Name { get; set; }
 
         /// <summary>
@@ -22,31 +20,26 @@
         /// <remarks>
         /// This must be unique
         /// </remarks>
-        [DataMember]
         string OfferCode { get; set; }
 
         /// <summary>
         /// Gets or sets the provider key.
         /// </summary>
-        [DataMember]
         Guid OfferProviderKey { get; set; }
 
         /// <summary>
         /// Gets or sets the offer starts date.
         /// </summary>
-        [DataMember]
         DateTime OfferStartsDate { get; set; }
 
         /// <summary>
         /// Gets or sets the offer ends date.
         /// </summary>
-        [DataMember]
         DateTime OfferEndsDate { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether active.
         /// </summary>
-        [DataMember]
         bool Active { get; set; }
 
         /// <summary>
@@ -62,7 +55,6 @@
         /// <summary>
         /// Gets or sets the component configurations.
         /// </summary>
-        [DataMember]
         OfferComponentDefinitionCollection ComponentDefinitions { get; set; }
     }
 }

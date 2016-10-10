@@ -34,6 +34,39 @@
         Guid GetProviderKey(Type type);
 
         /// <summary>
+        /// Gets the provider keys for a given type.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the provider
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="IEnumerable{Guid}"/>.
+        /// </returns>
+        IEnumerable<Guid> GetProviderKeys<T>();
+
+        /// <summary>
+        /// Gets the provider keys for a given type.
+        /// </summary>
+        /// <param name="type">
+        /// The type of the provider.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{Guid}"/>.
+        /// </returns>
+        IEnumerable<Guid> GetProviderKeys(Type type);
+
+        /// <summary>
+        /// Gets the provider attribute by the key specified within the attribute.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="EntityCollectionProviderAttribute"/>.
+        /// </returns>
+        EntityCollectionProviderAttribute GetProviderAttributeByProviderKey(Guid key);
+
+        /// <summary>
         /// Gets the <see cref="EntityCollectionProviderAttribute"/> from the provider of type T.
         /// </summary>
         /// <typeparam name="T">
@@ -43,6 +76,18 @@
         /// The <see cref="EntityCollectionProviderAttribute"/>.
         /// </returns>
         EntityCollectionProviderAttribute GetProviderAttribute<T>();
+
+        /// <summary>
+        /// Gets a collection of <see cref="EntityCollectionProviderAttribute"/> from providers of type T.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the provider
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        IEnumerable<EntityCollectionProviderAttribute> GetProviderAttributes<T>();
+
 
         /// <summary>
         /// Gets the provider attributes for all resolved types.
@@ -74,6 +119,16 @@
         /// </returns>
         Attempt<EntityCollectionProviderBase> GetProviderForCollection(Guid collectionKey);
 
+        /// <summary>
+        /// Gets the provider attribute for providers responsible for filter group's filters.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="EntityCollectionProviderAttribute"/>.
+        /// </returns>
+        EntityCollectionProviderAttribute GetProviderAttributeForFilter(Guid collectionKey);
 
         /// <summary>
         /// The get provider for collection.

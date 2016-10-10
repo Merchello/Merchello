@@ -1,55 +1,50 @@
-﻿using System;
-using System.Runtime.Serialization;
-using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Models.Interfaces;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+
+    using Merchello.Core.Models.Interfaces;
+
     /// <summary>
-    /// Defines a Merchello ShipMethod object interface
+    /// Represents shipping method.
     /// </summary>
     public interface IShipMethod : IGatewayProviderMethod
     {            
         /// <summary>
-        /// The name for the ShipMethod
+        /// Gets or sets the name for the shipping method.
         /// </summary>
-        [DataMember]
-        string Name { get; set;}
+        string Name { get; set; }
 
         /// <summary>
-        /// The key associated with the gateway provider for the Ship Method
+        /// Gets the key associated with the gateway provider.
         /// </summary>
-        [DataMember]
         Guid ProviderKey { get; }
             
         /// <summary>
-        /// The key associated with the ship country for the Ship Method
+        /// Gets the key associated with the ship country.
         /// </summary>
-        [DataMember]
         Guid ShipCountryKey { get; }
             
         /// <summary>
-        /// The surcharge for the ShipMethod
+        /// Gets or sets the surcharge.
         /// </summary>
-        [DataMember]
-        decimal Surcharge { get; set;}
+        /// <remarks>
+        /// Currently not being used.
+        /// </remarks>
+        decimal Surcharge { get; set; }
             
         /// <summary>
-        /// The service code (generally defined by the provider) for the ShipMethod
+        /// Gets or sets the service code (generally defined by the provider).
         /// </summary>
-        [DataMember]
-        string ServiceCode { get; set;}
+        string ServiceCode { get; set; }
 
         /// <summary>
-        /// True/false indicating whether or not this shipmethod is taxable
+        /// Gets or sets a value indicating whether or not this shipping method is taxable.
         /// </summary>
-        [DataMember]
         bool Taxable { get; set; }
 
         /// <summary>
-        /// Stores province settings for this ship method
+        /// Gets or sets the province collection.
         /// </summary>
-        [DataMember]
         ProvinceCollection<IShipProvince> Provinces { get; set; }
     }
 }

@@ -5,19 +5,18 @@
     using System.Linq;
 
     using Merchello.Core.Models;
-    using Merchello.Core.Models.DetachedContent;
-    using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.Rdbms;
     using Merchello.Core.Persistence.Factories;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
 
     using Umbraco.Core;
-    using Umbraco.Core.Cache;
     using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
     using Umbraco.Core.Persistence.SqlSyntax;
+
+    // REFACTOR request based caching should be either all done in .Web services or all done here in a base class
 
     /// <summary>
     /// The product repository.
@@ -87,7 +86,7 @@
         /// The <see cref="Page"/>.
         /// </returns>
         /// <remarks>
-        //// TODO this is a total hack and needs to be thought through a bit better.  IQuery is a worthless parameter here
+        //// REFACTOR IQuery is a worthless parameter here
         /// </remarks>
         public override Page<IProduct> GetPage(long page, long itemsPerPage, IQuery<IProduct> query, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
         {
@@ -799,6 +798,30 @@
         }
 
         /// <summary>
+        /// Returns a value indicating whether or not the entity exists in at least one of the collections.
+        /// </summary>
+        /// <param name="entityKey">
+        /// The entity key.
+        /// </param>
+        /// <param name="collectionKeys">
+        /// The collection keys.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool ExistsInCollection(Guid entityKey, Guid[] collectionKeys)
+        {
+            var sql = new Sql();
+            sql.Append("SELECT COUNT(*)")
+                .Append("FROM [merchProduct2EntityCollection]")
+                .Append(
+                    "WHERE [merchProduct2EntityCollection].[productKey] = @pkey AND [merchProduct2EntityCollection].[entityCollectionKey] IN (@eckeys)",
+                    new { @pkey = entityKey, @eckeys = collectionKeys });
+
+            return Database.ExecuteScalar<int>(sql) > 0;
+        }
+
+        /// <summary>
         /// Adds a product to a static product collection.
         /// </summary>
         /// <param name="entityKey">
@@ -896,6 +919,124 @@
         }
 
         /// <summary>
+        /// The get product keys from collection.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public Page<Guid> GetKeysThatExistInAllCollections(
+            Guid[] collectionKeys,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var cacheKey = GetPagedDtoCacheKey(
+                            "GetKeysFromCollection",
+                            page,
+                            itemsPerPage,
+                            orderExpression,
+                            sortDirection,
+                            new Dictionary<string, string>
+                                {
+                                    { "collectionKeys", string.Join(string.Empty, collectionKeys) }
+                                });
+
+            var pagedKeys = TryGetCachedPageOfKeys(cacheKey);
+            if (pagedKeys != null) return pagedKeys;
+
+            var sql = new Sql();
+            sql.Append("SELECT *")
+              .Append("FROM [merchProductVariant]")
+               .Append("WHERE [merchProductVariant].[productKey] IN (")
+               .Append("SELECT [productKey]")
+               .Append("FROM [merchProduct2EntityCollection]")
+               .Append("WHERE [merchProduct2EntityCollection].[entityCollectionKey] IN (@eckeys)", new { @eckeys = collectionKeys })
+               .Append("GROUP BY productKey")
+               .Append("HAVING COUNT(*) = @keyCount", new { @keyCount = collectionKeys.Count() })
+               .Append(")")
+               .Append("AND [merchProductVariant].[master] = 1");
+
+            pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+
+            return CachePageOfKeys(cacheKey, pagedKeys);
+        }
+
+        public int CountKeysThatExistInAllCollections(Guid[] collectionKeys)
+        {
+            return Database.ExecuteScalar<int>(SqlForKeysThatExistInAllCollections(collectionKeys, true));
+        }
+
+        public IEnumerable<Tuple<IEnumerable<Guid>, int>> CountKeysThatExistInAllCollections(IEnumerable<Guid[]> collectionKeysGroups)
+        {
+            var sql = new Sql();
+            var keysGroups = collectionKeysGroups as Guid[][] ?? collectionKeysGroups.ToArray();
+            foreach (var group in keysGroups)
+            {
+                if (sql.SQL.Length > 0) sql.Append("UNION");
+                sql.Append(string.Format("SELECT {0} as Hash", group.GetHashCode())) // can't paramertize this SqlCE chokes but it should not matter since it's just a value.
+                    .Append(", T1.Count")
+                    .Append("FROM (")
+                    .Append("SELECT COUNT(*) AS Count")
+                       .Append("FROM [merchProductVariant]")
+                       .Append("WHERE [merchProductVariant].[productKey] IN (")
+                       .Append("SELECT [productKey]")
+                       .Append("FROM [merchProduct2EntityCollection]")
+                       .Append("WHERE [merchProduct2EntityCollection].[entityCollectionKey] IN (@eckeys)", new { @eckeys = group })
+                       .Append("GROUP BY productKey")
+                       .Append("HAVING COUNT(*) = @keyCount", new { @keyCount = group.Count() })
+                       .Append(")")
+                       .Append("AND [merchProductVariant].[master] = 1")
+                    .Append(") AS T1");
+ 
+            }
+
+            var dtos = Database.Fetch<CountDto>(sql);
+
+            var results = new List<Tuple<IEnumerable<Guid>, int>>();
+            foreach (var group in keysGroups)
+            {
+                var hash = group.GetHashCode();
+                var dto = dtos.FirstOrDefault(x => x.Hash == hash);
+                if (dto != null) results.Add(new Tuple<IEnumerable<Guid>, int>(group, dto.Count));
+            }
+
+            return results;
+        }
+
+        private Sql SqlForKeysThatExistInAllCollections(Guid[] collectionKeys, bool isCount = false)
+        {
+            var sql = new Sql();
+            sql.Select(isCount ? "COUNT(*) AS Count" : "*")
+                .Append("FROM [merchProductVariant]")
+               .Append("WHERE [merchProductVariant].[productKey] IN (")
+               .Append("SELECT [productKey]")
+               .Append("FROM [merchProduct2EntityCollection]")
+               .Append("WHERE [merchProduct2EntityCollection].[entityCollectionKey] IN (@eckeys)", new { @eckeys = collectionKeys })
+               .Append("GROUP BY productKey")
+               .Append("HAVING COUNT(*) = @keyCount", new { @keyCount = collectionKeys.Count() })
+               .Append(")")
+               .Append("AND [merchProductVariant].[master] = 1");
+
+            return sql;
+        }
+
+        /// <summary>
         /// The get keys from collection.
         /// </summary>
         /// <param name="collectionKey">
@@ -956,6 +1097,45 @@
             return CachePageOfKeys(cacheKey, pagedKeys);
         }
 
+        public Page<Guid> GetKeysThatExistInAllCollections(
+            Guid[] collectionKeys,
+            string term,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var cacheKey = GetPagedDtoCacheKey(
+                "GetKeysThatExistInAllCollections",
+                page,
+                itemsPerPage,
+                orderExpression,
+                sortDirection,
+                new Dictionary<string, string>
+                    {
+                        { "collectionKey", string.Join(string.Empty, collectionKeys) },
+                        { "term", term }
+                    });
+
+            var pagedKeys = TryGetCachedPageOfKeys(cacheKey);
+            if (pagedKeys != null) return pagedKeys;
+
+            var sql = this.BuildProductSearchSql(term);
+            sql.Append("AND [merchProductVariant].[productKey] IN (")
+                .Append("SELECT DISTINCT([productKey])")
+                .Append("FROM [merchProduct2EntityCollection]")
+                .Append(
+                    "WHERE [merchProduct2EntityCollection].[entityCollectionKey] IN (@eckeys)",
+                    new { @eckey = collectionKeys })
+                .Append("GROUP BY productKey")
+                .Append("HAVING COUNT(*) = @keyCount", new { @keyCount = collectionKeys.Count() })
+                .Append(")");
+
+            pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+
+            return CachePageOfKeys(cacheKey, pagedKeys);
+        }
+
         /// <summary>
         /// The get keys not in collection.
         /// </summary>
@@ -1005,6 +1185,62 @@
                .Append("SELECT DISTINCT([productKey])")
                .Append("FROM [merchProduct2EntityCollection]")
                .Append("WHERE [merchProduct2EntityCollection].[entityCollectionKey] = @eckey", new { @eckey = collectionKey })
+               .Append(")")
+               .Append("AND [merchProductVariant].[master] = 1");
+
+            pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+            return CachePageOfKeys(cacheKey, pagedKeys);
+        }
+
+        /// <summary>
+        /// Gets the page of product keys that do not exist in any of the collections with keys passed.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection keys.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public Page<Guid> GetKeysNotInAnyCollections(
+            Guid[] collectionKeys,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var cacheKey = GetPagedDtoCacheKey(
+                           "GetKeysNotInAnyCollections",
+                           page,
+                           itemsPerPage,
+                           orderExpression,
+                           sortDirection,
+                           new Dictionary<string, string>
+                               {
+                                    { "collectionKeys", string.Join(string.Empty, collectionKeys) }
+                               });
+
+            var pagedKeys = TryGetCachedPageOfKeys(cacheKey);
+            if (pagedKeys != null) return pagedKeys;
+
+            var sql = new Sql();
+            sql.Append("SELECT *")
+              .Append("FROM [merchProductVariant]")
+               .Append("WHERE [merchProductVariant].[productKey] NOT IN (")
+               .Append("SELECT DISTINCT([productKey])")
+               .Append("FROM [merchProduct2EntityCollection]")
+               .Append("WHERE [merchProduct2EntityCollection].[entityCollectionKey] IN (@eckeys)", new { @eckeys = collectionKeys })
                .Append(")")
                .Append("AND [merchProductVariant].[master] = 1");
 
@@ -1073,6 +1309,160 @@
             return CachePageOfKeys(cacheKey, pagedKeys);
         }
 
+        public Page<Guid> GetKeysNotInAnyCollections(
+            Guid[] collectionKeys,
+            string term,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var cacheKey = GetPagedDtoCacheKey(
+                           "GetKeysNotInAnyCollections",
+                           page,
+                           itemsPerPage,
+                           orderExpression,
+                           sortDirection,
+                           new Dictionary<string, string>
+                               {
+                                { "collectionKeys", string.Join(string.Empty, collectionKeys) },
+                                { "term", term }
+                               });
+
+            var pagedKeys = TryGetCachedPageOfKeys(cacheKey);
+            if (pagedKeys != null) return pagedKeys;
+
+
+            var sql = this.BuildProductSearchSql(term);
+            sql.Append("AND [merchProductVariant].[productKey] NOT IN (")
+                .Append("SELECT DISTINCT([productKey])")
+                .Append("FROM [merchProduct2EntityCollection]")
+                .Append(
+                    "WHERE [merchProduct2EntityCollection].[entityCollectionKey] IN (@eckeys)",
+                    new { @eckeys = collectionKeys })
+                .Append(")");
+
+            pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+            return CachePageOfKeys(cacheKey, pagedKeys);
+        }
+
+        /// <summary>
+        /// Gets a collection of keys that exist in any one of the collections passed.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection keys.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public Page<Guid> GetKeysThatExistInAnyCollections(
+            Guid[] collectionKeys,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var cacheKey = GetPagedDtoCacheKey(
+                           "GetKeysThatExistInAnyCollectionss",
+                           page,
+                           itemsPerPage,
+                           orderExpression,
+                           sortDirection,
+                           new Dictionary<string, string>
+                               {
+                                    { "collectionKeys", string.Join(string.Empty, collectionKeys) }
+                               });
+
+            var pagedKeys = TryGetCachedPageOfKeys(cacheKey);
+            if (pagedKeys != null) return pagedKeys;
+
+            var sql = new Sql();
+            sql.Append("SELECT *")
+              .Append("FROM [merchProductVariant]")
+               .Append("WHERE [merchProductVariant].[productKey] IN (")
+               .Append("SELECT DISTINCT([productKey])")
+               .Append("FROM [merchProduct2EntityCollection]")
+               .Append("WHERE [merchProduct2EntityCollection].[entityCollectionKey] IN (@eckeys)", new { @eckeys = collectionKeys })
+               .Append(")")
+               .Append("AND [merchProductVariant].[master] = 1");
+
+            pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+            return CachePageOfKeys(cacheKey, pagedKeys);
+        }
+
+        /// <summary>
+        /// Gets a collection of keys that exist in any one of the collections passed.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection keys.
+        /// </param>
+        /// <param name="term">
+        /// The search term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public Page<Guid> GetKeysThatExistInAnyCollections(
+            Guid[] collectionKeys,
+            string term,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var cacheKey = GetPagedDtoCacheKey(
+                           "GetKeysThatExistInAnyCollections",
+                           page,
+                           itemsPerPage,
+                           orderExpression,
+                           sortDirection,
+                           new Dictionary<string, string>
+                               {
+                                { "collectionKeys", string.Join(string.Empty, collectionKeys) },
+                                { "term", term }
+                               });
+
+            var pagedKeys = TryGetCachedPageOfKeys(cacheKey);
+            if (pagedKeys != null) return pagedKeys;
+
+
+            var sql = this.BuildProductSearchSql(term);
+            sql.Append("AND [merchProductVariant].[productKey] IN (")
+                .Append("SELECT DISTINCT([productKey])")
+                .Append("FROM [merchProduct2EntityCollection]")
+                .Append(
+                    "WHERE [merchProduct2EntityCollection].[entityCollectionKey] IN (@eckeys)",
+                    new { @eckeys = collectionKeys })
+                .Append(")");
+
+            pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+            return CachePageOfKeys(cacheKey, pagedKeys);
+        }
+
         /// <summary>
         /// The get products from collection.
         /// </summary>
@@ -1102,6 +1492,46 @@
             SortDirection sortDirection = SortDirection.Descending)
         {
             var p = this.GetKeysFromCollection(collectionKey, page, itemsPerPage, orderExpression, sortDirection);
+
+            return new Page<IProduct>()
+            {
+                CurrentPage = p.CurrentPage,
+                ItemsPerPage = p.ItemsPerPage,
+                TotalItems = p.TotalItems,
+                TotalPages = p.TotalPages,
+                Items = p.Items.Select(Get).ToList()
+            };
+        }
+
+        /// <summary>
+        /// The get products from collection.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IProduct}"/>.
+        /// </returns>
+        public Page<IProduct> GetEntitiesThatExistInAllCollections(
+            Guid[] collectionKeys,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var p = this.GetKeysThatExistInAllCollections(collectionKeys, page, itemsPerPage, orderExpression, sortDirection);
 
             return new Page<IProduct>()
             {
@@ -1146,6 +1576,50 @@
             SortDirection sortDirection = SortDirection.Descending)
         {
             var p = GetKeysFromCollection(collectionKey, term, page, itemsPerPage, orderExpression, sortDirection);
+
+            return new Page<IProduct>()
+            {
+                CurrentPage = p.CurrentPage,
+                ItemsPerPage = p.ItemsPerPage,
+                TotalItems = p.TotalItems,
+                TotalPages = p.TotalPages,
+                Items = p.Items.Select(Get).ToList()
+            };
+        }
+
+        /// <summary>
+        /// The get from collection.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection key.
+        /// </param>
+        /// <param name="term">
+        /// The term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IProduct}"/>.
+        /// </returns>
+        public Page<IProduct> GetEntitiesThatExistInAllCollections(
+            Guid[] collectionKeys,
+            string term,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var p = this.GetKeysThatExistInAllCollections(collectionKeys, term, page, itemsPerPage, orderExpression, sortDirection);
 
             return new Page<IProduct>()
             {

@@ -1,5 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <language>
+  <area alias="sections">
+    <key alias="merchello">Merchello</key>
+  </area>
   <area alias="merchelloGeneral">
     <key alias="apply">Apply</key>
     <key alias="price">Price</key>
@@ -54,12 +57,12 @@
     <key alias="friday">Friday</key>
     <key alias="saturday">Saturday</key>
     <key alias="sunday">Sunday</key>
-    <key alias="day">Day</key>
-    <key alias="item">Item</key>
-    <key alias="items">Items</key>
-    <key alias="totals">Totals</key>
-    <key alias="quantity">Quantity</key>
-    <key alias="subTotal">Sub Total</key>
+      <key alias="day">Day</key>
+      <key alias="item">Item</key>
+      <key alias="items">Items</key>
+      <key alias="totals">Totals</key>
+      <key alias="quantity">Quantity</key>
+      <key alias="subTotal">Sub Total</key>
     <key alias="checkout">Checkout</key>
     <key alias="author">Author</key>
     <key alias="visibility">Visibility</key>
@@ -80,6 +83,7 @@
     <key alias="gateways">Gateway Providers</key>
   </area>
   <area alias="merchelloTabs">
+    <key alias="filterGroups">Filter Groups</key>
     <key alias="productListing">Product Listing</key>
     <key alias="productContentTypes">Product Content Types</key>
     <key alias="product">Product</key>
@@ -118,14 +122,14 @@
     <key alias="customerBaskets">Customer Baskets</key>
     <key alias="customerCheckouts">Customer Checkouts</key>
     <key alias="customerCheckoutPercent">Customer Checkout Percent</key>
-    <key alias="thisWeekVsLast">This Week Vs. Last Week</key>
-    <key alias="monthlyTotalSales">Monthly Total Sales</key>
-    <key alias="topSellingItems"><![CDATA[ Top Selling Items <small>Top 10</small> ]]></key>
-    <key alias="thisWeek">This Week</key>
-    <key alias="lastWeek">Last Week</key>
-    <key alias="quantitySold">Quantity Sold</key>
-    <key alias="numberOfInvoices">Number of invoices</key>
-    <key alias="abandonedBaskets">Abandoned Baskets and Completed Checkouts</key>
+      <key alias="thisWeekVsLast">This Week Vs. Last Week</key>
+      <key alias="monthlyTotalSales">Monthly Total Sales</key>
+      <key alias="topSellingItems"><![CDATA[ Top Selling Items <small>Top 10</small> ]]></key>
+      <key alias="thisWeek">This Week</key>
+      <key alias="lastWeek">Last Week</key>
+      <key alias="quantitySold">Quantity Sold</key>
+      <key alias="numberOfInvoices">Number of invoices</key>
+      <key alias="abandonedBaskets">Abandoned Baskets and Completed Checkouts</key>
   </area>
   <area alias="merchelloProviders">
     <key alias="unpaidInvoiceCollection">Unpaid invoices</key>
@@ -153,11 +157,15 @@
     <key alias="noQualifyingEntities">There are no other items that can be added to the collection.</key>
     <key alias="collectionPickerTitle">Collections</key>
     <key alias="collectionPickerInfo">Add this item to one or more collections.</key>
+    <key alias="filterPickerTitle">Specified Filters</key>
+    <key alias="filterPickerInfo">Add this item to one or more specified filters.</key>
+    <key alias="filterAssociateFilters">Associate Filters</key>
     <key alias="allItems">All items</key>
     <key alias="allProduct">All Products</key>
     <key alias="allCustomer">All Customers</key>
     <key alias="allInvoice">All Sales</key>
     <key alias="allOffer">All Offers</key>
+    <key alias="allProductOption">Shared Product Options</key>
     <key alias="productCollections">Product Collections</key>
     <key alias="invoiceCollections">Invoice Collections</key>
     <key alias="customerCollections">Customer Collections</key>
@@ -189,6 +197,18 @@
     <key alias="optionValues">Option Values</key>
     <key alias="shared">Shared</key>
     <key alias="sharedCount">Shared Count</key>
+    <key alias="filterGroup">Filter Group</key>
+    <key alias="filters">Filters</key>
+  </area>
+  <area alias="merchelloNotes">
+    <key alias="notes">Notes</key>
+    <key alias="note">Note</key>
+    <key alias="invoiceNotes">Notes about this sale</key>
+    <key alias="customerNotes">Notes relating to this customer</key>
+    <key alias="paymentNotes">Notes relating to this payment</key>
+    <key alias="addNote">Add a new note</key>
+    <key alias="editNote">Edit note</key>
+    <key alias="internalOnly">This note is for internal use only.</key>
   </area>
   <area alias="merchelloProducts">
     <key alias="emptyProductCollection">There are currently no products in this collection</key>
@@ -199,13 +219,27 @@
     <key alias="newProductName">New Product Name</key>
     <key alias="newProductSku">New Product SKU</key>
   </area>
+  <area alias="merchelloSpecFilters">
+    <key alias="manageProductFilters">Manage Product Filters</key>
+    <key alias="editSpecFilter">
+      <![CDATA[
+      <strong>Edit Filters</strong>
+      <small>Add or edit filters, which can be used to enhance product filtering and nagivation.</small>
+      ]]>
+    </key>
+    <key alias="noSpecFilters">
+      <![CDATA[
+      <h5>You have not setup any specification filters</h5>
+      ]]>
+    </key>
+  </area>
   <area alias="merchelloProductOptions">
     <key alias="newOption">New Option</key>
     <key alias="sharedOption">Shared Options</key>
     <key alias="editOptions">
       <![CDATA[
       <strong>Edit Options</strong>
-      <small>Edit or add options, which will auto-update your variants</small>
+      <small>Add or edit options, which will auto-update your variants</small>
       ]]>
     </key>
     <key alias="sharedCount">Share Count</key>
@@ -237,7 +271,7 @@
     <key alias="tabs">Tabs</key>
     <key alias="noDetachedContentTypes">
       <![CDATA[
-      <h5>You have not associated and Umbraco content types with Merchello</h5>
+      <h5>You have not associated any Umbraco content types with Merchello</h5>
       <p>This can be done through the Products context menu.</p>
       ]]>
     </key>
@@ -249,7 +283,7 @@
     <key alias="productOptionContentTypes">Product Option Content Types</key>
     <key alias="productOptionContentType">Option Content Type</key>
     <key alias="noProductOptionContentType">
-      <![CDATA[
+    <![CDATA[
       <h5>You have not selected a product option content type</h5>
     ]]>
     </key>
@@ -307,11 +341,11 @@
   <area alias="merchelloCustomers">
     <key alias="loginName">Login</key>
     <key alias="newCustomer">New Customer</key>
-    <key alias="basket">Basket</key>
-    <key alias="customerBaskets">Customer Baskets</key>
-    <key alias="lastActivityDate">Last Activity Date</key>
+      <key alias="basket">Basket</key>
+      <key alias="lastActivityDate">Last Activity Date</key>
     <key alias="lastInvoiceTotal">Last Invoice Total</key>
     <key alias="location">Location</key>
+      <key alias="customerBaskets">Customer Baskets</key>
     <key alias="noCustomers">
       <![CDATA[
         <h5>You Have No Customers</h5>
@@ -324,16 +358,6 @@
       <small>A list of the customer's sales and their status</small>
       ]]>
     </key>
-    <area alias="merchelloNotes">
-      <key alias="notes">Notes</key>
-      <key alias="note">Note</key>
-      <key alias="saleNotes">Notes about this sale</key>
-      <key alias="customerNotes">Notes relating to this customer</key>
-      <key alias="paymentNotes">Notes relating to this payment</key>
-      <key alias="addNote">Add a new note</key>
-      <key alias="editNote">Edit note</key>
-      <key alias="internalOnly">This note is for internal use only.</key>
-    </area>
     <key alias="emptyCustomerCollection">There are currently no customers in this collection</key>
     <key alias="customerNotes">
       <![CDATA[
@@ -353,7 +377,7 @@
       <small>Items currently in the customer wish list</small>
       ]]>
     </key>
-    <key alias="itemCacheEmpty">Contains no items</key>
+      <key alias="itemCacheEmpty">Contains no items</key>
     <key alias="totalSpent">Total Spent</key>
   </area>
   <area alias="merchelloMarketing">
@@ -518,7 +542,6 @@
     <!-- actions -->
     <!-- phrases -->
   </area>
-
   <!-- TODO KEEP THE MERCHELLO SHIPPING AREA -->
   <area alias="merchelloShipping">
     <!-- things -->
@@ -638,7 +661,7 @@
     <key alias="notificationSettings" >Notification Settings</key>
     <key alias="notificationSettingsHelper" >Set who to send your notification to and when</key>
     <key alias="description" >Description</key>
-    <key alias="attachedEvent" >Attached Event</key>
+    <key alias="attachedEvent" >Attached Trigger</key>
     <key alias="resourceType"></key>
     <key alias="eventAlias" >Event Alias:</key>
     <key alias="sendTo" ><![CDATA[Send To <small>(i.e. orders@yourdomain.com)</small>]]></key>
@@ -712,6 +735,7 @@
     <key alias="dragAndReorderHelper">If you reorder your options and variants, it will change the order in which they appear on your storefront. Drag your options (ie size, style) vertically and variants (ie women's, small) horizontally.</key>
     <key alias="changePrices">Change prices</key>
     <key alias="updateInventory">Update inventory</key>
+    <key alias="toggleTracksInventory">Toggle Tracks Inventory</key>
     <key alias="toggleAvailable">Toggle Available</key>
     <key alias="toggleOnSale">Toggle On Sale</key>
     <key alias="duplicateVariant"> Duplicate Variant</key>

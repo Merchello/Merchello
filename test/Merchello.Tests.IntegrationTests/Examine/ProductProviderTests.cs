@@ -13,6 +13,8 @@ using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.Examine
 {
+    using System.Threading;
+
     [TestFixture]
     public class ProductProviderTests : DatabaseIntegrationTestBase
     {
@@ -152,6 +154,8 @@ namespace Merchello.Tests.IntegrationTests.Examine
 
             //// Act
             provider.DeleteProductFromIndex(product);
+
+            Thread.Sleep(200);
 
             //// Assert
             criteria = searcher.CreateSearchCriteria("productvariant", BooleanOperation.And);

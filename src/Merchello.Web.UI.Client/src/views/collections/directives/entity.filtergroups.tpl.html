@@ -1,0 +1,20 @@
+<div class="control-group umb-control-group" data-ng-show="ready">
+    <label class="merchello-control-label">
+        <localize key="merchelloCollections_filterPickerTitle"/>
+        <small><localize key="merchelloCollections_filterPickerInfo" /></small>
+
+    </label>
+    <div class="merchello-controls">
+
+        <div class="row">
+            <div data-ng-repeat="collection in associated">
+                <entity-filter-group collection="collection" entity-type="entityType" do-save="addOrRemove" auto-save="true" />
+            </div>
+
+        </div>
+
+        <div class="text-center">
+            <merchello-add-icon do-add="associateFilters()" data-ng-if="available.length > 0"></merchello-add-icon>
+        </div>
+    </div>
+</div>

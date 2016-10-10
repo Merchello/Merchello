@@ -15,6 +15,7 @@ var EntityCollectionProviderDisplay = function() {
     self.managesUniqueCollection = true;
     self.entityType = '';
     self.managedCollections = [];
+    self.dialogEditorView = undefined
 };
 
 

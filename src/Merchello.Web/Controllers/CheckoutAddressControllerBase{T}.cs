@@ -11,8 +11,6 @@
     using Merchello.Web.Factories;
     using Merchello.Web.Models.Ui;
 
-    using Umbraco.Core;
-
     /// <summary>
     /// A base controller to handle checkout address operations.
     /// </summary>
@@ -93,8 +91,8 @@
             bool initializeFromCustomerAddress = true)
             : base(contextSettingsFactory)
         {
-            Mandate.ParameterNotNull(billingAddressFactory, "billingAddressFactory");
-            Mandate.ParameterNotNull(shippingAddressFactory, "shippingAddressFactory");
+            Ensure.ParameterNotNull(billingAddressFactory, "billingAddressFactory");
+            Ensure.ParameterNotNull(shippingAddressFactory, "shippingAddressFactory");
 
             this.BillingAddressFactory = billingAddressFactory;
             this.ShippingAddressFactory = shippingAddressFactory;

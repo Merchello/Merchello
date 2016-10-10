@@ -9,8 +9,6 @@
 
     using Merchello.Core.Models.EntityBase;
 
-    using Umbraco.Core;
-
     /// <summary>
     /// The invoice.
     /// </summary>
@@ -18,118 +16,12 @@
     [DataContract(IsReference = true)]
     public class Invoice : VersionTaggedEntity, IInvoice
     {
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private static readonly Lazy<PropertySelectors> _ps = new Lazy<PropertySelectors>();
+
         #region Fields
-
-        /// <summary>
-        /// The customer key selector.
-        /// </summary>
-        private static readonly PropertyInfo CustomerKeySelector = ExpressionHelper.GetPropertyInfo<Invoice, Guid?>(x => x.CustomerKey);
-
-        /// <summary>
-        /// The invoice number prefix selector.
-        /// </summary>
-        private static readonly PropertyInfo InvoiceNumberPrefixSelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.InvoiceNumberPrefix);
-
-        /// <summary>
-        /// The invoice number selector.
-        /// </summary>
-        private static readonly PropertyInfo InvoiceNumberSelector = ExpressionHelper.GetPropertyInfo<Invoice, int>(x => x.InvoiceNumber);
-
-        /// <summary>
-        /// The invoice number prefix selector.
-        /// </summary>
-        private static readonly PropertyInfo PoNumberSelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.PoNumber);
-
-
-        /// <summary>
-        /// The invoice date selector.
-        /// </summary>
-        private static readonly PropertyInfo InvoiceDateSelector = ExpressionHelper.GetPropertyInfo<Invoice, DateTime>(x => x.InvoiceDate);
-
-        /// <summary>
-        /// The invoice status selector.
-        /// </summary>
-        private static readonly PropertyInfo InvoiceStatusSelector = ExpressionHelper.GetPropertyInfo<Invoice, IInvoiceStatus>(x => x.InvoiceStatus);
-
-        /// <summary>
-        /// The bill to name selector.
-        /// </summary>
-        private static readonly PropertyInfo BillToNameSelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToName);
-
-        /// <summary>
-        /// The bill to address 1 selector.
-        /// </summary>
-        private static readonly PropertyInfo BillToAddress1Selector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToAddress1);
-
-        /// <summary>
-        /// The bill to address 2 selector.
-        /// </summary>
-        private static readonly PropertyInfo BillToAddress2Selector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToAddress2);
-
-        /// <summary>
-        /// The bill to locality selector.
-        /// </summary>
-        private static readonly PropertyInfo BillToLocalitySelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToLocality);
-
-        /// <summary>
-        /// The bill to region selector.
-        /// </summary>
-        private static readonly PropertyInfo BillToRegionSelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToRegion);
-
-        /// <summary>
-        /// The bill to postal code selector.
-        /// </summary>
-        private static readonly PropertyInfo BillToPostalCodeSelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToPostalCode);
-
-        /// <summary>
-        /// The bill to country code selector.
-        /// </summary>
-        private static readonly PropertyInfo BillToCountryCodeSelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToCountryCode);
-
-        /// <summary>
-        /// The bill to email selector.
-        /// </summary>
-        private static readonly PropertyInfo BillToEmailSelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToEmail);
-
-        /// <summary>
-        /// The bill to phone selector.
-        /// </summary>
-        private static readonly PropertyInfo BillToPhoneSelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToPhone);
-
-        /// <summary>
-        /// The bill to company selector.
-        /// </summary>
-        private static readonly PropertyInfo BillToCompanySelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToCompany);
-
-        /// <summary>
-        /// The bill to company selector.
-        /// </summary>
-        private static readonly PropertyInfo CurrencyCodeSelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.CurrencyCode);
-
-        /// <summary>
-        /// The exported selector.
-        /// </summary>
-        private static readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<Invoice, bool>(x => x.Exported);
-
-        /// <summary>
-        /// The archived selector.
-        /// </summary>
-        private static readonly PropertyInfo ArchivedSelector = ExpressionHelper.GetPropertyInfo<Invoice, bool>(x => x.Archived);
-
-        /// <summary>
-        /// The total selector.
-        /// </summary>
-        private static readonly PropertyInfo TotalSelector = ExpressionHelper.GetPropertyInfo<Invoice, decimal>(x => x.Total);
-
-        /// <summary>
-        /// The orders changed selector.
-        /// </summary>
-        private static readonly PropertyInfo OrdersChangedSelector = ExpressionHelper.GetPropertyInfo<Invoice, OrderCollection>(x => x.Orders);
-
-        /// <summary>
-        /// The notes selector.
-        /// </summary>
-        private static readonly PropertyInfo NotesSelector = ExpressionHelper.GetPropertyInfo<Invoice, IEnumerable<INote>>(x => x.Notes);
 
         /// <summary>
         /// The customer key.
@@ -298,11 +190,11 @@
         /// </param>
         internal Invoice(IInvoiceStatus invoiceStatus, IAddress billToAddress, LineItemCollection lineItemCollection, OrderCollection orders, INote[] notes)
         {
-            Mandate.ParameterNotNull(invoiceStatus, "invoiceStatus");
-            Mandate.ParameterNotNull(billToAddress, "billToAddress");
-            Mandate.ParameterNotNull(lineItemCollection, "lineItemCollection");
-            Mandate.ParameterNotNull(orders, "orders");
-            Mandate.ParameterNotNull(notes, "notes");
+            Ensure.ParameterNotNull(invoiceStatus, "invoiceStatus");
+            Ensure.ParameterNotNull(billToAddress, "billToAddress");
+            Ensure.ParameterNotNull(lineItemCollection, "lineItemCollection");
+            Ensure.ParameterNotNull(orders, "orders");
+            Ensure.ParameterNotNull(notes, "notes");
 
             _invoiceStatus = invoiceStatus;
 
@@ -321,9 +213,7 @@
 
         }
 
-        /// <summary>
-        /// Gets or sets the unique customer 'key' to associated with the invoice
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public Guid? CustomerKey
         {
@@ -334,21 +224,12 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _customerKey = value;
-                    return _customerKey;
-                }, 
-                _customerKey, 
-                CustomerKeySelector);
+                SetPropertyValueAndDetectChanges(value, ref _customerKey, _ps.Value.CustomerKeySelector);
             }
         }
 
 
-        /// <summary>
-        /// Gets or sets the optional invoice number prefix
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string InvoiceNumberPrefix
         {
@@ -359,20 +240,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _invoiceNumberPrefix = value;
-                    return _invoiceNumberPrefix;
-                }, 
-                _invoiceNumberPrefix, 
-                InvoiceNumberPrefixSelector);
+                SetPropertyValueAndDetectChanges(value, ref _invoiceNumberPrefix, _ps.Value.InvoiceNumberPrefixSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the invoice number
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public int InvoiceNumber
         {
@@ -383,20 +255,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _invoiceNumber = value;
-                    return _invoiceNumber;
-                }, 
-                _invoiceNumber, 
-                InvoiceNumberSelector);
+                SetPropertyValueAndDetectChanges(value, ref _invoiceNumber, _ps.Value.InvoiceNumberSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the po number.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string PoNumber
         {
@@ -407,20 +270,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _poNumber = value;
-                        return _poNumber;
-                    },
-                _poNumber,
-                PoNumberSelector);
+                SetPropertyValueAndDetectChanges(value, ref _poNumber, _ps.Value.PoNumberSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the invoice date
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public DateTime InvoiceDate
         {
@@ -431,29 +285,18 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _invoiceDate = value;
-                    return _invoiceDate;
-                }, 
-                _invoiceDate, 
-                InvoiceDateSelector);
+                SetPropertyValueAndDetectChanges(value, ref _invoiceDate, _ps.Value.InvoiceDateSelector);
             }
         }
 
-        /// <summary>
-        /// Gets the key for the invoice status associated with this invoice
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public Guid InvoiceStatusKey
         {
             get { return _invoiceStatus.Key; }            
         }
 
-        /// <summary>
-        /// Gets or sets the invoice status.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public IInvoiceStatus InvoiceStatus
         {
@@ -464,20 +307,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _invoiceStatus = value;
-                    return _invoiceStatus;
-                }, 
-                _invoiceStatus, 
-                InvoiceStatusSelector);
+                SetPropertyValueAndDetectChanges(value, ref _invoiceStatus, _ps.Value.InvoiceStatusSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the full name to use for billing.  Generally copied from customer address.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string BillToName
         {
@@ -488,20 +322,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _billToName = value;
-                    return _billToName;
-                }, 
-                _billToName, 
-                BillToNameSelector);
+                SetPropertyValueAndDetectChanges(value, ref _billToName, _ps.Value.BillToNameSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the address line 1 to use for billing.  Generally copied from customer address.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string BillToAddress1
         {
@@ -512,20 +337,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _billToAddress1 = value;
-                    return _billToAddress1;
-                }, 
-                _billToAddress1, 
-                BillToAddress1Selector);
+                SetPropertyValueAndDetectChanges(value, ref _billToAddress1, _ps.Value.BillToAddress1Selector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the address line 2 to use for billing.  Generally copied from customer address.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string BillToAddress2
         {
@@ -536,20 +352,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _billToAddress2 = value;
-                    return _billToAddress2;
-                }, 
-                _billToAddress2, 
-                BillToAddress2Selector);
+                SetPropertyValueAndDetectChanges(value, ref _billToAddress2, _ps.Value.BillToAddress2Selector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the city or locality to use for billing.  Generally copied from customer address.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string BillToLocality
         {
@@ -560,20 +367,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _billToLocality = value;
-                    return _billToLocality;
-                }, 
-                _billToLocality, 
-                BillToLocalitySelector);
+                SetPropertyValueAndDetectChanges(value, ref _billToLocality, _ps.Value.BillToLocalitySelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the state, region or province to use for billing.  Generally copied from customer address.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string BillToRegion
         {
@@ -584,20 +382,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _billToRegion = value;
-                    return _billToRegion;
-                }, 
-                _billToRegion, 
-                BillToRegionSelector);
+                SetPropertyValueAndDetectChanges(value, ref _billToRegion, _ps.Value.BillToRegionSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the postal code to use for billing.  Generally copied from customer address.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string BillToPostalCode
         {
@@ -608,20 +397,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _billToPostalCode = value;
-                    return _billToPostalCode;
-                }, 
-                _billToPostalCode, 
-                BillToPostalCodeSelector);
+                SetPropertyValueAndDetectChanges(value, ref _billToPostalCode, _ps.Value.BillToPostalCodeSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the country code to use for billing.  Generally copied from customer address.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string BillToCountryCode
         {
@@ -632,20 +412,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _billToCountryCode = value;
-                    return _billToCountryCode;
-                }, 
-                _billToCountryCode, 
-                BillToCountryCodeSelector);
+                SetPropertyValueAndDetectChanges(value, ref _billToCountryCode, _ps.Value.BillToCountryCodeSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the email address to use for billing.  Generally copied from customer address.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string BillToEmail
         {
@@ -656,20 +427,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _billToEmail = value;
-                    return _billToEmail;
-                },
-                    _billToEmail,
-                    BillToEmailSelector);
+                SetPropertyValueAndDetectChanges(value, ref _billToEmail, _ps.Value.BillToEmailSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the phone number to use for billing.  Generally copied from customer address.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string BillToPhone
         {
@@ -680,20 +442,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _billToPhone = value;
-                    return _billToPhone;
-                }, 
-                _billToPhone, 
-                BillToPhoneSelector);
+                SetPropertyValueAndDetectChanges(value, ref _billToPhone, _ps.Value.BillToPhoneSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the company name to use for billing.  Generally copied from customer address.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string BillToCompany
         {
@@ -704,20 +457,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _billToCompany = value;
-                    return _billToCompany;
-                }, 
-                _billToCompany, 
-                BillToCompanySelector);
+                SetPropertyValueAndDetectChanges(value, ref _billToCompany, _ps.Value.BillToCompanySelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the currency code
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string CurrencyCode
         {
@@ -728,20 +472,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _currencyCode = value;
-                        return _currencyCode;
-                    },
-                _currencyCode,
-                CurrencyCodeSelector);
+                SetPropertyValueAndDetectChanges(value, ref _currencyCode, _ps.Value.CurrencyCodeSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether or not this invoice has been exported to an external system
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public bool Exported
         {
@@ -752,20 +487,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _exported = value;
-                    return _exported;
-                }, 
-                _exported, 
-                ExportedSelector);
+                SetPropertyValueAndDetectChanges(value, ref _exported, _ps.Value.ExportedSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether or not this invoice has been archived
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public bool Archived
         {
@@ -776,20 +502,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _archived = value;
-                    return _archived;
-                }, 
-                _archived, 
-                ArchivedSelector);
+                SetPropertyValueAndDetectChanges(value, ref _archived, _ps.Value.ArchivedSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the total invoice amount
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public decimal Total
         {
@@ -800,20 +517,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _total = value;
-                    return _total;
-                }, 
-                _total, 
-                TotalSelector);
+                SetPropertyValueAndDetectChanges(value, ref _total, _ps.Value.TotalSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the collection of orders associated with the invoice
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public OrderCollection Orders
         {
@@ -830,9 +538,7 @@
         }
 
 
-        /// <summary>
-        /// Gets or sets the collection of notes associated with the invoice
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public IEnumerable<INote> Notes
         {
@@ -843,20 +549,12 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _notes = value;
-                        return _notes;
-                    },
-                _notes,
-                NotesSelector);
+                // REFACTOR Should be a notify collection
+                _notes = value;
             }
         }
 
-        /// <summary>
-        /// Gets the <see cref="ILineItem"/>s in the invoice
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public LineItemCollection Items
         {
@@ -871,9 +569,7 @@
             }
         }
 
-        /// <summary>
-        /// Gets or sets the examine id.
-        /// </summary>
+        /// <inheritdoc/>
         [IgnoreDataMember]
         internal int ExamineId
         {
@@ -881,10 +577,7 @@
             set { _examineId = value; }
         }
 
-        /// <summary>
-        /// Accepts visitor class to visit invoice line items
-        /// </summary>
-        /// <param name="visitor">The <see cref="ILineItemVisitor"/> class</param>
+        /// <inheritdoc/>
         public void Accept(ILineItemVisitor visitor)
         {
             this.Items.Accept(visitor);
@@ -892,7 +585,7 @@
 
 
         /// <summary>
-        /// The orders changed.
+        /// Handles the order collection changed.
         /// </summary>
         /// <param name="sender">
         /// The sender.
@@ -902,7 +595,119 @@
         /// </param>
         private void OrdersChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            OnPropertyChanged(OrdersChangedSelector);
+            OnPropertyChanged(_ps.Value.OrdersChangedSelector);
+        }
+
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private class PropertySelectors
+        {
+            /// <summary>
+            /// The customer key selector.
+            /// </summary>
+            public readonly PropertyInfo CustomerKeySelector = ExpressionHelper.GetPropertyInfo<Invoice, Guid?>(x => x.CustomerKey);
+
+            /// <summary>
+            /// The invoice number prefix selector.
+            /// </summary>
+            public readonly PropertyInfo InvoiceNumberPrefixSelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.InvoiceNumberPrefix);
+
+            /// <summary>
+            /// The invoice number selector.
+            /// </summary>
+            public readonly PropertyInfo InvoiceNumberSelector = ExpressionHelper.GetPropertyInfo<Invoice, int>(x => x.InvoiceNumber);
+
+            /// <summary>
+            /// The invoice number prefix selector.
+            /// </summary>
+            public readonly PropertyInfo PoNumberSelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.PoNumber);
+
+
+            /// <summary>
+            /// The invoice date selector.
+            /// </summary>
+            public readonly PropertyInfo InvoiceDateSelector = ExpressionHelper.GetPropertyInfo<Invoice, DateTime>(x => x.InvoiceDate);
+
+            /// <summary>
+            /// The invoice status selector.
+            /// </summary>
+            public readonly PropertyInfo InvoiceStatusSelector = ExpressionHelper.GetPropertyInfo<Invoice, IInvoiceStatus>(x => x.InvoiceStatus);
+
+            /// <summary>
+            /// The bill to name selector.
+            /// </summary>
+            public readonly PropertyInfo BillToNameSelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToName);
+
+            /// <summary>
+            /// The bill to address 1 selector.
+            /// </summary>
+            public readonly PropertyInfo BillToAddress1Selector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToAddress1);
+
+            /// <summary>
+            /// The bill to address 2 selector.
+            /// </summary>
+            public readonly PropertyInfo BillToAddress2Selector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToAddress2);
+
+            /// <summary>
+            /// The bill to locality selector.
+            /// </summary>
+            public readonly PropertyInfo BillToLocalitySelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToLocality);
+
+            /// <summary>
+            /// The bill to region selector.
+            /// </summary>
+            public readonly PropertyInfo BillToRegionSelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToRegion);
+
+            /// <summary>
+            /// The bill to postal code selector.
+            /// </summary>
+            public readonly PropertyInfo BillToPostalCodeSelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToPostalCode);
+
+            /// <summary>
+            /// The bill to country code selector.
+            /// </summary>
+            public readonly PropertyInfo BillToCountryCodeSelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToCountryCode);
+
+            /// <summary>
+            /// The bill to email selector.
+            /// </summary>
+            public readonly PropertyInfo BillToEmailSelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToEmail);
+
+            /// <summary>
+            /// The bill to phone selector.
+            /// </summary>
+            public readonly PropertyInfo BillToPhoneSelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToPhone);
+
+            /// <summary>
+            /// The bill to company selector.
+            /// </summary>
+            public readonly PropertyInfo BillToCompanySelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToCompany);
+
+            /// <summary>
+            /// The bill to company selector.
+            /// </summary>
+            public readonly PropertyInfo CurrencyCodeSelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.CurrencyCode);
+
+            /// <summary>
+            /// The exported selector.
+            /// </summary>
+            public readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<Invoice, bool>(x => x.Exported);
+
+            /// <summary>
+            /// The archived selector.
+            /// </summary>
+            public readonly PropertyInfo ArchivedSelector = ExpressionHelper.GetPropertyInfo<Invoice, bool>(x => x.Archived);
+
+            /// <summary>
+            /// The total selector.
+            /// </summary>
+            public readonly PropertyInfo TotalSelector = ExpressionHelper.GetPropertyInfo<Invoice, decimal>(x => x.Total);
+
+            /// <summary>
+            /// The orders changed selector.
+            /// </summary>
+            public readonly PropertyInfo OrdersChangedSelector = ExpressionHelper.GetPropertyInfo<Invoice, OrderCollection>(x => x.Orders);
         }
     }
 }

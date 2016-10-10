@@ -164,6 +164,7 @@
             AddUpdateCache(EntityType.Shipment, new TypeField("Shipment", "Shipment", Constants.TypeFieldKeys.Entity.ShipmentKey));
             AddUpdateCache(EntityType.Warehouse, new TypeField("Warehouse", "Warehouse", Constants.TypeFieldKeys.Entity.WarehouseKey));
             AddUpdateCache(EntityType.WarehouseCatalog, new TypeField("WarehouseCatalog", "WarehouseCatalog", Constants.TypeFieldKeys.Entity.WarehouseCatalogKey));
+
             AddUpdateCache(EntityType.EntityCollection, new TypeField("EntityCollection", "EntityCollection", Constants.TypeFieldKeys.Entity.EntityCollectionKey));
             AddUpdateCache(EntityType.Custom, NotFound);
         }

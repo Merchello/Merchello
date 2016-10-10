@@ -3,10 +3,9 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
+    using Configuration;
     using Merchello.Core.Logging;
     using Merchello.Web.Models.Ui;
-    using Merchello.Web.Models.Ui.Rendering;
 
     using Umbraco.Core.Models;
     using Umbraco.Web;
@@ -25,42 +24,8 @@
         /// </summary>
         public static class Content
         {
-            #region Content Type Aliases
 
             /// <summary>
-            /// The Umbraco ContentTypeAlias for the "store" ContentType.
-            /// </summary>
-            private const string ContentTypeAliasStore = "ftStore";
-
-            /// <summary>
-            /// The Umbraco ContentTypeAlias for the "basket" ContentType.
-            /// </summary>
-            private const string ContentTypeAliasBasket = "ftBasket";
-
-            /// <summary>
-            /// The Umbraco ContentTypeAlias for the "catalog" ContentType.
-            /// </summary>
-            private const string ContentTypeAliasCatalog = "ftCatalog";
-
-            /// <summary>
-            /// The Umbraco ContentTypeAlias for the "checkout" ContentTypes
-            /// </summary>
-            private const string ContentTypeAliasCheckout = "ftCheckout";
-
-            /// <summary>
-            /// The Umbraco ContentTypeAlias for the "receipt" ContentType.
-            /// </summary>
-            private const string ContentTypeAliasReceipt = "ftReceipt";
-
-            /// <summary>
-            /// The Umbraco ContentTypeAlias for the "account" ContentType.
-            /// </summary>
-            private const string ContentTypeAliasAccount = "ftAccount";
-
-            #endregion
-
-
-            /// <summary>c
             /// Gets the <see cref="UmbracoContext"/>.
             /// </summary>
             private static UmbracoContext UmbracoContext
@@ -86,7 +51,7 @@
             /// </returns>
             public static IPublishedContent GetStoreRoot()
             {
-                return UmbracoContext.ContentCache.GetByXPath(string.Format("//root/{0}", ContentTypeAliasStore)).FirstOrDefault();
+                return UmbracoContext.ContentCache.GetByXPath(string.Format("//root/{0}", FastTrackConfiguration.Current.ContentTypeAliasStore)).FirstOrDefault();
             }
 
             /// <summary>
@@ -97,7 +62,7 @@
             /// </returns>
             public static IPublishedContent GetBasket()
             {
-                return GetStoreRoot().FirstChild(x => x.ContentType.Alias == ContentTypeAliasBasket);
+                return GetStoreRoot().FirstChild(x => x.ContentType.Alias == FastTrackConfiguration.Current.ContentTypeAliasBasket);
             }
 
             /// <summary>
@@ -108,7 +73,7 @@
             /// </returns>
             public static IPublishedContent GetCatalog()
             {
-                return GetStoreRoot().FirstChild(x => x.ContentType.Alias == ContentTypeAliasCatalog);
+                return GetStoreRoot().FirstChild(x => x.ContentType.Alias == FastTrackConfiguration.Current.ContentTypeAliasCatalog);
             }
 
             /// <summary>
@@ -119,7 +84,7 @@
             /// </returns>
             public static IPublishedContent GetCheckout()
             {
-                return GetStoreRoot().FirstChild(x => x.ContentType.Alias == ContentTypeAliasCheckout);
+                return GetStoreRoot().FirstChild(x => x.ContentType.Alias == FastTrackConfiguration.Current.ContentTypeAliasCheckout);
             }
 
             /// <summary>
@@ -130,7 +95,7 @@
             /// </returns>
             public static IPublishedContent GetReceipt()
             {
-                return GetStoreRoot().FirstChild(x => x.ContentType.Alias == ContentTypeAliasReceipt);
+                return GetStoreRoot().FirstChild(x => x.ContentType.Alias == FastTrackConfiguration.Current.ContentTypeAliasReceipt);
             }
 
             /// <summary>
@@ -141,7 +106,18 @@
             /// </returns>
             public static IPublishedContent GetAccount()
             {
-                return GetStoreRoot().FirstChild(x => x.ContentType.Alias == ContentTypeAliasAccount);
+                return GetStoreRoot().FirstChild(x => x.ContentType.Alias == FastTrackConfiguration.Current.ContentTypeAliasAccount);
+            }
+
+            /// <summary>
+            /// Gets the first child of the account content section with the content type 'ftChangePassword'.
+            /// </summary>
+            /// <returns>
+            /// The <see cref="IPublishedContent"/>.
+            /// </returns>
+            public static IPublishedContent GetChangePassword()
+            {
+                return GetAccount().FirstChild(x => x.ContentType.Alias == FastTrackConfiguration.Current.ContentTypeAliasChangePassword);
             }
 
             /// <summary>

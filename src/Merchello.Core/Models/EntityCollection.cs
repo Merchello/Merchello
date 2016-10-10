@@ -1,14 +1,13 @@
 ﻿namespace Merchello.Core.Models
 {
     using System;
+    using System.Collections.Specialized;
     using System.Reflection;
     using System.Runtime.Serialization;
 
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.TypeFields;
-
-    using Umbraco.Core;
 
     /// <summary>
     /// The entity collection.
@@ -18,29 +17,11 @@
     internal class EntityCollection : DeployableEntity, IEntityCollection
     {
         /// <summary>
-        /// The entity type field key selector.
+        /// The property selectors.
         /// </summary>
-        private static readonly PropertyInfo EntityTfKeySelector = ExpressionHelper.GetPropertyInfo<EntityCollection, Guid>(x => x.EntityTfKey);
+        private static readonly Lazy<PropertySelectors> _ps = new Lazy<PropertySelectors>();
 
-        /// <summary>
-        /// The name selector.
-        /// </summary>
-        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<EntityCollection, string>(x => x.Name);
-
-        /// <summary>
-        /// The provider key selector.
-        /// </summary>
-        private static readonly PropertyInfo ProviderKeySelector = ExpressionHelper.GetPropertyInfo<EntityCollection, Guid>(x => x.ProviderKey);
-
-        /// <summary>
-        /// The parent key selector.
-        /// </summary>
-        private static readonly PropertyInfo ParentKeySelector = ExpressionHelper.GetPropertyInfo<EntityCollection, Guid?>(x => x.ParentKey);
-
-        /// <summary>
-        /// The sort info selector.
-        /// </summary>
-        private static readonly PropertyInfo SortOrderSelector = ExpressionHelper.GetPropertyInfo<EntityCollection, int>(x => x.SortOrder);
+        #region Fields
 
         /// <summary>
         /// The entity type field key.
@@ -68,6 +49,18 @@
         private int _sortOrder;
 
         /// <summary>
+        /// The <see cref="ExtendedDataCollection"/>.
+        /// </summary>
+        private ExtendedDataCollection _extendedData;
+
+        /// <summary>
+        /// Gets a value indicating whether the collection is represented as a filter.
+        /// </summary>
+        private bool _isFilter;
+
+        #endregion
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="EntityCollection"/> class.
         /// </summary>
         /// <param name="entityTfKey">
@@ -78,15 +71,13 @@
         /// </param>
         public EntityCollection(Guid entityTfKey, Guid providerKey)
         {
-            Mandate.ParameterCondition(!Guid.Empty.Equals(entityTfKey), "entityKey");
-            Mandate.ParameterCondition(!Guid.Empty.Equals(providerKey), "providerKey");
+            Ensure.ParameterCondition(!Guid.Empty.Equals(entityTfKey), "entityKey");
+            Ensure.ParameterCondition(!Guid.Empty.Equals(providerKey), "providerKey");
             _entityTfKey = entityTfKey;
             _prodiverKey = providerKey;
         }
 
-        /// <summary>
-        /// Gets or sets the parent key.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public Guid? ParentKey
         {
@@ -97,20 +88,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                   o =>
-                   {
-                       _parentKey = value;
-                       return _parentKey;
-                   },
-                   _parentKey,
-                   ParentKeySelector);
+                SetPropertyValueAndDetectChanges(value, ref _parentKey, _ps.Value.ParentKeySelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the entity type field key.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public Guid EntityTfKey
         {
@@ -121,20 +103,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                    {
-                        _entityTfKey = value;
-                        return _entityTfKey;
-                    },
-                    _entityTfKey,
-                    EntityTfKeySelector);
+                SetPropertyValueAndDetectChanges(value, ref _entityTfKey, _ps.Value.EntityTfKeySelector);
             }
         }
 
-        /// <summary>
-        /// Gets the entity type.
-        /// </summary>
+        /// <inheritdoc/>
         public EntityType EntityType
         {
             get
@@ -143,9 +116,7 @@
             }             
         }
 
-        /// <summary>
-        /// Gets or sets the name.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Name
         {
@@ -156,20 +127,11 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                   o =>
-                   {
-                       _name = value;
-                       return _name;
-                   },
-                   _name,
-                   NameSelector);
+                SetPropertyValueAndDetectChanges(value, ref _name, _ps.Value.NameSelector);
             }
         }
 
-        /// <summary>
-        /// Gets the sort order.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public int SortOrder
         {
@@ -180,20 +142,11 @@
 
             internal set
             {
-                SetPropertyValueAndDetectChanges(
-                  o =>
-                  {
-                      _sortOrder = value;
-                      return _sortOrder;
-                  },
-                  _sortOrder,
-                  SortOrderSelector);
+                SetPropertyValueAndDetectChanges(value, ref _sortOrder, _ps.Value.SortOrderSelector);
             }
         }
 
-        /// <summary>
-        /// Gets or sets the dynamic collection.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public Guid ProviderKey
         {
@@ -204,15 +157,94 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(
-                   o =>
-                   {
-                       _prodiverKey = value;
-                       return _prodiverKey;
-                   },
-                   _prodiverKey,
-                   ProviderKeySelector);
+                SetPropertyValueAndDetectChanges(value, ref _prodiverKey, _ps.Value.ProviderKeySelector);
             }
+        }
+
+        /// <inheritdoc/>
+        [DataMember]
+        public bool IsFilter
+        {
+            get
+            {
+                return _isFilter;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(value, ref _isFilter, _ps.Value.IsFilterSelector);
+            }
+        }
+
+        /// <inheritdoc/>
+        [DataMember]
+        public ExtendedDataCollection ExtendedData
+        {
+            get
+            {
+                return _extendedData;
+            }
+
+            internal set
+            {
+                _extendedData = value;
+                _extendedData.CollectionChanged += ExtendedDataChanged;
+            }
+        }
+
+        /// <summary>
+        /// Handles the extended data collection changed.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void ExtendedDataChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(_ps.Value.ExtendedDataChangedSelector);
+        }
+
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private class PropertySelectors
+        {
+            /// <summary>
+            /// The entity type field key selector.
+            /// </summary>
+            public readonly PropertyInfo EntityTfKeySelector = ExpressionHelper.GetPropertyInfo<EntityCollection, Guid>(x => x.EntityTfKey);
+
+            /// <summary>
+            /// The name selector.
+            /// </summary>
+            public readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<EntityCollection, string>(x => x.Name);
+
+            /// <summary>
+            /// The provider key selector.
+            /// </summary>
+            public readonly PropertyInfo ProviderKeySelector = ExpressionHelper.GetPropertyInfo<EntityCollection, Guid>(x => x.ProviderKey);
+
+            /// <summary>
+            /// The parent key selector.
+            /// </summary>
+            public readonly PropertyInfo ParentKeySelector = ExpressionHelper.GetPropertyInfo<EntityCollection, Guid?>(x => x.ParentKey);
+
+            /// <summary>
+            /// The sort info selector.
+            /// </summary>
+            public readonly PropertyInfo SortOrderSelector = ExpressionHelper.GetPropertyInfo<EntityCollection, int>(x => x.SortOrder);
+
+            /// <summary>
+            /// The extended data changed selector.
+            /// </summary>
+            public readonly PropertyInfo ExtendedDataChangedSelector = ExpressionHelper.GetPropertyInfo<EntityCollection, ExtendedDataCollection>(x => x.ExtendedData);
+
+            /// <summary>
+            /// The is filter selector.
+            /// </summary>
+            public readonly PropertyInfo IsFilterSelector = ExpressionHelper.GetPropertyInfo<EntityCollection, bool>(x => x.IsFilter);
         }
     }
 }

@@ -13,6 +13,8 @@
     using Merchello.Core.EntityCollections.Providers;
     using Merchello.Core.Logging;
     using Merchello.Core.Models;
+    using Merchello.Core.Models.Interfaces;
+    using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing.Collections;
     using Merchello.Web.Models.Interfaces;
@@ -99,6 +101,7 @@
         /// <returns>
         /// The <see cref="Guid"/>.
         /// </returns>
+        /// TODO update this to resolve from a common Marker inteface
         [HttpGet]
         public Guid[] GetSortableProviderKeys()
         {
@@ -142,6 +145,45 @@
         {
             var providers = _staticProviderAtts.Select(x => x.ToEntityCollectionProviderDisplay());
             return providers;
+        }
+
+        /// <summary>
+        /// Gets the entity filter group providers for a given type of entity.
+        /// </summary>
+        /// <param name="entityType">
+        /// The entity type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        [HttpGet]
+        public IEnumerable<EntityCollectionProviderDisplay> GetEntityFilterGroupProviders(EntityType entityType)
+        {
+            if (entityType != EntityType.Product) throw new NotImplementedException("Only Product types have been implemented");
+
+            return
+                _resolver.GetProviderAttributes<IProductEntityFilterGroupProvider>()
+                    .Select(x => x.ToEntityCollectionProviderDisplay());
+        }
+
+        /// <summary>
+        /// The get entity specified filter collection attribute provider.
+        /// </summary>
+        /// <param name="key">
+        /// The entity collection key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="EntityCollectionProviderDisplay"/>.
+        /// </returns>
+        [HttpGet]
+        public EntityCollectionProviderDisplay GetEntityFilterGroupFilterProvider(Guid key)
+        {
+            var att = 
+                _resolver.GetProviderAttributeForFilter(key);
+
+            if (att == null) throw new NullReferenceException("Could not find Attribute Provider");
+
+            return att.ToEntityCollectionProviderDisplay();
         }
 
         /// <summary>
@@ -205,6 +247,80 @@
         }
 
         /// <summary>
+        /// Gets a list of entity specification collections by entity type.
+        /// </summary>
+        /// <param name="entityType">
+        /// The entity type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        [HttpGet]
+        public IEnumerable<EntityFilterGroupDisplay> GetEntityFilterGroups(EntityType entityType)
+        {
+            if (entityType != EntityType.Product) throw new NotImplementedException();
+
+            var keys = EntityCollectionProviderResolver.Current.GetProviderKeys<IEntityFilterGroupProvider>();
+
+            // TODO service call will need to be updated to respect entity type if ever opened up to other entity types
+            var collections = ((EntityCollectionService)_entityCollectionService).GetEntityFilterGroupsByProviderKeys(keys);
+            
+            return collections.Select(c => c.ToEntitySpecificationCollectionDisplay()).OrderBy(x => x.SortOrder);
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="IEntityFilterGroup"/> by a collection of keys that are not associated
+        /// with a product
+        /// </summary>
+        /// <param name="entityType">
+        /// The entity Type.
+        /// </param>
+        /// <param name="entityKey">
+        /// The entity Key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntitySpecifiedFilterCollection}"/>.
+        /// </returns>
+        [HttpGet]
+        public IEnumerable<EntityFilterGroupDisplay> GetEntityFilterGroupsContaining(EntityType entityType, Guid entityKey)
+        {
+            if (entityType != EntityType.Product) throw new NotImplementedException();
+
+            var key = EntityCollectionProviderResolver.Current.GetProviderKey<ProductFilterGroupProvider>();
+
+            // TODO service call will need to be updated to respect entity type if ever opened up to other entity types
+            var collections = ((EntityCollectionService)_entityCollectionService).GetEntityFilterGroupsContainingProduct(new[] { key }, entityKey);
+
+            return collections.Select(c => c.ToEntitySpecificationCollectionDisplay()).OrderBy(x => x.SortOrder);
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="IEntityFilterGroup"/> by a collection of keys that are not associated
+        /// with a product
+        /// </summary>
+        /// <param name="entityType">
+        /// The entity Type.
+        /// </param>
+        /// <param name="entityKey">
+        /// The entity Key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntitySpecifiedFilterCollection}"/>.
+        /// </returns>
+        [HttpGet]
+        public IEnumerable<EntityFilterGroupDisplay> GetEntityFilterGroupsNotContaining(EntityType entityType, Guid entityKey)
+        {
+            if (entityType != EntityType.Product) throw new NotImplementedException();
+
+            var key = EntityCollectionProviderResolver.Current.GetProviderKey<ProductFilterGroupProvider>();
+
+            // TODO service call will need to be updated to respect entity type if ever opened up to other entity types
+            var collections = ((EntityCollectionService)_entityCollectionService).GetEntityFilterGroupsNotContainingProduct(new[] { key }, entityKey);
+
+            return collections.Select(c => c.ToEntitySpecificationCollectionDisplay()).OrderBy(x => x.SortOrder);
+        }
+
+        /// <summary>
         /// The get entity collections by entity.
         /// </summary>
         /// <param name="model">
@@ -228,7 +344,7 @@
 
                     return product == null ? 
                         empty : 
-                        product.GetCollectionsContaining().Select(x => x.ToEntityCollectionDisplay()).OrderBy(x => x.Name);
+                        product.GetCollectionsContaining(model.IsFilter).Select(x => x.ToEntityCollectionDisplay()).OrderBy(x => x.Name);
 
                 case EntityType.Customer:
                     
@@ -397,7 +513,47 @@
                     var invalid =
                         new InvalidOperationException("Merchello service could not be found for the entity type");
                     MultiLogHelper.Error<EntityCollectionApiController>("An attempt was made to add an entity to a collection", invalid);
-                    return Request.CreateResponse(HttpStatusCode.NotImplemented);
+                    return Request.CreateErrorResponse(HttpStatusCode.NotImplemented, invalid);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
+
+        /// <summary>
+        /// Adds entity associations with specified filters.
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
+        [HttpPost]
+        public HttpResponseMessage PostAssociateEntityWithFilters(Entity2FilterCollectionsModel model)
+        {
+            var collections = _entityCollectionService.GetAll(model.CollectionKeys).ToArray();
+
+            foreach (var collection in collections)
+            {
+                var provider = collection.ResolveProvider();
+                var entityType = provider.EntityCollection.EntityType;
+                switch (entityType)
+                {
+                    case EntityType.Customer:
+                        var noCustomer = new NotImplementedException("Customer filters not implemented");
+                        return Request.CreateErrorResponse(HttpStatusCode.NotImplemented, noCustomer);
+                    case EntityType.Invoice:
+                        var noInvoice = new NotImplementedException("Invoice filters not implemented");
+                        return Request.CreateErrorResponse(HttpStatusCode.NotImplemented, noInvoice);
+                    case EntityType.Product:
+                        MerchelloContext.Services.ProductService.AddToCollection(model.EntityKey, collection.Key);
+                        break;
+                    default:
+                        var invalid =
+                            new InvalidOperationException("Merchello service could not be found for the entity type");
+                        MultiLogHelper.Error<EntityCollectionApiController>("An attempt was made to add an entity to a collection", invalid);
+                        return Request.CreateErrorResponse(HttpStatusCode.NotImplemented, invalid);
+                }
             }
 
             return Request.CreateResponse(HttpStatusCode.OK);
@@ -490,9 +646,79 @@
                 ec.ParentKey = collection.ParentKey;
             }
 
+            ec.IsFilter = collection.IsFilter;
+            ((EntityCollection)ec).ExtendedData = collection.ExtendedData.AsExtendedDataCollection();
+
             _entityCollectionService.Save(ec);
 
             return ec.ToEntityCollectionDisplay();
+        }
+
+        /// <summary>
+        /// Saves an entity filter group.
+        /// </summary>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        /// <returns>
+        /// The <see cref="EntityFilterGroupDisplay"/>.
+        /// </returns>
+        [HttpPut, HttpPost]
+        public EntityFilterGroupDisplay PutEntityFilterGroup(EntityFilterGroupDisplay collection)
+        {
+            var currentVersion = ((EntityCollectionService)_entityCollectionService).GetEntityFilterGroupByKey(collection.Key);
+            if (currentVersion == null) throw new NullReferenceException("Collection was not found");
+
+            // update the root (filter) collection
+            var filter = (IEntityCollection)currentVersion;
+            filter = collection.ToEntityCollection(filter);
+
+            _entityCollectionService.Save(filter);
+
+            var removers =
+                currentVersion.Filters.Where(
+                    x =>
+                    collection.Filters.Where(adds => !adds.Key.Equals(Guid.Empty)).All(y => y.Key != x.Key));
+
+            // remove the removers
+            foreach (var rm in removers)
+            {
+                _entityCollectionService.Delete(rm);
+            }
+
+            var operations = new List<IEntityCollection>();
+
+            // new attribute collections
+            foreach (var op in collection.Filters)
+            {
+                if (op.Key.Equals(Guid.Empty))
+                {
+                    var ec = _entityCollectionService.CreateEntityCollection(op.EntityType, op.ProviderKey, op.Name);
+
+                    ec.ParentKey = op.ParentKey ?? collection.Key;
+                    ec.IsFilter = collection.IsFilter;
+                    foreach (var val in op.ExtendedData)
+                    {
+                        ec.ExtendedData.SetValue(val.Key, val.Value);
+                    }
+
+                    operations.Add(ec);
+                }
+                else
+                {
+                    var exist = _entityCollectionService.GetByKey(op.Key);
+                    exist = op.ToEntityCollection(exist);
+                    operations.Add(exist);
+                }
+
+            }
+
+            _entityCollectionService.Save(operations);
+
+
+            return
+                ((EntityCollectionService)_entityCollectionService).GetEntityFilterGroupByKey(collection.Key)
+                    .ToEntitySpecificationCollectionDisplay();
         }
 
         /// <summary>
@@ -534,21 +760,19 @@
             var collectionsArray = collections.ToArray();
             if (!collectionsArray.Any()) return Enumerable.Empty<EntityCollectionDisplay>();
 
-            var first = collectionsArray.FirstOrDefault();
-            if (first != null)
+            var existing = _entityCollectionService.GetAll(collectionsArray.Select(x => x.Key).ToArray()).ToArray();
+
+            var updates = new List<IEntityCollection>();
+
+            foreach (var update in collectionsArray)
             {
-                var parentKey = first.ParentKey;
-                var existing = parentKey == null
-                                   ? _entityCollectionService.GetRootLevelEntityCollections(first.EntityType)
-                                   : _entityCollectionService.GetChildren(parentKey.Value);
-
-                var updates =
-                    collectionsArray.Where(x => existing.Any(y => y.SortOrder != x.SortOrder && y.Key == x.Key));
-                    
-
-                _entityCollectionService.Save(updates.Select(x => x.ToEntityCollection(existing.FirstOrDefault(y => y.Key == x.Key))));
+                var match = existing.FirstOrDefault(x => x.Key == update.Key);
+                if (match == null) continue;
+                updates.Add(update.ToEntityCollection(match));
             }
-         
+
+            _entityCollectionService.Save(updates);
+
 
             return collectionsArray;
         }

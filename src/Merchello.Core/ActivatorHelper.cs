@@ -3,6 +3,9 @@
     using System;
     using System.Linq;
     using System.Reflection;
+
+    using Merchello.Core.Logging;
+
     using Umbraco.Core;
 
     /// <summary>
@@ -84,5 +87,46 @@
                 return Attempt<T>.Fail(ex);
             }
         }
-	}
+
+
+        public static T CreateInstance<T>(object[] constructorArgs)
+          where T : class
+        {
+            var type = typeof(T);
+
+            const System.Reflection.BindingFlags BindingFlags =
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | BindingFlags.NonPublic;
+
+            var constructorArgumentTypes =
+                constructorArgs.Select(value => value.GetType()).ToList();
+
+            var constructor = type.GetConstructor(
+                BindingFlags,
+                null,
+                CallingConventions.Any,
+                constructorArgumentTypes.ToArray(),
+                null);
+
+            try
+            {
+                var obj = constructor.Invoke(constructorArgs);
+                if (obj is T)
+                {
+                    return obj as T;
+                }
+
+                throw new Exception("ActivatorHelper failed to instantiate class of type {type.Name}");
+            }
+            catch (Exception ex)
+            {
+                var logData = MultiLogger.GetBaseLoggingData();
+                logData.AddCategory("Helpers");
+
+                MultiLogHelper.Error(typeof(ActivatorHelper), "Failed to instantiate class", ex, logData);
+
+                throw;
+            }
+        }
+
+    }
 }

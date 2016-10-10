@@ -5,6 +5,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Merchello.Core.Logging;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Services;
@@ -26,7 +27,7 @@
         /// <summary>
         /// The activated gateway provider cache.
         /// </summary>
-        private readonly ConcurrentDictionary<Guid, Type> _entityCollectionProviderCache = new ConcurrentDictionary<Guid, Type>();
+        private static readonly ConcurrentDictionary<Guid, Type> _entityCollectionProviderCache = new ConcurrentDictionary<Guid, Type>();
 
         /// <summary>
         /// The instance types.
@@ -79,10 +80,53 @@
         /// </returns>
         public Guid GetProviderKey(Type type)
         {
-            var foundType = _instanceTypes.FirstOrDefault(type.IsAssignableFrom);
-            return foundType != null
-                ? foundType.GetCustomAttribute<EntityCollectionProviderAttribute>(false).Key :
-                Guid.Empty;
+            return GetProviderKeys(type).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Gets the provider keys for a given type.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the provider
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="IEnumerable{Guid}"/>.
+        /// </returns>
+        public IEnumerable<Guid> GetProviderKeys<T>()
+        {
+            return GetProviderKeys(typeof(T));
+        }
+
+        /// <summary>
+        /// Gets the provider keys for a given type.
+        /// </summary>
+        /// <param name="type">
+        /// The type of the provider.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{Guid}"/>.
+        /// </returns>
+        public IEnumerable<Guid> GetProviderKeys(Type type)
+        {
+            var foundTypes = _instanceTypes.Where(type.IsAssignableFrom);
+            var foundArray = foundTypes as Type[] ?? foundTypes.ToArray();
+            return foundArray.Any()
+                ? foundArray.Select(x => x.GetCustomAttribute<EntityCollectionProviderAttribute>(false).Key) :
+                Enumerable.Empty<Guid>();
+        }
+
+        /// <summary>
+        /// Gets the provider attribute by the key specified within the attribute.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="EntityCollectionProviderAttribute"/>.
+        /// </returns>
+        public EntityCollectionProviderAttribute GetProviderAttributeByProviderKey(Guid key)
+        {
+            return GetProviderAttributes().FirstOrDefault(x => x.Key == key);
         }
 
         /// <summary>
@@ -96,8 +140,21 @@
         /// </returns>
         public EntityCollectionProviderAttribute GetProviderAttribute<T>()
         {
-            var foundType = _instanceTypes.FirstOrDefault(typeof(T).IsAssignableFrom);
-            return foundType != null ? foundType.GetCustomAttribute<EntityCollectionProviderAttribute>(false) : null;
+            return GetProviderAttributes<T>().FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Gets the <see cref="EntityCollectionProviderAttribute"/> from the provider of type T.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the provider
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="IEnumerable{EntityCollectionProviderAttribute}"/>.
+        /// </returns>
+        public IEnumerable<EntityCollectionProviderAttribute> GetProviderAttributes<T>()
+        {
+            return GetProviderAttribute(typeof(T));
         }
 
         /// <summary>
@@ -123,6 +180,8 @@
         /// </returns>
         public IEnumerable<Type> GetProviderTypesForEntityType(EntityType entityType)
         {
+            this.EnsureInitialized();
+
             return
                 _instanceTypes.Where(
                     x =>
@@ -152,6 +211,38 @@
 
             var nullReference = new NullReferenceException("EntityCollectionProvider could not be resolved for the collection.");
             return Attempt<EntityCollectionProviderBase>.Fail(nullReference);
+        }
+
+        /// <summary>
+        /// Gets the provider attribute for providers responsible for specified filter attribute collections.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="EntityCollectionProviderAttribute"/>.
+        /// </returns>
+        public EntityCollectionProviderAttribute GetProviderAttributeForFilter(Guid collectionKey)
+        {
+            var attempt = GetProviderForCollection(collectionKey);
+            if (!attempt.Success)
+            {
+                MultiLogHelper.WarnWithException<EntityCollectionProviderResolver>(
+                    "Failed to retreive provider for collection",
+                    attempt.Exception);
+
+                return null;
+            }
+
+            var provider = attempt.Result as IEntityFilterGroupProvider;
+            if (provider == null)
+            {
+                var nullRef = new NullReferenceException("Provider found did not implement IEntityFilterProvider");
+                MultiLogHelper.WarnWithException<EntityCollectionProviderResolver>("Invalid type", nullRef);
+                return null;
+            }
+
+            return GetProviderAttribute(provider.FilterProviderType).FirstOrDefault();
         }
 
         /// <summary>
@@ -217,7 +308,44 @@
             {
                 LogHelper.Info<EntityCollectionProviderResolver>("Failed to remove provider associated with collect " + collectionKey + " from cache");
             }
-        }        
+        }
+
+        /// <summary>
+        /// The ensure initialized.
+        /// </summary>
+        internal void EnsureInitialized()
+        {
+            var defined =
+                _instanceTypes
+                    .Select(x => x.GetCustomAttribute<EntityCollectionProviderAttribute>(false).Key).Distinct().Count();
+
+            var registered =
+                _entityCollectionProviderCache.Select(
+                    x => x.Value.GetCustomAttribute<EntityCollectionProviderAttribute>(false).Key).Distinct().Count();
+
+            if (defined < registered) IsInitialized = false;
+            if (!IsInitialized) this.Initialize();
+        }
+
+        /// <summary>
+        /// Gets the provider attributes of providers with matching types
+        /// </summary>
+        /// <param name="type">
+        /// The type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{EntityCollectionProviderAttribute}"/>.
+        /// </returns>
+        private IEnumerable<EntityCollectionProviderAttribute> GetProviderAttribute(Type type)
+        {
+            this.EnsureInitialized();
+
+            var foundTypes = _instanceTypes.Where(type.IsAssignableFrom);
+            var typesArray = foundTypes as Type[] ?? foundTypes.ToArray();
+            return typesArray.Any() ?
+                typesArray.Select(x => x.GetCustomAttribute<EntityCollectionProviderAttribute>(false))
+                : Enumerable.Empty<EntityCollectionProviderAttribute>();
+        }
 
         /// <summary>
         /// The create instance.
@@ -255,20 +383,19 @@
         }
 
         /// <summary>
-        /// The ensure initialized.
+        /// Ensures the provider.
         /// </summary>
-        private void EnsureInitialized()
+        /// <param name="providerKey">
+        /// The provider key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        private bool EnusureUniqueProvider(Guid providerKey)
         {
-            var defined =
-                _instanceTypes
-                    .Select(x => x.GetCustomAttribute<EntityCollectionProviderAttribute>(false).Key).Distinct().Count();
-
-            var registered =
-                _entityCollectionProviderCache.Select(
-                    x => x.Value.GetCustomAttribute<EntityCollectionProviderAttribute>(false).Key).Distinct().Count();
-
-            if (defined < registered) IsInitialized = false;
-            if (!IsInitialized) this.Initialize();
+            //if (_entityCollectionProviderCache.Any(x => x.Value.GetCustomAttribute<EntityCollectionProviderAttribute>(false).Key == providerKey)) return false;
+           
+            return _merchelloContext.Services.EntityCollectionService.CollectionCountManagedByProvider(providerKey) <= 1;
         }
 
         /// <summary>
@@ -304,12 +431,18 @@
             foreach (var reg in unregistered)
             {
                 var att = reg.GetCustomAttribute<EntityCollectionProviderAttribute>(false);
-                var collection = ((EntityCollectionService)_merchelloContext.Services.EntityCollectionService).CreateEntityCollectionWithKey(
-                    att.EntityTfKey,
-                    att.Key,
-                    att.Name);
 
-                this.AddOrUpdateCache(collection.Key, reg);
+                if (EnusureUniqueProvider(att.Key))
+                {
+                    var collection = ((EntityCollectionService)_merchelloContext.Services.EntityCollectionService).CreateEntityCollection(
+                        att.EntityTfKey,
+                        att.Key,
+                        att.Name);
+
+                    if (typeof(IEntityFilterGroupProvider).IsAssignableFrom(reg)) collection.IsFilter = true;
+                    _merchelloContext.Services.EntityCollectionService.Save(collection);
+                    this.AddOrUpdateCache(collection.Key, reg);
+                }
             }
 
             IsInitialized = true;

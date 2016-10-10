@@ -1,74 +1,100 @@
-﻿using System;
-using System.Reflection;
-using System.Runtime.Serialization;
-using Merchello.Core.Models.EntityBase;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Reflection;
+    using System.Runtime.Serialization;
+
+    using Merchello.Core.Models.EntityBase;
+
+    /// <inheritdoc/>
     [Serializable]
     [DataContract(IsReference = true)]
     public class StoreSetting : Entity, IStoreSetting
     {
-        private string _name;
-        private string _value;
-        private string _typeName;
-
-        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<StoreSetting, string>(x => x.Name);
-        private static readonly PropertyInfo ValueSelector = ExpressionHelper.GetPropertyInfo<StoreSetting, string>(x => x.Value);
-        private static readonly PropertyInfo TypeNameSelector = ExpressionHelper.GetPropertyInfo<StoreSetting, string>(x => x.TypeName);
+        /// <summary>
+        /// The property selectors.
+        /// </summary>
+        private static readonly Lazy<PropertySelectors> _ps = new Lazy<PropertySelectors>();
 
         /// <summary>
-        /// The name of the store setting
+        /// The name.
         /// </summary>
-        /// <remarks>
-        /// Should be unique but not enforced
-        /// </remarks>
+        private string _name;
+
+        /// <summary>
+        /// The value.
+        /// </summary>
+        private string _value;
+
+        /// <summary>
+        /// The type name.
+        /// </summary>
+        private string _typeName;
+
+        /// <inheritdoc/>
         [DataMember]
         public string Name
         {
-            get { return _name; }
+            get
+            {
+                return _name;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _name = value;
-                    return _name;
-                }, _name, NameSelector);
+                SetPropertyValueAndDetectChanges(value, ref _name, _ps.Value.NameSelector);
             }
         }
 
-        /// <summary>
-        /// The value of the store setting
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Value
         {
-            get { return _value; }
+            get
+            {
+                return _value;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _value = value;
-                    return _value;
-                }, _value, ValueSelector);
+                SetPropertyValueAndDetectChanges(value, ref _value, _ps.Value.ValueSelector);
+            }
+        }
+
+        /// <inheritdoc/>
+        [DataMember]
+        public string TypeName
+        {
+            get
+            {
+                return _typeName;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(value, ref _typeName, _ps.Value.TypeNameSelector);
             }
         }
 
         /// <summary>
-        /// The type of the store setting
+        /// The property selectors.
         /// </summary>
-        [DataMember]
-        public string TypeName
+        private class PropertySelectors
         {
-            get { return _typeName; }
-            set
-            {
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _typeName = value;
-                    return _typeName;
-                }, _typeName, TypeNameSelector);
-            }
+            /// <summary>
+            /// The name selector.
+            /// </summary>
+            public readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<StoreSetting, string>(x => x.Name);
+
+            /// <summary>
+            /// The value selector.
+            /// </summary>
+            public readonly PropertyInfo ValueSelector = ExpressionHelper.GetPropertyInfo<StoreSetting, string>(x => x.Value);
+
+            /// <summary>
+            /// The type name selector.
+            /// </summary>
+            public readonly PropertyInfo TypeNameSelector = ExpressionHelper.GetPropertyInfo<StoreSetting, string>(x => x.TypeName);
         }
     }
 }

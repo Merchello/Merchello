@@ -294,6 +294,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\CollectionCombinationTests.cs" />
     <Compile Include="Configuration\RegionalProvinceConfigurationCollectionTest.cs" />
     <Compile Include="DataModifiers\DataModifierLookupTests.cs" />
     <Compile Include="ExtendedData\ExtendedDataExtensionTests.cs" />
@@ -371,6 +372,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="TreeNode\" />
     <Folder Include="WebControllers\" />
   </ItemGroup>
   <ItemGroup>

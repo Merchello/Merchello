@@ -4,7 +4,9 @@
     using Core;
     using Core.Services;
 
+    using Merchello.Core.Models;
     using Merchello.Core.ValueConverters;
+    using Merchello.Web.Models.ContentEditing;
 
     using Umbraco.Core;
 
@@ -13,11 +15,6 @@
     /// </summary>
     public class CachedQueryProvider : ICachedQueryProvider
     {
-        /// <summary>
-        /// A value indicating whether or not to enable any data modifiers.
-        /// </summary>
-        private readonly bool _enableDataModifiers;
-
         /// <summary>
         /// A value indicating the conversion type for detached content values.
         /// </summary>
@@ -41,7 +38,12 @@
         /// <summary>
         /// The <see cref="ICachedProductQuery"/>
         /// </summary>
-        private Lazy<ICachedProductQuery> _productQuery;        
+        private Lazy<ICachedProductQuery> _productQuery;
+
+        /// <summary>
+        /// A value indicating whether or not to enable any data modifiers.
+        /// </summary>
+        private bool _enableDataModifiers;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedQueryProvider"/> class.
@@ -95,7 +97,7 @@
         internal CachedQueryProvider(IMerchelloContext merchelloContext, bool enableDataModifiers, DetachedValuesConversionType conversionType)
         {
             Mandate.ParameterNotNull(merchelloContext, "MerchelloContext is not initialized");
-            _enableDataModifiers = enableDataModifiers;
+            this.DataModifiersEnabled = enableDataModifiers;
             _conversionType = conversionType;
             InitializeProvider(merchelloContext);
         }
@@ -135,6 +137,25 @@
             }
         }
 
+        internal bool DataModifiersEnabled { get; private set; } 
+
+        /// <summary>
+        /// Allows for externally setting the enable data modifiers property.
+        /// </summary>
+        /// <param name="enabled">
+        /// The enabled.
+        /// </param>
+        internal void SetDataModifiers(bool enabled = true)
+        {
+            this.DataModifiersEnabled = enabled;
+
+            // These are currently not used so there is no reason to instantiate the Lazy if we don't need
+            // ((CachedQueryBase)_customerQuery.Value).EnableDataModifiers = enabled;
+            // ((CachedQueryBase)_invoiceQuery.Value).EnableDataModifiers = enabled;
+            // ((CachedQueryBase)_orderQuery.Value).EnableDataModifiers = enabled;
+            ((CachedQueryBase)_productQuery.Value).EnableDataModifiers = enabled;
+        }
+
         /// <summary>
         /// The initialize provider.
         /// </summary>
@@ -144,16 +165,16 @@
         private void InitializeProvider(IMerchelloContext merchelloContext)
         {
             if (_customerQuery == null)
-            _customerQuery = new Lazy<ICachedCustomerQuery>(() => new CachedCustomerQuery(merchelloContext, _enableDataModifiers));
+            _customerQuery = new Lazy<ICachedCustomerQuery>(() => new CachedCustomerQuery(merchelloContext, DataModifiersEnabled));
 
             if (_invoiceQuery == null)
-            _invoiceQuery = new Lazy<ICachedInvoiceQuery>(() => new CachedInvoiceQuery(merchelloContext, _enableDataModifiers));
+            _invoiceQuery = new Lazy<ICachedInvoiceQuery>(() => new CachedInvoiceQuery(merchelloContext, DataModifiersEnabled));
 
             if (_orderQuery == null)
-            _orderQuery = new Lazy<ICachedOrderQuery>(() => new CachedOrderQuery(merchelloContext, _enableDataModifiers));
+            _orderQuery = new Lazy<ICachedOrderQuery>(() => new CachedOrderQuery(merchelloContext, DataModifiersEnabled));
 
             if (_productQuery == null)
-            _productQuery = new Lazy<ICachedProductQuery>(() => new CachedProductQuery(merchelloContext, _enableDataModifiers, _conversionType));
+            _productQuery = new Lazy<ICachedProductQuery>(() => new CachedProductQuery(merchelloContext, DataModifiersEnabled, _conversionType));
         }
     }
 }

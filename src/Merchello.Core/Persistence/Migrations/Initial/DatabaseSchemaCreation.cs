@@ -4,12 +4,9 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using Configuration;
     using DatabaseModelDefinitions;
     using Events;
     using Models.Rdbms;
-
-    using umbraco;
 
     using Umbraco.Core;
     using Umbraco.Core.Logging;
@@ -182,7 +179,7 @@
         /// </returns>
         public MerchelloDatabaseSchemaResult ValidateSchema()
         {
-            var result = new MerchelloDatabaseSchemaResult
+            var result = new MerchelloDatabaseSchemaResult(_database)
             {
                 DbIndexDefinitions = SqlSyntaxContext.SqlSyntaxProvider.GetDefinedIndexes(_database)
                     .Select(x => new DbIndexDefinition()

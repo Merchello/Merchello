@@ -184,12 +184,26 @@
         IEnumerable<IEntityCollection> GetByProviderKey(Guid providerKey);
 
         /// <summary>
+        /// Gets an entity filter group by key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEntityFilterGroup"/>.
+        /// </returns>
+        IEntityFilterGroup GetEntityFilterGroupByKey(Guid key);
+
+        /// <summary>
         /// The get all.
         /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
         /// <returns>
         /// The <see cref="IEnumerable{IEntityCollection}"/>.
         /// </returns>
-        IEnumerable<IEntityCollection> GetAll();
+        IEnumerable<IEntityCollection> GetAll(params Guid[] keys);
 
         /// <summary>
         /// The get children.
@@ -238,14 +252,41 @@
         /// <summary>
         /// The get root level entity collections.
         /// </summary>
+        /// <param name="entityType">
+        /// The entity type.
+        /// </param>
+        /// <param name="providerKey">
+        /// The provider key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntityCollection}"/>.
+        /// </returns>
+        IEnumerable<IEntityCollection> GetRootLevelEntityCollections(EntityType entityType, Guid providerKey);
+
+        /// <summary>
+        /// The get root level entity collections.
+        /// </summary>
         /// <param name="entityTfKey">
-        /// The entity tf key.
+        /// The entity type field key.
         /// </param>
         /// <returns>
         /// The <see cref="IEnumerable{IEntityCollection}"/>.
         /// </returns>
         IEnumerable<IEntityCollection> GetRootLevelEntityCollections(Guid entityTfKey);
 
+        /// <summary>
+        /// The get root level entity collections.
+        /// </summary>
+        /// <param name="entityTfKey">
+        /// The entity type field key.
+        /// </param>
+        /// <param name="providerKey">
+        /// The provider key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntityCollection}"/>.
+        /// </returns>
+        IEnumerable<IEntityCollection> GetRootLevelEntityCollections(Guid entityTfKey, Guid providerKey);
 
         /// <summary>
         /// Gets a Page of collections from collection.
@@ -296,5 +337,14 @@
         /// The <see cref="bool"/>.
         /// </returns>
         bool HasChildEntityCollections(Guid collectionKey);
+
+        /// <summary>
+        /// Gets the count of collections managed by a provider
+        /// </summary>
+        /// <param name="providerKey">The provider key</param>
+        /// <returns>
+        /// The count of collections managed by a provider
+        /// </returns>
+        int CollectionCountManagedByProvider(Guid providerKey);
     }
 }

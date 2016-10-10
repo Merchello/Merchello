@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.Persistence.Repositories
 {
     using System;
+    using System.Collections.Generic;
 
     using Merchello.Core.Models;
     using Merchello.Core.Persistence.Querying;
@@ -13,7 +14,7 @@
     /// </summary>
     internal interface IItemCacheRepository : IRepositoryQueryable<Guid, IItemCache>
     {
-        /// <summary>
+            /// <summary>
         /// Gets a page of <see cref="IItemCache"/>
         /// </summary>
         /// <param name="itemCacheTfKey">

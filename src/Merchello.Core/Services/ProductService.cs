@@ -170,6 +170,14 @@
         /// </summary>
         public static event TypedEventHandler<IProductService, DeleteEventArgs<IProduct>> Deleted;
 
+        internal static event EventHandler AddingToCollection;
+
+        internal static event EventHandler RemovingFromCollection;
+
+        internal static event EventHandler AddedToCollection;
+
+        internal static event EventHandler RemovedFromCollection;
+
         #endregion
 
         /// <summary>
@@ -625,10 +633,14 @@
         /// </param>
         public void AddToCollection(Guid productKey, Guid collectionKey)
         {
+            if (AddingToCollection != null) AddingToCollection.Invoke(this, new EventArgs());
+           
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 repository.AddToCollection(productKey, collectionKey);
             }
+
+            if (AddedToCollection != null) AddedToCollection.Invoke(this, new EventArgs());
         }
 
         /// <summary>
@@ -648,6 +660,26 @@
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.ExistsInCollection(productKey, collectionKey);
+            }
+        }
+
+        /// <summary>
+        /// Returns true if the entity exists in the at least one of the static collections.
+        /// </summary>
+        /// <param name="entityKey">
+        /// The entity key.
+        /// </param>
+        /// <param name="collectionKeys">
+        /// The collection keys.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool ExistsInCollection(Guid entityKey, IEnumerable<Guid> collectionKeys)
+        {
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.ExistsInCollection(entityKey, collectionKeys.ToArray());
             }
         }
 
@@ -690,10 +722,15 @@
         /// </param>
         public void RemoveFromCollection(Guid productKey, Guid collectionKey)
         {
+            if (RemovingFromCollection != null) RemovingFromCollection.Invoke(this, new EventArgs());
+
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 repository.RemoveFromCollection(productKey, collectionKey);
             }
+
+            if (RemovedFromCollection != null) RemovedFromCollection.Invoke(this, new EventArgs());
+
         }
 
         /// <summary>
@@ -727,6 +764,40 @@
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetFromCollection(collectionKey, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// Gets disctint products from multiple collections.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IProduct}"/>.
+        /// </returns>
+        public Page<IProduct> GetProductsThatExistInAllCollections(
+            IEnumerable<Guid> collectionKeys,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetEntitiesThatExistInAllCollections(collectionKeys.ToArray(), page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
             }
         }
 
@@ -769,6 +840,44 @@
         }
 
         /// <summary>
+        /// Gets distinct products from multiple collections filtered by a search term.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection key.
+        /// </param>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IProduct}"/>.
+        /// </returns>
+        public Page<IProduct> GetProductsThatExistInAllCollections(
+            IEnumerable<Guid> collectionKeys,
+            string searchTerm,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetEntitiesThatExistInAllCollections(collectionKeys.ToArray(), searchTerm, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+            }
+        }
+
+        /// <summary>
         /// Gets all the products
         /// </summary>
         /// <returns>
@@ -780,6 +889,22 @@
             {
                 return repository.GetAll();
             }
+        }
+
+        //// Hack fix for ATP
+        //// This should not be public
+        //// REFACTOR
+        public Page<Guid> GetKeysThatExistInAnyCollections(
+           IEnumerable<Guid> collectionKeys,
+           long page,
+           long itemsPerPage,
+           string sortBy = "",
+           SortDirection sortDirection = SortDirection.Descending)
+                {
+                    using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
+                    {
+                        return repository.GetKeysThatExistInAnyCollections(collectionKeys.ToArray(), page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+                    }
         }
 
         /// <summary>
@@ -813,6 +938,40 @@
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetKeysFromCollection(collectionKey, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// The get product keys from collection.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        internal Page<Guid> GetKeysThatExistInAllCollections(
+            IEnumerable<Guid> collectionKeys,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetKeysThatExistInAllCollections(collectionKeys.ToArray(), page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
             }
         }
 
@@ -855,6 +1014,44 @@
         }
 
         /// <summary>
+        /// The get keys from collection.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection key.
+        /// </param>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        internal Page<Guid> GetKeysThatExistInAllCollections(
+            IEnumerable<Guid> collectionKeys,
+            string searchTerm,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetKeysThatExistInAllCollections(collectionKeys.ToArray(), searchTerm, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+            }
+        }
+
+        /// <summary>
         /// The get keys not in collection.
         /// </summary>
         /// <param name="collectionKey">
@@ -886,6 +1083,40 @@
             {
                 return repository.GetKeysNotInCollection(collectionKey, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
             } 
+        }
+
+        /// <summary>
+        /// The get keys not in collection.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        internal Page<Guid> GetKeysNotInAnyCollections(
+            IEnumerable<Guid> collectionKeys,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetKeysNotInAnyCollections(collectionKeys.ToArray(), page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+            }
         }
 
         /// <summary>
@@ -925,6 +1156,60 @@
                 return repository.GetKeysNotInCollection(collectionKey, searchTerm, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
             }
         }
+
+        /// <summary>
+        /// The get keys not in collection.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection key.
+        /// </param>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        internal Page<Guid> GetKeysNotInAnyCollections(
+           IEnumerable<Guid> collectionKeys,
+           string searchTerm,
+           long page,
+           long itemsPerPage,
+           string sortBy = "",
+           SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetKeysNotInAnyCollections(collectionKeys.ToArray(), searchTerm, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+            }
+        }
+
+
+        internal Page<Guid> GetKeysThatExistInAnyCollections(
+           IEnumerable<Guid> collectionKeys,
+           string searchTerm,
+           long page,
+           long itemsPerPage,
+           string sortBy = "",
+           SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetKeysThatExistInAnyCollections(collectionKeys.ToArray(), searchTerm, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+            }
+        }
+
 
         #region Filtering
 
@@ -1484,6 +1769,14 @@
             using (var repository = RepositoryFactory.CreateProductVariantRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Count(query);
+            }
+        }
+
+        internal IEnumerable<Tuple<IEnumerable<Guid>, int>> CountKeysThatExistInAllCollections(IEnumerable<Guid[]> collectionKeysGroups)
+        {
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.CountKeysThatExistInAllCollections(collectionKeysGroups);
             }
         }
 

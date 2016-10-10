@@ -259,7 +259,7 @@
         /// </param>
         protected virtual void InitializeLoggerResolver(IMultiLogger logger)
         {
-            if (MultiLogResolver.HasCurrent)
+            if (!MultiLogResolver.HasCurrent)
             MultiLogResolver.Current = new MultiLogResolver(logger);
         }
 
@@ -371,7 +371,9 @@
 
                 EntityCollectionProviderResolver.Current = new EntityCollectionProviderResolver(
                    PluginManager.Current.ResolveEnityCollectionProviders(),
-                   merchelloContext);                 
+                   merchelloContext);
+                // REFACTOR HACK FIX - this resolver
+                EntityCollectionProviderResolver.Current.EnsureInitialized();
             }
         }
 

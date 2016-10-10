@@ -7,6 +7,7 @@
     using Merchello.Core.Marketing.Offer;
     using Merchello.Web.Pluggable;
     using Merchello.Web.Reporting;
+    using Merchello.Web.Search;
     using Merchello.Web.Ui;
 
     using Umbraco.Core;
@@ -68,6 +69,8 @@
             // initialize the AutoMapperMappings
             AutoMapperMappings.CreateMappings();
 
+
+
             return this;
         }
 
@@ -103,6 +106,9 @@
 
             if(!OfferComponentResolver.HasCurrent)
                 OfferComponentResolver.Current = new OfferComponentResolver(PluginManager.Current.ResolveOfferComponents(), OfferProviderResolver.Current);
+
+            if (!ProxyQueryManager.HasCurrent)
+                ProxyQueryManager.Current = new ProxyQueryManager(MerchelloContext.Current.Cache.RequestCache);
         }
 
         /// <summary>

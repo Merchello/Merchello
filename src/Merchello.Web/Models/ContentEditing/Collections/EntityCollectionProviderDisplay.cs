@@ -14,7 +14,7 @@
     /// <summary>
     /// Represents an entity collection provider.
     /// </summary>
-    public class EntityCollectionProviderDisplay
+    public class EntityCollectionProviderDisplay : DialogEditorDisplayBase
     {
         /// <summary>
         /// Gets or sets the key.

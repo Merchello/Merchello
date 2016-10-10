@@ -53,7 +53,7 @@ namespace Merchello.Core.Models.MonitorModels
                     PaymentSuccess = paymentResult.Payment.Success,
                     Payment = paymentResult.Payment.Success ? paymentResult.Payment.Result : null,
                     Invoice = paymentResult.Invoice,
-                    Contacts = contacts.ToArray(),
+                    Contacts = contacts == null ? new string[] { } : contacts.ToArray(),
                     Shipment = shipment,
                     ShipMethod = shipMethod,
                     CurrencySymbol = currencySymbol,

@@ -31,10 +31,11 @@ namespace Merchello.Tests.IntegrationTests.Dto
         }
 
         [Test]
+        [NUnit.Framework.Ignore]
         public void Can_Get_A_Page_Of_Keys()
         {
             var sql = new Sql();
-            sql.Append("SELECT *").Append("FROM [merchInvoice]");
+            sql.Select("*").Append("FROM merchInvoice");
 
             var page = _db.Page<KeyDto>(1, 10, sql);
 

@@ -36,8 +36,7 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.PickStaticColl
             treeService.getTree({section: 'merchello'}).then(function(tree) {
                 var root = tree.root;
                 var treeId = getTreeId();
-                
-                console.info(treeId);
+
                 $scope.pickerRootNode = _.find(root.children, function (child) {
                     return child.id === treeId;
                 });

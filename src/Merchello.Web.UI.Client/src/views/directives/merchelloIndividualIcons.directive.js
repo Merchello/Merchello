@@ -25,12 +25,14 @@ angular.module('merchello.directives').directive('merchelloSortIcon', function(l
         restrict: 'E',
         replace: true,
         scope: {
+            doSort: '&'
         },
         template: '<span class="merchello-icons">' +
-        '<a class="merchello-icon" title="{{title}}" prevent-default>' +
+        '<a class="merchello-icon" ng-click="doSort()" title="{{title}}" prevent-default>' +
         '<i class="icon icon-navigation"></i>' +
         '</a></span>',
         link: function(scope, elm, attr) {
+
             scope.title = '';
             localizationService.localize('actions_sort').then(function(value) {
                 scope.title = value;

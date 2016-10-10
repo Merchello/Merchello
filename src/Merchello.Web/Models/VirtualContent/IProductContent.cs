@@ -10,7 +10,7 @@
     /// <summary>
     /// Defines a virtual product content.
     /// </summary>
-    public interface IProductContent : IProductContentBase, IPublishedContent
+    public interface IProductContent : IProductContentBase, IPublishedContent, ICmsContent
     {
         /// <summary>
         /// Gets the key.

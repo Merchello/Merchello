@@ -361,6 +361,11 @@
         /// </returns>
         Page<Guid> GetProductsKeysOnSale(long page, long itemsPerPage, string orderExpression, SortDirection sortDirection = SortDirection.Descending);
 
+
+        int CountKeysThatExistInAllCollections(Guid[] collectionKeys);
+
+        IEnumerable<Tuple<IEnumerable<Guid>, int>> CountKeysThatExistInAllCollections(IEnumerable<Guid[]> collectionKeysGroups);
+
         #endregion
     }
 }

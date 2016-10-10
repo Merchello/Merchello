@@ -49,24 +49,13 @@
                         <product-variant-digital-download product-variant="productVariant" pre-values-loaded="preValuesLoaded"></product-variant-digital-download>
                     </merchello-slide-open-panel>
 
-                    <!-- Product Options and Variants -->
-                    <merchello-slide-open-panel is-open="product.hasOptions" classes="'control-group umb-control-group'" hide-close="hideClose">
-                        <label class="merchello-control-label">
-                            <localize key="merchelloGeneral_multipleOptions"/>
-                            <small><localize key="merchelloVariant_addOptions"/></small>
-                        </label>
 
-                        <div class="merchello-controls row-fluid">
-
-                            <!-- Allows adding/removing/editing of options / attributes -->
-                            <product-options-manage product="product" parent-form="productVariantForm" classes="'well col-xs-10 span10'"></product-options-manage>
-
-                        </div>
-                    </merchello-slide-open-panel>
 
                     <merchello-slide-open-panel is-open="context !== 'createproduct'" classes="'control-group umb-control-group'" hide-close="hideClose">
 
-                                <entity-static-collections entity-type="entityType" entity="product" pre-values-loaded="preValuesLoaded"></entity-static-collections>
+                        <entity-static-collections entity-type="entityType" entity="product" pre-values-loaded="preValuesLoaded"></entity-static-collections>
+
+                        <entity-filter-groups entity-type="entityType" pre-values-loaded="preValuesLoaded" entity="product"></entity-filter-groups>
 
                     </merchello-slide-open-panel>
 

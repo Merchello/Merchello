@@ -243,6 +243,10 @@ namespace Merchello.Web.Pluggable
         /// <param name="key">The key of the customer to retrieve</param>
         protected virtual void TryGetCustomer(Guid key)
         {
+            // REFACTOR-v3 - this should come directly from the service as this is redundant and creates
+            // a second (context specific) cache item.  However, since we're not cloning the cached item
+            // out of cache this does create somewhat of a protection against accidently changing values.
+            // Also, ideally, we should use a proxy of ICustomerBase so that the customer values are immutable.
             var customer = (ICustomerBase)Cache.RuntimeCache.GetCacheItem(CacheKeys.CustomerCacheKey(key));
 
             // use the IsLoggedIn method to check which gets/sets the value in the Request Cache
@@ -300,8 +304,8 @@ namespace Merchello.Web.Pluggable
                 // in member is the same as the reference we have to a previously logged in member in the same browser.
                 if (isLoggedIn) ContextData.Values.Add(new KeyValuePair<string, string>(UmbracoMemberIdDataKey, this.GetMembershipProviderKey()));
 
-                // Cache the customer so that for each request we don't have to do a bunch of
-                // DB lookups.
+                // FYI this is really only to set the customer cookie so this entire block
+                // should be merged into the section of code directly above.
                 CacheCustomer(customer);
             }
             else
@@ -525,7 +529,7 @@ namespace Merchello.Web.Pluggable
             };
 
             // Ensure a session cookie for Anonymous customers
-            // TODO - on persisted authenticcation, we need to synch the cookie expiration
+            // TODO - on persisted authentication, we need to synch the cookie expiration
             if (customer.IsAnonymous) cookie.Expires = DateTime.MinValue;
 
             this._umbracoContext.HttpContext.Response.Cookies.Add(cookie);

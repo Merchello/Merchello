@@ -15,7 +15,6 @@
     using Merchello.Web.Models.VirtualContent;
     using Merchello.Web.Workflow.CustomerItemCache;
 
-    using Umbraco.Core;
     using Umbraco.Core.Models;
     using Umbraco.Core.Models.PublishedContent;
 
@@ -491,6 +490,7 @@
         /// <returns>
         /// The <see cref="IProductContent"/>.
         /// </returns>
+        [Obsolete("This method will be removed in version 3.0.0")]
         public static IProductContent AsProductContent(this ProductDisplay display)
         {
             return display.AsProductContent(new ProductContentFactory());
@@ -508,6 +508,7 @@
         /// <returns>
         /// The <see cref="IProductContent"/>.
         /// </returns>
+        [Obsolete("This method will be removed in version 3.0.0")]
         public static IProductContent AsProductContent(this ProductDisplay display, ProductContentFactory factory)
         {
             if (!display.HasVirtualContent()) return null;

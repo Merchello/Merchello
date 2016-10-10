@@ -8,3 +8,32 @@
   .label-warning { background: lighten($orange, 20%); }
   .label-info { background: desaturate(lighten($blue, 30%), 25%); }
 }
+
+.spec-filter-list {
+  a.sort-icon {
+    cursor: pointer;
+    text-decoration: underline;
+    :hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.entity-filter-association {
+
+  ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+  }
+
+  label {
+    display: block;
+  }
+  input {
+    padding: 0;
+    margin:0;
+    position: relative;
+    top: -2px;
+  }
+}

@@ -21,6 +21,8 @@
     using Merchello.Core.Persistence.Migrations;
     using Merchello.Core.Persistence.Migrations.Initial;
     using Merchello.Web.Routing;
+    using Merchello.Web.Search;
+    using Merchello.Web.Search.Provisional;
     using Merchello.Web.Workflow;
 
     using Models.SaleHistory;
@@ -136,7 +138,29 @@
             // Detached Content
             DetachedContentTypeService.Deleting += DetachedContentTypeServiceOnDeleting;
 
+            ProductService.AddedToCollection += ProductServiceAddedToCollection;
+            ProductService.RemovedFromCollection += ProductServiceRemovedFromCollection;
+            ProductService.Deleted += ProductServiceDeleted;
+
             if (merchelloIsStarted) this.VerifyMerchelloVersion();
+        }
+
+        private void ProductServiceDeleted(IProductService sender, DeleteEventArgs<IProduct> e)
+        {
+            var merchello = new MerchelloHelper();
+            ((ProductFilterGroupQuery)merchello.Filters.Product).ClearFilterTreeCache();
+        }   
+
+        private void ProductServiceRemovedFromCollection(object sender, EventArgs e)
+        {
+            var merchello = new MerchelloHelper();
+            ((ProductFilterGroupQuery)merchello.Filters.Product).ClearFilterTreeCache();
+        }
+
+        private void ProductServiceAddedToCollection(object sender, EventArgs e)
+        {
+            var merchello = new MerchelloHelper();
+            ((ProductFilterGroupQuery)merchello.Filters.Product).ClearFilterTreeCache();
         }
 
         /// <summary>

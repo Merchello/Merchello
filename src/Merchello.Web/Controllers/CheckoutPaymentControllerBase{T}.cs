@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Web.Controllers
 {
     using System;
+    using System.Reflection;
     using System.Web.Mvc;
 
     using Merchello.Core;
@@ -11,8 +12,6 @@
     using Merchello.Web.Factories;
     using Merchello.Web.Models.Ui;
     using Merchello.Web.Mvc;
-
-    using Umbraco.Core;
 
     /// <summary>
     /// A base controller responsible for handling payment method selection operations..
@@ -58,7 +57,7 @@
             CheckoutContextSettingsFactory contextSettingsFactory)
             : base(contextSettingsFactory)
         {
-            Mandate.ParameterNotNull(checkoutPaymentModelFactory, "checkoutPaymentModelFactory");
+            Ensure.ParameterNotNull(checkoutPaymentModelFactory, "checkoutPaymentModelFactory");
             this.CheckoutPaymentModelFactory = checkoutPaymentModelFactory;
 
             // ensures the sub class has a GatewayMethodUiAttribute
@@ -178,7 +177,7 @@
         /// </exception>
         protected virtual IInvoice GetInvoice(Guid invoiceKey)
         {
-            Mandate.ParameterCondition(!Guid.Empty.Equals(invoiceKey), "invoiceKey");
+            Ensure.ParameterCondition(!Guid.Empty.Equals(invoiceKey), "invoiceKey");
             var invoice = MerchelloServices.InvoiceService.GetByKey(invoiceKey);
             if (invoice == null)
             {
@@ -202,7 +201,7 @@
         /// </exception>
         protected virtual IPayment GetPayment(Guid paymentKey)
         {
-            Mandate.ParameterCondition(!Guid.Empty.Equals(paymentKey), "paymentKey");
+            Ensure.ParameterCondition(!Guid.Empty.Equals(paymentKey), "paymentKey");
             var payment = MerchelloServices.PaymentService.GetByKey(paymentKey);
             if (payment == null)
             {
@@ -220,7 +219,7 @@
         /// </exception>
         private void EnsureAttribute()
         {
-            // Ensure GatewayMethodUiAttribute
+            // Ensure GatewayMethodUiAttribute // FYI THIS WAS AN UMBRACO EXTENSION
             var att = GetType().GetCustomAttribute<GatewayMethodUiAttribute>(true);
             if (att == null)
             {

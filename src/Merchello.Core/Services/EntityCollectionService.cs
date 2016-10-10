@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.Services
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
@@ -354,17 +355,38 @@
             }
         }
 
+
         /// <summary>
-        /// The get all.
+        /// Gets <see cref="IEntityFilterGroup"/> by it's key.
         /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
         /// <returns>
-        /// The <see cref="IEnumerable{IEntityCollection}"/>.
+        /// The <see cref="IEntityFilterGroup"/>.
         /// </returns>
-        public IEnumerable<IEntityCollection> GetAll()
+        public IEntityFilterGroup GetEntityFilterGroupByKey(Guid key)
         {
             using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetAll();
+                return repository.GetEntityFilterGroup(key);
+            }
+        }
+
+        /// <summary>
+        /// The get all.
+        /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntityCollection}"/>.
+        /// </returns>
+        public IEnumerable<IEntityCollection> GetAll(params Guid[] keys)
+        {
+            using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetAll(keys);
             }
         }
 
@@ -440,6 +462,24 @@
         /// <summary>
         /// The get root level entity collections.
         /// </summary>
+        /// <param name="entityType">
+        /// The entity type.
+        /// </param>
+        /// <param name="providerKey">
+        /// The provider key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        public IEnumerable<IEntityCollection> GetRootLevelEntityCollections(EntityType entityType, Guid providerKey)
+        {
+            return this.GetRootLevelEntityCollections(
+                EnumTypeFieldConverter.EntityType.GetTypeField(entityType).TypeKey, providerKey);
+        }
+
+        /// <summary>
+        /// The get root level entity collections.
+        /// </summary>
         /// <param name="entityTfKey">
         /// The entity type field key.
         /// </param>
@@ -451,6 +491,27 @@
             using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<IEntityCollection>.Builder.Where(x => x.ParentKey == null && x.EntityTfKey == entityTfKey);
+                return repository.GetByQuery(query);
+            }
+        }
+
+        /// <summary>
+        /// The get root level entity collections.
+        /// </summary>
+        /// <param name="entityTfKey">
+        /// The entity type field key.
+        /// </param>
+        /// <param name="providerKey">
+        /// The provider Key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntityCollection}"/>.
+        /// </returns>
+        public IEnumerable<IEntityCollection> GetRootLevelEntityCollections(Guid entityTfKey, Guid providerKey)
+        {
+            using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IEntityCollection>.Builder.Where(x => x.ParentKey == null && x.EntityTfKey == entityTfKey && x.ProviderKey == providerKey);
                 return repository.GetByQuery(query);
             }
         }
@@ -520,6 +581,22 @@
         public bool HasChildEntityCollections(Guid collectionKey)
         {
             return this.ChildEntityCollectionCount(collectionKey) > 0;
+        }
+
+        /// <summary>
+        /// Gets the count of collections managed by a provider
+        /// </summary>
+        /// <param name="providerKey">The provider key</param>
+        /// <returns>
+        /// The count of collections managed by a provider
+        /// </returns>
+        public int CollectionCountManagedByProvider(Guid providerKey)
+        {
+            using (var repostitory = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IEntityCollection>.Builder.Where(x => x.ProviderKey == providerKey);
+                return repostitory.Count(query);
+            }
         }
 
         /// <summary>
@@ -600,7 +677,11 @@
         {
             Mandate.ParameterCondition(!Guid.Empty.Equals(entityTfKey), "entityTfKey");
             Mandate.ParameterCondition(!Guid.Empty.Equals(providerKey), "providerKey");
-            var collection = new EntityCollection(entityTfKey, providerKey) { Name = name };
+            var collection = new EntityCollection(entityTfKey, providerKey)
+                                 {
+                                     Name = name,
+                                     ExtendedData = new ExtendedDataCollection()
+                                 };
 
             if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IEntityCollection>(collection), this))
             {
@@ -651,22 +732,27 @@
             return collection;
         }
 
+
         /// <summary>
         /// The get entity collections by product key.
         /// </summary>
         /// <param name="productKey">
         /// The product key.
         /// </param>
+        /// <param name="isFilter">
+        /// A value indicating whether the query should be for filter collections or standard "static" collections
+        /// </param>
         /// <returns>
         /// The <see cref="IEnumerable{IEntityCollection}"/>.
         /// </returns>
-        internal IEnumerable<IEntityCollection> GetEntityCollectionsByProductKey(Guid productKey)
+        internal IEnumerable<IEntityCollection> GetEntityCollectionsByProductKey(Guid productKey, bool isFilter = false)
         {
             using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetEntityCollectionsByProductKey(productKey);                
+                return repository.GetEntityCollectionsByProductKey(productKey, isFilter);                
             }
         }
+
 
         /// <summary>
         /// The get entity collections by invoice key.
@@ -701,6 +787,66 @@
                 return repository.GetEntityCollectionsByCustomerKey(customerKey);
             }
         }
+
+        /// <summary>
+        /// Gets a collection of <see cref="IEntityFilterGroup"/> by a collection of keys.
+        /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntityFilterGroup}"/>.
+        /// </returns>
+        internal IEnumerable<IEntityFilterGroup> GetEntityFilterGroupsByProviderKeys(IEnumerable<Guid> keys)
+        {
+            using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetEntityFilterGroupsByProviderKeys(keys.ToArray());
+            }
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="IEntityFilterGroup"/> by a collection of keys that are not associated
+        /// with a product
+        /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntityFilterGroup}"/>.
+        /// </returns>
+        internal IEnumerable<IEntityFilterGroup> GetEntityFilterGroupsContainingProduct(IEnumerable<Guid> keys, Guid productKey)
+        {
+            using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetEntityFilterGroupsContainingProduct(keys.ToArray(), productKey);
+            }
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="IEntityFilterGroup"/> by a collection of keys that are not associated
+        /// with a product
+        /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntityFilterGroup}"/>.
+        /// </returns>
+        internal IEnumerable<IEntityFilterGroup> GetEntityFilterGroupsNotContainingProduct(IEnumerable<Guid> keys, Guid productKey)
+        {
+            using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetEntityFilterGroupsNotContainingProduct(keys.ToArray(), productKey);
+            }
+        }
+
 
         /// <summary>
         /// The validate sort by field.

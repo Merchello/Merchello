@@ -46,11 +46,5 @@
         /// </summary>
         [DataMember]
         bool Exported { get; set; }
-
-        /// <summary>
-        /// Accepts visitor class to visit order line items
-        /// </summary>
-        /// <param name="visitor">The <see cref="ILineItemVisitor"/> class</param>
-        void Accept(ILineItemVisitor visitor);  
     }
 }
