@@ -877,8 +877,6 @@
         /// </returns>
         public decimal SumLineItemTotalsBySku(DateTime startDate, DateTime endDate, string currencyCode, string sku)
         {
-            //var ends = endDate.AddDays(1);
-
             const string SQL = @"SELECT	SUM(T2.[quantity] * T2.[price]) AS Total
                         FROM	[merchInvoice] T1
                         INNER JOIN [merchInvoiceItem] T2 ON T1.[pk] = T2.[invoiceKey]
