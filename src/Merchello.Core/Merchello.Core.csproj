@@ -374,7 +374,7 @@
     <Compile Include="Configuration\Outline\TreeElement.cs" />
     <Compile Include="CurrencyContext.cs" />
     <Compile Include="CurrencyHelper.cs" />
-    <Compile Include="EntityCollections\IEntityCollectionProviderAttribute.cs" />
+    <Compile Include="EntityCollections\IEntityCollectionProviderMeta.cs" />
     <Compile Include="Logging\IRemoteLogger.cs" />
     <Compile Include="Models\EntityBase\IDateStamped.cs" />
     <Compile Include="Models\IDeepCloneable.cs" />
