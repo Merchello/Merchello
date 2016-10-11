@@ -286,10 +286,10 @@
         {
             if (entityType != EntityType.Product) throw new NotImplementedException();
 
-            var key = EntityCollectionProviderResolver.Current.GetProviderKey<ProductFilterGroupProvider>();
+            var keys = GetEditorFilterProviderKeys();
 
             // TODO service call will need to be updated to respect entity type if ever opened up to other entity types
-            var collections = ((EntityCollectionService)_entityCollectionService).GetEntityFilterGroupsContainingProduct(new[] { key }, entityKey);
+            var collections = ((EntityCollectionService)_entityCollectionService).GetEntityFilterGroupsContainingProduct(keys, entityKey);
 
             return collections.Select(c => c.ToEntitySpecificationCollectionDisplay()).OrderBy(x => x.SortOrder);
         }
@@ -312,10 +312,10 @@
         {
             if (entityType != EntityType.Product) throw new NotImplementedException();
 
-            var key = EntityCollectionProviderResolver.Current.GetProviderKey<ProductFilterGroupProvider>();
+            var keys = GetEditorFilterProviderKeys();
 
             // TODO service call will need to be updated to respect entity type if ever opened up to other entity types
-            var collections = ((EntityCollectionService)_entityCollectionService).GetEntityFilterGroupsNotContainingProduct(new[] { key }, entityKey);
+            var collections = ((EntityCollectionService)_entityCollectionService).GetEntityFilterGroupsNotContainingProduct(keys, entityKey);
 
             return collections.Select(c => c.ToEntitySpecificationCollectionDisplay()).OrderBy(x => x.SortOrder);
         }
@@ -822,6 +822,22 @@
                 default:
                     throw new NotSupportedException("Customer, Invoice and Product queries are only supported.");
             }
+        }
+
+        private Guid[] GetEditorFilterProviderKeys()
+        {
+            var keys = EntityCollectionProviderResolver.Current.GetProviderKeys<IProductEntityFilterGroupProvider>().ToArray();
+
+            var selectable = new List<Guid>();
+            
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var key in keys)
+            {
+                var att = EntityCollectionProviderResolver.Current.GetProviderAttributeByProviderKey(key);
+                if (att.EntityTfKey == Core.Constants.TypeFieldKeys.Entity.ProductKey && !att.ManagesUniqueCollection) selectable.Add(key);
+            }
+
+            return selectable.ToArray();
         }
 
         /// <summary>
