@@ -130,7 +130,8 @@ namespace Merchello.Web.Search.Provisional
                                   ParentKey = f.Key,
                                   ProviderMeta = f.ProviderMeta,
                                   SortOrder = f.SortOrder,
-                                  Count = GetCountFromResult(filterContextKey, results)
+                                  Count = GetCountFromResult(filterContextKey, results),
+                                  ExtendedData = f.ExtendedData
                               };
                 primedFilters.Add(ppf);
             }
@@ -146,7 +147,8 @@ namespace Merchello.Web.Search.Provisional
                                            ProviderMeta = group.ProviderMeta,
                                            SortOrder = group.SortOrder,
                                            Count = GetCountFromResult(contextKey, results),
-                                           Filters = primedFilters
+                                           Filters = primedFilters,
+                                           ExtendedData = group.ExtendedData
                                        }
                            };
 

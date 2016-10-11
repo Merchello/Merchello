@@ -2,6 +2,8 @@ namespace Merchello.Web.Models
 {
     using System;
 
+    using Merchello.Core.Models;
+
     /// <inheritdoc/>
     internal class PrimedProductFilter : IPrimedProductFilter
     {
@@ -22,5 +24,8 @@ namespace Merchello.Web.Models
 
         /// <inheritdoc/>
         public int Count { get; set; }
+
+        /// <inheritdoc/>
+        public ExtendedDataCollection ExtendedData { get; internal set; }
     }
 }
