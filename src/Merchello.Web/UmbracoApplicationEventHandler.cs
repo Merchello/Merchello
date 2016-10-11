@@ -142,7 +142,22 @@
             ProductService.RemovedFromCollection += ProductServiceRemovedFromCollection;
             ProductService.Deleted += ProductServiceDeleted;
 
+            EntityCollectionService.Saved += EntityCollectionSaved;
+            EntityCollectionService.Deleted += EntityCollectionDeleted;
+
             if (merchelloIsStarted) this.VerifyMerchelloVersion();
+        }
+
+        private void EntityCollectionSaved(IEntityCollectionService sender, SaveEventArgs<Core.Models.Interfaces.IEntityCollection> e)
+        {
+            var merchello = new MerchelloHelper();
+            ((ProductFilterGroupQuery)merchello.Filters.Product).ClearFilterTreeCache();
+        }
+
+        private void EntityCollectionDeleted(IEntityCollectionService sender, DeleteEventArgs<Core.Models.Interfaces.IEntityCollection> e)
+        {
+            var merchello = new MerchelloHelper();
+            ((ProductFilterGroupQuery)merchello.Filters.Product).ClearFilterTreeCache();
         }
 
         private void ProductServiceDeleted(IProductService sender, DeleteEventArgs<IProduct> e)
