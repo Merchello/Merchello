@@ -3,6 +3,7 @@ namespace Merchello.Web.Models.Ui.Rendering
     using System;
 
     using Merchello.Core.EntityCollections;
+    using Merchello.Core.Models;
     using Merchello.Core.Models.Interfaces;
 
     /// <summary>
@@ -20,8 +21,10 @@ namespace Merchello.Web.Models.Ui.Rendering
         {
             this.Key = collection.Key;
             this.ParentKey = collection.ParentKey;
+            this.ProviderKey = collection.ProviderKey;
             this.SortOrder = collection.SortOrder;
             this.Name = collection.Name;
+            this.ExtendedData = collection.ExtendedData;
 
             this.Initialize(collection.ProviderKey);
         }
@@ -50,6 +53,11 @@ namespace Merchello.Web.Models.Ui.Rendering
         /// Gets the provider meta.
         /// </summary>
         public IProviderMeta ProviderMeta { get; private set; }
+
+        /// <summary>
+        /// Gets the extended data collection.
+        /// </summary>
+        public ExtendedDataCollection ExtendedData { get; private set; }
 
         /// <summary>
         /// Gets the provider key.

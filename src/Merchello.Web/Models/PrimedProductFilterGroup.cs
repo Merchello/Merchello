@@ -3,6 +3,8 @@ namespace Merchello.Web.Models
     using System;
     using System.Collections.Generic;
 
+    using Merchello.Core.Models;
+
     /// <inheritdoc/>
     internal class PrimedProductFilterGroup : IPrimedProductFilterGroup
     {
@@ -33,5 +35,7 @@ namespace Merchello.Web.Models
         /// <inheritdoc/>
         public int Count { get; set; }
 
+        /// <inheritdoc/>
+        public ExtendedDataCollection ExtendedData { get; internal set; }
     }
 }
