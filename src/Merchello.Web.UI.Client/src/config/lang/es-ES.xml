@@ -300,8 +300,8 @@
     </key>
   </area>
   <area alias="merchelloSales">
-    <key alias="invoice">Invoice</key>
-    <key alias="invoiceNumber">Invoice #</key>
+    <key alias="invoice">Pedido</key>
+    <key alias="invoiceNumber">Pedido #</key>
     <key alias="invoiceNumberPrefix">Invoice Number Prefix</key>
     <key alias="poNumber">PO Number</key>
     <key alias="paymentStatus">Payment Status</key>
@@ -321,8 +321,6 @@
       ]]>
     </key>
     <key alias="emptySalesCollection">No hay ventas en esta colección</key>
-    <key alias="invoiceNumber">Pedido #</key>
-    <key alias="paymentStatus">Payment status</key>
     <key alias="fulfillmentStatus">Fulfillment status</key>
     <key alias="billingAddress">Billing Address</key>
     <key alias="noBillingAddress">No Billing Address</key>
