@@ -156,9 +156,9 @@
     <key alias="noQualifyingEntities">Нет других элементов для добавления в данный список.</key>
     <key alias="collectionPickerTitle">Категории</key>
     <key alias="collectionPickerInfo">Добавить этот товар в одну или несколько категорий.</key>
-    <key alias="filterPickerTitle">Specified Filters</key>
-    <key alias="filterPickerInfo">Add this item to one or more specified filters.</key>
-    <key alias="filterAssociateFilters">Associate Filters</key>
+    <key alias="filterPickerTitle">Настроенные фильтры</key>
+    <key alias="filterPickerInfo">Добавить этот элемент к одному или нескольким настроенным фильтрам.</key>
+    <key alias="filterAssociateFilters">Назначить фильтры</key>
     <key alias="allItems">Все элементы</key>
     <key alias="allProduct">Все товары</key>
     <key alias="allCustomer">Все покупатели</key>
@@ -195,8 +195,8 @@
     <key alias="optionValues">Значения свойства</key>
     <key alias="shared">Совместное</key>
     <key alias="sharedCount">К-во совмещений</key>
-    <key alias="filterGroup">Filter Group</key>
-    <key alias="filters">Filters</key>
+    <key alias="filterGroup">Группа фильтров</key>
+    <key alias="filters">Фильтры</key>
   </area>
   <area alias="merchelloNotes">
     <key alias="notes">Заметки</key>
@@ -218,16 +218,16 @@
     <key alias="newProductSku">Задайте артикул товара</key>
   </area>
   <area alias="merchelloSpecFilters">
-    <key alias="manageProductFilters">Manage Product Filters</key>
+    <key alias="manageProductFilters">Управление фильтрами товаров</key>
     <key alias="editSpecFilter">
       <![CDATA[
-      <strong>Edit Filters</strong>
-      <small>Add or edit filters, which can be used to enhance product filtering and nagivation.</small>
+      <strong>Изменить фильтры</strong>
+      <small>Добавить или изменить фильтры, которые могут быть использованы для расширенной фильтрации и навигации по товарам.</small>
       ]]>
     </key>
     <key alias="noSpecFilters">
       <![CDATA[
-      <h5>You have not setup any specification filters</h5>
+      <h5>У Вас пока нет ни одного настроенного фильтра</h5>
       ]]>
     </key>
   </area>
@@ -336,7 +336,7 @@
     <key alias="lastInvoiceTotal">Сумма последнего счета</key>
     <key alias="lastActivityDate">Дата последней активности</key>
     <key alias="location">Местоположение</key>
-      <key alias="customerBaskets">Customer Baskets</key>
+      <key alias="customerBaskets">Корзины покупателя</key>
     <key alias="noCustomers">
       <![CDATA[
         <h5>Покупателей пока нет</h5>
@@ -560,8 +560,8 @@
   <area alias="merchelloInventory">
     <!-- things -->
     <key alias="base">Базовый учет</key>
-    <key alias="inventory">Учет</key>
-    <key alias="tracking">Отслеживание количества</key>
+    <key alias="inventory">Учет остатков</key>
+    <key alias="tracking">Отслеживание остатков</key>
     <!-- actions -->
     <!-- phrases -->
   </area>
@@ -586,7 +586,7 @@
     <key alias="catalogDefaultsHelper">Установите свойства всех товаров каталога по-умолчанию. Они могут быть затем изменены для каждого товара в отдельности.</key>
     <key alias="globalTaxable">Все товары облагаются налогом</key>
     <key alias="globalShippable">Все товары продаются с доставкой</key>
-    <key alias="globalTrackInventory"><![CDATA[Отслеживать количество для всех товаров и вариантов]]></key>
+    <key alias="globalTrackInventory"><![CDATA[Отслеживать остатки для всех товаров и вариантов]]></key>
     <key alias="globalShippingIsTaxable">Стоимость доставки облагается налогом</key>
     <key alias="globalTaxationApplication">Установить правила налогообложения</key>
     <key alias="defaultCultureName">Культура (язык) по-умолчанию</key>
@@ -724,8 +724,8 @@
     <key alias="reorderVariants">Пересортировать</key>
     <key alias="dragAndReorderHelper">Если Вы пересортируете свойства и варианты, изменится порядок их отображения в магазине. Перетаскивайте свойства (напр. 'цвет' или 'размер') вертикально, а варианты (напр. 'мужской' или 'женский') горизонтально.</key>
     <key alias="changePrices">Изменить цены</key>
-    <key alias="updateInventory">Обновить количество</key>
-    <key alias="toggleTracksInventory">Toggle Tracks Inventory</key>
+    <key alias="updateInventory">Обновить остатки</key>
+    <key alias="toggleTracksInventory">Отслеживание остатков</key>
     <key alias="toggleAvailable">Товар доступен</key>
     <key alias="toggleOnSale">В распродаже</key>
     <key alias="duplicateVariant"> Скопировать вариант</key>
