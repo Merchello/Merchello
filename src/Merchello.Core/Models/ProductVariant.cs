@@ -233,6 +233,21 @@
 
         /// <inheritdoc/>
         [IgnoreDataMember]
+        public bool Master
+        {
+            get
+            {
+                return _master;
+            }
+
+            internal set
+            {
+                SetPropertyValueAndDetectChanges(value, ref _master, _ps.Value.MasterSelector);
+            }
+        }
+
+        /// <inheritdoc/>
+        [IgnoreDataMember]
         internal ProductAttributeCollection ProductAttributes
         {
             get
@@ -244,21 +259,6 @@
             {
                 _attibutes = value;
                 _attibutes.CollectionChanged += ProductAttributesChanged;
-            }
-        }
-
-        /// <inheritdoc/>
-        [IgnoreDataMember]
-        internal bool Master
-        {
-            get
-            {
-                return _master;
-            }
-
-            set
-            {
-                SetPropertyValueAndDetectChanges(value, ref _master, _ps.Value.MasterSelector);
             }
         }
 

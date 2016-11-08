@@ -33,5 +33,10 @@
         /// Gets the id used in the examine index.
         /// </summary>
         int ExamineId { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether this represents the master product variant.
+        /// </summary>
+        bool Master { get; }
     }
 }
