@@ -377,7 +377,8 @@
     <Compile Include="EntityCollections\IEntityCollectionProviderMeta.cs" />
     <Compile Include="Logging\IRemoteLogger.cs" />
     <Compile Include="Models\EntityBase\IDateStamped.cs" />
-    <Compile Include="Models\IDeepCloneable.cs" />
+    <Compile Include="Models\Interfaces\IDeepCloneable.cs" />
+    <Compile Include="Models\Interfaces\IShallowClone.cs" />
     <Compile Include="Models\Rdbms\CountDto.cs" />
     <Compile Include="Models\Rdbms\DigitalMediaDto.cs" />
     <Compile Include="PagedCollection.cs" />
