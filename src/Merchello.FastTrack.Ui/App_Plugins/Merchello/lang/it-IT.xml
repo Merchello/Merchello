@@ -20,11 +20,11 @@
     <key alias="shipment">Spedizione</key>
     <key alias="sku">SKU</key>
     <key alias="quantity">Quantità</key>
-    <key alias="fulfill"> Rellenar</key>
-    <key alias="status"> Stato</key>
-    <key alias="type"> Tipo</key>
+    <key alias="fulfill">Rellenar</key>
+    <key alias="status">Stato</key>
+    <key alias="type">Tipo</key>
     <key alias="amount"> Quantità</key>
-    <key alias="via"> Per</key>
+    <key alias="via">Per</key>
     <key alias="options">Opzioni</key>
     <key alias="select">Seleziona</key>
     <key alias="all">Tutti</key>
@@ -57,12 +57,11 @@
     <key alias="friday">Friday</key>
     <key alias="saturday">Saturday</key>
     <key alias="sunday">Sunday</key>
-      <key alias="day">Day</key>
-      <key alias="item">Item</key>
-      <key alias="items">Items</key>
-      <key alias="totals">Totals</key>
-      <key alias="quantity">Quantity</key>
-      <key alias="subTotal">Sub Total</key>
+    <key alias="day">Day</key>
+    <key alias="item">Item</key>
+    <key alias="items">Items</key>
+    <key alias="totals">Totals</key>
+    <key alias="subTotal">Sub Total</key>
     <key alias="checkout">Checkout</key>
     <key alias="author">Author</key>
     <key alias="visibility">Visibility</key>
@@ -283,7 +282,7 @@
     <key alias="productOptionContentTypes">Product Option Content Types</key>
     <key alias="productOptionContentType">Option Content Type</key>
     <key alias="noProductOptionContentType">
-      <![CDATA[
+    <![CDATA[
       <h5>You have not selected a product option content type</h5>
     ]]>
     </key>
@@ -322,8 +321,6 @@
       ]]>
     </key>
     <key alias="emptySalesCollection">There are currently no sales in this collection</key>
-    <key alias="invoiceNumber">Invoice #</key>
-    <key alias="paymentStatus">Payment status</key>
     <key alias="fulfillmentStatus">Fulfillment status</key>
     <key alias="billingAddress">Billing Address</key>
     <key alias="noBillingAddress">No Billing Address</key>
@@ -341,11 +338,11 @@
   <area alias="merchelloCustomers">
     <key alias="loginName">Login</key>
     <key alias="newCustomer">New Customer</key>
-      <key alias="basket">Basket</key>
-      <key alias="lastActivityDate">Last Activity Date</key>
+    <key alias="basket">Basket</key>
+    <key alias="lastActivityDate">Last Activity Date</key>
     <key alias="lastInvoiceTotal">Last Invoice Total</key>
     <key alias="location">Location</key>
-      <key alias="customerBaskets">Customer Baskets</key>
+    <key alias="customerBaskets">Customer Baskets</key>
     <key alias="noCustomers">
       <![CDATA[
         <h5>You Have No Customers</h5>
@@ -377,7 +374,7 @@
       <small>Items currently in the customer wish list</small>
       ]]>
     </key>
-      <key alias="itemCacheEmpty">Contains no items</key>
+    <key alias="itemCacheEmpty">Contains no items</key>
     <key alias="totalSpent">Total Spent</key>
   </area>
   <area alias="merchelloMarketing">
@@ -462,7 +459,6 @@
     <key alias="allowOutOfStockPurchase">Allow out of stock purchase</key>
   </area>
   <area alias="merchelloOrder">
-    <!-- things -->
     <!-- moved to sales -->
     <key alias="invoice">Invoice</key>
     <key alias="invoiceNumber">Invoice #</key>
@@ -489,7 +485,7 @@
     <key alias="orderName">[Nome ordine]</key>
     <key alias="createOrder">Create Order</key>
 
-
+    <!-- to be removed -->
     <key alias="filter">Filtri ordini</key>
     <key alias="addDateFilters">Add date filters</key>
     <key alias="removeDateFilters">Remove date filters</key>
@@ -542,8 +538,8 @@
     <key alias="location">Location</key>
     <!-- actions -->
     <!-- phrases -->
-    <key alias="location">Location</key>
   </area>
+  <!-- TODO KEEP THE MERCHELLO SHIPPING AREA -->
   <area alias="merchelloShipping">
     <!-- things -->
     <key alias="shipping">Spedizione</key>
@@ -551,7 +547,7 @@
     <key alias="weight">Peso</key>
     <key alias="dimensions">Dimensioni</key>
     <!-- actions -->
-    <key alias="setVars"> Configuraizone informazioni sulla spedizione: peso e dimensioni</key>
+    <key alias="setVars">Configuraizone informazioni sulla spedizione: peso e dimensioni</key>
     <!-- phrases -->
     <key alias="editWarehouseHelper">Modifica le impostazioni del tuo magazzino</key>
     <key alias="editWarehouse">Impostazioni del magazzino</key>
@@ -582,6 +578,7 @@
     <key alias="addStyle">Aggiungi uno stile...</key>
     <key alias="enterOffer">Enter a name for the offer</key>
   </area>
+  
   <area alias="merchelloSettings">
     <key alias="storeDefaults">Impostazioni del negozio</key>
     <key alias="setDefaultSettingsHelper">CImposta i valori di default del negozio</key>
@@ -601,6 +598,7 @@
     <key alias="globalTaxationApplication">Set how taxes are applied</key>
     <key alias="defaultCultureName">Set the default extended content culture</key>
   </area>
+  
   <area alias="merchelloShippingCountry">
     <key alias="addCountry">Aggiungi una nazione</key>
     <key alias="typeCountryName">Nome del tipo della naizone</key>
@@ -614,8 +612,8 @@
     <key alias="extendedAddress">Indirizzo esteso</key>
     <key alias="city">Città</key>
     <key alias="stateProvince">Stato/Provincia</key>
-    <key alias="zip"> Codice postale</key>
-    <key alias="country"> Nazione</key>
+    <key alias="zip">Codice postale</key>
+    <key alias="country">Nazione</key>
     <key alias="selectCountry">Seleziona una nazione</key>
     <key alias="makePrimaryWarehouse">Rendi questo magazzino come principale</key>
     <key alias="addWarehouse">Aggiungi un magazzino</key>
@@ -661,11 +659,11 @@
     <key alias="notificationSettingsHelper">Imposta quando mandare la notifica e a chi</key>
     <key alias="description">Descrizione</key>
     <key alias="attachedEvent">Evento associato</key>
+    <key alias="resourceType"></key>
     <key alias="eventAlias">Alias dell'evento:</key>
     <key alias="sendTo"><![CDATA[Manda a <small>(ej. ordini@tuodominio.com)</small>]]></key>
     <key alias="replyTo"><![CDATA[CDATA a <small>(i.e. info@tuodominio.com)</small>]]></key>
     <key alias="emailCustomer">Mandare email al cliente</key>
-    <key alias="resourceType" />
   </area>
   <area alias="merchelloNotificationsEditTemplate">
     <key alias="header">Testata</key>
@@ -755,6 +753,7 @@
     <key alias="removeProduct">Disconnect This Product</key>
     <key alias="itemLocation">Item Location</key>
   </area>
+
   <area alias="merchelloAuditLogs">
     <key alias="notificationShipping">Shipping confirmation email sent to %0%</key>
     <key alias="notificationSalesConfirmation">Sales confirmation email sent to %0%</key>
