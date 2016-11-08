@@ -21,7 +21,7 @@
         /// <param name="customerBasket">
         /// The customerBasket.
         /// </param>
-        internal BasketConversionBase(IBasket anonymousBasket, IBasket customerBasket)
+        protected BasketConversionBase(IBasket anonymousBasket, IBasket customerBasket)
         {
             Mandate.ParameterNotNull(anonymousBasket, "anonymousBasket");
             Mandate.ParameterNotNull(customerBasket, "customerBasket");
