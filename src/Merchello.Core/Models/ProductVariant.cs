@@ -217,6 +217,15 @@
 
         /// <inheritdoc/>
         [IgnoreDataMember]
+        public int ExamineId
+        {
+            get { return _examineId; }
+            internal set { _examineId = value; }
+        }
+
+
+        /// <inheritdoc/>
+        [IgnoreDataMember]
         public IEnumerable<IProductAttribute> Attributes 
         {
             get { return _attibutes; }            
@@ -252,15 +261,6 @@
                 SetPropertyValueAndDetectChanges(value, ref _master, _ps.Value.MasterSelector);
             }
         }
-
-        /// <inheritdoc/>
-        [IgnoreDataMember]
-        internal int ExamineId 
-        {
-            get { return _examineId; }
-            set { _examineId = value;  }
-        }
-
 
         /// <summary>
         /// Handles the product attributes collection changed.
