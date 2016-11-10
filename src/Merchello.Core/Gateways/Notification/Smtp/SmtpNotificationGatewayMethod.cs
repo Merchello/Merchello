@@ -62,29 +62,30 @@
         {
             if (!message.Recipients.Any()) return;
 
-            var msg = new MailMessage
+            using (var msg = new MailMessage
             {
                 From = new MailAddress(message.From),
                 Subject = message.Name,
                 Body = message.BodyText,
                 IsBodyHtml = true
-            };
-
-            // REFACTOR update to MultiLogHelper when we control Resolution Freeze
-            LogHelper.Info<SmtpNotificationGatewayMethod>("Sending an email to " + string.Join(", ", message.Recipients));
-
-            foreach (var to in message.Recipients)
+            })
             {
-                if (!string.IsNullOrEmpty(to))
+                // REFACTOR update to MultiLogHelper when we control Resolution Freeze
+                LogHelper.Info<SmtpNotificationGatewayMethod>("Sending an email to " + string.Join(", ", message.Recipients));
+
+                foreach (var to in message.Recipients)
                 {
-                    msg.To.Add(new MailAddress(to));
+                    if (!string.IsNullOrEmpty(to))
+                    {
+                        msg.To.Add(new MailAddress(to));
+                    }
                 }
+
+                // Event raised to allow further modification to msg (like attachments)
+                Sending.RaiseEvent(new ObjectEventArgs<MailMessage>(msg), this);
+
+                this.Send(msg);
             }
-
-            // Event raised to allow further modification to msg (like attachments)
-            Sending.RaiseEvent(new ObjectEventArgs<MailMessage>(msg), this);
-
-            this.Send(msg);
         }
 
         /// <summary>
@@ -110,13 +111,6 @@
                     if (_settings.EnableSsl) smtpClient.EnableSsl = true;
                     smtpClient.Port = _settings.Port;
                     smtpClient.Send(msg);
-                }
-                if (msg.Attachments.Any())
-                {
-                    foreach (var attachment in msg.Attachments)
-                    {
-                        attachment.Dispose();
-                    }
                 }
 
                 return true;
