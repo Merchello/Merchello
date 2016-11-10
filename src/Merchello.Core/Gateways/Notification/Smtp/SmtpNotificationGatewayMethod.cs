@@ -111,6 +111,13 @@
                     smtpClient.Port = _settings.Port;
                     smtpClient.Send(msg);
                 }
+                if (msg.Attachments.Any())
+                {
+                    foreach (var attachment in msg.Attachments)
+                    {
+                        attachment.Dispose();
+                    }
+                }
 
                 return true;
             }
