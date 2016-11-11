@@ -28,5 +28,15 @@
         /// Gets the total (sum) of inventory "counts" across all associated warehouses
         /// </summary>
         int TotalInventoryCount { get; }
+
+        /// <summary>
+        /// Gets the id used in the examine index.
+        /// </summary>
+        int ExamineId { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether this represents the master product variant.
+        /// </summary>
+        bool Master { get; }
     }
 }

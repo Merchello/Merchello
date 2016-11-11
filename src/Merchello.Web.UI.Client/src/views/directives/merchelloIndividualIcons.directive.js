@@ -5,7 +5,7 @@ angular.module('merchello.directives').directive('merchelloSaveIcon', function(l
         replace: true,
         scope: {
             showSave: '=',
-            doSave: '&',
+            doSave: '&'
         },
         template: '<span class="merchello-icons">' +
         '<a class="merchello-icon merchello-icon-provinces" data-ng-show="showSave" ng-click="doSave()" title="{{title}}" prevent-default>' +

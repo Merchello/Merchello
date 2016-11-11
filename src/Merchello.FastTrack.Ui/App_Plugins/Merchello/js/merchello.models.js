@@ -1833,13 +1833,16 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
 
         // gets the local start date string
         function offerStartsDateLocalDateString() {
+            //return this.offerStartsDate;
             return localDateString(this.offerStartsDate);
         }
 
         // gets the local end date string
         function offerEndsDateLocalDateString() {
+            //return this.offerEndsDate;
             return localDateString(this.offerEndsDate);
         }
+
 
         function componentDefinitionExtendedDataToArray() {
             angular.forEach(this.componentDefinitions, function(cd) {
@@ -5251,6 +5254,8 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 tabs.addTab('salesOverTime', 'merchelloTabs_salesOverTime', '#/merchello/merchello/salesOverTime/manage');
                 tabs.addTab("salesByItem", "merchelloTabs_salesByItem", '#/merchello/merchello/salesByItem/manage');
                 tabs.addTab("abandonedBasket", "merchelloTabs_abandonedBasket", '#/merchello/merchello/abandonedBasket/manage');
+                // throw event here:
+
                 return tabs;
             }
 

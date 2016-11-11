@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Providers.Payment.PayPal.Models
 {
+    using Merchello.Providers.Models;
     using Merchello.Providers.Payment.Models;
     using Merchello.Providers.Payment.PayPal;
 
