@@ -15,7 +15,8 @@ var EntityCollectionProviderDisplay = function() {
     self.managesUniqueCollection = true;
     self.entityType = '';
     self.managedCollections = [];
-    self.dialogEditorView = undefined
+    // self.dialogEditorView = undefined;  we use this model for both collections and filters
+    //                                     this is just to indicate that the property is there in some models
 };
 
 

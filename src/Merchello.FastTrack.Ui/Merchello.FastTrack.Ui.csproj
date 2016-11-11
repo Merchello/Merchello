@@ -747,7 +747,6 @@
     <Content Include="Config\404handlers.config" />
     <Content Include="App_Plugins\FastTrack\config\fasttrack.config" />
     <Content Include="App_Plugins\FastTrack\Views\PurchaseOrderPayment\PaymentForm.cshtml" />
-    <Compile Include="App_Code\InvoiceStatusChangeCheck.cs" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\jquery.creditCardValidator.js" />
