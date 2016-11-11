@@ -41,13 +41,16 @@
 
         // gets the local start date string
         function offerStartsDateLocalDateString() {
+            //return this.offerStartsDate;
             return localDateString(this.offerStartsDate);
         }
 
         // gets the local end date string
         function offerEndsDateLocalDateString() {
+            //return this.offerEndsDate;
             return localDateString(this.offerEndsDate);
         }
+
 
         function componentDefinitionExtendedDataToArray() {
             angular.forEach(this.componentDefinitions, function(cd) {

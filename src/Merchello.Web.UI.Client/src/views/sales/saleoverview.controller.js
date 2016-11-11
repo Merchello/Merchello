@@ -134,6 +134,7 @@
                 $scope.discountLineItems = [];
                 var promise = invoiceResource.getByKey(id);
                 promise.then(function (invoice) {
+
                     $scope.invoice = invoiceDisplayBuilder.transform(invoice);
                     $scope.billingAddress = $scope.invoice.getBillToAddress();
 
