@@ -39,7 +39,7 @@ angular.module('merchello.directives').directive('offerComponents', function() {
  * @description
  * Common form elements for Merchello's OfferSettings
  */
-angular.module('merchello.directives').directive('offerMainProperties', function(dialogService, localizationService) {
+angular.module('merchello.directives').directive('offerMainProperties', function(dialogService, localizationService, eventsService) {
 
     return {
         restrict: 'E',
@@ -56,6 +56,7 @@ angular.module('merchello.directives').directive('offerMainProperties', function
             scope.dateBtnText = '';
             scope.ready = false;
             var allDates = '';
+            var eventOfferExpiresOpen = 'merchello.offercouponexpires.open';
 
             scope.openDateRangeDialog = function() {
                 var dialogData = {
@@ -76,13 +77,15 @@ angular.module('merchello.directives').directive('offerMainProperties', function
             }
 
             function init() {
+
+                eventsService.on(eventOfferExpiresOpen, scope.openDateRangeDialog);
+
                 scope.$watch('offer', function(nv, ov) {
 
                     if (nv) {
                         if (nv.key !== undefined) {
                             localizationService.localize('merchelloGeneral_allDates').then(function(value) {
                                 allDates = value;
-                                setDateBtnText();
                                 scope.ready = true;
                             });
                         }
@@ -98,15 +101,6 @@ angular.module('merchello.directives').directive('offerMainProperties', function
                 setDateBtnText();
 
             }
-
-            function setDateBtnText() {
-                if (scope.offer.offerExpires) {
-                    scope.dateBtnText = scope.offer.offerStartsDate + ' - ' + scope.offer.offerEndsDate;
-                } else {
-                    scope.dateBtnText = allDates;
-                }
-            }
-
 
             init();
         }

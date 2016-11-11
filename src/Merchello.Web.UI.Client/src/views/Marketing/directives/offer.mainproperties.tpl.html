@@ -22,15 +22,22 @@
         </div>
     </div>
     <div class="row-fluid">
-        <div class="form-group col-xs-6 span6">
+        <!--div class="form-group col-xs-6 span6">
 
             <label class="label-checkbox"><input name="expires" type="checkbox" data-ng-model="offer.offerExpires" data-ng-click="toggleOfferExpires()"> <span><localize key="merchelloMarketing_offerSetExpires" /></span></label>
+        </div-->
+
+        <div class="btn-group" data-ng-hide="offer.offerExpires">
+            <a href="#" class="btn btn-small" data-ng-click="toggleOfferExpires()" prevent-default>Offer is valid for all dates</a>
+        </div>
+
+        <div class="btn-group" data-ng-show="offer.offerExpires">
+            <a href="#" class="btn btn-small" data-ng-click="openDateRangeDialog()" prevent-default>{{ offer.offerStartsDate }} to {{ offer.offerEndsDate }}</a>
+            <a href="#" class="btn btn-small" prevent-default data-ng-click="toggleOfferExpires()">X</a>
         </div>
     </div>
 
-    <merchello-slide-open-panel hide-close="true" is-open="offer.offerExpires">
-        <div class="btn-group">
-            <a href="#" class="btn btn-small" data-ng-click="openDateRangeDialog()" prevent-default>{{ offer.offerStartsDate }} {{ offer.offerEndsDate }}</a>
-        </div>
-    </merchello-slide-open-panel>
+
+
+
 </div>

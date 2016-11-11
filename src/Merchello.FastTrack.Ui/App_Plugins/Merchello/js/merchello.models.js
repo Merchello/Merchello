@@ -559,16 +559,16 @@ var EntityCollectionDisplay = function() {
 EntityCollectionDisplay.prototype = (function() {
 
     function clone() {
-        var clone = angular.extend(new EntityCollectionDisplay(), this);
-        if (clone.filters) {
-            var collections = clone.filters;
-            clone.filters = [];
+        var c = angular.extend(new EntityCollectionDisplay(), this);
+        if (c.filters) {
+            var collections = c.filters;
+            c.filters = [];
             angular.forEach(collections, function(ac) {
                 var atclone = angular.extend(new EntityCollectionDisplay(), ac);
-                clone.filters.push(atclone);
+                c.filters.push(atclone);
             });
         }
-        return clone;
+        return c;
     }
 
     return {
@@ -597,7 +597,8 @@ var EntityCollectionProviderDisplay = function() {
     self.managesUniqueCollection = true;
     self.entityType = '';
     self.managedCollections = [];
-    self.dialogEditorView = undefined
+    // self.dialogEditorView = undefined;  we use this model for both collections and filters
+    //                                     this is just to indicate that the property is there in some models
 };
 
 
@@ -4348,14 +4349,14 @@ angular.module('merchello.models').factory('entityCollectionDisplayBuilder',
                     var collections = [];
                     if (angular.isArray(jsonResult)) {
                         for(var i = 0; i < jsonResult.length; i++) {
-                            var filters = undefined;
+                            var filters = null;
                             if (jsonResult[i].filters) {
                                 filters = this.transform(jsonResult[i].filters);
                             }
                             var collection = genericModelBuilder.transform(jsonResult[ i ], Constructor);
                             collection.entityTypeField = typeFieldDisplayBuilder.transform(jsonResult[ i ].entityTypeField );
                             collection.extendedData = extendedDataDisplayBuilder.transform(jsonResult[i].extendedData);
-                            if (filters) {
+                            if (filters !== null) {
                                 collection.filters = filters;
                             }
                             collections.push(collection);

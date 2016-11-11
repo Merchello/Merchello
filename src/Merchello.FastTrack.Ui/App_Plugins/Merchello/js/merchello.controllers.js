@@ -39,6 +39,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
         $scope.setLineItemName = setLineItemName;
         var eventComponentsName = 'merchello.offercomponentcollection.changed';
         var eventOfferSavingName = 'merchello.offercoupon.saving';
+        var eventOfferExpiresOpen = 'merchello.offercouponexpires.open';
 
         /**
          * @ngdoc method
@@ -161,6 +162,8 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
             $scope.offerSettings.offerExpires = !$scope.offerSettings.offerExpires;
             if (!$scope.offerSettings.offerExpires) {
                 setDefaultDates(new Date());
+            } else {
+                eventsService.emit(eventOfferExpiresOpen);
             }
         }
 
@@ -10707,7 +10710,6 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
 
                    $scope.tabs.appendCustomerTab($scope.invoice.customerKey);
 
-                    console.info($scope.invoice);
 
                 }, function (reason) {
                     notificationsService.error("Invoice Load Failed", reason.message);
