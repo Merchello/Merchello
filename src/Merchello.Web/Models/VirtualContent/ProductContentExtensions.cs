@@ -1,10 +1,12 @@
 ﻿namespace Merchello.Web.Models.VirtualContent
 {
+    using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
 
     using Merchello.Core;
+    using Merchello.Core.Logging;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Models.ContentEditing.Collections;
@@ -85,6 +87,63 @@
             return
                 ((EntityCollectionService)MerchelloContext.Current.Services.EntityCollectionService)
                     .GetEntityCollectionsByProductKey(product.Key).Select(x => x.ToEntityCollectionDisplay());
+        }
+
+        /// <summary>
+        /// Gets the default <see cref="IProductAttributeContent"/> based on default option choices.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductVariantContent"/>.
+        /// </returns>
+        public static IProductVariantContent GetDefaultProductVariant(this IProductContent product)
+        {
+            if (!product.Options.Any()) return null;
+
+            var attKeys = new List<Guid>();
+            foreach (var opt in product.Options)
+            {
+                var defaultChoice = opt.Choices.FirstOrDefault(x => x.IsDefaultChoice);
+                if (defaultChoice == null)
+                {
+                    defaultChoice = opt.Choices.First();
+                    MultiLogHelper.Debug(typeof(ProductCollectionExtensions), "Could not find default option choice.  Using first choice as default.");
+                }
+                attKeys.Add(defaultChoice.Key);
+            }
+
+            return product.GetProductVariantDisplayWithAttributes(attKeys.ToArray());
+        }
+
+
+        /// <summary>
+        /// Gets the <see cref="ProductVariantDisplay"/> with matching with attributes from the product.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <param name="optionChoices">
+        /// The option choices.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductVariantDisplay"/>.
+        /// </returns>        
+        public static IProductVariantContent GetProductVariantDisplayWithAttributes(this IProductContent product, Guid[] optionChoices)
+        {
+            var variant = 
+                product.ProductVariants.FirstOrDefault(
+                    x =>
+                    x.Attributes.Count() == optionChoices.Count()
+                    && optionChoices.All(key => x.Attributes.FirstOrDefault(att => att.Key == key) != null));
+
+            if (variant == null)
+            {
+                MultiLogHelper.Debug(typeof(ProductContentExtensions), "Could not find IProductVariantContent with keys matching choices in optionChoices array.");
+            }
+
+            return variant;
         }
     }
 }
