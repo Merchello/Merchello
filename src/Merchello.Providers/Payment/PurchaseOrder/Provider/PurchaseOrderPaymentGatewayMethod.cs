@@ -13,6 +13,11 @@
     /// Represents an PurchaseOrder Payment Method
     /// </summary>
     [GatewayMethodUi("PurchaseOrder.PurchaseOrder")]
+    [PaymentGatewayMethod("PayPal Express Checkout Method Editors",
+        "",
+        "",
+        "~/App_Plugins/MerchelloProviders/views/dialogs/voidpayment.confirm.html",
+        "")]
     public class PurchaseOrderPaymentGatewayMethod : PaymentGatewayMethodBase, IPurchaseOrderPaymentGatewayMethod
     {
         /// <summary>
