@@ -40,7 +40,6 @@ if (MUI !== undefined) {
             braintreePayPalSurface:   '/umbraco/fasttrack/BraintreePayPal/',
             braintreeStandardCcSurface: '/umbraco/fasttrack/BraintreeStandardCc/',
 
-
             // the checkout address surface controller end point
             countryRegionApi: '/umbraco/Merchello/CountryRegionApi/'
         },
