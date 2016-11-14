@@ -19,6 +19,8 @@ namespace Merchello.Web.Pluggable
     using Umbraco.Core.Logging;
     using Umbraco.Web;
 
+    using Newtonsoft.Json;
+
     /// <summary>
     /// A base class for defining customer contexts for various membership providers.
     /// </summary>
@@ -502,16 +504,19 @@ namespace Merchello.Web.Pluggable
 
             if (cookie != null)
             {
+                var parsedOk = false;
                 try
                 {
                     this.ContextData = cookie.ToCustomerContextData();
-                    this.TryGetCustomer(this.ContextData.Key);
+                    parsedOk = true;
                 }
-                catch (Exception ex)
+                catch (JsonException ex)
                 {
                     MultiLogHelper.Error<CustomerContext>("Decrypted guid did not parse", ex);
                     this.CreateAnonymousCustomer();
                 }
+
+                if (parsedOk) this.TryGetCustomer(this.ContextData.Key);
             }
             else
             {
