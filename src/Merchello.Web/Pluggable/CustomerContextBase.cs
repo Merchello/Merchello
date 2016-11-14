@@ -56,6 +56,11 @@ namespace Merchello.Web.Pluggable
         /// </summary>
         private readonly CacheHelper _cache;
 
+        /// <summary>
+        /// The number of days in which to persist an anonymous customer cookie.
+        /// </summary>
+        private readonly int _anonCookieExpireDays;
+
         #endregion
 
         #region Constructors
@@ -87,6 +92,7 @@ namespace Merchello.Web.Pluggable
            
             this._merchelloContext = merchelloContext;
             this._umbracoContext = umbracoContext;
+            this._anonCookieExpireDays = MerchelloConfiguration.Current.AnonymousCustomerCookieExpiresDays;
             this._customerService = merchelloContext.Services.CustomerService;
             this._cache = merchelloContext.Cache;
             this.Initialize();
@@ -522,15 +528,24 @@ namespace Merchello.Web.Pluggable
         private void CacheCustomer(ICustomerBase customer)
         {
             // set/reset the cookie 
-            // TODO decide how we want to deal with cookie persistence options
             var cookie = new HttpCookie(CustomerCookieName)
             {
                 Value = this.ContextData.ToJson()
             };
 
             // Ensure a session cookie for Anonymous customers
-            // TODO - on persisted authentication, we need to synch the cookie expiration
-            if (customer.IsAnonymous) cookie.Expires = DateTime.MinValue;
+            if (customer.IsAnonymous)
+            {
+                if (_anonCookieExpireDays <= 0)
+                {
+                    cookie.Expires = DateTime.MinValue;
+                }
+                else
+                {
+                    var expires = DateTime.Now.AddDays(_anonCookieExpireDays);
+                    cookie.Expires = expires;
+                }
+            }
 
             this._umbracoContext.HttpContext.Response.Cookies.Add(cookie);
 

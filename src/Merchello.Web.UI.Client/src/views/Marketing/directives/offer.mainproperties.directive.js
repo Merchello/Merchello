@@ -65,7 +65,6 @@ angular.module('merchello.directives').directive('offerMainProperties', function
                 scope.offer.offerStartsDate = dialogData.startDate;
                 scope.offer.offerEndsDate = dialogData.endDate;
                 setDateBtnText();
-
             }
 
             init();
