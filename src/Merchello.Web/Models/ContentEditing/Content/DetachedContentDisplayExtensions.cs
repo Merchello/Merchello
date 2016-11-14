@@ -203,6 +203,8 @@ namespace Merchello.Web.Models.ContentEditing.Content
         /// </param>
         internal static void EnsureValueConversion(this ProductDisplayBase display, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
         {
+            if (display == null) return;
+
             if (display.DetachedContents.Any())
             {
                 foreach (var dc in display.DetachedContents)
