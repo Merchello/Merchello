@@ -119,10 +119,11 @@ angular.module('merchello.directives').directive('addPaymentTable', function() {
                 }
                 promise.then(function (payment) {
                     // added a timeout here to give the examine index
-                    $timeout(function() {
+                   $timeout(function() {
                         notificationsService.success('Payment ' + note + 'success');
                         reload();
                     }, 400);
+
                 }, function (reason) {
                     notificationsService.error('Payment ' + note + 'Failed', reason.message);
                 });

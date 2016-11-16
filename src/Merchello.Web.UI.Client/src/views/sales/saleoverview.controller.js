@@ -201,7 +201,8 @@
                 var paymentsPromise = paymentResource.getPaymentsByInvoice(key);
                 paymentsPromise.then(function(payments) {
                     $scope.allPayments = paymentDisplayBuilder.transform(payments);
-                    $scope.payments = _.filter($scope.allPayments, function(p) { return !p.voided && !p.collected; })
+                    $scope.payments = _.filter($scope.allPayments, function(p) { return !p.voided && !p.collected && p.authorized; });
+                    console.info($scope.payments);
                     loadPaymentMethods();
                     $scope.preValuesLoaded = true;
                 }, function(reason) {
@@ -280,6 +281,11 @@
                 if (!dialogData.isValid()) {
                     return false;
                 }
+
+                /*
+                    We need to be able to swap out the editor depending on the provider here.
+                */
+
                 var promise = paymentResource.getPaymentMethod(dialogData.paymentMethodKey);
                 promise.then(function(paymentMethod) {
                     var pm = paymentMethodDisplayBuilder.transform(paymentMethod);
