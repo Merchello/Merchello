@@ -1,6 +1,6 @@
 angular.module('merchello.directives').directive('merchelloListView',
-    ['$routeParams', '$log', '$filter', 'dialogService', 'localizationService', 'merchelloListViewHelper', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
-    function($routeParams, $log, $filter, dialogService, localizationService, merchelloListViewHelper, queryDisplayBuilder, queryResultDisplayBuilder) {
+    ['$routeParams', '$log', '$filter', 'dialogService', 'eventsService', 'localizationService', 'merchelloListViewHelper', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
+    function($routeParams, $log, $filter, dialogService, eventsService, localizationService, merchelloListViewHelper, queryDisplayBuilder, queryResultDisplayBuilder) {
         return {
             restrict: 'E',
             replace: true,
@@ -41,6 +41,8 @@ angular.module('merchello.directives').directive('merchelloListView',
                 scope.endDate = '';
                 scope.dateBtnText = ''
                 var allDates = '';
+
+                var handleChanged = "merchello.collection.changed";
 
                 scope.config = merchelloListViewHelper.getConfig(scope.entityType);
 
@@ -89,6 +91,8 @@ angular.module('merchello.directives').directive('merchelloListView',
                               search();
                           }
                     });
+
+                    eventsService.on(handleChanged, search);
 
                 }
 

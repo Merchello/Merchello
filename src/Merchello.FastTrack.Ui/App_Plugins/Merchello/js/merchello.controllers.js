@@ -1612,10 +1612,10 @@ angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.Filt
 
 
 angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.ManageStaticCollectionController',
-    ['$scope',  'treeService', 'notificationsService', 'navigationService', 'assetsService', 'entityCollectionHelper', 'merchelloTabsFactory',
+    ['$scope',  'treeService', 'notificationsService', 'navigationService', 'assetsService', 'eventsService', 'entityCollectionHelper', 'merchelloTabsFactory',
         'settingsResource', 'entityCollectionResource', 'settingDisplayBuilder', 'productDisplayBuilder', 'invoiceDisplayBuilder', 'customerDisplayBuilder',
         'queryDisplayBuilder', 'queryResultDisplayBuilder', 'entityCollectionDisplayBuilder',
-    function($scope, treeService, notificationsService, navigationService, assetsService, entityCollectionHelper, merchelloTabsFactory,
+    function($scope, treeService, notificationsService, navigationService, assetsService, eventsService, entityCollectionHelper, merchelloTabsFactory,
         settingsResource, entityCollectionResource, settingDisplayBuilder, productDisplayBuilder, invoiceDisplayBuilder, customerDisplayBuilder,
         queryDisplayBuilder, queryResultDisplayBuilder, entityCollectionDisplayBuilder) {
 
@@ -1650,6 +1650,8 @@ angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.Mana
         $scope.toggleMode = toggleMode;
         $scope.handleEntity = handleEntity;
         $scope.saveCollection = saveCollection;
+
+        var collectionChanged = "merchello.collection.changed";
 
         function init() {
             var cssPromise = assetsService.loadCss('/App_Plugins/Merchello/assets/css/merchello.css');
@@ -1690,7 +1692,6 @@ angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.Mana
             var promise = entityCollectionResource.getByKey($scope.collectionKey);
             promise.then(function(collection) {
                 $scope.collection = entityCollectionDisplayBuilder.transform(collection);
-                console.info($scope.collection);
                 loadEntities();
             }, function(reason) {
                 notificationsService.error('Failed to load the collection ' + reason);
@@ -1751,6 +1752,7 @@ angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.Mana
             }
 
             promise.then(function() {
+                eventsService.emit(collectionChanged);
               loadEntities();
             }, function(reason) {
                 notificationsService.error('Failed to add entity to collection ' + reason);
