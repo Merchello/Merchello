@@ -153,6 +153,15 @@
 				return new Version(2, 2, 0);
 	        }
 
+            if (this.ValidColumns.Contains("merchProductAttribute,detachedContentValues"))
+            {
+                var merchProductAttributeDetachedContentValuesSize = _database.GetDbTableColumnSize("merchProductAttribute", "detachedContentValues");
+                if (merchProductAttributeDetachedContentValuesSize <= 500)
+                {
+                    return new Version(2, 3, 0);
+                }
+            }
+
 	        // If Errors is empty or if TableDefinitions tables + columns correspond to valid tables + columns then we're at current version
             if (this.MerchelloErrors.Any() == false ||
                 (this.TableDefinitions.All(x => this.ValidTables.Contains(x.Name))
