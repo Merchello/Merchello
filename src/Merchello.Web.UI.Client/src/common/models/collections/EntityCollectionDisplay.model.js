@@ -24,16 +24,16 @@ var EntityCollectionDisplay = function() {
 EntityCollectionDisplay.prototype = (function() {
 
     function clone() {
-        var clone = angular.extend(new EntityCollectionDisplay(), this);
-        if (clone.filters) {
-            var collections = clone.filters;
-            clone.filters = [];
+        var c = angular.extend(new EntityCollectionDisplay(), this);
+        if (c.filters) {
+            var collections = c.filters;
+            c.filters = [];
             angular.forEach(collections, function(ac) {
                 var atclone = angular.extend(new EntityCollectionDisplay(), ac);
-                clone.filters.push(atclone);
+                c.filters.push(atclone);
             });
         }
-        return clone;
+        return c;
     }
 
     return {

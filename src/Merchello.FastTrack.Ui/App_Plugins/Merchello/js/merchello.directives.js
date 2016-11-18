@@ -39,7 +39,7 @@ angular.module('merchello.directives').directive('offerComponents', function() {
  * @description
  * Common form elements for Merchello's OfferSettings
  */
-angular.module('merchello.directives').directive('offerMainProperties', function() {
+angular.module('merchello.directives').directive('offerMainProperties', function(dialogService, localizationService, eventsService) {
 
     return {
         restrict: 'E',
@@ -50,7 +50,58 @@ angular.module('merchello.directives').directive('offerMainProperties', function
             settings: '=',
             toggleOfferExpires: '&'
         },
-        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/offer.mainproperties.tpl.html'
+        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/offer.mainproperties.tpl.html',
+        link: function (scope, elm, attr) {
+
+            scope.dateBtnText = '';
+            scope.ready = false;
+            var allDates = '';
+            var eventOfferExpiresOpen = 'merchello.offercouponexpires.open';
+
+            scope.openDateRangeDialog = function() {
+                var dialogData = {
+                    startDate: scope.offer.offerStartsDate,
+                    endDate: scope.offer.offerEndsDate
+                };
+
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/daterange.selection.html',
+                    show: true,
+                    callback: processDateRange,
+                    dialogData: dialogData
+                });
+            }
+
+            scope.clearDates = function() {
+                scope.toggleOfferExpires();
+            }
+
+            function init() {
+
+                eventsService.on(eventOfferExpiresOpen, scope.openDateRangeDialog);
+
+                scope.$watch('offer', function(nv, ov) {
+
+                    if (nv) {
+                        if (nv.key !== undefined) {
+                            localizationService.localize('merchelloGeneral_allDates').then(function(value) {
+                                allDates = value;
+                                scope.ready = true;
+                            });
+                        }
+                    }
+
+                });
+
+            }
+
+            function processDateRange(dialogData) {
+                scope.offer.offerStartsDate = dialogData.startDate;
+                scope.offer.offerEndsDate = dialogData.endDate;
+            }
+
+            init();
+        }
     };
 })
 
@@ -1825,7 +1876,7 @@ angular.module('merchello.directives').directive('merchelloSaveIcon', function(l
         replace: true,
         scope: {
             showSave: '=',
-            doSave: '&',
+            doSave: '&'
         },
         template: '<span class="merchello-icons">' +
         '<a class="merchello-icon merchello-icon-provinces" data-ng-show="showSave" ng-click="doSave()" title="{{title}}" prevent-default>' +
@@ -1995,8 +2046,8 @@ angular.module('merchello.directives').directive('merchelloCreateButton', functi
 
 
 angular.module('merchello.directives').directive('merchelloListView',
-    ['$routeParams', '$log', '$filter', 'dialogService', 'localizationService', 'merchelloListViewHelper', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
-    function($routeParams, $log, $filter, dialogService, localizationService, merchelloListViewHelper, queryDisplayBuilder, queryResultDisplayBuilder) {
+    ['$routeParams', '$log', '$filter', 'dialogService', 'eventsService', 'localizationService', 'merchelloListViewHelper', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
+    function($routeParams, $log, $filter, dialogService, eventsService, localizationService, merchelloListViewHelper, queryDisplayBuilder, queryResultDisplayBuilder) {
         return {
             restrict: 'E',
             replace: true,
@@ -2037,6 +2088,8 @@ angular.module('merchello.directives').directive('merchelloListView',
                 scope.endDate = '';
                 scope.dateBtnText = ''
                 var allDates = '';
+
+                var handleChanged = "merchello.collection.changed";
 
                 scope.config = merchelloListViewHelper.getConfig(scope.entityType);
 
@@ -2085,6 +2138,8 @@ angular.module('merchello.directives').directive('merchelloListView',
                               search();
                           }
                     });
+
+                    eventsService.on(handleChanged, search);
 
                 }
 
@@ -4357,10 +4412,11 @@ angular.module('merchello.directives').directive('addPaymentTable', function() {
                 }
                 promise.then(function (payment) {
                     // added a timeout here to give the examine index
-                    $timeout(function() {
+                   $timeout(function() {
                         notificationsService.success('Payment ' + note + 'success');
                         reload();
                     }, 400);
+
                 }, function (reason) {
                     notificationsService.error('Payment ' + note + 'Failed', reason.message);
                 });

@@ -5,7 +5,7 @@
     /// <summary>
     /// Defines an entity collection proxy.
     /// </summary>
-    public interface IEntityCollectionProxy : IHasParent, IEntityProxy
+    public interface IEntityCollectionProxy : IHasParent, IEntityProxy, IHasExtendedData
     {
         /// <summary>
         /// Gets the collection name.

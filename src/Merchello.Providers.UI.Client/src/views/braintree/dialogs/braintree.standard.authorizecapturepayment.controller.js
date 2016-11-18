@@ -42,7 +42,6 @@ angular.module('merchello.providers').controller('Merchello.Providers.Dialogs.Br
                     };
                     $scope.braintreeClient = new braintree.api.Client(setup);
                     $scope.loaded = true;
-                    console.info($scope.dialogData);
                 });
             }
 
@@ -82,6 +81,7 @@ angular.module('merchello.providers').controller('Merchello.Providers.Dialogs.Br
                             console.info(err);
                             return;
                         }
+
                         $scope.dialogData.processorArgs.setValue('nonce-from-the-client', nonce);
                         $scope.submit($scope.dialogData);
                     });

@@ -134,6 +134,7 @@
                 $scope.discountLineItems = [];
                 var promise = invoiceResource.getByKey(id);
                 promise.then(function (invoice) {
+
                     $scope.invoice = invoiceDisplayBuilder.transform(invoice);
                     $scope.billingAddress = $scope.invoice.getBillToAddress();
 
@@ -155,7 +156,6 @@
 
                    $scope.tabs.appendCustomerTab($scope.invoice.customerKey);
 
-                    console.info($scope.invoice);
 
                 }, function (reason) {
                     notificationsService.error("Invoice Load Failed", reason.message);
@@ -201,7 +201,8 @@
                 var paymentsPromise = paymentResource.getPaymentsByInvoice(key);
                 paymentsPromise.then(function(payments) {
                     $scope.allPayments = paymentDisplayBuilder.transform(payments);
-                    $scope.payments = _.filter($scope.allPayments, function(p) { return !p.voided && !p.collected; })
+                    $scope.payments = _.filter($scope.allPayments, function(p) { return !p.voided && !p.collected && p.authorized; });
+                    console.info($scope.payments);
                     loadPaymentMethods();
                     $scope.preValuesLoaded = true;
                 }, function(reason) {
@@ -280,6 +281,11 @@
                 if (!dialogData.isValid()) {
                     return false;
                 }
+
+                /*
+                    We need to be able to swap out the editor depending on the provider here.
+                */
+
                 var promise = paymentResource.getPaymentMethod(dialogData.paymentMethodKey);
                 promise.then(function(paymentMethod) {
                     var pm = paymentMethodDisplayBuilder.transform(paymentMethod);

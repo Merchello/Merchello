@@ -15,9 +15,9 @@
  * The controller for offers list view controller
  */
 angular.module('merchello').controller('Merchello.Backoffice.OfferEditController',
-    ['$scope', '$routeParams', '$location', 'dateHelper', 'assetsService', 'dialogService', 'eventsService', 'notificationsService', 'settingsResource', 'marketingResource', 'merchelloTabsFactory',
+    ['$scope', '$routeParams', '$location', '$filter', 'dateHelper', 'assetsService', 'dialogService', 'eventsService', 'notificationsService', 'settingsResource', 'marketingResource', 'merchelloTabsFactory',
         'dialogDataFactory', 'settingDisplayBuilder', 'offerProviderDisplayBuilder', 'offerSettingsDisplayBuilder', 'offerComponentDefinitionDisplayBuilder',
-    function($scope, $routeParams, $location, dateHelper, assetsService, dialogService, eventsService, notificationsService, settingsResource, marketingResource, merchelloTabsFactory,
+    function($scope, $routeParams, $location, $filter, dateHelper, assetsService, dialogService, eventsService, notificationsService, settingsResource, marketingResource, merchelloTabsFactory,
              dialogDataFactory, settingDisplayBuilder, offerProviderDisplayBuilder, offerSettingsDisplayBuilder, offerComponentDefinitionDisplayBuilder) {
 
         $scope.loaded = false;
@@ -39,6 +39,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
         $scope.setLineItemName = setLineItemName;
         var eventComponentsName = 'merchello.offercomponentcollection.changed';
         var eventOfferSavingName = 'merchello.offercoupon.saving';
+        var eventOfferExpiresOpen = 'merchello.offercouponexpires.open';
 
         /**
          * @ngdoc method
@@ -128,6 +129,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
                 $scope.context = 'existing';
                 var offerSettingsPromise = marketingResource.getOfferSettings(key);
                 offerSettingsPromise.then(function(settings) {
+
                     $scope.offerSettings = offerSettingsDisplayBuilder.transform(settings);
                     $scope.lineItemName = $scope.offerSettings.getLineItemName();
                     $scope.hasReward = $scope.offerSettings.hasRewards();
@@ -136,8 +138,8 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
                     if ($scope.offerSettings.offerStartsDate === '0001-01-01' || !$scope.offerSettings.offerExpires) {
                         setDefaultDates(new Date());
                     } else {
-                        $scope.offerSettings.offerStartsDate = $scope.offerSettings.offerStartsDateLocalDateString();
-                        $scope.offerSettings.offerEndsDate = $scope.offerSettings.offerEndsDateLocalDateString();
+                        $scope.offerSettings.offerStartsDate = formatDate($scope.offerSettings.offerStartsDate);
+                        $scope.offerSettings.offerEndsDate = formatDate($scope.offerSettings.offerEndsDate);
                     }
                     $scope.preValuesLoaded = true;
                     $scope.loaded = true;
@@ -158,6 +160,11 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
 
         function toggleOfferExpires() {
             $scope.offerSettings.offerExpires = !$scope.offerSettings.offerExpires;
+            if (!$scope.offerSettings.offerExpires) {
+                setDefaultDates(new Date());
+            } else {
+                eventsService.emit(eventOfferExpiresOpen);
+            }
         }
 
 
@@ -238,8 +245,15 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
             var start = new Date(actual.getFullYear(), actual.getMonth(), actual.getDate());
             var end = new Date(actual.getFullYear(), month, actual.getDate());
 
-            $scope.offerSettings.offerStartsDate = start.toLocaleDateString();
-            $scope.offerSettings.offerEndsDate = end.toLocaleDateString();
+            $scope.offerSettings.offerStartsDate = formatDate(start);
+            $scope.offerSettings.offerEndsDate = formatDate(end);
+        }
+
+        function formatDate(d, format) {
+            if (format === undefined) {
+                format = $scope.settings.dateFormat;
+            }
+            return $filter('date')(d, format);
         }
 
         function onComponentCollectionChanged() {
@@ -1598,10 +1612,10 @@ angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.Filt
 
 
 angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.ManageStaticCollectionController',
-    ['$scope',  'treeService', 'notificationsService', 'navigationService', 'assetsService', 'entityCollectionHelper', 'merchelloTabsFactory',
+    ['$scope',  'treeService', 'notificationsService', 'navigationService', 'assetsService', 'eventsService', 'entityCollectionHelper', 'merchelloTabsFactory',
         'settingsResource', 'entityCollectionResource', 'settingDisplayBuilder', 'productDisplayBuilder', 'invoiceDisplayBuilder', 'customerDisplayBuilder',
         'queryDisplayBuilder', 'queryResultDisplayBuilder', 'entityCollectionDisplayBuilder',
-    function($scope, treeService, notificationsService, navigationService, assetsService, entityCollectionHelper, merchelloTabsFactory,
+    function($scope, treeService, notificationsService, navigationService, assetsService, eventsService, entityCollectionHelper, merchelloTabsFactory,
         settingsResource, entityCollectionResource, settingDisplayBuilder, productDisplayBuilder, invoiceDisplayBuilder, customerDisplayBuilder,
         queryDisplayBuilder, queryResultDisplayBuilder, entityCollectionDisplayBuilder) {
 
@@ -1636,6 +1650,8 @@ angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.Mana
         $scope.toggleMode = toggleMode;
         $scope.handleEntity = handleEntity;
         $scope.saveCollection = saveCollection;
+
+        var collectionChanged = "merchello.collection.changed";
 
         function init() {
             var cssPromise = assetsService.loadCss('/App_Plugins/Merchello/assets/css/merchello.css');
@@ -1676,7 +1692,6 @@ angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.Mana
             var promise = entityCollectionResource.getByKey($scope.collectionKey);
             promise.then(function(collection) {
                 $scope.collection = entityCollectionDisplayBuilder.transform(collection);
-                console.info($scope.collection);
                 loadEntities();
             }, function(reason) {
                 notificationsService.error('Failed to load the collection ' + reason);
@@ -1737,6 +1752,7 @@ angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.Mana
             }
 
             promise.then(function() {
+                eventsService.emit(collectionChanged);
               loadEntities();
             }, function(reason) {
                 notificationsService.error('Failed to add entity to collection ' + reason);
@@ -6681,19 +6697,74 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.ProductAddCont
         }]);
 
 angular.module('merchello').controller('Merchello.Product.Dialogs.ProductCopyController',
-    ['$scope',
-    function($scope) {
+    ['$scope', 'productResource',
+    function($scope, productResource) {
 
         $scope.wasFormSubmitted = false;
         $scope.save = save;
 
+        $scope.checking = false;
+        $scope.isUnique = true;
+
+        var currentSku = '';
+
+        var input = angular.element( document.querySelector( '#copysku' ) );
+
+
+        function init() {
+
+            console.info(input);
+
+            input.bind("keyup onfocusout", function (event) {
+                var code = event.which;
+                // alpha , numbers, ! and backspace
+
+                if ( code === 45 ||
+                    (code >47 && code <58) ||
+                    (code >64 && code <91) ||
+                    (code >96 && code <123) || code === 33 || code == 8) {
+                    $scope.$apply(function () {
+                        if ($scope.dialogData.sku !== '') {
+                            checkUniqueSku($scope.dialogData.sku);
+                        }
+                    });
+                } else {
+                    event.preventDefault();
+                }
+            });
+        }
 
         function save() {
             $scope.wasFormSubmitted = true;
-            if ($scope.copyProductForm.name.$valid && $scope.copyProductForm.sku.$valid) {
+            if ($scope.copyProductForm.name.$valid && $scope.copyProductForm.copysku.$valid && $scope.isUnique) {
+
                 $scope.submit($scope.dialogData);
             }
         }
+
+        function checkUniqueSku(sku) {
+            console.info(sku);
+            $scope.checking = true;
+            if (sku === undefined || sku === '') {
+                $scope.checking = false;
+                $scope.isUnique = true;
+            } else {
+
+                if (sku === currentSku) {
+                    $scope.checking = false;
+                    return true;
+                }
+                var checkPromise = productResource.getSkuExists(sku).then(function(exists) {
+                    $scope.checking = false;
+                    currentSku = sku;
+                    $scope.isUnique = exists === 'false';
+                    console.info($scope.isUnique);
+                    $scope.checking = false;
+                });
+            }
+        }
+
+        init();
 }]);
 
 angular.module('merchello').controller('Merchello.Product.Dialogs.PickSpecFilterCollectionsController',
@@ -10674,6 +10745,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 $scope.discountLineItems = [];
                 var promise = invoiceResource.getByKey(id);
                 promise.then(function (invoice) {
+
                     $scope.invoice = invoiceDisplayBuilder.transform(invoice);
                     $scope.billingAddress = $scope.invoice.getBillToAddress();
 
@@ -10695,7 +10767,6 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
 
                    $scope.tabs.appendCustomerTab($scope.invoice.customerKey);
 
-                    console.info($scope.invoice);
 
                 }, function (reason) {
                     notificationsService.error("Invoice Load Failed", reason.message);
@@ -10741,7 +10812,8 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 var paymentsPromise = paymentResource.getPaymentsByInvoice(key);
                 paymentsPromise.then(function(payments) {
                     $scope.allPayments = paymentDisplayBuilder.transform(payments);
-                    $scope.payments = _.filter($scope.allPayments, function(p) { return !p.voided && !p.collected; })
+                    $scope.payments = _.filter($scope.allPayments, function(p) { return !p.voided && !p.collected && p.authorized; });
+                    console.info($scope.payments);
                     loadPaymentMethods();
                     $scope.preValuesLoaded = true;
                 }, function(reason) {
@@ -10820,6 +10892,11 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 if (!dialogData.isValid()) {
                     return false;
                 }
+
+                /*
+                    We need to be able to swap out the editor depending on the provider here.
+                */
+
                 var promise = paymentResource.getPaymentMethod(dialogData.paymentMethodKey);
                 promise.then(function(paymentMethod) {
                     var pm = paymentMethodDisplayBuilder.transform(paymentMethod);

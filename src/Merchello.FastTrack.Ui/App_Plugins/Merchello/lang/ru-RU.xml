@@ -14,16 +14,16 @@
     <key alias="chooseMedia">Выбрать медиа</key>
     <key alias="multipleOptions">Выбор свойств</key>
     <key alias="optional">(необяз.)</key>
-    <key alias="percentSymbol" >%</key>
-    <key alias="moneySymbol" >$</key>
-    <key alias="trackingNumber" >№ квитанции </key>
-    <key alias="shipment" >Доставка</key>
-    <key alias="sku" >Артикул</key>
-    <key alias="quantity" >К-во</key>
-    <key alias="fulfill"> Завершен</key>
-    <key alias="status"> Состояние</key>
-    <key alias="type"> Тип</key>
-    <key alias="amount"> Сумма</key>
+    <key alias="percentSymbol">%</key>
+    <key alias="moneySymbol">$</key>
+    <key alias="trackingNumber">№ квитанции </key>
+    <key alias="shipment">Доставка</key>
+    <key alias="sku">Артикул</key>
+    <key alias="quantity">К-во</key>
+    <key alias="fulfill">Завершен</key>
+    <key alias="status">Состояние</key>
+    <key alias="type">Тип</key>
+    <key alias="amount">Сумма</key>
     <key alias="via">Через</key>
     <key alias="options">Опции</key>
     <key alias="select">Выбрать</key>
@@ -61,7 +61,6 @@
     <key alias="item">Товар</key>
     <key alias="items">Товары</key>
     <key alias="totals">Итого</key>
-    <key alias="quantity">Количество</key>
     <key alias="subTotal">Всего</key>
     <key alias="checkout">Расчет</key>
     <key alias="author">Автор</key>
@@ -83,7 +82,7 @@
     <key alias="gateways">Провайдеры</key>
   </area>
   <area alias="merchelloTabs">
-    <key alias="productFilterSpecs">Параметры фильтров</key>
+    <key alias="filterGroups">Фильтр групп</key>
     <key alias="productListing">Список товаров</key>
     <key alias="productContentTypes">Типы документов</key>
     <key alias="product">Товар</key>
@@ -141,6 +140,7 @@
     <key alias="addProvider">Добавить провайдер</key>
   </area>
   <area alias="merchelloCollections">
+    <key alias="selectedCollection">Selected collection</key>
     <key alias="providers">Провайдеры списков</key>
     <key alias="newCollection">Новая категория</key>
     <key alias="manageCollection">Управление категорией</key>
@@ -156,14 +156,15 @@
     <key alias="noQualifyingEntities">Нет других элементов для добавления в данный список.</key>
     <key alias="collectionPickerTitle">Категории</key>
     <key alias="collectionPickerInfo">Добавить этот товар в одну или несколько категорий.</key>
-    <key alias="filterPickerTitle">Specified Filters</key>
-    <key alias="filterPickerInfo">Add this item to one or more specified filters.</key>
-    <key alias="filterAssociateFilters">Associate Filters</key>
+    <key alias="filterPickerTitle">Настроенные фильтры</key>
+    <key alias="filterPickerInfo">Добавить этот элемент к одному или нескольким настроенным фильтрам.</key>
+    <key alias="filterAssociateFilters">Назначить фильтры</key>
     <key alias="allItems">Все элементы</key>
     <key alias="allProduct">Все товары</key>
     <key alias="allCustomer">Все покупатели</key>
     <key alias="allInvoice">Все продажи</key>
     <key alias="allOffer">Все предложения</key>
+    <key alias="allProductOption">Shared Product Options</key>
     <key alias="productCollections">Категории товаров</key>
     <key alias="invoiceCollections">Списки счетов</key>
     <key alias="customerCollections">Списки покупателей</key>
@@ -195,13 +196,13 @@
     <key alias="optionValues">Значения свойства</key>
     <key alias="shared">Совместное</key>
     <key alias="sharedCount">К-во совмещений</key>
-    <key alias="filterGroup">Filter Group</key>
-    <key alias="filters">Filters</key>
+    <key alias="filterGroup">Группа фильтров</key>
+    <key alias="filters">Фильтры</key>
   </area>
   <area alias="merchelloNotes">
     <key alias="notes">Заметки</key>
     <key alias="note">Заметка</key>
-    <key alias="saleNotes">Заметки об этой покупке</key>
+    <key alias="invoiceNotes">Заметки об этой покупке</key>
     <key alias="customerNotes">Заметки по этому покупателю</key>
     <key alias="paymentNotes">Заметки по этому платежу</key>
     <key alias="addNote">Добавить заметку</key>
@@ -218,16 +219,16 @@
     <key alias="newProductSku">Задайте артикул товара</key>
   </area>
   <area alias="merchelloSpecFilters">
-    <key alias="manageProductFilters">Manage Product Filters</key>
+    <key alias="manageProductFilters">Управление фильтрами товаров</key>
     <key alias="editSpecFilter">
       <![CDATA[
-      <strong>Edit Filters</strong>
-      <small>Add or edit filters, which can be used to enhance product filtering and nagivation.</small>
+      <strong>Изменить фильтры</strong>
+      <small>Добавить или изменить фильтры, которые могут быть использованы для расширенной фильтрации и навигации по товарам.</small>
       ]]>
     </key>
     <key alias="noSpecFilters">
       <![CDATA[
-      <h5>You have not setup any specification filters</h5>
+      <h5>У Вас пока нет ни одного настроенного фильтра</h5>
       ]]>
     </key>
   </area>
@@ -273,24 +274,30 @@
       <p>Сопоставление может быть сделано через контекстное меню товаров.</p>
       ]]>
     </key>
-    <key alias="noProductContentType"><![CDATA[
+    <key alias="noProductContentType">
+      <![CDATA[
       <h5>Вы не выбрали тип документов для товаров</h5>
-    ]]></key>
+    ]]>
+    </key>
     <key alias="productOptionContentTypes">Типы документов для свойства</key>
     <key alias="productOptionContentType">Тип документов для свойства</key>
     <key alias="noProductOptionContentType">
-      <![CDATA[
+    <![CDATA[
       <h5>Вы не выбрали тип документов для свойства товара</h5>
     ]]>
     </key>
-    <key alias="deleteWarning"><![CDATA[
+    <key alias="deleteWarning">
+      <![CDATA[
     Эта операция также удалит ВСЕ значения дополнительных свойств, сопоставленных товарам этого типа.
-    ]]></key>
+    ]]>
+    </key>
     <key alias="removeDetachedContent">Удалить расширенные свойства</key>
-    <key alias="removeDetachedContentWarning"><![CDATA[
+    <key alias="removeDetachedContentWarning">
+      <![CDATA[
     Удаление расширенных свойств НЕ удаляет сам товар или его вариант. Используйте эту операцию, если хотите
     удалить или изменить сопоставленный товару тип документов Umbraco. Эта операция удалит расширенные свойства для ВСЕХ языков.
-    ]]></key>
+    ]]>
+    </key>
   </area>
   <area alias="merchelloSales">
     <key alias="invoice">Счет</key>
@@ -307,13 +314,13 @@
     <key alias="paymentExpirationWarning">Вы могли не получить платеж по причине просроченной авторизации.</key>
     <key alias="processedBy">Проведен через</key>
     <key alias="refundMethod">Метод возврата</key>
-    <key alias="noSales"><![CDATA[
+    <key alias="noSales">
+      <![CDATA[
         <h5>Продаж пока не было</h5>
         <p>Но вскоре обязательно будут!</p>
-      ]]></key>
+      ]]>
+    </key>
     <key alias="emptySalesCollection">В списке нет продаж</key>
-    <key alias="invoiceNumber">Счет №</key>
-    <key alias="paymentStatus">Сост. оплаты</key>
     <key alias="fulfillmentStatus">Завершение</key>
     <key alias="billingAddress">Платежный адрес</key>
     <key alias="noBillingAddress">Нет плат. адреса</key>
@@ -331,12 +338,11 @@
   <area alias="merchelloCustomers">
     <key alias="loginName">Логин</key>
     <key alias="newCustomer">Новый покупатель</key>
-    <key alias="customerBaskets">Покупательские корзины</key>
     <key alias="basket">Корзина</key>
-    <key alias="lastInvoiceTotal">Сумма последнего счета</key>
     <key alias="lastActivityDate">Дата последней активности</key>
+    <key alias="lastInvoiceTotal">Сумма последнего счета</key>
     <key alias="location">Местоположение</key>
-      <key alias="customerBaskets">Customer Baskets</key>
+    <key alias="customerBaskets">Покупательские корзины</key>
     <key alias="noCustomers">
       <![CDATA[
         <h5>Покупателей пока нет</h5>
@@ -368,7 +374,7 @@
       <small>Товары, находящиеся в списке сейчас</small>
       ]]>
     </key>
-      <key alias="itemCacheEmpty">Не содержит товаров</key>
+    <key alias="itemCacheEmpty">Не содержит товаров</key>
     <key alias="totalSpent">Всего проведено</key>
   </area>
   <area alias="merchelloMarketing">
@@ -543,25 +549,26 @@
     <!-- actions -->
     <key alias="setVars">Установка параметров доставки: веса и размеров</key>
     <!-- phrases -->
-      <key alias="editWarehouseHelper" >Изменить данные о складе</key>
-      <key alias="editWarehouse" >Изменить склад</key>
-      <key alias="shippingMethods" >Способы доставки</key>
-      <key alias="shippingMethodsHelper" >Добавить способы доставки в имеющийся регион или создать новый регион</key>
-      <key alias="addCountry" >Добавить страну</key>
-      <key alias="addCatalog">Добавить каталог</key>
-      <key alias="selectCatalog">Выбрать каталог</key>
-      <key alias="shippingProvidersMethodsTitle">Провайдеры и способы доставки</key>
-      <key alias="shipContriesInfo"><![CDATA[
+    <key alias="editWarehouseHelper">Изменить данные о складе</key>
+    <key alias="editWarehouse">Изменить склад</key>
+    <key alias="shippingMethods">Способы доставки</key>
+    <key alias="shippingMethodsHelper">Добавить способы доставки в имеющийся регион или создать новый регион</key>
+    <key alias="addCountry">Добавить страну</key>
+    <key alias="addCatalog">Добавить каталог</key>
+    <key alias="selectCatalog">Выбрать каталог</key>
+    <key alias="shippingProvidersMethodsTitle">Провайдеры и способы доставки</key>
+    <key alias="shipContriesInfo">
+      <![CDATA[
         Страны доставки
         <small>Список провайдеров и способов доставки, отсортированный по странам.</small>]]>
-      </key>
-     <key alias="warehouse">Склад</key>
+    </key>
+    <key alias="warehouse">Склад</key>
   </area>
   <area alias="merchelloInventory">
     <!-- things -->
     <key alias="base">Базовый учет</key>
-    <key alias="inventory">Учет</key>
-    <key alias="tracking">Отслеживание количества</key>
+    <key alias="inventory">Учет остатков</key>
+    <key alias="tracking">Отслеживание остатков</key>
     <!-- actions -->
     <!-- phrases -->
   </area>
@@ -586,7 +593,7 @@
     <key alias="catalogDefaultsHelper">Установите свойства всех товаров каталога по-умолчанию. Они могут быть затем изменены для каждого товара в отдельности.</key>
     <key alias="globalTaxable">Все товары облагаются налогом</key>
     <key alias="globalShippable">Все товары продаются с доставкой</key>
-    <key alias="globalTrackInventory"><![CDATA[Отслеживать количество для всех товаров и вариантов]]></key>
+    <key alias="globalTrackInventory"><![CDATA[Отслеживать остатки для всех товаров и вариантов]]></key>
     <key alias="globalShippingIsTaxable">Стоимость доставки облагается налогом</key>
     <key alias="globalTaxationApplication">Установить правила налогообложения</key>
     <key alias="defaultCultureName">Культура (язык) по-умолчанию</key>
@@ -594,122 +601,122 @@
 
   <area alias="merchelloShippingCountry">
     <key alias="addCountry">Добавить страну</key>
-    <key alias="typeCountryName" >Наберите название страны</key>
-    <key alias="noneSelected" >-- не выбрано --</key>
+    <key alias="typeCountryName">Наберите название страны</key>
+    <key alias="noneSelected">-- не выбрано --</key>
   </area>
   <area alias="merchelloShippingWarehouse">
-    <key alias="deleteComfirm" >Вы уверены, что хотите удалить склад </key>
+    <key alias="deleteComfirm">Вы уверены, что хотите удалить склад </key>
     <key alias="address">Адрес</key>
-    <key alias="primaryWarehouse" >Главный склад</key>
-    <key alias="streetAddress" >Адрес</key>
+    <key alias="primaryWarehouse">Главный склад</key>
+    <key alias="streetAddress">Адрес</key>
     <key alias="extendedAddress">Доп. адрес</key>
     <key alias="city">Город</key>
     <key alias="stateProvince">Регион</key>
-    <key alias="zip"> Почтовый индекс</key>
-    <key alias="country"> Страна</key>
-    <key alias="selectCountry" >Выбрать страну</key>
-    <key alias="makePrimaryWarehouse" >Задать этот склад как главный</key>
-    <key alias="addWarehouse" >Добавить склад</key>
-    <key alias="editWarehouse" >Изменить склад</key>
+    <key alias="zip">Почтовый индекс</key>
+    <key alias="country">Страна</key>
+    <key alias="selectCountry">Выбрать страну</key>
+    <key alias="makePrimaryWarehouse">Задать этот склад как главный</key>
+    <key alias="addWarehouse">Добавить склад</key>
+    <key alias="editWarehouse">Изменить склад</key>
   </area>
   <area alias="merchelloShippingMethod">
     <key alias="addEditShippingMethod">Добавить/изменить стоимость доставки для</key>
-    <key alias="method" >Способ</key>
-    <key alias="setRange" >Задать диапазон</key>
-    <key alias="addNewRange" >Добавить диапазон</key>
-    <key alias="adjustIndividualRegions" >Настроить для каждого региона</key>
-    <key alias="region" >Регион</key>
-    <key alias="adjustRate" >Размер ставки</key>
-    <key alias="adjustBy" >Ставка в</key>
+    <key alias="method">Способ</key>
+    <key alias="setRange">Задать диапазон</key>
+    <key alias="addNewRange">Добавить диапазон</key>
+    <key alias="adjustIndividualRegions">Настроить для каждого региона</key>
+    <key alias="region">Регион</key>
+    <key alias="adjustRate">Размер ставки</key>
+    <key alias="adjustBy">Ставка в</key>
   </area>
   <area alias="merchelloShippingProvider">
-    <key alias="provider" >Провайдер</key>
-    <key alias="addProvider" >Добавить провайдер</key>
-    <key alias="selectProvider" >Выберите провайдер</key>
-    <key alias="selectResource" >Выберите ресурс</key>
+    <key alias="provider">Провайдер</key>
+    <key alias="addProvider">Добавить провайдер</key>
+    <key alias="selectProvider">Выберите провайдер</key>
+    <key alias="selectResource">Выберите ресурс</key>
   </area>
   <area alias="merchelloShippingHistory">
-    <key alias="shipmentHistory" >История доставки</key>
-    <key alias="shipmentHistoryHelper" >Записи состояния для имеющихся доставок</key>
-    <key alias="shipment" >Доставка</key>
-    <key alias="trackingNumber" >№ квитанции</key>
+    <key alias="shipmentHistory">История доставки</key>
+    <key alias="shipmentHistoryHelper">Записи состояния для имеющихся доставок</key>
+    <key alias="shipment">Доставка</key>
+    <key alias="trackingNumber">№ квитанции</key>
   </area>
   <area alias="merchelloTaxation">
-    <key alias="taxation" >Налогообложение</key>
-    <key alias="taxMethods" >Методы налогообложения</key>
-    <key alias="taxMethodsHelper" >Установить простые ставки для регионов доставки</key>
+    <key alias="taxation">Налогообложение</key>
+    <key alias="taxMethods">Методы налогообложения</key>
+    <key alias="taxMethodsHelper">Установить простые ставки для регионов доставки</key>
     <key alias="taxIncludeInProductPrice">Включать в цену товара</key>
   </area>
   <area alias="merchelloNotifications">
-    <key alias="notifications" >Уведомления</key>
-    <key alias="addNotification" >Добавить уведомление</key>
+    <key alias="notifications">Уведомления</key>
+    <key alias="addNotification">Добавить уведомление</key>
   </area>
   <area alias="merchelloNotificationsEdit">
-    <key alias="emailTemplate" >Шаблон письма</key>
-    <key alias="emailTemplateHelper" >Изменит шаблон уведомительного письма</key>
-    <key alias="emailTemplateEditBody" >Редактировать основной текст</key>
-    <key alias="notificationSettings" >Параметры уведомлений</key>
-    <key alias="notificationSettingsHelper" >Укажите кому и когда направлять уведомления</key>
-    <key alias="description" >Описание</key>
-    <key alias="attachedEvent" >Назначенное событие</key>
+    <key alias="emailTemplate">Шаблон письма</key>
+    <key alias="emailTemplateHelper">Изменит шаблон уведомительного письма</key>
+    <key alias="emailTemplateEditBody">Редактировать основной текст</key>
+    <key alias="notificationSettings">Параметры уведомлений</key>
+    <key alias="notificationSettingsHelper">Укажите кому и когда направлять уведомления</key>
+    <key alias="description">Описание</key>
+    <key alias="attachedEvent">Назначенное событие</key>
     <key alias="resourceType"></key>
-    <key alias="eventAlias" >Код события:</key>
-    <key alias="sendTo" ><![CDATA[Куда <small>(например, orders@yourdomain.com)</small>]]></key>
-    <key alias="replyTo" ><![CDATA[Отвечать на <small>(например, reply@yourdomain.com)</small>]]></key>
-    <key alias="emailCustomer" >Отослать покупателю</key>
+    <key alias="eventAlias">Код события:</key>
+    <key alias="sendTo"><![CDATA[Куда <small>(например, orders@yourdomain.com)</small>]]></key>
+    <key alias="replyTo"><![CDATA[Отвечать на <small>(например, reply@yourdomain.com)</small>]]></key>
+    <key alias="emailCustomer">Отослать покупателю</key>
   </area>
   <area alias="merchelloNotificationsEditTemplate">
-    <key alias="header" >Шапка</key>
-    <key alias="footer" >Подвал</key>
-    <key alias="templateHelper" >Вы можете добавить статическое HTML-содержимое в шапку и подвал шаблона, например, &lt;br /&gt; для отображения пустой строки и т.п.</key>
+    <key alias="header">Шапка</key>
+    <key alias="footer">Подвал</key>
+    <key alias="templateHelper">Вы можете добавить статическое HTML-содержимое в шапку и подвал шаблона, например, &lt;br /&gt; для отображения пустой строки и т.п.</key>
   </area>
   <area alias="merchelloNotificationsDelete">
     <key alias="merchelloNotificationsDelete_deleteNotification">Удалить способ уведомления</key>
   </area>
   <area alias="merchelloNotificationsMessage">
     <add alias="replyTo">Отвечать на</add>
-    <key alias="addEditMessage" >Добавить/изменить уведомительное сообщение</key>
-    <key alias="attachedEvent" >Назначенное событие</key>
-    <key alias="fromEmail" ><![CDATA[От кого <small>(например, confirmation@yourdomain.com)</small>]]></key>
+    <key alias="addEditMessage">Добавить/изменить уведомительное сообщение</key>
+    <key alias="attachedEvent">Назначенное событие</key>
+    <key alias="fromEmail"><![CDATA[От кого <small>(например, confirmation@yourdomain.com)</small>]]></key>
   </area>
   <area alias="merchelloNotificationsMethod">
-    <key alias="addEditMethod" >Добавить/изменить способ уведомления</key>
-    <key alias="notificationsMethodResource" >Способ уведомления</key>
-    <key alias="message" >Сообщение</key>
-    <key alias="notification" >Уведомление</key>
-    <key alias="event" >Событие</key>
-    <key alias="sendTo" >Кому</key>
-    <key alias="emailCustomer" >Отослать покупателю</key>
+    <key alias="addEditMethod">Добавить/изменить способ уведомления</key>
+    <key alias="notificationsMethodResource">Способ уведомления</key>
+    <key alias="message">Сообщение</key>
+    <key alias="notification">Уведомление</key>
+    <key alias="event">Событие</key>
+    <key alias="sendTo">Кому</key>
+    <key alias="emailCustomer">Отослать покупателю</key>
   </area>
   <area alias="merchelloGatewayProvider">
-    <key alias="gatewayProvider" >Внешние шлюзы</key>
-    <key alias="notificationProvider" >Провайдеры уведомлений</key>
-    <key alias="notificationProviderHelper" >Включить/отключить провайдеры уведомлений</key>
-    <key alias="paymentProvider" >Провайдеры оплаты</key>
-    <key alias="paymentProviderHelper" >Включить/отключить провайдеры оплаты</key>
-    <key alias="shippingProvider" > Провайдеры доставки</key>
-    <key alias="shippingProviderHelper" >Включить/отключить провайдеры доставки</key>
-    <key alias="taxationProvider" > Провайдеры налогообложения</key>
-    <key alias="taxationProviderHelper" >Включить/отключить провайдеры налогообложения</key>
-    <key alias="host" >Адрес/хост</key>
-    <key alias="username" >Логин</key>
-    <key alias="password" >Пароль</key>
-    <key alias="enableSSL" >Разрешить SSL</key>
-    <key alias="encryptProviderConfiguration" > Зашифровать параметры конфигурации</key>
-    <key alias="providerName" >Название провайдера</key>
+    <key alias="gatewayProvider">Внешние шлюзы</key>
+    <key alias="notificationProvider">Провайдеры уведомлений</key>
+    <key alias="notificationProviderHelper">Включить/отключить провайдеры уведомлений</key>
+    <key alias="paymentProvider">Провайдеры оплаты</key>
+    <key alias="paymentProviderHelper">Включить/отключить провайдеры оплаты</key>
+    <key alias="shippingProvider"> Провайдеры доставки</key>
+    <key alias="shippingProviderHelper">Включить/отключить провайдеры доставки</key>
+    <key alias="taxationProvider"> Провайдеры налогообложения</key>
+    <key alias="taxationProviderHelper">Включить/отключить провайдеры налогообложения</key>
+    <key alias="host">Адрес/хост</key>
+    <key alias="username">Логин</key>
+    <key alias="password">Пароль</key>
+    <key alias="enableSSL">Разрешить SSL</key>
+    <key alias="encryptProviderConfiguration"> Зашифровать параметры конфигурации</key>
+    <key alias="providerName">Название провайдера</key>
     <key alias="activate">включить</key>
-    <key alias="deactivate" >отключить</key>
+    <key alias="deactivate">отключить</key>
   </area>
   <area alias="merchelloPayment">
     <key alias="paymentInfo">Информация об оплате</key>
-    <key alias="payment" >Платеж</key>
-    <key alias="addPaymentMethod" >Добавить метод</key>
-    <key alias="resourceType" >Тип ресурса:</key>
-    <key alias="deletePayment" >Удалить метод оплаты</key>
+    <key alias="payment">Платеж</key>
+    <key alias="addPaymentMethod">Добавить метод</key>
+    <key alias="resourceType">Тип ресурса:</key>
+    <key alias="deletePayment">Удалить метод оплаты</key>
     <key alias="paymentMethod">Метод оплаты</key>
   </area>
   <area alias="merchelloPaymentMethod">
-    <key alias="addEditPayment" >Добавить/изменить метод оплаты</key>
+    <key alias="addEditPayment">Добавить/изменить метод оплаты</key>
   </area>
   <area alias="merchelloMethodDelete">
     <key alias="deleteConfirmation">Вы уверены, что хотите удалить этот метод </key>
@@ -724,8 +731,8 @@
     <key alias="reorderVariants">Пересортировать</key>
     <key alias="dragAndReorderHelper">Если Вы пересортируете свойства и варианты, изменится порядок их отображения в магазине. Перетаскивайте свойства (напр. 'цвет' или 'размер') вертикально, а варианты (напр. 'мужской' или 'женский') горизонтально.</key>
     <key alias="changePrices">Изменить цены</key>
-    <key alias="updateInventory">Обновить количество</key>
-    <key alias="toggleTracksInventory">Toggle Tracks Inventory</key>
+    <key alias="updateInventory">Обновить остатки</key>
+    <key alias="toggleTracksInventory">Отслеживание остатков</key>
     <key alias="toggleAvailable">Товар доступен</key>
     <key alias="toggleOnSale">В распродаже</key>
     <key alias="duplicateVariant"> Скопировать вариант</key>

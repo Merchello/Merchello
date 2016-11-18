@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Merchello.Core.Models;
     using Merchello.Core.Models.Interfaces;
 
     /// <summary>
@@ -23,6 +24,7 @@
             this.Name = collection.Name;
             this.SortOrder = collection.SortOrder;
             this.Initialize(collection.Filters, collection.ProviderKey);
+            this.ExtendedData = collection.ExtendedData;
         }
 
         /// <summary>
@@ -60,6 +62,11 @@
                 return null;
             }
         }
+
+        /// <summary>
+        /// Gets the extended data collection.
+        /// </summary>
+        public ExtendedDataCollection ExtendedData { get; private set; }
 
         /// <summary>
         /// Initializes the model.

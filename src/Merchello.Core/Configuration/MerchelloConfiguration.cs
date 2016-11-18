@@ -198,6 +198,18 @@
             get { return int.Parse(Section.Settings["AnonymousCustomersMaxDays"].Value); }
         }
 
+
+        /// <summary>
+        /// Gets the number of days to persist an anonymous customer cookie.
+        /// </summary>
+        public int AnonymousCustomerCookieExpiresDays
+        {
+            get
+            {
+                return int.Parse(Section.Settings["AnonymousCustomerCookieExpiresDays"].Value);
+            }
+        }
+
         /// <summary>
         /// Gets the pattern formatter.
         /// </summary>

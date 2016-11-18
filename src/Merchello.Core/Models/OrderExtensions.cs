@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Core.Models
 {
+    using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
@@ -59,6 +60,37 @@
         internal static IInvoice Invoice(this IOrder order, IMerchelloContext merchelloContext)
         {
             return merchelloContext.Services.InvoiceService.GetByKey(order.InvoiceKey);
+        }
+
+        /// <summary>
+        /// Gets a collection of shipments for an order.
+        /// </summary>
+        /// <param name="order">
+        /// The order.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IShipment}"/>.
+        /// </returns>
+        public static IEnumerable<IShipment> Shipments(this IOrder order)
+        {
+            return order.Shipments(MerchelloContext.Current);
+        }
+
+        /// <summary>
+        /// Gets a collection of shipments for an order.
+        /// </summary>
+        /// <param name="order">
+        /// The order.
+        /// </param>
+        /// <param name="merchelloContext">
+        /// The <see cref="IMerchelloContext"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IShipment}"/>.
+        /// </returns>
+        internal static IEnumerable<IShipment> Shipments(this IOrder order, IMerchelloContext merchelloContext)
+        {
+            return merchelloContext.Services.ShipmentService.GetShipmentsByOrderKey(order.Key);
         }
 
 #region Fulfillment

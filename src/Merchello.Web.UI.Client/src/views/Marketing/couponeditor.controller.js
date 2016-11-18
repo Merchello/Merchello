@@ -7,9 +7,9 @@
  * The controller for offers list view controller
  */
 angular.module('merchello').controller('Merchello.Backoffice.OfferEditController',
-    ['$scope', '$routeParams', '$location', 'dateHelper', 'assetsService', 'dialogService', 'eventsService', 'notificationsService', 'settingsResource', 'marketingResource', 'merchelloTabsFactory',
+    ['$scope', '$routeParams', '$location', '$filter', 'dateHelper', 'assetsService', 'dialogService', 'eventsService', 'notificationsService', 'settingsResource', 'marketingResource', 'merchelloTabsFactory',
         'dialogDataFactory', 'settingDisplayBuilder', 'offerProviderDisplayBuilder', 'offerSettingsDisplayBuilder', 'offerComponentDefinitionDisplayBuilder',
-    function($scope, $routeParams, $location, dateHelper, assetsService, dialogService, eventsService, notificationsService, settingsResource, marketingResource, merchelloTabsFactory,
+    function($scope, $routeParams, $location, $filter, dateHelper, assetsService, dialogService, eventsService, notificationsService, settingsResource, marketingResource, merchelloTabsFactory,
              dialogDataFactory, settingDisplayBuilder, offerProviderDisplayBuilder, offerSettingsDisplayBuilder, offerComponentDefinitionDisplayBuilder) {
 
         $scope.loaded = false;
@@ -31,6 +31,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
         $scope.setLineItemName = setLineItemName;
         var eventComponentsName = 'merchello.offercomponentcollection.changed';
         var eventOfferSavingName = 'merchello.offercoupon.saving';
+        var eventOfferExpiresOpen = 'merchello.offercouponexpires.open';
 
         /**
          * @ngdoc method
@@ -120,6 +121,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
                 $scope.context = 'existing';
                 var offerSettingsPromise = marketingResource.getOfferSettings(key);
                 offerSettingsPromise.then(function(settings) {
+
                     $scope.offerSettings = offerSettingsDisplayBuilder.transform(settings);
                     $scope.lineItemName = $scope.offerSettings.getLineItemName();
                     $scope.hasReward = $scope.offerSettings.hasRewards();
@@ -128,8 +130,8 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
                     if ($scope.offerSettings.offerStartsDate === '0001-01-01' || !$scope.offerSettings.offerExpires) {
                         setDefaultDates(new Date());
                     } else {
-                        $scope.offerSettings.offerStartsDate = $scope.offerSettings.offerStartsDateLocalDateString();
-                        $scope.offerSettings.offerEndsDate = $scope.offerSettings.offerEndsDateLocalDateString();
+                        $scope.offerSettings.offerStartsDate = formatDate($scope.offerSettings.offerStartsDate);
+                        $scope.offerSettings.offerEndsDate = formatDate($scope.offerSettings.offerEndsDate);
                     }
                     $scope.preValuesLoaded = true;
                     $scope.loaded = true;
@@ -150,6 +152,11 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
 
         function toggleOfferExpires() {
             $scope.offerSettings.offerExpires = !$scope.offerSettings.offerExpires;
+            if (!$scope.offerSettings.offerExpires) {
+                setDefaultDates(new Date());
+            } else {
+                eventsService.emit(eventOfferExpiresOpen);
+            }
         }
 
 
@@ -230,8 +237,15 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
             var start = new Date(actual.getFullYear(), actual.getMonth(), actual.getDate());
             var end = new Date(actual.getFullYear(), month, actual.getDate());
 
-            $scope.offerSettings.offerStartsDate = start.toLocaleDateString();
-            $scope.offerSettings.offerEndsDate = end.toLocaleDateString();
+            $scope.offerSettings.offerStartsDate = formatDate(start);
+            $scope.offerSettings.offerEndsDate = formatDate(end);
+        }
+
+        function formatDate(d, format) {
+            if (format === undefined) {
+                format = $scope.settings.dateFormat;
+            }
+            return $filter('date')(d, format);
         }
 
         function onComponentCollectionChanged() {
