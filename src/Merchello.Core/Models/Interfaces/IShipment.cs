@@ -151,6 +151,11 @@
         /// Gets or sets the tracking code associated with this shipment
         /// </summary>
         string TrackingCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the tracking url.
+        /// </summary>
+        string TrackingUrl { get; set; }
     }
 }
 

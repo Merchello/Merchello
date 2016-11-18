@@ -216,6 +216,14 @@
         public string TrackingCode { get; set; }
 
         /// <summary>
+        /// Gets or sets the tracking url.
+        /// </summary>
+        [Column("trackingUrl")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        [Length(1000)]
+        public string TrackingUrl { get; set; }
+
+        /// <summary>
         /// Gets or sets the update date.
         /// </summary>
         [Column("updateDate")]
