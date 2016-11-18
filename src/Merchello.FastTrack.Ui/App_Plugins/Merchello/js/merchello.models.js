@@ -3702,6 +3702,7 @@ angular.module('merchello.models').constant('SalesOverTimeResult', SalesOverTime
         self.email = '';
         self.carrier = '';
         self.trackingCode = '';
+        self.trackingUrl = '';
         self.shippedDate = '';
         self.items = [];
         self.shipmentStatus = {};

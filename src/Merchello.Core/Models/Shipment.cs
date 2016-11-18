@@ -157,6 +157,11 @@
         private string _trackingCode;
 
         /// <summary>
+        /// The tracking url.
+        /// </summary>
+        private string _trackingUrl;
+
+        /// <summary>
         /// The collection of items.
         /// </summary>
         private LineItemCollection _items;
@@ -657,6 +662,21 @@
 
         /// <inheritdoc/>
         [DataMember]
+        public string TrackingUrl
+        {
+            get
+            {
+                return _trackingUrl;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(value, ref _trackingUrl, _ps.Value.TrackingUrlSelector);
+            }
+        }
+
+        /// <inheritdoc/>
+        [DataMember]
         public LineItemCollection Items
         {
             get
@@ -811,6 +831,11 @@
             /// The tracking code selector.
             /// </summary>
             public readonly PropertyInfo TrackingCodeSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.TrackingCode);
+
+            /// <summary>
+            /// The tracking url selector.
+            /// </summary>
+            public readonly PropertyInfo TrackingUrlSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.TrackingUrl);
 
             /// <summary>
             /// The carrier selector.
