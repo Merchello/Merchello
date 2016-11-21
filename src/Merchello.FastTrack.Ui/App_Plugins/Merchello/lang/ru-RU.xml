@@ -17,6 +17,7 @@
     <key alias="percentSymbol">%</key>
     <key alias="moneySymbol">$</key>
     <key alias="trackingNumber">№ квитанции </key>
+    <key alias="trackingUrl">Tracking URL</key>
     <key alias="shipment">Доставка</key>
     <key alias="sku">Артикул</key>
     <key alias="quantity">К-во</key>

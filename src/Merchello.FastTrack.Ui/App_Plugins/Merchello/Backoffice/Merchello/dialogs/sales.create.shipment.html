@@ -10,6 +10,10 @@
                 <input name="trackingNo" data-ng-model="dialogData.trackingNumber" type="text" class="col-xs-6 span6"/>
             </div>
             <div class="form-group">
+                <label for="trackingUrl"><localize key="merchelloGeneral_trackingUrl"/></label>
+                <input name="trackingNo" data-ng-model="dialogData.trackingUrl" type="text" class="col-xs-6 span6"/>
+            </div>
+            <div class="form-group">
                 <label for="provider"><localize key="merchelloGeneral_via"/></label>
                 <select name="shipmentStatus" class="col-xs-6 span6" data-ng-model="dialogData.shipMethods.selected" data-ng-options="option.name for option in dialogData.shipMethods.alternatives"></select>
             </div>
