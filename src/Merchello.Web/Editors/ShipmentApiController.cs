@@ -259,7 +259,7 @@
                 
                 var merchOrder = _orderService.GetByKey(shipmentRequest.Order.Key);
 
-                var builder = new ShipmentBuilderChain(MerchelloContext, merchOrder, shipmentRequest.Order.Items.Select(x => x.Key), shipmentRequest.ShipMethodKey, shipmentRequest.ShipmentStatusKey, shipmentRequest.TrackingNumber);
+                var builder = new ShipmentBuilderChain(MerchelloContext, merchOrder, shipmentRequest.Order.Items.Select(x => x.Key), shipmentRequest.ShipMethodKey, shipmentRequest.ShipmentStatusKey, shipmentRequest.TrackingNumber, shipmentRequest.TrackingUrl);
 
                 var attempt = builder.Build();
                 

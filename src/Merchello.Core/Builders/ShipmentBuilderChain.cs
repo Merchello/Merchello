@@ -37,6 +37,11 @@
         /// The shipment tracking number.
         /// </summary>
         private readonly string _trackingNumber;
+
+        /// <summary>
+        /// The tracking url.
+        /// </summary>
+        private readonly string _trackingUrl;
  
         /// <summary>
         /// The merchello context.
@@ -69,20 +74,26 @@
         /// <param name="trackingNumber">
         /// The tracking Number.
         /// </param>
-        public ShipmentBuilderChain(IMerchelloContext merchelloContext, IOrder order, IEnumerable<Guid> keysToShip, Guid shipMethodKey, Guid shipmentStatusKey, string trackingNumber)
+        /// <param name="trackingUrl">
+        /// The tracking Url.
+        /// </param>
+        public ShipmentBuilderChain(IMerchelloContext merchelloContext, IOrder order, IEnumerable<Guid> keysToShip, Guid shipMethodKey, Guid shipmentStatusKey, string trackingNumber, string trackingUrl)
         {
+            var toShip = keysToShip as Guid[] ?? keysToShip.ToArray();
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             Mandate.ParameterNotNull(order, "order");
-            Mandate.ParameterNotNull(keysToShip, "keysToShip");
+            
+            Mandate.ParameterNotNull(toShip, "keysToShip");
             Mandate.ParameterCondition(!shipMethodKey.Equals(Guid.Empty), "shipMethodKey");
             Mandate.ParameterCondition(!shipmentStatusKey.Equals(Guid.Empty), "shipmentStatusKey");
 
             _merchelloContext = merchelloContext;
             _order = order;
-            _keysToShip = keysToShip;
+            _keysToShip = toShip;
             _shipMethodKey = shipMethodKey;
             _shipmentStatusKey = shipmentStatusKey;
             _trackingNumber = trackingNumber;
+            _trackingUrl = trackingUrl;
             ResolveChain(Core.Constants.TaskChainAlias.OrderPreparationShipmentCreate);
         }
 
@@ -133,7 +144,8 @@
                             {
                                 ShipMethodKey = _shipMethodKey,
                                 VersionKey = quoted.VersionKey,
-                                TrackingCode = _trackingNumber
+                                TrackingCode = _trackingNumber,
+                                TrackingUrl = _trackingUrl
                             })
                 : Attempt<IShipment>.Fail(new InvalidOperationException("The configuration Chain Task List could not be instantiated."));
 

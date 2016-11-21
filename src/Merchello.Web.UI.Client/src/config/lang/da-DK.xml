@@ -17,6 +17,7 @@
     <key alias="percentSymbol">%</key>
     <key alias="moneySymbol">DKK</key>
     <key alias="trackingNumber">Sporingsnummer</key>
+    <key alias="trackingUrl">Tracking URL</key>
     <key alias="shipment">Forsendelse</key>
     <key alias="sku">SKU</key>
     <key alias="quantity">Antal</key>

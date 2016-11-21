@@ -17,6 +17,7 @@
     <key alias="percentSymbol">%</key>
     <key alias="moneySymbol">€</key>
     <key alias="trackingNumber">Numero tracciamento # </key>
+    <key alias="trackingUrl">Tracking URL</key>
     <key alias="shipment">Spedizione</key>
     <key alias="sku">SKU</key>
     <key alias="quantity">Quantità</key>
