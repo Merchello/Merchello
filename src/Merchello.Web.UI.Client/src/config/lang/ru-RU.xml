@@ -547,6 +547,7 @@
     <key alias="info">Информация о доставке</key>
     <key alias="weight">Вес</key>
     <key alias="dimensions">Размеры</key>
+    <key alias="carrier">Carrier</key>
     <!-- actions -->
     <key alias="setVars">Установка параметров доставки: веса и размеров</key>
     <!-- phrases -->

@@ -83,7 +83,7 @@
 
             MerchelloContext.Current.Services.OrderService.Save(order);
 
-            var builder = new ShipmentBuilderChain(MerchelloContext.Current, order, order.Items.Select(x => x.Key), Guid.NewGuid(), Constants.DefaultKeys.ShipmentStatus.Packaging, "Track", "http://url.com");
+            var builder = new ShipmentBuilderChain(MerchelloContext.Current, order, order.Items.Select(x => x.Key), Guid.NewGuid(), Constants.DefaultKeys.ShipmentStatus.Packaging, "Track", "http://url.com", "carrier");
 
             var attempt = builder.Build();
 

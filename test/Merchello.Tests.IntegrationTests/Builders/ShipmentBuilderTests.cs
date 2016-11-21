@@ -43,7 +43,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
             const int taskCount = 3;
 
             //// Act
-            var builder = new ShipmentBuilderChain(MerchelloContext.Current, _order, _order.Items.Select(x => x.Key), _shipMethodKey.GetValueOrDefault(), Constants.DefaultKeys.ShipmentStatus.Quoted, "test-tracking", "http://somewhere.com");
+            var builder = new ShipmentBuilderChain(MerchelloContext.Current, _order, _order.Items.Select(x => x.Key), _shipMethodKey.GetValueOrDefault(), Constants.DefaultKeys.ShipmentStatus.Quoted, "test-tracking", "http://somewhere.com", "carrier");
 
             //// Assert
             Assert.NotNull(builder);
@@ -57,7 +57,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
         public void ShipmentBuilder_Creates_And_Saves_A_Shipment_And_OrderLineItems_Are_Updated()
         {
             //// Arrange
-            var builder = new ShipmentBuilderChain(MerchelloContext.Current, _order, _order.Items.Select(x => x.Key), _shipMethodKey.GetValueOrDefault(), Constants.DefaultKeys.ShipmentStatus.Quoted, "test-tracking", "http://somewhere.com");
+            var builder = new ShipmentBuilderChain(MerchelloContext.Current, _order, _order.Items.Select(x => x.Key), _shipMethodKey.GetValueOrDefault(), Constants.DefaultKeys.ShipmentStatus.Quoted, "test-tracking", "http://somewhere.com", "carrier");
 
             //// Act
             var attempt = builder.Build();
@@ -72,7 +72,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
         {
             //// Arrange
             var shipmentService = MerchelloContext.Current.Services.ShipmentService;
-            var builder = new ShipmentBuilderChain(MerchelloContext.Current, _order, _order.Items.Select(x => x.Key), _shipMethodKey.GetValueOrDefault(), Constants.DefaultKeys.ShipmentStatus.Quoted, "test-tracking", "http://somewhere.com");
+            var builder = new ShipmentBuilderChain(MerchelloContext.Current, _order, _order.Items.Select(x => x.Key), _shipMethodKey.GetValueOrDefault(), Constants.DefaultKeys.ShipmentStatus.Quoted, "test-tracking", "http://somewhere.com", "carrier");
             var attempt = builder.Build();
             Assert.IsTrue(attempt.Success, "Failed to build shipment");
 

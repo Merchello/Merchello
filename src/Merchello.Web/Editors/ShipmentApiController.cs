@@ -259,13 +259,13 @@
                 
                 var merchOrder = _orderService.GetByKey(shipmentRequest.Order.Key);
 
-                var builder = new ShipmentBuilderChain(MerchelloContext, merchOrder, shipmentRequest.Order.Items.Select(x => x.Key), shipmentRequest.ShipMethodKey, shipmentRequest.ShipmentStatusKey, shipmentRequest.TrackingNumber, shipmentRequest.TrackingUrl);
+                var builder = new ShipmentBuilderChain(MerchelloContext, merchOrder, shipmentRequest.Order.Items.Select(x => x.Key), shipmentRequest.ShipMethodKey, shipmentRequest.ShipmentStatusKey, shipmentRequest.TrackingNumber, shipmentRequest.TrackingUrl, shipmentRequest.Carrier);
 
                 var attempt = builder.Build();
                 
                 if (!attempt.Success)
-                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, attempt.Exception));                
-                                  
+                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, attempt.Exception));
+
                 return attempt.Result.ToShipmentDisplay();
 
             }
