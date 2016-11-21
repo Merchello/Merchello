@@ -547,6 +547,7 @@
     <key alias="info">Forsendelsesinformation</key>
     <key alias="weight">Vægt</key>
     <key alias="dimensions">Dimensioner</key>
+    <key alias="carrier">Carrier</key>
     <!-- actions -->
     <key alias="setVars">Opsæt forsendelsesvariabler: Vægt og dimensioner</key>
     <!-- phrases -->

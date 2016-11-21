@@ -6,6 +6,10 @@
         <h3><localize key="general_edit" /> <localize key="merchelloGeneral_shipment" /></h3>
         <div class="control-group row-fluid">
             <div class="form-group">
+                <label for="carrier"><localize key="merchelloShipping_carrier"/></label>
+                <input name="carrier" data-ng-model="dialogData.shipment.carrier" type="text" class="col-xs-6 span6"/>
+            </div>
+            <div class="form-group">
                 <label for="trackingNo"><localize key="merchelloGeneral_trackingNumber" />:</label>
                 <input name="trackingNo" data-ng-model="dialogData.shipment.trackingCode" type="text" class="col-xs-6 span6" />
             </div>

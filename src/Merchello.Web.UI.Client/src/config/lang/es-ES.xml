@@ -547,6 +547,7 @@
     <key alias="info">Información de envío</key>
     <key alias="weight">Peso</key>
     <key alias="dimensions">Dimensiones</key>
+    <key alias="carrier">Carrier</key>
     <!-- actions -->
     <key alias="setVars">Configura las variables de envío: Peso y dimensiones</key>
     <!-- phrases -->
