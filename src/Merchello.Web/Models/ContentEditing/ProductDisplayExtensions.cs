@@ -353,7 +353,7 @@
 
                 IProductAttribute destinationProductAttribute;
 
-                if (destination.Choices.IndexOfKey(choice.Key) > 0)
+                if (destination.Choices.IndexOfKey(choice.Key) >= 0)
                 {
                     destinationProductAttribute = destination.Choices[choice.Key];
 

@@ -134,6 +134,42 @@
             RemoveFromCache(e.SavedEntities);
         }
 
+
+        /// <summary>
+        /// Clears the virtual content cache.
+        /// </summary>
+        /// <param name="products">
+        /// The products.
+        /// </param>
+        internal void RemoveFromCache(IEnumerable<IProduct> products)
+        {
+            foreach (var p in products)
+            {
+                RemoveFromCache(p);
+            }
+        }
+
+        /// <summary>
+        /// Clears the virtual content cache.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        internal void RemoveFromCache(IProduct product)
+        {
+            if (product.DetachedContents.Any())
+            {
+                foreach (var dc in product.DetachedContents.Where(x => !x.Slug.IsNullOrWhiteSpace()))
+                {
+                    Cache.RuntimeCache.ClearCacheItem(GetSlugCacheKey(dc.Slug, true));
+                    Cache.RuntimeCache.ClearCacheItem(GetSlugCacheKey(dc.Slug, false));
+                }
+            }
+
+            Cache.RuntimeCache.ClearCacheItem(GetSkuCacheKey(product.Sku, true));
+            Cache.RuntimeCache.ClearCacheItem(GetSkuCacheKey(product.Sku, false));
+        }
+
         /// <summary>
         /// Gets the slug cache key.
         /// </summary>
@@ -166,41 +202,6 @@
         private static string GetSkuCacheKey(string sku, bool modified)
         {
             return string.Format("merch.productcontent.sku.{0}.{1}", sku, modified);
-        }
-
-        /// <summary>
-        /// Clears the virtual content cache.
-        /// </summary>
-        /// <param name="products">
-        /// The products.
-        /// </param>
-        private void RemoveFromCache(IEnumerable<IProduct> products)
-        {
-            foreach (var p in products)
-            {
-                RemoveFromCache(p);
-            }
-        }
-
-        /// <summary>
-        /// Clears the virtual content cache.
-        /// </summary>
-        /// <param name="product">
-        /// The product.
-        /// </param>
-        private void RemoveFromCache(IProduct product)
-        {
-            if (product.DetachedContents.Any())
-            {
-                foreach (var dc in product.DetachedContents.Where(x => !x.Slug.IsNullOrWhiteSpace()))
-                {
-                    Cache.RuntimeCache.ClearCacheItem(GetSlugCacheKey(dc.Slug, true));
-                    Cache.RuntimeCache.ClearCacheItem(GetSlugCacheKey(dc.Slug, false));
-                }
-            }
-
-            Cache.RuntimeCache.ClearCacheItem(GetSkuCacheKey(product.Sku, true));
-            Cache.RuntimeCache.ClearCacheItem(GetSkuCacheKey(product.Sku, false));
         }
     }
 }
