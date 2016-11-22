@@ -362,6 +362,11 @@
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether uses override default.
+        /// </summary>
+        internal bool UsesOverrideDefault { get; set; }
+
+        /// <summary>
         /// Gets a property by it's alias.
         /// </summary>
         /// <param name="alias">
