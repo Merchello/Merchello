@@ -141,7 +141,7 @@
                     IndexProduct(p);
 
                     // we also need to refresh the published product cache
-                    contentCache.RemoveFromCache(p);
+                    contentCache.ClearVirtualCache(p);
                 }
             }
         }
