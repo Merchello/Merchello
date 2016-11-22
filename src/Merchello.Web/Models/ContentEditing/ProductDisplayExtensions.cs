@@ -408,6 +408,9 @@
         /// <param name="optionContentTypes">
         /// The option Content Types.
         /// </param>
+        /// <param name="optionWrappers">
+        /// Product option content wrappers.
+        /// </param>
         /// <param name="cultureName">
         /// The cultureName
         /// </param>
@@ -417,12 +420,13 @@
         /// <returns>
         /// The <see cref="IEnumerable{IProductVariantContent}"/>.
         /// </returns>
-        internal static IEnumerable<IProductVariantContent> ProductVariantsAsProductVariantContent(this ProductDisplay display, IDictionary<Guid, PublishedContentType> optionContentTypes, string cultureName, IPublishedContent parent = null)
+        internal static IEnumerable<IProductVariantContent> ProductVariantsAsProductVariantContent(this ProductDisplay display, IDictionary<Guid, PublishedContentType> optionContentTypes, IEnumerable<IProductOptionWrapper> optionWrappers, string cultureName, IPublishedContent parent = null)
         {
             var variantContent = new List<IProductVariantContent>();
 
 
             // ReSharper disable once LoopCanBeConvertedToQuery
+            var optionWrapperArray = optionWrappers as IProductOptionWrapper[] ?? optionWrappers.ToArray();
             foreach (var variant in display.ProductVariants)
             {
                 var contentType = variant.DetachedContents.Any()
@@ -431,7 +435,14 @@
                                           variant.DetachedContentForCulture(cultureName).DetachedContentType.UmbContentType.Alias)
                                       : null;
 
-                variantContent.Add(new ProductVariantContent(variant, contentType, optionContentTypes, cultureName, parent));
+                var attributes = new List<IProductAttributeContent>();
+                foreach (var o in optionWrapperArray)
+                {
+                    var att = o.Choices.FirstOrDefault(x => variant.Attributes.Select(y => y.Key).Contains(x.Key));
+                    if (att != null) attributes.Add(att);
+                }
+
+                variantContent.Add(new ProductVariantContent(variant, contentType, optionContentTypes, attributes, cultureName, parent));
             }
 
             return variantContent;
@@ -462,9 +473,23 @@
             // This is a hack for the special case when HasProperty and HasValue extensions are called
             // and a content type is not assigned. - so we will default to the product content type
             // if there is none.  The detachedDataValues collection should be empty -
-            var ct = contentType ?? parent.ContentType;
+            var usesDefault = contentType == null;
+            var ct = usesDefault ? parent.ContentType : contentType;
 
-            return new ProductOptionWrapper(display, parent, contentType);
+            var pow = new ProductOptionWrapper(display, parent, ct);
+            if (usesDefault)
+            {
+                foreach (var choice in pow.Choices)
+                {
+                    var cc = choice as ProductAttributeContent;
+                    if (cc != null)
+                    {
+                        cc.UsesOverrideDefault = true;
+                    }
+                }
+            }
+
+            return pow;
         }
 
         /// <summary>

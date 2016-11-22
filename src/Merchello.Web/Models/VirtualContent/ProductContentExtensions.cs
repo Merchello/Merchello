@@ -117,6 +117,83 @@
             return product.GetProductVariantDisplayWithAttributes(attKeys.ToArray());
         }
 
+        /// <summary>
+        /// Returns a value indicating whether or not an attribute has property content.
+        /// </summary>
+        /// <param name="variant">
+        /// The variant.
+        /// </param>
+        /// <param name="attribute">
+        /// The attribute.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public static bool AttributeHasContent(this IProductVariantContent variant, ProductAttributeDisplay attribute)
+        {
+            return variant.AttributeHasContent(attribute.Key);
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether or not an attribute has property content.
+        /// </summary>
+        /// <param name="variant">
+        /// The variant.
+        /// </param>
+        /// <param name="attributeKey">
+        /// The attribute key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public static bool AttributeHasContent(this IProductVariantContent variant, Guid attributeKey)
+        {
+            var pv = variant as ProductVariantContent;
+            if (pv == null) return false;
+            var att = pv.AttributeContent.FirstOrDefault(x => x.Key == attributeKey);
+            if (att == null) return false;
+            var ac = att as ProductAttributeContent;
+            if (ac == null) return false;
+            return !ac.UsesOverrideDefault;
+        }
+
+        /// <summary>
+        /// Gets the content for an attribute if available.
+        /// </summary>
+        /// <param name="variant">
+        /// The variant.
+        /// </param>
+        /// <param name="attribute">
+        /// The attribute.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductAttributeContent"/>.
+        /// </returns>
+        public static IProductAttributeContent GetContentForAttribute(this IProductVariantContent variant, ProductAttributeDisplay attribute)
+        {
+            return variant.GetContentForAttribute(attribute.Key);
+        }
+
+        /// <summary>
+        /// Gets the content for an attribute if available.
+        /// </summary>
+        /// <param name="variant">
+        /// The variant.
+        /// </param>
+        /// <param name="attributeKey">
+        /// The attribute key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductAttributeContent"/>.
+        /// </returns>
+        public static IProductAttributeContent GetContentForAttribute(this IProductVariantContent variant, Guid attributeKey)
+        {
+            if (!variant.AttributeHasContent(attributeKey)) return null;
+
+            var pv = variant as ProductVariantContent;
+            if (pv == null) return null;
+            return pv.AttributeContent.FirstOrDefault(x => x.Key == attributeKey);
+        }
 
         /// <summary>
         /// Gets the <see cref="ProductVariantDisplay"/> with matching with attributes from the product.

@@ -24,6 +24,11 @@
         private readonly ProductVariantDisplay _variant;
 
         /// <summary>
+        /// Attribute content.
+        /// </summary>
+        private readonly IEnumerable<IProductAttributeContent> _attibutes;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ProductVariantContent"/> class.
         /// </summary>
         /// <param name="variant">
@@ -35,16 +40,20 @@
         /// <param name="optionContentTypes">
         /// The option Content Types.
         /// </param>
+        /// <param name="attributes">
+        /// The attributes.
+        /// </param>
         /// <param name="cultureName">
         /// The culture name.
         /// </param>
         /// <param name="parent">
         /// The parent.
         /// </param>
-        public ProductVariantContent(ProductVariantDisplay variant, PublishedContentType contentType, IDictionary<Guid, PublishedContentType> optionContentTypes, string cultureName = "en-US", IPublishedContent parent = null)
+        public ProductVariantContent(ProductVariantDisplay variant, PublishedContentType contentType, IDictionary<Guid, PublishedContentType> optionContentTypes, IEnumerable<IProductAttributeContent> attributes, string cultureName = "en-US", IPublishedContent parent = null)
             : base(variant, contentType, optionContentTypes, cultureName)
         {
             _variant = variant;
+            _attibutes = attributes;
             _parent = parent;
         }
 
@@ -136,6 +145,17 @@
             get
             {
                 return _parent;
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IProductAttributeContent"/>.
+        /// </summary>
+        internal IEnumerable<IProductAttributeContent> AttributeContent
+        {
+            get
+            {
+                return _attibutes;
             }
         }
 
