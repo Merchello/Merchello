@@ -29,6 +29,8 @@
         /// </summary>
         private IEnumerable<IProductAttributeContent> _choices;
 
+        private bool _usesContentTypeOverride;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductOptionWrapper"/> class.
         /// </summary>
@@ -41,10 +43,14 @@
         /// <param name="contentType">
         /// The content Type.
         /// </param>
-        public ProductOptionWrapper(ProductOptionDisplay display, IPublishedContent _parent, PublishedContentType contentType = null)
+        /// <param name="usesContentTypeOverride">
+        /// The uses Content Type Override.
+        /// </param>
+        public ProductOptionWrapper(ProductOptionDisplay display, IPublishedContent _parent, PublishedContentType contentType = null, bool usesContentTypeOverride = false)
         {
             _display = display;
             _contentType = contentType;
+            _usesContentTypeOverride = usesContentTypeOverride;
 
             Initialize(_parent);
         }
@@ -146,7 +152,7 @@
         private void Initialize(IPublishedContent parent)
         {
             var ct = _contentType ?? parent.ContentType;
-            _choices = _display.Choices.Select(choice => new ProductAttributeContent(ct, choice, parent));
+            _choices = _display.Choices.Select(choice => new ProductAttributeContent(ct, choice, parent) { UsesOverrideDefault = _usesContentTypeOverride });
         }
     }
 }
