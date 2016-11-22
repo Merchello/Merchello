@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace Merchello.Web.Pluggable
 {
     using System.Collections.Generic;
@@ -89,7 +91,7 @@ namespace Merchello.Web.Pluggable
             var fullFileName = string.Format("{0}{1}", mapped, fileName);
             if (File.Exists(fullFileName))
             {
-                File.WriteAllText(fullFileName, viewBody);
+                File.WriteAllText(fullFileName, viewBody,Encoding.UTF8);
 
                 return true;
             }
