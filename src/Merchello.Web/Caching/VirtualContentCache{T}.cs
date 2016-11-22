@@ -192,7 +192,7 @@
         /// <param name="key">
         /// The key.
         /// </param>
-        public void ClearVirtualCache(Guid key)
+        public virtual void ClearVirtualCache(Guid key)
         {
             _cache.RuntimeCache.ClearCacheItem(GetCacheKey(key, true));
             _cache.RuntimeCache.ClearCacheItem(GetCacheKey(key, false));
