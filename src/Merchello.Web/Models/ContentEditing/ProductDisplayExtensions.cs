@@ -476,19 +476,7 @@
             var usesDefault = contentType == null;
             var ct = usesDefault ? parent.ContentType : contentType;
 
-            var pow = new ProductOptionWrapper(display, parent, ct);
-            if (usesDefault)
-            {
-                foreach (var choice in pow.Choices)
-                {
-                    var cc = choice as ProductAttributeContent;
-                    if (cc != null)
-                    {
-                        cc.UsesOverrideDefault = true;
-                    }
-                }
-            }
-
+            var pow = new ProductOptionWrapper(display, parent, ct, usesDefault);
             return pow;
         }
 

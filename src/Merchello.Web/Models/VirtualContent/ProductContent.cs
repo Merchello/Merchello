@@ -267,7 +267,7 @@
         /// </summary>
         private void Initialize()
         {
-            _options = _display.ProductOptions.Select(x => x.ProductOptionAsProductOptionWrapper(this, this.OptionContentTypes));
+            _options = _display.ProductOptions.Select(x => x.ProductOptionAsProductOptionWrapper(this, this.OptionContentTypes)).ToArray();
             _variantContent = new Lazy<IEnumerable<IProductVariantContent>>(() => _display.ProductVariantsAsProductVariantContent(this.OptionContentTypes, _options, CultureName, this));
         }
     }
