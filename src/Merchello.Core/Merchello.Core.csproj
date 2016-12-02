@@ -384,6 +384,10 @@
     <Compile Include="PagedCollection.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoFourZero\AddShipmentTrackingUrlColumns.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoThreeOne\AlterProductAttributeColumnToNtext.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IProductQueryRepository.cs" />
+    <Compile Include="Persistence\Repositories\ProductRepository.collectionpricing.cs">
+      <DependentUpon>ProductRepository.cs</DependentUpon>
+    </Compile>
     <Compile Include="Trees\FirstByValueTreeNodeVisitor.cs" />
     <Compile Include="Trees\ITreeNodeVisitor.cs" />
     <Compile Include="Trees\NodeAggregatorTreeNodeVisitor.cs" />
