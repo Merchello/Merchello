@@ -62,7 +62,7 @@
 
             if (!item.TrackInventory || item.OutOfStockPurchase) return;
 
-            if (item.TotalInventoryCount > 0) return;
+            if (item.TotalInventoryCount >= lineItem.Quantity) return;
 
             _outOfStockItems.Add(lineItem);
         }
