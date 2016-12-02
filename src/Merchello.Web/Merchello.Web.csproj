@@ -604,7 +604,6 @@
     <Compile Include="Pluggable\ICustomerContext.cs" />
     <Compile Include="Pluggable\PluggableObjectHelper.cs" />
     <Compile Include="PluginManagerExtensions.cs" />
-    <Compile Include="ProductContentEditing.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="PropertyConverters\MultiProductPickerValueConverter.cs" />
     <Compile Include="PropertyConverters\ProductDisplayValueConverter.cs" />
