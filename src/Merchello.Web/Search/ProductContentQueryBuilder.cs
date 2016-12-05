@@ -17,6 +17,21 @@
         private readonly ICachedProductQuery _cachedQuery;
 
         /// <summary>
+        /// The minimum price range.
+        /// </summary>
+        private decimal _minPrice = 0M;
+
+        /// <summary>
+        /// The maximum price range.
+        /// </summary>
+        private decimal _maxPrice = 0M;
+
+        /// <summary>
+        /// A value indicating the builder should setup a price range filter..
+        /// </summary>
+        private bool _hasPriceRangeFilter = false;
+
+        /// <summary>
         /// The search term.
         /// </summary>
         private string _searchTerm;
@@ -34,6 +49,29 @@
             this.Initialize();
         }
 
+        /// <inheritdoc/>
+        public void SetPriceRange(decimal min, decimal max)
+        {
+            if (min > max)
+            {
+                var tmp = min;
+                max = min;
+                min = tmp;
+            }
+
+            _minPrice = min;
+            _maxPrice = max;
+            _hasPriceRangeFilter = true;
+        }
+
+        /// <inheritdoc/>
+        public void ClearPriceRange()
+        {
+            _hasPriceRangeFilter = false;
+            _minPrice = 0M;
+            _maxPrice = 0M;
+        }
+
         /// <summary>
         /// The reset.
         /// </summary>
@@ -45,6 +83,7 @@
             this.SortBy = ProductSortField.Name;
             this.SortDirection = SortDirection.Ascending;
             this.CollectionClusivity = CollectionClusivity.ExistsInAllCollectionsAndFilters;
+            this.ClearPriceRange();
         }
 
         /// <summary>
@@ -68,7 +107,7 @@
         {
             var sortBy = SortBy.ToString().ToLowerInvariant();
 
-            return new ProductContentQuery(_cachedQuery)
+            var query = new ProductContentQuery(_cachedQuery)
             {
                 SearchTerm = _searchTerm,
                 Page = Page,
@@ -78,7 +117,15 @@
                 CollectionKeys = this.CollectionKeys,
                 CollectionClusivity = this.CollectionClusivity
             };
+
+            if (_hasPriceRangeFilter)
+            {
+                query.SetPriceRange(_minPrice, _maxPrice);
+            }
+
+            return query;
         }
+
 
         /// <summary>
         /// Initializes the builder.
