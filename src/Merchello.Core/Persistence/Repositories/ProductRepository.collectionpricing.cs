@@ -73,7 +73,7 @@
                .Append("GROUP BY productKey")
                .Append("HAVING COUNT(*) = @keyCount", new { @keyCount = collectionKeys.Count() })
                .Append(")")
-               .Append("AND ([merchProductVariant].[onSale] = 0 AND [merchProductVariant].[price] BETWEEN @low AND @high)", new { @low = min, @high = max })
+               .Append("AND (([merchProductVariant].[onSale] = 0 AND [merchProductVariant].[price] BETWEEN @low AND @high)", new { @low = min, @high = max })
               .Append("OR")
               .Append("([merchProductVariant].[onSale] = 1 AND [merchProductVariant].[salePrice] BETWEEN @low AND @high)", new { @low = min, @high = max })
               .Append(")")
@@ -121,7 +121,7 @@
                 .Append("GROUP BY productKey")
                 .Append("HAVING COUNT(*) = @keyCount", new { @keyCount = collectionKeys.Count() })
                 .Append(")")
-                .Append("AND ([merchProductVariant].[onSale] = 0 AND [merchProductVariant].[price] BETWEEN @low AND @high)", new { @low = min, @high = max })
+                .Append("AND (([merchProductVariant].[onSale] = 0 AND [merchProductVariant].[price] BETWEEN @low AND @high)", new { @low = min, @high = max })
                 .Append("OR")
                 .Append("([merchProductVariant].[onSale] = 1 AND [merchProductVariant].[salePrice] BETWEEN @low AND @high)", new { @low = min, @high = max })
                 .Append(")");
@@ -164,7 +164,7 @@
                .Append("FROM [merchProduct2EntityCollection]")
                .Append("WHERE [merchProduct2EntityCollection].[entityCollectionKey] IN (@eckeys)", new { @eckeys = collectionKeys })
                .Append(")")
-               .Append("AND ([merchProductVariant].[onSale] = 0 AND [merchProductVariant].[price] BETWEEN @low AND @high)", new { @low = min, @high = max })
+               .Append("AND (([merchProductVariant].[onSale] = 0 AND [merchProductVariant].[price] BETWEEN @low AND @high)", new { @low = min, @high = max })
                .Append("OR")
                .Append("([merchProductVariant].[onSale] = 1 AND [merchProductVariant].[salePrice] BETWEEN @low AND @high)", new { @low = min, @high = max })
                .Append(")")
@@ -210,7 +210,7 @@
                     "WHERE [merchProduct2EntityCollection].[entityCollectionKey] IN (@eckeys)",
                     new { @eckeys = collectionKeys })
                 .Append(")")
-                .Append("AND ([merchProductVariant].[onSale] = 0 AND [merchProductVariant].[price] BETWEEN @low AND @high)", new { @low = min, @high = max })
+                .Append("AND (([merchProductVariant].[onSale] = 0 AND [merchProductVariant].[price] BETWEEN @low AND @high)", new { @low = min, @high = max })
                 .Append("OR")
                 .Append("([merchProductVariant].[onSale] = 1 AND [merchProductVariant].[salePrice] BETWEEN @low AND @high)", new { @low = min, @high = max })
                 .Append(")");
@@ -252,7 +252,7 @@
                .Append("FROM [merchProduct2EntityCollection]")
                .Append("WHERE [merchProduct2EntityCollection].[entityCollectionKey] IN (@eckeys)", new { @eckeys = collectionKeys })
                .Append(")")
-               .Append("AND ([merchProductVariant].[onSale] = 0 AND [merchProductVariant].[price] BETWEEN @low AND @high)", new { @low = min, @high = max })
+               .Append("AND (([merchProductVariant].[onSale] = 0 AND [merchProductVariant].[price] BETWEEN @low AND @high)", new { @low = min, @high = max })
                .Append("OR")
                .Append("([merchProductVariant].[onSale] = 1 AND [merchProductVariant].[salePrice] BETWEEN @low AND @high)", new { @low = min, @high = max })
                .Append(")")
@@ -298,7 +298,7 @@
                     "WHERE [merchProduct2EntityCollection].[entityCollectionKey] IN (@eckeys)",
                     new { @eckeys = collectionKeys })
                 .Append(")")
-                .Append("AND ([merchProductVariant].[onSale] = 0 AND [merchProductVariant].[price] BETWEEN @low AND @high)", new { @low = min, @high = max })
+                .Append("AND (([merchProductVariant].[onSale] = 0 AND [merchProductVariant].[price] BETWEEN @low AND @high)", new { @low = min, @high = max })
                 .Append("OR")
                 .Append("([merchProductVariant].[onSale] = 1 AND [merchProductVariant].[salePrice] BETWEEN @low AND @high)", new { @low = min, @high = max })
                 .Append(")");
