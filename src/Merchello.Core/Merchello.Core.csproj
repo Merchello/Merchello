@@ -388,6 +388,10 @@
     <Compile Include="Persistence\Repositories\ProductRepository.collectionpricing.cs">
       <DependentUpon>ProductRepository.cs</DependentUpon>
     </Compile>
+    <Compile Include="Services\Interfaces\IProductQueryService.cs" />
+    <Compile Include="Services\ProductService.collectionqueries.cs">
+      <DependentUpon>ProductService.cs</DependentUpon>
+    </Compile>
     <Compile Include="Trees\FirstByValueTreeNodeVisitor.cs" />
     <Compile Include="Trees\ITreeNodeVisitor.cs" />
     <Compile Include="Trees\NodeAggregatorTreeNodeVisitor.cs" />
