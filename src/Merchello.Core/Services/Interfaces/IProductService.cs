@@ -3,12 +3,14 @@
     using System;
     using System.Collections.Generic;
 
+    using Merchello.Core.Services.Interfaces;
+
     using Models;
 
     /// <summary>
     /// Defines the ProductService, which provides access to operations involving <see cref="IProduct"/>
     /// </summary>
-    public interface IProductService : IStaticCollectionService<IProduct>, IPageCachedService<IProduct>
+    public interface IProductService : IStaticCollectionService<IProduct>, IPageCachedService<IProduct>, IProductServicePortForward
     {
         /// <summary>
         /// Creates a Product without saving it to the database

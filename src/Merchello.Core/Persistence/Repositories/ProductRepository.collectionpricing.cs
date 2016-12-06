@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Merchello.Core.Models.Rdbms;
     using Merchello.Core.Persistence.Querying;
 
     using Umbraco.Core.Persistence;
@@ -305,6 +306,24 @@
 
             pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
             return CachePageOfKeys(cacheKey, pagedKeys);
+        }
+
+        /// <summary>
+        /// Gets a list of currently listed Manufacturers.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{String}"/> (manufacturer names).
+        /// </returns>
+        public IEnumerable<string> GetAllManufacturers()
+        {
+            var sql = new Sql("SELECT DISTINCT(manufacturer)")
+                .From<ProductVariantDto>(SqlSyntax)
+                .Where<ProductVariantDto>(x => x.Manufacturer != string.Empty)
+                .OrderBy<ProductVariantDto>(x => x.Manufacturer, SqlSyntax);
+
+            var results = Database.Fetch<string>(sql);
+
+            return results;
         }
     }
 }

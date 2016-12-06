@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.Persistence.Repositories
 {
     using System;
+    using System.Collections.Generic;
 
     using Merchello.Core.Persistence.Querying;
 
@@ -317,5 +318,13 @@
             long itemsPerPage,
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending);
+
+        /// <summary>
+        /// Gets a list of all manufacturers.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{String}"/> list of distinct manufacturers.
+        /// </returns>
+        IEnumerable<string> GetAllManufacturers();
     }
 }

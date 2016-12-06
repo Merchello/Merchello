@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.Services
 {
     using System;
+    using System.Collections.Generic;
 
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.Repositories;
@@ -11,8 +12,17 @@
     /// <summary>
     /// Product service queries for used in the product query.
     /// </summary>
-    public partial class ProductService
+    public partial class ProductService : IProductServicePortForward
     {
+        /// <inheritdoc/>
+        public IEnumerable<string> GetAllManufacturers()
+        {
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetAllManufacturers();
+            }
+        }
+
         /// <summary>
         /// Gets the entity keys for distinct entities in multiple collections
         /// </summary>
