@@ -389,6 +389,7 @@
       <DependentUpon>ProductRepository.cs</DependentUpon>
     </Compile>
     <Compile Include="Services\Interfaces\IProductQueryService.cs" />
+    <Compile Include="Services\Interfaces\IProductServicePortForward.cs" />
     <Compile Include="Services\ProductService.collectionqueries.cs">
       <DependentUpon>ProductService.cs</DependentUpon>
     </Compile>

@@ -3818,18 +3818,29 @@ angular.module('merchello.directives').directive('productVariantsViewTable', fun
                     settings: '='
                 },
                 templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/productvariant.mainproperties.tpl.html',
-                controller: function ($scope, warehouseResource, warehouseDisplayBuilder, catalogInventoryDisplayBuilder) {
+                controller: function ($scope, productResource, warehouseResource, warehouseDisplayBuilder, catalogInventoryDisplayBuilder) {
 
                     // Get the default warehouse for the ensureCatalogInventory() function below
                     $scope.defaultWarehouse = {};
                     $scope.defaultWarehouseCatalog = {};
 
+                    $scope.manufacturers = [];
+                    $scope.showSuggest = false;
+
+                    // grab the manufacturer text box to apply the filters
+                    var input = angular.element( document.querySelector( '#manufacturer' ) );
+
+                    $scope.populate = function(txt) {
+                        $scope.productVariant.manufacturer = txt;
+                    }
+
+
                     function init() {
-                       /* $scope.$watch('settings', function(nv, ov) {
-                            if (nv !== undefined) {
-                                console.info($scope.settings);
-                            }
-                        })*/
+
+                        // get the list of existing manufacturers to make it easier to enter
+                        productResource.getManufacturers().then(function(data) {
+                            $scope.manufacturers = data;
+                        });
 
                         var promiseWarehouse = warehouseResource.getDefaultWarehouse();
                         promiseWarehouse.then(function (warehouse) {
@@ -3844,6 +3855,27 @@ angular.module('merchello.directives').directive('productVariantsViewTable', fun
                                 {
                                     $scope.productVariant.ensureCatalogInventory($scope.defaultWarehouseCatalog.key);
                                 }
+                            }
+                        });
+
+                        input.bind("keyup focusout", function (event) {
+                            var code = event.which;
+                            // alpha , numbers, ! and backspace
+
+                            if ( code === 45 ||
+                                (code >47 && code <58) ||
+                                (code >64 && code <91) ||
+                                (code >96 && code <123) || code === 33 || code == 8) {
+                                $scope.$apply(function () {
+                                    if ($scope.productVariant.manufacturer !== '') {
+                                        $scope.showSuggest = true;
+                                    } else {
+                                        $scope.showSuggest = false;
+                                    }
+                                });
+                            } else {
+                                event.preventDefault();
+                                $scope.showSuggest = false;
                             }
                         });
                     }
