@@ -209,10 +209,10 @@
             if (_isComplete)
                 throw new InvalidOperationException("The boot manager has already been completed");
 
-            //Once the application is booted, initialize the value converters
+            // Once the application is booted, initialize the value converters
             InitializeValueConverters();
 
-            //Once the application is booted, initialize the subscriptions which require reading from 
+            // Once the application is booted, initialize the subscriptions which require reading from 
             // a resolver (MonitorResolver) which can only be done after resolution is frozen - which
             // is now (i.e. after Startup)
             InitializeObserverSubscriptions();
