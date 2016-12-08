@@ -209,13 +209,7 @@
             if (_isComplete)
                 throw new InvalidOperationException("The boot manager has already been completed");
 
-            // Once the application is booted, initialize the value converters
-            InitializeValueConverters();
 
-            // Once the application is booted, initialize the subscriptions which require reading from 
-            // a resolver (MonitorResolver) which can only be done after resolution is frozen - which
-            // is now (i.e. after Startup)
-            InitializeObserverSubscriptions();
 
             if (afterComplete != null)
             {
@@ -226,6 +220,55 @@
 
             return this;
         }
+
+        /// <summary>
+        /// Initializes resolvers that require accessing resolvers after resolution has been frozen.
+        /// </summary>
+        /// <remarks>
+        /// Hack fix for M-1254.  Issue arose in Umbraco 7.5.6 when Umbraco Core bumped Resolution.Freeze (Resolution is an Umbraco singleton
+        /// used by certain resolver base classes - Umbraco ResolutionBase) 
+        /// </remarks>
+        // ReSharper disable once StyleCop.SA1204
+        public static void FinalizeBoot()
+        {
+            // Once the application is booted, initialize the value converters
+            InitializeValueConverters();
+
+            // Once the application is booted, initialize the subscriptions which require reading from 
+            // a resolver (MonitorResolver) which can only be done after resolution is frozen - which
+            // is now (i.e. after Startup)
+            InitializeObserverSubscriptions();
+        }
+
+        /// <summary>
+        /// Initializes value converters.
+        /// </summary>
+        protected static void InitializeValueConverters()
+        {
+            // initialize the DetachedPublishedPropertyConverter singleton
+            if (!DetachedValuesConverter.HasCurrent)
+                DetachedValuesConverter.Current = new DetachedValuesConverter(ApplicationContext.Current, PluginManager.Current.ResolveDetachedValueOverriders());
+        }
+
+        /// <summary>
+        /// Responsible initializing observer subscriptions.
+        /// </summary>
+        protected static void InitializeObserverSubscriptions()
+        {
+            if (!TriggerResolver.HasCurrent || !MonitorResolver.HasCurrent) return;
+
+            var monitors = MonitorResolver.Current.GetAllMonitors();
+
+            LogHelper.Info<CoreBootManager>("Starting subscribing Monitors to Triggers");
+
+            foreach (var monitor in monitors)
+            {
+                monitor.Subscribe(TriggerResolver.Current);
+            }
+
+            LogHelper.Info<Umbraco.Core.CoreBootManager>("Finished subscribing Monitors to Triggers");
+        }
+
 
         /// <summary>
         /// Creates the MerchelloPluginContext (singleton)
@@ -293,35 +336,6 @@
 
             if (!OfferProcessorFactory.HasCurrent)
             OfferProcessorFactory.Current = new OfferProcessorFactory(PluginManager.Current.ResolveOfferConstraintChains());
-        }
-
-        /// <summary>
-        /// Initializes value converters.
-        /// </summary>
-        protected virtual void InitializeValueConverters()
-        {
-            // initialize the DetachedPublishedPropertyConverter singleton
-            if (!DetachedValuesConverter.HasCurrent)
-                DetachedValuesConverter.Current = new DetachedValuesConverter(ApplicationContext.Current, PluginManager.Current.ResolveDetachedValueOverriders());
-        }
-
-        /// <summary>
-        /// Responsible initializing observer subscriptions.
-        /// </summary>
-        protected virtual void InitializeObserverSubscriptions()
-        {
-            if (!TriggerResolver.HasCurrent || !MonitorResolver.HasCurrent) return;
-
-            var monitors = MonitorResolver.Current.GetAllMonitors();
-
-            LogHelper.Info<CoreBootManager>("Starting subscribing Monitors to Triggers");
-
-            foreach (var monitor in monitors)
-            {
-                monitor.Subscribe(TriggerResolver.Current);
-            }
-
-            LogHelper.Info<Umbraco.Core.CoreBootManager>("Finished subscribing Monitors to Triggers");            
         }
 
         /// <summary>
