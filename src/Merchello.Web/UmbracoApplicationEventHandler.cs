@@ -111,6 +111,8 @@
         {
             base.ApplicationStarted(umbracoApplication, applicationContext);
 
+            Core.CoreBootManager.FinalizeBoot();
+
             MultiLogHelper.Info<UmbracoApplicationEventHandler>("Initializing Customer related events");
 
             MemberService.Saving += this.MemberServiceOnSaving;
