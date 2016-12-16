@@ -39,8 +39,8 @@
       <HintPath>..\packages\AutoMapper.3.0.0\lib\net40\AutoMapper.Net4.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Braintree-2.54.0, Version=2.54.0.0, Culture=neutral, PublicKeyToken=31b586f34d3e96c7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Braintree.2.54.0\lib\Braintree-2.54.0.dll</HintPath>
+    <Reference Include="Braintree, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31b586f34d3e96c7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Braintree.3.3.0\lib\net452\Braintree.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="businesslogic, Version=1.0.6079.16192, Culture=neutral, processorArchitecture=MSIL">
@@ -181,6 +181,7 @@
       <HintPath>..\packages\UmbracoCms.Core.7.5.2\lib\System.Data.SqlServerCe.Entity.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Net" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
       <Private>True</Private>
