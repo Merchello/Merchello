@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net.Mail;
 
     using Formatters;
     using Models;
@@ -141,13 +142,35 @@
         /// <param name="formatter">The <see cref="IFormatter"/> to use to format the message</param>
         public virtual void Send(INotificationMessage notificationMessage, IFormatter formatter)
         {
-            PerformSend(new FormattedNotificationMessage(notificationMessage, formatter)); 
+            Send(notificationMessage, formatter, null); 
+        }
+
+        /// <summary>
+        /// Sends a <see cref="IFormattedNotificationMessage"/>
+        /// </summary>
+        /// <param name="notificationMessage">
+        /// The <see cref="IFormattedNotificationMessage"/> to be sent
+        /// </param>
+        /// <param name="formatter">
+        /// The <see cref="IFormatter"/> to use to format the message
+        /// </param>
+        /// <param name="attachments">
+        /// The attachments.
+        /// </param>
+        public virtual void Send(INotificationMessage notificationMessage, IFormatter formatter, IEnumerable<Attachment> attachments)
+        {
+            PerformSend(new FormattedNotificationMessage(notificationMessage, formatter), attachments);
         }
 
         /// <summary>
         /// Does the actual work of sending the <see cref="IFormattedNotificationMessage"/>
         /// </summary>
-        /// <param name="message">The <see cref="IFormattedNotificationMessage"/> to be sent</param>
-        public abstract void PerformSend(IFormattedNotificationMessage message);        
+        /// <param name="message">
+        /// The <see cref="IFormattedNotificationMessage"/> to be sent
+        /// </param>
+        /// <param name="attachments">
+        /// The attachments.
+        /// </param>
+        public abstract void PerformSend(IFormattedNotificationMessage message, IEnumerable<Attachment> attachments = null);        
     }
 }
