@@ -1,6 +1,8 @@
 ﻿namespace Merchello.Core.Gateways.Notification
 {
     using System.Collections.Generic;
+    using System.Net.Mail;
+
     using Formatters;
     using Models;
 
@@ -54,5 +56,19 @@
         /// <param name="notificationMessage">The <see cref="IFormattedNotificationMessage"/> to be sent</param>
         /// <param name="formatter">The <see cref="IFormatter"/> to use to format the message</param>
         void Send(INotificationMessage notificationMessage, IFormatter formatter);
+
+        /// <summary>
+        /// Sends a <see cref="IFormattedNotificationMessage"/> with attachments.
+        /// </summary>
+        /// <param name="notificationMessage">
+        /// The notification message.
+        /// </param>
+        /// <param name="formatter">
+        /// The formatter.
+        /// </param>
+        /// <param name="attachments">
+        /// The attachments.
+        /// </param>
+        void Send(INotificationMessage notificationMessage, IFormatter formatter, IEnumerable<Attachment> attachments);
     }
 }

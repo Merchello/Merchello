@@ -311,8 +311,8 @@
                 ((Invoice) invoice).InvoiceNumber = _storeSettingService.GetNextInvoiceNumber();
             }
 
-            var includesStatusChange = ((Invoice) invoice).IsPropertyDirty("InvoiceStatus") &&
-                                       ((Invoice) invoice).HasIdentity == true;
+            var includesStatusChange = ((Invoice)invoice).IsPropertyDirty("InvoiceStatus") &&
+                                       ((Invoice)invoice).HasIdentity == true;
 
             if (raiseEvents)
             {
@@ -364,7 +364,7 @@
 
             var existingInvoicesWithStatusChanges =
                 invoicesArray.Where(
-                    x => ((Invoice) x).HasIdentity == true && ((Invoice) x).IsPropertyDirty("InvoiceStatus"))
+                    x => ((Invoice)x).HasIdentity == true && ((Invoice)x).IsPropertyDirty("InvoiceStatus"))
                     .ToArray();
 
             if (raiseEvents)
@@ -407,7 +407,7 @@
             if (raiseEvents)
                 if (Deleting.IsRaisedEventCancelled(new DeleteEventArgs<IInvoice>(invoice), this))
                 {
-                    ((Invoice) invoice).WasCancelled = true;
+                    ((Invoice)invoice).WasCancelled = true;
                     return;
                 }
 

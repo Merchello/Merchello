@@ -1,6 +1,8 @@
 ﻿namespace Merchello.Core.Gateways.Notification.Triggering
 {
     using System.Collections.Generic;
+    using System.Net.Mail;
+
     using Observation;
 
     /// <summary>
