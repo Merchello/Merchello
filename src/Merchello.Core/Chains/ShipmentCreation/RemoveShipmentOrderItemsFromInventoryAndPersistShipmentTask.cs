@@ -65,7 +65,11 @@
         {
             var trackableItems = Order.InventoryTrackedItems().Where(x => KeysToShip.Contains(x.Key)).ToArray();
 
-            var variants = _productVariantService.GetByKeys(trackableItems.Select(x => x.ExtendedData.GetProductVariantKey())).ToArray();
+            var trackableKeys = trackableItems.Select(x => x.ExtendedData.GetProductVariantKey()).ToArray();
+
+            var variants = trackableKeys.Any() ?
+                _productVariantService.GetByKeys(trackableKeys).ToArray() :
+                Enumerable.Empty<IProductVariant>().ToArray();
 
             if (variants.Any())
             {
