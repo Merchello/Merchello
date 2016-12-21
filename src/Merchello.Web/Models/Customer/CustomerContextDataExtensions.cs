@@ -1,9 +1,13 @@
 namespace Merchello.Web.Models.Customer
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web;
     using Core;
+
+    using Merchello.Core.Logging;
+
     using Newtonsoft.Json;
 
     using Umbraco.Core;
@@ -45,7 +49,15 @@ namespace Merchello.Web.Models.Customer
                 return null;
             }
 
-            return JsonConvert.DeserializeObject<CustomerContextData>(EncryptionHelper.Decrypt(contextCookie.Value));
+            try
+            {
+                return JsonConvert.DeserializeObject<CustomerContextData>(EncryptionHelper.Decrypt(contextCookie.Value));
+            }
+            catch (Exception ex)
+            {
+                MultiLogHelper.WarnWithException(typeof(CustomerContextDataExtensions), "Failed to decrypt custom context data", ex);
+                return new CustomerContextData();
+            }
         }
 
         /// <summary>
