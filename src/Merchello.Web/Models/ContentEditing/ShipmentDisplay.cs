@@ -159,6 +159,11 @@
         public string TrackingCode { get; set; }
 
         /// <summary>
+        /// Gets or sets the tracking url.
+        /// </summary>
+        public string TrackingUrl { get; set; }
+
+        /// <summary>
         /// Gets or sets the items.
         /// </summary>
         public override IEnumerable<OrderLineItemDisplay> Items { get; set; }

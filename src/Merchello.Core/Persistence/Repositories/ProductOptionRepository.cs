@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Merchello.Core.Events;
     using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Core.Models.Counting;
@@ -15,6 +16,7 @@
 
     using Umbraco.Core;
     using Umbraco.Core.Cache;
+    using Umbraco.Core.Events;
     using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
@@ -85,6 +87,11 @@
             _detachedContentTypeRepository = detachedContentTypeRepository;
         }
 
+        // fixme v3
+        // TODO - this is a quick fix for an examine re-index issue where a shared product option is saved and individual products
+        // that implement that option indexed values are not updated.
+        // see: http://issues.merchello.com/youtrack/issue/M-1233
+        internal static event TypedEventHandler<ProductOptionRepository, ObjectEventArgs<IEnumerable<Guid>>>  ReIndex; 
 
         /// <summary>
         /// Saves options associated with a product.
@@ -689,6 +696,34 @@
             SaveProductAttributes(entity);
 
             entity.ResetDirtyProperties();
+
+            if (!entity.Shared) return;
+
+            // TODO fixme
+            var keys = GetProductKeysForCacheRefresh(new[] { entity.Key }).ToArray();
+            foreach (var key in keys)
+            {
+                RuntimeCache.ClearCacheItem(Core.Cache.CacheKeys.GetEntityCacheKey<IProduct>(key));
+            }
+            ReIndex.RaiseEvent(new ObjectEventArgs<IEnumerable<Guid>>(keys), this);
+        }
+
+        protected override void PersistDeletedItem(IProductOption entity)
+        {
+            var refresh = entity.Shared;
+            base.PersistDeletedItem(entity);
+
+            if (!refresh) return;
+
+            if (!entity.Shared) return;
+
+            // TODO fixme
+            var keys = GetProductKeysForCacheRefresh(new[] { entity.Key }).ToArray();
+            foreach (var key in keys)
+            {
+                RuntimeCache.ClearCacheItem(Core.Cache.CacheKeys.GetEntityCacheKey<IProduct>(key));
+            }
+            ReIndex.RaiseEvent(new ObjectEventArgs<IEnumerable<Guid>>(keys), this);
         }
 
         #endregion

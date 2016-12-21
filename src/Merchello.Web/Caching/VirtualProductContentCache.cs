@@ -135,6 +135,19 @@
         }
 
         /// <summary>
+        /// Clears the virtual content cache.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        public void ClearVirtualCache(IProduct product)
+        {
+            ClearVirtualCache(product.Key);
+
+            RemoveFromCache(product);
+        }
+
+        /// <summary>
         /// Gets the slug cache key.
         /// </summary>
         /// <param name="slug">

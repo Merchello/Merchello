@@ -1,3 +1,5 @@
+
+// OBSOLETE
 angular.module('merchello.providers.models').factory('merchantDescriptorBuilder',
     ['genericModelBuilder', 'MerchantDescriptor',
         function(genericModelBuilder, MerchantDescriptor) {

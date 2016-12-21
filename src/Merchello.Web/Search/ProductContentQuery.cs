@@ -4,6 +4,7 @@
     using System.Linq;
 
     using Merchello.Core;
+    using Merchello.Core.Logging;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Web.Models;
     using Merchello.Web.Models.VirtualContent;
@@ -11,12 +12,27 @@
     /// <summary>
     /// Represents a product filter query.
     /// </summary>
-    internal class ProductContentQuery : ICmsContentQuery<IProductContent>
+    internal class ProductContentQuery : IProductContentQuery
     {
         /// <summary>
         /// The <see cref="ICachedProductQuery"/>.
         /// </summary>
         private readonly ICachedProductQuery _query;
+
+        /// <summary>
+        /// The minimum price in the price range.
+        /// </summary>
+        private decimal _minPrice = 0M;
+
+        /// <summary>
+        /// The maximum price in the price range.
+        /// </summary>
+        private decimal _maxPrice = 0M;
+
+        /// <summary>
+        /// A value indicating that the query should consider price ranges.
+        /// </summary>
+        private bool _hasRange = false;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductContentQuery"/> class.
@@ -28,6 +44,33 @@
         {
             Ensure.ParameterNotNull(query, "The CachedProductQuery cannot be null");
             _query = query;
+        }
+
+        /// <inheritdoc/>
+        public decimal MinPrice
+        {
+            get
+            {
+                return _minPrice;
+            }
+        }
+
+        /// <inheritdoc/>
+        public decimal MaxPrice
+        {
+            get
+            {
+                return _maxPrice;
+            }
+        }
+
+        /// <inheritdoc/>
+        public bool HasPriceRange
+        {
+            get
+            {
+                return _hasRange;
+            }
         }
 
         /// <summary>
@@ -87,33 +130,93 @@
             var hasCollections = CollectionKeys != null && CollectionKeys.Any();
 
 
-            if (!hasCollections)
+            if (!hasCollections && !HasPriceRange)
             {
                 return HasSearchTerm
                   ? _query.TypedProductContentSearchPaged(SearchTerm, Page, ItemsPerPage, SortBy, SortDirection)
                   : _query.TypedProductContentSearchPaged(Page, ItemsPerPage, SortBy, SortDirection);
             }
 
+            if (!hasCollections && HasPriceRange)
+            {
+                if (!HasSearchTerm)
+                {
+                    return _query.TypedProductContentByPriceRange(MinPrice, MaxPrice, Page, ItemsPerPage, SortBy, SortDirection);
+                }
+                
+                // don't have a price range with a search term filter.
+                var notImplemented = new NotImplementedException();
+                MultiLogHelper.Error<ProductContentQuery>("Typed product content by search term and price range has not been implemented", notImplemented);
+                throw notImplemented;
+            }
+            
+
             switch (this.CollectionClusivity)
             {
                 case CollectionClusivity.DoesNotExistInAnyCollectionsAndFilters:
 
-                    return HasSearchTerm ?
+                    if (!HasPriceRange)
+                    {
+                        return HasSearchTerm ?
                         _query.TypedProductContentPageThatNotInAnyCollections(CollectionKeys, SearchTerm, Page, ItemsPerPage, SortBy, SortDirection) :
                         _query.TypedProductContentPageThatNotInAnyCollections(CollectionKeys, Page, ItemsPerPage, SortBy, SortDirection);
+                    }
+
+                    return HasSearchTerm ?
+                    _query.TypedProductContentPageThatNotInAnyCollections(CollectionKeys, SearchTerm, MinPrice, MaxPrice, Page, ItemsPerPage, SortBy, SortDirection) :
+                    _query.TypedProductContentPageThatNotInAnyCollections(CollectionKeys, MinPrice, MaxPrice, Page, ItemsPerPage, SortBy, SortDirection);
 
                 case CollectionClusivity.ExistsInAnyCollectionOrFilter:
 
+                    if (!HasPriceRange)
+                    {
+                        return HasSearchTerm ?
+                            _query.TypedProductContentPageThatExistsInAnyCollections(CollectionKeys, SearchTerm, Page, ItemsPerPage, SortBy, SortDirection) :
+                            _query.TypedProductContentPageThatExistsInAnyCollections(CollectionKeys, Page, ItemsPerPage, SortBy, SortDirection);
+                    }
+
                     return HasSearchTerm ?
-                        _query.TypedProductContentPageThatExistsInAnyCollections(CollectionKeys, SearchTerm, Page, ItemsPerPage, SortBy, SortDirection) :
-                        _query.TypedProductContentPageThatExistsInAnyCollections(CollectionKeys, Page, ItemsPerPage, SortBy, SortDirection);
+                        _query.TypedProductContentPageThatExistsInAnyCollections(CollectionKeys, SearchTerm, MinPrice, MaxPrice, Page, ItemsPerPage, SortBy, SortDirection) :
+                        _query.TypedProductContentPageThatExistsInAnyCollections(CollectionKeys, MinPrice, MaxPrice, Page, ItemsPerPage, SortBy, SortDirection);
 
                 case CollectionClusivity.ExistsInAllCollectionsAndFilters:
                 default:
+
+                    if (!HasPriceRange)
+                    {
+                        return HasSearchTerm ?
+                            _query.TypedProductContentPageThatExistInAllCollections(CollectionKeys, SearchTerm, Page, ItemsPerPage, SortBy, SortDirection) :
+                            _query.TypedProductContentPageThatExistInAllCollections(CollectionKeys, Page, ItemsPerPage, SortBy, SortDirection);
+                    }
+
                     return HasSearchTerm ?
-                        _query.TypedProductContentPageThatExistInAllCollections(CollectionKeys, SearchTerm, Page, ItemsPerPage, SortBy, SortDirection) :
-                        _query.TypedProductContentPageThatExistInAllCollections(CollectionKeys, Page, ItemsPerPage, SortBy, SortDirection);
+                        _query.TypedProductContentPageThatExistInAllCollections(CollectionKeys, SearchTerm, MinPrice, MaxPrice, Page, ItemsPerPage, SortBy, SortDirection) :
+                        _query.TypedProductContentPageThatExistInAllCollections(CollectionKeys, MinPrice, MaxPrice, Page, ItemsPerPage, SortBy, SortDirection);
             }
+        }
+
+
+        /// <inheritdoc/>
+        public void SetPriceRange(decimal min, decimal max)
+        {
+            if (min > max)
+            {
+                var tmp = min;
+                max = min;
+                min = tmp;
+            }
+
+            _minPrice = min;
+            _maxPrice = max;
+            _hasRange = true;
+        }
+
+        /// <inheritdoc/>
+        public void ClearPriceRange()
+        {
+            _minPrice = 0M;
+            _maxPrice = 0M;
+            _hasRange = false;
         }
     }
 }

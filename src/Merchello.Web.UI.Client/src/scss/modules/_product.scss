@@ -7,3 +7,18 @@
 #addProductForm, #copyProductForm  {
   .error { display: block; }
 }
+
+.manufacturer {
+
+  .suggest ul {
+    margin: .5em 0 0 0;
+    list-style: none;
+    li {
+      display: inline-block;
+      margin-left: 1em;
+    }
+    :first-child {
+      margin-left: 0;
+    }
+  }
+}

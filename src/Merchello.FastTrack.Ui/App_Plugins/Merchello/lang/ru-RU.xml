@@ -17,6 +17,7 @@
     <key alias="percentSymbol">%</key>
     <key alias="moneySymbol">$</key>
     <key alias="trackingNumber">№ квитанции </key>
+    <key alias="trackingUrl">Tracking URL</key>
     <key alias="shipment">Доставка</key>
     <key alias="sku">Артикул</key>
     <key alias="quantity">К-во</key>
@@ -546,6 +547,7 @@
     <key alias="info">Информация о доставке</key>
     <key alias="weight">Вес</key>
     <key alias="dimensions">Размеры</key>
+    <key alias="carrier">Carrier</key>
     <!-- actions -->
     <key alias="setVars">Установка параметров доставки: веса и размеров</key>
     <!-- phrases -->

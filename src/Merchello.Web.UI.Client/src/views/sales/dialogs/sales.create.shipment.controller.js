@@ -33,7 +33,10 @@ angular.module('merchello')
         function save() {
             $scope.dialogData.shipmentRequest.shipMethodKey = $scope.dialogData.shipMethods.selected.key;
             $scope.dialogData.shipmentRequest.shipmentStatusKey = $scope.dialogData.shipmentStatus.key;
+            $scope.dialogData.shipmentRequest.carrier = $scope.dialogData.carrier;
             $scope.dialogData.shipmentRequest.trackingNumber = $scope.dialogData.trackingNumber;
+            $scope.dialogData.shipmentRequest.trackingUrl = $scope.dialogData.trackingUrl;
+
             $scope.dialogData.shipmentRequest.order.items = _.filter($scope.dialogData.order.items, function (item) {
                 return item.selected === true;
             });

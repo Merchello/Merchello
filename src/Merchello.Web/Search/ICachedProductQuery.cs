@@ -194,6 +194,61 @@
         PagedCollection<IProductContent> TypedProductContentSearchPaged(string term, long page, long itemsPerPage, string sortBy = "name", SortDirection sortDirection = SortDirection.Descending);
 
         /// <summary>
+        /// Gets a collection of typed product content by price range.
+        /// </summary>
+        /// <param name="min">
+        /// The min price.
+        /// </param>
+        /// <param name="max">
+        /// The max price.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PagedCollection"/>.
+        /// </returns>
+        PagedCollection<IProductContent> TypedProductContentByPriceRange(decimal min, decimal max, long page, long itemsPerPage, string sortBy = "price", SortDirection sortDirection = SortDirection.Descending);
+
+        ///// <summary>
+        ///// Gets a collection of typed product content by price range including a search term.
+        ///// </summary>
+        ///// <param name="searchTerm">
+        ///// The search term.
+        ///// </param>
+        ///// <param name="min">
+        ///// The min price.
+        ///// </param>
+        ///// <param name="max">
+        ///// The max price.
+        ///// </param>
+        ///// <param name="page">
+        ///// The page.
+        ///// </param>
+        ///// <param name="itemsPerPage">
+        ///// The items per page.
+        ///// </param>
+        ///// <param name="sortBy">
+        ///// The sort by.
+        ///// </param>
+        ///// <param name="sortDirection">
+        ///// The sort direction.
+        ///// </param>
+        ///// <returns>
+        ///// The <see cref="PagedCollection"/>.
+        ///// </returns>
+        //PagedCollection<IProductContent> TypedProductContentByPriceRange(string searchTerm, decimal min, decimal max, long page, long itemsPerPage, string sortBy = "price", SortDirection sortDirection = SortDirection.Descending);
+
+        /// <summary>
         /// Gets a <see cref="PagedCollection{IProductContent}"/> that exists in every collection referenced.
         /// </summary>
         /// <param name="collectionKeys">
@@ -241,6 +296,70 @@
         /// The <see cref="PagedCollection"/>.
         /// </returns>
         PagedCollection<IProductContent> TypedProductContentPageThatExistInAllCollections(IEnumerable<Guid> collectionKeys, string searchTerm, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending);
+
+        /// <summary>
+        /// Gets a <see cref="PagedCollection{IProductContent}"/> that exists in every collection referenced.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection of collection keys.
+        /// </param>
+        /// <param name="min">
+        /// The min.
+        /// </param>
+        /// <param name="max">
+        /// The max.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PagedCollection"/>.
+        /// </returns>
+        PagedCollection<IProductContent> TypedProductContentPageThatExistInAllCollections(IEnumerable<Guid> collectionKeys, decimal min, decimal max, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending);
+
+        /// <summary>
+        /// Gets a <see cref="PagedCollection{IProductContent}"/> that exists in every collection referenced.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection of collection keys.
+        /// </param>
+        /// <param name="searchTerm">
+        /// The search Term.
+        /// </param>
+        /// <param name="min">
+        /// The min.
+        /// </param>
+        /// <param name="max">
+        /// The max.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PagedCollection"/>.
+        /// </returns>
+        PagedCollection<IProductContent> TypedProductContentPageThatExistInAllCollections(IEnumerable<Guid> collectionKeys, string searchTerm, decimal min, decimal max, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending);
+
+
+
 
         /// <summary>
         /// Gets a <see cref="PagedCollection{IProductContent}"/> that does not exists in any of the collections referenced..
@@ -291,6 +410,70 @@
         /// </returns>
         PagedCollection<IProductContent> TypedProductContentPageThatNotInAnyCollections(IEnumerable<Guid> collectionKeys, string searchTerm, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending);
 
+
+
+        /// <summary>
+        /// Gets a <see cref="PagedCollection{IProductContent}"/> that does not exists in any of the collections referenced..
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection keys.
+        /// </param>
+        /// <param name="min">
+        /// The min.
+        /// </param>
+        /// <param name="max">
+        /// The max.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PagedCollection"/>.
+        /// </returns>
+        PagedCollection<IProductContent> TypedProductContentPageThatNotInAnyCollections(IEnumerable<Guid> collectionKeys, decimal min, decimal max, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending);
+
+        /// <summary>
+        /// Gets a <see cref="PagedCollection{IProductContent}"/> that does not exists in any of the collections referenced..
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection keys.
+        /// </param>
+        /// <param name="searchTerm">
+        /// The search Term.
+        /// </param>
+        /// <param name="min">
+        /// The min.
+        /// </param>
+        /// <param name="max">
+        /// The max.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PagedCollection"/>.
+        /// </returns>
+        PagedCollection<IProductContent> TypedProductContentPageThatNotInAnyCollections(IEnumerable<Guid> collectionKeys, string searchTerm, decimal min, decimal max, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending);
+
+
         /// <summary>
         /// Gets a <see cref="PagedCollection{IProductContent}"/> that exists in any of the collections passed.
         /// </summary>
@@ -340,6 +523,69 @@
         /// The <see cref="PagedCollection"/>.
         /// </returns>
         PagedCollection<IProductContent> TypedProductContentPageThatExistsInAnyCollections(IEnumerable<Guid> collectionKeys, string searchTerm, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending);
+
+        /// <summary>
+        /// Gets a <see cref="PagedCollection{IProductContent}"/> that exists in any of the collections passed.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection keys.
+        /// </param>
+        /// <param name="min">
+        /// The min.
+        /// </param>
+        /// <param name="max">
+        /// The max.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PagedCollection"/>.
+        /// </returns>
+        PagedCollection<IProductContent> TypedProductContentPageThatExistsInAnyCollections(IEnumerable<Guid> collectionKeys, decimal min, decimal max, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending);
+
+        /// <summary>
+        /// Gets a <see cref="PagedCollection{IProductContent}"/> that exists in any of the collections passed.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection keys.
+        /// </param>
+        /// <param name="searchTerm">
+        /// The search Term.
+        /// </param>
+        /// <param name="min">
+        /// The min.
+        /// </param>
+        /// <param name="max">
+        /// The max.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PagedCollection"/>.
+        /// </returns>
+        PagedCollection<IProductContent> TypedProductContentPageThatExistsInAnyCollections(IEnumerable<Guid> collectionKeys, string searchTerm, decimal min, decimal max, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending);
+
+
 
         /// <summary>
         /// Gets a <see cref="ProductDisplay"/> by it's key

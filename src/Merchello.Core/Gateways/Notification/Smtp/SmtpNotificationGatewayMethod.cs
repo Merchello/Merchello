@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.Gateways.Notification.Smtp
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Net;
     using System.Net.Mail;
@@ -57,8 +58,13 @@
         /// <summary>
         /// Does the actual work of sending the <see cref="IFormattedNotificationMessage"/>
         /// </summary>
-        /// <param name="message">The <see cref="IFormattedNotificationMessage"/> to be sent</param>
-        public override void PerformSend(IFormattedNotificationMessage message)
+        /// <param name="message">
+        /// The <see cref="IFormattedNotificationMessage"/> to be sent
+        /// </param>
+        /// <param name="attachments">
+        /// The attachments.
+        /// </param>
+        public override void PerformSend(IFormattedNotificationMessage message, IEnumerable<Attachment> attachments = null)
         {
             if (!message.Recipients.Any()) return;
 
@@ -70,7 +76,6 @@
                 IsBodyHtml = true
             })
             {
-                // REFACTOR update to MultiLogHelper when we control Resolution Freeze
                 LogHelper.Info<SmtpNotificationGatewayMethod>("Sending an email to " + string.Join(", ", message.Recipients));
 
                 foreach (var to in message.Recipients)
@@ -78,6 +83,14 @@
                     if (!string.IsNullOrEmpty(to))
                     {
                         msg.To.Add(new MailAddress(to));
+                    }
+                }
+
+                if (attachments != null)
+                {
+                    foreach (var att in attachments)
+                    {
+                        msg.Attachments.Add(att);
                     }
                 }
 

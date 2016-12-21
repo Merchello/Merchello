@@ -1,5 +1,5 @@
 # version format
-version: 2.3.1.{build}
+version: 2.4.0.{build}
 
 # UMBRACO_PACKAGE_PRERELEASE_SUFFIX if a rtm release build this should be blank, otherwise if empty will default to alpha
 # example UMBRACO_PACKAGE_PRERELEASE_SUFFIX=beta
@@ -49,9 +49,11 @@ install:
 build_script:
 - build-appveyor.cmd
 
-test:
-   assemblies:
-      - '..\test\Merchello.Tests.IntegrationTests\bin\Release\Merchello.Tests.IntegrationTests.dll'
+test: off
+
+#test:
+#   assemblies:
+#      - '..\test\Merchello.Tests.IntegrationTests\bin\Release\Merchello.Tests.IntegrationTests.dll'
 
 # run custom scripts before tests
 before_test:

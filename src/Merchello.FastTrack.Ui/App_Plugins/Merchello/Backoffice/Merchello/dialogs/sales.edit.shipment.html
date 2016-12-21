@@ -5,10 +5,22 @@
     <div class="umb-panel-body with-header with-footer">
         <h3><localize key="general_edit" /> <localize key="merchelloGeneral_shipment" /></h3>
         <div class="control-group row-fluid">
-            <label for="trackingNo"><localize key="merchelloGeneral_trackingNumber" />:</label>
-            <input name="trackingNo" data-ng-model="dialogData.shipment.trackingCode" type="text" class="col-xs-6 span6" />
-            <label>Shipment Status</label>
-            <select name="status" class="col-xs-6 span6" data-ng-model="dialogData.shipment.shipmentStatus" data-ng-options="option.name for option in dialogData.shipmentStatuses"></select>
+            <div class="form-group">
+                <label for="carrier"><localize key="merchelloShipping_carrier"/></label>
+                <input name="carrier" data-ng-model="dialogData.shipment.carrier" type="text" class="col-xs-6 span6"/>
+            </div>
+            <div class="form-group">
+                <label for="trackingNo"><localize key="merchelloGeneral_trackingNumber" />:</label>
+                <input name="trackingNo" data-ng-model="dialogData.shipment.trackingCode" type="text" class="col-xs-6 span6" />
+            </div>
+            <div class="form-group">
+                <label for="trackingUrl"><localize key="merchelloGeneral_trackingUrl"/></label>
+                <input name="trackingNo" data-ng-model="dialogData.shipment.trackingUrl" type="text" class="col-xs-6 span6"/>
+            </div>
+            <div class="form-group">
+                <label>Shipment Status</label>
+                <select name="status" class="col-xs-6 span6" data-ng-model="dialogData.shipment.shipmentStatus" data-ng-options="option.name for option in dialogData.shipmentStatuses"></select>
+            </div>
         </div>
         <table class="table table-striped merchello-striped-table order-items">
             <tbody>

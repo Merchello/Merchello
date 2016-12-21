@@ -42,9 +42,6 @@ angular.module('merchello.directives').directive("productOptionsAddEdit",
                 }
             });
 
-
-
-
             if (scope.option.choices.length > 0) {
                 scope.selectedAttribute.current = _.find(scope.option.choices, function(c) {
                    if (c.isDefaultChoice) {

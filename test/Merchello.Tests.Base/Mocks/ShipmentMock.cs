@@ -95,6 +95,8 @@
 
         public string TrackingCode { get; set; }
 
+        public string TrackingUrl { get; set; }
+
         public void Accept(ILineItemVisitor visitor)
         {
             throw new NotImplementedException();

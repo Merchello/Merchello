@@ -17,7 +17,7 @@
 		<tags></tags>
 		<dependencies>
 			<dependency id="UmbracoCms.Core" version="7.5.0" />
-      <dependency id="Braintree" version="2.54.0" />
+      <dependency id="Braintree" version="3.3.0" />
       <dependency id="PayPalMerchantSDK" version="2.15.117" />
 		</dependencies>
 	</metadata>

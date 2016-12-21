@@ -17,6 +17,7 @@
     <key alias="percentSymbol">%</key>
     <key alias="moneySymbol">DKK</key>
     <key alias="trackingNumber">Sporingsnummer</key>
+    <key alias="trackingUrl">Tracking URL</key>
     <key alias="shipment">Forsendelse</key>
     <key alias="sku">SKU</key>
     <key alias="quantity">Antal</key>
@@ -546,6 +547,7 @@
     <key alias="info">Forsendelsesinformation</key>
     <key alias="weight">Vægt</key>
     <key alias="dimensions">Dimensioner</key>
+    <key alias="carrier">Carrier</key>
     <!-- actions -->
     <key alias="setVars">Opsæt forsendelsesvariabler: Vægt og dimensioner</key>
     <!-- phrases -->

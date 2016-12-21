@@ -478,5 +478,16 @@
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 
+        /// <summary>
+        /// Gets a list of all current manufacturers.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{String}"/> (Manufacturer names).
+        /// </returns>
+        [HttpGet]
+        public IEnumerable<string> GetAllManufacturers()
+        {
+            return _productService.GetAllManufacturers();
+        }
     }
 }

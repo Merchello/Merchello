@@ -17,6 +17,7 @@
     <key alias="percentSymbol">%</key>
     <key alias="moneySymbol">€</key>
     <key alias="trackingNumber">Tracking # </key>
+    <key alias="trackingUrl">Tracking URL</key>
     <key alias="shipment">Envío</key>
     <key alias="sku">SKU</key>
     <key alias="quantity">Cant</key>
@@ -546,6 +547,7 @@
     <key alias="info">Información de envío</key>
     <key alias="weight">Peso</key>
     <key alias="dimensions">Dimensiones</key>
+    <key alias="carrier">Carrier</key>
     <!-- actions -->
     <key alias="setVars">Configura las variables de envío: Peso y dimensiones</key>
     <!-- phrases -->

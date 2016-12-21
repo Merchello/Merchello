@@ -23,7 +23,7 @@
     /// <summary>
     /// Represents the Product Service 
     /// </summary>
-    public class ProductService : PageCachedServiceBase<IProduct>, IProductService
+    public partial class ProductService : PageCachedServiceBase<IProduct>, IProductService
     {
         /// <summary>
         /// The locker.
