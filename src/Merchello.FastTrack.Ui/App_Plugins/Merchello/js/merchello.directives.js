@@ -4344,7 +4344,7 @@ angular.module('merchello.directives').directive('addPaymentTable', function() {
             paymentMethods: '=',
         },
         templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/addpaymenttable.tpl.html',
-        controller: function($scope, $timeout, notificationsService, dialogService, dialogDataFactory, paymentResource) {
+        controller: function($scope, $timeout, invoiceHelper, notificationsService, dialogService, dialogDataFactory, paymentResource) {
             $scope.loaded = false;
             $scope.authorizePaymentOnly = false;
 
@@ -4407,7 +4407,7 @@ angular.module('merchello.directives').directive('addPaymentTable', function() {
                 dialogData.showSpinner = $scope.showSpinner;
                 dialogData.paymentMethod = paymentMethod;
                 dialogData.paymentMethodName = paymentMethod.name;
-                dialogData.invoiceBalance = $scope.invoice.remainingBalance($scope.payments);
+                dialogData.invoiceBalance = invoiceHelper.round($scope.invoice.remainingBalance($scope.payments), 2);
                 dialogData.currencySymbol = $scope.currencySymbol;
                 dialogData.invoice = $scope.invoice;
                 dialogData.authorizePaymentOnly = $scope.authorizePaymentOnly;
