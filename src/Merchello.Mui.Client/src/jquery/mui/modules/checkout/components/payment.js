@@ -26,12 +26,13 @@ MUI.Checkout.Payment.Braintree = {
     bind: {
 
         allForms: function() {
-            // binds the standard transaction
-            MUI.Checkout.Payment.Braintree.bind.btstandard.init();
 
-            if($('#paypal-container').length > 0) {
+            if($('.paypal-button').length > 0) {
                 // binds the PayPal on time transaction
                 MUI.Checkout.Payment.Braintree.bind.btpaypal.init();
+            } else {
+                // binds the standard transaction
+                MUI.Checkout.Payment.Braintree.bind.btstandard.init();
             }
         },
         
@@ -157,56 +158,6 @@ MUI.Checkout.Payment.Braintree = {
                         });
                     });
                 }
-                /*
-
-                if (frm.length > 0) {
-                    var cn = $(frm).find('[data-muivalue="cardnumber"]');
-                    if (cn.length > 0) {
-                        var icon = $(cn).next('[data-muivalue="cardtype"]');
-                        if ($(icon.length === 0)) {
-                            var span = MUI.Settings.Payments.cardtemplate;
-                            $(cn).after(span);
-                        }
-                        $(cn).keyup(function() {
-                            MUI.Services.Braintree.setCardLabel(cn);
-                        });
-                    }
-
-                    // disable the form
-                    $(frm).submit(function(e) {
-                        e.preventDefault();
-
-                        var cc = MUI.Checkout.Payment.Braintree.getBrainTreeCreditCard();
-                        if (MUI.Services.Braintree.validateCard(cc)) {
-                            var token = MUI.Checkout.Payment.Braintree.getBraintreeToken();
-                            var setup = {
-                                clientToken: token
-                            };
-                            var client = new braintree.api.Client(setup);
-                            client.tokenizeCard(cc, function(err, nonce) {
-                                if (err !== null) {
-                                    MUI.Logger.captureError(err);
-                                    //CO.Checkout.renderErrorMessages([ err ]);
-                                    return false;
-                                }
-
-                                var data = { nonce: nonce };
-                                var method = 'Process';
-
-                                if (MUI.Checkout.Payment.Braintree.invoiceKey !== '') {
-                                    data.invoiceKey = MUI.Checkout.Payment.Braintree.invoiceKey;
-                                    method = 'Retry';
-                                }
-
-                                var url = MUI.Settings.Endpoints.braintreeStandardCcSurface + method;
-
-                                MUI.Checkout.Payment.Braintree.postBraintreeForm(url, data);
-                            });
-                        }
-                    });
-                }
-
-                */
             }
         },
 
@@ -218,48 +169,74 @@ MUI.Checkout.Payment.Braintree = {
 
                 var token = MUI.Checkout.Payment.Braintree.getBraintreeToken();
 
-                // TODO update to V3
-                braintree.setup(token, "custom", {
-                    paypal: {
-                        container: "paypal-container"
-                    },
-                    onPaymentMethodReceived: function (obj) {
+                var paypalButton = document.querySelector('.paypal-button');
 
+                // Create a client.
+                braintree.client.create({
+                    authorization: token
+                }, function (clientErr, clientInstance) {
 
-                        var frm = MUI.Checkout.Payment.Braintree.getBraintreeForm();
-                        $(frm).submit(function(e) {
-                           e.preventDefault();
-                        });
-                        var hidden = $(frm).find('[data-muivalue="btpaypalnonce"]');
-                        MUI.Checkout.Payment.Braintree.token = hidden.val();
-                        $(hidden).val(obj.nonce);
-
-                        var btn = $(frm).find('.mui-requirejs');
-                        if (MUI.Settings.Endpoints.braintreePayPalSurface !== '')
-                        {
-                            var method = 'Process';
-                            var data = { nonce: $(hidden).val() };
-                            if (MUI.Checkout.Payment.Braintree.invoiceKey !== '') {
-                                method = 'Retry';
-                                data.invoiceKey = MUI.Checkout.Payment.Braintree.invoiceKey;
-                            }
-
-                            var url = MUI.Settings.Endpoints.braintreePayPalSurface + method;
-                            
-                            // determine whether or not to show the submit button
-                            if (MUI.Settings.Payments.braintreePayPalRequiresBtn !== undefined
-                                && MUI.Settings.Payments.braintreePayPalRequiresBtn)
-                            {
-                                $(btn).show();
-                                $(btn).click(function(e) {
-                                    e.preventDefault();
-                                    MUI.Checkout.Payment.Braintree.postBraintreeForm(url, data);
-                                });
-                            } else {
-                                MUI.Checkout.Payment.Braintree.postBraintreeForm(url, data);
-                            }
-                        }
+                    // Stop if there was a problem creating the client.
+                    // This could happen if there is a network error or if the authorization
+                    // is invalid.
+                    if (clientErr) {
+                        console.error('Error creating client:', clientErr);
+                        return;
                     }
+
+                    // Create a PayPal component.
+                    braintree.paypal.create({
+                        client: clientInstance
+                    }, function (paypalErr, paypalInstance) {
+
+                        // Stop if there was a problem creating PayPal.
+                        // This could happen if there was a network error or if it's incorrectly
+                        // configured.
+                        if (paypalErr) {
+                            console.error('Error creating PayPal:', paypalErr);
+                            return;
+                        }
+
+                        // Enable the button.
+                        paypalButton.removeAttribute('disabled');
+
+                        // When the button is clicked, attempt to tokenize.
+                        paypalButton.addEventListener('click', function (event) {
+
+                            // Because tokenization opens a popup, this has to be called as a result of
+                            // customer action, like clicking a button—you cannot call this at any time.
+                            paypalInstance.tokenize({
+                                flow: 'vault'
+                            }, function (tokenizeErr, payload) {
+
+                                // Stop if there was an error.
+                                if (tokenizeErr) {
+                                    if (tokenizeErr.type !== 'CUSTOMER') {
+                                        console.error('Error tokenizing:', tokenizeErr);
+                                    }
+                                    return;
+                                }
+
+                                // Tokenization succeeded!
+                                paypalButton.setAttribute('disabled', true);
+
+                                if (MUI.Settings.Endpoints.braintreePayPalSurface !== '')
+                                {
+                                    var method = 'Process';
+                                    var data = { nonce: payload.nonce };
+                                    if (MUI.Checkout.Payment.Braintree.invoiceKey !== '') {
+                                        method = 'Retry';
+                                        data.invoiceKey = MUI.Checkout.Payment.Braintree.invoiceKey;
+                                    }
+
+                                    var url = MUI.Settings.Endpoints.braintreePayPalSurface + method;
+                                    MUI.Checkout.Payment.Braintree.postBraintreeForm(url, data);
+                                }
+                            });
+
+                        }, false);
+                    });
+
                 });
             }
 
@@ -305,24 +282,5 @@ MUI.Checkout.Payment.Braintree = {
 
     getBraintreeForm: function() {
         return $('[data-muiscript="braintree"]');
-    },
-
-    // OBSOLETE
-    getBrainTreeCreditCard: function() {
-
-        try {
-            var cc = new MUI.Services.Braintree.BraintreeCreditCard();
-            cc.cardholderName = $('#CardHolder').val();
-            cc.number = $('#CardNumber').val();
-            cc.expirationDate = $('#ExpiresMonthYear').val();
-            cc.cvv = $('#Cvv').val();
-            cc.billingAddress.postalCode = $('#PostalCode').val();
-
-            return cc;
-        }
-        catch(err) {
-            MUI.Logger.captureError(err);
-            throw err;
-        }
     }
 };

@@ -20,7 +20,8 @@ MUI.Services.Braintree = {
         $.when(
             MUI.Assets.cachedGetScript('/App_Plugins/Merchello/client/lib/card-validator.min.js'), // don't need this anymore
             MUI.Assets.cachedGetScript('//js.braintreegateway.com/web/3.6.3/js/client.min.js'),
-            MUI.Assets.cachedGetScript('//js.braintreegateway.com/web/3.6.3/js/hosted-fields.min.js')
+            MUI.Assets.cachedGetScript('//js.braintreegateway.com/web/3.6.3/js/hosted-fields.min.js'),
+            MUI.Assets.cachedGetScript('//js.braintreegateway.com/web/3.6.3/js/paypal.min.js')
             // MUI.Assets.cachedGetScript('//js.braintreegateway.com/v2/braintree.js')
         ).then(function() {
                 MUI.Services.Braintree.initialized = true;
@@ -30,6 +31,7 @@ MUI.Services.Braintree = {
 
     },
 
+    /*
     // Validates the entire card
     // obsolete
     validateCard: function(creditCard) {
@@ -115,5 +117,6 @@ MUI.Services.Braintree = {
             postalCode: ''
         };
     }
+    */
     
 };
