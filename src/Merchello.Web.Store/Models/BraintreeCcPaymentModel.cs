@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Web.Store.Models
 {
+    using System;
     using System.ComponentModel.DataAnnotations;
 
     using Merchello.Web.Store.Localization;
@@ -8,6 +9,7 @@
     /// <summary>
     /// A model for rendering and processing .
     /// </summary>
+    [Obsolete("Use BraintreePaymentModel")]
     public class BraintreeCcPaymentModel : BraintreePaymentModel
     {
         /// <summary>

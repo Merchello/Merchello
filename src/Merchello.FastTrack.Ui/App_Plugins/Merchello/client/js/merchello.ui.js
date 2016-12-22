@@ -210,8 +210,11 @@ MUI.Services.Braintree = {
         // this also asserts if the customer goes back and changes the method to another
         // braintree method, that these are only loaded once
         $.when(
-            MUI.Assets.cachedGetScript('/App_Plugins/Merchello/client/lib/card-validator.min.js'),
-            MUI.Assets.cachedGetScript('//js.braintreegateway.com/v2/braintree.js')
+            MUI.Assets.cachedGetScript('/App_Plugins/Merchello/client/lib/card-validator.min.js'), // don't need this anymore
+            MUI.Assets.cachedGetScript('//js.braintreegateway.com/web/3.6.3/js/client.min.js'),
+            MUI.Assets.cachedGetScript('//js.braintreegateway.com/web/3.6.3/js/hosted-fields.min.js'),
+            MUI.Assets.cachedGetScript('//js.braintreegateway.com/web/3.6.3/js/paypal.min.js')
+            // MUI.Assets.cachedGetScript('//js.braintreegateway.com/v2/braintree.js')
         ).then(function() {
                 MUI.Services.Braintree.initialized = true;
                 if (callback !== undefined) callback();
@@ -220,7 +223,9 @@ MUI.Services.Braintree = {
 
     },
 
+    /*
     // Validates the entire card
+    // obsolete
     validateCard: function(creditCard) {
         if (typeof creditCard !== 'object') {
             return false;
@@ -232,6 +237,7 @@ MUI.Services.Braintree = {
     },
 
     // Validates card number
+    // obsolete
     validateCardNumber: function(number) {
         var valid = cardValidator.number(number);
         if (!valid.isValid) MUI.Notify.warn('Invalid credit card number');
@@ -239,6 +245,7 @@ MUI.Services.Braintree = {
     },
 
     // validates the expires date
+    // obsolete
     validateExpires: function(expires) {
         var valid = cardValidator.expirationDate(expires);
         if (!valid.isValid) MUI.Notify.warn('Invalid credit card expiration date');
@@ -246,6 +253,7 @@ MUI.Services.Braintree = {
     },
 
     // validates the cvv (matches the length to the card type)
+    // obsolete
     validateCvv: function(cvv) {
         var valid = cardValidator.cvv(cvv);
         if (!valid.isValid) MUI.Notify.warn('Invalid credit card cvv');
@@ -253,12 +261,14 @@ MUI.Services.Braintree = {
     },
 
     // validates the postal code (at least 3 digits)
+    // obsolete
     validatePostalCode: function(postalCode) {
         var valid = cardValidator.postalCode(postalCode)
         return valid;
     },
 
     // Sets the card icon
+    // obsolete
     setCardLabel: function (el) {
 
         if (!el.length > 0) return;
@@ -287,7 +297,8 @@ MUI.Services.Braintree = {
 
         }
     },
-    
+
+    // obsolete
     BraintreeCreditCard: function() {
         var self = this;
         self.cardholderName = '';
@@ -298,6 +309,7 @@ MUI.Services.Braintree = {
             postalCode: ''
         };
     }
+    */
     
 };
 
@@ -1271,12 +1283,13 @@ MUI.Checkout.Payment.Braintree = {
     bind: {
 
         allForms: function() {
-            // binds the standard transaction
-            MUI.Checkout.Payment.Braintree.bind.btstandard.init();
 
-            if($('#paypal-container').length > 0) {
+            if($('.paypal-button').length > 0) {
                 // binds the PayPal on time transaction
                 MUI.Checkout.Payment.Braintree.bind.btpaypal.init();
+            } else {
+                // binds the standard transaction
+                MUI.Checkout.Payment.Braintree.bind.btstandard.init();
             }
         },
         
@@ -1284,51 +1297,122 @@ MUI.Checkout.Payment.Braintree = {
 
             init: function() {
                 MUI.debugConsole('Initializing Braintree CC form');
-                var frm = MUI.Checkout.Payment.Braintree.getBraintreeForm();
-                if (frm.length > 0) {
-                    var cn = $(frm).find('[data-muivalue="cardnumber"]');
-                    if (cn.length > 0) {
-                        var icon = $(cn).next('[data-muivalue="cardtype"]');
-                        if ($(icon.length === 0)) {
-                            var span = MUI.Settings.Payments.cardtemplate;
-                            $(cn).after(span);
+
+                var form = MUI.Checkout.Payment.Braintree.getBraintreeForm();
+
+                if (form.length > 0) {
+
+                    var token = MUI.Checkout.Payment.Braintree.getBraintreeToken();
+
+                    braintree.client.create({
+                        authorization: token
+                    }, function (err, clientInstance) {
+                        if (err) {
+                            console.error(err);
+                            return;
                         }
-                        $(cn).keyup(function() {
-                            MUI.Services.Braintree.setCardLabel(cn);
-                        });
-                    }
-
-                    // disable the form
-                    $(frm).submit(function(e) {
-                        e.preventDefault();
-
-                        var cc = MUI.Checkout.Payment.Braintree.getBrainTreeCreditCard();
-                        if (MUI.Services.Braintree.validateCard(cc)) {
-                            var token = MUI.Checkout.Payment.Braintree.getBraintreeToken();
-                            var setup = {
-                                clientToken: token
-                            };
-                            var client = new braintree.api.Client(setup);
-                            client.tokenizeCard(cc, function(err, nonce) {
-                                if (err !== null) {
-                                    MUI.Logger.captureError(err);
-                                    //CO.Checkout.renderErrorMessages([ err ]);
-                                    return false;
+                        braintree.hostedFields.create({
+                            client: clientInstance,
+                            styles: {
+                                'input': {
+                                    'font-size': '14px',
+                                    'font-family': 'helvetica, tahoma, calibri, sans-serif',
+                                    'color': '#3a3a3a'
+                                },
+                                ':focus': {
+                                    'color': 'black'
                                 }
-
-                                var data = { nonce: nonce };
-                                var method = 'Process';
-
-                                if (MUI.Checkout.Payment.Braintree.invoiceKey !== '') {
-                                    data.invoiceKey = MUI.Checkout.Payment.Braintree.invoiceKey;
-                                    method = 'Retry';
+                            },
+                            fields: {
+                                number: {
+                                    selector: '#card-number',
+                                    placeholder: '4111 1111 1111 1111'
+                                },
+                                cvv: {
+                                    selector: '#cvv',
+                                    placeholder: '123'
+                                },
+                                expirationMonth: {
+                                    selector: '#expiration-month',
+                                    placeholder: 'MM'
+                                },
+                                expirationYear: {
+                                    selector: '#expiration-year',
+                                    placeholder: 'YY'
+                                },
+                                postalCode: {
+                                    selector: '#postal-code',
+                                    placeholder: '90210'
                                 }
+                            }
+                        }, function (err, hostedFieldsInstance) {
+                            if (err) {
+                                console.error(err);
+                                return;
+                            }
 
-                                var url = MUI.Settings.Endpoints.braintreeStandardCcSurface + method;
+                            hostedFieldsInstance.on('validityChange', function (event) {
+                                var field = event.fields[event.emittedBy];
 
-                                MUI.Checkout.Payment.Braintree.postBraintreeForm(url, data);
+                                if (field.isValid) {
+                                    if (event.emittedBy === 'expirationMonth' || event.emittedBy === 'expirationYear') {
+                                        if (!event.fields.expirationMonth.isValid || !event.fields.expirationYear.isValid) {
+                                            return;
+                                        }
+                                    } else if (event.emittedBy === 'number') {
+                                        $('#card-number').next('span').text('');
+                                    }
+
+                                    // Apply styling for a valid field
+                                    $(field.container).parents('.form-group').addClass('has-success');
+                                } else if (field.isPotentiallyValid) {
+                                    // Remove styling  from potentially valid fields
+                                    $(field.container).parents('.form-group').removeClass('has-warning');
+                                    $(field.container).parents('.form-group').removeClass('has-success');
+                                    if (event.emittedBy === 'number') {
+                                        $('#card-number').next('span').text('');
+                                    }
+                                } else {
+                                    // Add styling to invalid fields
+                                    $(field.container).parents('.form-group').addClass('has-warning');
+                                    // Add helper text for an invalid card number
+                                    if (event.emittedBy === 'number') {
+                                        $('#card-number').next('span').text('Looks like this card number has an error.');
+                                    }
+                                }
                             });
-                        }
+
+                            hostedFieldsInstance.on('cardTypeChange', function (event) {
+                                // Handle a field's change, such as a change in validity or credit card type
+                                if (event.cards.length === 1) {
+                                    $('#card-type').text(event.cards[0].niceType);
+                                } else {
+                                    $('#card-type').text('Card');
+                                }
+                            });
+
+                            $('.panel-body').submit(function (event) {
+                                event.preventDefault();
+                                hostedFieldsInstance.tokenize(function (err, payload) {
+                                    if (err) {
+                                        console.error(err);
+                                        return;
+                                    }
+
+                                    var data = { nonce: payload.nonce };
+                                    var method = 'Process';
+
+                                    if (MUI.Checkout.Payment.Braintree.invoiceKey !== '') {
+                                        data.invoiceKey = MUI.Checkout.Payment.Braintree.invoiceKey;
+                                        method = 'Retry';
+                                    }
+
+                                    var url = MUI.Settings.Endpoints.braintreeStandardCcSurface + method;
+
+                                    MUI.Checkout.Payment.Braintree.postBraintreeForm(url, data);
+                                });
+                            });
+                        });
                     });
                 }
             }
@@ -1342,47 +1426,74 @@ MUI.Checkout.Payment.Braintree = {
 
                 var token = MUI.Checkout.Payment.Braintree.getBraintreeToken();
 
-                braintree.setup(token, "custom", {
-                    paypal: {
-                        container: "paypal-container"
-                    },
-                    onPaymentMethodReceived: function (obj) {
+                var paypalButton = document.querySelector('.paypal-button');
 
+                // Create a client.
+                braintree.client.create({
+                    authorization: token
+                }, function (clientErr, clientInstance) {
 
-                        var frm = MUI.Checkout.Payment.Braintree.getBraintreeForm();
-                        $(frm).submit(function(e) {
-                           e.preventDefault();
-                        });
-                        var hidden = $(frm).find('[data-muivalue="btpaypalnonce"]');
-                        MUI.Checkout.Payment.Braintree.token = hidden.val();
-                        $(hidden).val(obj.nonce);
-
-                        var btn = $(frm).find('.mui-requirejs');
-                        if (MUI.Settings.Endpoints.braintreePayPalSurface !== '')
-                        {
-                            var method = 'Process';
-                            var data = { nonce: $(hidden).val() };
-                            if (MUI.Checkout.Payment.Braintree.invoiceKey !== '') {
-                                method = 'Retry';
-                                data.invoiceKey = MUI.Checkout.Payment.Braintree.invoiceKey;
-                            }
-
-                            var url = MUI.Settings.Endpoints.braintreePayPalSurface + method;
-                            
-                            // determine whether or not to show the submit button
-                            if (MUI.Settings.Payments.braintreePayPalRequiresBtn !== undefined
-                                && MUI.Settings.Payments.braintreePayPalRequiresBtn)
-                            {
-                                $(btn).show();
-                                $(btn).click(function(e) {
-                                    e.preventDefault();
-                                    MUI.Checkout.Payment.Braintree.postBraintreeForm(url, data);
-                                });
-                            } else {
-                                MUI.Checkout.Payment.Braintree.postBraintreeForm(url, data);
-                            }
-                        }
+                    // Stop if there was a problem creating the client.
+                    // This could happen if there is a network error or if the authorization
+                    // is invalid.
+                    if (clientErr) {
+                        console.error('Error creating client:', clientErr);
+                        return;
                     }
+
+                    // Create a PayPal component.
+                    braintree.paypal.create({
+                        client: clientInstance
+                    }, function (paypalErr, paypalInstance) {
+
+                        // Stop if there was a problem creating PayPal.
+                        // This could happen if there was a network error or if it's incorrectly
+                        // configured.
+                        if (paypalErr) {
+                            console.error('Error creating PayPal:', paypalErr);
+                            return;
+                        }
+
+                        // Enable the button.
+                        paypalButton.removeAttribute('disabled');
+
+                        // When the button is clicked, attempt to tokenize.
+                        paypalButton.addEventListener('click', function (event) {
+
+                            // Because tokenization opens a popup, this has to be called as a result of
+                            // customer action, like clicking a button—you cannot call this at any time.
+                            paypalInstance.tokenize({
+                                flow: 'vault'
+                            }, function (tokenizeErr, payload) {
+
+                                // Stop if there was an error.
+                                if (tokenizeErr) {
+                                    if (tokenizeErr.type !== 'CUSTOMER') {
+                                        console.error('Error tokenizing:', tokenizeErr);
+                                    }
+                                    return;
+                                }
+
+                                // Tokenization succeeded!
+                                paypalButton.setAttribute('disabled', true);
+
+                                if (MUI.Settings.Endpoints.braintreePayPalSurface !== '')
+                                {
+                                    var method = 'Process';
+                                    var data = { nonce: payload.nonce };
+                                    if (MUI.Checkout.Payment.Braintree.invoiceKey !== '') {
+                                        method = 'Retry';
+                                        data.invoiceKey = MUI.Checkout.Payment.Braintree.invoiceKey;
+                                    }
+
+                                    var url = MUI.Settings.Endpoints.braintreePayPalSurface + method;
+                                    MUI.Checkout.Payment.Braintree.postBraintreeForm(url, data);
+                                }
+                            });
+
+                        }, false);
+                    });
+
                 });
             }
 
@@ -1428,24 +1539,6 @@ MUI.Checkout.Payment.Braintree = {
 
     getBraintreeForm: function() {
         return $('[data-muiscript="braintree"]');
-    },
-
-    getBrainTreeCreditCard: function() {
-
-        try {
-            var cc = new MUI.Services.Braintree.BraintreeCreditCard();
-            cc.cardholderName = $('#CardHolder').val();
-            cc.number = $('#CardNumber').val();
-            cc.expirationDate = $('#ExpiresMonthYear').val();
-            cc.cvv = $('#Cvv').val();
-            cc.billingAddress.postalCode = $('#PostalCode').val();
-
-            return cc;
-        }
-        catch(err) {
-            MUI.Logger.captureError(err);
-            throw err;
-        }
     }
 };
 
