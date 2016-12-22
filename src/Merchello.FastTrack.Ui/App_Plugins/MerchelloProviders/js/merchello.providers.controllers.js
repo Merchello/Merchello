@@ -62,8 +62,6 @@ angular.module('merchello.providers').controller('Merchello.Providers.Dialogs.Br
                 //$scope.cardholderName = billingAddress.name;
                 $scope.postalCode = billingAddress.postalCode;
 
-                console.info($scope.dialogData.invoiceBalance);
-
                 assetsService.load(filesToLoad).then(function () {
                     setupBraintree();
                 });
