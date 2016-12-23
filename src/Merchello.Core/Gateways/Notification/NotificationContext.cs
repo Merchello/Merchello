@@ -3,6 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net.Mail;
+
     using Formatters;
     using Models;
     using Observation;
@@ -65,6 +67,24 @@
         /// <param name="formatter">The <see cref="IFormatter"/> to use when formatting the message</param>
         public void Send(INotificationMessage message, IFormatter formatter)
         {
+            Send(message, formatter, null);
+        }
+
+
+        /// <summary>
+        /// Sends a <see cref="INotificationMessage"/>
+        /// </summary>
+        /// <param name="message">
+        /// The <see cref="INotificationMessage"/> to be sent
+        /// </param>
+        /// <param name="formatter">
+        /// The <see cref="IFormatter"/> to use when formatting the message
+        /// </param>
+        /// <param name="attachments">
+        /// The attachments.
+        /// </param>
+        public void Send(INotificationMessage message, IFormatter formatter, IEnumerable<Attachment> attachments)
+        {
             var activeProviders = GetAllActivatedProviders();
 
             var provider = activeProviders.FirstOrDefault(x => ((NotificationGatewayProviderBase)x).NotificationMethods.Any(y => y.Key == message.MethodKey)) as NotificationGatewayProviderBase;
@@ -72,8 +92,8 @@
             if (provider == null) return;
 
             var method = provider.GetNotificationGatewayMethodByKey(message.MethodKey);
-            
-            method.Send(message, formatter);
+
+            method.Send(message, formatter, attachments);
         }
     }
 }

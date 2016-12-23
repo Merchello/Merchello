@@ -1,31 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using Merchello.Core.Models;
-
-namespace Merchello.Core.Gateways.Notification
+﻿namespace Merchello.Core.Gateways.Notification
 {
+    using System.Collections.Generic;
+
+    using Merchello.Core.Models;
+
     /// <summary>
     /// Defines a base notification
     /// </summary>
     public interface IFormattedNotificationMessage
     {
         /// <summary>
-        /// The sender's From address
+        /// Gets the sender's From address
         /// </summary>
         string From { get; }
 
         /// <summary>
-        /// The optional reply to address
+        /// Gets the optional reply to address
         /// </summary>
         string ReplyTo { get; }
 
         /// <summary>
-        /// The name of the <see cref="INotificationMessage"/>
+        /// Gets or sets the name of the <see cref="INotificationMessage"/>
         /// </summary>
         string Name { get; set; }
 
         /// <summary>
-        /// A list of recipients for the notification.
+        /// Gets a list of recipients for the notification.
         /// </summary>
         /// <remarks>
         /// This could be email addresses, mailing addresses, mobile numbers
@@ -33,17 +33,17 @@ namespace Merchello.Core.Gateways.Notification
         IEnumerable<string> Recipients { get; }
 
         /// <summary>
-        /// True/false indicating if the notification should also be sent to the customer
+        /// Gets a value indicating whether the notification should also be sent to the customer
         /// </summary>
         bool SendToCustomer { get; }
 
         /// <summary>
-        /// The notification message body text
+        /// Gets the notification message body text
         /// </summary>
         string BodyText { get; }
 
         /// <summary>
-        /// The status of the formatted message
+        /// Gets the status of the formatted message
         /// </summary>
         FormatStatus FormatStatus { get; }
 
@@ -58,6 +58,5 @@ namespace Merchello.Core.Gateways.Notification
         /// </summary>
         /// <param name="value">The recipient to be removed</param>
         void RemoveRecipient(string value);
-
     }
 }

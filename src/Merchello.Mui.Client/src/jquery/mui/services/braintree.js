@@ -18,8 +18,11 @@ MUI.Services.Braintree = {
         // this also asserts if the customer goes back and changes the method to another
         // braintree method, that these are only loaded once
         $.when(
-            MUI.Assets.cachedGetScript('/App_Plugins/Merchello/client/lib/card-validator.min.js'),
-            MUI.Assets.cachedGetScript('//js.braintreegateway.com/v2/braintree.js')
+            MUI.Assets.cachedGetScript('/App_Plugins/Merchello/client/lib/card-validator.min.js'), // don't need this anymore
+            MUI.Assets.cachedGetScript('//js.braintreegateway.com/web/3.6.3/js/client.min.js'),
+            MUI.Assets.cachedGetScript('//js.braintreegateway.com/web/3.6.3/js/hosted-fields.min.js'),
+            MUI.Assets.cachedGetScript('//js.braintreegateway.com/web/3.6.3/js/paypal.min.js')
+            // MUI.Assets.cachedGetScript('//js.braintreegateway.com/v2/braintree.js')
         ).then(function() {
                 MUI.Services.Braintree.initialized = true;
                 if (callback !== undefined) callback();
@@ -28,7 +31,9 @@ MUI.Services.Braintree = {
 
     },
 
+    /*
     // Validates the entire card
+    // obsolete
     validateCard: function(creditCard) {
         if (typeof creditCard !== 'object') {
             return false;
@@ -40,6 +45,7 @@ MUI.Services.Braintree = {
     },
 
     // Validates card number
+    // obsolete
     validateCardNumber: function(number) {
         var valid = cardValidator.number(number);
         if (!valid.isValid) MUI.Notify.warn('Invalid credit card number');
@@ -47,6 +53,7 @@ MUI.Services.Braintree = {
     },
 
     // validates the expires date
+    // obsolete
     validateExpires: function(expires) {
         var valid = cardValidator.expirationDate(expires);
         if (!valid.isValid) MUI.Notify.warn('Invalid credit card expiration date');
@@ -54,6 +61,7 @@ MUI.Services.Braintree = {
     },
 
     // validates the cvv (matches the length to the card type)
+    // obsolete
     validateCvv: function(cvv) {
         var valid = cardValidator.cvv(cvv);
         if (!valid.isValid) MUI.Notify.warn('Invalid credit card cvv');
@@ -61,12 +69,14 @@ MUI.Services.Braintree = {
     },
 
     // validates the postal code (at least 3 digits)
+    // obsolete
     validatePostalCode: function(postalCode) {
         var valid = cardValidator.postalCode(postalCode)
         return valid;
     },
 
     // Sets the card icon
+    // obsolete
     setCardLabel: function (el) {
 
         if (!el.length > 0) return;
@@ -95,7 +105,8 @@ MUI.Services.Braintree = {
 
         }
     },
-    
+
+    // obsolete
     BraintreeCreditCard: function() {
         var self = this;
         self.cardholderName = '';
@@ -106,5 +117,6 @@ MUI.Services.Braintree = {
             postalCode: ''
         };
     }
+    */
     
 };
