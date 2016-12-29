@@ -193,7 +193,6 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
             }
 
             function save() {
-                console.info($scope.productVariant);
                 if ($scope.productVariant.hasDetachedContent()) {
                     saveDetachedContent();
                 }
