@@ -57,7 +57,7 @@
                               ProductVariantKey = entity.ProductVariantKey,
                               CreateDate = entity.CreateDate,
                               UpdateDate = entity.UpdateDate,
-                              ExtendedData = entity.ExtendedData.SerializeToXml()
+                              ExtendedData = entity.ExtendedData?.SerializeToXml()
                           };
 
             return dto;
