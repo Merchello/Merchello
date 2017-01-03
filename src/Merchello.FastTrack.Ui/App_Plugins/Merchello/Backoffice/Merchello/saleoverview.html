@@ -24,11 +24,11 @@
             <div class="merchello-pane primary span9">
                 <!-- Order Information -->
                 <div class="control-group umb-control-group">
-                    <div class="merchello-section-label">
+                    <!--<div class="merchello-section-label">
                         <localize key="merchelloOrder_saleInformation" />
                         <small><localize key="merchelloOrderView_orderInformationHelper" /></small>
-                    </div>
-                    <div class="merchello-controls">
+                    </div>-->
+               
                         <h5>Invoiced: {{invoice.invoiceDateString() | date : settings.dateFormat }}</h5>
                         <div class="button-bar">
                             <!-- ACTION: Cancel Sale -->
@@ -45,7 +45,7 @@
                         <add-payment-table is-open="newPaymentOpen" payments="allPayments" toggle-open="toggleNewPaymentOpen()" reload="reload()" currency-symbol="currencySymbol" invoice="invoice" show-spinner="setNotPreValuesLoaded()" payment-methods="paymentMethods"></add-payment-table>
                         <invoice-itemization-table invoice="invoice" payment-methods="paymentMethods" pre-values-loaded="preValuesLoaded" all-payments="allPayments" payments="payments" currency-symbol="currencySymbol"></invoice-itemization-table>
 
-                    </div>
+                  
                 </div>
 
                 <div class="control-group umb-control-group">
