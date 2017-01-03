@@ -1,6 +1,6 @@
 /*! Merchello
  * https://github.com/meritage/Merchello
- * Copyright (c) 2016 Across the Pond, LLC.
+ * Copyright (c) 2017 Across the Pond, LLC.
  * Licensed MIT
  */
 
@@ -7471,22 +7471,13 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                     $scope.loaded = true;
 
                     if ($scope.productVariant.hasDetachedContent()) {
-                        var isoCodes = _.pluck($scope.languages, 'isoCode');
 
-                        // ensure language has not been deleted
-                        $scope.productVariant.detachedContents = _.reject($scope.productVariant.detachedContents, function(dc) {
-                           var fnd =  _.find(isoCodes, function(iso) { if (dc.cultureName === iso) return iso; });
-                           if (fnd === undefined) {
-                                return dc;
-                           }
-                        });
-
-                        var missing = $scope.productVariant.assertLanguageContent(isoCodes);
+                        var missing = $scope.productVariant.assertLanguageContent(_.pluck($scope.languages, 'isoCode'));
                         if (missing.length > 0) {
                             var detachedContentType = $scope.productVariant.detachedContentType();
                             createDetachedContent(detachedContentType, missing);
                         }
-                        
+
                         $scope.detachedContent = $scope.productVariant.getDetachedContent($scope.language.isoCode);
                         
                         $scope.isConfigured = true;
