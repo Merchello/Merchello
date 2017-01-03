@@ -351,6 +351,8 @@
     <Content Include="App_Plugins\Merchello\assets\images\heart.png" />
     <Content Include="App_Plugins\Merchello\assets\images\logo-tag.png" />
     <Content Include="App_Plugins\Merchello\assets\images\logo.png" />
+    <Content Include="App_Plugins\Merchello\assets\images\partner-doc.png" />
+    <Content Include="App_Plugins\Merchello\assets\images\support.png" />
     <Content Include="App_Plugins\Merchello\assets\images\website.png" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\abandonedBasket.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\collectionproviderlist.html" />
