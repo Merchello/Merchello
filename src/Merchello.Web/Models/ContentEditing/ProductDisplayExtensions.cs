@@ -36,10 +36,13 @@
         /// <param name="destination">
         /// The destination.
         /// </param>
+        /// <param name="languages">
+        /// Valid languages defined in Umbraco
+        /// </param>
         /// <returns>
         /// The <see cref="IProduct"/>.
         /// </returns>
-        internal static IProduct ToProduct(this ProductDisplay productDisplay, IProduct destination)
+        internal static IProduct ToProduct(this ProductDisplay productDisplay, IProduct destination, ILanguage[] languages = null)
         {
             if (productDisplay.Key != Guid.Empty)
             {
@@ -613,11 +616,15 @@
         /// <param name="display">
         /// The display.
         /// </param>
-        internal static void AddOrUpdateDetachedContent(this IProductBase destination, ProductDisplayBase display)
+        /// <param name="languages">
+        /// A list of languages configured in Umbraco.
+        /// </param>
+        internal static void AddOrUpdateDetachedContent(this IProductBase destination, ProductDisplayBase display, ILanguage[] languages = null)
         {
             if (destination.DetachedContents.Any())
             {
                 // detached content
+                // TODO BUG this is not identifying the language to be removed.
                 var removedLanguages =
                     destination.DetachedContents.Where(
                         x => !display.DetachedContents.Select(y => y.CultureName).Contains(x.CultureName));
