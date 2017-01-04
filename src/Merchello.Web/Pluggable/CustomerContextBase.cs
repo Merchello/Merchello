@@ -3,7 +3,6 @@ namespace Merchello.Web.Pluggable
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
     using System.Web;
 
     using Merchello.Core;
@@ -15,11 +14,10 @@ namespace Merchello.Web.Pluggable
     using Merchello.Web.Models.Customer;
     using Merchello.Web.Workflow;
 
-    using Umbraco.Core;
-    using Umbraco.Core.Logging;
-    using Umbraco.Web;
-
     using Newtonsoft.Json;
+
+    using Umbraco.Core;
+    using Umbraco.Web;
 
     /// <summary>
     /// A base class for defining customer contexts for various membership providers.
@@ -163,17 +161,7 @@ namespace Merchello.Web.Pluggable
         /// </remarks>
         public void SetValue(string key, string value)
         {
-            //// if (this.ContextData.Values.Any(x => x.Key == key))
-            //// {
-            ////    var idx = this.ContextData.Values.FindIndex(x => x.Key == key);
-            ////    this.ContextData.Values.RemoveAt(idx);
-            //// }
-
-            //// this.ContextData.Values.Add(new KeyValuePair<string, string>(key, value));
-
-            //// this.CacheCustomer(this.CurrentCustomer);
-
-            CurrentCustomer.ExtendedData.SetValue(key, value);
+            CurrentCustomer.ExtendedData.SetValue(Core.Constants.ExtendedDataKeys.CustomerContextDataPrefix + key, value);
 
             if (CurrentCustomer.IsAnonymous)
             {
@@ -196,8 +184,7 @@ namespace Merchello.Web.Pluggable
         /// </returns>
         public string GetValue(string key)
         {
-            return CurrentCustomer.ExtendedData.GetValue(key);
-            //// this.ContextData.Values.FirstOrDefault(x => x.Key == key).Value;
+            return CurrentCustomer.ExtendedData.GetValue(Core.Constants.ExtendedDataKeys.CustomerContextDataPrefix + key);
         }
 
         #endregion
@@ -294,7 +281,9 @@ namespace Merchello.Web.Pluggable
                 {
                     // The customer that was found was not anonymous and yet the member is 
                     // not logged in.
+                    var values = customer.ExtendedData.GetItemsByKeyPrefix(Core.Constants.ExtendedDataKeys.CustomerContextDataPrefix);
                     CreateAnonymousCustomer();
+                    UpdateContextData(CurrentCustomer, values);
                     return;
                 }
                 else if (customer.IsAnonymous == false && isLoggedIn)
@@ -302,7 +291,6 @@ namespace Merchello.Web.Pluggable
                     // User may have logged out and logged in with a different customer
                     // Addresses issue http://issues.merchello.com/youtrack/issue/M-454
                     this.EnsureIsLoggedInCustomer(customer, this.GetMembershipProviderKey());
-
                     return;
                 }
 
@@ -352,7 +340,7 @@ namespace Merchello.Web.Pluggable
         /// <summary>
         /// Converts an anonymous customer's basket to a customer basket
         /// </summary>
-        /// <param name="customer">
+        /// <param name="original">
         /// The anonymous customer - <see cref="ICustomerBase"/>.
         /// </param>
         /// <param name="membershipId">
@@ -361,11 +349,11 @@ namespace Merchello.Web.Pluggable
         /// <param name="customerLoginName">
         /// The customer login name.
         /// </param>
-        protected void ConvertBasket(ICustomerBase customer, string membershipId, string customerLoginName)
+        protected void ConvertBasket(ICustomerBase original, string membershipId, string customerLoginName)
         {
-            var anonymousBasket = Basket.GetBasket(this._merchelloContext, customer);
+            var anonymousBasket = Basket.GetBasket(this._merchelloContext, original);
 
-            customer = this.CustomerService.GetByLoginName(customerLoginName) ??
+            var customer = this.CustomerService.GetByLoginName(customerLoginName) ??
                             this.CustomerService.CreateCustomerWithKey(customerLoginName);
 
 
@@ -378,6 +366,7 @@ namespace Merchello.Web.Pluggable
 
             //// convert the customer basket
             ConvertBasket(anonymousBasket, customerBasket);
+            CopyContextData(original, customer);
 
             this.CacheCustomer(customer);
             this.CurrentCustomer = customer;
@@ -452,11 +441,39 @@ namespace Merchello.Web.Pluggable
             }
 
             attempt.Result.Merge();
-
         }
 
+        /// <summary>
+        /// Copies the context data stored in the customer extended data collection.
+        /// </summary>
+        /// <param name="original">
+        /// The original.
+        /// </param>
+        /// <param name="converted">
+        /// The converted.
+        /// </param>
+        private static void CopyContextData(ICustomerBase original, ICustomerBase converted)
+        {
+            var values = original.ExtendedData.GetItemsByKeyPrefix(Core.Constants.ExtendedDataKeys.CustomerContextDataPrefix);
+            UpdateContextData(converted, values);
+        }
 
-
+        /// <summary>
+        /// Updates the context data.
+        /// </summary>
+        /// <param name="converted">
+        /// The converted.
+        /// </param>
+        /// <param name="ctxValues">
+        /// The context values.
+        /// </param>
+        private static void UpdateContextData(ICustomerBase converted, IEnumerable<KeyValuePair<string, string>> ctxValues)
+        {
+            foreach (var value in ctxValues)
+            {
+                converted.ExtendedData.SetValue(value.Key, value.Value);
+            }
+        }
 
         /// <summary>
         /// Creates an anonymous customer
