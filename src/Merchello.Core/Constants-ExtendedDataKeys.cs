@@ -21,6 +21,7 @@
                     "merchExtendedData", 
                     "merchLineItemCollection",
                     "merchLineItem",
+                    "merchCustCtx",
                     "merchCurrencyCode",
                     "merchCouponReward",                    
                     "merchCouponRewardLog",
@@ -81,6 +82,11 @@
         public static class ExtendedDataKeys
         {
             //// Common - serialized classes --------------------------------------------------------
+
+            /// <summary>
+            /// The customer context data prefix.
+            /// </summary>
+            public const string CustomerContextDataPrefix = "merchCustCtx";
 
             /// <summary>
             /// Gets the extended data.
