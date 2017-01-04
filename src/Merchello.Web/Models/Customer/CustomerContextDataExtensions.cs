@@ -72,6 +72,8 @@ namespace Merchello.Web.Models.Customer
         /// <returns>
         /// The value as a string.
         /// </returns>
+        /// <seealso cref="http://issues.merchello.com/youtrack/issue/M-1264"/>
+        [Obsolete]
         public static string GetValue(this CustomerContextData contextData, string alias)
         {
             return contextData.Values.FirstOrDefault(x => x.Key == alias).Value;
@@ -89,10 +91,12 @@ namespace Merchello.Web.Models.Customer
         /// <param name="value">
         /// The value.
         /// </param>
+        /// <see cref="http://issues.merchello.com/youtrack/issue/M-1264"/>
+        [Obsolete]
         public static void SetValue(this CustomerContextData contextData, string alias, string value)
         {
-            Mandate.ParameterNotNullOrEmpty(alias, "alias");
-            Mandate.ParameterNotNullOrEmpty(value, "value");
+            Ensure.ParameterNotNullOrEmpty(alias, "alias");
+            Ensure.ParameterNotNullOrEmpty(value, "value");
 
             contextData.Values.Remove(contextData.Values.FirstOrDefault(x => x.Key == alias));
             contextData.Values.Add(new KeyValuePair<string, string>(alias, value));
