@@ -48,6 +48,7 @@ namespace Merchello.Web.Pluggable
         /// </summary>
         private readonly ICustomerService _customerService;
 
+
         /// <summary>
         /// The <see cref="UmbracoContext"/>.
         /// </summary>
@@ -162,15 +163,26 @@ namespace Merchello.Web.Pluggable
         /// </remarks>
         public void SetValue(string key, string value)
         {
-            if (this.ContextData.Values.Any(x => x.Key == key))
+            //// if (this.ContextData.Values.Any(x => x.Key == key))
+            //// {
+            ////    var idx = this.ContextData.Values.FindIndex(x => x.Key == key);
+            ////    this.ContextData.Values.RemoveAt(idx);
+            //// }
+
+            //// this.ContextData.Values.Add(new KeyValuePair<string, string>(key, value));
+
+            //// this.CacheCustomer(this.CurrentCustomer);
+
+            CurrentCustomer.ExtendedData.SetValue(key, value);
+
+            if (CurrentCustomer.IsAnonymous)
             {
-                var idx = this.ContextData.Values.FindIndex(x => x.Key == key);
-                this.ContextData.Values.RemoveAt(idx);
+                _customerService.Save((IAnonymousCustomer)CurrentCustomer);
             }
-
-            this.ContextData.Values.Add(new KeyValuePair<string, string>(key, value));
-
-            this.CacheCustomer(this.CurrentCustomer);
+            else
+            {
+                _customerService.Save((ICustomer)CurrentCustomer);
+            }
         }
 
         /// <summary>
@@ -184,7 +196,8 @@ namespace Merchello.Web.Pluggable
         /// </returns>
         public string GetValue(string key)
         {
-            return this.ContextData.Values.FirstOrDefault(x => x.Key == key).Value;
+            return CurrentCustomer.ExtendedData.GetValue(key);
+            //// this.ContextData.Values.FirstOrDefault(x => x.Key == key).Value;
         }
 
         #endregion
@@ -209,7 +222,7 @@ namespace Merchello.Web.Pluggable
                 return;
             }
 
-            cookie.Expires = DateTime.Now.AddDays(-1);
+            //// cookie.Expires = DateTime.Now.AddDays(-1);
 
             this._cache.RequestCache.ClearCacheItem(CustomerCookieName);
             this._cache.RuntimeCache.ClearCacheItem(CacheKeys.CustomerCacheKey(customer.Key));
@@ -310,7 +323,9 @@ namespace Merchello.Web.Pluggable
 
                 // The current Membership Providers "ID or Key" is stored in the ContextData so that we can "ensure" that the current logged
                 // in member is the same as the reference we have to a previously logged in member in the same browser.
-                if (isLoggedIn) ContextData.Values.Add(new KeyValuePair<string, string>(UmbracoMemberIdDataKey, this.GetMembershipProviderKey()));
+                if (isLoggedIn) ContextData.Pid = this.GetMembershipProviderKey(); 
+                
+                ////ContextData.Values.Add(new KeyValuePair<string, string>(UmbracoMemberIdDataKey, this.GetMembershipProviderKey()));
 
                 // FYI this is really only to set the customer cookie so this entire block
                 // should be merged into the section of code directly above.
@@ -355,7 +370,10 @@ namespace Merchello.Web.Pluggable
 
 
             this.ContextData.Key = customer.Key;
-            this.ContextData.Values.Add(new KeyValuePair<string, string>(UmbracoMemberIdDataKey, membershipId));
+            this.ContextData.Pid = membershipId;
+
+            //// this.ContextData.Values.Add(new KeyValuePair<string, string>(UmbracoMemberIdDataKey, membershipId));
+
             var customerBasket = Basket.GetBasket(this._merchelloContext, customer);
 
             //// convert the customer basket
@@ -470,17 +488,17 @@ namespace Merchello.Web.Pluggable
         {
             if (this._cache.RequestCache.GetCacheItem(CacheKeys.EnsureIsLoggedInCustomerValidated(customer.Key)) != null) return;
 
-            var dataValue = this.ContextData.Values.FirstOrDefault(x => x.Key == UmbracoMemberIdDataKey);
+            //// var dataValue = this.ContextData.Values.FirstOrDefault(x => x.Key == UmbracoMemberIdDataKey);
 
             // If the dataValues do not contain the umbraco member id reinitialize
-            if (!string.IsNullOrEmpty(dataValue.Value))
+            if (!string.IsNullOrEmpty(this.ContextData.Pid))
             {
                 // Assert are equal
-                if (!dataValue.Value.Equals(membershipId)) this.Reinitialize(customer);
+                if (!this.ContextData.Pid.Equals(membershipId)) this.Reinitialize(customer);
                 return;
             }
 
-            if (dataValue.Value != membershipId) this.Reinitialize(customer);
+            if (this.ContextData.Pid != membershipId) this.Reinitialize(customer);
         }
 
         /// <summary>
