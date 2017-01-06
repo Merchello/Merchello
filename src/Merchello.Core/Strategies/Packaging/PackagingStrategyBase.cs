@@ -27,22 +27,22 @@
         /// </summary>
         protected readonly IMerchelloContext MerchelloContext;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PackagingStrategyBase"/> class.
-        /// </summary>
-        /// <param name="lineItemCollection">
-        /// The line item collection.
-        /// </param>
-        /// <param name="destination">
-        /// The destination.
-        /// </param>
-        /// <param name="versionKey">
-        /// The version key.
-        /// </param>
-        protected PackagingStrategyBase(LineItemCollection lineItemCollection, IAddress destination, Guid versionKey)
-            : this(Core.MerchelloContext.Current, lineItemCollection, destination, versionKey)
-        {
-        }
+        ///// <summary>
+        ///// Initializes a new instance of the <see cref="PackagingStrategyBase"/> class.
+        ///// </summary>
+        ///// <param name="lineItemCollection">
+        ///// The line item collection.
+        ///// </param>
+        ///// <param name="destination">
+        ///// The destination.
+        ///// </param>
+        ///// <param name="versionKey">
+        ///// The version key.
+        ///// </param>
+        //protected PackagingStrategyBase(LineItemCollection lineItemCollection, IAddress destination, Guid versionKey)
+        //    : this(Core.MerchelloContext.Current, lineItemCollection, destination, versionKey)
+        //{
+        //}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PackagingStrategyBase"/> class.
