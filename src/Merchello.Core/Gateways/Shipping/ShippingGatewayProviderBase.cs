@@ -247,6 +247,15 @@
             return strategy.GetShipmentRateQuotes(tryGetCached);
         }
 
+
+        /// <summary>
+        /// The reset ship methods.
+        /// </summary>
+        public virtual void ResetShipMethods()
+        {
+            _shipMethods = null;
+        }
+
         /// <summary>
         /// Deletes all active shipMethods
         /// </summary>
@@ -262,14 +271,6 @@
             {
                 DeleteShippingGatewayMethod(gatewayShipMethod);
             }
-        }
-
-        /// <summary>
-        /// The reset ship methods.
-        /// </summary>
-        protected virtual void ResetShipMethods()
-        {
-            _shipMethods = null;
         }
     }
 }
