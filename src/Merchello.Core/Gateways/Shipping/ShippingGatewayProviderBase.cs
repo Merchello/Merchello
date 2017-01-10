@@ -267,7 +267,7 @@
         /// <summary>
         /// The reset ship methods.
         /// </summary>
-        internal virtual void ResetShipMethods()
+        protected virtual void ResetShipMethods()
         {
             _shipMethods = null;
         }
