@@ -18,6 +18,11 @@
         TaxationApplication TaxationApplication { get; }
 
         /// <summary>
+        /// Gets the <see cref="ITaxationByProductMethod"/>.
+        /// </summary>
+        ITaxationByProductMethod ProductPricingTaxMethod { get; }
+
+        /// <summary>
         /// Calculates taxes for the <see cref="IInvoice"/>
         /// </summary>
         /// <param name="invoice">The <see cref="IInvoice"/> to tax</param>
