@@ -7,6 +7,7 @@
     using Merchello.Core.Logging;
     using Merchello.Web.Models.Ui;
 
+    using Umbraco.Core;
     using Umbraco.Core.Models;
     using Umbraco.Web;
 
@@ -44,6 +45,17 @@
             }
 
             /// <summary>
+            /// Gets store root xpath.
+            /// </summary>
+            /// <returns>
+            /// The <see cref="string"/>.
+            /// </returns>
+            public static string GetStoreRootXpath()
+            {
+                return FastTrackConfiguration.Current.StoreRootXpath.EnsureEndsWith("/");
+            }
+
+            /// <summary>
             /// Gets the first store ContentType found.
             /// </summary>
             /// <returns>
@@ -51,7 +63,7 @@
             /// </returns>
             public static IPublishedContent GetStoreRoot()
             {
-                return UmbracoContext.ContentCache.GetByXPath(string.Format("//root/{0}", FastTrackConfiguration.Current.ContentTypeAliasStore)).FirstOrDefault();
+                return UmbracoContext.ContentCache.GetByXPath(string.Format("{0}{1}", GetStoreRootXpath(), FastTrackConfiguration.Current.ContentTypeAliasStore)).FirstOrDefault();
             }
 
             /// <summary>
