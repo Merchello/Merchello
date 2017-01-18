@@ -1,14 +1,14 @@
-﻿namespace Merchello.Web.Strategies.Itemization
+﻿namespace Merchello.Web.Models.ContentEditing
 {
     using System.Collections.Generic;
-    using System.Linq;
+    using System.Diagnostics.CodeAnalysis;
 
-    using Merchello.Web.Models.ContentEditing;
+    using Merchello.Core.Strategies.Itemization;
 
     /// <summary>
-    /// Represents a invoice itemization.
+    /// Represent an invoice item itemization.
     /// </summary>
-    public class InvoiceItemizationDisplay
+    public class InvoiceItemItemizationDisplay
     {
         /// <summary>
         /// Gets or sets the collection of the product line items.
@@ -46,24 +46,34 @@
         public bool Reconciles { get; internal set; }
 
         /// <summary>
-        /// Gets the total of the invoice.
+        /// Gets the invoice total of the invoice.
         /// </summary>
-        public decimal Total { get; internal set; }
+        public decimal InvoiceTotal { get; internal set; }
+
+        /// <summary>
+        /// Gets the total of the invoice itemization.
+        /// </summary>
+        public decimal ItemizationTotal { get; internal set; }
     }
 
-
-    internal static class InvoiceItemizationDisplayExtensions
+    /// <summary>
+    /// Extension methods for <see cref="InvoiceItemItemizationDisplay"/>.
+    /// </summary>
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "Reviewed. Suppression is OK here.")]
+    internal static class InvoiceItemItemizationDisplayExtensions
     {
-        public static decimal CalculateTotal(this InvoiceItemizationDisplay itemization)
+        /// <summary>
+        /// Maps <see cref="InvoiceItemItemization"/> to <see cref="InvoiceItemItemizationDisplay"/>.
+        /// </summary>
+        /// <param name="itemization">
+        /// The itemization.
+        /// </param>
+        /// <returns>
+        /// The <see cref="InvoiceItemItemizationDisplay"/>.
+        /// </returns>
+        public static InvoiceItemItemizationDisplay ToInvoiceItemItemizationDisplay(this InvoiceItemItemization itemization)
         {
-            var productTotal = itemization.Products.Sum(x => x.Price * x.Quantity);
-            var shippingTotal = itemization.Shipping.Sum(x => x.Price * x.Quantity);
-            var taxTotal = itemization.Tax.Sum(x => x.Price * x.Quantity);
-            var adjTotal = itemization.Adjustments.Sum(x => x.Price * x.Quantity);
-            var discountsTotal = itemization.Discounts.Sum(x => x.Price * x.Quantity);
-            var customTotal = itemization.Custom.Sum(x => x.Price * x.Quantity);
-
-            return productTotal + shippingTotal + taxTotal + customTotal - (discountsTotal + adjTotal);
+            return AutoMapper.Mapper.Map<InvoiceItemItemizationDisplay>(itemization);
         }
     }
 }

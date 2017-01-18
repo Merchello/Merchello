@@ -283,6 +283,7 @@
     <Compile Include="ApplicationContextExtensions.cs" />
     <Compile Include="Caching\IVirtualContentCache{T}.cs" />
     <Compile Include="Caching\IVirtualProductContentCache.cs" />
+    <Compile Include="Models\ContentEditing\InvoiceItemItemizationDisplay.cs" />
     <Compile Include="Models\PrimedProductFilter.cs" />
     <Compile Include="Search\CachedQueryBase.cs" />
     <Compile Include="Search\IProductContentQuery.cs" />
@@ -595,9 +596,6 @@
     <Compile Include="Search\ProductCollectionQuery.cs" />
     <Compile Include="Search\ProductFilterGroupQuery.cs" />
     <Compile Include="Search\ProxyQueryManager.cs" />
-    <Compile Include="Strategies\Itemization\InvoiceItemazationStrategy.cs" />
-    <Compile Include="Strategies\Itemization\InvoiceItemizationDisplay.cs" />
-    <Compile Include="Strategies\Itemization\InvoiceItemizationStrategyBase.cs" />
     <Compile Include="Trees\Actions\NewProductOptionContentTypeAction.cs" />
     <Compile Include="Workflow\Notification\Monitor\RazorMonitorBase{T}.cs" />
     <Compile Include="Workflow\Notification\Monitor\RazorOrderShippedMonitor.cs" />

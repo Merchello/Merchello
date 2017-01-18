@@ -1,4 +1,4 @@
-﻿namespace Merchello.Web.Strategies.Itemization
+﻿namespace Merchello.Core.Strategies.Itemization
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -7,7 +7,6 @@
     using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Core.Strategies;
-    using Merchello.Web.Models.ContentEditing;
 
     /// <summary>
     /// The invoice itemization strategy base.
@@ -18,28 +17,28 @@
         /// Initializes a new instance of the <see cref="InvoiceItemizationStrategyBase"/> class.
         /// </summary>
         /// <param name="display">
-        /// The <see cref="InvoiceDisplay"/>.
+        /// The <see cref="Invoice"/>.
         /// </param>
-        protected InvoiceItemizationStrategyBase(InvoiceDisplay display)
+        protected InvoiceItemizationStrategyBase(Invoice display)
         {
             Ensure.ParameterNotNull(display, "invoice");
-            Invoice = display;
+            this.Invoice = display;
         }
 
         /// <summary>
         /// Gets the invoice.
         /// </summary>
-        protected InvoiceDisplay Invoice { get; }
+        protected Invoice Invoice { get; }
 
         /// <summary>
         /// Itemizes the invoice.
         /// </summary>
         /// <returns>
-        /// The <see cref="InvoiceItemizationDisplay"/>.
+        /// The <see cref="InvoiceItemItemization"/>.
         /// </returns>
-        public InvoiceItemizationDisplay Itemize()
+        public InvoiceItemItemization Itemize()
         {
-            var itemization = ItemizeInvoice();
+            var itemization = this.ItemizeInvoice();
             itemization.Reconciles = true;
 
             if (!this.Reconcile(itemization))
@@ -48,7 +47,9 @@
                 MultiLogHelper.Warn<InvoiceItemizationStrategyBase>("Reconciliation of invoice total failed in the itemization strategy");
             }
 
-            itemization.Total = Invoice.Total;
+            itemization.ItemizationTotal = itemization.CalculateTotal();
+
+            itemization.InvoiceTotal = Invoice.Total;
 
             return itemization;
         }
@@ -57,9 +58,9 @@
         /// Itemizes the invoice.
         /// </summary>
         /// <returns>
-        /// The <see cref="InvoiceItemizationDisplay"/>.
+        /// The <see cref="InvoiceItemItemization"/>.
         /// </returns>
-        protected abstract InvoiceItemizationDisplay ItemizeInvoice();
+        protected abstract InvoiceItemItemization ItemizeInvoice();
 
         /// <summary>
         /// Gets the line item collection by <see cref="LineItemType"/>.
@@ -70,9 +71,9 @@
         /// <returns>
         /// The <see cref="IEnumerable{InvoiceLineItem}"/>.
         /// </returns>
-        protected virtual IEnumerable<InvoiceLineItemDisplay> GetLineItemCollection(LineItemType lineItemType)
+        protected virtual IEnumerable<ILineItem> GetLineItemCollection(LineItemType lineItemType)
         {
-            return Invoice.Items.Where(x => x.LineItemType == lineItemType);
+            return this.Invoice.Items.Where(x => x.LineItemType == lineItemType).Select(x => x.AsLineItemWithKeyOf<InvoiceLineItem>());
         }
 
         /// <summary>
@@ -84,9 +85,9 @@
         /// <returns>
         /// A value that indicates that the itemization could be reconciled.
         /// </returns>
-        protected virtual bool Reconcile(InvoiceItemizationDisplay itemization)
+        protected virtual bool Reconcile(InvoiceItemItemization itemization)
         {
-            return itemization.CalculateTotal() == Invoice.Total;
+            return itemization.CalculateTotal() == this.Invoice.Total;
         }
     }
 }

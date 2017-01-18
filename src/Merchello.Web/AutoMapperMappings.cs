@@ -4,6 +4,7 @@
     using Core.Models;
 
     using Merchello.Core.Models.Interfaces;
+    using Merchello.Core.Strategies.Itemization;
     using Merchello.Web.Models.SaleHistory;
 
     using Models.ContentEditing;
@@ -86,6 +87,8 @@
                 .ForMember(dest => dest.LineItemTypeField, opt => opt.ResolveUsing<LineItemTypeFieldResolver>().ConstructedBy(() => new LineItemTypeFieldResolver()));
 
             AutoMapper.Mapper.CreateMap<IInvoice, InvoiceDisplay>();
+
+            AutoMapper.Mapper.CreateMap<InvoiceItemItemization, InvoiceItemItemizationDisplay>();
 
             // Order
             AutoMapper.Mapper.CreateMap<IOrderStatus, OrderStatusDisplay>();

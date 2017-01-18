@@ -1,7 +1,6 @@
 angular.module('merchello.directives').directive('invoiceItemizationTable',
-    ['localizationService', 'invoiceHelper',
-        function(localizationService, invoiceHelper) {
-
+    ['$q', 'localizationService', 'invoiceResource', 'invoiceHelper',
+        function($q, localizationService, invoiceResource, invoiceHelper) {
             return {
                 restrict: 'E',
                 replace: true,
@@ -25,6 +24,8 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                     scope.discountLineItems = [];
                     scope.adjustmentLineItems = [];
                     scope.remainingBalance = 0;
+
+                    scope.itemization = {};
 
                     function init() {
 
@@ -56,14 +57,20 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
 
                         var label  = scope.remainingBalance == '0' ? 'merchelloOrderView_captured' : 'merchelloOrderView_authorized';
 
-                        localizationService.localize(label).then(function(value) {
-                            scope.authorizedCapturedLabel = value;
+                        $q.all([
+                            localizationService.localize(label),
+                            invoiceResource.getItemItemization(scope.invoice.key)
+                        ]).then(function(data) {
+                            scope.authorizedCapturedLabel = data[0];
+                            scope.itemization = data[1];
+                            console.info(scope.itemization);
+                            scope.loaded = true;
                         });
 
-                        scope.loaded = true;
                     }
 
 
+                    /*
                     // utility method to assist in building scope line item collections
                     function aggregateScopeLineItemCollection(lineItems, collection) {
                         if(angular.isArray(lineItems)) {
@@ -76,7 +83,7 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                             }
                         }
                     }
-                    
+                    */
                     // initialize the directive
                     init();
                 }

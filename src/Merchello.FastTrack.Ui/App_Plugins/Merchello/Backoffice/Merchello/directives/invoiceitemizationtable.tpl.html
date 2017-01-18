@@ -31,12 +31,12 @@
         <td class="text-right">({{discountItem.quantity * discountItem.price | currency : currencySymbol}})</td>
     </tr>
     <tr>
-        <td colspan="4" class="text-right"><localize key="merchelloOrderView_salesTax" /></td>
-        <td class="text-right">{{taxTotal | currency : currencySymbol}}</td>
-    </tr>
-    <tr>
         <td colspan="4" class="text-right"><localize key="merchelloShipping_shipping" /></td>
         <td class="text-right">{{shippingTotal | currency : currencySymbol}}</td>
+    </tr>
+    <tr>
+        <td colspan="4" class="text-right"><localize key="merchelloOrderView_salesTax" /></td>
+        <td class="text-right">{{taxTotal | currency : currencySymbol}}</td>
     </tr>
     <tr data-ng-show="adjustmentLineItems.length > 0">
         <td colspan="5"><strong><localize key="merchelloSales_adjustments"></localize></strong></td>

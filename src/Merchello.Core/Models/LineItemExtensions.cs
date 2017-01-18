@@ -257,6 +257,24 @@
             return attempt.Result as T;
         }
 
+        /// <summary>
+        /// The as line item with key of.
+        /// </summary>
+        /// <param name="lineItem">
+        /// The line item.
+        /// </param>
+        /// <typeparam name="T">
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="T"/>.
+        /// </returns>
+        public static T AsLineItemWithKeyOf<T>(this ILineItem lineItem) where T : class, ILineItem
+        {
+            var clone = lineItem.AsLineItemOf<T>();
+            clone.Key = lineItem.Key;
+            return clone;
+        }
+
 
         /// <summary>
         /// Creates a line item of a particular type for a shipment rate quote

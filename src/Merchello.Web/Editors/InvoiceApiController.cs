@@ -105,6 +105,28 @@
         }
 
         /// <summary>
+        /// Gets invoice item itemization.
+        /// </summary>
+        /// <param name="id">
+        /// The invoice key
+        /// </param>
+        /// <returns>
+        /// The <see cref="InvoiceItemItemizationDisplay"/>.
+        /// </returns>
+        /// <exception cref="NullReferenceException">
+        /// Throws a null reference exception if the invoice could not be retrieved by the Invoice service
+        /// </exception>
+        [HttpGet]
+        public InvoiceItemItemizationDisplay GetInvoiceItemItemization(Guid id)
+        {
+            var invoice = _invoiceService.GetByKey(id);
+            if (invoice == null) throw new NullReferenceException("Invoice not found");
+
+            var itemization = invoice.ItemizeItems();
+            return itemization.ToInvoiceItemItemizationDisplay();
+        }
+
+        /// <summary>
         /// Returns All Invoices
         /// 
         /// GET /umbraco/Merchello/InvoiceApi/SearchAllInvoices
