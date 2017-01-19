@@ -210,7 +210,7 @@ MUI.Services.Braintree = {
         // this also asserts if the customer goes back and changes the method to another
         // braintree method, that these are only loaded once
         $.when(
-            MUI.Assets.cachedGetScript('/App_Plugins/Merchello/client/lib/card-validator.min.js'), // don't need this anymore
+            MUI.Assets.cachedGetScript('/App_Plugins/Merchello/client/lib/card-validator.min.js'), // Verify we don't need this anymore
             MUI.Assets.cachedGetScript('//js.braintreegateway.com/web/3.6.3/js/client.min.js'),
             MUI.Assets.cachedGetScript('//js.braintreegateway.com/web/3.6.3/js/hosted-fields.min.js'),
             MUI.Assets.cachedGetScript('//js.braintreegateway.com/web/3.6.3/js/paypal.min.js')
@@ -1212,6 +1212,7 @@ MUI.Checkout.Payment.Braintree = {
                 var form = MUI.Checkout.Payment.Braintree.getBraintreeForm();
 
                 if (form.length > 0) {
+
 
                     var token = MUI.Checkout.Payment.Braintree.getBraintreeToken();
 

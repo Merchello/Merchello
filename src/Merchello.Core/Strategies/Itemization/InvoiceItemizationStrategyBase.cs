@@ -28,7 +28,7 @@
         /// <summary>
         /// Gets the invoice.
         /// </summary>
-        protected Invoice Invoice { get; }
+        protected Invoice Invoice { get; private set; }
 
         /// <summary>
         /// Itemizes the invoice.
