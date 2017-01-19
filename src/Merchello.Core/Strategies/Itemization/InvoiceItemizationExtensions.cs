@@ -7,7 +7,7 @@
     /// <summary>
     /// Extension methods for <see cref="InvoiceItemItemization"/>.
     /// </summary>
-    internal static class InvoiceItemizationExtensions
+    public static class InvoiceItemizationExtensions
     {
         /// <summary>
         /// Calculates the product total.
