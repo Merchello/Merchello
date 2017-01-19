@@ -24,12 +24,18 @@
         /// <summary>
         /// Gets the product line items without taxes included.
         /// </summary>
-        public IEnumerable<ILineItem> ProductLineItems => this._productLineItems;
+        public IEnumerable<ILineItem> ProductLineItems
+        {
+            get { return this._productLineItems; }
+        }
 
         /// <summary>
         /// Gets the tax line items created based on taxes that were included in the product pricing.
         /// </summary>
-        public IEnumerable<ILineItem> TaxLineItems => this._taxLineItems;
+        public IEnumerable<ILineItem> TaxLineItems
+        {
+            get { return this._taxLineItems; }  
+        } 
 
         /// <summary>
         /// Visits a line items.
@@ -75,7 +81,7 @@
                 clone.Price = ConvertToDecimal(item.ExtendedData.GetValue(priceKey));
                 _productLineItems.Add(clone);
 
-                var taxItem = new InvoiceLineItem(LineItemType.Tax, $"{item.Name} Tax", $"{item.Sku}-Tax", item.Quantity, ConvertToDecimal(item.ExtendedData.GetValue(taxKey)));
+                var taxItem = new InvoiceLineItem(LineItemType.Tax, string.Format("{0} Tax", item.Name), string.Format("{0}-Tax", item.Sku), item.Quantity, ConvertToDecimal(item.ExtendedData.GetValue(taxKey)));
                 _taxLineItems.Add(taxItem);
             }
         }
