@@ -3,17 +3,17 @@
     using Merchello.Core.Models;
 
     /// <summary>
-    /// Represents the default invoice itemization strategy.
+    /// Represents the invoice itemization strategy for splitting out taxes (VAT) that were included in product pricing.
     /// </summary>
-    public class DefaultInvoiceItemazationStrategy : InvoiceItemizationStrategyBase
+    public class ProductBasedTaxationInvoiceItemazationStrategy : InvoiceItemizationStrategyBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="DefaultInvoiceItemazationStrategy"/> class.
+        /// Initializes a new instance of the <see cref="ProductBasedTaxationInvoiceItemazationStrategy"/> class.
         /// </summary>
         /// <param name="invoice">
         /// The invoice.
         /// </param>
-        public DefaultInvoiceItemazationStrategy(Invoice invoice)
+        public ProductBasedTaxationInvoiceItemazationStrategy(Invoice invoice)
             : base(invoice)
         {
         }

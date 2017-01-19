@@ -393,7 +393,8 @@
     <Compile Include="Services\ProductService.collectionqueries.cs">
       <DependentUpon>ProductService.cs</DependentUpon>
     </Compile>
-    <Compile Include="Strategies\Itemization\DefaultInvoiceItemazationStrategy.cs" />
+    <Compile Include="Strategies\Itemization\DefaultInvoiceItemizationStrategy.cs" />
+    <Compile Include="Strategies\Itemization\ProductBasedTaxationInvoiceItemazationStrategy.cs" />
     <Compile Include="Strategies\Itemization\InvoiceItemItemization.cs" />
     <Compile Include="Strategies\Itemization\InvoiceItemizationExtensions.cs" />
     <Compile Include="Strategies\Itemization\InvoiceItemizationStrategyBase.cs" />

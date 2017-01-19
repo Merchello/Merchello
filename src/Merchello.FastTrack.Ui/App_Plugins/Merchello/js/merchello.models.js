@@ -3379,6 +3379,12 @@ var InvoiceItemItemizationDisplay = function() {
     self.shipping = [];
     self.tax = [];
     self.reconciles = false;
+    self.productTotal = 0.00;
+    self.shippingTotal = 0.00;
+    self.taxTotal = 0.00;
+    self.adjustmentTotal = 0.00;
+    self.discountTotal = 0.00;
+    self.customTotal = 0.00;
     self.invoiceTotal = 0.00;
     self.itemizationTotal = 0.00;
 };

@@ -48,8 +48,13 @@
             }
 
             itemization.ItemizationTotal = itemization.CalculateTotal();
-
             itemization.InvoiceTotal = Invoice.Total;
+            itemization.ProductTotal = itemization.CalculateProductTotal();
+            itemization.ShippingTotal = itemization.CalculateShippingTotal();
+            itemization.TaxTotal = itemization.CalculateTaxTotal();
+            itemization.AdjustmentTotal = itemization.CalculateAdjustmentTotal();
+            itemization.DiscountTotal = itemization.CalculateDiscountTotal();
+            itemization.CustomTotal = itemization.CalculateCustomTotal();
 
             return itemization;
         }

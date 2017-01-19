@@ -45,6 +45,37 @@
         /// </summary>
         public bool Reconciles { get; internal set; }
 
+
+        /// <summary>
+        /// Gets the shipping total.
+        /// </summary>
+        public decimal ShippingTotal { get; internal set; }
+
+        /// <summary>
+        /// Gets the tax total.
+        /// </summary>
+        public decimal TaxTotal { get; internal set; }
+
+        /// <summary>
+        /// Gets the adjustment total.
+        /// </summary>
+        public decimal AdjustmentTotal { get; internal set; }
+
+        /// <summary>
+        /// Gets the product total.
+        /// </summary>
+        public decimal ProductTotal { get; internal set; }
+
+        /// <summary>
+        /// Gets the discount total.
+        /// </summary>
+        public decimal DiscountTotal { get; internal set; }
+
+        /// <summary>
+        /// Gets the custom total.
+        /// </summary>
+        public decimal CustomTotal { get; internal set; }
+
         /// <summary>
         /// Gets the invoice total of the invoice.
         /// </summary>

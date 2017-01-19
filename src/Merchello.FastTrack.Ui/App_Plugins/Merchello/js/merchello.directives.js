@@ -4748,21 +4748,6 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
 
                     }
 
-
-                    /*
-                    // utility method to assist in building scope line item collections
-                    function aggregateScopeLineItemCollection(lineItems, collection) {
-                        if(angular.isArray(lineItems)) {
-                            angular.forEach(lineItems, function(item) {
-                                collection.push(item);
-                            });
-                        } else {
-                            if(lineItems !== undefined) {
-                                collection.push(lineItems);
-                            }
-                        }
-                    }
-                    */
                     // initialize the directive
                     init();
                 }

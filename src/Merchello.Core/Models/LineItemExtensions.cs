@@ -257,24 +257,6 @@
             return attempt.Result as T;
         }
 
-        /// <summary>
-        /// The as line item with key of.
-        /// </summary>
-        /// <param name="lineItem">
-        /// The line item.
-        /// </param>
-        /// <typeparam name="T">
-        /// </typeparam>
-        /// <returns>
-        /// The <see cref="T"/>.
-        /// </returns>
-        public static T AsLineItemWithKeyOf<T>(this ILineItem lineItem) where T : class, ILineItem
-        {
-            var clone = lineItem.AsLineItemOf<T>();
-            clone.Key = lineItem.Key;
-            return clone;
-        }
-
 
         /// <summary>
         /// Creates a line item of a particular type for a shipment rate quote
@@ -437,6 +419,25 @@
 
             result.Items.Add(itemCacheLineItems);
             return result;
+        }
+
+        /// <summary>
+        /// Converts a line item of one type to a line item of another type while preserving the key.
+        /// </summary>
+        /// <param name="lineItem">
+        /// The line item.
+        /// </param>
+        /// <typeparam name="T">
+        /// The type of the line item
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="T"/>.
+        /// </returns>
+        internal static T AsLineItemWithKeyOf<T>(this ILineItem lineItem) where T : class, ILineItem
+        {
+            var clone = lineItem.AsLineItemOf<T>();
+            clone.Key = lineItem.Key;
+            return clone;
         }
 
         #region Formatter
