@@ -33,6 +33,17 @@
             {
                 get { return "DefaultInvoiceTaxRateQuote";  }
             }
+
+            /// <summary>
+            /// Gets the configuration key for the invoice itemization strategy.
+            /// </summary>
+            public static string InvoiceItemizationStrategy
+            {
+                get
+                {
+                    return "InvoiceItemizationStrategy";
+                }
+            }
         }
 
         /// <summary>

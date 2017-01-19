@@ -283,6 +283,7 @@
     <Compile Include="ApplicationContextExtensions.cs" />
     <Compile Include="Caching\IVirtualContentCache{T}.cs" />
     <Compile Include="Caching\IVirtualProductContentCache.cs" />
+    <Compile Include="Models\ContentEditing\InvoiceItemItemizationDisplay.cs" />
     <Compile Include="Models\PrimedProductFilter.cs" />
     <Compile Include="Search\CachedQueryBase.cs" />
     <Compile Include="Search\IProductContentQuery.cs" />

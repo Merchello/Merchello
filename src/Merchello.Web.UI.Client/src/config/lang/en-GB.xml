@@ -516,7 +516,7 @@
     <key alias="billingAndShippingAddressHelper">Billing and Shipping addresses</key>
     <key alias="orderInformationHelper"><![CDATA[Line items & costs]]></key>
     <key alias="captureUpTo">Capture Up To</key>
-    <key alias="salesTax">Sales Tax</key>
+    <key alias="salesTax">Tax</key>
     <key alias="authorized">Authorized</key>
     <key alias="captured">Captured</key>
     <key alias="paymentHistory"> Payment History</key>

@@ -790,8 +790,8 @@ angular.module('merchello.resources')
      **/
     angular.module('merchello.resources')
         .factory('invoiceResource', [
-            '$q', '$http', 'umbRequestHelper',
-            function($q, $http, umbRequestHelper) {
+            '$q', '$http', 'umbRequestHelper', 'invoiceItemItemizationDisplayBuilder',
+            function($q, $http, umbRequestHelper, invoiceItemItemizationDisplayBuilder) {
 
                 var baseUrl = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloInvoiceApiBaseUrl'];
 
@@ -811,6 +811,31 @@ angular.module('merchello.resources')
                                 params: { id: id }
                             }),
                             'Failed to retreive data for invoice id: ' + id);
+                    },
+
+                    /**
+                     * @ngdoc method
+                     * @name getItemItemization
+                     * @description
+                     **/
+                    getItemItemization: function (id) {
+                        var url = baseUrl + 'GetInvoiceItemItemization';
+
+                        var deferred = $q.defer();
+                        $q.all([
+                            umbRequestHelper.resourcePromise(
+                                $http({
+                                    url: url,
+                                    method: "GET",
+                                    params: { id: id }
+                                }),
+                                'Failed to retreive data for invoice itemization for id: ' + id)
+                        ]).then(function(data) {
+                            var results = invoiceItemItemizationDisplayBuilder.transform(data[0]);
+                            deferred.resolve(results);
+                        });
+
+                        return deferred.promise;
                     },
 
                     /**
