@@ -4742,7 +4742,6 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                         ]).then(function(data) {
                             scope.authorizedCapturedLabel = data[0];
                             scope.itemization = data[1];
-                            console.info(scope.itemization);
                             scope.loaded = true;
                         });
 
