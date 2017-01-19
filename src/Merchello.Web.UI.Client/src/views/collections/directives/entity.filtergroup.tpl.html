@@ -2,7 +2,7 @@
     <h4>{{ collection.name }}</h4>
     <ul>
         <li data-ng-repeat="att in collection.filters">
-            <label>
+            <label class="label-checkbox">
             <input type="checkbox" data-ng-model="att.selected" data-ng-click="save(att)" /> {{ att.name }}
             </label>
         </li>

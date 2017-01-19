@@ -351,6 +351,8 @@
     <Content Include="App_Plugins\Merchello\assets\images\heart.png" />
     <Content Include="App_Plugins\Merchello\assets\images\logo-tag.png" />
     <Content Include="App_Plugins\Merchello\assets\images\logo.png" />
+    <Content Include="App_Plugins\Merchello\assets\images\partner-doc.png" />
+    <Content Include="App_Plugins\Merchello\assets\images\support.png" />
     <Content Include="App_Plugins\Merchello\assets\images\website.png" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\abandonedBasket.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\collectionproviderlist.html" />
@@ -839,6 +841,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Code\CustomerCxtDataViewer.cs" />
     <Compile Include="ExampleUiHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UmbracoEventHandler.cs" />

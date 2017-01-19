@@ -45,6 +45,7 @@ MUI.Checkout.Payment.Braintree = {
 
                 if (form.length > 0) {
 
+
                     var token = MUI.Checkout.Payment.Braintree.getBraintreeToken();
 
                     braintree.client.create({

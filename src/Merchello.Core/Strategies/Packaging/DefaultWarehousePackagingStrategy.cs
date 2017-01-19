@@ -40,7 +40,7 @@
             LineItemCollection lineItemCollection,
             IAddress destination,
             Guid versionKey)
-            : base(lineItemCollection, destination, versionKey)
+            : this(Core.MerchelloContext.Current, lineItemCollection, destination, versionKey)
         {
         }
 

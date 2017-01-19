@@ -149,6 +149,32 @@
                        : null;
         }
 
+        /// <summary>
+        /// Gets a list of all keys with a given key prefix.
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
+        /// <param name="prefix">
+        /// The prefix.
+        /// </param>
+        /// <returns>
+        /// The collection of values that match the prefix.
+        /// </returns>
+        /// <remarks>
+        /// Introduced for customer context conversions.
+        /// </remarks>
+        internal static IEnumerable<KeyValuePair<string, string>> GetItemsByKeyPrefix(this ExtendedDataCollection extendedData, string prefix)
+        {
+            var values = new List<KeyValuePair<string, string>>();
+            foreach (var item in extendedData.Keys)
+            {
+                if (item.StartsWith(prefix)) values.Add(new KeyValuePair<string, string>(item, extendedData.GetValue(item)));
+            }
+
+            return values;
+        }
+
         #endregion
 
         #region LineItemCollection

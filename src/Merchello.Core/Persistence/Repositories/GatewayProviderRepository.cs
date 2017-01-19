@@ -213,7 +213,7 @@
         /// </param>
         protected override void PersistUpdatedItem(IGatewayProviderSettings entity)
         {
-            ((Entity)entity).AddingEntity();
+            ((Entity)entity).UpdatingEntity();
 
             var factory = new GatewayProviderSettingsFactory();
             var dto = factory.BuildDto(entity);
