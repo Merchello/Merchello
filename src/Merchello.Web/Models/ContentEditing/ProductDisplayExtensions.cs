@@ -97,12 +97,13 @@
                 else
                 {
                     //// Add to a new catalog
-                    ((Product)destination).MasterVariant.AddToCatalogInventory(new CatalogInventory(catalogInventory.CatalogKey, catalogInventory.ProductVariantKey)
-                                                                                   {
-                                                                                       Location = catalogInventory.Location,
-                                                                                       Count = catalogInventory.Count,
-                                                                                       LowCount = catalogInventory.LowCount
-                                                                                   });
+                    ((Product)destination).MasterVariant.AddToCatalogInventory(
+                        new CatalogInventory(catalogInventory.CatalogKey, catalogInventory.ProductVariantKey)
+                        {
+                            Location = catalogInventory.Location,
+                            Count = catalogInventory.Count,
+                            LowCount = catalogInventory.LowCount
+                        });
                 }
             }
 
@@ -652,8 +653,6 @@
                 }
             }         
         }
-
-    
 
         #endregion
 
