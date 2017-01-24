@@ -426,8 +426,13 @@
             var attempt = orderBuilder.Build();
             if (attempt.Success) return attempt.Result;
 
-            MultiLogHelper.Error<OrderBuilderChain>("Extension method PrepareOrder failed", attempt.Exception);
-            throw attempt.Exception;
+            var exception = attempt.Exception != null
+                                ? attempt.Exception
+                                : new NullReferenceException(
+                                      "Order creation task did not return an exception but it returned as a failure.");
+
+                MultiLogHelper.Error<OrderBuilderChain>("Extension method PrepareOrder failed", attempt.Exception);
+                throw exception;
         }
 
         #endregion
