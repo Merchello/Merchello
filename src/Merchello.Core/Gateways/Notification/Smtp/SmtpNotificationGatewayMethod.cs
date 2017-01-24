@@ -126,9 +126,6 @@
                     smtpClient.Send(msg);
                 }
 
-                // http://issues.merchello.com/youtrack/issue/M-1204
-                msg.Dispose(); // dispose MailMessage object after smtp client is done using it
-                
                 return true;
             }
             catch (Exception ex)
