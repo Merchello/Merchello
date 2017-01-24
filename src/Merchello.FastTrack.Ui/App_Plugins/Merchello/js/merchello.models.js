@@ -2324,7 +2324,7 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
         self.name = '';
         self.sku = '';
         self.sortOrder = 0;
-        self.detachedDataValues = {};
+        self.detachedDataValues = [];
         self.isDefaultChoice = false;
     };
 
@@ -2863,7 +2863,9 @@ angular.module('merchello.models').constant('ProductVariantDetachedContentDispla
             });
 
             angular.forEach(this.attributes, function(a) {
-                a.detachedDataValues = a.detachedDataValues.toArray();
+                if(!angular.isArray(a.detachedDataValues)) {
+                 a.detachedDataValues = a.detachedDataValues.toArray();
+                }
             });
         }
 

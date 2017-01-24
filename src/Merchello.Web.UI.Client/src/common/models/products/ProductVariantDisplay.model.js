@@ -183,7 +183,9 @@
             });
 
             angular.forEach(this.attributes, function(a) {
-                a.detachedDataValues = a.detachedDataValues.toArray();
+                if(!angular.isArray(a.detachedDataValues)) {
+                 a.detachedDataValues = a.detachedDataValues.toArray();
+                }
             });
         }
 

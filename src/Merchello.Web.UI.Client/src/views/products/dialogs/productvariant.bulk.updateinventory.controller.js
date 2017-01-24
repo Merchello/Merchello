@@ -11,7 +11,7 @@
         function($scope) {
 
             function init() {
-                console.info($scope.dialogData);
+
             }
 
             // Initialize the controller
