@@ -6876,7 +6876,7 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.AddProductCont
         function($scope) {
 
             function init() {
-                console.info($scope.dialogData);
+
             }
 
             // Initialize the controller
