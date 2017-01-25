@@ -24,8 +24,6 @@
                     var extendedDataKey = 'merchSmtpProviderSettings';
                     var settingsString = $scope.dialogData.provider.extendedData.getValue(extendedDataKey);
                     $scope.notificationProviderSettings = angular.fromJson(settingsString);
-                    console.info($scope.dialogData);
-                    console.info($scope.notificationProviderSettings);
 
                     // Watch with object equality to convert back to a string for the submit() call on the Save button
                     $scope.$watch(function () {
@@ -33,7 +31,6 @@
                     }, function (newValue, oldValue) {
                         $scope.dialogData.provider.extendedData.setValue(extendedDataKey, angular.toJson(newValue));
                     }, true);
-                    console.info($scope.dialogData);
                 }
             }
 

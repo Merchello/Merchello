@@ -115,7 +115,6 @@ angular.module('merchello').controller('Merchello.Directives.DetachedContentType
                 loadDetachedContentTypes();
                 notificationsService.success('Deleted successfully');
             }, function(reason) {
-                console.info(reason);
               notificationsService.error('Failed to delete detached content type' + reason);
             });
         }

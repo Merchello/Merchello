@@ -316,7 +316,6 @@
                     // added a timeout here to give the examine index
                     $timeout(function() {
                         notificationsService.success("Payment Captured");
-                        console.info(paymentRequest);
                         loadInvoice(paymentRequest.invoiceKey);
                     }, 400);
                 }, function (reason) {
@@ -353,7 +352,7 @@
                 var promiseStatuses = shipmentResource.getAllShipmentStatuses();
                 promiseStatuses.then(function(statuses) {
                     var data = dialogDataFactory.createCreateShipmentDialogData();
-                    data.order = $scope.invoice.orders[0]; // todo: pull from current order when multiple orders is available
+                    data.order = $scope.invoice.orders[0];
                     data.order.items = data.order.getUnShippedItems();
                     data.shipmentStatuses = statuses;
                     data.currencySymbol = $scope.currencySymbol;
@@ -367,7 +366,8 @@
 
                     // TODO this could eventually turn into an array
                     var shipmentLineItems = $scope.invoice.getShippingLineItems();
-                    if (shipmentLineItems[0]) {
+                    data.shipmentLineItems = shipmentLineItems;
+                    if (shipmentLineItems.length) {
                         var shipMethodKey = shipmentLineItems[0].extendedData.getValue('merchShipMethodKey');
                         var request = { shipMethodKey: shipMethodKey, invoiceKey: data.invoiceKey, lineItemKey: shipmentLineItems[0].key };
                         var shipMethodPromise = shipmentResource.getShipMethodAndAlternatives(request);
@@ -376,6 +376,7 @@
                             data.shipMethods.selected = _.find(data.shipMethods.alternatives, function(method) {
                                 return method.key === shipMethodKey;
                             });
+
                             dialogService.open({
                                 template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/sales.create.shipment.html',
                                 show: true,

@@ -8,5 +8,5 @@
      */
     angular.module('merchello').controller('Merchello.GatewayProviders.Dialogs.ShippingAddCountryProviderController',
         function($scope) {
-        console.info($scope.dialogData);
+
     });

@@ -72,6 +72,7 @@
     <key alias="decrease">Уменьшить</key>
     <key alias="associateWith">Связать с</key>
     <key alias="shared">Совместное</key>
+    <key alias="custom">Custom</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Товары</key>
@@ -565,6 +566,7 @@
         <small>Список провайдеров и способов доставки, отсортированный по странам.</small>]]>
     </key>
     <key alias="warehouse">Склад</key>
+    <key alias="selectShipment">Select Shipment</key>
   </area>
   <area alias="merchelloInventory">
     <!-- things -->

@@ -156,7 +156,6 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.ProductAddCont
                             $scope.checking = false;
                             currentSku = sku;
                             $scope.isUnique = exists === 'false';
-                            console.info($scope.isUnique);
                             $scope.checking = false;
                     });
                 }

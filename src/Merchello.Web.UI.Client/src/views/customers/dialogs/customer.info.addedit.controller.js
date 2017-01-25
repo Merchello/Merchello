@@ -25,7 +25,6 @@
              */
             function save() {
                 $scope.wasFormSubmitted = true;
-                console.info($scope.dialogData);
                 if ($scope.editInfoForm.email.$valid) {
                     $scope.submit($scope.dialogData);
                 }

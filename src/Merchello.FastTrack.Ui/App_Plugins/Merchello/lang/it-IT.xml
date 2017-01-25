@@ -72,6 +72,7 @@
     <key alias="decrease">Decrease</key>
     <key alias="associateWith">Associate with</key>
     <key alias="shared">Shared</key>
+    <key alias="custom">Custom</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Products</key>
@@ -565,6 +566,7 @@
         <small>A list of the catalog's shipping providers and methods, sorted by country.</small>]]>
     </key>
     <key alias="warehouse">Warehouse</key>
+    <key alias="selectShipment">Select Shipment</key>
   </area>
   <area alias="merchelloInventory">
     <!-- things -->
