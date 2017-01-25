@@ -207,7 +207,6 @@
                 instruction.entityKey = dialogData.lineItem.key;
                 instruction.quantity = dialogData.lineItem.quantity;
                 instruction.itemCacheType = dialogData.itemCacheType;
-                console.info(instruction);
                 backOfficeCheckoutResource.updateLineItemQuantity(instruction).then(function() {
                     loadCustomer($scope.customer.key);
                 });

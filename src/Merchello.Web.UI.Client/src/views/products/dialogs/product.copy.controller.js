@@ -15,8 +15,6 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.ProductCopyCon
 
         function init() {
 
-            console.info(input);
-
             input.bind("keyup onfocusout", function (event) {
                 var code = event.which;
                 // alpha , numbers, ! and backspace
@@ -45,7 +43,7 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.ProductCopyCon
         }
 
         function checkUniqueSku(sku) {
-            console.info(sku);
+
             $scope.checking = true;
             if (sku === undefined || sku === '') {
                 $scope.checking = false;
@@ -60,7 +58,6 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.ProductCopyCon
                     $scope.checking = false;
                     currentSku = sku;
                     $scope.isUnique = exists === 'false';
-                    console.info($scope.isUnique);
                     $scope.checking = false;
                 });
             }

@@ -31,7 +31,6 @@ angular.module('merchello').controller('Merchello.PropertyEditors.MerchelloMulti
         }
 
         function remove(product) {
-            console.info(product);
             $scope.products = _.reject($scope.products, function (p) { return p.key === product.key });
             setModelValue();
         }

@@ -17,6 +17,12 @@
                 <label for="trackingUrl"><localize key="merchelloGeneral_trackingUrl"/></label>
                 <input name="trackingNo" data-ng-model="dialogData.trackingUrl" type="text" class="col-xs-6 span6"/>
             </div>
+            <div class="form-group" data-ng-show="shipmentSelection.show">
+                <label for="shipment"><localize key="merchelloShipping_selectShipment" /></label>
+                <select name="shipment" data-ng-model="shipmentSelection.selected" class="col-xs-6 span6" data-ng-options="option.name for option in shipmentSelection.shipments" data-ng-change="updateViewSelectedForShipment()">
+
+                </select>
+            </div>
             <div class="form-group">
                 <label for="provider"><localize key="merchelloGeneral_via"/></label>
                 <select name="shipmentStatus" class="col-xs-6 span6" data-ng-model="dialogData.shipMethods.selected" data-ng-options="option.name for option in dialogData.shipMethods.alternatives"></select>
@@ -38,7 +44,7 @@
                 <th><localize key="merchelloGeneral_quantity" /></th>
                 <th><localize key="merchelloGeneral_total" /></th>
             </tr>
-            <tr data-ng-repeat="lineitem in dialogData.order.items">
+            <tr data-ng-repeat="lineitem in shipmentSelection.selected.items"> <!-- dialogData.order.items -->
                 <td><input type="checkbox" data-ng-disabled="lineitem.backOrder" data-ng-model="lineitem.selected" /></td>
                 <td>
                     <h4>{{lineitem.name}}</h4>

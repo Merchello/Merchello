@@ -162,7 +162,6 @@ angular.module('merchello').controller('Merchello.PropertyEditors.MerchelloProdu
                 else {
                     $scope.options.orderDirection = "desc";
                 }
-                console.info($scope.options.orderDirection);
                 loadProducts();
             }
         };

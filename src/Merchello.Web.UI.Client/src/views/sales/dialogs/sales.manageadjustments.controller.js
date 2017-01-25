@@ -22,7 +22,6 @@ angular.module('merchello').controller('Merchello.Sales.Dialogs.ManageAdjustment
         }
         
         function deleteAdjustment(item) {
-            console.info(item);
             if (item.isNew !== undefined) {
                 $scope.adjustments = _.reject($scope.adjustments, function(adj) {
                    return adj.isNew === true && adj.name === item.name;

@@ -20,7 +20,6 @@ angular.module('merchello')
             _.each($scope.dialogData.shipment.items, function(item) {
                 item.selected = true;
             });
-            console.info('Got here');
             $scope.loaded = true;
         }
 
