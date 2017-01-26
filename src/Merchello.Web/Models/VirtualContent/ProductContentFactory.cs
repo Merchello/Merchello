@@ -56,7 +56,7 @@
         /// <summary>
         /// The detached content types.
         /// </summary>
-        private Lazy<IEnumerable<IDetachedContentType>> _detachedContentTypes;
+        private IEnumerable<IDetachedContentType> _detachedContentTypes;
 
         // private readonly VirtualProductContentCache _cache;
 
@@ -99,7 +99,25 @@
         /// <summary>
         /// The initializing.
         /// </summary>
-        public static event TypedEventHandler<ProductContentFactory, VirtualContentEventArgs> Initializing; 
+        public static event TypedEventHandler<ProductContentFactory, VirtualContentEventArgs> Initializing;
+
+
+        /// <summary>
+        /// Gets the detached content types.
+        /// </summary>
+        private IEnumerable<IDetachedContentType> DetachedContentTypes
+        {
+            get
+            {
+                if (_detachedContentTypes == null)
+                {
+                    _detachedContentTypes = _detachedContentTypeService.GetAll().Where(x => x.ContentTypeKey != null);
+                }
+
+                return _detachedContentTypes;
+            }
+        }
+
 
         /// <summary>
         /// The build content.
@@ -148,7 +166,7 @@
 
             if (!keys.Any()) return publishedContentTypes;
 
-            var contentTypeKeys = _detachedContentTypes.Value
+            var contentTypeKeys = DetachedContentTypes
                     .Where(x => keys.Any(y => y == x.Key)).Where(x => x.ContentTypeKey != null)
                     .Select(x => x.ContentTypeKey.Value);
 
@@ -156,7 +174,7 @@
 
             foreach (var ct in contentTypes)
             {
-                var dct = _detachedContentTypes.Value.FirstOrDefault(x => x.ContentTypeKey != null && x.ContentTypeKey.Value == ct.Key);
+                var dct = DetachedContentTypes.FirstOrDefault(x => x.ContentTypeKey != null && x.ContentTypeKey.Value == ct.Key);
                 if (dct != null)
                 publishedContentTypes.Add(dct.Key, PublishedContentType.Get(PublishedItemType.Content, ct.Alias));
             }
@@ -181,8 +199,6 @@
             _defaultStoreLanguage = StringExtensions.IsNullOrWhiteSpace(this._parentCulture) ?
                 _storeSettingService.GetByKey(Constants.StoreSettingKeys.DefaultExtendedContentCulture).Value :
                 _parentCulture;
-
-            _detachedContentTypes = new Lazy<IEnumerable<IDetachedContentType>>(() => _detachedContentTypeService.GetAll().Where(x => x.ContentTypeKey != null));
 
             if (_allLanguages.Any())
             {
