@@ -219,6 +219,9 @@
     <key alias="copyProduct">Kopier produkt</key>
     <key alias="newProductName">Nyt produktnavn</key>
     <key alias="newProductSku">Nyt produktnummer</key>
+    <key alias="newPrice">New Price</key>
+    <key alias="newCostOfGoods">New Cost Of Goods</key>
+    <key alias="newSalePrice">New Sale Price</key>
   </area>
   <area alias="merchelloSpecFilters">
     <key alias="manageProductFilters">Administrer produktfiltre</key>
