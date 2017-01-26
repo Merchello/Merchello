@@ -219,6 +219,9 @@
     <key alias="copyProduct">Создать копию</key>
     <key alias="newProductName">Задайте наименование товара</key>
     <key alias="newProductSku">Задайте артикул товара</key>
+    <key alias="newPrice">New Price</key>
+    <key alias="newCostOfGoods">New Cost Of Goods</key>
+    <key alias="newSalePrice">New Sale Price</key>
   </area>
   <area alias="merchelloSpecFilters">
     <key alias="manageProductFilters">Управление фильтрами товаров</key>
