@@ -32,11 +32,6 @@
         private bool _hasPriceRangeFilter = false;
 
         /// <summary>
-        /// The search term.
-        /// </summary>
-        private string _searchTerm;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="ProductContentQueryBuilder"/> class.
         /// </summary>
         /// <param name="cachedQuery">
@@ -77,7 +72,7 @@
         /// </summary>
         public override void Reset()
         {
-            this._searchTerm = string.Empty;
+            this.SearchTerm = string.Empty;
             this.Page = 1;
             this.ItemsPerPage = 10;
             this.SortBy = ProductSortField.Name;
@@ -109,7 +104,6 @@
 
             var query = new ProductContentQuery(_cachedQuery)
             {
-                SearchTerm = _searchTerm,
                 Page = Page,
                 ItemsPerPage = ItemsPerPage,
                 SortBy = sortBy,
@@ -117,6 +111,11 @@
                 CollectionKeys = this.CollectionKeys,
                 CollectionClusivity = this.CollectionClusivity
             };
+
+            if (!string.IsNullOrWhiteSpace(SearchTerm))
+            {
+                query.SearchTerm = SearchTerm;
+            }
 
             if (_hasPriceRangeFilter)
             {

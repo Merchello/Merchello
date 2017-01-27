@@ -8,7 +8,6 @@
     /// </summary>
     public interface IProductContentQueryBuilder : ICmsContentQueryBuilder<IProductCollection, IProductFilter, IProductContent>
     {
-
         /// <summary>
         /// Sets the price range constraints.
         /// </summary>
