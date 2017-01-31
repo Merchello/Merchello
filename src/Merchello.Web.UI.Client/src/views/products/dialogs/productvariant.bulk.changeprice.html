@@ -11,7 +11,10 @@
                 <span class="add-on">{{dialogData.currencySymbol}}</span>
                 <input name="new-price" data-ng-model="dialogData.price" class="col-xs-5 span5" type="number"/>
             </div>
-            <div class="form-group row-fluid input-prepend">
+            <div class="form-group row-fluid">
+                <label class="label-checkbox"><input name="includeCostOfGoods" type="checkbox" data-ng-model="dialogData.includeCostOfGoods"><span>Update cost of goods price.</span></label>
+            </div>
+            <div class="form-group row-fluid input-prepend" data-ng-show="dialogData.includeCostOfGoods">
                 <label for="cost-price"><localize key="merchelloProducts_newCostOfGoods">New Cost Of Goods</localize></label>
                 <span class="add-on">{{dialogData.currencySymbol}}</span>
                 <input name="cost-price" data-ng-model="dialogData.costOfGoods" class="col-xs-5 span5" type="number" />
@@ -19,7 +22,7 @@
             <div class="form-group row-fluid">
                 <label class="label-checkbox"><input name="includeSalePrice" type="checkbox" data-ng-model="dialogData.includeSalePrice"> <span>Update sale price.</span></label>
             </div>
-            <div class="form-group row-fluid input-prepend"  data-ng-show="dialogData.includeSalePrice">
+            <div class="form-group row-fluid input-prepend" data-ng-show="dialogData.includeSalePrice">
                 <label for="new-sale-price"><localize key="merchelloProducts_newSalePrice">New Sale Price</localize></label>
                 <span class="add-on">{{dialogData.currencySymbol}}</span>
                 <input name="new-sale-price" data-ng-model="dialogData.salePrice" class="col-xs-5 span5" type="number" />
@@ -30,13 +33,10 @@
     <div class="umb-panel-footer">
         <div class="umb-el-wrap umb-panel-buttons">
             <div class="btn-toolbar umb-btn-toolbar pull-right">
-
                 <a href data-ng-click="close()" class="btn btn-link">
                     <localize key="general_cancel">Cancel</localize>
                 </a>
-
-                <button class="btn btn-primary"
-                        data-ng-click="submit(dialogData)">
+                <button class="btn btn-primary" data-ng-click="submit(dialogData)">
                     <localize key="buttons_save">Save</localize>
                 </button>
 
