@@ -1,9 +1,11 @@
 ﻿{       
     javascript: [
-        '~/App_Plugins/DiploTraceLogViewer/backoffice/diplotracelog/EditController.js',
-		'~/App_Plugins/DiploTraceLogViewer/backoffice/diplotracelog/ng-table/ng-table.min.js'
+		'~/App_Plugins/DiploTraceLogViewer/backoffice/diplotracelog/Diplo.TraceLog.Resources.js',
+        '~/App_Plugins/DiploTraceLogViewer/backoffice/diplotracelog/Diplo.TraceLog.Controller.js',
+		'~/App_Plugins/DiploTraceLogViewer/backoffice/diplotracelog/Diplo.TraceLog.Detail.Controller.js',
+		'~/App_Plugins/DiploTraceLogViewer/backoffice/diplotracelog/plugins/smart-table.min.js'
     ],
 	css: [
-		'~/App_Plugins/DiploTraceLogViewer/backoffice/diplotracelog/tracelog.css',
+		'~/App_Plugins/DiploTraceLogViewer/backoffice/diplotracelog/tracelog3.css',
 	]
 }

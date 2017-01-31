@@ -1,88 +1,17 @@
-﻿<script>
-    function TraceLogDetailController($scope, $routeParams) {
-
-        var findInArray = function (array, value, offset) {
-            for (var i = 0; i < array.length; i++) {
-                if (array[i]["Id"] === value) {
-                    return array[i + offset];
-                }
-            }
-            return null;
-        }
-
-        $scope.getSearchText = function (max) {
-
-            var selection = window.getSelection().toString();
-
-            if (selection.length < 3) {
-                selection = $scope.dialogData.logItem.Logger + " " + $scope.dialogData.logItem.Message;
-            }
-
-            return selection.substring(0, max);
-        }
-
-        $scope.hasPrevious = function () {
-            return $scope.dialogData.items[0].Id !== $scope.dialogData.logItem.Id;
-        }
-
-        $scope.hasNext = function () {
-            return $scope.dialogData.items[$scope.dialogData.items.length - 1].Id !== $scope.dialogData.logItem.Id;
-        }
-
-        $scope.nextItem = function () {
-            var next = findInArray($scope.dialogData.items, $scope.dialogData.logItem.Id, 1);
-            if (next) {
-                $scope.dialogData.logItem = next;
-            }
-        }
-
-        $scope.previousItem = function () {
-            var prev = findInArray($scope.dialogData.items, $scope.dialogData.logItem.Id, -1);
-            if (prev) {
-                $scope.dialogData.logItem = prev;
-            }
-        }
-    }
-</script>
-
-<style type="text/css">
-    #logdetail .tlError {
-        color: #c00;
-    }
-
-    #logdetail .tlWarn {
-        color: #cc8c00;
-    }
-
-    #logdetail .logger {
-    }
-
-    #logdetail .message {
-        font-family: 'Courier New', serif;
-        white-space: pre-wrap;
-        background-color: #f8f8f8;
-        border: 1px solid #dbdbdb;
-        padding: 8px;
-        margin: 8px;
-    }
-
-    #logdetail .umb-scrollable {
-        z-index: 9999;
-    }
-
-    #logdetail .umb-panel-footer .btn {
-        z-index: 99999;
-    }
-
-    #logdetail .btn-default {
-        margin-top: 9px;
-    }
-</style>
-
-<div class="umb-panel" ng-controller="TraceLogDetailController" id="logdetail">
+﻿<div class="umb-panel" ng-controller="DiploTraceLogDetailController" id="diplo-logdetail">
 
     <div class="umb-panel-header">
-        <h3 class="headline">Log Data Detail <small class="umb-version">{{dialogData.logItem.Date}}</small></h3>
+        <div class="row-fluid">
+            <div class="span6">
+                <h3>Log Data Detail<br /><small>{{dialogData.logItem.Date}}</small></h3>
+            </div>
+            <div class="span6">
+                <div class="btn-toolbar pull-right">
+                    <a ng-click="previousItem()" class="btn" ng-show="hasPrevious()"><i class="icon-previous"></i>Previous</a>
+                    <a ng-click="nextItem()" class="btn" ng-show="hasNext()">Next <i class="icon-next"></i></a>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="umb-panel-body umb-scrollable">
@@ -119,32 +48,30 @@
                 <td colspan="2" class="message">{{ dialogData.logItem.Message }}</td>
             </tr>
             <tr>
-                <td>
-                    <div class="btn-toolbar pull-left">
-                        <a ng-click="previousItem()" class="btn" ng-show="hasPrevious()"><i class="icon-previous"></i>Previous</a>
-                        <a ng-click="nextItem()" class="btn" ng-show="hasNext()">Next <i class="icon-next"></i></a>
-                    </div>
-                </td>
-
-                <td>
-                    <div class="btn-group">
-                        <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="icon-search"></i> Search
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a ng-href="https://www.google.com/search?q={{ getSearchText(80) }}" target="_blank" title="Search this message with Google">Search With Google</a></li>
-                            <li><a ng-href="http://our.umbraco.org/search?q={{ getSearchText(60) }}&content=wiki,forum,documentation" target="_blank" title="Search this message on Our Umbraco forums and docs">Search Our Umbraco</a></li>
-                            <li><a ng-href="https://www.google.co.uk/?q=site:our.umbraco.org {{ getSearchText(60) }}&safe=off#q=site:our.umbraco.org {{ dialogData.logItem.Logger}} {{ dialogData.logItem.Message | limitTo:80 }}&safe=off" target="_blank" title="Search Our Umbraco forums using Google">Search Our with Google</a></li>
-                            <li><a ng-href="https://github.com/umbraco/Umbraco-CMS/search?q={{ dialogData.logItem.Logger}}" target="_blank" title="Search within Umbraco source code on Github">Search Umbraco Source</a></li>
-                            <li><a ng-href="http://issues.umbraco.org/issues?q={{ dialogData.logItem.Logger}}" target="_blank" title="Search Umbraco Issues board">Search Umbraco Issues</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="btn-toolbar pull-right">
-                        <a ng-click="close()" class="btn">
-                            <localize key="general_close">Close</localize>
-                        </a>
+                <td colspan="2">
+                    <div class="row-fluid">
+                        <div class="span8">
+                            <div class="btn-group">
+                                <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <i class="icon-search"></i> Search
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a ng-href="https://www.google.com/search?q={{ getSearchText(80) }}" target="_blank" title="Search this message with Google">Search With Google</a></li>
+                                    <li><a ng-href="http://our.umbraco.org/search?q={{ getSearchText(60) }}&content=wiki,forum,documentation" target="_blank" title="Search this message on Our Umbraco forums and docs">Search Our Umbraco</a></li>
+                                    <li><a ng-href="https://www.google.co.uk/?q=site:our.umbraco.org {{ getSearchText(60) }}&safe=off#q=site:our.umbraco.org {{ dialogData.logItem.Logger}} {{ dialogData.logItem.Message | limitTo:80 }}&safe=off" target="_blank" title="Search Our Umbraco forums using Google">Search Our with Google</a></li>
+                                    <li><a ng-href="https://github.com/umbraco/Umbraco-CMS/search?q={{ dialogData.logItem.Logger}}" target="_blank" title="Search within Umbraco source code on Github">Search Umbraco Source</a></li>
+                                    <li><a ng-href="http://issues.umbraco.org/issues?q={{ dialogData.logItem.Logger}}" target="_blank" title="Search Umbraco Issues board">Search Umbraco Issues</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="span4">
+                            <div class="btn-toolbar pull-right">
+                                <a ng-click="close()" class="btn">
+                                    <localize key="general_close">Close</localize>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </td>
             </tr>
