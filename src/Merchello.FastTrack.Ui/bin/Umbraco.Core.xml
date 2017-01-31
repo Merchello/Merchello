@@ -1563,6 +1563,16 @@
             A wrapper for StringEnumerator since it doesn't explicitly implement IEnumerable
             </summary>
         </member>
+        <member name="T:Umbraco.Core.Configuration.UmbracoSettings.UmbracoConfigurationElement">
+            <summary>
+            Base class with shared helper methods
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Configuration.UmbracoSettings.UmbracoConfigurationElement._rawElements">
+            <summary>
+            Used so the RawElement types are not re-created every time they are accessed
+            </summary>
+        </member>
         <member name="P:Umbraco.Core.Configuration.UmbracoSettings.IImagingAutoFillUploadField.Alias">
             <summary>
             Allow setting internally so we can create a default
@@ -1959,6 +1969,11 @@
         <member name="F:Umbraco.Core.Constants.Conventions.MediaTypes.Image">
             <summary>
             MediaType alias for an image.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Constants.Conventions.MediaTypes.AutoSelect">
+            <summary>
+            MediaType alias indicating allowing auto-selection.
             </summary>
         </member>
         <member name="T:Umbraco.Core.Constants.Conventions.Member">
@@ -2592,6 +2607,11 @@
             Guid for a DataType object.
             </summary>
         </member>
+        <member name="F:Umbraco.Core.Constants.ObjectTypes.DocumentGuid">
+            <summary>
+            Guid for a Document object.
+            </summary>
+        </member>
         <member name="F:Umbraco.Core.Constants.ObjectTypes.DocumentTypeGuid">
             <summary>
             Guid for a Document Type object.
@@ -2676,7 +2696,7 @@
         </member>
         <member name="T:Umbraco.Core.CoreBootManager">
             <summary>
-            A bootstrapper for the Umbraco application which initializes all objects for the Core of the application 
+            A bootstrapper for the Umbraco application which initializes all objects for the Core of the application
             </summary>
             <remarks>
             This does not provide any startup functionality relating to web objects
@@ -2748,7 +2768,7 @@
         </member>
         <member name="M:Umbraco.Core.CoreBootManager.InitializeApplicationEventsResolver">
             <summary>
-            Special method to initialize the ApplicationEventsResolver and any modifications required for it such 
+            Special method to initialize the ApplicationEventsResolver and any modifications required for it such
             as adding custom types to the resolver.
             </summary>
         </member>
@@ -2790,6 +2810,11 @@
             <remarks>
             One per AppDomain, represents the Umbraco database
             </remarks>
+        </member>
+        <member name="F:Umbraco.Core.DatabaseContext.ConnectionCheckMinutes">
+            <summary>
+            The number of minutes to throttle the checks to CanConnect
+            </summary>
         </member>
         <member name="M:Umbraco.Core.DatabaseContext.#ctor(Umbraco.Core.Persistence.IDatabaseFactory,Umbraco.Core.Logging.ILogger,Umbraco.Core.Persistence.SqlSyntax.SqlSyntaxProviders)">
             <summary>
@@ -3654,6 +3679,16 @@
             Returns all migrations that were used in the migration runner
             </summary>
         </member>
+        <member name="P:Umbraco.Core.Events.MigrationEventArgs.ConfiguredSemVersion">
+            <summary>
+            Gets the origin version of the migration, i.e. the one that is currently installed.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Events.MigrationEventArgs.TargetSemVersion">
+            <summary>
+            Gets the target version of the migration.
+            </summary>
+        </member>
         <member name="M:Umbraco.Core.Events.PublishEventArgs`1.#ctor(System.Collections.Generic.IEnumerable{`0},System.Boolean,System.Boolean,Umbraco.Core.Events.EventMessages)">
             <summary>
             Constructor accepting multiple entities that are used in the publish operation
@@ -4061,6 +4096,36 @@
             Borrowed from https://github.com/cjbhaines/Log4Net.Async - will reference Nuget packages directly in v8
             </summary>
             <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:Umbraco.Core.MainDom">
+            <summary>
+            Represents the main AppDomain running for a given application.
+            </summary>
+            <remarks>
+            <para>There can be only one "main" AppDomain running for a given application at a time.</para>
+            <para>When an AppDomain starts, it tries to acquire the main domain status.</para>
+            <para>When an AppDomain stops (eg the application is restarting) it should release the main domain status.</para>
+            <para>It is possible to register against the MainDom and be notified when it is released.</para>
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Core.MainDom.Register(System.Action,System.Int32)">
+            <summary>
+            Registers a resource that requires the current AppDomain to be the main domain to function.
+            </summary>
+            <param name="release">An action to execute before the AppDomain releases the main domain status.</param>
+            <param name="weight">An optional weight (lower goes first).</param>
+            <returns>A value indicating whether it was possible to register.</returns>
+        </member>
+        <member name="M:Umbraco.Core.MainDom.Register(System.Action,System.Action,System.Int32)">
+            <summary>
+            Registers a resource that requires the current AppDomain to be the main domain to function.
+            </summary>
+            <param name="install">An action to execute when registering.</param>
+            <param name="release">An action to execute before the AppDomain releases the main domain status.</param>
+            <param name="weight">An optional weight (lower goes first).</param>
+            <returns>A value indicating whether it was possible to register.</returns>
+            <remarks>If registering is successful, then the <paramref name="install"/> action
+            is guaranteed to execute before the AppDomain releases the main domain status.</remarks>
         </member>
         <member name="M:Umbraco.Core.Logging.OwinLogger.WriteCore(System.Diagnostics.TraceEventType,System.Int32,System.Object,System.Exception,System.Func{System.Object,System.Exception,System.String})">
             <summary>
@@ -6047,6 +6112,669 @@
             
             </remarks>
         </member>
+        <member name="T:Umbraco.Core.Persistence.BulkDataReader">
+             <summary>
+             A base implementation of <see cref="T:System.Data.IDataReader"/> that is suitable for <see cref="M:System.Data.SqlClient.SqlBulkCopy.WriteToServer(System.Data.IDataReader)"/>.
+             </summary>
+             <remarks>
+             
+             Borrowed from Microsoft:
+             See: https://blogs.msdn.microsoft.com/anthonybloesch/2013/01/23/bulk-loading-data-with-idatareader-and-sqlbulkcopy/
+             
+             This implementation is designed to be very memory efficient requiring few memory resources and to support
+             rapid transfer of data to SQL Server.
+            
+             Subclasses should implement <see cref="P:Umbraco.Core.Persistence.BulkDataReader.SchemaName"/>, <see cref="P:Umbraco.Core.Persistence.BulkDataReader.TableName"/>,
+             <see cref="M:Umbraco.Core.Persistence.BulkDataReader.AddSchemaTableRows"/>, <see cref="M:Umbraco.Core.Persistence.BulkDataReader.Read"/>, <see cref="M:Umbraco.Core.Persistence.BulkDataReader.GetValue(System.Int32)"/>.
+             If they contain disposable resources they should override <see cref="M:Umbraco.Core.Persistence.BulkDataReader.Dispose(System.Boolean)"/>.
+             
+             SD: Alternatively, we could have used a LinqEntityDataReader which is nicer to use but it uses quite a lot of reflection and
+             I thought this would just be quicker.
+             Simple example of that: https://github.com/gridsum/DataflowEx/blob/master/Gridsum.DataflowEx/Databases/BulkDataReader.cs
+             Full example of that: https://github.com/matthewschrager/Repository/blob/master/Repository.EntityFramework/EntityDataReader.cs
+              So we know where to find that if we ever need it, these would convert any Linq data source to an IDataReader
+             
+             </remarks>
+        </member>
+        <member name="F:Umbraco.Core.Persistence.BulkDataReader._schemaTable">
+            <summary>
+            The <see cref="T:System.Data.DataTable"/> containing the input row set's schema information <see cref="M:System.Data.SqlClient.SqlBulkCopy.WriteToServer(System.Data.IDataReader)"/>
+            requires to function correctly.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Persistence.BulkDataReader._columnMappings">
+            <summary>
+            The mapping from the row set input to the target table's columns.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.AddSchemaTableRows">
+            <summary>
+            Adds the input row set's schema to the object.
+            </summary>
+            <remarks>
+            Call <see cref="M:Umbraco.Core.Persistence.BulkDataReader.AddSchemaTableRow(System.String,System.Nullable{System.Int32},System.Nullable{System.Int16},System.Nullable{System.Int16},System.Boolean,System.Boolean,System.Boolean,System.Data.SqlDbType,System.String,System.String,System.String,System.String,System.String)"/>
+            to do this for each row.
+            </remarks>
+            <seealso cref="M:Umbraco.Core.Persistence.BulkDataReader.AddSchemaTableRow(System.String,System.Nullable{System.Int32},System.Nullable{System.Int16},System.Nullable{System.Int16},System.Boolean,System.Boolean,System.Boolean,System.Data.SqlDbType,System.String,System.String,System.String,System.String,System.String)"/>
+        </member>
+        <member name="F:Umbraco.Core.Persistence.BulkDataReader.AllowedOptionalColumnCombinations">
+            <summary>
+            For each <see cref="T:System.Data.SqlDbType"/>, the optional columns that may have values.
+            </summary>
+            <remarks>
+            This is used for checking the parameters of <see cref="M:Umbraco.Core.Persistence.BulkDataReader.AddSchemaTableRow(System.String,System.Nullable{System.Int32},System.Nullable{System.Int16},System.Nullable{System.Int16},System.Boolean,System.Boolean,System.Boolean,System.Data.SqlDbType,System.String,System.String,System.String,System.String,System.String)"/>.
+            </remarks>
+            <seealso cref="M:Umbraco.Core.Persistence.BulkDataReader.AddSchemaTableRow(System.String,System.Nullable{System.Int32},System.Nullable{System.Int16},System.Nullable{System.Int16},System.Boolean,System.Boolean,System.Boolean,System.Data.SqlDbType,System.String,System.String,System.String,System.String,System.String)"/>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.AddSchemaTableRow(System.String,System.Nullable{System.Int32},System.Nullable{System.Int16},System.Nullable{System.Int16},System.Boolean,System.Boolean,System.Boolean,System.Data.SqlDbType,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            A helper method to support <see cref="M:Umbraco.Core.Persistence.BulkDataReader.AddSchemaTableRows"/>.
+            </summary>
+            <remarks>
+            This methds does extensive argument checks. These errors will cause hard to diagnose exceptions in latter
+            processing so it is important to detect them when they can be easily associated with the code defect.
+            </remarks>
+            <exception cref="T:System.ArgumentException">
+            The combination of values for the parameters is not supported.
+            </exception>
+            <exception cref="T:System.ArgumentNullException">
+            A null value for the parameter is not supported.
+            </exception>
+            <param name="columnName">
+            The name of the column.
+            </param>
+            <param name="columnSize">
+            The size of the column which may be null if not applicable.
+            </param>
+            <param name="numericPrecision">
+            The precision of the column which may be null if not applicable.
+            </param>
+            <param name="numericScale">
+            The scale of the column which may be null if not applicable.
+            </param>
+            <param name="isUnique">
+            Are the column values unique (i.e. never duplicated)?
+            </param>
+            <param name="isKey">
+            Is the column part of the primary key?
+            </param>
+            <param name="allowDbNull">
+            Is the column nullable (i.e. optional)?
+            </param>
+            <param name="providerType">
+            The corresponding <see cref="T:System.Data.SqlDbType"/>.
+            </param>
+            <param name="udtSchema">
+            The schema name of the UDT.
+            </param>
+            <param name="udtType">
+            The type name of the UDT.
+            </param>
+            <param name="xmlSchemaCollectionDatabase">
+            For XML columns the schema collection's database name. Otherwise, null.
+            </param>
+            <param name="xmlSchemaCollectionOwningSchema">
+            For XML columns the schema collection's schema name. Otherwise, null.
+            </param>
+            <param name="xmlSchemaCollectionName">
+            For XML columns the schema collection's name. Otherwise, null.
+            </param>
+            <seealso cref="M:Umbraco.Core.Persistence.BulkDataReader.AddSchemaTableRows"/>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.#ctor">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Persistence.BulkDataReader._isOpen">
+            <summary>
+            Is the bulk copy process open?
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.Close">
+            <summary>
+            Closes the <see cref="T:System.Data.IDataReader"/>. (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <seealso cref="M:System.Data.IDataReader.Close"/>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.GetBoolean(System.Int32)">
+            <summary>
+            Gets the value of the specified column as a <see cref="T:System.Boolean"/>.  (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <exception cref="T:System.IndexOutOfRangeException">
+            The index passed was outside the range of 0 through <see cref="P:Umbraco.Core.Persistence.BulkDataReader.FieldCount"/>.
+            </exception>
+            <param name="i">
+            The zero-based column ordinal.
+            </param>
+            <returns>
+            The value of the column.
+            </returns>
+            <seealso cref="M:System.Data.IDataRecord.GetBoolean(System.Int32)"/>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.GetByte(System.Int32)">
+            <summary>
+            Gets the value of the specified column as a <see cref="T:System.Byte"/>.  (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <exception cref="T:System.IndexOutOfRangeException">
+            The index passed was outside the range of 0 through <see cref="P:Umbraco.Core.Persistence.BulkDataReader.FieldCount"/>.
+            </exception>
+            <param name="i">
+            The zero-based column ordinal.
+            </param>
+            <returns>
+            The value of the column.
+            </returns>
+            <seealso cref="M:System.Data.IDataRecord.GetByte(System.Int32)"/>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.GetBytes(System.Int32,System.Int64,System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Reads a stream of bytes from the specified column offset into the buffer as an array, starting at the given buffer offset.
+            (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <remarks>
+            If you pass a buffer that is null, <see cref="M:Umbraco.Core.Persistence.BulkDataReader.GetBytes(System.Int32,System.Int64,System.Byte[],System.Int32,System.Int32)"/> returns the length of the row in bytes.
+            </remarks>
+            <exception cref="T:System.IndexOutOfRangeException">
+            The index passed was outside the range of 0 through <see cref="P:Umbraco.Core.Persistence.BulkDataReader.FieldCount"/>.
+            </exception>
+            <param name="i">
+            The zero-based column ordinal.
+            </param>
+            <param name="fieldOffset">
+            The index within the field from which to start the read operation.
+            </param>
+            <param name="buffer">
+            The buffer into which to read the stream of bytes.
+            </param>
+            <param name="bufferoffset">
+            The index for buffer to start the read operation.
+            </param>
+            <param name="length">
+            The number of bytes to read.
+            </param>
+            <returns>
+            The actual number of bytes read.
+            </returns>
+            <seealso cref="M:System.Data.IDataRecord.GetBytes(System.Int32,System.Int64,System.Byte[],System.Int32,System.Int32)"/>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.GetChar(System.Int32)">
+            <summary>
+            Gets the value of the specified column as a <see cref="T:System.Char"/>.  (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <exception cref="T:System.IndexOutOfRangeException">
+            The index passed was outside the range of 0 through <see cref="P:Umbraco.Core.Persistence.BulkDataReader.FieldCount"/>.
+            </exception>
+            <param name="i">
+            The zero-based column ordinal.
+            </param>
+            <returns>
+            The value of the column.
+            </returns>
+            <seealso cref="M:System.Data.IDataRecord.GetChar(System.Int32)"/>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.GetChars(System.Int32,System.Int64,System.Char[],System.Int32,System.Int32)">
+            <summary>
+            Reads a stream of characters from the specified column offset into the buffer as an array, starting at the given buffer offset.
+            (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <remarks>
+            If you pass a buffer that is null, <see cref="M:Umbraco.Core.Persistence.BulkDataReader.GetChars(System.Int32,System.Int64,System.Char[],System.Int32,System.Int32)"/> returns the length of the row in bytes.
+            </remarks>
+            <exception cref="T:System.IndexOutOfRangeException">
+            The index passed was outside the range of 0 through <see cref="P:Umbraco.Core.Persistence.BulkDataReader.FieldCount"/>.
+            </exception>
+            <param name="i">
+            The zero-based column ordinal.
+            </param>
+            <param name="fieldoffset">
+            The index within the field from which to start the read operation.
+            </param>
+            <param name="buffer">
+            The buffer into which to read the stream of characters.
+            </param>
+            <param name="bufferoffset">
+            The index for buffer to start the read operation.
+            </param>
+            <param name="length">
+            The number of characters to read.
+            </param>
+            <returns>
+            The actual number of characters read.
+            </returns>
+            <seealso cref="M:System.Data.IDataRecord.GetChars(System.Int32,System.Int64,System.Char[],System.Int32,System.Int32)"/>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.GetData(System.Int32)">
+            <summary>
+            Returns an IDataReader for the specified column ordinal. (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <remarks>
+            <see cref="T:System.Data.SqlClient.SqlBulkCopy"/> does not support nested result sets so this method always returns null.
+            </remarks>
+            <exception cref="T:System.IndexOutOfRangeException">
+            The index passed was outside the range of 0 through <see cref="P:Umbraco.Core.Persistence.BulkDataReader.FieldCount"/>.
+            </exception>
+            <param name="i">
+            The zero-based column ordinal.
+            </param>
+            <returns>
+            The <see cref="T:System.Data.IDataReader"/> for the specified column ordinal (null).
+            </returns>
+            <seealso cref="M:System.Data.IDataRecord.GetData(System.Int32)"/>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.GetDataTypeName(System.Int32)">
+            <summary>
+            The data type information for the specified field. (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <exception cref="T:System.IndexOutOfRangeException">
+            The index passed was outside the range of 0 through <see cref="P:Umbraco.Core.Persistence.BulkDataReader.FieldCount"/>.
+            </exception>
+            <param name="i">
+            The zero-based column ordinal.
+            </param>
+            <returns>
+            The data type information for the specified field.
+            </returns>
+            <seealso cref="M:System.Data.IDataRecord.GetDataTypeName(System.Int32)"/>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.GetDateTime(System.Int32)">
+            <summary>
+            Gets the value of the specified column as a <see cref="T:System.DateTime"/>.  (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <exception cref="T:System.IndexOutOfRangeException">
+            The index passed was outside the range of 0 through <see cref="P:Umbraco.Core.Persistence.BulkDataReader.FieldCount"/>.
+            </exception>
+            <param name="i">
+            The zero-based column ordinal.
+            </param>
+            <returns>
+            The value of the column.
+            </returns>
+            <seealso cref="M:System.Data.IDataRecord.GetDateTime(System.Int32)"/>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.GetDateTimeOffset(System.Int32)">
+            <summary>
+            Gets the value of the specified column as a <see cref="T:System.DateTimeOffset"/>.
+            </summary>
+            <exception cref="T:System.IndexOutOfRangeException">
+            The index passed was outside the range of 0 through <see cref="P:Umbraco.Core.Persistence.BulkDataReader.FieldCount"/>.
+            </exception>
+            <param name="i">
+            The zero-based column ordinal.
+            </param>
+            <returns>
+            The value of the column.
+            </returns>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.GetDecimal(System.Int32)">
+            <summary>
+            Gets the value of the specified column as a <see cref="T:System.Decimal"/>.  (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <exception cref="T:System.IndexOutOfRangeException">
+            The index passed was outside the range of 0 through <see cref="P:Umbraco.Core.Persistence.BulkDataReader.FieldCount"/>.
+            </exception>
+            <param name="i">
+            The zero-based column ordinal.
+            </param>
+            <returns>
+            The value of the column.
+            </returns>
+            <seealso cref="M:System.Data.IDataRecord.GetDecimal(System.Int32)"/>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.GetDouble(System.Int32)">
+            <summary>
+            Gets the value of the specified column as a <see cref="T:System.Double"/>.  (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <exception cref="T:System.IndexOutOfRangeException">
+            The index passed was outside the range of 0 through <see cref="P:Umbraco.Core.Persistence.BulkDataReader.FieldCount"/>.
+            </exception>
+            <param name="i">
+            The zero-based column ordinal.
+            </param>
+            <returns>
+            The value of the column.
+            </returns>
+            <seealso cref="M:System.Data.IDataRecord.GetDouble(System.Int32)"/>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.GetFieldType(System.Int32)">
+            <summary>
+            Gets the <see cref="T:System.Type"/> information corresponding to the type of <see cref="T:System.Object"/> that would be returned from <see cref="M:Umbraco.Core.Persistence.BulkDataReader.GetValue(System.Int32)"/>.
+            (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <exception cref="T:System.IndexOutOfRangeException">
+            The index passed was outside the range of 0 through <see cref="P:Umbraco.Core.Persistence.BulkDataReader.FieldCount"/>.
+            </exception>
+            <param name="i">
+            The zero-based column ordinal.
+            </param>
+            <returns>
+            The <see cref="T:System.Type"/> information corresponding to the type of <see cref="T:System.Object"/> that would be returned from <see cref="M:Umbraco.Core.Persistence.BulkDataReader.GetValue(System.Int32)"/>.
+            </returns>
+            <seealso cref="M:System.Data.IDataRecord.GetFieldType(System.Int32)"/>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.GetFloat(System.Int32)">
+            <summary>
+            Gets the value of the specified column as a <see cref="T:System.Single"/>.  (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <exception cref="T:System.IndexOutOfRangeException">
+            The index passed was outside the range of 0 through <see cref="P:Umbraco.Core.Persistence.BulkDataReader.FieldCount"/>.
+            </exception>
+            <param name="i">
+            The zero-based column ordinal.
+            </param>
+            <returns>
+            The value of the column.
+            </returns>
+            <seealso cref="M:System.Data.IDataRecord.GetFloat(System.Int32)"/>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.GetGuid(System.Int32)">
+            <summary>
+            Gets the value of the specified column as a <see cref="T:System.Guid"/>.  (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <exception cref="T:System.IndexOutOfRangeException">
+            The index passed was outside the range of 0 through <see cref="P:Umbraco.Core.Persistence.BulkDataReader.FieldCount"/>.
+            </exception>
+            <param name="i">
+            The zero-based column ordinal.
+            </param>
+            <returns>
+            The value of the column.
+            </returns>
+            <seealso cref="M:System.Data.IDataRecord.GetGuid(System.Int32)"/>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.GetInt16(System.Int32)">
+            <summary>
+            Gets the value of the specified column as a <see cref="T:System.Int16"/>.  (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <exception cref="T:System.IndexOutOfRangeException">
+            The index passed was outside the range of 0 through <see cref="P:Umbraco.Core.Persistence.BulkDataReader.FieldCount"/>.
+            </exception>
+            <param name="i">
+            The zero-based column ordinal.
+            </param>
+            <returns>
+            The value of the column.
+            </returns>
+            <seealso cref="M:System.Data.IDataRecord.GetInt16(System.Int32)"/>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.GetInt32(System.Int32)">
+            <summary>
+            Gets the value of the specified column as a <see cref="T:System.Int32"/>.  (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <exception cref="T:System.IndexOutOfRangeException">
+            The index passed was outside the range of 0 through <see cref="P:Umbraco.Core.Persistence.BulkDataReader.FieldCount"/>.
+            </exception>
+            <param name="i">
+            The zero-based column ordinal.
+            </param>
+            <returns>
+            The value of the column.
+            </returns>
+            <seealso cref="M:System.Data.IDataRecord.GetInt32(System.Int32)"/>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.GetInt64(System.Int32)">
+            <summary>
+            Gets the value of the specified column as a <see cref="T:System.Int64"/>.  (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <exception cref="T:System.IndexOutOfRangeException">
+            The index passed was outside the range of 0 through <see cref="P:Umbraco.Core.Persistence.BulkDataReader.FieldCount"/>.
+            </exception>
+            <param name="i">
+            The zero-based column ordinal.
+            </param>
+            <returns>
+            The value of the column.
+            </returns>
+            <seealso cref="M:System.Data.IDataRecord.GetInt64(System.Int32)"/>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.GetName(System.Int32)">
+            <summary>
+            Gets the name for the field to find. (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <exception cref="T:System.IndexOutOfRangeException">
+            The index passed was outside the range of 0 through <see cref="P:Umbraco.Core.Persistence.BulkDataReader.FieldCount"/>.
+            </exception>
+            <param name="i">
+            The zero-based column ordinal.
+            </param>
+            <returns>
+            The name of the field or the empty string (""), if there is no value to return.
+            </returns>
+            <seealso cref="M:System.Data.IDataRecord.GetName(System.Int32)"/>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.GetOrdinal(System.String)">
+            <summary>
+            Return the index of the named field. (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <exception cref="T:System.IndexOutOfRangeException">
+            The index of the named field was not found.
+            </exception>
+            <param name="name">
+            The name of the field to find.
+            </param>
+            <returns>
+            The index of the named field.
+            </returns>
+            <seealso cref="M:System.Data.IDataRecord.GetOrdinal(System.String)"/>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.GetSchemaTable">
+            <summary>
+            Returns a <see cref="T:System.Data.DataTable"/> that describes the column metadata of the <see cref="T:System.Data.IDataReader"/>. (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <exception cref="T:System.InvalidOperationException">
+            The <see cref="T:System.Data.IDataReader"/> is closed.
+            </exception>
+            <returns>
+            A <see cref="T:System.Data.DataTable"/> that describes the column metadata.
+            </returns>
+            <seealso cref="M:System.Data.IDataReader.GetSchemaTable"/>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.GetString(System.Int32)">
+            <summary>
+            Gets the value of the specified column as a <see cref="T:System.String"/>. (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <exception cref="T:System.IndexOutOfRangeException">
+            The index passed was outside the range of 0 through <see cref="P:Umbraco.Core.Persistence.BulkDataReader.FieldCount"/>.
+            </exception>
+            <param name="i">
+            The zero-based column ordinal.
+            </param>
+            <returns>
+            The value of the column.
+            </returns>
+            <seealso cref="M:System.Data.IDataRecord.GetString(System.Int32)"/>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.GetTimeSpan(System.Int32)">
+            <summary>
+            Gets the value of the specified column as a <see cref="T:System.TimeSpan"/>.
+            </summary>
+            <exception cref="T:System.IndexOutOfRangeException">
+            The index passed was outside the range of 0 through <see cref="P:Umbraco.Core.Persistence.BulkDataReader.FieldCount"/>.
+            </exception>
+            <param name="i">
+            The zero-based column ordinal.
+            </param>
+            <returns>
+            The value of the column.
+            </returns>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.GetValue(System.Int32)">
+            <summary>
+            Gets the value of the specified column as a <see cref="T:System.Object"/>. (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <exception cref="T:System.IndexOutOfRangeException">
+            The index passed was outside the range of 0 through <see cref="P:Umbraco.Core.Persistence.BulkDataReader.FieldCount"/>.
+            </exception>
+            <param name="i">
+            The zero-based column ordinal.
+            </param>
+            <returns>
+            The value of the column.
+            </returns>
+            <seealso cref="M:System.Data.IDataRecord.GetValue(System.Int32)"/>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.GetValues(System.Object[])">
+            <summary>
+            Populates an array of objects with the column values of the current record. (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <exception cref="T:System.ArgumentNullException">
+            <paramref name="values"/> was null.
+            </exception>
+            <param name="values">
+            An array of <see cref="T:System.Object"/> to copy the attribute fields into.
+            </param>
+            <returns>
+            The number of instances of <see cref="T:System.Object"/> in the array.
+            </returns>
+            <seealso cref="M:System.Data.IDataRecord.GetValues(System.Object[])"/>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.IsDBNull(System.Int32)">
+            <summary>
+            Return whether the specified field is set to null. (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <exception cref="T:System.IndexOutOfRangeException">
+            The index passed was outside the range of 0 through <see cref="P:Umbraco.Core.Persistence.BulkDataReader.FieldCount"/>.
+            </exception>
+            <param name="i">
+            The zero-based column ordinal.
+            </param>
+            <returns>
+            True if the specified field is set to null; otherwise, false.
+            </returns>
+            <seealso cref="M:System.Data.IDataRecord.IsDBNull(System.Int32)"/>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.NextResult">
+            <summary>
+            Advances the data reader to the next result, when reading the results of batch SQL statements. (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <remarks>
+            <see cref="T:System.Data.IDataReader"/> for <see cref="T:System.Data.SqlClient.SqlBulkCopy"/> returns a single result set so false is always returned.
+            </remarks>
+            <returns>
+            True if there are more rows; otherwise, false. <see cref="T:System.Data.IDataReader"/> for <see cref="T:System.Data.SqlClient.SqlBulkCopy"/> returns a single result set so false is always returned.
+            </returns>
+            <seealso cref="M:System.Data.IDataReader.NextResult"/>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.Read">
+            <summary>
+            Advances the <see cref="T:System.Data.IDataReader"/> to the next record. (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <returns>
+            True if there are more rows; otherwise, false.
+            </returns>
+            <seealso cref="M:System.Data.IDataReader.Read"/>
+        </member>
+        <member name="F:Umbraco.Core.Persistence.BulkDataReader._disposed">
+            <summary>
+            Has the object been disposed?
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.Dispose(System.Boolean)">
+            <summary>
+            Dispose of any disposable and expensive resources.
+            </summary>
+            <param name="disposing">
+            Is this call the result of a <see cref="M:System.IDisposable.Dispose"/> call?
+            </param>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources. (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <seealso cref="M:System.IDisposable.Dispose"/>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.BulkDataReader.Finalize">
+            <summary>
+            Finalizer
+            </summary>
+            <remarks>
+            <see cref="T:Umbraco.Core.Persistence.BulkDataReader"/> has no unmanaged resources but a subclass may thus a finalizer is required.
+            </remarks>
+        </member>
+        <member name="P:Umbraco.Core.Persistence.BulkDataReader.ColumnMappings">
+            <summary>
+            The mapping from the row set input to the target table's columns.
+            </summary>
+            <remarks>
+            If necessary, <see cref="M:Umbraco.Core.Persistence.BulkDataReader.AddSchemaTableRows"/> will be called to initialize the mapping.
+            </remarks>
+        </member>
+        <member name="P:Umbraco.Core.Persistence.BulkDataReader.SchemaName">
+            <summary>
+            The name of the input row set's schema.
+            </summary>
+            <remarks>
+            This may be different from the target schema but usually they are identical.
+            </remarks>
+        </member>
+        <member name="P:Umbraco.Core.Persistence.BulkDataReader.TableName">
+            <summary>
+            The name of the input row set's table.
+            </summary>
+            <remarks>
+            This may be different from the target table but usually they are identical.
+            </remarks>
+        </member>
+        <member name="P:Umbraco.Core.Persistence.BulkDataReader.Depth">
+            <summary>
+            Gets a value indicating the depth of nesting for the current row. (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <remarks>
+            <see cref="T:System.Data.SqlClient.SqlBulkCopy"/> does not support nested result sets so this method always returns 0.
+            </remarks>
+            <seealso cref="P:System.Data.IDataReader.Depth"/>
+        </member>
+        <member name="P:Umbraco.Core.Persistence.BulkDataReader.FieldCount">
+            <summary>
+            Gets the number of columns in the current row. (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <seealso cref="P:System.Data.IDataRecord.FieldCount"/>
+        </member>
+        <member name="P:Umbraco.Core.Persistence.BulkDataReader.IsClosed">
+            <summary>
+            Gets a value indicating whether the data reader is closed. (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <seealso cref="P:System.Data.IDataReader.IsClosed"/>
+        </member>
+        <member name="P:Umbraco.Core.Persistence.BulkDataReader.Item(System.Int32)">
+            <summary>
+            Gets the column located at the specified index. (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <exception cref="T:System.IndexOutOfRangeException">
+            No column with the specified index was found.
+            </exception>
+            <param name="i">
+            The zero-based index of the column to get.
+            </param>
+            <returns>
+            The column located at the specified index as an <see cref="T:System.Object"/>.
+            </returns>
+            <seealso cref="P:IDataRecord.Item(Int32)"/>
+        </member>
+        <member name="P:Umbraco.Core.Persistence.BulkDataReader.Item(System.String)">
+            <summary>
+            Gets the column with the specified name. (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <exception cref="T:System.IndexOutOfRangeException">
+            No column with the specified name was found.
+            </exception>
+            <param name="name">
+            The name of the column to find.
+            </param>
+            <returns>
+            The column located at the specified name as an <see cref="T:System.Object"/>.
+            </returns>
+            <seealso cref="P:IDataRecord.Item(String)"/>
+        </member>
+        <member name="P:Umbraco.Core.Persistence.BulkDataReader.RecordsAffected">
+            <summary>
+            Gets the number of rows changed, inserted, or deleted by execution of the SQL statement. (Inherited from <see cref="T:System.Data.IDataReader"/>.)
+            </summary>
+            <remarks>
+            Always returns -1 which is the expected behaviour for statements.
+            </remarks>
+            <seealso cref="P:System.Data.IDataReader.RecordsAffected"/>
+        </member>
         <member name="T:Umbraco.Core.Persistence.Factories.TaskFactory">
             <summary>
             Creates the model mappings for Tasks
@@ -6055,6 +6783,11 @@
         <member name="T:Umbraco.Core.Persistence.Migrations.IMigration">
             <summary>
             Marker interface for database migrations
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Persistence.Migrations.Upgrades.TargetVersionSevenFiveFive.UpdateAllowedMediaTypesAtRoot">
+            <summary>
+            See: http://issues.umbraco.org/issue/U4-4196
             </summary>
         </member>
         <member name="T:Umbraco.Core.Persistence.Migrations.Upgrades.TargetVersionSevenFiveZero.RemoveStylesheetDataAndTablesAgain">
@@ -6071,6 +6804,11 @@
             <summary>
             Represents a <see cref="T:Umbraco.Core.Models.TaskType"/> to DTO mapper used to translate the properties of the public api 
             implementation to that of the database's DTO as sql: [tableName].[columnName].
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Persistence.Migrations.Upgrades.TargetVersionSevenSixZero.UpdateUniqueIndexOnCmsPropertyData">
+            <summary>
+            See: http://issues.umbraco.org/issue/U4-9188
             </summary>
         </member>
         <member name="T:Umbraco.Core.Persistence.Migrations.Upgrades.TargetVersionSevenThreeTwo.EnsureMigrationsTableIdentityIsCorrect">
@@ -7081,6 +7819,55 @@
             <summary>
             This fixes the storage of user languages from the old format like en_us to en-US
             </summary>
+        </member>
+        <member name="T:Umbraco.Core.Persistence.PocoDataDataReader`2">
+            <summary>
+            A data reader used for reading collections of PocoData entity types
+            </summary>
+            <remarks>
+            We are using a custom data reader so that tons of memory is not consumed when rebuilding this table, previously
+            we'd generate SQL insert statements, but we'd have to put all of the XML structures into memory first. Alternatively
+            we can use .net's DataTable, but this also requires putting everything into memory. By using a DataReader we don't have to 
+            store every content item and it's XML structure in memory to get it into the DB, we can stream it into the db with this 
+            reader.
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.PocoDataDataReader`2.AddSchemaTableRows">
+            <summary>
+            This will automatically add the schema rows based on the Poco table definition and the columns passed in
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.PocoDataDataReader`2.GetValue(System.Int32)">
+            <summary>
+            Get the value from the column index for the current object
+            </summary>
+            <param name="i"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.PocoDataDataReader`2.Read">
+            <summary>
+            Advance the cursor
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.PocoDataDataReader`2.Dispose(System.Boolean)">
+            <summary>
+            Ensure the enumerator is disposed
+            </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="T:Umbraco.Core.Persistence.Querying.QueryExtensions">
+            <summary>
+            SD: This is a horrible hack but unless we break compatibility with anyone who's actually implemented IQuery{T} there's not much we can do.
+            The IQuery{T} interface is useless without having a GetWhereClauses method and cannot be used for tests.
+            We have to wait till v8 to make this change I suppose.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Querying.QueryExtensions.GetWhereClauses``1(Umbraco.Core.Persistence.Querying.IQuery{``0})">
+            <summary>
+            Returns all translated where clauses and their sql parameters
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:Umbraco.Core.Persistence.Repositories.PetaPocoRepositoryBase`2">
             <summary>
@@ -8918,7 +9705,7 @@
             for when there is some processing overhead (i.e. Type finding in assemblies) to return the Types used to instantiate the instances. 
             In some these cases we don't want to have to type-find during application startup, only when we need to resolve the instances.</para>
             <para>Important notes about this resolver: it does not support Insert or Remove and therefore does not support any ordering unless 
-            the types are marked with the WeightedPluginAttribute.</para>
+            the types are marked with the WeightAttribute.</para>
             </remarks>
         </member>
         <member name="T:Umbraco.Core.ObjectResolution.ManyObjectsResolverBase`2">
@@ -8976,7 +9763,7 @@
             </summary>
             <returns>The sorted resolved object instances.</returns>
             <remarks>
-            <para>The order is based upon the <c>WeightedPluginAttribute</c> and <c>DefaultPluginWeight</c>.</para>
+            <para>The order is based upon the <c>WeightAttribute</c> and <c>DefaultPluginWeight</c>.</para>
             <para>Weights are sorted ascendingly (lowest weights come first).</para>
             </remarks>
         </member>
@@ -9189,7 +9976,7 @@
             <summary>
             Gets or sets the default type weight.
             </summary>
-            <remarks>Determines the weight of types that do not have a <c>WeightedPluginAttribute</c> set on 
+            <remarks>Determines the weight of types that do not have a <c>WeightAttribute</c> set on 
             them, when calling <c>GetSortedValues</c>.</remarks>
         </member>
         <member name="P:Umbraco.Core.ObjectResolution.ManyObjectsResolverBase`2.Values">
@@ -11293,6 +12080,30 @@
             <param name="locker">The object to lock.</param>
             <remarks>Should always be used within a using block.</remarks>
         </member>
+        <member name="M:Umbraco.Core.Models.UmbracoEntityExtensions.ValidatePathWithException(Umbraco.Core.Models.Rdbms.NodeDto)">
+            <summary>
+            Does a quick check on the entity's set path to ensure that it's valid and consistent
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Models.UmbracoEntityExtensions.ValidatePath(Umbraco.Core.Models.EntityBase.IUmbracoEntity)">
+            <summary>
+            Does a quick check on the entity's set path to ensure that it's valid and consistent
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Models.UmbracoEntityExtensions.EnsureValidPath``1(``0,Umbraco.Core.Logging.ILogger,System.Func{``0,``0},System.Action{``0})">
+            <summary>
+            This will validate the entity's path and if it's invalid it will fix it, if fixing is required it will recursively 
+            check and fix all ancestors if required.
+            </summary>
+            <param name="entity"></param>
+            <param name="logger"></param>
+            <param name="getParent">A callback specified to retrieve the parent entity of the entity</param>
+            <param name="update">A callback specified to update a fixed entity</param>
+        </member>
         <member name="T:Umbraco.Core.Packaging.IPackageExtraction">
             <summary>
             Used to access an umbraco package file
@@ -11544,6 +12355,20 @@
             MSSQL has a DateTime standard that is unambiguous and works on all servers:
             YYYYMMDD HH:mm:ss
             </remarks>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.SqlSyntax.MicrosoftSqlSyntaxProviderBase`1.GetSqlDbType(System.Type)">
+            <summary>
+            This uses a the DbTypeMap created and custom mapping to resolve the SqlDbType
+            </summary>
+            <param name="clrType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.SqlSyntax.MicrosoftSqlSyntaxProviderBase`1.GetSqlDbType(System.Data.DbType)">
+            <summary>
+            Returns the mapped SqlDbType for the DbType specified
+            </summary>
+            <param name="dbType"></param>
+            <returns></returns>
         </member>
         <member name="T:Umbraco.Core.PropertyEditors.DefaultPropertyValueConverterAttribute">
             <summary>
@@ -13149,7 +13974,11 @@
             Represents the content type that a <see cref="T:Umbraco.Core.Models.Media"/> object is based on
             </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "T:Umbraco.Core.Models.IMediaType" -->
+        <member name="T:Umbraco.Core.Models.IMediaType">
+            <summary>
+            Defines a ContentType, which Media is based on
+            </summary>
+        </member>
         <member name="M:Umbraco.Core.Models.IMediaType.DeepCloneWithResetIdentities(System.String)">
             <summary>
             Creates a deep clone of the current entity with its identity/alias and it's property identities reset
@@ -13713,6 +14542,15 @@
             <param name="media"></param>
             <returns></returns>
         </member>
+        <member name="M:Umbraco.Core.Models.UserExtensions.IsAdmin(Umbraco.Core.Models.Membership.IUser)">
+            <summary>
+            Determines whether this user is an admin.
+            </summary>
+            <param name="user"></param>
+            <returns>
+            	<c>true</c> if this user is admin; otherwise, <c>false</c>.
+            </returns>
+        </member>
         <member name="T:Umbraco.Core.NetworkHelper">
             <summary>
             Currently just used to get the machine name in med trust and to format a machine name for use with file names
@@ -13750,7 +14588,13 @@
             A resolver to return all IApplicationEvents objects
             </summary>
             <remarks>
-            This is disposable because after the app has started it should be disposed to release any memory being occupied by instances.
+            <para>This is disposable because after the app has started it should be disposed to release any memory being occupied by instances.</para>
+            <para>Ordering handlers: handlers are ordered by (ascending) weight. By default, handlers from the Umbraco.* or Concorde.*
+            assemblies have a -100 weight whereas any other handler has a weight of +100. A custom weight can be assigned to a handler
+            by marking the class with the WeightAttribute. For example, the CacheRefresherEventHandler is marked with [Weight(int.MinValue)]
+            because its events need to run before anything else. Positive weights are considered "user-space" while negative weights are
+            "core". Finally, users can register a filter to process the list (after it has been ordered) and re-order it, or remove handlers.</para>
+            <para>BEWARE! handlers order is an important thing, and removing handlers or reordering handlers can have unexpected consequences.</para>
             </remarks>
         </member>
         <member name="M:Umbraco.Core.ObjectResolution.ApplicationEventsResolver.#ctor(System.IServiceProvider,Umbraco.Core.Logging.ILogger,System.Collections.Generic.IEnumerable{System.Type})">
@@ -13759,7 +14603,7 @@
             </summary>
             <param name="logger"></param>
             <param name="applicationEventHandlers"></param>
-            <param name="serviceProvider"></param>		
+            <param name="serviceProvider"></param>
         </member>
         <member name="M:Umbraco.Core.ObjectResolution.ApplicationEventsResolver.InstantiateLegacyStartupHandlers">
             <summary>
@@ -13779,7 +14623,7 @@
         </member>
         <member name="P:Umbraco.Core.ObjectResolution.ApplicationEventsResolver.InstanceTypes">
             <summary>
-            Override in order to only return types of IApplicationEventHandler and above, 
+            Override in order to only return types of IApplicationEventHandler and above,
             do not include the legacy types of IApplicationStartupHandler
             </summary>
         </member>
@@ -13787,6 +14631,17 @@
             <summary>
             Gets the <see cref="T:Umbraco.Core.IApplicationEventHandler"/> implementations.
             </summary>
+        </member>
+        <member name="P:Umbraco.Core.ObjectResolution.ApplicationEventsResolver.FilterCollection">
+            <summary>
+            Gets or sets a delegate to filter the event handler list (EXPERT!).
+            </summary>
+            <remarks>
+            <para>This can be set on startup in the pre-boot process in either a custom boot manager or global.asax (UmbracoApplication).</para>
+            <para>Allows custom logic to execute in order to filter and/or re-order the event handlers prior to executing.</para>
+            <para>To be used by custom boot sequences where the boot loader needs to remove some handlers, or raise their priority.</para>
+            <para>Filtering the event handler collection can have ugly consequences. Use with care.</para>
+            </remarks>
         </member>
         <member name="P:Umbraco.Core.ObjectResolution.ApplicationEventsResolver.IsDisposed">
             <summary>
@@ -15488,7 +16343,7 @@
             Safely inserts a record, or updates if it exists, based on a unique constraint.
             </summary>
             <param name="db"></param>
-            <param name="poco"></param>       
+            <param name="poco"></param>
             <returns>The action that executed, either an insert or an update. If an insert occurred and a PK value got generated, the poco object
             passed in will contain the updated value.</returns>
             <remarks>
@@ -15506,7 +16361,7 @@
             </summary>
             <param name="db"></param>
             <param name="poco"></param>
-            <param name="updateArgs"></param>      
+            <param name="updateArgs"></param>
             <param name="updateCommand">If the entity has a composite key they you need to specify the update command explicitly</param>
             <returns>The action that executed, either an insert or an update. If an insert occurred and a PK value got generated, the poco object
             passed in will contain the updated value.</returns>
@@ -15526,6 +16381,32 @@
             <param name="value"></param>
             <returns></returns>
         </member>
+        <member name="M:Umbraco.Core.Persistence.PetaPocoExtensions.BulkInsertRecords``1(Umbraco.Core.Persistence.Database,System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Performs the bulk insertion in the context of a current transaction with an optional parameter to complete the transaction
+            when finished
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="db"></param>
+            <param name="collection"></param>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.PetaPocoExtensions.BulkInsertRecords``1(Umbraco.Core.Persistence.Database,System.Collections.Generic.IEnumerable{``0},Umbraco.Core.Persistence.Transaction,Umbraco.Core.Persistence.SqlSyntax.ISqlSyntaxProvider,System.Boolean,System.Boolean)">
+            <summary>
+            Performs the bulk insertion in the context of a current transaction with an optional parameter to complete the transaction
+            when finished
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="db"></param>
+            <param name="collection"></param>
+            <param name="tr"></param>
+            <param name="syntaxProvider"></param>
+            <param name="useNativeSqlPlatformBulkInsert">
+            If this is false this will try to just generate bulk insert statements instead of using the current SQL platform's bulk
+            insert logic. For SQLCE, bulk insert statements do not work so if this is false it will insert one at a time.
+            </param>
+            <param name="commitTrans"></param>
+            <returns>The number of items inserted</returns>
+        </member>
         <member name="M:Umbraco.Core.Persistence.PetaPocoExtensions.BulkInsertRecords``1(Umbraco.Core.Persistence.Database,System.Collections.Generic.IEnumerable{``0},Umbraco.Core.Persistence.Transaction,System.Boolean)">
             <summary>
             Performs the bulk insertion in the context of a current transaction with an optional parameter to complete the transaction
@@ -15537,22 +16418,85 @@
             <param name="tr"></param>
             <param name="commitTrans"></param>
         </member>
-        <member name="M:Umbraco.Core.Persistence.PetaPocoExtensions.GenerateBulkInsertCommand``1(Umbraco.Core.Persistence.Database,System.Collections.Generic.IEnumerable{``0},System.Data.IDbConnection,System.String[]@)">
+        <member name="M:Umbraco.Core.Persistence.PetaPocoExtensions.GenerateBulkInsertCommand``1(Umbraco.Core.Persistence.Database,Umbraco.Core.Persistence.Database.PocoData,System.Collections.Generic.IEnumerable{``0},System.String[]@)">
             <summary>
             Creates a bulk insert command
             </summary>
             <typeparam name="T"></typeparam>
             <param name="db"></param>
             <param name="collection"></param>
-            <param name="connection"></param>        
             <param name="sql"></param>
+            <param name="pd"></param>
             <returns>Sql commands with populated command parameters required to execute the sql statement</returns>
             <remarks>
-            The limits for number of parameters are 2100 (in sql server, I think there's many more allowed in mysql). So 
-            we need to detect that many params and split somehow. 
-            For some reason the 2100 limit is not actually allowed even though the exception from sql server mentions 2100 as a max, perhaps it is 2099 
+            The limits for number of parameters are 2100 (in sql server, I think there's many more allowed in mysql). So
+            we need to detect that many params and split somehow.
+            For some reason the 2100 limit is not actually allowed even though the exception from sql server mentions 2100 as a max, perhaps it is 2099
             that is max. I've reduced it to 2000 anyways.
             </remarks>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.PetaPocoExtensions.IncludeColumn(Umbraco.Core.Persistence.Database.PocoData,System.Collections.Generic.KeyValuePair{System.String,Umbraco.Core.Persistence.Database.PocoColumn})">
+            <summary>
+            A filter used below a few times to get all columns except result cols and not the primary key if it is auto-incremental
+            </summary>
+            <param name="data"></param>
+            <param name="column"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.PetaPocoExtensions.NativeSqlPlatformBulkInsertRecords``1(Umbraco.Core.Persistence.Database,Umbraco.Core.Persistence.SqlSyntax.ISqlSyntaxProvider,Umbraco.Core.Persistence.Database.PocoData,System.Collections.Generic.IEnumerable{``0},System.Int32@)">
+            <summary>
+            Bulk insert records with Sql BulkCopy or TableDirect or whatever sql platform specific bulk insert records should be used
+            </summary>
+            <param name="db"></param>
+            <param name="syntaxProvider"></param>
+            <param name="pd"></param>
+            <param name="collection"></param>
+            <param name="processed">The number of records inserted</param>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.PetaPocoExtensions.BulkInsertRecordsSqlCe``1(Umbraco.Core.Persistence.Database,Umbraco.Core.Persistence.Database.PocoData,System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Logic used to perform bulk inserts with SqlCe's TableDirect
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="db"></param>
+            <param name="pd"></param>
+            <param name="collection"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.PetaPocoExtensions.BulkInsertRecordsSqlServer``1(Umbraco.Core.Persistence.Database,Umbraco.Core.Persistence.SqlSyntax.SqlServerSyntaxProvider,Umbraco.Core.Persistence.Database.PocoData,System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Logic used to perform bulk inserts with SqlServer's BulkCopy
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="db"></param>
+            <param name="sqlSyntaxProvider"></param>
+            <param name="pd"></param>
+            <param name="collection"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.PetaPocoExtensions.GetTypedConnection``1(System.Data.IDbConnection)">
+            <summary>
+            Returns the underlying connection as a typed connection - this is used to unwrap the profiled mini profiler stuff
+            </summary>
+            <typeparam name="TConnection"></typeparam>
+            <param name="connection"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.PetaPocoExtensions.GetTypedTransaction``1(System.Data.IDbTransaction)">
+            <summary>
+            Returns the underlying connection as a typed connection - this is used to unwrap the profiled mini profiler stuff
+            </summary>
+            <typeparam name="TTransaction"></typeparam>
+            <param name="connection"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.PetaPocoExtensions.GetTypedCommand``1(System.Data.IDbCommand)">
+            <summary>
+            Returns the underlying connection as a typed connection - this is used to unwrap the profiled mini profiler stuff
+            </summary>
+            <typeparam name="TCommand"></typeparam>
+            <param name="command"></param>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Core.Persistence.PetaPocoExtensions.CreateDatabaseSchema(Umbraco.Core.Persistence.Database)">
             <summary>
@@ -15576,23 +16520,75 @@
             Extension methods adding strong types to PetaPoco's Sql Builder
             </summary>
         </member>
-        <member name="T:Umbraco.Core.Persistence.Querying.BaseExpressionHelper">
+        <member name="T:Umbraco.Core.Persistence.Querying.CachedExpression">
             <summary>
-            Logic that is shared with the expression helpers
+            Represents an expression which caches the visitor's result.
             </summary>
         </member>
-        <member name="T:Umbraco.Core.Persistence.Querying.QueryExtensions">
+        <member name="M:Umbraco.Core.Persistence.Querying.CachedExpression.Wrap(System.Linq.Expressions.Expression)">
             <summary>
-            SD: This is a horrible hack but unless we break compatibility with anyone who's actually implemented IQuery{T} there's not much we can do.
-            The IQuery{T} interface is useless without having a GetWhereClauses method and cannot be used for tests.
-            We have to wait till v8 to make this change I suppose.
+            Replaces the inner expression.
+            </summary>
+            <param name="expression">expression.</param>
+            <remarks>The new expression is assumed to have different parameter but produce the same SQL statement.</remarks>
+        </member>
+        <member name="P:Umbraco.Core.Persistence.Querying.CachedExpression.InnerExpression">
+            <summary>
+            Gets or sets the inner Expression.
             </summary>
         </member>
-        <member name="M:Umbraco.Core.Persistence.Querying.QueryExtensions.GetWhereClauses``1(Umbraco.Core.Persistence.Querying.IQuery{``0})">
+        <member name="P:Umbraco.Core.Persistence.Querying.CachedExpression.VisitResult">
             <summary>
-            Returns all translated where clauses and their sql parameters
+            Gets or sets the compiled SQL statement output.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Persistence.Querying.CachedExpression.Visited">
+            <summary>
+            Gets or sets a value indicating whether the cache Expression has been compiled already.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Persistence.Querying.ExpressionVisitorBase">
+            <summary>
+            An expression tree parser to create SQL statements and SQL parameters based on a strongly typed expression.
+            </summary>
+            <remarks>This object is stateful and cannot be re-used to parse an expression.</remarks>
+        </member>
+        <member name="F:Umbraco.Core.Persistence.Querying.ExpressionVisitorBase.SqlParameters">
+            <summary>
+            Gets the list of SQL parameters.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Querying.ExpressionVisitorBase.GetSqlParameters">
+            <summary>
+            Gets the SQL parameters.
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Querying.ExpressionVisitorBase.Visit(System.Linq.Expressions.Expression)">
+            <summary>
+            Visits the expression and produces the corresponding SQL statement.
+            </summary>
+            <param name="expression">The expression</param>
+            <returns>The SQL statement corresponding to the expression.</returns>
+            <remarks>Also populates the SQL parameters.</remarks>
+        </member>
+        <member name="P:Umbraco.Core.Persistence.Querying.ExpressionVisitorBase.Visited">
+            <summary>
+            Gets or sets a value indicating whether the visited expression has been visited already,
+            in which case visiting will just populate the SQL parameters.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Persistence.Querying.ExpressionVisitorBase.SqlSyntax">
+            <summary>
+            Gets or sets the SQL syntax provider for the current database.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Persistence.Querying.PocoToSqlExpressionVisitor`1">
+            <summary>
+            An expression tree parser to create SQL statements and SQL parameters based on a strongly typed expression,
+            based on Umbraco's DTOs.
+            </summary>
+            <remarks>This object is stateful and cannot be re-used to parse an expression.</remarks>
         </member>
         <member name="T:Umbraco.Core.Persistence.Querying.IQuery`1">
             <summary>
@@ -15606,6 +16602,13 @@
             </summary>
             <param name="predicate"></param>
             <returns>This instance so calls to this method are chainable</returns>
+        </member>
+        <member name="T:Umbraco.Core.Persistence.Querying.ModelToSqlExpressionVisitor`1">
+            <summary>
+            An expression tree parser to create SQL statements and SQL parameters based on a strongly typed expression,
+            based on Umbraco's business logic models.
+            </summary>
+            <remarks>This object is stateful and cannot be re-used to parse an expression.</remarks>
         </member>
         <member name="T:Umbraco.Core.Persistence.Querying.Query`1">
             <summary>
@@ -15642,12 +16645,38 @@
             Represents a repository for doing CRUD operations for <see cref="T:Umbraco.Core.Models.IContent"/>
             </summary>
         </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase`2.GetAllVersions(System.Int32)">
+            <summary>
+            Gets a list of all versions for an <see cref="!:TEntity"/> ordered so latest is first
+            </summary>
+            <param name="id">Id of the <see cref="!:TEntity"/> to retrieve versions from</param>
+            <returns>An enumerable list of the same <see cref="!:TEntity"/> object with different versions</returns>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase`2.GetVersionIds(System.Int32,System.Int32)">
+            <summary>
+            Gets a list of all version Ids for the given content item ordered so latest is first
+            </summary>
+            <param name="id"></param>
+            <param name="maxRows">The maximum number of rows to return</param>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase`2.PerformDeleteVersion(System.Int32,System.Guid)">
             <summary>
             Protected method to execute the delete statements for removing a single version for a TEntity item.
             </summary>
             <param name="id">Id of the <see cref="!:TEntity"/> to delete a version from</param>
             <param name="versionId">Guid id of the version to delete</param>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase`2.GetPagedXmlEntriesByPath(System.String,System.Int64,System.Int32,System.String[],System.Int64@)">
+            <summary>
+            Gets paged document descendants as XML by path
+            </summary>
+            <param name="path">Path starts with</param>
+            <param name="pageIndex">Page number</param>
+            <param name="pageSize">Page size</param>
+            <param name="orderBy"></param>
+            <param name="totalRecords">Total records the query would return without paging</param>
+            <returns>A paged enumerable of XML entries of content items</returns>
         </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase`2.Count(System.String)">
             <summary>
@@ -15670,12 +16699,11 @@
             <param name="entity"></param>
             <param name="tagRepo"></param>
         </member>
-        <member name="M:Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase`2.GetPagedResultsByQuery``2(Umbraco.Core.Persistence.Querying.IQuery{`1},System.Int64,System.Int32,System.Int64@,System.Tuple{System.String,System.String},System.Func{Umbraco.Core.Persistence.Sql,System.Collections.Generic.IEnumerable{`1}},System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Boolean,System.Func{System.Tuple{System.String,System.Object[]}})">
+        <member name="M:Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase`2.GetPagedResultsByQuery``1(Umbraco.Core.Persistence.Querying.IQuery{`1},System.Int64,System.Int32,System.Int64@,System.Tuple{System.String,System.String},System.Func{Umbraco.Core.Persistence.Sql,Umbraco.Core.Persistence.Sql,System.Collections.Generic.IEnumerable{`1}},System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Boolean,System.Func{System.Tuple{System.String,System.Object[]}})">
             <summary>
             A helper method for inheritors to get the paged results by query in a way that minimizes queries
             </summary>
             <typeparam name="TDto">The type of the d.</typeparam>
-            <typeparam name="TContentBase">The 'true' entity type (i.e. Content, Member, etc...)</typeparam>
             <param name="query">The query.</param>
             <param name="pageIndex">Index of the page.</param>
             <param name="pageSize">Size of the page.</param>
@@ -15694,6 +16722,13 @@
             Deletes all media files passed in.
             </summary>
             <param name="files"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase`2.GetBaseQuery(Umbraco.Core.Persistence.Repositories.BaseQueryType)">
+            <summary>
+            For Paging, repositories must support returning different query for the query type specified
+            </summary>
+            <param name="queryType"></param>
             <returns></returns>
         </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase`2.DocumentDefinition.#ctor(System.Int32,System.Guid,System.DateTime,System.DateTime,Umbraco.Core.Models.IContentTypeComposition)">
@@ -15744,10 +16779,18 @@
         </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.IRepositoryVersionable`2.GetAllVersions(System.Int32)">
             <summary>
-            Gets a list of all versions for an <see cref="!:TEntity"/>.
+            Gets a list of all versions for an <see cref="!:TEntity"/> ordered so latest is first
             </summary>
             <param name="id">Id of the <see cref="!:TEntity"/> to retrieve versions from</param>
             <returns>An enumerable list of the same <see cref="!:TEntity"/> object with different versions</returns>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.IRepositoryVersionable`2.GetVersionIds(System.Int32,System.Int32)">
+            <summary>
+            Gets a list of all version Ids for the given content item
+            </summary>
+            <param name="id"></param>
+            <param name="maxRows">The maximum number of rows to return</param>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.IRepositoryVersionable`2.GetByVersion(System.Guid)">
             <summary>
@@ -15768,6 +16811,17 @@
             </summary>
             <param name="id">Id of the <see cref="!:TEntity"/> object to delete versions from</param>
             <param name="versionDate">Latest version date</param>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.IRepositoryVersionable`2.GetPagedXmlEntriesByPath(System.String,System.Int64,System.Int32,System.String[],System.Int64@)">
+            <summary>
+            Gets paged content descendants as XML by path
+            </summary>
+            <param name="path">Path starts with</param>
+            <param name="pageIndex">Page number</param>
+            <param name="pageSize">Page size</param>
+            <param name="orderBy"></param>
+            <param name="totalRecords">Total records the query would return without paging</param>
+            <returns>A paged enumerable of XML entries of content items</returns>
         </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.IContentRepository.BuildXmlCache">
             <summary>
@@ -15895,14 +16949,17 @@
             <param name="filter">Search text filter</param>
             <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IContent"/> objects</returns>
         </member>
-        <member name="M:Umbraco.Core.Persistence.Repositories.ContentRepository.CreateContentFromDto(Umbraco.Core.Models.Rdbms.DocumentDto,Umbraco.Core.Models.IContentType,Umbraco.Core.Models.ITemplate,Umbraco.Core.Models.PropertyCollection)">
+        <member name="M:Umbraco.Core.Persistence.Repositories.ContentRepository.ProcessQuery(Umbraco.Core.Persistence.Sql,Umbraco.Core.Persistence.Sql,System.Boolean)">
             <summary>
-            Private method to create a content object from a DocumentDto, which is used by Get and GetByVersion.
+            This is the underlying method that processes most queries for this repository
             </summary>
-            <param name="dto"></param>
-            <param name="contentType"></param>
-            <param name="template"></param>
-            <param name="propCollection"></param>
+            <param name="sqlFull">
+            The full SQL with the outer join to return all data required to create an IContent
+            </param>
+            <param name="sqlIds">
+            The Id SQL without the outer join to just return all document ids - used to process the properties for the content item
+            </param>
+            <param name="withCache"></param>
             <returns></returns>
         </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.ContentRepository.CreateContentFromDto(Umbraco.Core.Models.Rdbms.DocumentDto,System.Guid,Umbraco.Core.Persistence.Sql)">
@@ -16335,15 +17392,6 @@
             <param name="filter">Search text filter</param>
             <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IMedia"/> objects</returns>
         </member>
-        <member name="M:Umbraco.Core.Persistence.Repositories.MediaRepository.CreateMediaFromDto(Umbraco.Core.Models.Rdbms.ContentVersionDto,Umbraco.Core.Models.IMediaType,Umbraco.Core.Models.PropertyCollection)">
-            <summary>
-            Private method to create a media object from a ContentDto
-            </summary>
-            <param name="d"></param>
-            <param name="contentType"></param>
-            <param name="propCollection"></param>
-            <returns></returns>
-        </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.MediaRepository.CreateMediaFromDto(Umbraco.Core.Models.Rdbms.ContentVersionDto,System.Guid,Umbraco.Core.Persistence.Sql)">
             <summary>
             Private method to create a media object from a ContentDto
@@ -16413,15 +17461,6 @@
             <remarks>
             The query supplied will ONLY work with data specifically on the cmsMember table because we are using PetaPoco paging (SQL paging)
             </remarks>
-        </member>
-        <member name="M:Umbraco.Core.Persistence.Repositories.MemberRepository.CreateMemberFromDto(Umbraco.Core.Models.Rdbms.MemberDto,Umbraco.Core.Models.IMemberType,Umbraco.Core.Models.PropertyCollection)">
-            <summary>
-            Private method to create a member object from a MemberDto
-            </summary>
-            <param name="dto"></param>
-            <param name="contentType"></param>
-            <param name="propCollection"></param>
-            <returns></returns>
         </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.MemberRepository.CreateMemberFromDto(Umbraco.Core.Models.Rdbms.MemberDto,System.Guid,Umbraco.Core.Persistence.Sql)">
             <summary>
@@ -16742,7 +17781,7 @@
         </member>
         <member name="T:Umbraco.Core.Persistence.SqlSyntax.SqlServerSyntaxProvider">
             <summary>
-            Represents an SqlSyntaxProvider for Sql Server
+            Represents an SqlSyntaxProvider for Sql Server.
             </summary>
         </member>
         <member name="M:Umbraco.Core.Persistence.SqlSyntax.SqlServerSyntaxProvider.GetVersionName(Umbraco.Core.Persistence.Database)">
@@ -18838,18 +19877,18 @@
             Used for a result on the query to get the associated language for a domain if there is one
             </summary>
         </member>
-        <member name="T:Umbraco.Core.ObjectResolution.WeightedPluginAttribute">
+        <member name="T:Umbraco.Core.ObjectResolution.WeightAttribute">
             <summary>
             Indicates the relative weight of a resolved object type.
             </summary>
         </member>
-        <member name="M:Umbraco.Core.ObjectResolution.WeightedPluginAttribute.#ctor(System.Int32)">
+        <member name="M:Umbraco.Core.ObjectResolution.WeightAttribute.#ctor(System.Int32)">
             <summary>
-            Initializes a new instance of the <see cref="T:Umbraco.Core.ObjectResolution.WeightedPluginAttribute"/> class with a weight.
+            Initializes a new instance of the <see cref="T:Umbraco.Core.ObjectResolution.WeightAttribute"/> class with a weight.
             </summary>
             <param name="weight">The object type weight.</param>
         </member>
-        <member name="P:Umbraco.Core.ObjectResolution.WeightedPluginAttribute.Weight">
+        <member name="P:Umbraco.Core.ObjectResolution.WeightAttribute.Weight">
             <summary>
             Gets or sets the weight of the object type.
             </summary>
@@ -20923,6 +21962,19 @@
             Defines the ContentService, which is an easy access to operations involving <see cref="T:Umbraco.Core.Models.IContent"/>
             </summary>
         </member>
+        <member name="M:Umbraco.Core.Services.IContentService.GetPagedXmlEntries(System.String,System.Int64,System.Int32,System.Int64@)">
+            <summary>
+            Gets all XML entries found in the cmsContentXml table based on the given path
+            </summary>
+            <param name="path">Path starts with</param>
+            <param name="pageIndex">Page number</param>
+            <param name="pageSize">Page size</param>
+            <param name="totalRecords">Total records the query would return without paging</param>
+            <returns>A paged enumerable of XML entries of content items</returns>
+            <remarks>
+            If -1 is passed, then this will return all content xml entries, otherwise will return all descendents from the path
+            </remarks>
+        </member>
         <member name="M:Umbraco.Core.Services.IContentService.BuildXmlCache">
             <summary>
             This builds the Xml document used for the XML cache
@@ -21095,6 +22147,14 @@
             </summary>
             <param name="id"></param>
             <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IContent"/> objects</returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.IContentService.GetVersionIds(System.Int32,System.Int32)">
+            <summary>
+            Gets a list of all version Ids for the given content item ordered so latest is first
+            </summary>
+            <param name="id"></param>
+            <param name="maxRows">The maximum number of rows to return</param>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Core.Services.IContentService.GetRootContent">
             <summary>
@@ -21630,6 +22690,14 @@
             <param name="id"></param>
             <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IContent"/> objects</returns>
         </member>
+        <member name="M:Umbraco.Core.Services.ContentService.GetVersionIds(System.Int32,System.Int32)">
+            <summary>
+            Gets a list of all version Ids for the given content item ordered so latest is first
+            </summary>
+            <param name="id"></param>
+            <param name="maxRows">The maximum number of rows to return</param>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Core.Services.ContentService.GetAncestors(System.Int32)">
             <summary>
             Gets a collection of <see cref="T:Umbraco.Core.Models.IContent"/> objects, which are ancestors of the current content.
@@ -22111,6 +23179,16 @@
             <param name="raiseEvents"></param>
             <returns>True if sorting succeeded, otherwise False</returns>
         </member>
+        <member name="M:Umbraco.Core.Services.ContentService.GetPagedXmlEntries(System.String,System.Int64,System.Int32,System.Int64@)">
+            <summary>
+            Gets paged content descendants as XML by path
+            </summary>
+            <param name="path">Path starts with</param>
+            <param name="pageIndex">Page number</param>
+            <param name="pageSize">Page size</param>
+            <param name="totalRecords">Total records the query would return without paging</param>
+            <returns>A paged enumerable of XML entries of content items</returns>
+        </member>
         <member name="M:Umbraco.Core.Services.ContentService.BuildXmlCache">
             <summary>
             This builds the Xml document used for the XML cache
@@ -22132,6 +23210,12 @@
             </summary>
             <param name="content"><see cref="T:Umbraco.Core.Models.IContent"/> item to retrieve Descendants from</param>
             <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IContent"/> objects</returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.ContentService.QuickUpdate(Umbraco.Core.Models.IContent)">
+            <summary>
+            Hack: This is used to fix some data if an entity's properties are invalid/corrupt
+            </summary>
+            <param name="content"></param>
         </member>
         <member name="M:Umbraco.Core.Services.ContentService.PublishWithChildrenDo(Umbraco.Core.Models.IContent,System.Int32,System.Boolean)">
             <summary>
@@ -24462,6 +25546,19 @@
             Defines the Media Service, which is an easy access to operations involving <see cref="T:Umbraco.Core.Models.IMedia"/>
             </summary>
         </member>
+        <member name="M:Umbraco.Core.Services.IMediaService.GetPagedXmlEntries(System.String,System.Int64,System.Int32,System.Int64@)">
+            <summary>
+            Gets all XML entries found in the cmsContentXml table based on the given path
+            </summary>
+            <param name="path">Path starts with</param>
+            <param name="pageIndex">Page number</param>
+            <param name="pageSize">Page size</param>
+            <param name="totalRecords">Total records the query would return without paging</param>
+            <returns>A paged enumerable of XML entries of media items</returns>
+            <remarks>
+            If -1 is passed, then this will return all media xml entries, otherwise will return all descendents from the path
+            </remarks>
+        </member>
         <member name="M:Umbraco.Core.Services.IMediaService.RebuildXmlStructures(System.Int32[])">
             <summary>
             Rebuilds all xml content in the cmsContentXml table for all media
@@ -24938,6 +26035,15 @@
             <param name="email">Email of the Member to create</param>
             <param name="memberType"><see cref="T:Umbraco.Core.Models.IMemberType"/> which the Member should be based on</param>
             <returns><see cref="T:Umbraco.Core.Models.IMember"/></returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.IMemberService.GetPagedXmlEntries(System.Int64,System.Int32,System.Int64@)">
+            <summary>
+            Gets all XML entries found in the cmsContentXml table
+            </summary>
+            <param name="pageIndex">Page number</param>
+            <param name="pageSize">Page size</param>
+            <param name="totalRecords">Total records the query would return without paging</param>
+            <returns>A paged enumerable of XML entries of content items</returns>        
         </member>
         <member name="M:Umbraco.Core.Services.IMemberService.RebuildXmlStructures(System.Int32[])">
             <summary>
@@ -26733,6 +27839,16 @@
             <param name="raiseEvents"></param>
             <returns>True if sorting succeeded, otherwise False</returns>
         </member>
+        <member name="M:Umbraco.Core.Services.MediaService.GetPagedXmlEntries(System.String,System.Int64,System.Int32,System.Int64@)">
+            <summary>
+            Gets paged media descendants as XML by path
+            </summary>
+            <param name="path">Path starts with</param>
+            <param name="pageIndex">Page number</param>
+            <param name="pageSize">Page size</param>
+            <param name="totalRecords">Total records the query would return without paging</param>
+            <returns>A paged enumerable of XML entries of media items</returns>
+        </member>
         <member name="M:Umbraco.Core.Services.MediaService.RebuildXmlStructures(System.Int32[])">
             <summary>
             Rebuilds all xml content in the cmsContentXml table for all media
@@ -26753,6 +27869,12 @@
             <param name="parentTrashed">Indicates whether the Parent is trashed or not</param>
             <param name="eventInfo">Used to track the objects to be used in the move event</param>
             <returns>Collection of updated <see cref="T:Umbraco.Core.Models.IMedia"/> objects</returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.MediaService.QuickUpdate(Umbraco.Core.Models.IMedia)">
+            <summary>
+            Hack: This is used to fix some data if an entity's properties are invalid/corrupt
+            </summary>
+            <param name="media"></param>
         </member>
         <member name="E:Umbraco.Core.Services.MediaService.DeletingVersions">
             <summary>
@@ -27024,6 +28146,15 @@
             </param>
             <returns>True if publishing succeeded, otherwise False</returns>
         </member>
+        <member name="M:Umbraco.Core.Services.MemberService.GetPagedXmlEntries(System.Int64,System.Int32,System.Int64@)">
+            <summary>
+            Gets paged member descendants as XML by path
+            </summary>
+            <param name="pageIndex">Page number</param>
+            <param name="pageSize">Page size</param>
+            <param name="totalRecords">Total records the query would return without paging</param>
+            <returns>A paged enumerable of XML entries of member items</returns>
+        </member>
         <member name="M:Umbraco.Core.Services.MemberService.GetCount(Umbraco.Core.Models.Membership.MemberCountType)">
             <summary>
             Gets the total number of Members based on the count type
@@ -27279,6 +28410,13 @@
             Currently this will only work for Content entities!
             </remarks>
         </member>
+        <member name="M:Umbraco.Core.Services.NotificationService.GetPreviousVersion(System.Int32)">
+            <summary>
+            Gets the previous version to the latest version of the content item if there is one
+            </summary>
+            <param name="contentId"></param>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Core.Services.NotificationService.SendNotifications(Umbraco.Core.Models.Membership.IUser,System.Collections.Generic.IEnumerable{Umbraco.Core.Models.EntityBase.IUmbracoEntity},System.String,System.String,System.Web.HttpContextBase,System.Func{Umbraco.Core.Models.Membership.IUser,System.String[],System.String},System.Func{Umbraco.Core.Models.Membership.IUser,System.String[],System.String})">
             <summary>
             Sends the notifications for the specified user regarding the specified node and action.
@@ -27354,14 +28492,14 @@
             <param name="action">The action letter - note: this is a string for future compatibility</param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Core.Services.NotificationService.SendNotification(Umbraco.Core.Models.Membership.IUser,Umbraco.Core.Models.Membership.IUser,Umbraco.Core.Models.IContent,System.Collections.Generic.IEnumerable{Umbraco.Core.Models.IContent},System.String,System.Web.HttpContextBase,System.Func{Umbraco.Core.Models.Membership.IUser,System.String[],System.String},System.Func{Umbraco.Core.Models.Membership.IUser,System.String[],System.String})">
+        <member name="M:Umbraco.Core.Services.NotificationService.CreateNotificationRequest(Umbraco.Core.Models.Membership.IUser,Umbraco.Core.Models.Membership.IUser,Umbraco.Core.Models.IContentBase,Umbraco.Core.Models.IContentBase,System.String,System.Web.HttpContextBase,System.Func{Umbraco.Core.Models.Membership.IUser,System.String[],System.String},System.Func{Umbraco.Core.Models.Membership.IUser,System.String[],System.String})">
             <summary>
             Sends the notification
             </summary>
             <param name="performingUser"></param>
             <param name="mailingUser"></param>
             <param name="content"></param>
-            <param name="allVersions"></param>
+            <param name="oldDoc"></param>
             <param name="actionName">The action readable name - currently an action is just a single letter, this is the name associated with the letter </param>
             <param name="http"></param>
             <param name="createSubject">Callback to create the mail subject</param>
@@ -29309,6 +30447,20 @@
             Returns the number of processed instructions
             </returns>
         </member>
+        <member name="M:Umbraco.Core.Sync.DatabaseServerMessenger.ProcessDatabaseInstructions(System.Collections.Generic.IReadOnlyCollection{Umbraco.Core.Sync.RefreshInstruction},Umbraco.Core.Models.Rdbms.CacheInstructionDto,System.Collections.Generic.HashSet{Umbraco.Core.Sync.RefreshInstruction},System.Int32@)">
+            <summary>
+            Processes the instruction batch and checks for errors
+            </summary>
+            <param name="instructionBatch"></param>
+            <param name="dto"></param>
+            <param name="processed">
+            Tracks which instructions have already been processed to avoid duplicates
+            </param>
+            <param name="lastId"></param>
+            <returns>
+            returns true if all instructions in the batch were processed, otherwise false if they could not be due to the app being shut down
+            </returns>
+        </member>
         <member name="M:Umbraco.Core.Sync.DatabaseServerMessenger.PruneOldInstructions">
             <summary>
             Remove old instructions from the database
@@ -29360,6 +30512,23 @@
             <para>Practically, all we really need is the guid, the other infos are here for information
             and debugging purposes.</para>
             </remarks>
+        </member>
+        <member name="M:Umbraco.Core.Sync.DatabaseServerMessenger.GetAllInstructions(System.Collections.Generic.IEnumerable{Newtonsoft.Json.Linq.JToken})">
+            <summary>
+            Parses out the individual instructions to be processed
+            </summary>
+            <param name="jsonArray"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Sync.DatabaseServerMessenger.NotifyRefreshers(System.Collections.Generic.IEnumerable{Umbraco.Core.Sync.RefreshInstruction},System.Collections.Generic.HashSet{Umbraco.Core.Sync.RefreshInstruction})">
+            <summary>
+            executes the instructions against the cache refresher instances
+            </summary>
+            <param name="instructions"></param>
+            <param name="processed"></param>
+            <returns>
+            Returns true if all instructions were processed, otherwise false if the processing was interupted (i.e. app shutdown)
+            </returns>
         </member>
         <member name="P:Umbraco.Core.Sync.DatabaseServerMessenger.SyncFilePath">
             <summary>
@@ -30951,6 +32120,15 @@
             Boots up the Umbraco application
             </summary>
         </member>
+        <member name="M:Umbraco.Core.UmbracoApplicationBase.CurrentDomainOnAssemblyResolve(System.Object,System.ResolveEventArgs)">
+            <summary>
+            Called when an assembly can't be resolved. In here we can do magic with the assembly name and try loading another.
+            This is used for loading a signed assembly of AutoMapper (v. 3.1+) without having to recompile old code.
+            </summary>
+            <param name="sender"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Core.UmbracoApplicationBase.Application_Start(System.Object,System.EventArgs)">
             <summary>
             Initializes the Umbraco application
@@ -32513,7 +33691,7 @@
             <param name="node">The child node to sort.</param>
             <param name="orderBy">A function returning the value to order the nodes by.</param>
             <returns>A value indicating whether sorting was needed.</returns>
-            <remarks>Assuming all nodes but <paramref name="node"/> are sorted, this will move the node to 
+            <remarks>Assuming all nodes but <paramref name="node"/> are sorted, this will move the node to
             the right position without moving all the nodes (as SortNodes would do) - should improve perfs.</remarks>
         </member>
         <member name="M:Umbraco.Core.XmlHelper.ImportXmlNodeFromText(System.String,System.Xml.XmlDocument@)">
@@ -32557,6 +33735,16 @@
             <param name="parent">The node to set or create the child text node on</param>
             <param name="name">The node name.</param>
             <param name="value">The node value.</param>
+            <returns>a XmlNode</returns>
+        </member>
+        <member name="M:Umbraco.Core.XmlHelper.SetInnerXmlNode(System.Xml.XmlDocument,System.Xml.XmlNode,System.String,System.String)">
+            <summary>
+            Sets or creates an Xml node from its inner Xml.
+            </summary>
+            <param name="xd">The xmldocument.</param>
+            <param name="parent">The node to set or create the child text node on</param>
+            <param name="name">The node name.</param>
+            <param name="value">The node inner Xml.</param>
             <returns>a XmlNode</returns>
         </member>
         <member name="M:Umbraco.Core.XmlHelper.AddCDataNode(System.Xml.XmlDocument,System.String,System.String)">

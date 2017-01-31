@@ -1000,7 +1000,7 @@
             If the authentication type is cookie based, then this filter will execute, otherwise it will be disabled
             </remarks>
         </member>
-        <member name="T:Umbraco.Web.Profiling.StartupWebProfilerProvider">
+        <member name="T:Umbraco.Web.Profiling.WebProfilerProvider">
             <summary>
             This is a custom MiniProfiler WebRequestProfilerProvider (which is generally the default) that allows
             us to profile items during app startup - before an HttpRequest is created
@@ -1010,23 +1010,7 @@
             profiling data and this sub class no longer performs any logic.
             </remarks>
         </member>
-        <member name="M:Umbraco.Web.Profiling.StartupWebProfilerProvider.BootComplete">
-            <summary>
-            Executed once the application boot process is complete and changes the phase to Request
-            </summary>
-        </member>
-        <member name="M:Umbraco.Web.Profiling.StartupWebProfilerProvider.Stop(System.Boolean)">
-            <summary>
-            Executed when a profiling operation is completed
-            </summary>
-            <param name="discardResults"></param>
-            <remarks>
-            This checks if the bootup phase is None, if so, it just calls the base class, otherwise it checks
-            if a profiler is active (i.e. in startup), then sets the phase to None so that the base class will be used
-            for all subsequent calls.
-            </remarks>
-        </member>
-        <member name="M:Umbraco.Web.Profiling.StartupWebProfilerProvider.Start(StackExchange.Profiling.ProfileLevel)">
+        <member name="M:Umbraco.Web.Profiling.WebProfilerProvider.Start(StackExchange.Profiling.ProfileLevel)">
             <summary>
             Executed when a profiling operation is started
             </summary>
@@ -1037,7 +1021,7 @@
             then this sets the startup profiler to be active. Otherwise it just calls the base class Start method.
             </remarks>
         </member>
-        <member name="M:Umbraco.Web.Profiling.StartupWebProfilerProvider.GetCurrentProfiler">
+        <member name="M:Umbraco.Web.Profiling.WebProfilerProvider.GetCurrentProfiler">
             <summary>
             This returns the current profiler
             </summary>
@@ -1047,9 +1031,9 @@
             returns the base class
             </remarks>
         </member>
-        <member name="T:Umbraco.Web.Profiling.StartupWebProfilerProvider.StartupPhase">
+        <member name="T:Umbraco.Web.Profiling.WebProfilerProvider.BootPhase">
             <summary>
-            Used to determine which phase the boot process is in
+            Indicates the boot phase.
             </summary>
         </member>
         <member name="T:Umbraco.Web.Profiling.WebProfiler">
@@ -1065,20 +1049,6 @@
         <member name="M:Umbraco.Web.Profiling.WebProfiler.UmbracoApplicationApplicationInit(System.Object,System.EventArgs)">
             <summary>
             Handle the Init event o fthe UmbracoApplication which allows us to subscribe to the HttpApplication events
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:Umbraco.Web.Profiling.WebProfiler.UmbracoApplicationEndRequest(System.Object,System.EventArgs)">
-            <summary>
-            Handle the begin request event
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:Umbraco.Web.Profiling.WebProfiler.UmbracoApplicationBeginRequest(System.Object,System.EventArgs)">
-            <summary>
-            Handle the end request event
             </summary>
             <param name="sender"></param>
             <param name="e"></param>
@@ -1189,7 +1159,7 @@
             Gets the current request cache to persist the values between handlers
             </summary>
         </member>
-        <member name="M:Umbraco.Web.Editors.RedirectUrlManagementController.IsEnabled">
+        <member name="M:Umbraco.Web.Editors.RedirectUrlManagementController.GetEnableState">
             <summary>
             Returns true/false of whether redirect tracking is enabled or not
             </summary>
@@ -2423,7 +2393,7 @@
             <param name="sender"></param>
             <param name="e"></param>
             <remarks>
-            When an entity is copied new permissions may be assigned to it based on it's parent, if that is the 
+            When an entity is copied new permissions may be assigned to it based on it's parent, if that is the
             case then we need to clear all user permissions cache.
             </remarks>
         </member>
@@ -2435,18 +2405,18 @@
             <param name="e"></param>
         </member>
         <member name="M:Umbraco.Web.Cache.CacheRefresherEventHandler.ContentServiceSaved(Umbraco.Core.Services.IContentService,Umbraco.Core.Events.SaveEventArgs{Umbraco.Core.Models.IContent})">
-            <summary>
-            Handles cache refreshing for when content is saved (not published)
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-            <remarks>
-            When an entity is saved we need to notify other servers about the change in order for the Examine indexes to 
-            stay up-to-date for unpublished content.
+             <summary>
+             Handles cache refreshing for when content is saved (not published)
+             </summary>
+             <param name="sender"></param>
+             <param name="e"></param>
+             <remarks>
+             When an entity is saved we need to notify other servers about the change in order for the Examine indexes to
+             stay up-to-date for unpublished content.
             
-            When an entity is created new permissions may be assigned to it based on it's parent, if that is the 
-            case then we need to clear all user permissions cache.
-            </remarks>
+             When an entity is created new permissions may be assigned to it based on it's parent, if that is the
+             case then we need to clear all user permissions cache.
+             </remarks>
         </member>
         <member name="M:Umbraco.Web.Cache.CacheRefresherEventHandler.LocalizationServiceDeletedLanguage(Umbraco.Core.Services.ILocalizationService,Umbraco.Core.Events.DeleteEventArgs{Umbraco.Core.Models.ILanguage})">
             <summary>
@@ -3126,7 +3096,7 @@
         </member>
         <member name="M:Umbraco.Web.Editors.ContentController.PostSort(Umbraco.Web.Models.ContentEditing.ContentSortOrder)">
             <summary>
-            Change the sort order for media
+            Change the sort order for content
             </summary>
             <param name="sorted"></param>
             <returns></returns>
@@ -4792,10 +4762,11 @@
             <param name="memberService"></param>
             <param name="member"></param>
             <param name="display"></param>
+            <param name="localizedText"></param>
             <returns></returns>
             <remarks>
             If the membership provider installed is the umbraco membership provider, then we will allow changing the username, however if
-            the membership provider is a custom one, we cannot allow chaning the username because MembershipProvider's do not actually natively 
+            the membership provider is a custom one, we cannot allow chaning the username because MembershipProvider's do not actually natively
             allow that.
             </remarks>
         </member>
@@ -4814,7 +4785,7 @@
             </summary>
             <remarks>
             This also ensures that the IsLocked out property is readonly when the member is not locked out - this is because
-            an admin cannot actually set isLockedOut = true, they can only unlock. 
+            an admin cannot actually set isLockedOut = true, they can only unlock.
             </remarks>
         </member>
         <member name="T:Umbraco.Web.Models.Mapping.TabsAndPropertiesResolver">
@@ -5805,7 +5776,7 @@
             Use focal point, to generate an output image using the focal point instead of the predefined crop
             </param>
             <param name="useCropDimensions">
-            Use crop dimensions to have the output image sized according to the predefined crop sizes, this will override the width and height parameters&gt;.
+            Use crop dimensions to have the output image sized according to the predefined crop sizes, this will override the width and height parameters.
             </param>
             <param name="cacheBuster">
             Add a serialised date of the last edit of the item to ensure client cache refresh when updated
@@ -6179,6 +6150,17 @@
             <param name="app"></param>
             <param name="explicitPaths"></param>
             <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Security.Identity.AuthenticationOptionsExtensions.SetSignInChallengeResultCallback(Microsoft.Owin.Security.AuthenticationOptions,System.Func{Microsoft.Owin.IOwinContext,Microsoft.Owin.Security.AuthenticationProperties})">
+            <summary>
+            When trying to implement an Azure AD B2C provider or other OAuth provider that requires a customized Challenge Result in order to work then
+            this must be used.
+            </summary>
+            <param name="authOptions"></param>
+            <param name="authProperties"></param>
+            <remarks>
+            See: http://issues.umbraco.org/issue/U4-7353
+            </remarks>
         </member>
         <member name="M:Umbraco.Web.Security.Identity.AuthenticationOptionsExtensions.SetExternalSignInAutoLinkOptions(Microsoft.Owin.Security.AuthenticationOptions,Umbraco.Web.Security.Identity.ExternalSignInAutoLinkOptions)">
             <summary>
@@ -8845,7 +8827,7 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.Editors.MediaTypeController.GetAllowedChildren(System.Int32)">
+        <member name="M:Umbraco.Web.Editors.MediaTypeController.GetAllowedChildren(System.String)">
             <summary>
             Returns the allowed child content type objects for the content item id passed in
             </summary>
@@ -9428,6 +9410,13 @@
             <param name="allowedUserOptions">A list of MenuItems that the user has permissions to execute on the current document</param>
             <remarks>By default the user must have Browse permissions to see the node in the Content tree</remarks>
             <returns></returns>        
+        </member>
+        <member name="M:Umbraco.Web.Trees.ContentTreeControllerBase.GetEntityFromId(System.String)">
+            <summary>
+            Get an entity via an id that can be either an integer or a Guid
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
         </member>
         <member name="P:Umbraco.Web.Trees.ContentTreeControllerBase.RecycleBinId">
             <summary>
@@ -11422,12 +11411,13 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.PublishedCache.XmlPublishedCache.RoutesCache.Store(System.Int32,System.String)">
+        <member name="M:Umbraco.Web.PublishedCache.XmlPublishedCache.RoutesCache.Store(System.Int32,System.String,System.Boolean)">
             <summary>
             Stores a route for a node.
             </summary>
             <param name="nodeId">The node identified.</param>
             <param name="route">The route.</param>
+            <param name="trust">A value indicating whether the value can be trusted for inbound routing.</param>
         </member>
         <member name="M:Umbraco.Web.PublishedCache.XmlPublishedCache.RoutesCache.GetRoute(System.Int32)">
             <summary>
@@ -11758,18 +11748,7 @@
             Allows developers to add custom variables on parsing
             </summary>
         </member>
-        <member name="T:Umbraco.Web.Strategies.Migrations.RebuildMediaXmlCacheAfterUpgrade">
-             <summary>
-             This will execute after upgrading to rebuild the xml cache
-             </summary>
-             <remarks>
-             This cannot execute as part of a db migration since we need access to the services/repos.
-            
-             This will execute for specific versions -
-            
-             * If current is less than or equal to 7.0.0
-             </remarks>
-        </member>
+        <!-- Badly formed XML comment ignored for member "T:Umbraco.Web.Strategies.Migrations.RebuildXmlCachesAfterUpgrade" -->
         <member name="T:Umbraco.Web.Strategies.PublicAccessEventHandler">
             <summary>
             Used to ensure that the public access data file is kept up to date properly
@@ -11956,7 +11935,7 @@
         </member>
         <member name="P:Umbraco.Web.UI.Controls.UmbracoUserControl.SqlHelper">
             <summary>
-            Returns the legacy SqlHelper
+            Unused, please do not use
             </summary>
         </member>
         <member name="F:umbraco.controls.Tree.TreeControl.DEFAULT_APP">
@@ -13189,7 +13168,7 @@
         </member>
         <member name="M:Umbraco.Web.Editors.MediaController.GetEmpty(System.String,System.Int32)">
             <summary>
-            Gets an empty content item for the 
+            Gets an empty content item for the
             </summary>
             <param name="contentTypeAlias"></param>
             <param name="parentId"></param>
@@ -13227,7 +13206,7 @@
             Returns the root media objects
             </summary>
         </member>
-        <member name="M:Umbraco.Web.Editors.MediaController.GetChildren(System.Int32,System.Int32,System.Int32,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Boolean,System.String)">
+        <member name="M:Umbraco.Web.Editors.MediaController.GetChildren(System.String,System.Int32,System.Int32,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Boolean,System.String)">
             <summary>
             Returns the child media objects
             </summary>
@@ -13237,7 +13216,7 @@
             Moves an item to the recycle bin, if it is already there then it will permanently delete it
             </summary>
             <param name="id"></param>
-            <returns></returns> 
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Web.Editors.MediaController.PostMove(Umbraco.Web.Models.ContentEditing.MoveOrCopy)">
             <summary>
@@ -13250,7 +13229,7 @@
             <summary>
             Saves content
             </summary>
-            <returns></returns>        
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Web.Editors.MediaController.MapPropertyValues``1(Umbraco.Web.Models.ContentEditing.ContentBaseItemSave{``0})">
             <summary>
@@ -13289,7 +13268,7 @@
         </member>
         <member name="M:Umbraco.Web.Editors.MediaController.CheckPermissions(System.Collections.Generic.IDictionary{System.String,System.Object},Umbraco.Core.Models.Membership.IUser,Umbraco.Core.Services.IMediaService,System.Int32,Umbraco.Core.Models.IMedia)">
             <summary>
-            Performs a permissions check for the user to check if it has access to the node based on 
+            Performs a permissions check for the user to check if it has access to the node based on
             start node and/or permissions for the node
             </summary>
             <param name="storage">The storage to add the content item to so it can be reused</param>
@@ -15741,6 +15720,11 @@
             <param name="webRoutingSection"></param>
             <param name="pcr">The content request.</param>
         </member>
+        <member name="M:Umbraco.Web.Routing.PublishedContentRequestEngine.TryRouteRequest">
+            <summary>
+            Tries to route the request.
+            </summary>
+        </member>
         <member name="M:Umbraco.Web.Routing.PublishedContentRequestEngine.PrepareRequest">
             <summary>
             Prepares the request.
@@ -15965,12 +15949,12 @@
         <member name="M:Umbraco.Web.Search.ExamineEvents.ContentTypeCacheRefresherCacheUpdated(Umbraco.Web.Cache.ContentTypeCacheRefresher,Umbraco.Core.Cache.CacheRefresherEventArgs)">
             <summary>
             This is used to refresh content indexers IndexData based on the DataService whenever a content type is changed since
-            properties may have been added/removed
+            properties may have been added/removed, then we need to re-index any required data if aliases have been changed
             </summary>
             <param name="sender"></param>
             <param name="e"></param>
             <remarks>
-            See: http://issues.umbraco.org/issue/U4-4798
+            See: http://issues.umbraco.org/issue/U4-4798, http://issues.umbraco.org/issue/U4-7833
             </remarks>
         </member>
         <member name="M:Umbraco.Web.Search.ExamineEvents.MediaCacheRefresherCacheUpdated(Umbraco.Web.Cache.MediaCacheRefresher,Umbraco.Core.Cache.CacheRefresherEventArgs)">
@@ -16255,7 +16239,7 @@
         </member>
         <member name="P:Umbraco.Web.UI.Controls.UmbracoControl.SqlHelper">
             <summary>
-            Returns the legacy SqlHelper
+            Unused, please do not use
             </summary>
         </member>
         <member name="P:Umbraco.Web.UI.Controls.InsertMacroSplitButton.ClientCallbackOpenMacroModel">
@@ -18799,7 +18783,7 @@
         </member>
         <member name="P:umbraco.uQuery.SqlHelper">
             <summary>
-            Gets the SqlHelper used by Umbraco
+            Unused, please do not use
             </summary>
         </member>
         <!-- Badly formed XML comment ignored for member "T:umbraco.uQuery.IGetProperty" -->
@@ -20588,12 +20572,6 @@
             the response should use the specified code and description. The code and description will or will
             not be used, in due time.</remarks>
         </member>
-        <member name="F:Umbraco.Web.Routing.PublishedContentRequest._cacheability">
-            <summary>
-            Gets or sets the <c>System.Web.HttpCacheability</c>
-            </summary>
-            <remarks>Is set to <c>System.Web.HttpCacheability.Private</c>  by default, which is the ASP.NET default.</remarks>
-        </member>
         <member name="F:Umbraco.Web.Routing.PublishedContentRequest._cacheExtensions">
             <summary>
             Gets or sets a list of Extensions to append to the Response.Cache object
@@ -20750,6 +20728,11 @@
             </summary>
             <remarks>Does not actually set the http response status description, only registers that the response
             should use the specified description. The description will or will not be used, in due time.</remarks>
+        </member>
+        <member name="P:Umbraco.Web.Routing.PublishedContentRequest.Cacheability">
+            <summary>
+            Gets or sets the <c>System.Web.HttpCacheability</c>
+            </summary>
         </member>
         <member name="T:Umbraco.Web.Routing.RoutingContext">
             <summary>
@@ -20923,6 +20906,11 @@
             </summary>
             <param name="node">The sender.</param>
             <param name="e">The <see cref="T:umbraco.cms.businesslogic.ContentCacheLoadNodeEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="P:umbraco.content.SqlHelper">
+            <summary>
+            Unused, please do not use
+            </summary>
         </member>
         <member name="P:umbraco.content.XmlContent">
             <remarks>
@@ -21829,6 +21817,11 @@
             </param>
             <returns>An Umbraco item.</returns>
         </member>
+        <member name="P:umbraco.library.SqlHelper">
+            <summary>
+            Unused, please do not use
+            </summary>
+        </member>
         <member name="T:umbraco.macro">
             <summary>
             Summary description for macro.
@@ -21984,6 +21977,11 @@
             Raises the <see cref="T:Umbraco.Core.Events.MacroErrorEventArgs"/> event.
             </summary>
             <param name="e">The <see cref="T:Umbraco.Core.Events.MacroErrorEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="P:umbraco.macro.SqlHelper">
+            <summary>
+            Unused, please do not use
+            </summary>
         </member>
         <member name="E:umbraco.macro.MacroRendering">
             <summary>
@@ -22185,6 +22183,11 @@
             Replaces the found tags in the StringBuilder object, with "real content"
             </summary>
             <param name="umbPage"></param>
+        </member>
+        <member name="P:umbraco.template.SqlHelper">
+            <summary>
+            Unused, please do not use
+            </summary>
         </member>
         <member name="T:umbraco.presentation.UmbracoContext">
             <summary>
@@ -23000,6 +23003,11 @@
             Gets or sets the type of the node.
             </summary>
             <value>The type of the node.</value>
+        </member>
+        <member name="P:umbraco.macroTasks.SqlHelper">
+            <summary>
+            Unused, please do not use
+            </summary>
         </member>
         <member name="T:umbraco.XsltTasks">
              <summary>
@@ -28281,6 +28289,11 @@
             Returns the current user
             </summary>
         </member>
+        <member name="P:umbraco.presentation.umbraco.webservices.TagsAutoCompleteHandler.SqlHelper">
+            <summary>
+            Unused, please do not use
+            </summary>
+        </member>
         <member name="T:umbraco.presentation.webservices.TreeClientService">
             <summary>
             Client side ajax utlities for the tree
@@ -29033,6 +29046,11 @@
             TODO: need to update this render method to do everything that the obsolete render method does and remove the obsolete method
             </summary>
             <param name="tree"></param>
+        </member>
+        <member name="P:umbraco.loadMacros.SqlHelper">
+            <summary>
+            Unused, please do not use
+            </summary>
         </member>
         <member name="M:umbraco.loadMedia.#cctor">
             <summary>
@@ -29837,15 +29855,6 @@
         <member name="F:umbraco.cms.presentation.user.PermissionEditor.JsInclude1">
             <summary>
             JsInclude1 control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.cms.presentation.user.PermissionEditor.JsInclude2">
-            <summary>
-            JsInclude2 control.
             </summary>
             <remarks>
             Auto-generated field.

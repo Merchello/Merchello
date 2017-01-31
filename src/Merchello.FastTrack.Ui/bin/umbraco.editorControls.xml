@@ -413,6 +413,11 @@
             Lazy load currently selected RelationType
             </summary>
         </member>
+        <member name="P:umbraco.editorControls.BaseDataType.SqlHelper">
+            <summary>
+            Unused, please do not use
+            </summary>
+        </member>
         <member name="T:umbraco.editorControls.BaseTreePickerEditor">
             <summary>
             A base tree picker class that has all of the functionality built in for an IDataEditor
@@ -540,6 +545,11 @@
             Summary description for dateField.
             </summary>
         </member>
+        <member name="P:umbraco.editorControls.DefaultData.SqlHelper">
+            <summary>
+            Unused, please do not use
+            </summary>
+        </member>
         <member name="T:umbraco.editorControls.DefaultDataKeyValue">
             <summary>
             Summary description for cms.businesslogic.datatype.DefaultDataKeyValue.
@@ -566,6 +576,11 @@
             </summary>
             <param name="DataType">The DataType to be parsed (note: the BaseDataType from editorControls is obsolete)</param>
             <param name="DisplayTextBox">Whether to use the default text box</param>
+        </member>
+        <member name="P:umbraco.editorControls.DefaultPrevalueEditor.SqlHelper">
+            <summary>
+            Unused, please do not use
+            </summary>
         </member>
         <member name="T:umbraco.editorControls.dictionaryPicker.dictionaryPicker">
             <summary>
@@ -610,6 +625,11 @@
             <summary>
             Serialize configuration to:
             uploadPropertyAlias,generateImages,quality,showLabel|presetTemplateName,targetWidth,targetHeight,keepAspect;
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.imagecropper.PrevalueEditor.SqlHelper">
+            <summary>
+            Unused, please do not use
             </summary>
         </member>
         <member name="T:umbraco.editorControls.imagecropper.Resources">
@@ -689,6 +709,11 @@
         <member name="T:umbraco.editorControls.KeyValuePrevalueEditor">
             <summary>
             Summary description for KeyValuePrevalueEditor.
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.KeyValuePrevalueEditor.SqlHelper">
+            <summary>
+            Unused, please do not use
             </summary>
         </member>
         <member name="T:umbraco.editorControls.label.DataTypeNoEdit">
@@ -812,6 +837,11 @@
                         _webServiceUrl: umbracoPath + &quot;/webservices/legacyAjaxCalls.asmx/GetNodeName&quot;,
                         _label: labe [rest of string was truncated]&quot;;.
              </summary>
+        </member>
+        <member name="P:umbraco.editorControls.mediapicker.MediaPickerPrevalueEditor.SqlHelper">
+            <summary>
+            Unused, please do not use
+            </summary>
         </member>
         <member name="T:umbraco.editorControls.memberPicker">
             <summary>
@@ -2536,6 +2566,16 @@
             <param name="nodeId">The node id.</param>
             <returns></returns>
         </member>
+        <member name="P:umbraco.editorControls.tags.PrevalueEditor.SqlHelper">
+            <summary>
+            Unused, please do not use
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.tinymce.tinyMCEPreValueConfigurator.SqlHelper">
+            <summary>
+            Unused, please do not use
+            </summary>
+        </member>
         <member name="T:umbraco.editorControls.tinyMCE3.webcontrol.plugin.ConfigSection">
             <summary>
             Description of ConfigSection.
@@ -2887,6 +2927,11 @@
             <param name="filterInput">The filter string to be validated</param>
             <returns>A validated filtered comma separated string</returns>
         </member>
+        <member name="P:umbraco.editorControls.ultimatepicker.ultimatePickerPrevalueEditor.SqlHelper">
+            <summary>
+            Unused, please do not use
+            </summary>
+        </member>
         <member name="T:umbraco.editorControls.uploadfield.DataTypeUploadField">
             <summary>
             Summary description for DataTypeUploadField.
@@ -2923,6 +2968,16 @@
             <remarks>
             This is used for the required and regex validation of a document type's property
             </remarks>     
+        </member>
+        <member name="P:umbraco.editorControls.uploadfield.uploadFieldPreValue.SqlHelper">
+            <summary>
+            Unused, please do not use
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.userControlGrapper.usercontrolPrevalueEditor.SqlHelper">
+            <summary>
+            Unused, please do not use
+            </summary>
         </member>
         <member name="T:umbraco.editorControls.XmlData">
             <summary>
