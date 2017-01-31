@@ -1,6 +1,6 @@
 /*! umbraco
  * https://github.com/umbraco/umbraco-cms/
- * Copyright (c) 2016 Umbraco HQ;
+ * Copyright (c) 2017 Umbraco HQ;
  * Licensed 
  */
 
@@ -2195,7 +2195,7 @@ angular.module('umbraco.services')
          * @description
          * Opens a content picker tree in a modal, the callback returns an array of selected documents
          * @param {Object} options content picker dialog options object
-         * @param {Boolean} options.multipicker should the picker return one or multiple items
+         * @param {Boolean} options.multiPicker should the picker return one or multiple items
          * @param {Function} options.callback callback function
          * @returns {Object} modal object
          */
@@ -4879,6 +4879,65 @@ function mediaHelper(umbRequestHelper) {
         
     };
 }angular.module('umbraco.services').factory('mediaHelper', mediaHelper);
+
+/**
+ * @ngdoc service
+ * @name umbraco.services.mediaTypeHelper
+ * @description A helper service for the media types
+ **/
+function mediaTypeHelper(mediaTypeResource, $q) {
+
+    var mediaTypeHelperService = {
+
+        getAllowedImagetypes: function (mediaId){
+				
+            // Get All allowedTypes
+            return mediaTypeResource.getAllowedTypes(mediaId)
+                .then(function(types){
+                    
+                    var allowedQ = types.map(function(type){
+                        return mediaTypeResource.getById(type.id);
+                    });
+
+                    // Get full list
+                    return $q.all(allowedQ).then(function(fullTypes){
+
+                        // Find all the media types with an Image Cropper property editor
+                        var filteredTypes = mediaTypeHelperService.getTypeWithEditor(fullTypes, ['Umbraco.ImageCropper']);
+
+                        // If there is only one media type with an Image Cropper we will return this one
+                        if(filteredTypes.length === 1) {
+                            return filteredTypes;
+                        // If there is more than one Image cropper, custom media types have been added, and we return all media types with and Image cropper or UploadField
+                        } else {
+                            return mediaTypeHelperService.getTypeWithEditor(fullTypes, ['Umbraco.ImageCropper', 'Umbraco.UploadField']);
+                        }
+
+                    });
+            });
+		},
+
+        getTypeWithEditor: function (types, editors) {
+
+            return types.filter(function (mediatype) {
+                for (var i = 0; i < mediatype.groups.length; i++) {
+                    var group = mediatype.groups[i];
+                    for (var j = 0; j < group.properties.length; j++) {
+                        var property = group.properties[j];
+                        if( editors.indexOf(property.editor) !== -1 ) {
+                            return mediatype;
+                        }
+                    }
+                }
+            });
+
+        }
+
+    };
+
+    return mediaTypeHelperService;
+}
+angular.module('umbraco.services').factory('mediaTypeHelper', mediaTypeHelper);
 
 /**
  * @ngdoc service
@@ -8246,15 +8305,15 @@ function umbRequestHelper($http, $q, umbDataFormatter, angularHelper, dialogServ
          * @description
          * This returns a promise with an underlying http call, it is a helper method to reduce
          *  the amount of duplicate code needed to query http resources and automatically handle any 
-         *  Http errors. See /docs/source/using-promises-resources.md
+         *  500 Http server errors. 
          *
-         * @param {object} opts A mixed object which can either be a string representing the error message to be
-         *   returned OR an object containing either:
+         * @param {object} opts A mixed object which can either be a `string` representing the error message to be
+         *   returned OR an `object` containing either:
          *     { success: successCallback, errorMsg: errorMessage }
          *          OR
          *     { success: successCallback, error: errorCallback }
-         *   In both of the above, the successCallback must accept these parameters: data, status, headers, config
-         *   If using the errorCallback it must accept these parameters: data, status, headers, config
+         *   In both of the above, the successCallback must accept these parameters: `data`, `status`, `headers`, `config`
+         *   If using the errorCallback it must accept these parameters: `data`, `status`, `headers`, `config`
          *   The success callback must return the data which will be resolved by the deferred object.
          *   The error callback must return an object containing: {errorMsg: errorMessage, data: originalData, status: status }
          */
@@ -8512,7 +8571,7 @@ angular.module('umbraco.services')
             loginDialog = null;
 
             if (success) {
-                securityRetryQueue.retryAll();
+                securityRetryQueue.retryAll(currentUser.name);
             }
             else {
                 securityRetryQueue.cancelAll();
@@ -8520,9 +8579,9 @@ angular.module('umbraco.services')
             }
         }
 
-        /** 
-        This methods will set the current user when it is resolved and 
-        will then start the counter to count in-memory how many seconds they have 
+        /**
+        This methods will set the current user when it is resolved and
+        will then start the counter to count in-memory how many seconds they have
         remaining on the auth session
         */
         function setCurrentUser(usr) {
@@ -8535,8 +8594,8 @@ angular.module('umbraco.services')
             countdownUserTimeout();
         }
 
-        /** 
-        Method to count down the current user's timeout seconds, 
+        /**
+        Method to count down the current user's timeout seconds,
         this will continually count down their current remaining seconds every 5 seconds until
         there are no more seconds remaining.
         */
@@ -8551,8 +8610,8 @@ angular.module('umbraco.services')
                     //if there are more than 30 remaining seconds, recurse!
                     if (currentUser.remainingAuthSeconds > 30) {
 
-                        //we need to check when the last time the timeout was set from the server, if 
-                        // it has been more than 30 seconds then we'll manually go and retrieve it from the 
+                        //we need to check when the last time the timeout was set from the server, if
+                        // it has been more than 30 seconds then we'll manually go and retrieve it from the
                         // server - this helps to keep our local countdown in check with the true timeout.
                         if (lastServerTimeoutSet != null) {
                             var now = new Date();
@@ -8560,7 +8619,7 @@ angular.module('umbraco.services')
 
                             if (seconds > 30) {
 
-                                //first we'll set the lastServerTimeoutSet to null - this is so we don't get back in to this loop while we 
+                                //first we'll set the lastServerTimeoutSet to null - this is so we don't get back in to this loop while we
                                 // wait for a response from the server otherwise we'll be making double/triple/etc... calls while we wait.
                                 lastServerTimeoutSet = null;
 
@@ -8579,7 +8638,7 @@ angular.module('umbraco.services')
                     }
                     else {
 
-                        //we are either timed out or very close to timing out so we need to show the login dialog.                                        
+                        //we are either timed out or very close to timing out so we need to show the login dialog.
                         if (Umbraco.Sys.ServerVariables.umbracoSettings.keepUserLoggedIn !== true) {
                             //NOTE: the safeApply because our timeout is set to not run digests (performance reasons)
                             angularHelper.safeApply($rootScope, function () {
@@ -8590,14 +8649,14 @@ angular.module('umbraco.services')
                                 }
                                 finally {
                                     userAuthExpired();
-                                } 
+                                }
                             });
                         }
                         else {
                             //we've got less than 30 seconds remaining so let's check the server
 
                             if (lastServerTimeoutSet != null) {
-                                //first we'll set the lastServerTimeoutSet to null - this is so we don't get back in to this loop while we 
+                                //first we'll set the lastServerTimeoutSet to null - this is so we don't get back in to this loop while we
                                 // wait for a response from the server otherwise we'll be making double/triple/etc... calls while we wait.
                                 lastServerTimeoutSet = null;
 
@@ -8692,8 +8751,8 @@ angular.module('umbraco.services')
                         return result;
                     });
             },
-          
-            /** Logs the user out 
+
+            /** Logs the user out
              */
             logout: function () {
 

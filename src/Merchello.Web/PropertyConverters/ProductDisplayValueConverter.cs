@@ -61,6 +61,7 @@
                 return null;
 
             var productKey = source.ToString();
+            if (string.IsNullOrEmpty(productKey)) return null;
 
             try
             {
@@ -69,7 +70,7 @@
             }
             catch (Exception ex)
             {
-                MultiLogHelper.Error<ProductDisplayValueConverter>("Failed to Convert ProductDisplay property", ex);
+                // MultiLogHelper.Info<ProductDisplayValueConverter>("Failed to Convert ProductDisplay property");
                 return null;
             }
         }
