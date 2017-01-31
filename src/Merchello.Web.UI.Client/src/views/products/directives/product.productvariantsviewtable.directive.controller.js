@@ -335,7 +335,7 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
             angular.forEach(dialogData.productVariants,
                 function(pv) {
                     pv.price = dialogData.price;
-                    if (dialogData.costOfGoods) {
+                    if (dialogData.includeCostOfGoods) {
                         pv.costOfGoods = dialogData.costOfGoods;
                     }
                     if (dialogData.includeSalePrice) {
