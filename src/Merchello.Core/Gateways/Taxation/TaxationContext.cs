@@ -88,7 +88,7 @@
         /// <summary>
         /// Gets the product pricing tax method.
         /// </summary>
-        internal ITaxationByProductMethod ProductPricingTaxMethod
+        public ITaxationByProductMethod ProductPricingTaxMethod
         {
             get
             {

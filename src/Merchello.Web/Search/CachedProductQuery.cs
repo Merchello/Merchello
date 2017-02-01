@@ -428,6 +428,48 @@
                     sortBy);
         }
 
+        /// <inheritdoc />
+        public PagedCollection<IProductContent> TypedProductContentByPriceRange(
+            decimal min,
+            decimal max,
+            long page,
+            long itemsPerPage,
+            string sortBy = "price",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var cacheKey = PagedKeyCache.GetPagedQueryCacheKey<ICachedProductQuery>(
+                "GetProductsInPriceRange",
+                page,
+                itemsPerPage,
+                sortBy,
+                sortDirection,
+                new Dictionary<string, string>
+                    {
+                                    { "min", min.ToString(CultureInfo.InvariantCulture) },
+                                    { "max", max.ToString(CultureInfo.InvariantCulture) }
+                    });
+
+            var pagedKeys = PagedKeyCache.GetPageByCacheKey(cacheKey);
+
+            return
+                _cache.GetPagedCollectionByCacheKey(
+                    pagedKeys ?? _productService.GetProductsKeysInPriceRange(min, max, page, itemsPerPage, sortBy, sortDirection),
+                    sortBy);
+        }
+
+        ///// <inheritdoc />
+        //public PagedCollection<IProductContent> TypedProductContentByPriceRange(
+        //    string searchTerm,
+        //    decimal min,
+        //    decimal max,
+        //    long page,
+        //    long itemsPerPage,
+        //    string sortBy = "price",
+        //    SortDirection sortDirection = SortDirection.Descending)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
         /// <summary>
         /// Gets a <see cref="PagedCollection{IProductContent}"/> that exists in every collection referenced.
         /// </summary>
@@ -502,6 +544,45 @@
             if (!keys.Any()) return PagedCollection<IProductContent>.Empty();
 
             var pagedKeys = ((ProductService)Service).GetKeysThatExistInAllCollections(keys, searchTerm, page, itemsPerPage, sortBy, sortDirection);
+
+            return _cache.MapPagedCollection(pagedKeys, sortBy);
+        }
+
+        /// <inheritdoc/>
+        public PagedCollection<IProductContent> TypedProductContentPageThatExistInAllCollections(
+            IEnumerable<Guid> collectionKeys,
+            decimal min,
+            decimal max,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Ascending)
+        {
+            var keys = collectionKeys as Guid[] ?? collectionKeys.ToArray();
+
+            if (!keys.Any()) return PagedCollection<IProductContent>.Empty();
+
+            var pagedKeys = ((ProductService)Service).GetKeysThatExistInAllCollections(keys, min, max, page, itemsPerPage, sortBy, sortDirection);
+
+            return _cache.MapPagedCollection(pagedKeys, sortBy);
+        }
+
+        /// <inheritdoc/>
+        public PagedCollection<IProductContent> TypedProductContentPageThatExistInAllCollections(
+            IEnumerable<Guid> collectionKeys,
+            string searchTerm,
+            decimal min,
+            decimal max,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Ascending)
+        {
+            var keys = collectionKeys as Guid[] ?? collectionKeys.ToArray();
+
+            if (!keys.Any()) return PagedCollection<IProductContent>.Empty();
+
+            var pagedKeys = ((ProductService)Service).GetKeysThatExistInAllCollections(keys, searchTerm, min, max, page, itemsPerPage, sortBy, sortDirection);
 
             return _cache.MapPagedCollection(pagedKeys, sortBy);
         }
@@ -584,6 +665,45 @@
             return _cache.MapPagedCollection(pagedKeys, sortBy);
         }
 
+        /// <inheritdoc/>
+        public PagedCollection<IProductContent> TypedProductContentPageThatNotInAnyCollections(
+            IEnumerable<Guid> collectionKeys,
+            decimal min,
+            decimal max,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Ascending)
+        {
+            var keys = collectionKeys as Guid[] ?? collectionKeys.ToArray();
+
+            if (!keys.Any()) return PagedCollection<IProductContent>.Empty();
+
+            var pagedKeys = ((ProductService)Service).GetKeysNotInAnyCollections(keys, min, max, page, itemsPerPage, sortBy, sortDirection);
+
+            return _cache.MapPagedCollection(pagedKeys, sortBy);
+        }
+
+        /// <inheritdoc/>
+        public PagedCollection<IProductContent> TypedProductContentPageThatNotInAnyCollections(
+            IEnumerable<Guid> collectionKeys,
+            string searchTerm,
+            decimal min,
+            decimal max,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Ascending)
+        {
+            var keys = collectionKeys as Guid[] ?? collectionKeys.ToArray();
+
+            if (!keys.Any()) return PagedCollection<IProductContent>.Empty();
+
+            var pagedKeys = ((ProductService)Service).GetKeysNotInAnyCollections(keys, searchTerm, min, max, page, itemsPerPage, sortBy, sortDirection);
+
+            return _cache.MapPagedCollection(pagedKeys, sortBy);
+        }
+
         /// <summary>
         /// Gets a <see cref="PagedCollection{IProductContent}"/> that exists in any of the collections passed.
         /// </summary>
@@ -662,6 +782,45 @@
             return _cache.MapPagedCollection(pagedKeys, sortBy);
         }
 
+        /// <inheritdoc/>
+        public PagedCollection<IProductContent> TypedProductContentPageThatExistsInAnyCollections(
+            IEnumerable<Guid> collectionKeys,
+            decimal min,
+            decimal max,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Ascending)
+        {
+            var keys = collectionKeys as Guid[] ?? collectionKeys.ToArray();
+
+            if (!keys.Any()) return PagedCollection<IProductContent>.Empty();
+
+            var pagedKeys = ((ProductService)Service).GetKeysThatExistInAnyCollections(keys, min, max, page, itemsPerPage, sortBy, sortDirection);
+
+            return _cache.MapPagedCollection(pagedKeys, sortBy);
+        }
+
+        /// <inheritdoc/>
+        public PagedCollection<IProductContent> TypedProductContentPageThatExistsInAnyCollections(
+            IEnumerable<Guid> collectionKeys,
+            string searchTerm,
+            decimal min,
+            decimal max,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Ascending)
+        {
+            var keys = collectionKeys as Guid[] ?? collectionKeys.ToArray();
+
+            if (!keys.Any()) return PagedCollection<IProductContent>.Empty();
+
+            var pagedKeys = ((ProductService)Service).GetKeysThatExistInAnyCollections(keys, searchTerm, min, max, page, itemsPerPage, sortBy, sortDirection);
+
+            return _cache.MapPagedCollection(pagedKeys, sortBy);
+        }
+
         /// <summary>
         /// Gets a <see cref="ProductDisplay"/> by it's unique key
         /// </summary>
@@ -691,7 +850,9 @@
             var criteria = SearchProvider.CreateSearchCriteria();
             criteria.Field("sku", sku).And().Field("master", "True");
 
-            var display = SearchProvider.Search(criteria).Select(PerformMapSearchResultToDisplayObject).FirstOrDefault();
+
+            var displays = SearchProvider.Search(criteria).Select(PerformMapSearchResultToDisplayObject);
+            var display = displays.FirstOrDefault();
 
             if (display != null) return this.ModifyData(display);
 
@@ -718,7 +879,9 @@
             var criteria = SearchProvider.CreateSearchCriteria();
             criteria.Field("slugs", slug).And().Field("master", "True");
 
-            var display = SearchProvider.Search(criteria).Select(PerformMapSearchResultToDisplayObject).FirstOrDefault();
+            var displays = SearchProvider.Search(criteria).Select(PerformMapSearchResultToDisplayObject).ToArray();
+
+            var display = displays.FirstOrDefault(x => x.DetachedContents.Any(y => y.Slug.Equals(slug, StringComparison.InvariantCultureIgnoreCase)));
 
             // Don't modifiy the data here as it would have been modified in the PerformMapSearchResultToDisplayObject
             if (display != null) return display;

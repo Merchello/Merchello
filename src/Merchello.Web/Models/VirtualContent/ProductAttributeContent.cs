@@ -362,6 +362,11 @@
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether uses override default.
+        /// </summary>
+        internal bool UsesOverrideDefault { get; set; }
+
+        /// <summary>
         /// Gets a property by it's alias.
         /// </summary>
         /// <param name="alias">
@@ -382,7 +387,7 @@
         /// The alias.
         /// </param>
         /// <param name="recurse">
-        /// The recurse.
+        /// A value indicating whether or not to use a recursive lookup.
         /// </param>
         /// <returns>
         /// The <see cref="IPublishedProperty"/>.
@@ -413,7 +418,6 @@
             _display.EnsureAttributeDetachedDataValues();
             if (!_display.DetachedDataValues.Any() || _contentType == null) return propDictionary;
 
-           
             propDictionary.AddRange(_display.DataValuesAsPublishedProperties(_contentType));
             return propDictionary;
         }

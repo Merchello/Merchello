@@ -22,8 +22,14 @@
         public Guid Key { get; set; }
 
         /// <summary>
+        /// Gets or sets the membership provider id.
+        /// </summary>
+        public string Pid { get; set; }
+
+        /// <summary>
         /// Gets the context values.
         /// </summary>
+        [Obsolete]
         public List<KeyValuePair<string, string>> Values { get; private set; } 
     }
 }

@@ -50,6 +50,7 @@
                 ShipMethodKey = dto.ShipMethodKey,
                 Carrier = dto.Carrier,
                 TrackingCode = dto.TrackingCode,
+                TrackingUrl = dto.TrackingUrl,
                 VersionKey = dto.VersionKey,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
@@ -102,6 +103,7 @@
                 Email = entity.Email,
                 Carrier = entity.Carrier,
                 TrackingCode = entity.TrackingCode,
+                TrackingUrl = entity.TrackingUrl,
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate
             };

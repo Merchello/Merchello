@@ -13,10 +13,12 @@
     using Gateways.Payment;
     using Gateways.Taxation;
 
+    using Merchello.Core.Configuration;
     using Merchello.Core.EntityCollections;
     using Merchello.Core.Logging;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.TypeFields;
+    using Merchello.Core.Strategies.Itemization;
 
     using Newtonsoft.Json;
     using Services;
@@ -91,6 +93,42 @@
                        ? merchelloContext.Services.StoreSettingService.GetCurrencyByCode(currencyCode)
                        : null;
         }
+
+        #region Itemization
+
+        /// <summary>
+        /// Itemizes the items in an invoice.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <returns>
+        /// The <see cref="InvoiceItemItemization"/>.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Throws an exception if the itemization strategy could not be instantiated.
+        /// </exception>
+        public static InvoiceItemItemization ItemizeItems(this IInvoice invoice)
+        {
+            var type = MerchelloConfiguration.Current.GetStrategyElement(Constants.StrategyTypeAlias.InvoiceItemizationStrategy).Type;
+
+            var ctrArgValues = new object[] { invoice };
+
+            var strategy = ActivatorHelper.CreateInstance<InvoiceItemizationStrategyBase>(type, ctrArgValues);
+
+
+            if (strategy.Success)
+            {
+                return strategy.Result.Itemize();
+            }
+
+
+            MultiLogHelper.Error(typeof(InvoiceExtensions), "Failed to instantiate the InvoiceItemizationStrategy.", strategy.Exception);
+
+            throw strategy.Exception;
+        }
+
+        #endregion
 
         #region Address
 
@@ -388,8 +426,13 @@
             var attempt = orderBuilder.Build();
             if (attempt.Success) return attempt.Result;
 
-            MultiLogHelper.Error<OrderBuilderChain>("Extension method PrepareOrder failed", attempt.Exception);
-            throw attempt.Exception;
+            var exception = attempt.Exception != null
+                                ? attempt.Exception
+                                : new NullReferenceException(
+                                      "Order creation task did not return an exception but it returned as a failure.");
+
+                MultiLogHelper.Error<OrderBuilderChain>("Extension method PrepareOrder failed", attempt.Exception);
+                throw exception;
         }
 
         #endregion
@@ -1113,7 +1156,7 @@
 
         #endregion
 
-        private static decimal Ensure2Places(decimal value)
+        internal static decimal Ensure2Places(decimal value)
         {
             var ensured = value.ToString("N2");
 

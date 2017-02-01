@@ -99,7 +99,8 @@ namespace Merchello.Web
         /// </returns>
         protected override string GetMembershipProviderKey()
         {
-            return MembershipHelper.GetCurrentMemberId().ToString(CultureInfo.InvariantCulture);
+            var id = MembershipHelper.GetCurrentMemberId();
+            return id == 0 ? string.Empty : id.ToString(CultureInfo.InvariantCulture);
         }
 
         /// <summary>

@@ -17,9 +17,19 @@
         private readonly ICachedProductQuery _cachedQuery;
 
         /// <summary>
-        /// The search term.
+        /// The minimum price range.
         /// </summary>
-        private string _searchTerm;
+        private decimal _minPrice = 0M;
+
+        /// <summary>
+        /// The maximum price range.
+        /// </summary>
+        private decimal _maxPrice = 0M;
+
+        /// <summary>
+        /// A value indicating the builder should setup a price range filter..
+        /// </summary>
+        private bool _hasPriceRangeFilter = false;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductContentQueryBuilder"/> class.
@@ -34,17 +44,41 @@
             this.Initialize();
         }
 
+        /// <inheritdoc/>
+        public void SetPriceRange(decimal min, decimal max)
+        {
+            if (min > max)
+            {
+                var tmp = min;
+                max = min;
+                min = tmp;
+            }
+
+            _minPrice = min;
+            _maxPrice = max;
+            _hasPriceRangeFilter = true;
+        }
+
+        /// <inheritdoc/>
+        public void ClearPriceRange()
+        {
+            _hasPriceRangeFilter = false;
+            _minPrice = 0M;
+            _maxPrice = 0M;
+        }
+
         /// <summary>
         /// The reset.
         /// </summary>
         public override void Reset()
         {
-            this._searchTerm = string.Empty;
+            this.SearchTerm = string.Empty;
             this.Page = 1;
             this.ItemsPerPage = 10;
             this.SortBy = ProductSortField.Name;
             this.SortDirection = SortDirection.Ascending;
             this.CollectionClusivity = CollectionClusivity.ExistsInAllCollectionsAndFilters;
+            this.ClearPriceRange();
         }
 
         /// <summary>
@@ -68,9 +102,8 @@
         {
             var sortBy = SortBy.ToString().ToLowerInvariant();
 
-            return new ProductContentQuery(_cachedQuery)
+            var query = new ProductContentQuery(_cachedQuery)
             {
-                SearchTerm = _searchTerm,
                 Page = Page,
                 ItemsPerPage = ItemsPerPage,
                 SortBy = sortBy,
@@ -78,7 +111,20 @@
                 CollectionKeys = this.CollectionKeys,
                 CollectionClusivity = this.CollectionClusivity
             };
+
+            if (!string.IsNullOrWhiteSpace(SearchTerm))
+            {
+                query.SearchTerm = SearchTerm;
+            }
+
+            if (_hasPriceRangeFilter)
+            {
+                query.SetPriceRange(_minPrice, _maxPrice);
+            }
+
+            return query;
         }
+
 
         /// <summary>
         /// Initializes the builder.

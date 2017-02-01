@@ -402,6 +402,7 @@
 			destination.VersionKey = shipmentDisplay.VersionKey;
 			destination.Carrier = shipmentDisplay.Carrier;
 			destination.TrackingCode = shipmentDisplay.TrackingCode;
+		    destination.TrackingUrl = shipmentDisplay.TrackingUrl;
 		    destination.ShipmentStatus = shipmentDisplay.ShipmentStatus.ToShipmentStatus();
 
 			var existing = shipmentDisplay.Items.Where(x => x.Key != Guid.Empty);

@@ -11,7 +11,9 @@
         self.productVariants = [];
         self.currencySymbol = '';
         self.price = 0;
+        self.costOfGoods = 0;
         self.includeSalePrice = false;
+        self.includeCostOfGoods = false;
         self.salePrice = 0;
     };
 

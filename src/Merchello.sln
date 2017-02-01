@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Core", "Merchello.Core\Merchello.Core.csproj", "{2A83A229-C24B-4D8D-B806-7C9999EB9461}"
 EndProject
@@ -29,7 +29,7 @@ EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Merchello.Web.UI.Client", "http://localhost:55729", "{37C148C6-04CB-4C12-973A-02714528E94B}"
 	ProjectSection(WebsiteProperties) = preProject
 		UseIISExpress = "true"
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5.2"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_55729"
 		Debug.AspNetCompiler.PhysicalPath = "Merchello.Web.UI.Client\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_55729\"
@@ -69,7 +69,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Readme", "Readme", "{197C16
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Merchello.Providers.UI.Client", "Merchello.Providers.UI.Client\", "{F348D45B-3926-4998-89F2-0017439DC45C}"
 	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5.2"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_14360"
 		Debug.AspNetCompiler.PhysicalPath = "Merchello.Providers.UI.Client\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_14360\"
@@ -94,7 +94,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Tests.PaymentProv
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Merchello.Mui.Client", "Merchello.Mui.Client\", "{22C1B905-B2E5-4F0A-9F17-3A7262B7E0A9}"
 	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5.2"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_7159"
 		Debug.AspNetCompiler.PhysicalPath = "Merchello.Mui.Client\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_7159\"

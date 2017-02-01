@@ -1,54 +1,116 @@
-﻿@model Merchello.Web.Store.Models.BraintreeCcPaymentModel
+﻿@model Merchello.Web.Store.Models.BraintreePaymentModel
 @using System.Web.Mvc.Html
 @using Merchello.FastTrack.Ui
 @using Merchello.Web.Models.Ui
 
 <h3>Braintree credit card</h3>
-<form data-muiscript="braintree">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="form-group">
-                @Html.LabelFor(x => x.CardHolder)
-                @Html.TextBoxFor(x => x.CardHolder, new { @class = "form-control" })
-                @Html.ValidationMessageFor(x => x.CardHolder)
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(x => x.CardNumber)
-                @Html.TextBoxFor(x => x.CardNumber, new { placeholder = "0000 0000 0000 0000", style = "cursor: auto", maxlength = "16", @class = "form-control", data_muivalue="cardnumber" })
-                @Html.ValidationMessageFor(x => x.CardNumber)
-            </div>
-        </div>
+
+
+<!-- Bootstrap inspired Braintree Hosted Fields example -->
+<div class="panel panel-default bootstrap-basic">
+    <div class="panel-heading">
+        <h3 class="panel-title">Enter Card Details</h3>
     </div>
-    <div class="row">
-        <div class="col-md-3">
-            <div class="form-group">
-                @Html.LabelFor(x => x.ExpiresMonthYear)
-                @Html.TextBoxFor(x => x.ExpiresMonthYear, new { placeholder = "mm/yy", maxlength = "5", @class = "form-control" })
-                @Html.ValidationMessageFor(x => x.ExpiresMonthYear)
+    <form class="panel-body braintree" data-muiscript="braintree">
+
+        <div class="form-group">
+            <label class="control-label">Card Number</label>
+            <!-- Hosted Fields div container -->
+            <div class="form-control" id="card-number"></div>
+            <span class="helper-text"></span>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <label class="control-label col-xs-12">Expiration Date</label>
+                <div class="col-xs-6">
+                    <!-- Hosted Fields div container -->
+                    <div class="form-control" id="expiration-month"></div>
+                </div>
+                <div class="col-xs-6">
+                    <!-- Hosted Fields div container -->
+                    <div class="form-control" id="expiration-year"></div>
+                </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="form-group">
-                @Html.LabelFor(x => x.Cvv)
-                @Html.TextBoxFor(x => x.Cvv, new { maxlength = "3", placeholder = "123", @class = "form-control" })
-                @Html.ValidationMessageFor(x => x.Cvv)
+
+        <div class="form-group">
+            <label class="control-label">Security Code</label>
+            <!-- Hosted Fields div container -->
+            <div class="form-control" id="cvv"></div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Zipcode</label>
+            <!-- Hosted Fields div container -->
+            <div class="form-control" id="postal-code"></div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-6">
+                <a href="@ExampleUiHelper.CheckoutWorkflow.GetPageForStage(CheckoutStage.PaymentMethod).Url" class="btn btn-default">Back</a>
+            </div>
+            <div class="col-md-6 text-right">
+                <input type="hidden" id="braintree-successurl" value="@ExampleUiHelper.Content.GetReceipt().Url" />
+                <button value="submit" id="submit" class="btn btn-success btn-lg">Pay with <span id="card-type">Card</span></button>
+            </div>
+
+            @*<button class="btn btn-default pull-right">Finish &amp; Pay</button>*@
+        </div>
+
+        @Html.HiddenFor(x => x.Token, new { data_muivalue = "btnonce" })
+
+
+    </form>
+</div>
+
+
+@*<form data-muiscript="braintree">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.CardHolder)
+                    @Html.TextBoxFor(x => x.CardHolder, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.CardHolder)
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(x => x.CardNumber)
+                    @Html.TextBoxFor(x => x.CardNumber, new { placeholder = "0000 0000 0000 0000", style = "cursor: auto", maxlength = "16", @class = "form-control", data_muivalue = "cardnumber" })
+                    @Html.ValidationMessageFor(x => x.CardNumber)
+                </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                @Html.LabelFor(x => x.PostalCode)
-                @Html.TextBoxFor(x => x.PostalCode, new { @class = "form-control" })
-                @Html.ValidationMessageFor(x => x.PostalCode)
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.ExpiresMonthYear)
+                    @Html.TextBoxFor(x => x.ExpiresMonthYear, new { placeholder = "mm/yy", maxlength = "5", @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.ExpiresMonthYear)
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Cvv)
+                    @Html.TextBoxFor(x => x.Cvv, new { maxlength = "3", placeholder = "123", @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.Cvv)
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.PostalCode)
+                    @Html.TextBoxFor(x => x.PostalCode, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.PostalCode)
+                </div>
             </div>
         </div>
-    </div>
 
         <div>
             <a href="@ExampleUiHelper.CheckoutWorkflow.GetPageForStage(CheckoutStage.PaymentMethod).Url" class="btn btn-default">Back</a>
-            <input type="hidden" id="braintree-successurl" value="@ExampleUiHelper.Content.GetReceipt().Url"/>
+            <input type="hidden" id="braintree-successurl" value="@ExampleUiHelper.Content.GetReceipt().Url" />
             <button class="btn btn-default pull-right">Finish &amp; Pay</button>
         </div>
 
         @Html.HiddenFor(x => x.Token, new { data_muivalue = "btnonce" })
 
-</form>
+    </form>*@

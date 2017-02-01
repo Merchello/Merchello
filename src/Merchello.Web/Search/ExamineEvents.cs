@@ -12,6 +12,7 @@
     using Examine;
     using Examine.Providers;
 
+    using Merchello.Core.Persistence.Repositories;
     using Merchello.Web.Caching;
 
     using Umbraco.Core;
@@ -88,6 +89,10 @@
             ProductService.Saved += ProductServiceSaved;
             ProductService.Deleted += ProductServiceDeleted;
 
+            // fixme V3
+            // this is a hack to re-index products when shared options are changed
+            ProductOptionRepository.ReIndex += ProductOptionRepositoryReIndex;
+
             //ProductVariantService.Created += ProductVariantServiceCreated;
             ProductVariantService.Saved += ProductVariantServiceSaved;
             ProductVariantService.Deleted += ProductVariantServiceDeleted;
@@ -109,6 +114,36 @@
 
             //CustomerAddressService.Saved += CustomerAddressServiceSaved;
             //CustomerAddressService.Deleted += CustomerAddressServiceDeleted;
+        }
+
+        /// <summary>
+        /// The product option repository re index.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The product keys.
+        /// </param>
+        /// <remarks>
+        /// REFACTOR v3
+        /// </remarks>
+        private void ProductOptionRepositoryReIndex(ProductOptionRepository sender, Core.Events.ObjectEventArgs<IEnumerable<Guid>> e)
+        {
+            var keys = e.EventObject;
+
+            if (MerchelloContext.HasCurrent)
+            {
+                var products = MerchelloContext.Current.Services.ProductService.GetByKeys(keys).ToArray();
+                var contentCache = new VirtualProductContentCache();
+                foreach (var p in products)
+                {
+                    IndexProduct(p);
+
+                    // we also need to refresh the published product cache
+                    contentCache.ClearVirtualCache(p);
+                }
+            }
         }
 
         /// <summary>

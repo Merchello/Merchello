@@ -1,0 +1,228 @@
+﻿
+.umb-modal.fade.in.diplo-tracelog-modal {
+    margin-left: 0;
+}
+
+@media only screen and (min-width: 1400px) {
+    #diplo-logdetail {
+        width: 840px !important;
+        margin-left: -840px !important;
+    }
+}
+
+@media only screen and (min-width: 1200px) and (max-width: 1399px) {
+    #diplo-logdetail {
+        width: 600px !important;
+        margin-left: -600px !important;
+    }
+}
+
+@media only screen and (min-width: 1000px) and (max-width: 1199px) {
+    #diplo-logdetail {
+        width: 500px !important;
+        margin-left: -500px !important;
+    }
+}
+
+#diplo-logdetail {
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+
+#traceLog .st-sort-ascent:before {
+    content: '\25B2';
+}
+
+#traceLog .st-sort-descent:before {
+    content: '\25BC';
+}
+
+#traceLog td, #traceLog th {
+    padding: 8px;
+}
+
+#traceLog th {
+    cursor: pointer;
+}
+
+#traceLog tr.filters input, #traceLog tr.filters select {
+    width: 100%;
+    margin: 0;
+    padding: 5px;
+    height: 30px;
+    box-sizing: border-box;
+}
+
+
+#traceLog.table-striped > tbody > tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+#traceLog.table-striped > tbody > tr {
+    color: #333;
+}
+
+    #traceLog.table-striped > tbody > tr:hover {
+        background-color: #eee !important;
+        color: #000;
+    }
+
+    #traceLog.table-striped > tbody > tr.tlError {
+        color: #a00;
+    }
+
+    #traceLog.table-striped > tbody > tr.tlWarn {
+        color: #aa6a00;
+    }
+
+#traceLog .logger {
+    max-width: 200px;
+    overflow: hidden;
+    text-align: right;
+}
+
+#traceLog .logger-inner {
+    float: right;
+}
+
+#traceLog .logger small, #traceLog .date small {
+    color: #ccc;
+}
+
+#traceLog .message:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#traceLog tfoot {
+    background-color: #e8e8e8;
+}
+
+#traceLog thead {
+    background-color: #e8e8e8;
+    color: #555555;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+    #traceLog thead tr.ng-table-filters {
+        background-color: #f8f8f8;
+    }
+
+    #traceLog thead .sort-asc, #traceLog thead .sort-desc {
+    }
+
+    #traceLog thead select.level-select {
+        margin-bottom: 0;
+        max-width: 70px;
+        font-size: smaller;
+    }
+
+#traceLog .pager .btn-group .btn-default {
+    background-color: #fff;
+}
+
+#traceLog .pager li > a {
+    border-radius: 0;
+}
+
+    #traceLog .pager li > a:hover {
+    }
+
+#traceLog .inner-addon {
+    position: relative;
+}
+
+    #traceLog .inner-addon .icon {
+        position: absolute;
+        padding: 6px;
+    }
+
+    #traceLog .inner-addon i.icon {
+        color: #ccc;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+        #traceLog .inner-addon i.icon:hover {
+            color: #666;
+            text-decoration: none;
+        }
+
+#traceLog .left-addon .icon {
+    left: 0px;
+}
+
+#traceLog .right-addon .icon {
+    right: 0px;
+}
+
+#traceLog .pagination a {
+    height: 20px;
+}
+
+#traceLog .info-message a {
+    text-decoration: underline;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+#traceLog-panel .log-name {
+    display: block;
+    color: #666;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+#traceLog-panel .dropdown-menu > li > a {
+    cursor: pointer;
+}
+
+#traceLog-panel .polling {
+    position: absolute;
+    top: 50px;
+    right: 20px;
+    color: #ccc;
+    margin-top: 8px;
+}
+
+#traceLog-panel .umb-btn-toolbar .btn {
+    height: 20px;
+}
+
+#diplo-logdetail h3 {
+    margin: 2px;
+}
+
+#diplo-logdetail .tlError {
+    color: #c00;
+}
+
+#diplo-logdetail .tlWarn {
+    color: #cc8c00;
+}
+
+#diplo-logdetail .logger {
+}
+
+#diplo-logdetail .message {
+    font-family: 'Courier New', serif;
+    white-space: pre-wrap;
+    background-color: #f8f8f8;
+    border: 1px solid #dbdbdb;
+    padding: 8px;
+    margin: 8px;
+    font-size: 12px;
+}
+
+#diplo-logdetail .umb-scrollable {
+    z-index: 9999;
+}
+
+#diplo-logdetail .umb-panel-footer .btn {
+    z-index: 99999;
+}
+
+#diplo-logdetail .btn-default {
+    margin-top: 9px;
+}

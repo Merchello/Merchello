@@ -36,10 +36,13 @@
         /// <param name="destination">
         /// The destination.
         /// </param>
+        /// <param name="languages">
+        /// Valid languages defined in Umbraco
+        /// </param>
         /// <returns>
         /// The <see cref="IProduct"/>.
         /// </returns>
-        internal static IProduct ToProduct(this ProductDisplay productDisplay, IProduct destination)
+        internal static IProduct ToProduct(this ProductDisplay productDisplay, IProduct destination, ILanguage[] languages = null)
         {
             if (productDisplay.Key != Guid.Empty)
             {
@@ -94,12 +97,13 @@
                 else
                 {
                     //// Add to a new catalog
-                    ((Product)destination).MasterVariant.AddToCatalogInventory(new CatalogInventory(catalogInventory.CatalogKey, catalogInventory.ProductVariantKey)
-                                                                                   {
-                                                                                       Location = catalogInventory.Location,
-                                                                                       Count = catalogInventory.Count,
-                                                                                       LowCount = catalogInventory.LowCount
-                                                                                   });
+                    ((Product)destination).MasterVariant.AddToCatalogInventory(
+                        new CatalogInventory(catalogInventory.CatalogKey, catalogInventory.ProductVariantKey)
+                        {
+                            Location = catalogInventory.Location,
+                            Count = catalogInventory.Count,
+                            LowCount = catalogInventory.LowCount
+                        });
                 }
             }
 
@@ -353,7 +357,7 @@
 
                 IProductAttribute destinationProductAttribute;
 
-                if (destination.Choices.Contains(choice.Sku))
+                if (destination.Choices.IndexOfKey(choice.Key) >= 0)
                 {
                     destinationProductAttribute = destination.Choices[choice.Key];
 
@@ -408,6 +412,9 @@
         /// <param name="optionContentTypes">
         /// The option Content Types.
         /// </param>
+        /// <param name="optionWrappers">
+        /// Product option content wrappers.
+        /// </param>
         /// <param name="cultureName">
         /// The cultureName
         /// </param>
@@ -417,12 +424,13 @@
         /// <returns>
         /// The <see cref="IEnumerable{IProductVariantContent}"/>.
         /// </returns>
-        internal static IEnumerable<IProductVariantContent> ProductVariantsAsProductVariantContent(this ProductDisplay display, IDictionary<Guid, PublishedContentType> optionContentTypes, string cultureName, IPublishedContent parent = null)
+        internal static IEnumerable<IProductVariantContent> ProductVariantsAsProductVariantContent(this ProductDisplay display, IDictionary<Guid, PublishedContentType> optionContentTypes, IEnumerable<IProductOptionWrapper> optionWrappers, string cultureName, IPublishedContent parent = null)
         {
             var variantContent = new List<IProductVariantContent>();
 
 
             // ReSharper disable once LoopCanBeConvertedToQuery
+            var optionWrapperArray = optionWrappers as IProductOptionWrapper[] ?? optionWrappers.ToArray();
             foreach (var variant in display.ProductVariants)
             {
                 var contentType = variant.DetachedContents.Any()
@@ -431,7 +439,14 @@
                                           variant.DetachedContentForCulture(cultureName).DetachedContentType.UmbContentType.Alias)
                                       : null;
 
-                variantContent.Add(new ProductVariantContent(variant, contentType, optionContentTypes, cultureName, parent));
+                var attributes = new List<IProductAttributeContent>();
+                foreach (var o in optionWrapperArray)
+                {
+                    var att = o.Choices.FirstOrDefault(x => variant.Attributes.Select(y => y.Key).Contains(x.Key));
+                    if (att != null) attributes.Add(att);
+                }
+
+                variantContent.Add(new ProductVariantContent(variant, contentType, optionContentTypes, attributes, cultureName, parent));
             }
 
             return variantContent;
@@ -462,9 +477,11 @@
             // This is a hack for the special case when HasProperty and HasValue extensions are called
             // and a content type is not assigned. - so we will default to the product content type
             // if there is none.  The detachedDataValues collection should be empty -
-            var ct = contentType ?? parent.ContentType;
+            var usesDefault = contentType == null;
+            var ct = usesDefault ? parent.ContentType : contentType;
 
-            return new ProductOptionWrapper(display, parent, contentType);
+            var pow = new ProductOptionWrapper(display, parent, ct, usesDefault);
+            return pow;
         }
 
         /// <summary>
@@ -600,11 +617,15 @@
         /// <param name="display">
         /// The display.
         /// </param>
-        internal static void AddOrUpdateDetachedContent(this IProductBase destination, ProductDisplayBase display)
+        /// <param name="languages">
+        /// A list of languages configured in Umbraco.
+        /// </param>
+        internal static void AddOrUpdateDetachedContent(this IProductBase destination, ProductDisplayBase display, ILanguage[] languages = null)
         {
             if (destination.DetachedContents.Any())
             {
                 // detached content
+                // TODO BUG this is not identifying the language to be removed.
                 var removedLanguages =
                     destination.DetachedContents.Where(
                         x => !display.DetachedContents.Select(y => y.CultureName).Contains(x.CultureName));
@@ -632,8 +653,6 @@
                 }
             }         
         }
-
-    
 
         #endregion
 

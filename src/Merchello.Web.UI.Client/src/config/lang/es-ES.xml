@@ -17,6 +17,7 @@
     <key alias="percentSymbol">%</key>
     <key alias="moneySymbol">€</key>
     <key alias="trackingNumber">Tracking # </key>
+    <key alias="trackingUrl">Tracking URL</key>
     <key alias="shipment">Envío</key>
     <key alias="sku">SKU</key>
     <key alias="quantity">Cant</key>
@@ -71,6 +72,7 @@
     <key alias="decrease">Decrease</key>
     <key alias="associateWith">Associate with</key>
     <key alias="shared">Shared</key>
+    <key alias="custom">Custom</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Productos</key>
@@ -217,6 +219,9 @@
     <key alias="copyProduct">Copy Product</key>
     <key alias="newProductName">New Product Name</key>
     <key alias="newProductSku">New Product SKU</key>
+    <key alias="newPrice">New Price</key>
+    <key alias="newCostOfGoods">New Cost Of Goods</key>
+    <key alias="newSalePrice">New Sale Price</key>
   </area>
   <area alias="merchelloSpecFilters">
     <key alias="manageProductFilters">Manage Product Filters</key>
@@ -546,6 +551,7 @@
     <key alias="info">Información de envío</key>
     <key alias="weight">Peso</key>
     <key alias="dimensions">Dimensiones</key>
+    <key alias="carrier">Carrier</key>
     <!-- actions -->
     <key alias="setVars">Configura las variables de envío: Peso y dimensiones</key>
     <!-- phrases -->
@@ -563,6 +569,7 @@
         <small>A list of the catalog's shipping providers and methods, sorted by country.</small>]]>
     </key>
     <key alias="warehouse">Warehouse</key>
+    <key alias="selectShipment">Select Shipment</key>
   </area>
   <area alias="merchelloInventory">
     <!-- things -->

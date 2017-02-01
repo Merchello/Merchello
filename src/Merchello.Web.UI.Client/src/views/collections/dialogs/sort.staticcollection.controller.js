@@ -103,7 +103,6 @@ angular.module('merchello')
                     childPromise.then(function(children) {
                         var reloadPromise = treeService.reloadNode($scope.currentNode);
                         reloadPromise.then(function() {
-                            console.info(treeService._getTreeCache());
                             navigationService.hideNavigation();
                             notificationsService.success('Collections sorted success.');
                         });

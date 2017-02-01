@@ -25,8 +25,18 @@
         public OrderDisplay Order { get; set; }
 
         /// <summary>
+        /// Gets or sets the carrier.
+        /// </summary>
+        public string Carrier { get; set; }
+
+        /// <summary>
         /// Gets or sets the tracking number.
         /// </summary>
         public string TrackingNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets the tracking url.
+        /// </summary>
+        public string TrackingUrl { get; set; }
     }
 }

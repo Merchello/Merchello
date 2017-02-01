@@ -13,7 +13,7 @@
         self.name = '';
         self.sku = '';
         self.sortOrder = 0;
-        self.detachedDataValues = {};
+        self.detachedDataValues = [];
         self.isDefaultChoice = false;
     };
 

@@ -17,7 +17,6 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstra
             $scope.save = save;
 
             function init() {
-                console.info($scope.dialogData);
                 if ($scope.dialogData.component.isConfigured()) {
                     loadExistingConfigurations();
                     $scope.loaded = true;

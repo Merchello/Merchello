@@ -21,7 +21,7 @@
     /// <summary>
     /// The product repository.
     /// </summary>
-    internal class ProductRepository : PagedRepositoryBase<IProduct, ProductDto>, IProductRepository
+    internal partial class ProductRepository : PagedRepositoryBase<IProduct, ProductDto>, IProductRepository
     {
         /// <summary>
         /// The product variant repository.

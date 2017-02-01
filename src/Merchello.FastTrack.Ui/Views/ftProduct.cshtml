@@ -53,6 +53,36 @@
 
 </div>
 
+@*@foreach (var variant in Model.ProductVariants)
+{
+    <h3>@variant.Name</h3>
+    <table class="table table-striped">
+        <tr>
+            <td>Name</td>
+            <td>Has content</td>
+            <td>Body text</td>
+        </tr>
+        @foreach (var att in variant.Attributes)
+        { 
+            <tr>
+                <td><b>@att.Name</b></td>
+                <td>@variant.AttributeHasContent(att)</td>
+                <td style="background-color: #eee">
+                    @if (variant.AttributeHasContent(att))
+                    {
+                        var content = variant.GetContentForAttribute(att);
+                        if (content != null)
+                        {
+                            var html = content.GetPropertyValue<IHtmlString>("bodyText");
+                            @html
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+}*@
+
 @helper Categories(IProductContent product)
 {
 var collections = product.Collections().ToArray();

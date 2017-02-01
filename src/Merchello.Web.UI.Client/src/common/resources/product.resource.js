@@ -101,6 +101,14 @@
                         'Failed to retreive data for product variant key ' + key);
                 },
 
+                getManufacturers: function()
+                {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'GetAllManufacturers';
+                    return umbRequestHelper.resourcePromise(
+                        $http({url: url, method: 'GET' }), 'Failed to retreive list of manufacturers'
+                    );
+                },
+
                 /**
                  * @ngdoc method
                  * @name save

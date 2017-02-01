@@ -11,7 +11,6 @@ angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.Dele
         function init() {
             $scope.dialogData = $scope.$parent.currentAction.metaData.dialogData;
             $scope.refreshPath = treeService.getPath($scope.$parent.currentNode);
-            console.info($scope.currentNode);
             loadEntityCollection();
         }
 

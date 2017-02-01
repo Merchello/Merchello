@@ -17,6 +17,7 @@
     <key alias="percentSymbol">%</key>
     <key alias="moneySymbol">$</key>
     <key alias="trackingNumber">№ квитанции </key>
+    <key alias="trackingUrl">Tracking URL</key>
     <key alias="shipment">Доставка</key>
     <key alias="sku">Артикул</key>
     <key alias="quantity">К-во</key>
@@ -71,6 +72,7 @@
     <key alias="decrease">Уменьшить</key>
     <key alias="associateWith">Связать с</key>
     <key alias="shared">Совместное</key>
+    <key alias="custom">Custom</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Товары</key>
@@ -217,6 +219,9 @@
     <key alias="copyProduct">Создать копию</key>
     <key alias="newProductName">Задайте наименование товара</key>
     <key alias="newProductSku">Задайте артикул товара</key>
+    <key alias="newPrice">New Price</key>
+    <key alias="newCostOfGoods">New Cost Of Goods</key>
+    <key alias="newSalePrice">New Sale Price</key>
   </area>
   <area alias="merchelloSpecFilters">
     <key alias="manageProductFilters">Управление фильтрами товаров</key>
@@ -546,6 +551,7 @@
     <key alias="info">Информация о доставке</key>
     <key alias="weight">Вес</key>
     <key alias="dimensions">Размеры</key>
+    <key alias="carrier">Carrier</key>
     <!-- actions -->
     <key alias="setVars">Установка параметров доставки: веса и размеров</key>
     <!-- phrases -->
@@ -563,6 +569,7 @@
         <small>Список провайдеров и способов доставки, отсортированный по странам.</small>]]>
     </key>
     <key alias="warehouse">Склад</key>
+    <key alias="selectShipment">Select Shipment</key>
   </area>
   <area alias="merchelloInventory">
     <!-- things -->

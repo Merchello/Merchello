@@ -302,7 +302,7 @@
             function addNotificationMessage(method) {
                 var dialogData = dialogDataFactory.createAddEditNotificationMessageDialogData();
                 dialogData.notificationMessage = notificationMessageDisplayBuilder.createDefault();
-                console.info(method);
+
                 dialogData.notificationMessage.methodKey = method.key;
                 dialogData.notificationMessage.name = method.name;
                 dialogData.notificationMonitors = $scope.notificationMonitors;

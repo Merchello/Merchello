@@ -1151,11 +1151,12 @@
         /// <returns>
         /// A slug incremented with a count if necessary.
         /// </returns>
-        private string EnsureSlug(IProductVariantDetachedContent detachedContent, string slug)
+        private string EnsureSlug(IProductVariantDetachedContent detachedContent, string slug, int interval = 0)
         {
-            var count = Database.ExecuteScalar<int>("SELECT COUNT(slug) FROM [merchProductVariantDetachedContent] WHERE [merchProductVariantDetachedContent].[slug] = @Slug AND [merchProductVariantDetachedContent].[productVariantKey] != @Pvk", new { @Slug = slug, @Pvk = detachedContent.ProductVariantKey });
-            if (count > 0) slug = string.Format("{0}-{1}", slug, count + 1);
-            return slug;
+            var modSlug = interval > 0 ? string.Format("{0}-{1}", slug, interval) : slug;
+            var count = Database.ExecuteScalar<int>("SELECT COUNT(slug) FROM [merchProductVariantDetachedContent] WHERE [merchProductVariantDetachedContent].[slug] = @Slug AND [merchProductVariantDetachedContent].[productVariantKey] != @Pvk", new { @Slug = modSlug, @Pvk = detachedContent.ProductVariantKey });
+            if (count > 0) modSlug = EnsureSlug(detachedContent, slug, interval + 1);
+            return modSlug;
         }
 
 

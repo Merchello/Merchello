@@ -1,6 +1,6 @@
 /*! Merchello
  * https://github.com/meritage/Merchello
- * Copyright (c) 2016 Across the Pond, LLC.
+ * Copyright (c) 2017 Across the Pond, LLC.
  * Licensed MIT
  */
 
@@ -1098,7 +1098,9 @@ angular.module('merchello.models').constant('AddEditEntityStaticCollectionDialog
         self.productVariants = [];
         self.currencySymbol = '';
         self.price = 0;
+        self.costOfGoods = 0;
         self.includeSalePrice = false;
+        self.includeCostOfGoods = false;
         self.salePrice = 0;
     };
 
@@ -2324,7 +2326,7 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
         self.name = '';
         self.sku = '';
         self.sortOrder = 0;
-        self.detachedDataValues = {};
+        self.detachedDataValues = [];
         self.isDefaultChoice = false;
     };
 
@@ -2863,7 +2865,9 @@ angular.module('merchello.models').constant('ProductVariantDetachedContentDispla
             });
 
             angular.forEach(this.attributes, function(a) {
-                a.detachedDataValues = a.detachedDataValues.toArray();
+                if(!angular.isArray(a.detachedDataValues)) {
+                 a.detachedDataValues = a.detachedDataValues.toArray();
+                }
             });
         }
 
@@ -3362,6 +3366,34 @@ angular.module('merchello.models').constant('SalesOverTimeResult', SalesOverTime
     }());
 
     angular.module('merchello.models').constant('InvoiceDisplay', InvoiceDisplay);
+/**
+ * @ngdoc model
+ * @name InvoiceItemItemizationDisplay
+ * @function
+ *
+ * @description
+ * Represents a JS version of Merchello's InvoiceItemItemizationDisplay object
+ */
+var InvoiceItemItemizationDisplay = function() {
+    var self = this;
+    self.adjustments = [];
+    self.custom = [];
+    self.discounts = [];
+    self.products = [];
+    self.shipping = [];
+    self.tax = [];
+    self.reconciles = false;
+    self.productTotal = 0.00;
+    self.shippingTotal = 0.00;
+    self.taxTotal = 0.00;
+    self.adjustmentTotal = 0.00;
+    self.discountTotal = 0.00;
+    self.customTotal = 0.00;
+    self.invoiceTotal = 0.00;
+    self.itemizationTotal = 0.00;
+};
+
+angular.module('merchello.models').constant('InvoiceItemItemizationDisplay', InvoiceItemItemizationDisplay);
     /**
      * @ngdoc model
      * @name InvoiceStatusDisplay
@@ -3702,6 +3734,7 @@ angular.module('merchello.models').constant('SalesOverTimeResult', SalesOverTime
         self.email = '';
         self.carrier = '';
         self.trackingCode = '';
+        self.trackingUrl = '';
         self.shippedDate = '';
         self.items = [];
         self.shipmentStatus = {};
@@ -6074,6 +6107,49 @@ angular.module('merchello.models').factory('salesOverTimeResultBuilder',
                     }
                 };
             }]);
+    /**
+     * @ngdoc service
+     * @name merchello.models.invoiceItemItemizationDisplayBuilder
+     *
+     * @description
+     * A utility service that builds InvoiceItemItemizationDisplay models
+     */
+    angular.module('merchello.models')
+        .factory('invoiceItemItemizationDisplayBuilder',
+            ['genericModelBuilder','invoiceLineItemDisplayBuilder', 'InvoiceItemItemizationDisplay',
+            function (genericModelBuilder, invoiceLineItemDisplayBuilder, InvoiceItemItemizationDisplay) {
+
+                var Constructor = InvoiceItemItemizationDisplay;
+
+                return {
+                    createDefault: function() {
+                        return new Constructor();
+                    },
+                    transform: function(jsonResult) {
+                        var itemizations = genericModelBuilder.transform(jsonResult, Constructor);
+                        if (angular.isArray(itemizations)) {
+                            for(var i = 0; i < itemizations.length; i++) {
+                                itemizations[ i ].adjustments = invoiceLineItemDisplayBuilder.transform(jsonResult[ i ].adjustments);
+                                itemizations[ i ].custom = invoiceLineItemDisplayBuilder.transform(jsonResult[ i ].custom);
+                                itemizations[ i ].discounts = invoiceLineItemDisplayBuilder.transform(jsonResult[ i ].discounts);
+                                itemizations[ i ].products = invoiceLineItemDisplayBuilder.transform(jsonResult[ i ].products);
+                                itemizations[ i ].shipping = invoiceLineItemDisplayBuilder.transform(jsonResult[ i ].shipping);
+                                itemizations[ i ].tax = invoiceLineItemDisplayBuilder.transform(jsonResult[ i ].tax);
+                            }
+                        } else {
+                            //jsonResult = JSON.stringify(jsonResult);
+                            itemizations.adjustments = invoiceLineItemDisplayBuilder.transform(jsonResult.adjustments);
+                            itemizations.custom = invoiceLineItemDisplayBuilder.transform(jsonResult.custom);
+                            itemizations.discounts = invoiceLineItemDisplayBuilder.transform(jsonResult.discounts);
+                            itemizations.products = invoiceLineItemDisplayBuilder.transform(jsonResult.products);
+                            itemizations.shipping = invoiceLineItemDisplayBuilder.transform(jsonResult.shipping);
+                            itemizations.tax = invoiceLineItemDisplayBuilder.transform(jsonResult.tax);
+                        }
+                        return itemizations;
+                    }
+                };
+        }]);
+
     /**
      * @ngdoc service
      * @name merchello.models.invoiceLineItemDisplayBuilder

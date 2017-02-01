@@ -3,7 +3,6 @@ angular.module('merchello').controller('Merchello.Sales.Dialogs.InvoiceHeaderCon
     function($scope) {
 
         function init() {
-            console.info($scope.dialogData);
            $scope.loaded = true;
         }
 

@@ -50,6 +50,14 @@
         }
 
         /// <summary>
+        /// Gets the store root xpath.
+        /// </summary>
+        public string StoreRootXpath
+        {
+            get { return Section.Settings["StoreRootXpath"].Value; }
+        }
+
+        /// <summary>
         /// Get the Store document type alias
         /// </summary>
         public string ContentTypeAliasStore

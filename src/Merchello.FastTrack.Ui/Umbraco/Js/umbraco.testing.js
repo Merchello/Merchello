@@ -1,6 +1,6 @@
 /*! umbraco
  * https://github.com/umbraco/umbraco-cms/
- * Copyright (c) 2016 Umbraco HQ;
+ * Copyright (c) 2017 Umbraco HQ;
  * Licensed 
  */
 
@@ -68,7 +68,7 @@ angular.module('umbraco.mocks').
 						"view": "textstring",
 						"icon": "icon-quote",
 						"config": {
-							"style": "border-left: 3px solid #ccc; padding: 10px; color: #ccc; font-family: serif; font-variant: italic; font-size: 18px",
+							"style": "border-left: 3px solid #ccc; padding: 10px; color: #ccc; font-family: serif; font-style: italic; font-size: 18px",
 							"markup": "<blockquote>#value#</blockquote>"
 						}
 					}
@@ -1486,7 +1486,7 @@ angular.module('umbraco.mocks').
                   "content_nodeName": "Page Title",
                   "content_otherElements": "Properties",
                   "content_parentNotPublished": "This document is published but is not visible because the parent '%0%' is unpublished",
-                  "content_parentNotPublishedAnomaly": "Oops: this document is published but is not in the cache (internal error)",
+                  "content_parentNotPublishedAnomaly": "This document is published but is not in the cache",
                   "content_publish": "Publish",
                   "content_publishStatus": "Publication Status",
                   "content_releaseDate": "Publish at",

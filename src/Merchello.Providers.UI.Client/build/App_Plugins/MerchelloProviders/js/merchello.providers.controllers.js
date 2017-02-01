@@ -1,6 +1,6 @@
 /*! MerchelloPaymentProviders
  * https://github.com/Merchello/Merchello
- * Copyright (c) 2016 Across the Pond, LLC.
+ * Copyright (c) 2017 Across the Pond, LLC.
  * Licensed MIT
  */
 
@@ -52,74 +52,132 @@ angular.module('merchello.providers').controller('Merchello.Providers.Dialogs.Br
 
 
             function init() {
-                var filesToLoad = ['https://js.braintreegateway.com/v2/braintree.js'];
+                //var filesToLoad = ['https://js.braintreegateway.com/v2/braintree.js'];
+                var filesToLoad = [ 'https://js.braintreegateway.com/web/3.6.2/js/client.min.js',
+                                    'https://js.braintreegateway.com/web/3.6.2/js/hosted-fields.js'];
+
                 $scope.dialogData.warning = 'All credit card information is tokenized. No values are passed to the server.';
 
                 var billingAddress = $scope.dialogData.invoice.getBillToAddress();
-                $scope.cardholderName = billingAddress.name;
+                //$scope.cardholderName = billingAddress.name;
                 $scope.postalCode = billingAddress.postalCode;
-                loadMonths();
-                loadYears();
+
                 assetsService.load(filesToLoad).then(function () {
                     setupBraintree();
                 });
+
                 $scope.dialogData.amount = invoiceHelper.round($scope.dialogData.invoiceBalance, 2);
             }
 
             function setupBraintree() {
                 var promise = braintreeResource.getClientRequestToken($scope.dialogData.invoice.customerKey);
                 promise.then(function(requestToken) {
-                    var setup = {
-                        clientToken: JSON.parse(requestToken)
-                    };
-                    $scope.braintreeClient = new braintree.api.Client(setup);
-                    $scope.loaded = true;
+
+                    var form = document.querySelector('#cardForm');
+                    var authorization = JSON.parse(requestToken);
+
+                    braintree.client.create({
+                        authorization: authorization
+                    }, function(err, clientInstance) {
+                        if (err) {
+                            console.error(err);
+                            return;
+                        }
+                        createHostedFields(clientInstance);
+                    });
+
+                    function createHostedFields(clientInstance) {
+
+                        braintree.hostedFields.create({
+                            client: clientInstance,
+                            styles: {
+                                'input': {
+                                    'font-size': '16px',
+                                    'font-family': 'courier, monospace',
+                                    'font-weight': 'lighter',
+                                    'color': '#ccc'
+                                },
+                                ':focus': {
+                                    'color': 'black'
+                                },
+                                '.valid': {
+                                    'color': '#8bdda8'
+                                }
+                            },
+                            fields: {
+                                number: {
+                                    selector: '#card-number',
+                                    placeholder: '4111 1111 1111 1111'
+                                },
+                                cvv: {
+                                    selector: '#cvv',
+                                    placeholder: '123'
+                                },
+                                expirationDate: {
+                                    selector: '#expiration-date',
+                                    placeholder: 'MM/YYYY'
+                                },
+                                postalCode: {
+                                    selector: '#postal-code',
+                                    placeholder: '11111'
+                                }
+                            }
+                        }, function (err, hostedFieldsInstance) {
+
+                            var teardown = function (event) {
+                                event.preventDefault();
+
+                                hostedFieldsInstance.tokenize(function (tokenizeErr, payload) {
+                                    if (tokenizeErr) {
+                                        switch (tokenizeErr.code) {
+                                            case 'HOSTED_FIELDS_FIELDS_EMPTY':
+                                                console.error('All fields are empty! Please fill out the form.');
+                                                break;
+                                            case 'HOSTED_FIELDS_FIELDS_INVALID':
+                                                console.error('Some fields are invalid:', tokenizeErr.details.invalidFieldKeys);
+                                                break;
+                                            case 'HOSTED_FIELDS_FAILED_TOKENIZATION':
+                                                console.error('Tokenization failed server side. Is the card valid?');
+                                                break;
+                                            case 'HOSTED_FIELDS_TOKENIZATION_NETWORK_ERROR':
+                                                console.error('Network error occurred when tokenizing.');
+                                                break;
+                                            default:
+                                                console.error('Something bad happened!', tokenizeErr);
+                                        }
+                                    } else {
+                                        save(payload.nonce);
+                                    }
+
+                                    hostedFieldsInstance.teardown(function () {
+                                        createHostedFields(clientInstance);
+                                        form.removeEventListener('submit', teardown, false);
+                                    });
+                                });
+
+
+                            };
+
+                            form.addEventListener('submit', teardown, false);
+                        });
+
+                        $scope.loaded = true;
+                    }
+
                 });
             }
 
-            function loadMonths() {
-                var d = new Date();
-                var monthNames = [ "January", "February", "March", "April", "May", "June",
-                    "July", "August", "September", "October", "November", "December" ]
-                for(var i = 0; i < monthNames.length; i++) {
-                    $scope.months.push({ monthNumber: i,  monthName: monthNames[i] })
-                }
-            }
 
-            function loadYears() {
-                var d = new Date();
-                var start = d.getFullYear();
-                for(var i = 0; i < 15; i++) {
-                    $scope.years.push(start + i);
-                }
-            }
-
-            function save() {
+            function save(nonce) {
                 $scope.wasFormSubmitted = true;
-                if(invoiceHelper.valueIsInRage($scope.dialogData.amount, 0, $scope.dialogData.invoiceBalance) && $scope.authCaptureForm.cardholderName.$valid
-                    && $scope.authCaptureForm.cardNumber.$valid && $scope.authCaptureForm.cvv.$valid && $scope.authCaptureForm.postalCode.$valid) {
-
-                    var cc = braintreeCreditCardBuilder.createDefault();
-                    cc.cardholderName = $scope.cardholderName;
-                    cc.number = $scope.cardNumber;
-                    cc.cvv = $scope.cvv;
-                    cc.expirationMonth = invoiceHelper.padLeft($scope.selectedMonth.monthNumber + 1, '0', 2);
-                    cc.expirationYear = $scope.expirationYear;
-                    cc.billingAddress.postalCode = $scope.postalCode;
+                if(invoiceHelper.valueIsInRage($scope.dialogData.amount, 0, $scope.dialogData.invoiceBalance)) {
                     $scope.dialogData.showSpinner();
-                    $scope.braintreeClient.tokenizeCard(cc, function (err, nonce) {
-                        // Send nonce to your server
-                        if(err !== null) {
-                            console.info(err);
-                            return;
-                        }
+                    $scope.dialogData.processorArgs.setValue('nonce-from-the-client', nonce);
+                    $scope.submit($scope.dialogData);
 
-                        $scope.dialogData.processorArgs.setValue('nonce-from-the-client', nonce);
-                        $scope.submit($scope.dialogData);
-                    });
                 } else {
                     if(!invoiceHelper.valueIsInRage($scope.dialogData.amount, 0, $scope.dialogData.invoiceBalance)) {
-                        $scope.authCaptureForm.amount.$setValidity('amount', false);
+                        $scope.cardForm.amount.$setValidity('amount', false);
                     }
                 }
             }

@@ -17,6 +17,7 @@
     <key alias="percentSymbol">%</key>
     <key alias="moneySymbol">DKK</key>
     <key alias="trackingNumber">Sporingsnummer</key>
+    <key alias="trackingUrl">Tracking URL</key>
     <key alias="shipment">Forsendelse</key>
     <key alias="sku">SKU</key>
     <key alias="quantity">Antal</key>
@@ -71,6 +72,7 @@
     <key alias="decrease">Reducer</key>
     <key alias="associateWith">Tilknyt til</key>
     <key alias="shared">Delt</key>
+    <key alias="custom">Custom</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Produkter</key>
@@ -217,6 +219,9 @@
     <key alias="copyProduct">Kopier produkt</key>
     <key alias="newProductName">Nyt produktnavn</key>
     <key alias="newProductSku">Nyt produktnummer</key>
+    <key alias="newPrice">New Price</key>
+    <key alias="newCostOfGoods">New Cost Of Goods</key>
+    <key alias="newSalePrice">New Sale Price</key>
   </area>
   <area alias="merchelloSpecFilters">
     <key alias="manageProductFilters">Administrer produktfiltre</key>
@@ -546,6 +551,7 @@
     <key alias="info">Forsendelsesinformation</key>
     <key alias="weight">Vægt</key>
     <key alias="dimensions">Dimensioner</key>
+    <key alias="carrier">Carrier</key>
     <!-- actions -->
     <key alias="setVars">Opsæt forsendelsesvariabler: Vægt og dimensioner</key>
     <!-- phrases -->
@@ -563,6 +569,7 @@
         <small>En liste over katalogets leverings-udbydere og metoder, sorteret per land.</small>]]>
     </key>
     <key alias="warehouse">Lager</key>
+    <key alias="selectShipment">Select Shipment</key>
   </area>
   <area alias="merchelloInventory">
     <!-- things -->

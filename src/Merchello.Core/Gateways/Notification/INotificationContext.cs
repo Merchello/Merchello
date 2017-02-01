@@ -5,6 +5,8 @@ using Merchello.Core.Models;
 
 namespace Merchello.Core.Gateways.Notification
 {
+    using System.Net.Mail;
+
     /// <summary>
     /// Defines the NotificationContext
     /// </summary>
@@ -30,5 +32,18 @@ namespace Merchello.Core.Gateways.Notification
         /// <param name="formatter">The <see cref="IFormatter"/> to use when formatting the message</param>
         void Send(INotificationMessage message, IFormatter formatter);
 
+        /// <summary>
+        /// Sends a <see cref="INotificationMessage"/>.
+        /// </summary>
+        /// <param name="message">
+        /// The message.
+        /// </param>
+        /// <param name="formatter">
+        /// The formatter.
+        /// </param>
+        /// <param name="attachments">
+        /// The attachments.
+        /// </param>
+        void Send(INotificationMessage message, IFormatter formatter, IEnumerable<Attachment> attachments);
     }
 }

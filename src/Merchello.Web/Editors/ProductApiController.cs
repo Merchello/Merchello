@@ -19,6 +19,8 @@
     using Merchello.Web.WebApi.Binders;
     using Merchello.Web.WebApi.Filters;
 
+    using Umbraco.Core;
+    using Umbraco.Core.Models;
     using Umbraco.Web;
     using Umbraco.Web.Mvc;
 
@@ -49,6 +51,11 @@
         private readonly MerchelloHelper _merchello;
 
         /// <summary>
+        /// The collection of all languages.
+        /// </summary>
+        private Lazy<ILanguage[]> _allLanguages;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ProductApiController"/> class. 
         /// Constructor
         /// </summary>
@@ -72,6 +79,8 @@
             _warehouseService = MerchelloContext.Services.WarehouseService;
 
             _merchello = new MerchelloHelper(MerchelloContext, false, DetachedValuesConversionType.Editor);
+
+            Initialize();
         }
 
         /// <summary>
@@ -478,5 +487,24 @@
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 
+        /// <summary>
+        /// Gets a list of all current manufacturers.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{String}"/> (Manufacturer names).
+        /// </returns>
+        [HttpGet]
+        public IEnumerable<string> GetAllManufacturers()
+        {
+            return _productService.GetAllManufacturers();
+        }
+
+        /// <summary>
+        /// Initializes the controller
+        /// </summary>
+        private void Initialize()
+        { 
+            _allLanguages = new Lazy<ILanguage[]>(() => ApplicationContext.Current.Services.LocalizationService.GetAllLanguages().ToArray());
+        }
     }
 }

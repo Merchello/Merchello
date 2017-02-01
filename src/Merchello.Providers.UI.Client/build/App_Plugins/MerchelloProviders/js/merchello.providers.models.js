@@ -1,6 +1,6 @@
 /*! MerchelloPaymentProviders
  * https://github.com/Merchello/Merchello
- * Copyright (c) 2016 Across the Pond, LLC.
+ * Copyright (c) 2017 Across the Pond, LLC.
  * Licensed MIT
  */
 
@@ -60,6 +60,8 @@ var PayPalProviderSettings = function() {
 
 angular.module('merchello.providers.models').constant('PayPalProviderSettings', PayPalProviderSettings);
 
+
+// OBSOLETE
 angular.module('merchello.providers.models').factory('braintreeCreditCardBuilder',
     ['genericModelBuilder', 'BraintreeCreditCard',
         function(genericModelBuilder, BraintreeCreditCard) {
@@ -98,6 +100,8 @@ angular.module('merchello.providers.models').factory('braintreeProviderSettingsB
             };
         }]);
 
+
+// OBSOLETE
 angular.module('merchello.providers.models').factory('merchantDescriptorBuilder',
     ['genericModelBuilder', 'MerchantDescriptor',
         function(genericModelBuilder, MerchantDescriptor) {

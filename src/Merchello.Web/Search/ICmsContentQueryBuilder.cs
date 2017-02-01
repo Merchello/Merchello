@@ -86,6 +86,11 @@
         long ItemsPerPage { get; set; }
 
         /// <summary>
+        /// Gets or sets the search term.
+        /// </summary>
+        string SearchTerm { get; set; }
+
+        /// <summary>
         /// Gets or sets the sort by.
         /// </summary>
         ProductSortField SortBy { get; set; }
