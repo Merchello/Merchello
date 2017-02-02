@@ -144,7 +144,7 @@
             if (quoted == null) return Attempt<IShipment>.Fail(new NullReferenceException("An shipment could not be found in the invoice assoiciated with the order passed"));
 
             var status = _merchelloContext.Services.ShipmentService.GetShipmentStatusByKey(_shipmentStatusKey) ?? 
-                _merchelloContext.Services.ShipmentService.GetShipmentStatusByKey(Core.Constants.DefaultKeys.ShipmentStatus.Quoted);
+                _merchelloContext.Services.ShipmentService.GetShipmentStatusByKey(Core.Constants.ShipmentStatus.Quoted);
 
             // execute the change
             var attempt = TaskHandlers.Any()

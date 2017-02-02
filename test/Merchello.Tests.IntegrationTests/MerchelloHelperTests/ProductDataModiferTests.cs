@@ -40,7 +40,7 @@
             ((ServiceContext)MerchelloContext.Current.Services).ShipCountryService.Save(ukCountry);
 
             this._settingService = MerchelloContext.Current.Services.StoreSettingService;
-            var setting = this._settingService.GetByKey(Core.Constants.StoreSettingKeys.GlobalTaxationApplicationKey);
+            var setting = this._settingService.GetByKey(Core.Constants.StoreSetting.GlobalTaxationApplicationKey);
             setting.Value = "Product";
             this._settingService.Save(setting);
 
@@ -62,7 +62,7 @@
         public override void FixtureTearDown()
         {
             base.FixtureTearDown();
-            var setting = this._settingService.GetByKey(Core.Constants.StoreSettingKeys.GlobalTaxationApplicationKey);
+            var setting = this._settingService.GetByKey(Core.Constants.StoreSetting.GlobalTaxationApplicationKey);
             setting.Value = "Invoice";
             this._settingService.Save(setting);
             ((TaxationContext)MerchelloContext.Current.Gateways.Taxation).ClearProductPricingMethod();

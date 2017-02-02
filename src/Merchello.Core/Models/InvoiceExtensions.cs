@@ -395,8 +395,8 @@
         public static IOrder PrepareOrder(this IInvoice invoice, IMerchelloContext merchelloContext)
         {
             var orderStatusKey = invoice.HasShippableItems()
-                                     ? Constants.DefaultKeys.OrderStatus.NotFulfilled
-                                     : Constants.DefaultKeys.OrderStatus.Fulfilled;
+                                     ? Constants.OrderStatus.NotFulfilled
+                                     : Constants.OrderStatus.Fulfilled;
 
             var orderStatus = 
                 merchelloContext.Services.OrderService.GetOrderStatusByKey(orderStatusKey);
@@ -1005,12 +1005,12 @@
 
             var statuses = gatewayProviderService.GetAllInvoiceStatuses().ToArray();
 
-            if (invoice.Total > appliedTotal && invoice.InvoiceStatusKey != Core.Constants.DefaultKeys.InvoiceStatus.Partial)
-                invoice.InvoiceStatus = statuses.First(x => x.Key == Core.Constants.DefaultKeys.InvoiceStatus.Partial);
-            if (appliedTotal == 0 && invoice.InvoiceStatusKey != Core.Constants.DefaultKeys.InvoiceStatus.Unpaid)
-                invoice.InvoiceStatus = statuses.First(x => x.Key == Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
-            if (invoice.Total <= appliedTotal && invoice.InvoiceStatusKey != Core.Constants.DefaultKeys.InvoiceStatus.Paid)
-                invoice.InvoiceStatus = statuses.First(x => x.Key == Core.Constants.DefaultKeys.InvoiceStatus.Paid);
+            if (invoice.Total > appliedTotal && invoice.InvoiceStatusKey != Core.Constants.InvoiceStatus.Partial)
+                invoice.InvoiceStatus = statuses.First(x => x.Key == Core.Constants.InvoiceStatus.Partial);
+            if (appliedTotal == 0 && invoice.InvoiceStatusKey != Core.Constants.InvoiceStatus.Unpaid)
+                invoice.InvoiceStatus = statuses.First(x => x.Key == Core.Constants.InvoiceStatus.Unpaid);
+            if (invoice.Total <= appliedTotal && invoice.InvoiceStatusKey != Core.Constants.InvoiceStatus.Paid)
+                invoice.InvoiceStatus = statuses.First(x => x.Key == Core.Constants.InvoiceStatus.Paid);
 
             if (invoice.IsDirty()) gatewayProviderService.Save(invoice);
 

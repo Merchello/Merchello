@@ -197,7 +197,7 @@
             _parentCulture = _parent != null ? _parent.GetCulture().Name : string.Empty;
 
             _defaultStoreLanguage = StringExtensions.IsNullOrWhiteSpace(this._parentCulture) ?
-                _storeSettingService.GetByKey(Constants.StoreSettingKeys.DefaultExtendedContentCulture).Value :
+                _storeSettingService.GetByKey(Constants.StoreSetting.DefaultExtendedContentCulture).Value :
                 _parentCulture;
 
             if (_allLanguages.Any())

@@ -1149,7 +1149,7 @@
                 .Append("WHERE [merchOrder].[orderStatusKey] = @osk", new { @osk = orderStatusKey })
                 .Append(")");
 
-            if (orderStatusKey.Equals(Core.Constants.DefaultKeys.OrderStatus.NotFulfilled))
+            if (orderStatusKey.Equals(Core.Constants.OrderStatus.NotFulfilled))
             {
                 sql.Append("OR [merchInvoice].[pk] NOT IN (");
                 sql.Append("SELECT DISTINCT(invoiceKey)");
@@ -1248,7 +1248,7 @@
             sql.Append("WHERE [merchOrder].[orderStatusKey] = @osk", new { @osk = orderStatusKey });
             sql.Append(")");
 
-            if (orderStatusKey.Equals(Core.Constants.DefaultKeys.OrderStatus.NotFulfilled))
+            if (orderStatusKey.Equals(Core.Constants.OrderStatus.NotFulfilled))
             {
                 sql.Append("OR [merchInvoice].[pk] NOT IN (");
                 sql.Append("SELECT DISTINCT(invoiceKey)");

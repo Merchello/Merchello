@@ -36,7 +36,7 @@
         internal static string FormatAsStoreDate(this DateTime value, IMerchelloContext merchelloContext)
         {
             var dateFormat =
-                merchelloContext.Services.StoreSettingService.GetByKey(Constants.StoreSettingKeys.DateFormatKey);
+                merchelloContext.Services.StoreSettingService.GetByKey(Constants.StoreSetting.DateFormatKey);
             return dateFormat == null ? value.ToShortDateString() : value.ToString(dateFormat.Value);
         }
 

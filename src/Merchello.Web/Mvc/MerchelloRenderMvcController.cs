@@ -133,7 +133,7 @@
         private void Initialize()
         {
             var storeSettingsService = this._merchelloContext.Services.StoreSettingService;
-            var storeSetting = storeSettingsService.GetByKey(Core.Constants.StoreSettingKeys.CurrencyCodeKey);
+            var storeSetting = storeSettingsService.GetByKey(Core.Constants.StoreSetting.CurrencyCodeKey);
             _customerContext = PluggableObjectHelper.GetInstance<CustomerContextBase>("CustomerContext", UmbracoContext);
             _currency = storeSettingsService.GetCurrencyByCode(storeSetting.Value);
             _isInitialized = true;

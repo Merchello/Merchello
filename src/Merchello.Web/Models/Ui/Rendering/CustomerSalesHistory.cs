@@ -18,9 +18,9 @@
         /// </summary>
         private readonly Guid[] _validStatuses =
             {
-                Core.Constants.DefaultKeys.InvoiceStatus.Paid,
-                Core.Constants.DefaultKeys.InvoiceStatus.Partial,
-                Core.Constants.DefaultKeys.InvoiceStatus.Unpaid
+                Core.Constants.InvoiceStatus.Paid,
+                Core.Constants.InvoiceStatus.Partial,
+                Core.Constants.InvoiceStatus.Unpaid
             };
 
         /// <summary>

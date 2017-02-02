@@ -85,7 +85,7 @@
             get
             {
                 if (this._storeCurrency != null) return this._storeCurrency;
-                var storeSetting = this._storeSettingService.GetByKey(Core.Constants.StoreSettingKeys.CurrencyCodeKey);
+                var storeSetting = this._storeSettingService.GetByKey(Core.Constants.StoreSetting.CurrencyCodeKey);
                 this._storeCurrency = this._storeSettingService.GetCurrencyByCode(storeSetting.Value);
                 return this._storeCurrency;
             }

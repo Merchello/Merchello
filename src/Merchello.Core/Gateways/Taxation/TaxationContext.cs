@@ -275,7 +275,7 @@
         /// </summary>
         private void SetTaxApplicationSetting()
         {
-            var setting = _storeSettingService.GetByKey(Core.Constants.StoreSettingKeys.GlobalTaxationApplicationKey);
+            var setting = _storeSettingService.GetByKey(Core.Constants.StoreSetting.GlobalTaxationApplicationKey);
             if (setting == null)
             {
                 TaxationApplication = TaxationApplication.Invoice;

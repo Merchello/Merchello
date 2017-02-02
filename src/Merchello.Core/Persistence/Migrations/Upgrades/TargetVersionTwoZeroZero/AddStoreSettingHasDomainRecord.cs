@@ -39,9 +39,9 @@
         public override void Up()
         {
             var storeSettingService = MerchelloContext.Current.Services.StoreSettingService;
-            var setting = storeSettingService.GetByKey(Core.Constants.StoreSettingKeys.HasDomainRecordKey);
+            var setting = storeSettingService.GetByKey(Core.Constants.StoreSetting.HasDomainRecordKey);
             if (setting == null)
-            _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Core.Constants.StoreSettingKeys.HasDomainRecordKey, Name = "hasDomainRecord", Value = false.ToString(), TypeName = "System.Boolean", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Core.Constants.StoreSetting.HasDomainRecordKey, Name = "hasDomainRecord", Value = false.ToString(), TypeName = "System.Boolean", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
         }
 
         /// <summary>
@@ -50,7 +50,7 @@
         public override void Down()
         {
             var storeSettingService = MerchelloContext.Current.Services.StoreSettingService;
-            var setting = storeSettingService.GetByKey(Core.Constants.StoreSettingKeys.HasDomainRecordKey);
+            var setting = storeSettingService.GetByKey(Core.Constants.StoreSetting.HasDomainRecordKey);
             if (setting != null) storeSettingService.Delete(setting);
         }
     }

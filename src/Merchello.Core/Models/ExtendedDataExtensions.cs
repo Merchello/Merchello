@@ -845,7 +845,7 @@
             // TODO - this is a total hack since this value can be changed in the database
             var quoted = new ShipmentStatus()
             {
-                Key = Constants.DefaultKeys.ShipmentStatus.Quoted,
+                Key = Constants.ShipmentStatus.Quoted,
                 Alias = "quoted",
                 Name = "Quoted",
                 Active = true,

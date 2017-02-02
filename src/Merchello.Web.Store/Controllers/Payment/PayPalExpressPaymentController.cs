@@ -184,7 +184,7 @@
                     // Assert the payment key matches - this is to ensure that the 
                     // payment matches the invoice
                     var ensure = payments.All(x => x.Key == paymentKey) || !payments.Any();
-                    if (ensure && invoice.InvoiceStatus.Key == Core.Constants.DefaultKeys.InvoiceStatus.Unpaid)
+                    if (ensure && invoice.InvoiceStatus.Key == Core.Constants.InvoiceStatus.Unpaid)
                     {
                         MultiLogHelper.Info<PayPalExpressPaymentController>(string.Format("Deleted invoice number {0} to prevent duplicate. PayPal ACK response not success", invoice.PrefixedInvoiceNumber()));
                         MerchelloServices.InvoiceService.Delete(invoice);

@@ -376,6 +376,63 @@
     <Compile Include="Configuration\Outline\ReplacementCollection.cs" />
     <Compile Include="Configuration\Outline\ReplaceElement.cs" />
     <Compile Include="Configuration\Outline\TreeElement.cs" />
+    <Compile Include="Constants.CountryCodes.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.Database.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.DetachedPublishedContent.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.DistributedCache.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.ExtendedDataKeys.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.InvoiceStatus.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.Locks.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.Migrations.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.NotificationTriggers.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.OrderStatus.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.Providers.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.Repositories.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.ShipmentStatus.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.Store.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.StoreSettings.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.Strategies.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.TaskChains.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.TypeFields.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.Warehouse.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
     <Compile Include="CurrencyContext.cs" />
     <Compile Include="CurrencyHelper.cs" />
     <Compile Include="EntityCollections\IEntityCollectionProviderMeta.cs" />
@@ -854,18 +911,6 @@
     <Compile Include="Configuration\Outline\TaskElement.cs" />
     <Compile Include="Configuration\Outline\TasksConfigurationCollection.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Constants-ActivatorTypes.cs">
-      <DependentUpon>Constants.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Constants-Keys.cs">
-      <DependentUpon>Constants.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Constants-ExtendedDataKeys.cs">
-      <DependentUpon>Constants.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Constants-ProductEditor.cs">
-      <DependentUpon>Constants.cs</DependentUpon>
-    </Compile>
     <Compile Include="Gateways\GatewayContext.cs" />
     <Compile Include="Gateways\GatewayProviderBase.cs" />
     <Compile Include="Gateways\IGatewayContext.cs" />

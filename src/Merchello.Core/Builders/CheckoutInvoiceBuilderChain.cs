@@ -70,7 +70,7 @@
         public override Attempt<IInvoice> Build()
         {
             var unpaid =
-                _checkoutManager.Context.Services.InvoiceService.GetInvoiceStatusByKey(Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
+                _checkoutManager.Context.Services.InvoiceService.GetInvoiceStatusByKey(Core.Constants.InvoiceStatus.Unpaid);
 
             if (unpaid == null)
                 return Attempt<IInvoice>.Fail(new NullReferenceException("Unpaid invoice status query returned null"));
