@@ -34,7 +34,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Fulfillment
             
   
             //// Act
-            var invoice = _invoiceService.CreateInvoice(Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
+            var invoice = _invoiceService.CreateInvoice(Core.Constants.InvoiceStatus.Unpaid);
 
             //// Assert
             Assert.NotNull(invoice);
@@ -49,7 +49,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Fulfillment
         public void Can_Save_An_Invoice_With_InvoiceNumber()
         {
             //// Arrange
-            var invoice = _invoiceService.CreateInvoice(Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
+            var invoice = _invoiceService.CreateInvoice(Core.Constants.InvoiceStatus.Unpaid);
             Console.Write(invoice.InvoiceStatusKey);
 
             //// Act
@@ -65,7 +65,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Fulfillment
         public void Can_Get_Paged_Results_From_Query()
         {
             //// Arrange
-            var statuses = new[] { Core.Constants.DefaultKeys.InvoiceStatus.Paid, Core.Constants.DefaultKeys.InvoiceStatus.Unpaid };
+            var statuses = new[] { Core.Constants.InvoiceStatus.Paid, Core.Constants.InvoiceStatus.Unpaid };
 
             //// Act
             var page = ((InvoiceService)_invoiceService).GetPagedKeys("5 10 17 space nee", 1, 25);

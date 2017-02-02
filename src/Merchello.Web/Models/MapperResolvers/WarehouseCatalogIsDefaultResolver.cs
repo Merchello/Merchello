@@ -19,7 +19,7 @@
         /// </returns>
         protected override bool ResolveCore(IWarehouseCatalog source)
         {
-            return source.Key.Equals(Core.Constants.DefaultKeys.Warehouse.DefaultWarehouseCatalogKey);
+            return source.Key.Equals(Core.Constants.Warehouse.DefaultWarehouseCatalogKey);
         }
     }
 }

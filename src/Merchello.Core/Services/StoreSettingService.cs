@@ -388,7 +388,7 @@
                 {
                     using (var validationRepository = RepositoryFactory.CreateInvoiceRepository(uow))
                     { 
-                        invoiceNumber = repository.GetNextInvoiceNumber(Core.Constants.StoreSettingKeys.NextInvoiceNumberKey, validationRepository.GetMaxDocumentNumber, invoicesCount);
+                        invoiceNumber = repository.GetNextInvoiceNumber(Core.Constants.StoreSetting.NextInvoiceNumberKey, validationRepository.GetMaxDocumentNumber, invoicesCount);
                     }
 
                     uow.Commit();
@@ -417,7 +417,7 @@
                 {
                     using (var validationRepository = RepositoryFactory.CreateOrderRepository(uow))
                     {
-                        orderNumber = repository.GetNextOrderNumber(Core.Constants.StoreSettingKeys.NextOrderNumberKey, validationRepository.GetMaxDocumentNumber, ordersCount);
+                        orderNumber = repository.GetNextOrderNumber(Core.Constants.StoreSetting.NextOrderNumberKey, validationRepository.GetMaxDocumentNumber, ordersCount);
                     }
 
                     uow.Commit();
@@ -446,7 +446,7 @@
                 {
                     using (var validationRepository = RepositoryFactory.CreateShipmentRepository(uow))
                     {
-                        shipmentNumber = repository.GetNextShipmentNumber(Core.Constants.StoreSettingKeys.NextShipmentNumberKey, validationRepository.GetMaxDocumentNumber, shipmentsCount);
+                        shipmentNumber = repository.GetNextShipmentNumber(Core.Constants.StoreSetting.NextShipmentNumberKey, validationRepository.GetMaxDocumentNumber, shipmentsCount);
                     }
 
                     uow.Commit();

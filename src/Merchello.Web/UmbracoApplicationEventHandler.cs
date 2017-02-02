@@ -369,7 +369,7 @@
         /// </param>
         private void StoreSettingServiceOnSaved(IStoreSettingService sender, SaveEventArgs<IStoreSetting> e)
         {
-            var setting = e.SavedEntities.FirstOrDefault(x => x.Key == Core.Constants.StoreSettingKeys.GlobalTaxationApplicationKey);
+            var setting = e.SavedEntities.FirstOrDefault(x => x.Key == Core.Constants.StoreSetting.GlobalTaxationApplicationKey);
             if (setting == null) return;
 
             var taxationContext = (TaxationContext)MerchelloContext.Current.Gateways.Taxation;
@@ -405,7 +405,7 @@
 
             if (result.Payment.Success)
             {
-                if (result.Invoice.InvoiceStatusKey == Core.Constants.DefaultKeys.InvoiceStatus.Paid)
+                if (result.Invoice.InvoiceStatusKey == Core.Constants.InvoiceStatus.Paid)
                 {
                     result.Payment.Result.AuditPaymentCaptured(result.Payment.Result.Amount);
                 }
@@ -440,7 +440,7 @@
                 // Reset the Customer's CheckoutManager
                 e.Customer.Basket().GetCheckoutManager().Reset();
 
-                if (result.Invoice.InvoiceStatusKey == Core.Constants.DefaultKeys.InvoiceStatus.Paid)
+                if (result.Invoice.InvoiceStatusKey == Core.Constants.InvoiceStatus.Paid)
                 {
                     result.Payment.Result.AuditPaymentCaptured(result.Payment.Result.Amount);
                 }

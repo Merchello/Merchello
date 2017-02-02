@@ -50,7 +50,7 @@
         protected override bool PerformExists(IInvoice entity)
         {
             return !entity.Orders.Any()
-                   || entity.Orders.All(x => x.OrderStatusKey == Constants.DefaultKeys.OrderStatus.NotFulfilled);
+                   || entity.Orders.All(x => x.OrderStatusKey == Constants.OrderStatus.NotFulfilled);
         }
 
         /// <summary>
@@ -102,7 +102,7 @@
             SortDirection sortDirection = SortDirection.Ascending)
         {
             return _invoiceService.GetInvoiceKeysMatchingOrderStatus(
-                Constants.DefaultKeys.OrderStatus.NotFulfilled,
+                Constants.OrderStatus.NotFulfilled,
                 page,
                 itemsPerPage,
                 sortBy,
@@ -142,7 +142,7 @@
             return
                     this._invoiceService.GetInvoiceKeysMatchingOrderStatus(
                         args["searchTerm"].ToString(),
-                        Constants.DefaultKeys.OrderStatus.NotFulfilled,
+                        Constants.OrderStatus.NotFulfilled,
                         page,
                         itemsPerPage,
                         sortBy,
@@ -174,7 +174,7 @@
             SortDirection sortDirection = SortDirection.Ascending)
         {
             return _invoiceService.GetInvoiceKeysMatchingTermNotOrderStatus(
-                Constants.DefaultKeys.OrderStatus.NotFulfilled,
+                Constants.OrderStatus.NotFulfilled,
                 page,
                 itemsPerPage,
                 sortBy,
@@ -214,7 +214,7 @@
             return
                     this._invoiceService.GetInvoiceKeysMatchingTermNotOrderStatus(
                         args["searchTerm"].ToString(),
-                        Constants.DefaultKeys.OrderStatus.NotFulfilled,
+                        Constants.OrderStatus.NotFulfilled,
                         page,
                         itemsPerPage,
                         sortBy,

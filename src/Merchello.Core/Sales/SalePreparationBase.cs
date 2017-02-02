@@ -815,7 +815,7 @@
         private void Initialize()
         {
             var storeSettingsService = _merchelloContext.Services.StoreSettingService;
-            var shippingTaxSetting = storeSettingsService.GetByKey(Core.Constants.StoreSettingKeys.GlobalShippingIsTaxableKey);
+            var shippingTaxSetting = storeSettingsService.GetByKey(Core.Constants.StoreSetting.GlobalShippingIsTaxableKey);
             _shippingTaxable = new Lazy<bool>(() => Convert.ToBoolean(shippingTaxSetting.Value));
             this._offerCodeTempData = new Lazy<List<string>>(this.BuildOfferCodeList);
         }

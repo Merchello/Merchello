@@ -55,7 +55,7 @@
                     "Key",
                     new DetachedContentTypeDto()
                     {
-                        Key = Core.Constants.DefaultKeys.DetachedPublishedContentType.DefaultProductVariantDetachedPublishedContentTypeKey,
+                        Key = Core.Constants.DetachedPublishedContentType.DefaultProductVariantDetachedPublishedContentTypeKey,
                         Name = "No Extended Content",
                         EntityTfKey = entity.Product.TypeKey,
                         ContentTypeKey = null,

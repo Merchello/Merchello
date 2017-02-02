@@ -138,7 +138,7 @@
         public static IEnumerable<IOrderLineItem> UnfulfilledItems(this IOrder order, IMerchelloContext merchelloContext, IEnumerable<IOrderLineItem> items)
         {
 
-            if (Constants.DefaultKeys.OrderStatus.Fulfilled == order.OrderStatus.Key) return new List<IOrderLineItem>();
+            if (Constants.OrderStatus.Fulfilled == order.OrderStatus.Key) return new List<IOrderLineItem>();
 
             var shippableItems = items.Where(x => x.IsShippable() && x.ShipmentKey == null).ToArray();
 

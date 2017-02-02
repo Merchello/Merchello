@@ -60,13 +60,13 @@ namespace Merchello.Core.Chains.ShipmentCreation
             // not fulfilled
             if (Order.ShippableItems().All(x => ((OrderLineItem)x).ShipmentKey == null))
             {
-                orderStatusKey = Core.Constants.DefaultKeys.OrderStatus.NotFulfilled;
+                orderStatusKey = Core.Constants.OrderStatus.NotFulfilled;
                 return this.SaveOrderStatus(value, orderStatusKey);
             }
 
             if (Order.ShippableItems().Any(x => ((OrderLineItem)x).ShipmentKey == null))
             {
-                orderStatusKey = Core.Constants.DefaultKeys.OrderStatus.Open;
+                orderStatusKey = Core.Constants.OrderStatus.Open;
                 return this.SaveOrderStatus(value, orderStatusKey);
             }
 
@@ -77,10 +77,10 @@ namespace Merchello.Core.Chains.ShipmentCreation
             var shipments = _shipmentService.GetByKeys(shipmentKeys);
             orderStatusKey =
                 shipments.All(x =>
-                    x.ShipmentStatusKey.Equals(Core.Constants.DefaultKeys.ShipmentStatus.Delivered)
-                    || x.ShipmentStatusKey.Equals(Core.Constants.DefaultKeys.ShipmentStatus.Shipped)) ?
-                        Core.Constants.DefaultKeys.OrderStatus.Fulfilled :
-                        Core.Constants.DefaultKeys.OrderStatus.Open;
+                    x.ShipmentStatusKey.Equals(Core.Constants.ShipmentStatus.Delivered)
+                    || x.ShipmentStatusKey.Equals(Core.Constants.ShipmentStatus.Shipped)) ?
+                        Core.Constants.OrderStatus.Fulfilled :
+                        Core.Constants.OrderStatus.Open;
 
             return this.SaveOrderStatus(value, orderStatusKey);
         }

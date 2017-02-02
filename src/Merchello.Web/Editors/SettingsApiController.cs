@@ -247,7 +247,7 @@
         [HttpPost]
         public async Task<HttpResponseMessage> RecordDomain(MigrationDomain record)
         {
-            var setting = _storeSettingService.GetByKey(Constants.StoreSettingKeys.HasDomainRecordKey);
+            var setting = _storeSettingService.GetByKey(Constants.StoreSetting.HasDomainRecordKey);
 
             if (setting != null && setting.Value == "False")
             {

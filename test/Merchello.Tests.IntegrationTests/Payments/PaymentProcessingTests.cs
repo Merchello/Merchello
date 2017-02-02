@@ -103,7 +103,7 @@ namespace Merchello.Tests.IntegrationTests.Payments
             Assert.IsTrue(authorized.Payment.Success);
             Assert.IsTrue(authorized.Payment.Result.HasIdentity);
             Assert.IsTrue(authorized.Payment.Result.AppliedPayments(_merchelloContext).Any());
-            Assert.AreEqual(Constants.DefaultKeys.InvoiceStatus.Unpaid, _invoice.InvoiceStatusKey);
+            Assert.AreEqual(Constants.InvoiceStatus.Unpaid, _invoice.InvoiceStatusKey);
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace Merchello.Tests.IntegrationTests.Payments
 
             //// Assert
             Assert.IsTrue(capture.Payment.Success);
-            Assert.AreEqual(Constants.DefaultKeys.InvoiceStatus.Paid, _invoice.InvoiceStatusKey);
+            Assert.AreEqual(Constants.InvoiceStatus.Paid, _invoice.InvoiceStatusKey);
         }
         
         /// <summary>
@@ -172,7 +172,7 @@ namespace Merchello.Tests.IntegrationTests.Payments
 
             //// Assert
             Assert.IsTrue(capture.Payment.Success);
-            Assert.AreEqual(Constants.DefaultKeys.InvoiceStatus.Partial, _invoice.InvoiceStatusKey);
+            Assert.AreEqual(Constants.InvoiceStatus.Partial, _invoice.InvoiceStatusKey);
         }
 
         /// <summary>
@@ -188,7 +188,7 @@ namespace Merchello.Tests.IntegrationTests.Payments
 
             //// Assert
             Assert.IsTrue(authCapture.Payment.Success);
-            Assert.AreEqual(Constants.DefaultKeys.InvoiceStatus.Paid, _invoice.InvoiceStatusKey);
+            Assert.AreEqual(Constants.InvoiceStatus.Paid, _invoice.InvoiceStatusKey);
         }
 
         /// <summary>

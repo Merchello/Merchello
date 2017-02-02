@@ -72,19 +72,19 @@
             //// Arrange
             var billTo = new Address() { Address1 = "test", CountryCode = "US", PostalCode = "11111" };
 
-            var invoice = _invoiceService.CreateInvoice(Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
+            var invoice = _invoiceService.CreateInvoice(Core.Constants.InvoiceStatus.Unpaid);
             invoice.SetBillingAddress(billTo);
             _invoiceService.Save(invoice);
 
-            var invoice2 = _invoiceService.CreateInvoice(Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
+            var invoice2 = _invoiceService.CreateInvoice(Core.Constants.InvoiceStatus.Unpaid);
             invoice2.SetBillingAddress(billTo);
             _invoiceService.Save(invoice2);
             
-            var invoice3 = _invoiceService.CreateInvoice(Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
+            var invoice3 = _invoiceService.CreateInvoice(Core.Constants.InvoiceStatus.Unpaid);
             _invoiceService.Save(invoice3);
             invoice3.SetBillingAddress(billTo);
             
-            var invoice4 = _invoiceService.CreateInvoice(Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
+            var invoice4 = _invoiceService.CreateInvoice(Core.Constants.InvoiceStatus.Unpaid);
             invoice4.SetBillingAddress(billTo);
             _invoiceService.Save(invoice4);
           
@@ -136,19 +136,19 @@
             //// Arrange
             var billTo = new Address() { Address1 = "test", CountryCode = "US", PostalCode = "11111" };
 
-            var invoice = _invoiceService.CreateInvoice(Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
+            var invoice = _invoiceService.CreateInvoice(Core.Constants.InvoiceStatus.Unpaid);
             invoice.SetBillingAddress(billTo);
             _invoiceService.Save(invoice);
 
-            var invoice2 = _invoiceService.CreateInvoice(Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
+            var invoice2 = _invoiceService.CreateInvoice(Core.Constants.InvoiceStatus.Unpaid);
             invoice2.SetBillingAddress(billTo);
             _invoiceService.Save(invoice2);
 
-            var invoice3 = _invoiceService.CreateInvoice(Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
+            var invoice3 = _invoiceService.CreateInvoice(Core.Constants.InvoiceStatus.Unpaid);
             _invoiceService.Save(invoice3);
             invoice3.SetBillingAddress(billTo);
 
-            var invoice4 = _invoiceService.CreateInvoice(Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
+            var invoice4 = _invoiceService.CreateInvoice(Core.Constants.InvoiceStatus.Unpaid);
             invoice4.SetBillingAddress(billTo);
             _invoiceService.Save(invoice4);
 

@@ -214,7 +214,7 @@
         {
             var response = Request.CreateResponse(HttpStatusCode.OK);
 
-            if (Core.Constants.DefaultKeys.Warehouse.DefaultWarehouseCatalogKey.Equals(id))
+            if (Core.Constants.Warehouse.DefaultWarehouseCatalogKey.Equals(id))
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new InvalidOperationException("Cannot delete the default warehouse catalog."));
             }
