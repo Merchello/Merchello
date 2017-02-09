@@ -10836,7 +10836,6 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
 
                     loadShippingAddress(id);
 
-
                     $scope.showFulfill = hasUnPackagedLineItems();
                     $scope.loaded = true;
 
@@ -11008,7 +11007,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     $timeout(function() {
                         notificationsService.success("Payment Captured");
                         loadInvoice(paymentRequest.invoiceKey);
-                    }, 400);
+                    }, 800);
                 }, function (reason) {
                     notificationsService.error("Payment Capture Failed", reason.message);
                 });
@@ -11111,8 +11110,9 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     promiseNewShipment.then(function (shipment) {
                         $timeout(function() {
                             notificationsService.success('Shipment #' + shipment.shipmentNumber + ' created');
+                            //console.info(shipment);
                             loadInvoice(data.invoiceKey);
-                        }, 400);
+                        }, 800);
 
                     }, function (reason) {
                         notificationsService.error("New Shipment Failed", reason.message);
