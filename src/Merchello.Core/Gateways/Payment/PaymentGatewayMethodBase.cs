@@ -140,16 +140,16 @@
 
             // collect the payment authorization
             var response = PerformAuthorizePayment(invoice, args);
-            //((PaymentResult)response).ApproveOrderCreation = this.EnsureApproveOrderCreation(response, invoice);
+
+            // Check configuration for override on ApproveOrderCreation
+            if (!response.ApproveOrderCreation)
+                ((PaymentResult)response).ApproveOrderCreation = MerchelloConfiguration.Current.AlwaysApproveOrderCreation;
+
             AuthorizeAttempted.RaiseEvent(new PaymentAttemptEventArgs<IPaymentResult>(response), this);
 
             if (!response.Payment.Success) return response;
 
             AssertPaymentApplied(response, invoice);
-
-            // Check configuration for override on ApproveOrderCreation
-            if (!response.ApproveOrderCreation)
-                ((PaymentResult)response).ApproveOrderCreation = MerchelloConfiguration.Current.AlwaysApproveOrderCreation;
 
             // give response
             return response;
@@ -183,17 +183,17 @@
             // authorize and capture the payment
             var response = PerformAuthorizeCapturePayment(invoice, amount, args);
 
+            // Check configuration for override on ApproveOrderCreation
+            if (!response.ApproveOrderCreation)
+                ((PaymentResult)response).ApproveOrderCreation = MerchelloConfiguration.Current.AlwaysApproveOrderCreation;
+
             AuthorizeCaptureAttempted.RaiseEvent(new PaymentAttemptEventArgs<IPaymentResult>(response), this);
 
             if (!response.Payment.Success) return response;
 
-            AssertPaymentApplied(response, invoice);
+            AssertPaymentApplied(response, response.Invoice);
 
-            AssertInvoiceStatus(invoice);
-
-            // Check configuration for override on ApproveOrderCreation
-            if (!response.ApproveOrderCreation)
-                ((PaymentResult)response).ApproveOrderCreation = MerchelloConfiguration.Current.AlwaysApproveOrderCreation;
+            AssertInvoiceStatus(response.Invoice);
 
             // give response
             return response;
@@ -237,9 +237,9 @@
 
             if (!response.Payment.Success) return response;
 
-            AssertPaymentApplied(response, invoice);
+            AssertPaymentApplied(response, response.Invoice);
 
-            AssertInvoiceStatus(invoice);
+            AssertInvoiceStatus(response.Invoice);
 
 
             // give response
@@ -276,7 +276,7 @@
 
             if (!response.Payment.Success) return response;
 
-            AssertInvoiceStatus(invoice);
+            AssertInvoiceStatus(response.Invoice);
 
             // Force the ApproveOrderCreation to false
             if (response.ApproveOrderCreation) ((PaymentResult)response).ApproveOrderCreation = false;
@@ -329,7 +329,7 @@
                 GatewayProviderService.Save(payment);
             }
 
-            AssertInvoiceStatus(invoice);
+            AssertInvoiceStatus(response.Invoice);
 
             // Force the ApproveOrderCreation to false
             if (response.ApproveOrderCreation)
@@ -457,24 +457,6 @@
             {
                 GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, PaymentMethod.Name, payment.Amount);
             }
-        }
-
-        /// <summary>
-        /// Ensures ApproveOrderCreation setting.
-        /// </summary>
-        /// <param name="response">
-        /// The response.
-        /// </param>
-        /// <param name="invoice">
-        /// The invoice.
-        /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
-        private bool EnsureApproveOrderCreation(IPaymentResult response, IInvoice invoice)
-        {
-            if (!response.ApproveOrderCreation) return response.ApproveOrderCreation;
-            return !invoice.ShippableItems().Any() ? response.ApproveOrderCreation : response.ApproveOrderCreation;
         }
 
         /// <summary>

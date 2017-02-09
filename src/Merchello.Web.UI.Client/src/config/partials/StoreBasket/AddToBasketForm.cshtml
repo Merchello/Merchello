@@ -70,7 +70,10 @@
                             }
                             else
                             {
-                                <span>Out of stock</span>
+                                if (!product.OutOfStockPurchase)
+                                {
+                                    <span>Out of stock</span>
+                                }
                             }
                         }
                     </div>
@@ -80,7 +83,7 @@
                 @Html.HiddenFor(x => x.SuccessRedirectUrl)
                 @Html.AntiForgeryToken()
                 // Determine if the add to cart button should be displayed in case item is out of stock
-                if (product.ProductVariants.Any() || (!product.ProductVariants.Any() && product.TrackInventory && product.TotalInventoryCount > 0) || !product.TrackInventory)
+                if (product.ProductVariants.Any() || (!product.ProductVariants.Any() && product.TrackInventory && product.TotalInventoryCount > 0) || !product.TrackInventory || product.OutOfStockPurchase)
                 {
                     <div class="control-group text-center">
                         <input type="submit" value="Add to Basket" class="btn btn-default" />
