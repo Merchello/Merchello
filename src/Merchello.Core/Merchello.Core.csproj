@@ -537,6 +537,7 @@
     <Compile Include="Models\Rdbms\CountDto.cs" />
     <Compile Include="Models\Rdbms\DigitalMediaDto.cs" />
     <Compile Include="PagedCollection.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoFiveZero\AddIndexesToProductVariant.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoFourZero\AddShipmentTrackingUrlColumns.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoThreeOne\AlterProductAttributeColumnToNtext.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IProductQueryRepository.cs" />
@@ -1545,9 +1546,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Persistence\Migrations\Upgrades\TargetVersionTwoFiveZero\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
