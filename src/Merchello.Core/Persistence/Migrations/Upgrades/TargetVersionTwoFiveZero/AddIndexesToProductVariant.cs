@@ -7,7 +7,12 @@
     using Merchello.Core.Persistence.DatabaseModelDefinitions;
 
     using Umbraco.Core;
+    using Umbraco.Core.Persistence;
+    using Umbraco.Core.Persistence.DatabaseAnnotations;
+    using Umbraco.Core.Persistence.DatabaseModelDefinitions;
     using Umbraco.Core.Persistence.Migrations;
+    using Umbraco.Core.Persistence.Migrations.Syntax.Create.Index;
+    using Umbraco.Core.Persistence.Migrations.Syntax.Expressions;
 
     /// <summary>
     /// Adds name, price, sale price, barcode and manufacturer indexes to product variant.
@@ -29,13 +34,13 @@
                 IsUnique = x.Item4
             }).ToArray();
 
-            if (dbIndexes == null) throw new ArgumentNullException(nameof(dbIndexes));
+            if (dbIndexes == null) throw new NullReferenceException();
 
             CreateIndex(dbIndexes, "IX_merchProductVariantName", "name");
-            //CreateIndex(dbIndexes, "IX_merchProductVariantPrice", "price");
-            //CreateIndex(dbIndexes, "IX_merchProductVariantSalePrice", "salePrice");
-            //CreateIndex(dbIndexes, "IX_merchProductVariantBarcode", "barcode");
-            //CreateIndex(dbIndexes, "IX_merchProductVariantManufacturer", "manufacturer");
+            CreateIndex(dbIndexes, "IX_merchProductVariantPrice", "price");
+            CreateIndex(dbIndexes, "IX_merchProductVariantSalePrice", "salePrice");
+            CreateIndex(dbIndexes, "IX_merchProductVariantBarcode", "barcode");
+            CreateIndex(dbIndexes, "IX_merchProductVariantManufacturer", "manufacturer");
         }
 
         /// <summary>
@@ -65,7 +70,20 @@
             {
                 Logger.Info(typeof(AddIndexesToProductVariant), "Adding nonclustered index to " + columnName + " column on merchProductVariant table.");
 
-                Create.Index(indexName).OnTable("merchProductVariant").OnColumn(columnName);
+                var sqlSyntax = ApplicationContext.Current.DatabaseContext.SqlSyntax;
+
+                var dbProvider = ApplicationContext.Current.DatabaseContext.DatabaseProvider;
+
+                var createExpression = new CreateIndexExpression(dbProvider, new[] { dbProvider }, sqlSyntax)
+                {
+                    Index = { Name = indexName }
+                };
+
+                var builder = new CreateIndexBuilder(createExpression);
+
+                builder.OnTable("merchProductVariant").OnColumn(columnName).Ascending().WithOptions().NonClustered();
+
+                ApplicationContext.Current.DatabaseContext.Database.Execute(createExpression.ToString());
             }
         }
     }
