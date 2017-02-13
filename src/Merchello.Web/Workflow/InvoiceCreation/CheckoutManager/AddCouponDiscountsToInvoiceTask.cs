@@ -66,7 +66,7 @@
                 }
 
                 var coupon = foundCoupon.Result;
-                var clone = LineItemExtensions.CreateNewItemCacheLineItemContainer(value.Items.Where(x => x.LineItemType != LineItemType.Tax));
+                var clone = Extensions.CreateNewItemCacheLineItemContainer(value.Items.Where(x => x.LineItemType != LineItemType.Tax));
                 var apply = coupon.TryApply(clone, this.CheckoutManager.Context.Customer).AsCouponRedemptionResult(coupon);
                 if (apply.Success)
                 {

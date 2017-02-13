@@ -4,7 +4,10 @@
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
 
+    using Merchello.Core;
     using Merchello.Core.Models;
+
+    using Constants = Merchello.Providers.Constants;
 
     /// <summary>
     /// A model to store serialized transaction data for PayPal Express Checkout transactions.

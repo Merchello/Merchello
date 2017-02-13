@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Tests.UnitTests.Models
 {
+    using Merchello.Core;
     using Merchello.Core.Models;
 
     using NUnit.Framework;

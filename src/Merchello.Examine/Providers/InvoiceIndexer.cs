@@ -8,6 +8,7 @@
     using global::Examine;
     using global::Examine.LuceneEngine;
     using global::Examine.LuceneEngine.Config;
+    using Core;
 
     /// <summary>
     /// The invoice indexer.
@@ -79,7 +80,7 @@
         /// <remarks>For testing</remarks>
         internal void AddInvoiceToIndex(IInvoice invoice)
         {
-            var nodes = new List<XElement> {invoice.SerializeToXml().Root};
+            var nodes = new List<XElement> { invoice.SerializeToXml().Root };
             AddNodesToIndex(nodes, IndexTypes.Invoice);
         }
 

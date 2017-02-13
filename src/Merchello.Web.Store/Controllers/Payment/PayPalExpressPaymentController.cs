@@ -4,17 +4,15 @@
     using System.Linq;
     using System.Web.Mvc;
 
+    using Merchello.Core;
     using Merchello.Core.Gateways;
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Logging;
-    using Merchello.Core.Models;
     using Merchello.Providers.Models;
     using Merchello.Providers.Payment.PayPal.Models;
-    using Merchello.Providers.Payment.PayPal.Services;
     using Merchello.Web.Controllers;
     using Merchello.Web.Store.Models;
 
-    using Umbraco.Core;
     using Umbraco.Web.Mvc;
 
     /// <summary>

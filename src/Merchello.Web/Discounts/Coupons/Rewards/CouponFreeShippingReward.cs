@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Merchello.Core;
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models;
 

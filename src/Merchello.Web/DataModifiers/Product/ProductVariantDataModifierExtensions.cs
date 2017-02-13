@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Web.DataModifiers.Product
 {
+    using Merchello.Core;
     using Merchello.Core.Gateways.Taxation;
     using Merchello.Core.Models;
 

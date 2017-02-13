@@ -5,6 +5,9 @@ namespace Merchello.Web
     using System.Linq;
     using Core.Gateways.Payment;
     using Core.Models;
+
+    using Merchello.Core;
+
     using Models.ContentEditing;
     using Models.MapperResolvers;
 
