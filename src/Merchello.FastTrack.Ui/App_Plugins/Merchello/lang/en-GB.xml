@@ -20,6 +20,7 @@
     <key alias="trackingUrl">Tracking URL</key>
     <key alias="shipment">Shipment</key>
     <key alias="sku">SKU</key>
+    <key alias="name">Name</key>
     <key alias="quantity">Qty</key>
     <key alias="fulfill">Fulfill</key>
     <key alias="status">Status</key>
@@ -28,6 +29,7 @@
     <key alias="via">Via</key>
     <key alias="options">Options</key>
     <key alias="select">Select</key>
+    <key alias="selected">Selected</key>
     <key alias="all">All</key>
     <key alias="none">None</key>
     <key alias="expired">Expired</key>
@@ -180,11 +182,13 @@
   </area>
   <area alias="merchelloHeadline">
     <key alias="catalog">Catalog</key>
+    <key alias="productSpecFilters">Filter Specifications</key>
   </area>
   <area alias="merchelloValidation">
     <key alias="nameFieldRequired">The name field is required</key>
     <key alias="contentTypeRequired">Content type is required</key>
     <key alias="noteMessageRequired">The note message is required</key>
+    <key alias="oneChoiceRequired">At least one choice must be defined.</key>
   </area>
   <area alias="merchelloTableCaptions">
     <key alias="name">Name</key>
@@ -240,6 +244,11 @@
   <area alias="merchelloProductOptions">
     <key alias="newOption">New Option</key>
     <key alias="sharedOption">Shared Options</key>
+    <key alias="addProductOption">Add Product Option</key>
+    <key alias="editProductOption">Edit Product Option</key>
+    <key alias="choices">Choices</key>
+    <key alias="customSettings">Custom Settings</key>
+    <key alias="uiOption">UI Option</key>
     <key alias="editOptions">
       <![CDATA[
       <strong>Edit Options</strong>
@@ -308,6 +317,7 @@
     <key alias="invoice">Invoice</key>
     <key alias="invoiceNumber">Invoice #</key>
     <key alias="invoiceNumberPrefix">Invoice Number Prefix</key>
+    <key alias="createInvoice">Create Invoice</key>
     <key alias="poNumber">PO Number</key>
     <key alias="paymentStatus">Payment Status</key>
     <key alias="sales">Sales</key>
@@ -331,6 +341,10 @@
     <key alias="noBillingAddress">No Billing Address</key>
     <key alias="shippingAddress">Shipping Address</key>
     <key alias="noShippingAddress">No Shipping Address</key>
+    <key alias="noteInvoiceAddressChange">Note: This ONLY changes the addresses associated with THIS invoice.</key>
+    <key alias="noteShipmentAddressChange">Note: This will not change any existing shipment destination addresses.</key>
+    <key alias="editAddress">Edit Address</key>
+    <key alias="shippingMethod">Shipping method</key>
     <key alias="paid">Paid</key>
     <key alias="unpaid">Unpaid</key>
     <key alias="partial">Partial</key>
@@ -343,6 +357,8 @@
   <area alias="merchelloCustomers">
     <key alias="loginName">Login</key>
     <key alias="newCustomer">New Customer</key>
+    <key alias="customers">Customers</key>
+    <key alias="customerInformation">Customer Information</key>
     <key alias="basket">Basket</key>
     <key alias="lastActivityDate">Last Activity Date</key>
     <key alias="lastInvoiceTotal">Last Invoice Total</key>
@@ -381,10 +397,54 @@
     </key>
     <key alias="itemCacheEmpty">Contains no items</key>
     <key alias="totalSpent">Total Spent</key>
+    <key alias="actions">Actions</key>
+    <key alias="editAddress">Edit address</key>
+    <key alias="deleteAddress">Delete address</key>
+    <key alias="addNewAddress">Add New Address</key>
+    <key alias="billingAddresses">Billing Addresses</key>
+    <key alias="billingAddressesHelper">Billing addresses associated with this customer</key>
+    <key alias="shippingAddresses">Shipping Addresses</key>
+    <key alias="shippingAddressesHelper">Shipping addresses associated with this customer</key>
+
+    <!-- Address Form Labels -->
+    <key alias="label">Label</key>
+    <key alias="fullName">Full Name</key>
+    <key alias="firstName">First Name</key>
+    <key alias="lastName">Last Name</key>
+    <key alias="company">Company</key>
+    <key alias="address">Address</key>
+    <key alias="addressLine2">Address Line 2</key>
+    <key alias="city">City</key>
+    <key alias="country">Country</key>
+    <key alias="stateOrProvince">State/Province</key>
+    <key alias="zipOrPostalCode">Zip/Postal Code</key>
+    <key alias="phone">Phone</key>
+    <key alias="primaryAddress">Primary Address</key>
+    <key alias="email">Email</key>
+
+    <!-- Address Table Labels (shorter) -->
+    <key alias="tblLabel">Label</key>
+    <key alias="tblFullName">Name</key>
+    <key alias="tblAddress">Address</key>
+    <key alias="tblAddressLine2">Address 2</key>
+    <key alias="tblLocality">Locality</key>
+    <key alias="tblRegion">Region</key>
+    <key alias="tblCountry">Country</key>
+    <key alias="tblPostalCode">Postal</key>
+
+    <!-- Address Form Validation Messages -->
+    <key alias="labelRequired">Label is a required field</key>
+    <key alias="addressRequired">Address is a required field</key>
+    <key alias="cityRequired">City is a required field</key>
+    <key alias="countryRequired">Country is a required field</key>
+    <key alias="zipOrPostalCodeRequired">Zip/Postal Code is a required field</key>
+    <key alias="emailRequired">Email is a required field</key>
   </area>
   <area alias="merchelloMarketing">
     <key alias="currentOffers">Current Offers</key>
     <key alias="offerCode">Offer Code</key>
+    <key alias="offerCodeInUse">Already in use</key>
+    <key alias="offerCodeIsOk">Ok!</key>
     <key alias="newOffer">New Offer</key>
     <key alias="noOffer">No current offers</key>
     <key alias="newOfferPrompt">You have not offered your customers any special offers.  Why not create one?</key>
@@ -394,8 +454,15 @@
     <key alias="mustUniqueOfferCode">Offer codes must be unique.</key>
     <key alias="offerSetExpires">This offer is only valid for specific dates.</key>
     <key alias="offerNeverExpires">Does not expire.</key>
+    <key alias="offerHasExpired">Offer has expired</key>
     <key alias="offerValidDates">Offer Valid Dates</key>
     <key alias="offerValidDatesInfo">Set the dates for which this offer is valid.</key>
+    <key alias="offerValidAllDates">Offer is valid for all dates</key>
+    <key alias="offerNotActive">Not Active</key>
+    <key alias="offerActive">Active</key>
+    <key alias="thisOfferIsNotActive">This offer is not active</key>
+    <key alias="thisOfferIsActive">This offer is active</key>
+    <key alias="offerToSetActiveInfo"><![CDATA[ <strong>To set active:</strong> Assign and configure rewards and any constraints ]]></key>
     <key alias="offerConstraintsInfo">Constraints</key>
     <key alias="offerConstraintsConfig">Configure constraints associated with this offer.</key>
     <key alias="offerRewardsInfo">Rewards</key>
@@ -515,7 +582,10 @@
     <key alias="shippingAddress">Shipping Address</key>
     <key alias="billingAddress">Billing Address</key>
     <key alias="orderInformation">Order Information</key>
+    <key alias="invoiced">Invoiced</key>
     <!-- actions -->
+    <key alias="captureFunds">Capture Funds</key>
+    <key alias="newPayment">New Payment</key>
     <!-- phrases -->
     <key alias="billingAndShippingAddressHelper">Billing and Shipping addresses</key>
     <key alias="orderInformationHelper"><![CDATA[Line items & costs]]></key>
@@ -525,6 +595,7 @@
     <key alias="captured">Captured</key>
     <key alias="paymentHistory"> Payment History</key>
     <key alias="saleHistory">Sale History</key>
+    <key alias="saleHistoryHelper"><![CDATA[A timeline of events regarding this order]]></key>
     <key alias="paymentHistoryHelper">Status records for one or more payments</key>
     <key alias="paymentProcessedBy">Payment processed by:</key>
     <key alias="resetFilters">Reset Filters</key>
@@ -755,6 +826,7 @@
     <key alias="variantInformation">Product Information</key>
     <key alias="variantInformationHelper">Edit the variants for this product.</key>
     <key alias="selectProduct">Select Product...</key>
+    <key alias="selectProducts">Select products</key>
     <key alias="selectMerchelloProduct">Select Merchello Product</key>
     <key alias="selectYourProduct">Select Your Product</key>
     <key alias="removeProduct">Disconnect This Product</key>
