@@ -167,6 +167,15 @@
                 return new Version(2, 3, 1);
             }
 
+            if (!this.ValidIndexes.Contains("IX_merchProductVariantName") ||
+                !this.ValidIndexes.Contains("IX_merchProductVariantPrice") ||
+                !this.ValidIndexes.Contains("IX_merchProductVariantSalePrice") ||
+                !this.ValidIndexes.Contains("IX_merchProductVariantBarcode") ||
+                !this.ValidIndexes.Contains("IX_merchProductVariantManufacturer"))
+            {
+                return new Version(2, 4, 0);
+            }
+
 	        // If Errors is empty or if TableDefinitions tables + columns correspond to valid tables + columns then we're at current version
             if (this.MerchelloErrors.Any() == false ||
                 (this.TableDefinitions.All(x => this.ValidTables.Contains(x.Name))
