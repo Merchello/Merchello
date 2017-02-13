@@ -1547,7 +1547,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Persistence\Migrations\Upgrades\TargetVersionTwoFiveZero\" />
-    <Folder Include="zzRemoved\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
