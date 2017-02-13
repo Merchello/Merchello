@@ -9,13 +9,13 @@
         <div class="merchello-pane">
             <!-- selected products -->
             <div class="add-product-controls">
-            <strong>Select products</strong>
+            <strong><localize key="merchelloProductEdit_selectProducts" /></strong>
             <a href class="btn pull-right" data-ng-click="context = 'search'"><i class="icon-add pull-right col-xs-1"></i></a>
             </div>
             <div data-ng-repeat="p in selectedProducts" class="col-xs-11 well" data-ng-show="selectedProducts.length > 0">
                 <button class="btn pull-right" data-ng-click="removeProduct(p)"><i class="icon-trash"></i></button>
                 <span class="product-name">{{p.product.name}}</span>
-                <small class="product-info">{{p.product.sku}} <span class="price">Price: {{p.product.price | currency : currencySymbol}}</span></small>
+                <small class="product-info">{{p.product.sku}} <span class="price"><localize key="merchelloGeneral_price" />: {{p.product.price | currency : currencySymbol}}</span></small>
                 <div data-ng-show="p.product.hasVariants()">
                     <div class="control-group variant-selection">
                         <label data-ng-repeat="variant in p.selectedVariants"><input type="checkbox" value="{{variant.key}}" data-ng-model="variant.checked" /> {{variant.name}}</label>

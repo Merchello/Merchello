@@ -11186,9 +11186,9 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 }
 
                 if (address.addressType === 'Billing') {
-                    dialogData.warning = 'Note: This ONLY changes the addresses associated with THIS invoice.';
+                    dialogData.warning = localizationService.localize('merchelloSales_noteInvoiceAddressChange');
                 } else {
-                    dialogData.warning = 'Note: This will not change any existing shipment destination addresses.'
+                    dialogData.warning = localizationService.localize('merchelloSales_noteShipmentAddressChange');
                 }
 
 

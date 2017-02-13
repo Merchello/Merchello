@@ -2,14 +2,14 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Label</th>
-            <th>Name</th>
-            <th>Address</th>
-            <th>Address 2</th>
-            <th>Locality</th>
-            <th>Region</th>
-            <th>Country</th>
-            <th>Postal</th>
+            <th><localize key="merchelloCustomers_tblLabel" /></th>
+            <th><localize key="merchelloCustomers_tblFullName" /></th>
+            <th><localize key="merchelloCustomers_tblAddress" /></th>
+            <th><localize key="merchelloCustomers_tblAddressLine2" /></th>
+            <th><localize key="merchelloCustomers_tblLocality" /></th>
+            <th><localize key="merchelloCustomers_tblRegion" /></th>
+            <th><localize key="merchelloCustomers_tblCountry" /></th>
+            <th><localize key="merchelloCustomers_tblPostalCode" /></th>
             <th></th>
         </tr>
     </thead>
@@ -28,15 +28,15 @@
             <td>{{ address.postalCode }}</td>
             <td>
                 <div class="btn-group">
-                    <a href="#" class="btn dropdown-toggle" data-toggle="dropdown">Actions <i class="icon-navigation-down"></i></a>
+                    <a href="#" class="btn dropdown-toggle" data-toggle="dropdown"><localize key="merchelloCustomers_actions" /> <i class="icon-navigation-down"></i></a>
                     <ul class="dropdown-menu">
-                        <li><a data-ng-click="openAddressAddEditDialog(address)">Edit address</a></li>
-                        <li><a data-ng-click="openDeleteAddressDialog(address)">Delete address</a></li>
+                        <li><a data-ng-click="openAddressAddEditDialog(address)"><localize key="merchelloCustomers_editAddress" /></a></li>
+                        <li><a data-ng-click="openDeleteAddressDialog(address)"><localize key="merchelloCustomers_deleteAddress" /></a></li>
                     </ul>
                 </div>
             </td>
         </tr>
     </tbody>
 </table>
-    <a data-ng-click="openAddressAddEditDialog()" class="btn btn-default">Add New Address</a>
+    <a data-ng-click="openAddressAddEditDialog()" class="btn btn-default"><localize key="merchelloCustomers_addNewAddress" /></a>
 </div>
