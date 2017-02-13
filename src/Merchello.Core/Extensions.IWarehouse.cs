@@ -1,11 +1,13 @@
-﻿namespace Merchello.Core.Models
+﻿namespace Merchello.Core
 {
     using System.Linq;
 
+    using Merchello.Core.Models;
+
     /// <summary>
-    /// Extension methods for <see cref="IWarehouse"/>
+    /// Extension methods for <see cref="IWarehouse"/>.
     /// </summary>
-    public static class WarehouseExtensions
+    public static partial class Extensions
     {
         /// <summary>
         /// Returns a Warehouse address as an <see cref="IAddress"/>
@@ -42,7 +44,7 @@
         /// </returns>
         internal static IWarehouseCatalog DefaultCatalog(this IWarehouse warehouse)
         {
-            return ((Warehouse) warehouse).WarehouseCatalogs.FirstOrDefault();
+            return ((Warehouse)warehouse).WarehouseCatalogs.FirstOrDefault();
         }
     }
 }

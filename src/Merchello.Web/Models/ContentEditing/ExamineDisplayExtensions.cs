@@ -15,6 +15,7 @@
 
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
+    using Core;
 
     /// <summary>
     /// Extension methods to map examine (Lucene) documents to respective "Display" object classes

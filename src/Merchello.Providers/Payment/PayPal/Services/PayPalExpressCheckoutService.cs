@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
 
+    using Merchello.Core;
     using Merchello.Core.Events;
     using Merchello.Core.Logging;
     using Merchello.Core.Models;
@@ -14,7 +15,7 @@
 
     using global::PayPal.PayPalAPIInterfaceService.Model;
 
-    using Umbraco.Core;
+
     using Umbraco.Core.Events;
 
     /// <summary>

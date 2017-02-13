@@ -3,11 +3,12 @@
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
-    using System.Xml.Linq;    
+    using System.Xml.Linq;
     using Core.Models;
     using global::Examine;
     using global::Examine.LuceneEngine;
     using global::Examine.LuceneEngine.Config;
+    using Core;
 
     /// <summary>
     /// The customer indexer.

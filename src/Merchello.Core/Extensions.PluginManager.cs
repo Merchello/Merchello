@@ -2,24 +2,21 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-
-    using Gateways;
 
     using Merchello.Core.Chains.OfferConstraints;
-    using Merchello.Core.Configuration;
     using Merchello.Core.EntityCollections;
+    using Merchello.Core.Gateways;
+    using Merchello.Core.Observation;
     using Merchello.Core.Persistence.Migrations;
     using Merchello.Core.ValueConverters.ValueCorrections;
 
-    using Observation;
     using Umbraco.Core;
     using Umbraco.Core.Persistence.Migrations;
 
     /// <summary>
-    /// Extension methods for the <see cref="PluginManager"/>
+    /// Extensions for <see cref="PluginManager"/>.
     /// </summary>
-    internal static class PluginManagerExtensions
+    public static partial class Extensions
     {
         /// <summary>
         /// Resolves the <see cref="DetachedValueCorrectionBase"/>.
@@ -118,6 +115,6 @@
         {
             return
                 pluginManager.ResolveTypesWithAttribute<IMerchelloMigration, MigrationAttribute>();
-        } 
+        }
     }
 }

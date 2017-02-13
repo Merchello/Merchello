@@ -1,11 +1,11 @@
-﻿namespace Merchello.Core.Models
+﻿namespace Merchello.Core
 {
-    using Merchello.Core.Services;
+    using Merchello.Core.Models;
 
     /// <summary>
     /// Extension methods for <see cref="IProductOption"/>.
     /// </summary>
-    public static class ProductOptionExtensions
+    public static partial class Extensions
     {
         /// <summary>
         /// Adds a new option choice.

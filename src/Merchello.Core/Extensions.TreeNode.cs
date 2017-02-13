@@ -1,4 +1,4 @@
-﻿namespace Merchello.Core.Trees
+﻿namespace Merchello.Core
 {
     using System;
     using System.Collections.Generic;
@@ -7,13 +7,13 @@
 
     using Merchello.Core.Models;
     using Merchello.Core.Models.EntityBase;
+    using Merchello.Core.Trees;
 
     /// <summary>
     /// Extension methods for <see cref="TreeNode{T}"/>.
     /// </summary>
-    internal static class TreeNodeExtensions
+    public static partial class Extensions
     {
-
         /// <summary>
         /// Populates the tree from flattened data.
         /// </summary>
@@ -29,7 +29,7 @@
         /// <returns>
         /// The <see cref="TreeNode{TNode}"/>.
         /// </returns>
-        public static TreeNode<TNode> Populate<TNode>(this TreeNode<TNode> tree, IEnumerable<TNode> data)
+        internal static TreeNode<TNode> Populate<TNode>(this TreeNode<TNode> tree, IEnumerable<TNode> data)
             where TNode : IHasKeyId, IHasParent
         {
             var nodes = data as TNode[] ?? data.ToArray();
@@ -59,7 +59,7 @@
         /// <returns>
         /// The <see cref="IEnumerable{TreeNode}"/>.
         /// </returns>
-        public static IEnumerable<TreeNode<TNode>> Siblings<TNode>(
+        internal static IEnumerable<TreeNode<TNode>> Siblings<TNode>(
             this TreeNode<TNode> tree,
             Expression<Func<TreeNode<TNode>, bool>> predicate = null)
               where TNode : IHasKeyId
@@ -88,7 +88,7 @@
         /// <returns>
         /// The <see cref="IEnumerable{TreeNode}"/>.
         /// </returns>
-        public static IEnumerable<TreeNode<TNode>> AncestorsOrSelf<TNode>(
+        internal static IEnumerable<TreeNode<TNode>> AncestorsOrSelf<TNode>(
             this TreeNode<TNode> tree,
             Expression<Func<TreeNode<TNode>, bool>> predicate = null) where TNode : IHasKeyId
         {
@@ -116,7 +116,7 @@
         /// <returns>
         /// The <see cref="IEnumerable{TreeNode}"/>.
         /// </returns>
-        public static IEnumerable<TreeNode<TNode>> Ancestors<TNode>(
+        internal static IEnumerable<TreeNode<TNode>> Ancestors<TNode>(
             this TreeNode<TNode> tree,
             Expression<Func<TreeNode<TNode>, bool>> predicate = null)
             where TNode : IHasKeyId
@@ -146,7 +146,7 @@
         /// <returns>
         /// The <see cref="IEnumerable{TreeNode}"/>.
         /// </returns>
-        public static IEnumerable<TreeNode<TNode>> DescendantsOrSelf<TNode>(
+        internal static IEnumerable<TreeNode<TNode>> DescendantsOrSelf<TNode>(
             this TreeNode<TNode> tree,
             Expression<Func<TreeNode<TNode>, bool>> predicate = null)
             where TNode : IHasKeyId
@@ -175,7 +175,7 @@
         /// <returns>
         /// The <see cref="IEnumerable{TreeNode}"/>.
         /// </returns>
-        public static IEnumerable<TreeNode<TNode>> Descendants<TNode>(
+        internal static IEnumerable<TreeNode<TNode>> Descendants<TNode>(
             this TreeNode<TNode> tree,
             Expression<Func<TreeNode<TNode>, bool>> predicate = null)
             where TNode : IHasKeyId
@@ -204,7 +204,7 @@
         /// <returns>
         /// The <see cref="TreeNode{TNode}"/>.
         /// </returns>
-        public static TreeNode<TNode> FirstByValue<TNode>(this TreeNode<TNode> tree, TNode value)
+        internal static TreeNode<TNode> FirstByValue<TNode>(this TreeNode<TNode> tree, TNode value)
             where TNode : class, IHasKeyId
         {
             var visitor = new FirstByValueTreeNodeVisitor<TNode>(value);

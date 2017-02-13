@@ -1,8 +1,13 @@
-﻿namespace Merchello.Core.Observation
+﻿namespace Merchello.Core
 {
+    using Merchello.Core.Observation;
+
     using Umbraco.Core;
 
-    internal static class ObservationExtensions
+    /// <summary>
+    /// Extension methods for <see cref="ITrigger"/> and <see cref="IMonitor"/>
+    /// </summary>
+    public static partial class Extensions
     {
         /// <summary>
         /// Gets the <see cref="TriggerForAttribute"/>
@@ -30,7 +35,6 @@
         internal static MonitorForAttribute MonitorFor(this IMonitor monitor)
         {
             return monitor.GetType().GetCustomAttribute<MonitorForAttribute>(false);
-        }        
-
+        }
     }
 }
