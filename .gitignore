@@ -215,3 +215,4 @@ src/Merchello.FastTrack.Ui/media/created-packages/
 src/Merchello.FastTrack.Ui/App_Data/NuGetBackup/
 *project.lock.json
 src/Merchello.Umbraco.Ui.Client/.idea/
+src/Merchello.FastTrack.Ui/App_Data/umbraco.config
