@@ -19,7 +19,7 @@ namespace Merchello.Core.Persistence.Factories
         {
 
             var country = dto.CountryCode.Equals(Constants.CountryCodes.EverywhereElse) ?
-                new Country(Constants.CountryCodes.EverywhereElse, new List<IProvince>()) : 
+                new Country(Constants.CountryCodes.EverywhereElse, "Everywhere Else", new List<IProvince>()) : 
                 _storeSettingService.GetCountryByCode(dto.CountryCode);
 
             var shipCountry = new ShipCountry(dto.CatalogKey, country)

@@ -26,10 +26,7 @@ namespace Merchello.Core
         {
             if (string.IsNullOrEmpty(address.CountryCode)) return null;
 
-            return new Country(address.CountryCode, StoreSettingService.GetProvincesByCountryCode(address.CountryCode))
-            {
-                ProvinceLabel = StoreSettingService.GetProvinceLabelForCountry(address.CountryCode)
-            };
+            return MerchelloConfiguration.Current.MerchelloCountries().Countries.FirstOrDefault(x => x.CountryCode.Equals(address.CountryCode, StringComparison.InvariantCultureIgnoreCase));
         }
 
 
