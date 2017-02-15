@@ -304,8 +304,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Acquired\Configuration\RawXmlConfigurationElement.cs" />
     <Compile Include="Acquired\NetworkHelper.cs" />
     <Compile Include="ActivatorHelper.cs" />
+    <Compile Include="Configuration\Elements\CountriesElement.cs" />
     <Compile Include="Configuration\IDashboardConfiguration.cs" />
     <Compile Include="Builders\CheckoutInvoiceBuilderChain.cs" />
     <Compile Include="Cache\IPagedKeyQueryCache.cs" />
@@ -376,6 +378,9 @@
     <Compile Include="Configuration\Outline\ReplacementCollection.cs" />
     <Compile Include="Configuration\Outline\ReplaceElement.cs" />
     <Compile Include="Configuration\Outline\TreeElement.cs" />
+    <Compile Include="Configuration\Sections\IMerchelloCountriesSection.cs" />
+    <Compile Include="Configuration\Sections\MerchelloCountriesSection.cs" />
+    <Compile Include="Configuration\Sections\MerchelloSection.cs" />
     <Compile Include="Constants.CountryCodes.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
@@ -1182,7 +1187,6 @@
     <Compile Include="Models\Rdbms\StoreSettingDto.cs" />
     <Compile Include="Models\Rdbms\WarehouseCatalogDto.cs" />
     <Compile Include="Models\Rdbms\TaxMethodDto.cs" />
-    <Compile Include="Models\CountryBase.cs" />
     <Compile Include="Models\Shipment.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -19,40 +19,43 @@ namespace Merchello.Tests.UnitTests.Configuration
             _config = ConfigurationManager.GetSection("merchello") as MerchelloSection;
         }
 
-        /// <summary>
-        /// Test confirms that the regional province section in the Merchello.config contains 2 elements
-        /// </summary>
-        [Test]
-        public void RegionalProvince_Collection_Contains_2_Elements()
-        {
-            //// Arrange
-            const int expected = 2;
 
-            //// Act
-            var count = _config.RegionalProvinces.Count;
+        //// REMOVED IN VERSION 2.5.0 in prep for new configuration sections.
 
-            //// Assert
-            Assert.AreEqual(count, expected);
-        }
+        ///// <summary>
+        ///// Test confirms that the regional province section in the Merchello.config contains 2 elements
+        ///// </summary>
+        //[Test]
+        //public void RegionalProvince_Collection_Contains_2_Elements()
+        //{
+        //    //// Arrange
+        //    const int expected = 2;
 
-        /// <summary>
-        /// Test confirms that the region US has provinces
-        /// </summary>
-        [Test]
-        public void RegionalProvince_Collection_Contains_US_States()
-        {
-            //// Arrange
-            const int expected = 62;
+        //    //// Act
+        //    var count = _config.RegionalProvinces.Count;
 
-            //// Act
-            var us = _config.RegionalProvinces["US"];
-            Console.Write(us.ProvincesConfiguration.Count);
+        //    //// Assert
+        //    Assert.AreEqual(count, expected);
+        //}
 
-            //// Assert
-            Assert.NotNull(us);
-            Assert.AreEqual("US", us.Code);
-            Assert.AreEqual(expected, us.ProvincesConfiguration.Count);
+        ///// <summary>
+        ///// Test confirms that the region US has provinces
+        ///// </summary>
+        //[Test]
+        //public void RegionalProvince_Collection_Contains_US_States()
+        //{
+        //    //// Arrange
+        //    const int expected = 62;
+
+        //    //// Act
+        //    var us = _config.RegionalProvinces["US"];
+        //    Console.Write(us.ProvincesConfiguration.Count);
+
+        //    //// Assert
+        //    Assert.NotNull(us);
+        //    Assert.AreEqual("US", us.Code);
+        //    Assert.AreEqual(expected, us.ProvincesConfiguration.Count);
             
-        }
+        //}
     }
 }

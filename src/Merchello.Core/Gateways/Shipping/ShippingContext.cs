@@ -97,7 +97,7 @@
                 }    
             }
 
-            var countries = GatewayProviderService.GetAllShipCountries().Where(x => x.CountryCode != "ELSE").Select(x => new Country(x.CountryCode, x.Provinces));
+            var countries = GatewayProviderService.GetAllShipCountries().Where(x => x.CountryCode != "ELSE").Select(x => _storeSettingService.GetCountryByCode(x.CountryCode)).Where(x => x != null);
 
             return countries.Distinct();
         }
