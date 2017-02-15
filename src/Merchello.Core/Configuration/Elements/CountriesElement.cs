@@ -54,7 +54,7 @@
         /// </returns>
         private static ICountry CreateCountry(XElement xCountry, XElement xRegion)
         {
-            var provinces = xRegion?.Elements("province").Select(CreateProvince) ?? Enumerable.Empty<IProvince>();
+            var provinces = xRegion != null ? xRegion.Elements("province").Select(CreateProvince) : Enumerable.Empty<IProvince>();
 
             var iso = xCountry.Attribute("iso").Value.TryConvertTo<int>();
 
