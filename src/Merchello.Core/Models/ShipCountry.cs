@@ -40,7 +40,7 @@
         public ShipCountry(Guid catalogKey, ICountry country)
         {
             Ensure.ParameterCondition(catalogKey != Guid.Empty, "catalogKey");
-            Ensure.ParameterNotNull(country, nameof(country));
+            Ensure.ParameterNotNull(country, "country");
             _country = country;
             _catalogKey = catalogKey;
         }
