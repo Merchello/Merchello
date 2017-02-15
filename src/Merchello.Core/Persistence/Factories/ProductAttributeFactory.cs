@@ -67,7 +67,9 @@
                     Sku = entity.Sku,
                     SortOrder = entity.SortOrder,
                     IsDefaultChoice = entity.IsDefaultChoice,
-                    DetachedContentValues = JsonConvert.SerializeObject(entity.DetachedDataValues.AsEnumerable()),
+                    DetachedContentValues = entity.DetachedDataValues.Any() ? 
+                                                JsonConvert.SerializeObject(entity.DetachedDataValues.AsEnumerable()) :
+                                                null,
                     UpdateDate = entity.UpdateDate,
                     CreateDate = entity.CreateDate
                 };
