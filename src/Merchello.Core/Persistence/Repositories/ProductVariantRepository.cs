@@ -290,7 +290,7 @@
         /// </returns>
         public DetachedContentCollection<IProductVariantDetachedContent> GetDetachedContentCollection(Guid productVariantKey)
         {
-            var contents = this.GetProductVariantDetachedContents(productVariantKey);
+            var contents = this.GetProductVariantDetachedContents(productVariantKey).ToArray();
             return new DetachedContentCollection<IProductVariantDetachedContent> { contents };
         }
 
@@ -700,7 +700,7 @@
 
             var factory = new ProductVariantDetachedContentFactory();
 
-            return dtos.Select(factory.BuildEntity);
+            return dtos.Where(x => x != null).Select(factory.BuildEntity);
         }
 
 
