@@ -35,7 +35,7 @@
         {
             var detachedContentType = _detachedContentTypeFactory.Value.BuildEntity(dto.DetachedContentType);
 
-            var values = GetDetachedContentKeyValues(dto);          
+            var values = DetachedContentValuesSerializationHelper.Deserialize(dto.Values);
 
             var valuesCollection = new DetachedDataValuesCollection(values);
 
@@ -78,35 +78,10 @@
                            Slug = !entity.Slug.IsNullOrWhiteSpace() ? entity.Slug : null,
                            TemplateId = entity.TemplateId > 0 ? entity.TemplateId : null,
                            CanBeRendered = entity.CanBeRendered,
-                           Values = JsonConvert.SerializeObject(entity.DetachedDataValues.AsEnumerable()),
+                           Values = DetachedContentValuesSerializationHelper.Serialize(entity.DetachedDataValues),
                            CreateDate = entity.CreateDate,
                            UpdateDate = entity.UpdateDate
                        };
-        }
-
-        /// <summary>
-        /// The get detached content key values.
-        /// </summary>
-        /// <param name="dto">
-        /// The dto.
-        /// </param>
-        /// <returns>
-        /// The collection of detached content values.
-        /// </returns>
-        public IEnumerable<KeyValuePair<string, string>> GetDetachedContentKeyValues(ProductVariantDetachedContentDto dto)
-        {
-            try
-            {
-                return dto.Values.IsNullOrWhiteSpace()
-                                 ? Enumerable.Empty<KeyValuePair<string, string>>()
-                                 : JsonConvert.DeserializeObject<IEnumerable<KeyValuePair<string, string>>>(dto.Values);
-            }
-            catch (Exception ex)
-            {
-                MultiLogHelper.Error<ProductVariantDetachedContentFactory>("Failed to deserialize detached content values", ex);
-                return Enumerable.Empty<KeyValuePair<string, string>>();
-            }
-
         }
     }
 }

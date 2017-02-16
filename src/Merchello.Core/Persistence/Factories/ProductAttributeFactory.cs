@@ -27,9 +27,8 @@
         /// </returns>
         public IProductAttribute BuildEntity(ProductAttributeDto dto)
         {
-            var values = dto.DetachedContentValues.IsNullOrWhiteSpace()
-                             ? Enumerable.Empty<KeyValuePair<string, string>>()
-                             : JsonConvert.DeserializeObject<IEnumerable<KeyValuePair<string, string>>>(dto.DetachedContentValues);
+            var values = DetachedContentValuesSerializationHelper.Deserialize(dto.DetachedContentValues);
+                
 
             var valuesCollection = new DetachedDataValuesCollection(values);
 
@@ -67,9 +66,7 @@
                     Sku = entity.Sku,
                     SortOrder = entity.SortOrder,
                     IsDefaultChoice = entity.IsDefaultChoice,
-                    DetachedContentValues = entity.DetachedDataValues.Any() ? 
-                                                JsonConvert.SerializeObject(entity.DetachedDataValues.AsEnumerable()) :
-                                                null,
+                    DetachedContentValues = DetachedContentValuesSerializationHelper.Serialize(entity.DetachedDataValues),
                     UpdateDate = entity.UpdateDate,
                     CreateDate = entity.CreateDate
                 };
