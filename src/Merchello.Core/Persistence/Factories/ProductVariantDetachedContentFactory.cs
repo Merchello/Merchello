@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Merchello.Core.Logging;
     using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.Models.Rdbms;
 
@@ -34,9 +35,7 @@
         {
             var detachedContentType = _detachedContentTypeFactory.Value.BuildEntity(dto.DetachedContentType);
 
-            var values = dto.Values.IsNullOrWhiteSpace()
-                             ? Enumerable.Empty<KeyValuePair<string, string>>()
-                             : JsonConvert.DeserializeObject<IEnumerable<KeyValuePair<string, string>>>(dto.Values);            
+            var values = GetDetachedContentKeyValues(dto);          
 
             var valuesCollection = new DetachedDataValuesCollection(values);
 
@@ -83,6 +82,31 @@
                            CreateDate = entity.CreateDate,
                            UpdateDate = entity.UpdateDate
                        };
+        }
+
+        /// <summary>
+        /// The get detached content key values.
+        /// </summary>
+        /// <param name="dto">
+        /// The dto.
+        /// </param>
+        /// <returns>
+        /// The collection of detached content values.
+        /// </returns>
+        public IEnumerable<KeyValuePair<string, string>> GetDetachedContentKeyValues(ProductVariantDetachedContentDto dto)
+        {
+            try
+            {
+                return dto.Values.IsNullOrWhiteSpace()
+                                 ? Enumerable.Empty<KeyValuePair<string, string>>()
+                                 : JsonConvert.DeserializeObject<IEnumerable<KeyValuePair<string, string>>>(dto.Values);
+            }
+            catch (Exception ex)
+            {
+                MultiLogHelper.Error<ProductVariantDetachedContentFactory>("Failed to deserialize detached content values", ex);
+                return Enumerable.Empty<KeyValuePair<string, string>>();
+            }
+
         }
     }
 }
