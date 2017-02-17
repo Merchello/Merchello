@@ -8319,6 +8319,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductFilterGroups
                 }
             }
 
+
             /**
              * @ngdoc method
              * @name loadSettings

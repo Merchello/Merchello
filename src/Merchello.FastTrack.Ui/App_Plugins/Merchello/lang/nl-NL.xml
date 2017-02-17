@@ -227,6 +227,7 @@
     <key alias="newPrice">Nieuwe prijs</key>
     <key alias="newCostOfGoods">Nieuwe kostprijs</key>
     <key alias="newSalePrice">Nieuwe verkoopsprijs</key>
+    <key alias="recentlyUpdated">Recently Updated</key>
   </area>
   <area alias="merchelloSpecFilters">
     <key alias="manageProductFilters">Beheer Product Filters</key>

@@ -232,7 +232,7 @@
         public QueryResultDisplay GetRecentlyUpdated(QueryDisplay query)
         {
             var itemsPerPage = query.ItemsPerPage;
-            var currentPage = query.CurrentPage;
+            var currentPage = query.CurrentPage + 1;
 
             var results = _productService.GetRecentlyUpdatedProducts(currentPage, itemsPerPage);
 

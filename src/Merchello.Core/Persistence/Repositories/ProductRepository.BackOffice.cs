@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.Persistence.Repositories
 {
     using System;
+    using System.Linq;
 
     using Merchello.Core.Models;
     using Merchello.Core.Models.Rdbms;
@@ -14,19 +15,24 @@
         /// <inheritdoc/>
         public PagedCollection<IProduct> GetRecentlyUpdatedProducts(long page, long itemsPerPage = 10)
         {
-            var sql = GetBaseQuery(false);
-            sql.OrderByDescending<ProductDto>(x => x.CreateDate, SqlSyntax);
+            var sql = new Sql().Select("*")
+                .From<ProductDto>(SqlSyntax)
+                .OrderByDescending<ProductDto>(x => x.UpdateDate, SqlSyntax);
 
             var results = Database.Page<ProductDto>(page, itemsPerPage, sql);
 
-            var factory = new ProductFactory(
-                _productOptionRepository.GetProductAttributeCollectionForVariant,
-                _productVariantRepository.GetCategoryInventoryCollection,
-                _productOptionRepository.GetProductOptionCollection,
-                _productVariantRepository.GetProductVariantCollection,
-                _productVariantRepository.GetDetachedContentCollection);
+            var products = GetAll(results.Items.Select(x => x.Key).ToArray());
 
-            return results.AsPagedCollection(factory.BuildEntity, "createDate");
+
+            return new PagedCollection<IProduct>
+                       {
+                           CurrentPage = results.CurrentPage,
+                           Items = products,
+                           PageSize = results.ItemsPerPage,
+                           TotalItems = results.TotalItems,
+                           TotalPages = results.TotalPages,
+                           SortField = "createDate"
+                       };
         }
     }
 }

@@ -15,9 +15,13 @@
         <merchello-panel>
             <div class="merchello-pane" data-ng-show="preValuesLoaded">
 
+                <product-recent-updates-button />
+
                 <merchello-list-view builder="productDisplayBuilder" load="load" get-column-value="getColumnValue" entity-type="entityType">
 
                 </merchello-list-view>
+
+
 
                 <!-- Prompt to create products if no products in the catalog -->
                 <div class="pager well" data-ng-show="products.length == 0 && collectionKey===''">
