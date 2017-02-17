@@ -120,7 +120,7 @@
         {
             return
                 _contentTypeService.GetAllContentTypes()
-                    .OrderBy(x => x.SortOrder)
+                    .OrderBy(x => x.Name)
                     .Select(x => x.ToUmbContentTypeDisplay());
         }
 
