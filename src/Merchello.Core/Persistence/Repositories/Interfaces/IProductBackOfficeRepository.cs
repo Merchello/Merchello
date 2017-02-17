@@ -1,4 +1,4 @@
-﻿namespace Merchello.Core.Services.Interfaces
+﻿namespace Merchello.Core.Persistence.Repositories
 {
     using System.Collections.Generic;
 
@@ -7,18 +7,13 @@
     using Umbraco.Core.Persistence;
 
     /// <summary>
-    /// Marker interface product service queries that need to be ported forward to V3 version.
+    /// Represents a back office repository.
     /// </summary>
-    public interface IProductServicePortForward
+    /// <remarks>
+    /// Port forward to V3
+    /// </remarks>
+    public interface IProductBackOfficeRepository
     {
-        /// <summary>
-        /// Gets a list of currently listed Manufacturers.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IEnumerable{String}"/> (manufacturer names).
-        /// </returns>
-        IEnumerable<string> GetAllManufacturers();
-
         /// <summary>
         /// Gets recently updated products.
         /// </summary>
