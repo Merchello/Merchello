@@ -6347,6 +6347,7 @@ angular.module('merchello').controller('Merchello.ProductOption.Dialogs.ProductO
         $scope.currentTabs = undefined;
         $scope.tabs = [];
         $scope.preValuesLoaded = false;
+        $scope.choiceName = '';
 
         var umbracoTabs = [];
 
@@ -6387,6 +6388,8 @@ angular.module('merchello').controller('Merchello.ProductOption.Dialogs.ProductO
                 }
                 $scope.preValuesLoaded = true;
             });
+
+            $scope.choiceName = $scope.dialogData.choice.name;
         }
 
 
