@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
 
+    using Merchello.Core.Models;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.Repositories;
     using Merchello.Core.Services.Interfaces;
@@ -20,6 +21,15 @@
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAllManufacturers();
+            }
+        }
+
+        /// <inheritdoc/>
+        public PagedCollection<IProduct> GetRecentlyUpdatedProducts(long page, long itemsPerPage = 10)
+        {
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetRecentlyUpdatedProducts(page, itemsPerPage);
             }
         }
 

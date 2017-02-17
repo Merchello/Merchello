@@ -546,13 +546,17 @@
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoFiveZero\AddIndexesToProductVariant.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoFourZero\AddShipmentTrackingUrlColumns.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoThreeOne\AlterProductAttributeColumnToNtext.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IProductBackOfficeRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IProductQueryRepository.cs" />
+    <Compile Include="Persistence\Repositories\ProductRepository.BackOffice.cs">
+      <DependentUpon>ProductRepository.cs</DependentUpon>
+    </Compile>
     <Compile Include="Persistence\Repositories\ProductRepository.collectionpricing.cs">
       <DependentUpon>ProductRepository.cs</DependentUpon>
     </Compile>
     <Compile Include="Services\Interfaces\IProductQueryService.cs" />
     <Compile Include="Services\Interfaces\IProductServicePortForward.cs" />
-    <Compile Include="Services\ProductService.collectionqueries.cs">
+    <Compile Include="Services\ProductService.PortForward.cs">
       <DependentUpon>ProductService.cs</DependentUpon>
     </Compile>
     <Compile Include="Strategies\Itemization\DefaultInvoiceItemizationStrategy.cs" />

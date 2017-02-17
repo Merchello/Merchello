@@ -48,6 +48,7 @@
                 }
             }
 
+
             /**
              * @ngdoc method
              * @name loadSettings

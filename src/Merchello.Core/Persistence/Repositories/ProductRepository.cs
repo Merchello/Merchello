@@ -1748,7 +1748,7 @@
                .On<ProductDto, ProductVariantDto>(SqlSyntax, left => left.Key, right => right.ProductKey)
                .InnerJoin<ProductVariantIndexDto>(SqlSyntax)
                .On<ProductVariantDto, ProductVariantIndexDto>(SqlSyntax, left => left.Key, right => right.ProductVariantKey)
-               .Where<ProductVariantDto>(x => x.Master);
+               .Where<ProductVariantDto>(x => x.Master, SqlSyntax);
 
             return sql;
         }
