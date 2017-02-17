@@ -328,8 +328,8 @@ angular.module('merchello.services').service('invoiceHelper',
  * @description Handles list view configurations.
  **/
 angular.module('merchello.services').service('merchelloListViewHelper',
-    ['$filter',
-    function() {
+    ['$cacheFactory',
+    function($cacheFactory) {
 
         var configs = {
             product: {

@@ -78,10 +78,12 @@ angular.module('merchello.directives').directive('merchelloListView',
                             scope.enableDateFilter = false;
                         }
                     }
+
                     localizationService.localize('merchelloGeneral_allDates').then(function(value) {
                         allDates = value;
                         scope.dateBtnText = allDates;
                     });
+
 
                     scope.$watch('ready', function(newVal, oldVal) {
                         if (newVal === true) {
@@ -97,6 +99,7 @@ angular.module('merchello.directives').directive('merchelloListView',
                 }
 
                 function search() {
+
                     var page = scope.options.pageNumber - 1;
                     var perPage = scope.options.pageSize;
                     var sortBy = scope.options.orderBy;
