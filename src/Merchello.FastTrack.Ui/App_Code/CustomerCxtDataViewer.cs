@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace Merchello.FastTrack.Tests
+﻿namespace Merchello.FastTrack.Tests
 {
     using Merchello.Core.Models;
     using Merchello.Web;
