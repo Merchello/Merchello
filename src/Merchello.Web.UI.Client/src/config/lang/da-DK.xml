@@ -675,6 +675,8 @@
     <key alias="globalShippingIsTaxable">Der skal betales moms af forsendelsesomkostningerne</key>
     <key alias="globalTaxationApplication">Opsæt hvordan moms er tilføjet</key>
     <key alias="defaultCultureName">Sæt standard sprog for udvidet indhold</key>
+    <key alias="stickyListView">Enable sticky list settings for general list.</key>
+    <key alias="stickyCollectionView">Enable sticky list setting for collection lists.</key>
   </area>
   
   <area alias="merchelloShippingCountry">

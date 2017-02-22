@@ -676,6 +676,8 @@
     <key alias="globalShippingIsTaxable">Le spese di spedizione sono tassabili</key>
     <key alias="globalTaxationApplication">Set how taxes are applied</key>
     <key alias="defaultCultureName">Set the default extended content culture</key>
+    <key alias="stickyListView">Enable sticky list settings for general list.</key>
+    <key alias="stickyCollectionView">Enable sticky list setting for collection lists.</key>
   </area>
   
   <area alias="merchelloShippingCountry">
