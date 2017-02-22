@@ -448,7 +448,7 @@
                         ReturnURL = returnUrl,
                         CancelURL = cancelUrl,
                         PaymentDetails = paymentDetailsList,
-                        AddressOverride = "1"
+                        AddressOverride = "0"
                     };
 
             // Trigger the event to allow for overriding ecDetails
