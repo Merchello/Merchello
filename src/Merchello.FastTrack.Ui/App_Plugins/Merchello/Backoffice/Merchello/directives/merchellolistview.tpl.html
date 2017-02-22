@@ -13,8 +13,8 @@
             </td>
 
             <td>
-                <form class="pull-right ng-pristine ng-valid" novalidate data-ng-show="hasFilter">
-                    <i class="icon-search" data-ng-click="enterSearch($event)"></i>
+                <form class="pull-right ng-pristine ng-valid input-prepend" novalidate data-ng-show="hasFilter">
+                    <i class="icon-search add-on" data-ng-click="enterSearch($event)"></i>
                     <input type="text" data-ng-model="options.filter" on-keyup="search()" prevent-enter-submit no-dirty-check class="ng-pristine ng-valid">
                 </form>
             </td>
@@ -28,9 +28,14 @@
                     </select>
                 </form>
             </td>
+            <td>
+                <a data-ng-click="openSettings()" class="gear" prevent-default>
+                    <i class="icon icon-settings-alt-2 large"></i>
+                </a>
+            </td>
         </tr>
         <tr data-ng-show="enableDateFilter">
-            <td colspan="{{ config.columns.length + 2}}">
+            <td colspan="{{ config.columns.length + 3}}">
                 <div class="btn-group pull-right">
                     <a href="#" class="btn btn-small" data-ng-click="openDateRangeDialog()" prevent-default>{{ dateBtnText }}</a>
                     <a href="#" class="btn btn-small" prevent-default data-ng-click="clearDates()" data-ng-show="startDate !== '' && endDate !== ''">X</a>
@@ -41,7 +46,7 @@
 
         <tbody data-ng-show="!preValuesLoaded">
         <tr>
-            <td colspan="{{ config.columns.length + 2 }}">
+            <td colspan="{{ config.columns.length + 3 }}">
                 <div class="umb-loader-wrapper">
                     <div class="umb-loader"></div>
                 </div>
@@ -51,7 +56,7 @@
 
         <tbody ng-show="listViewResultSet.totalItems === 0 && preValuesLoaded">
         <tr>
-            <td colspan="{{ config.columns.length + 2 }}">
+            <td colspan="{{ config.columns.length + 3 }}">
                 <p><localize key="content_listViewNoItems">There are no items show in the list.</localize></p>
             </td>
         </tr>
@@ -61,13 +66,13 @@
         <tbody ng-show="listViewResultSet.totalItems > 0">
         <tr ng-repeat="result in listViewResultSet.items" data-ng-class="{selected:result.selected}">
             <td data-ng-repeat="col in config.columns" data-ng-bind-html="getColumnValue()(result, col)"></td>
-            <td colspan="2"></td>
+            <td colspan="3"></td>
         </tr>
         </tbody>
 
         <tfoot ng-show="pagination.length > 1">
         <tr>
-            <th colspan="{{config.columns.length + 2}}">
+            <th colspan="{{config.columns.length + 3}}">
                 <div class="pull-left">
                 </div>
                 <div class="pagination pagination-right">

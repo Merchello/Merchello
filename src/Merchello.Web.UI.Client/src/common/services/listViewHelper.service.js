@@ -4,8 +4,8 @@
  * @description Handles list view configurations.
  **/
 angular.module('merchello.services').service('merchelloListViewHelper',
-    ['$cacheFactory',
-    function($cacheFactory) {
+    ['$sessionStorage', '$localStorage',
+    function($sessionStorage, $localStorage) {
 
         var configs = {
             product: {
@@ -100,5 +100,60 @@ angular.module('merchello.services').service('merchelloListViewHelper',
             var ensure = listViewType.toLowerCase();
             return configs[ensure];
         };
+
+        this.cacheSettings = function(entityType, config) {
+            var cacheKey = 'listview-settings-' + entityType;
+
+            var settings = config;
+
+            if(settings === undefined) {
+
+                settings = $localStorage[cacheKey];
+                if (settings === undefined) {
+                    settings = {
+                        stickyList: false,
+                        stickyCollectionList: false
+                    };
+                    $localStorage[cacheKey] = settings;
+                }
+
+            } else {
+                $localStorage[cacheKey] = settings;
+            }
+
+            return settings;
+        },
+
+
+        this.cache = function(entityType) {
+
+            function getKey(entityType, key) {
+                return entityType + '-' + key;
+            }
+
+            return {
+                type: entityType,
+
+                setValue: function(key, value) {
+                    var cacheKey = getKey(entityType, key);
+                    $sessionStorage[cacheKey] = value;
+                },
+
+                getValue: function(key) {
+                    var cacheKey = getKey(entityType, key);
+                    return $sessionStorage[cacheKey];
+                },
+
+                hasKey: function(key) {
+                    var cacheKey = getKey(entityType, key);
+                    return $sessionStorage[cacheKey] !== undefined;
+                },
+
+                removeValue: function(key) {
+                    var cacheKey = getKey(entityType, key);
+                    $sessionStorage[cacheKey] = undefined;
+                }
+            };
+        }
 
 }]);
