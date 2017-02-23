@@ -229,6 +229,14 @@ namespace Merchello.Core.Configuration
         }
 
         /// <summary>
+        /// Gets a value indicating whether shipments should be quoted based on an item's sale price if it's on sale.
+        /// </summary>
+        public bool QuoteShipmentUsingOnSalePrice
+        {
+            get { return bool.Parse(Section.Settings["QuoteShipmentUsingOnSalePrice"].Value); }
+        }
+
+        /// <summary>
         /// Gets the pattern formatter.
         /// </summary>
         /// <remarks>
