@@ -516,6 +516,8 @@
     <Content Include="App_Plugins\Merchello\lib\charts\angular-chart.min.js" />
     <Content Include="App_Plugins\Merchello\lib\charts\Chart.js" />
     <Content Include="App_Plugins\Merchello\lib\charts\Chart.min.js" />
+    <Content Include="App_Plugins\Merchello\lib\ngStorage\ngStorage.js" />
+    <Content Include="App_Plugins\Merchello\lib\ngStorage\ngStorage.min.js" />
     <Content Include="App_Plugins\Merchello\propertyeditors\checkoutworkflowstagepicker\merchello.checkoutworkflowstagepicker.html" />
     <Content Include="App_Plugins\Merchello\propertyeditors\multiproductpicker\merchello.multiproductpicker.dialog.html" />
     <Content Include="App_Plugins\Merchello\propertyeditors\multiproductpicker\merchello.multiproductpicker.html" />

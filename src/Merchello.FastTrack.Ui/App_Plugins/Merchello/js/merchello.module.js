@@ -8,8 +8,14 @@
         'merchello.directives',
         'merchello.plugins',
         'merchello.resources',
-        'merchello.services'
-    ]);
+        'merchello.services',
+        'ngStorage'
+    ]).config(['$sessionStorageProvider','$localStorageProvider',
+        function ($sessionStorageProvider, $localStorageProvider) {
+            $sessionStorageProvider.setKeyPrefix('merchello-');
+            $localStorageProvider.setKeyPrefix('merchello-');
+        }]);
+
     angular.module('merchello.models', []);
     angular.module('merchello.filters', []);
     angular.module('merchello.directives', []);

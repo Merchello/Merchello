@@ -99,19 +99,15 @@
             
             var fullFilename = context.Server.MapPath(file);
 
-            context.Response.Clear();
+            var bin = System.IO.File.ReadAllBytes(fullFilename);
+
+            context.Response.ClearHeaders();
+            context.Response.ClearContent();
             context.Response.ContentType = "application/octet-stream";//set file type
-            context.Response.Buffer = false;
-            context.Response.BufferOutput = false;
-            //set download filename + ensure download widget (stops pdf's opening in browser!)
-            context.Response.AddHeader("Content-Disposition", string.Format("attachment; filename=\"{0}\"", Path.GetFileName(fullFilename)));
-
-            //send file down stream
-            //context.Response.TransmitFile();
-            context.Response.WriteFile(fullFilename);
-
+            context.Response.AddHeader("Content-Disposition", $"attachment; filename=\"{Path.GetFileName(fullFilename)}\"");
+            context.Response.BinaryWrite(bin);
             context.Response.Flush();
-            context.Response.Close();
+            context.Response.End();
 
             //update database to mark it as downloaded, after the stream completes if possible
             model.FirstAccessed = DateTime.Now;
