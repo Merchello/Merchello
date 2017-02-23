@@ -103,8 +103,8 @@
 
             context.Response.ClearHeaders();
             context.Response.ClearContent();
-            context.Response.ContentType = "application/octet-stream";//set file type
-            context.Response.AddHeader("Content-Disposition", $"attachment; filename=\"{Path.GetFileName(fullFilename)}\"");
+            context.Response.ContentType = "application/octet-stream"; //set file type
+            context.Response.AddHeader("Content-Disposition", string.Format("attachment; filename=\"{0}\"", Path.GetFileName(fullFilename)));
             context.Response.BinaryWrite(bin);
             context.Response.Flush();
             context.Response.End();
