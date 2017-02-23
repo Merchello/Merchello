@@ -6,6 +6,7 @@
     using Models;
     using Models.Interfaces;
     using Umbraco.Core;
+    using Configuration;
 
     /// <summary>
     /// Defines the rate table ship method
@@ -99,7 +100,7 @@
         public override Attempt<IShipmentRateQuote> QuoteShipment(IShipment shipment)
         {
             // TODO this should be made configurable
-            var visitor = new FixedRateShipmentLineItemVisitor { UseOnSalePriceIfOnSale = false };
+            var visitor = new FixedRateShipmentLineItemVisitor { UseOnSalePriceIfOnSale = MerchelloConfiguration.Current.QuoteShipmentUsingOnSalePrice };
 
             shipment.Items.Accept(visitor);
 
