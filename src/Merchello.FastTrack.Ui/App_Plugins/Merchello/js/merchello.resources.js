@@ -1765,7 +1765,18 @@ angular.module('merchello.resources').factory('noteResource', [
                             query
                         ),
                         'Failed to search products');
+                },
+
+                getRecentlyUpdated: function(query) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'GetRecentlyUpdated';
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(
+                            url,
+                            query
+                        ),
+                        'Failed to get recently updated products');
                 }
+
             };
     }]);
 

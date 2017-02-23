@@ -6347,6 +6347,7 @@ angular.module('merchello').controller('Merchello.ProductOption.Dialogs.ProductO
         $scope.currentTabs = undefined;
         $scope.tabs = [];
         $scope.preValuesLoaded = false;
+        $scope.choiceName = '';
 
         var umbracoTabs = [];
 
@@ -6387,6 +6388,8 @@ angular.module('merchello').controller('Merchello.ProductOption.Dialogs.ProductO
                 }
                 $scope.preValuesLoaded = true;
             });
+
+            $scope.choiceName = $scope.dialogData.choice.name;
         }
 
 
@@ -8315,6 +8318,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductFilterGroups
                     return productResource.searchProducts(query);
                 }
             }
+
 
             /**
              * @ngdoc method
@@ -10836,7 +10840,6 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
 
                     loadShippingAddress(id);
 
-
                     $scope.showFulfill = hasUnPackagedLineItems();
                     $scope.loaded = true;
 
@@ -11008,7 +11011,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     $timeout(function() {
                         notificationsService.success("Payment Captured");
                         loadInvoice(paymentRequest.invoiceKey);
-                    }, 400);
+                    }, 800);
                 }, function (reason) {
                     notificationsService.error("Payment Capture Failed", reason.message);
                 });
@@ -11111,8 +11114,9 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     promiseNewShipment.then(function (shipment) {
                         $timeout(function() {
                             notificationsService.success('Shipment #' + shipment.shipmentNumber + ' created');
+                            //console.info(shipment);
                             loadInvoice(data.invoiceKey);
-                        }, 400);
+                        }, 800);
 
                     }, function (reason) {
                         notificationsService.error("New Shipment Failed", reason.message);
@@ -11186,9 +11190,9 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 }
 
                 if (address.addressType === 'Billing') {
-                    dialogData.warning = 'Note: This ONLY changes the addresses associated with THIS invoice.';
+                    dialogData.warning = localizationService.localize('merchelloSales_noteInvoiceAddressChange');
                 } else {
-                    dialogData.warning = 'Note: This will not change any existing shipment destination addresses.'
+                    dialogData.warning = localizationService.localize('merchelloSales_noteShipmentAddressChange');
                 }
 
 

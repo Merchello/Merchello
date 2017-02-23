@@ -5,19 +5,19 @@
         </div>
         <div class="form-group col-xs-6 span6" data-ng-show="offer.key !== ''">
             <div class="well well-warning" data-ng-hide="offer.active">
-                <h2>Not Active</h2>
+                <h2><localize key="merchelloMarketing_offerNotActive" /></h2>
                 <p data-ng-hide="offer.hasRewards() && offer.componentsConfigured()">
-                <strong>To set active:</strong> Assign and configure rewards and any constraints.
+                <localize key="merchelloMarketing_offerToSetActiveInfo" />
                 </p>
                 <p data-ng-show="(offer.hasRewards() && offer.componentsConfigured()) && offer.expired">
-                    <strong>Offer has expired.</strong>
+                    <strong><localize key="merchelloMarketing_offerHasExpired" /></strong>
                 </p>
             </div>
             {{offerSaved}}
             <div class="well well-active" data-ng-show="offer.active && !offer.expired">
-                <h2>Active</h2>
+                <h2><localize key="merchelloMarketing_offerActive" /></h2>
             </div>
-            <label class="label-checkbox"><input name="expires" type="checkbox" data-ng-model="offer.active" data-ng-disabled="!offer.hasRewards() || !offer.componentsConfigured()"> <span data-ng-show="offer.active">This offer is active</span><span data-ng-hide="offer.active">This offer is not active</span></label>
+            <label class="label-checkbox"><input name="expires" type="checkbox" data-ng-model="offer.active" data-ng-disabled="!offer.hasRewards() || !offer.componentsConfigured()"> <span data-ng-show="offer.active"><localize key="merchelloMarketing_thisOfferIsActive" /></span><span data-ng-hide="offer.active"><localize key="merchelloMarketing_thisOfferIsNotActive" /></span></label>
 
         </div>
     </div>
@@ -28,7 +28,7 @@
         </div-->
 
         <div class="btn-group" data-ng-hide="offer.offerExpires">
-            <a href="#" class="btn btn-small" data-ng-click="toggleOfferExpires()" prevent-default>Offer is valid for all dates</a>
+            <a href="#" class="btn btn-small" data-ng-click="toggleOfferExpires()" prevent-default><localize key="merchelloMarketing_offerValidAllDates" /></a>
         </div>
 
         <div class="btn-group" data-ng-show="offer.offerExpires">

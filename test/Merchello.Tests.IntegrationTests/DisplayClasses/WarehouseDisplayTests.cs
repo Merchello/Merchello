@@ -168,7 +168,6 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
 
             //// Assert
             Assert.NotNull(countryDisplay);
-            Assert.AreEqual(country.Key, countryDisplay.Key);
             Assert.AreEqual(country.Name, countryDisplay.Name);
             Assert.AreEqual(country.ProvinceLabel, countryDisplay.ProvinceLabel);
             Assert.AreEqual(country.CountryCode, countryDisplay.CountryCode);

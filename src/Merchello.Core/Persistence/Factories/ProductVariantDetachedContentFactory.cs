@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Merchello.Core.Logging;
     using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.Models.Rdbms;
 
@@ -34,9 +35,7 @@
         {
             var detachedContentType = _detachedContentTypeFactory.Value.BuildEntity(dto.DetachedContentType);
 
-            var values = dto.Values.IsNullOrWhiteSpace()
-                             ? Enumerable.Empty<KeyValuePair<string, string>>()
-                             : JsonConvert.DeserializeObject<IEnumerable<KeyValuePair<string, string>>>(dto.Values);            
+            var values = DetachedContentValuesSerializationHelper.Deserialize(dto.Values);
 
             var valuesCollection = new DetachedDataValuesCollection(values);
 
@@ -79,7 +78,7 @@
                            Slug = !entity.Slug.IsNullOrWhiteSpace() ? entity.Slug : null,
                            TemplateId = entity.TemplateId > 0 ? entity.TemplateId : null,
                            CanBeRendered = entity.CanBeRendered,
-                           Values = JsonConvert.SerializeObject(entity.DetachedDataValues.AsEnumerable()),
+                           Values = DetachedContentValuesSerializationHelper.Serialize(entity.DetachedDataValues),
                            CreateDate = entity.CreateDate,
                            UpdateDate = entity.UpdateDate
                        };

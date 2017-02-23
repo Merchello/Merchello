@@ -61,7 +61,7 @@
             var coupon = couponAttempt.Result;
 
             var validationItems = this._paymentManager.PrepareInvoice();
-            var result = this.TryApplyOffer<ILineItemContainer, ILineItem>(LineItemExtensions.CreateNewItemCacheLineItemContainer(validationItems.Items.Where(x => x.LineItemType != LineItemType.Tax)), offerCode).AsCouponRedemptionResult(coupon);
+            var result = this.TryApplyOffer<ILineItemContainer, ILineItem>(Extensions.CreateNewItemCacheLineItemContainer(validationItems.Items.Where(x => x.LineItemType != LineItemType.Tax)), offerCode).AsCouponRedemptionResult(coupon);
 
             if (!result.Success) return result;
 

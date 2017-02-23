@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
 
+    using Merchello.Core;
     using Merchello.Core.Events;
     using Merchello.Core.Logging;
     using Merchello.Core.Models;
@@ -14,7 +15,7 @@
 
     using global::PayPal.PayPalAPIInterfaceService.Model;
 
-    using Umbraco.Core;
+
     using Umbraco.Core.Events;
 
     /// <summary>
@@ -447,7 +448,7 @@
                         ReturnURL = returnUrl,
                         CancelURL = cancelUrl,
                         PaymentDetails = paymentDetailsList,
-                        AddressOverride = "1"
+                        AddressOverride = Settings.AddressOverride.ToString()
                     };
 
             // Trigger the event to allow for overriding ecDetails

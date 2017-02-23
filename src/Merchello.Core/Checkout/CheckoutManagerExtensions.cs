@@ -56,7 +56,7 @@
         /// </returns>
         internal static ILineItemContainer CreateNewLineContainer(IEnumerable<ILineItem> filteredItems)
         {
-            return LineItemExtensions.CreateNewItemCacheLineItemContainer(filteredItems);
+            return Extensions.CreateNewItemCacheLineItemContainer(filteredItems);
         }
     }
 }

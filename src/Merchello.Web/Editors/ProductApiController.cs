@@ -10,6 +10,7 @@
 
     using Merchello.Core;
     using Merchello.Core.Chains.CopyEntity.Product;
+    using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Core.ValueConverters;
     using Merchello.Web.Models.ContentEditing;
@@ -216,7 +217,27 @@
                   query.ItemsPerPage,
                   query.SortBy,
                   query.SortDirection);
-        }        
+        }
+
+        /// <summary>
+        /// Gets the recently updated products.
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <returns>
+        /// The <see cref="QueryResultDisplay"/>.
+        /// </returns>
+        [HttpPost]
+        public QueryResultDisplay GetRecentlyUpdated(QueryDisplay query)
+        {
+            var itemsPerPage = query.ItemsPerPage;
+            var currentPage = query.CurrentPage + 1;
+
+            var results = _productService.GetRecentlyUpdatedProducts(currentPage, itemsPerPage);
+
+            return results.ToQueryResultDisplay<IProduct, ProductDisplay>(MapToProductDisplay);
+        }
 
         /// <summary>
         /// Creates a new product with variants
@@ -497,6 +518,23 @@
         public IEnumerable<string> GetAllManufacturers()
         {
             return _productService.GetAllManufacturers();
+        }
+
+        /// <summary>
+        /// Maps <see cref="IProduct"/> to <see cref="ProductDisplay"/>.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
+        /// <remarks>
+        /// Delegated to mapping function
+        /// </remarks>
+        private static ProductDisplay MapToProductDisplay(IProduct product)
+        {
+            return product.ToProductDisplay(DetachedValuesConversionType.Editor);
         }
 
         /// <summary>

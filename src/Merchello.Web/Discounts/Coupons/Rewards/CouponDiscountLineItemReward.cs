@@ -121,7 +121,7 @@
 
             // apply to the entire collection excluding previously added discounts
             var qualifying =
-                LineItemExtensions.CreateNewItemCacheLineItemContainer(validate.Items.Where(x => x.LineItemType != LineItemType.Discount));
+                Extensions.CreateNewItemCacheLineItemContainer(validate.Items.Where(x => x.LineItemType != LineItemType.Discount));
 
             var visitor = new CouponDiscountLineItemRewardVisitor(Amount, AdjustmentType);
             qualifying.Items.Accept(visitor);

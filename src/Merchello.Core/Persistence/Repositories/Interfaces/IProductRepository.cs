@@ -13,7 +13,7 @@
     /// <summary>
     /// Marker interface for the address repository
     /// </summary>
-    public interface IProductRepository : IPagedRepository<IProduct, ProductDto>, IStaticEntityCollectionRepository<IProduct>, IProductCollectionPriceQueries
+    public interface IProductRepository : IPagedRepository<IProduct, ProductDto>, IStaticEntityCollectionRepository<IProduct>, IProductCollectionPriceQueries, IProductBackOfficeRepository
     {
         /// <summary>
         /// Gets a collection of <see cref="IProduct"/> that has detached content of type.

@@ -110,7 +110,7 @@
         {
             // TODO the keyvalue pairs should never be empty but we need a hack fix to account for 
             // a WebAPi deserialization when creating a new detached content item.
-            foreach (var pair in keyValues.Where(x => !x.Key.IsNullOrWhiteSpace()))
+            foreach (var pair in keyValues.Where(x => !x.Key.IsNullOrWhiteSpace() && !x.Value.IsNullOrWhiteSpace()))
             {
                 this.SetValue(pair.Key, pair.Value);
             }

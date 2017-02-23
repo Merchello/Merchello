@@ -20,6 +20,7 @@
     <key alias="trackingUrl">Tracking URL</key>
     <key alias="shipment">Forsendelse</key>
     <key alias="sku">SKU</key>
+    <key alias="name">Name</key>
     <key alias="quantity">Antal</key>
     <key alias="fulfill">Behandl</key>
     <key alias="status">Status</key>
@@ -28,6 +29,7 @@
     <key alias="via">Gennem</key>
     <key alias="options">Muligheder</key>
     <key alias="select">Vælg</key>
+    <key alias="selected">Selected</key>
     <key alias="all">Alle</key>
     <key alias="none">Ingen</key>
     <key alias="expired">Udløbet</key>
@@ -180,11 +182,13 @@
   </area>
   <area alias="merchelloHeadline">
     <key alias="catalog">Katalog</key>
+    <key alias="productSpecFilters">Filter Specifications</key>
   </area>
   <area alias="merchelloValidation">
     <key alias="nameFieldRequired">Navn er påkrævet</key>
     <key alias="contentTypeRequired">Indholdstype er påkrævet</key>
     <key alias="noteMessageRequired">Note er påkrævet</key>
+    <key alias="oneChoiceRequired">At least one choice must be defined.</key>
   </area>
   <area alias="merchelloTableCaptions">
     <key alias="name">Navn</key>
@@ -222,6 +226,7 @@
     <key alias="newPrice">New Price</key>
     <key alias="newCostOfGoods">New Cost Of Goods</key>
     <key alias="newSalePrice">New Sale Price</key>
+    <key alias="recentlyUpdated">Recently Updated</key>
   </area>
   <area alias="merchelloSpecFilters">
     <key alias="manageProductFilters">Administrer produktfiltre</key>
@@ -240,6 +245,11 @@
   <area alias="merchelloProductOptions">
     <key alias="newOption">Ny tilvalgsmulighed</key>
     <key alias="sharedOption">Delte tilvalgsmuligheder</key>
+    <key alias="addProductOption">Add Product Option</key>
+    <key alias="editProductOption">Edit Product Option</key>
+    <key alias="choices">Choices</key>
+    <key alias="customSettings">Custom Settings</key>
+    <key alias="uiOption">UI Option</key>
     <key alias="editOptions">
       <![CDATA[
       <strong>Redigér tilvalgsmuligheder</strong>
@@ -308,6 +318,7 @@
     <key alias="invoice">Faktura</key>
     <key alias="invoiceNumber">Faktura #</key>
     <key alias="invoiceNumberPrefix">Faktura nummer præfix</key>
+    <key alias="createInvoice">Create Invoice</key>
     <key alias="poNumber">Ordrenummer</key>
     <key alias="paymentStatus">Betalingsstatus</key>
     <key alias="sales">Salg</key>
@@ -331,6 +342,10 @@
     <key alias="noBillingAddress">Ingen faktureringsadresse</key>
     <key alias="shippingAddress">Leveringsadresse</key>
     <key alias="noShippingAddress">Ingen leveringsadresse</key>
+    <key alias="noteInvoiceAddressChange">Note: This ONLY changes the addresses associated with THIS invoice.</key>
+    <key alias="noteShipmentAddressChange">Note: This will not change any existing shipment destination addresses.</key>
+    <key alias="editAddress">Edit Address</key>
+    <key alias="shippingMethod">Shipping method</key>
     <key alias="paid">Betalt</key>
     <key alias="unpaid">Ubetalt</key>
     <key alias="partial">Delvist</key>
@@ -343,6 +358,8 @@
   <area alias="merchelloCustomers">
     <key alias="loginName">Login</key>
     <key alias="newCustomer">Ny kunde</key>
+    <key alias="customers">Customers</key>
+    <key alias="customerInformation">Customer Information</key>
     <key alias="basket">Indkøbskurv</key>
     <key alias="lastActivityDate">Sidste aktivitet</key>
     <key alias="lastInvoiceTotal">Sidste faktura total</key>
@@ -381,10 +398,54 @@
     </key>
     <key alias="itemCacheEmpty">Indeholder ingen varer</key>
     <key alias="totalSpent">Total brugt</key>
+    <key alias="actions">Actions</key>
+    <key alias="editAddress">Edit address</key>
+    <key alias="deleteAddress">Delete address</key>
+    <key alias="addNewAddress">Add New Address</key>
+    <key alias="billingAddresses">Billing Addresses</key>
+    <key alias="billingAddressesHelper">Billing addresses associated with this customer</key>
+    <key alias="shippingAddresses">Shipping Addresses</key>
+    <key alias="shippingAddressesHelper">Shipping addresses associated with this customer</key>
+
+    <!-- Address Form Labels -->
+    <key alias="label">Label</key>
+    <key alias="fullName">Full Name</key>
+    <key alias="firstName">First Name</key>
+    <key alias="lastName">Last Name</key>
+    <key alias="company">Company</key>
+    <key alias="address">Address</key>
+    <key alias="addressLine2">Address Line 2</key>
+    <key alias="city">City</key>
+    <key alias="country">Country</key>
+    <key alias="stateOrProvince">State/Province</key>
+    <key alias="zipOrPostalCode">Zip/Postal Code</key>
+    <key alias="phone">Phone</key>
+    <key alias="primaryAddress">Primary Address</key>
+    <key alias="email">Email</key>
+
+    <!-- Address Table Labels (shorter) -->
+    <key alias="tblLabel">Label</key>
+    <key alias="tblFullName">Name</key>
+    <key alias="tblAddress">Address</key>
+    <key alias="tblAddressLine2">Address 2</key>
+    <key alias="tblLocality">Locality</key>
+    <key alias="tblRegion">Region</key>
+    <key alias="tblCountry">Country</key>
+    <key alias="tblPostalCode">Postal</key>
+
+    <!-- Address Form Validation Messages -->
+    <key alias="labelRequired">Label is a required field</key>
+    <key alias="addressRequired">Address is a required field</key>
+    <key alias="cityRequired">City is a required field</key>
+    <key alias="countryRequired">Country is a required field</key>
+    <key alias="zipOrPostalCodeRequired">Zip/Postal Code is a required field</key>
+    <key alias="emailRequired">Email is a required field</key>
   </area>
   <area alias="merchelloMarketing">
     <key alias="currentOffers">Aktuelle tilbud</key>
     <key alias="offerCode">Kode for tilbud</key>
+    <key alias="offerCodeInUse">Already in use</key>
+    <key alias="offerCodeIsOk">Ok!</key>
     <key alias="newOffer">Nyt tilbud</key>
     <key alias="noOffer">Ingen aktuelle tilbud</key>
     <key alias="newOfferPrompt">Du har ikke tilbudt dine kunder nogle specielle tilbud. Hvorfor ikke oprette et?</key>
@@ -396,6 +457,12 @@
     <key alias="offerNeverExpires">Udløber ikke.</key>
     <key alias="offerValidDates">Gyldige datoer for tilbud</key>
     <key alias="offerValidDatesInfo">Angiv datoerne hvor dette tilbud er gyldigt.</key>
+    <key alias="offerValidAllDates">Offer is valid for all dates</key>
+    <key alias="offerNotActive">Not Active</key>
+    <key alias="offerActive">Active</key>
+    <key alias="thisOfferIsNotActive">This offer is not active</key>
+    <key alias="thisOfferIsActive">This offer is active</key>
+    <key alias="offerToSetActiveInfo"><![CDATA[ <strong>To set active:</strong> Assign and configure rewards and any constraints ]]></key>
     <key alias="offerConstraintsInfo">Restriktioner</key>
     <key alias="offerConstraintsConfig">Konfigurer betingelser forbundet med dette tilbud.</key>
     <key alias="offerRewardsInfo">Belønninger</key>
@@ -515,7 +582,10 @@
     <key alias="shippingAddress">Leveringsadresse</key>
     <key alias="billingAddress">Faktureringsadresse</key>
     <key alias="orderInformation">Ordreinformation</key>
+    <key alias="invoiced">Invoiced</key>
     <!-- actions -->
+    <key alias="captureFunds">Capture Funds</key>
+    <key alias="newPayment">New Payment</key>
     <!-- phrases -->
     <key alias="billingAndShippingAddressHelper">Betaling- og leveringsadresser</key>
     <key alias="orderInformationHelper"><![CDATA[Ordrelinjer og omkostninger]]></key>
@@ -525,6 +595,7 @@
     <key alias="captured">Trukket</key>
     <key alias="paymentHistory">Betalingshistorik</key>
     <key alias="saleHistory">Salgshistorik</key>
+    <key alias="saleHistoryHelper"><![CDATA[A timeline of events regarding this order]]></key>
     <key alias="paymentHistoryHelper">Status registreringer for en eller flere betalinger</key>
     <key alias="paymentProcessedBy">Betaling gennemført af:</key>
     <key alias="resetFilters">Nulstil filtre</key>
@@ -755,6 +826,7 @@
     <key alias="variantInformation">Variantinformation</key>
     <key alias="variantInformationHelper">Redigér varianter på dette produkt.</key>
     <key alias="selectProduct">Vælg produkt...</key>
+    <key alias="selectProducts">Select products</key>
     <key alias="selectMerchelloProduct">Vælg Merchello produkt</key>
     <key alias="selectYourProduct">Vælg dit produkt</key>
     <key alias="removeProduct">Fjern dette produkt</key>

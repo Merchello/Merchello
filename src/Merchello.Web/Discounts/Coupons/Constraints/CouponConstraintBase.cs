@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Web.Discounts.Coupons.Constraints
 {
+    using Merchello.Core;
     using Merchello.Core.Exceptions;
     using Merchello.Core.Marketing.Constraints;
     using Merchello.Core.Marketing.Offer;

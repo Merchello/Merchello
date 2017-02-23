@@ -1,11 +1,16 @@
 ﻿namespace Merchello.Core.Configuration.Outline 
 {
+    using System.Collections.Generic;
     using System.Configuration;
+
+    using Merchello.Core.Configuration.Elements;
+    using Merchello.Core.Configuration.Sections;
+    using Merchello.Core.Models;
 
     /// <summary>
     /// Defines the Merchello main configuration section.
     /// </summary>
-    public class MerchelloSection : ConfigurationSection
+    public class MerchelloSection : ConfigurationSection, IMerchelloCountriesSection
     {
         /// <summary>
         /// Gets or sets the default connection string name for Merchello database connectivity
@@ -122,13 +127,34 @@
         }
 
         /// <summary>
-        /// Gets the RegionalProvince collection
+        /// Gets the list of countries.
         /// </summary>
-        [ConfigurationProperty("regionalProvinces", IsRequired = true), ConfigurationCollection(typeof(RegionalProvinceCollection), AddItemName = "region")]
-        public RegionalProvinceCollection RegionalProvinces
+        IEnumerable<ICountry> IMerchelloCountriesSection.Countries
         {
-            get { return (RegionalProvinceCollection) this["regionalProvinces"]; }
+            get
+            {
+                return this.Countries.Countries;
+            }
         }
+
+        /// <inheritdoc/>
+        [ConfigurationProperty("countries", IsRequired = true)]
+        internal CountriesElement Countries
+        {
+            get
+            {
+                return (CountriesElement)this["countries"];
+            }
+        }
+
+        ///// <summary>
+        ///// Gets the RegionalProvince collection
+        ///// </summary>
+        //[ConfigurationProperty("regionalProvinces", IsRequired = true), ConfigurationCollection(typeof(RegionalProvinceCollection), AddItemName = "region")]
+        //public RegionalProvinceCollection RegionalProvinces
+        //{
+        //    get { return (RegionalProvinceCollection) this["regionalProvinces"]; }
+        //}
 
         /// <summary>
         /// Gets the pluggable collection.

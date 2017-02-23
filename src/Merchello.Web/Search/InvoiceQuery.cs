@@ -13,6 +13,7 @@
     using Merchello.Examine;
     using Merchello.Examine.Models;
     using Merchello.Web.Models.ContentEditing;
+    using Core;
 
     /// <summary>
     /// The invoice query.

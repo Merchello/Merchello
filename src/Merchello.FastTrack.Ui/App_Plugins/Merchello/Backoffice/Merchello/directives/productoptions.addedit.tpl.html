@@ -2,23 +2,23 @@
 
         <div class="form-group row-fluid">
             <label for="name"><localize key="general_name" /></label>
-            <div class="error" data-ng-show="productOptionForm.name.$invalid && wasFormSubmitted">Name is a required field.</div>
+            <div class="error" data-ng-show="productOptionForm.name.$invalid && wasFormSubmitted"><localize key="merchelloValidation_nameFieldRequired" /></div>
             <input name="name" id="name" data-ng-model="option.name" class="span8" type="text" required />
         </div>
 
         <div class="control-group" data-ng-show="option.name !== ''">
 
-            <h5>Choices</h5>
-            <div class="error" data-ng-show="option.choices.length === 0 && wasFormSubmitted">At least one choice must be defined.</div>
+            <h5><localize key="merchelloProductOptions_choices" /></h5>
+            <div class="error" data-ng-show="option.choices.length === 0 && wasFormSubmitted"><localize key="merchelloValidation_oneChoiceRequired" /></div>
             <input type="text" name="choice" data-ng-model="choiceName" merch-enter="addChoice()" /> <merchello-add-icon do-add="addChoice()"></merchello-add-icon>
         </div>
         <table class="table settings-table col-xs-6 span6" data-ng-show="option.choices.length > 0">
             <thead>
             <tr>
                 <th data-ng-show="option.choices.length > 1"></th>
-                <th>Name</th>
-                <th>Sku</th>
-                <th>Selected</th>
+                <th><localize key="merchelloGeneral_name" /></th>
+                <th><localize key="merchelloGeneral_sku" /></th>
+                <th><localize key="merchelloGeneral_selected" /></th>
                 <th colspan="2"></th>
             </tr>
             </thead>
@@ -39,8 +39,8 @@
         </table>
 
         <div class="form-group control-group row-fluid">
-            <h5>Custom Settings</h5>
-            <label for="uiOption">UI Option</label>
+            <h5><localize key="merchelloProductOptions_customSettings" /></h5>
+            <label for="uiOption"><localize key="merchelloProductOptions_uiOption" /></label>
             <select id="uiOption" name="uiOption" class="span8" data- ng-options="ui.value for ui in uiOptions track by ui.key" data-ng-model="selectedUiOption">
                 <option value="" selected>-</option>
             </select>
