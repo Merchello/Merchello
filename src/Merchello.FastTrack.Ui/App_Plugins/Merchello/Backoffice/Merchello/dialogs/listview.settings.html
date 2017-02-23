@@ -1,0 +1,28 @@
+<div class="umb-panel merchello-side-panel">
+    <div class="umb-modalcolumn-header">
+        <h4><localize key="merchelloDelete_deleteConfirmation" /></h4>
+    </div>
+    <div class="umb-panel-body with-header with-footer">
+        <form>
+            <label class="label-checkbox" style="display: block"><input type="checkbox" data-ng-model="dialogData.settings.stickyList"> <span><localize key="merchelloSettings_stickyListView" /></span></label>
+            <label class="label-checkbox" style="display: block"><input type="checkbox" data-ng-model="dialogData.settings.stickyCollectionList"> <span><localize key="merchelloSettings_stickyCollectionView" /></span></label>
+        </form>
+    </div>
+
+    <div class="umb-panel-footer">
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+                <a href data-ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel"></localize>
+                </a>
+
+                <button class="btn-success"
+                        data-ng-click="submit(dialogData)">
+                    <localize key="buttons_save"></localize>
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>

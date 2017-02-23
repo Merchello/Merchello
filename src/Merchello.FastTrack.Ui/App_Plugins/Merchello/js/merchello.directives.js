@@ -2044,7 +2044,6 @@ angular.module('merchello.directives').directive('merchelloCreateButton', functi
     }
 });
 
-
 angular.module('merchello.directives').directive('merchelloListView',
     ['$routeParams', '$log', '$filter', 'dialogService', 'eventsService', 'localizationService', 'merchelloListViewHelper', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
     function($routeParams, $log, $filter, dialogService, eventsService, localizationService, merchelloListViewHelper, queryDisplayBuilder, queryResultDisplayBuilder) {
@@ -2095,6 +2094,13 @@ angular.module('merchello.directives').directive('merchelloListView',
 
                 //scope.goToEditor = goToEditor;
 
+                var cacheSettings = merchelloListViewHelper.cacheSettings(scope.entityType);
+                var cacheEnabled = false;
+
+
+                var cache = merchelloListViewHelper.cache(scope.entityType + '-listview');
+                var OPTIONS_CACHE_KEY = 'options';
+
                 scope.listViewResultSet = {
                     totalItems: 0,
                     items: []
@@ -2118,17 +2124,28 @@ angular.module('merchello.directives').directive('merchelloListView',
                     scope.enableDateFilter = 'includeDateFilter' in attr;
                     scope.hasFilter = !('noFilter' in attr);
                     scope.showTitle = !('noTitle' in attr);
+
+
                     if(scope.hasCollections) {
                         scope.collectionKey = $routeParams.id !== 'manage' ? $routeParams.id : '';
                         // none of the collections have the capability to filter by dates
                         if (scope.collectionKey !== '' && scope.enableDateFilter) {
                             scope.enableDateFilter = false;
                         }
+                        OPTIONS_CACHE_KEY = OPTIONS_CACHE_KEY + scope.collectionKey;
                     }
+
+                    cacheEnabled = scope.collectionKey !== '' ? cacheSettings.stickyCollectionList : cacheSettings.stickyList;
+
+                    if (cacheEnabled && cache.hasKey(OPTIONS_CACHE_KEY)) {
+                        scope.options = cache.getValue(OPTIONS_CACHE_KEY);
+                    }
+
                     localizationService.localize('merchelloGeneral_allDates').then(function(value) {
                         allDates = value;
                         scope.dateBtnText = allDates;
                     });
+
 
                     scope.$watch('ready', function(newVal, oldVal) {
                         if (newVal === true) {
@@ -2144,10 +2161,17 @@ angular.module('merchello.directives').directive('merchelloListView',
                 }
 
                 function search() {
+
+                    if (cacheEnabled) {
+                        cache.setValue(OPTIONS_CACHE_KEY, scope.options);
+                    }
+
+
                     var page = scope.options.pageNumber - 1;
                     var perPage = scope.options.pageSize;
                     var sortBy = scope.options.orderBy;
                     var sortDirection = scope.options.orderDirection === 'asc' ? 'Ascending' : 'Descending';
+
 
                     var query = queryDisplayBuilder.createDefault();
                     query.currentPage = page;
@@ -2294,6 +2318,25 @@ angular.module('merchello.directives').directive('merchelloListView',
                     scope.startDate = dialogData.startDate;
                     scope.endDate = dialogData.endDate;
                     search();
+                }
+
+                scope.openSettings = function() {
+
+                    var dialogData = {
+                        settings: cacheSettings
+                    };
+
+                    dialogService.open({
+                        template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/listview.settings.html',
+                        show: true,
+                        callback: processListViewSettings,
+                        dialogData: dialogData
+                    });
+                }
+
+                function processListViewSettings(dialogData) {
+                    cacheSettings = merchelloListViewHelper.cacheSettings(scope.entityType, dialogData.settings);
+                    cacheEnabled = scope.collectionKey !== '' ? cacheSettings.stickyCollectionList : cacheSettings.stickyList;
                 }
 
                 init();
