@@ -75,7 +75,8 @@
             { 45, typeof(Customer2EntityCollectionDto) },
             { 46, typeof(ProductVariantDetachedContentDto) },
             { 47, typeof(NoteDto) },
-            { 48, typeof(ProductOptionAttributeShareDto) }
+            { 48, typeof(ProductOptionAttributeShareDto) },
+            { 49, typeof(DigitalMediaDto) }
         };
 
         /// <summary>
