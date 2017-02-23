@@ -57,16 +57,36 @@
                 return;
             }
 
+            IPublishedContent mediaItem = null;
+
+
             var productVariant = MerchelloContext.Current.Services.ProductVariantService.GetByKey(model.ProductVariantKey);
+      
+            if(productVariant != null) 
+            { 
+                if (!productVariant.Download || !productVariant.DownloadMediaId.HasValue)
+                {
+                    ThrowError(context, "Product Variant isn't available for download!");
+                    return;
+                }
 
-            if (!productVariant.Download && productVariant.DownloadMediaId.HasValue)
-            {
-                ThrowError(context, "Product Variant isnt availablt for download!");
-                return;
+                mediaItem = UmbracoContext.Current.MediaCache.GetById(productVariant.DownloadMediaId.Value);
             }
+            
 
-            var mediaItem = UmbracoContext.Current.MediaCache.GetById(productVariant.DownloadMediaId.Value);
+            var product = MerchelloContext.Current.Services.ProductService.GetByKey(model.ProductVariantKey);
 
+            if (product != null) 
+            {
+                if (!product.Download || !product.DownloadMediaId.HasValue) 
+                {
+                    ThrowError(context, "Product isn't available for download!");
+                    return;
+                }
+
+                mediaItem = UmbracoContext.Current.MediaCache.GetById(product.DownloadMediaId.Value);
+            }
+            
 
             //TODO: move this to config somewhere
             if(!model.FirstAccessed.HasValue && model.CreateDate.AddDays(30) > DateTime.Now)
@@ -103,8 +123,8 @@
 
             context.Response.ClearHeaders();
             context.Response.ClearContent();
-            context.Response.ContentType = "application/octet-stream";//set file type
-            context.Response.AddHeader("Content-Disposition", $"attachment; filename=\"{Path.GetFileName(fullFilename)}\"");
+            context.Response.ContentType = "application/octet-stream"; //set file type
+            context.Response.AddHeader("Content-Disposition", string.Format("attachment; filename=\"{0}\"", Path.GetFileName(fullFilename)));
             context.Response.BinaryWrite(bin);
             context.Response.Flush();
             context.Response.End();
