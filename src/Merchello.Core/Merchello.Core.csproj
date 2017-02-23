@@ -543,6 +543,7 @@
     <Compile Include="Models\Rdbms\CountDto.cs" />
     <Compile Include="Models\Rdbms\DigitalMediaDto.cs" />
     <Compile Include="PagedCollection.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoFiveZero\AddDigitalMediaTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoFiveZero\AddIndexesToInvoice.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoFiveZero\AddIndexesToProductVariant.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoFourZero\AddShipmentTrackingUrlColumns.cs" />

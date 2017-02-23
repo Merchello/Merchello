@@ -172,7 +172,8 @@
                 !this.ValidIndexes.Contains("IX_merchProductVariantSalePrice") ||
                 !this.ValidIndexes.Contains("IX_merchProductVariantBarcode") ||
                 !this.ValidIndexes.Contains("IX_merchProductVariantManufacturer") ||
-                !this.ValidIndexes.Contains("IX_merchInvoiceBillToPostalCode"))
+                !this.ValidIndexes.Contains("IX_merchInvoiceBillToPostalCode") ||
+                !this.ValidTables.Contains("merchDigitalMedia"))
             {
                 return new Version(2, 4, 0);
             }
