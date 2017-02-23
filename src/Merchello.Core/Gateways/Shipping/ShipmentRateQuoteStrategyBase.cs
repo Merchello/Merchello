@@ -102,7 +102,7 @@
             var address = shipment.GetDestinationAddress();
             var args = address.Region.IsNullOrWhiteSpace() ? 
                 address.CountryCode :
-                string.Format("{0}.{1}", address.Region.Replace(" ", string.Empty), address.CountryCode);
+                string.Format("{0}.{1}", address.Region?.Replace(" ", string.Empty), address.CountryCode);
             return Cache.CacheKeys.ShippingGatewayProviderShippingRateQuoteCacheKey(shipment.Key, shippingGatewayMethod.ShipMethod.Key, shipment.VersionKey, args);
         }
 
