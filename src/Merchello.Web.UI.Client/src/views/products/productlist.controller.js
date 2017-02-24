@@ -7,9 +7,9 @@
      * The controller for product list view controller
      */
     angular.module('merchello').controller('Merchello.Backoffice.ProductListController',
-        ['$scope', '$log', '$q', '$routeParams', '$location', '$filter', 'localizationService', 'notificationsService', 'settingsResource', 'entityCollectionResource',
+        ['$scope', '$log', '$q', '$routeParams', '$location', '$filter', '$compile', 'localizationService', 'notificationsService', 'settingsResource', 'entityCollectionResource',
             'merchelloTabsFactory', 'productResource', 'productDisplayBuilder',
-        function($scope, $log, $q, $routeParams, $location, $filter, localizationService, notificationsService, settingsResource, entityCollectionResource,
+        function($scope, $log, $q, $routeParams, $location, $filter, $compile, localizationService, notificationsService, settingsResource, entityCollectionResource,
                  merchelloTabsFactory, productResource, productDisplayBuilder) {
 
             $scope.productDisplayBuilder = productDisplayBuilder;
@@ -17,6 +17,37 @@
             $scope.entityType = 'Product';
 
             $scope.tabs = [];
+
+            $scope.settingsComponent = undefined;
+            $scope.filterOptions = {
+                fields: [
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        selected: true,
+                        input: {
+                            src: 'search'
+                        }
+                    },
+                    {
+                        title: 'Sku',
+                        field: 'sku',
+                        selected: true,
+                        input: {
+                            src: 'search'
+                        }
+                    },
+                    {
+                        title: 'Manufacturer',
+                        field: 'manufacturer',
+                        selected: '',
+                        input: {
+                            src: 'custom',
+                            values: [],
+                        }
+                    }
+                ]
+            };
 
             // exposed methods
             $scope.getColumnValue = getColumnValue;
@@ -63,7 +94,8 @@
                         settingsResource.getCurrencySymbol(),
                         localizationService.localize('general_yes'),
                         localizationService.localize('general_no'),
-                        localizationService.localize('merchelloGeneral_some')
+                        localizationService.localize('merchelloGeneral_some'),
+                        productResource.getManufacturers()
                     ];
                 $q.all(promises).then(function(data) {
                     deferred.resolve(data);
@@ -73,6 +105,20 @@
                     yes = result[1];
                     no = result[2];
                     some = result[3];
+
+                    // load the manufacturers
+                    var field = _.find($scope.filterOptions.fields, function(f) {
+                        if (f.field === 'manufacturer') {
+                            return f;
+                        }
+                    });
+
+                    if (field !== undefined) {
+                        field.input.values = result[4];
+                        $scope.settingsComponent = buildFilterOptionComponent();
+                    }
+
+
                     $scope.preValuesLoaded = true;
                     $scope.loaded = true;
                 }, function(reason) {
@@ -149,6 +195,11 @@
                // } else {
                     return "#/merchello/merchello/productedit/" + product.key;
                // }
+            }
+
+            function buildFilterOptionComponent() {
+                var htm = "<product-list-view-filter-options value='filterOptions'></product-list-view-filter-options>";
+                return $compile(htm)($scope);
             }
 
             // Initialize the controller

@@ -2059,7 +2059,9 @@ angular.module('merchello.directives').directive('merchelloListView',
                 disableCollections: '@?',
                 includeDateFilter: '@?',
                 noTitle: '@?',
-                noFilter: '@?'
+                noFilter: '@?',
+                filterOptions: '=?',
+                settingsComponent: '=?'
             },
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/merchellolistview.tpl.html',
             link: function (scope, elm, attr) {
@@ -2085,7 +2087,7 @@ angular.module('merchello.directives').directive('merchelloListView',
                 scope.clearDates = clearDates;
                 scope.startDate = '';
                 scope.endDate = '';
-                scope.dateBtnText = ''
+                scope.dateBtnText = '';
                 var allDates = '';
 
                 var handleChanged = "merchello.collection.changed";
@@ -2120,6 +2122,7 @@ angular.module('merchello.directives').directive('merchelloListView',
                     if (!('ready' in attr)) {
                         scope.isReady = true;
                     }
+
                     scope.hasCollections = !('disableCollections' in attr);
                     scope.enableDateFilter = 'includeDateFilter' in attr;
                     scope.hasFilter = !('noFilter' in attr);
@@ -2139,6 +2142,13 @@ angular.module('merchello.directives').directive('merchelloListView',
 
                     if (cacheEnabled && cache.hasKey(OPTIONS_CACHE_KEY)) {
                         scope.options = cache.getValue(OPTIONS_CACHE_KEY);
+                    }
+
+                    if (scope.filterOptions !== undefined) {
+                        // assert scope.options has filterOptions
+                        if (!scope.options.hasOwnProperty('filterOptions')) {
+                            scope.options.filterOptions = scope.filterOptions;
+                        }
                     }
 
                     localizationService.localize('merchelloGeneral_allDates').then(function(value) {
@@ -2323,7 +2333,9 @@ angular.module('merchello.directives').directive('merchelloListView',
                 scope.openSettings = function() {
 
                     var dialogData = {
-                        settings: cacheSettings
+                        settings: cacheSettings,
+                        entityType: scope.entityType,
+                        settingsComponent: scope.settingsComponent
                     };
 
                     dialogService.open({
@@ -3618,6 +3630,49 @@ angular.module('merchello.directives').directive('productOptionsList', [
 
             init();
         }
+    }
+}]);
+
+angular.module('merchello.directives').directive('productListViewFilterOptions',
+    [
+    function() {
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                value: '='
+            },
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/product.listview.filteroptions.tpl.html',
+            link: function(scope, elm, attr) {
+
+                scope.name = {};
+                scope.sku = {};
+                scope.manufacturer = {};
+                scope.hasManufacturers = false;
+                scope.loaded = false;
+
+                function init() {
+                    scope.name = getField('name');
+                    scope.sku = getField('sku');
+                    scope.manufacturer = getField('manufacturer');
+                    scope.hasManufacturers = scope.manufacturer.input.values.length > 0;
+
+                }
+
+                function getField(fieldName) {
+                    if (scope.value === undefined) {
+                        throw new Error('Value has not been set on the scope');
+                    }
+
+                    return _.find(scope.value.fields, function (f) {
+                       if (f.field === fieldName) {
+                           return f;
+                       }
+                    });
+                }
+
+                init();
+            }
     }
 }]);
 

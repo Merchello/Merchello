@@ -13,7 +13,7 @@
     /// <remarks>
     /// This is simply a marker interface to mark V2 additions that need to be refactored and ported forward to V3
     /// </remarks>
-    public interface IProductCollectionPriceQueries
+    public interface IPortForwardProductRepository
     {
         ///// <summary>
         ///// The get keys not in collection.

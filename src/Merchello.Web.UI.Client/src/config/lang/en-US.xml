@@ -676,6 +676,7 @@
     <key alias="globalShippingIsTaxable">Shipping charges are taxable</key>
     <key alias="globalTaxationApplication">Set how taxes are applied</key>
     <key alias="defaultCultureName">Set the default extended content culture</key>
+    <key alias="listViewSettingsTitle">List settings</key>
     <key alias="stickyListView">Enable sticky list settings for general list.</key>
     <key alias="stickyCollectionView">Enable sticky list setting for collection lists.</key>
   </area>

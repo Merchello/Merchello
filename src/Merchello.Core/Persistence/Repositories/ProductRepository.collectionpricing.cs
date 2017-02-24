@@ -10,7 +10,7 @@
     using Umbraco.Core.Persistence;
 
     /// <inheritdoc/>
-    internal partial class ProductRepository : IProductCollectionPriceQueries
+    internal partial class ProductRepository : IPortForwardProductRepository
     {
         ///// <inheritdoc/>
         //public Page<Guid> GetKeysNotInCollection(

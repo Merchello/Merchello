@@ -13,7 +13,9 @@ angular.module('merchello.directives').directive('merchelloListView',
                 disableCollections: '@?',
                 includeDateFilter: '@?',
                 noTitle: '@?',
-                noFilter: '@?'
+                noFilter: '@?',
+                filterOptions: '=?',
+                settingsComponent: '=?'
             },
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/merchellolistview.tpl.html',
             link: function (scope, elm, attr) {
@@ -39,7 +41,7 @@ angular.module('merchello.directives').directive('merchelloListView',
                 scope.clearDates = clearDates;
                 scope.startDate = '';
                 scope.endDate = '';
-                scope.dateBtnText = ''
+                scope.dateBtnText = '';
                 var allDates = '';
 
                 var handleChanged = "merchello.collection.changed";
@@ -74,6 +76,7 @@ angular.module('merchello.directives').directive('merchelloListView',
                     if (!('ready' in attr)) {
                         scope.isReady = true;
                     }
+
                     scope.hasCollections = !('disableCollections' in attr);
                     scope.enableDateFilter = 'includeDateFilter' in attr;
                     scope.hasFilter = !('noFilter' in attr);
@@ -93,6 +96,13 @@ angular.module('merchello.directives').directive('merchelloListView',
 
                     if (cacheEnabled && cache.hasKey(OPTIONS_CACHE_KEY)) {
                         scope.options = cache.getValue(OPTIONS_CACHE_KEY);
+                    }
+
+                    if (scope.filterOptions !== undefined) {
+                        // assert scope.options has filterOptions
+                        if (!scope.options.hasOwnProperty('filterOptions')) {
+                            scope.options.filterOptions = scope.filterOptions;
+                        }
                     }
 
                     localizationService.localize('merchelloGeneral_allDates').then(function(value) {
@@ -277,7 +287,9 @@ angular.module('merchello.directives').directive('merchelloListView',
                 scope.openSettings = function() {
 
                     var dialogData = {
-                        settings: cacheSettings
+                        settings: cacheSettings,
+                        entityType: scope.entityType,
+                        settingsComponent: scope.settingsComponent
                     };
 
                     dialogService.open({
