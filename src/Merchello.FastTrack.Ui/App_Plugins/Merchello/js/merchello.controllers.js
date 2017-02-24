@@ -8300,7 +8300,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductFilterGroups
 
             $scope.tabs = [];
 
-            $scope.settingsComponent = undefined;
+            $scope.settingsComponent = 'product-list-view-filter-options';
             $scope.filterOptions = {
                 fields: [
                     {
@@ -8397,9 +8397,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductFilterGroups
 
                     if (field !== undefined) {
                         field.input.values = result[4];
-                        $scope.settingsComponent = buildFilterOptionComponent();
                     }
-
 
                     $scope.preValuesLoaded = true;
                     $scope.loaded = true;
@@ -8477,11 +8475,6 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductFilterGroups
                // } else {
                     return "#/merchello/merchello/productedit/" + product.key;
                // }
-            }
-
-            function buildFilterOptionComponent() {
-                var htm = "<product-list-view-filter-options value='filterOptions'></product-list-view-filter-options>";
-                return $compile(htm)($scope);
             }
 
             // Initialize the controller

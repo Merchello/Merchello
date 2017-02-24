@@ -18,7 +18,7 @@
 
             $scope.tabs = [];
 
-            $scope.settingsComponent = undefined;
+            $scope.settingsComponent = 'product-list-view-filter-options';
             $scope.filterOptions = {
                 fields: [
                     {
@@ -115,9 +115,7 @@
 
                     if (field !== undefined) {
                         field.input.values = result[4];
-                        $scope.settingsComponent = buildFilterOptionComponent();
                     }
-
 
                     $scope.preValuesLoaded = true;
                     $scope.loaded = true;
@@ -195,11 +193,6 @@
                // } else {
                     return "#/merchello/merchello/productedit/" + product.key;
                // }
-            }
-
-            function buildFilterOptionComponent() {
-                var htm = "<product-list-view-filter-options value='filterOptions'></product-list-view-filter-options>";
-                return $compile(htm)($scope);
             }
 
             // Initialize the controller

@@ -1,6 +1,6 @@
 angular.module('merchello.directives').directive('merchelloListView',
-    ['$routeParams', '$log', '$filter', 'dialogService', 'eventsService', 'localizationService', 'merchelloListViewHelper', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
-    function($routeParams, $log, $filter, dialogService, eventsService, localizationService, merchelloListViewHelper, queryDisplayBuilder, queryResultDisplayBuilder) {
+    ['$routeParams', '$log', '$filter', '$compile', 'dialogService', 'eventsService', 'localizationService', 'merchelloListViewHelper', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
+    function($routeParams, $log, $filter, $compile, dialogService, eventsService, localizationService, merchelloListViewHelper, queryDisplayBuilder, queryResultDisplayBuilder) {
         return {
             restrict: 'E',
             replace: true,
@@ -286,10 +286,12 @@ angular.module('merchello.directives').directive('merchelloListView',
 
                 scope.openSettings = function() {
 
+                    var component = buildFilterOptionComponent();
+
                     var dialogData = {
                         settings: cacheSettings,
                         entityType: scope.entityType,
-                        settingsComponent: scope.settingsComponent
+                        settingsComponent: component
                     };
 
                     dialogService.open({
@@ -303,7 +305,17 @@ angular.module('merchello.directives').directive('merchelloListView',
                 function processListViewSettings(dialogData) {
                     cacheSettings = merchelloListViewHelper.cacheSettings(scope.entityType, dialogData.settings);
                     cacheEnabled = scope.collectionKey !== '' ? cacheSettings.stickyCollectionList : cacheSettings.stickyList;
+                    search();
                 }
+
+                function buildFilterOptionComponent() {
+                    if (scope.settingsComponent !== undefined && scope.options.filterOptions !== undefined) {
+                        var htm = "<" + scope.settingsComponent + " value='options.filterOptions'></" + scope.settingsComponent + ">";
+                        return $compile(htm)(scope);
+                    }
+                    return undefined;
+                }
+
 
                 init();
             }
