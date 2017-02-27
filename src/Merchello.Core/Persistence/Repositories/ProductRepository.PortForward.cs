@@ -16,7 +16,7 @@
         /// <summary>
         /// A list of valid search fields.
         /// </summary>
-        private static string[] ValidSearchFields = { "name", "sku" };
+        private static readonly string[] ValidSearchFields = { "name", "sku" };
 
         ///// <inheritdoc/>
         //public Page<Guid> GetKeysNotInCollection(
