@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Merchello.Core.Models;
     using Merchello.Core.Models.Rdbms;
     using Merchello.Core.Persistence.Querying;
 
@@ -12,6 +13,11 @@
     /// <inheritdoc/>
     internal partial class ProductRepository : IPortForwardProductRepository
     {
+        /// <summary>
+        /// A list of valid search fields.
+        /// </summary>
+        private static string[] ValidSearchFields = { "name", "sku" };
+
         ///// <inheritdoc/>
         //public Page<Guid> GetKeysNotInCollection(
         //    Guid collectionKey,
@@ -318,12 +324,95 @@
         {
             var sql = new Sql("SELECT DISTINCT(manufacturer)")
                 .From<ProductVariantDto>(SqlSyntax)
-                .Where<ProductVariantDto>(x => x.Manufacturer != string.Empty)
+                .Where<ProductVariantDto>(x => x.Manufacturer != string.Empty, SqlSyntax)
                 .OrderBy<ProductVariantDto>(x => x.Manufacturer, SqlSyntax);
 
             var results = Database.Fetch<string>(sql);
 
             return results;
+        }
+
+        /// <inheritdoc/> 
+        public PagedCollection<IProduct> GetByAdvancedSearch(
+            Guid collectionKey,
+            string[] includeFields,
+            string term,
+            string manufacturer,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection direction = SortDirection.Ascending)
+        {
+
+            var sql = BuildAdvancedProductSearchSql(term, includeFields);
+            if (includeFields.Contains("manufacturer") && !manufacturer.IsNullOrWhiteSpace())
+            {
+                sql.Where<ProductVariantDto>(x => x.Manufacturer == manufacturer, SqlSyntax);
+            }
+
+            if (!collectionKey.Equals(Guid.Empty))
+            {
+                sql.Append("AND [merchProductVariant].[productKey] IN (")
+                .Append("SELECT DISTINCT([productKey])")
+                .Append("FROM [merchProduct2EntityCollection]")
+                .Append(
+                    "WHERE [merchProduct2EntityCollection].[entityCollectionKey] = @eckey",
+                    new { @eckey = collectionKey })
+                .Append(")");
+            }
+
+            if (!string.IsNullOrEmpty(orderExpression))
+            {
+                sql.Append(direction == SortDirection.Ascending
+                    ? string.Format("ORDER BY {0} ASC", orderExpression)
+                    : string.Format("ORDER BY {0} DESC", orderExpression));
+            }
+
+            var results = Database.Page<ProductVariantDto>(page, itemsPerPage, sql);
+
+            var products = GetAll(results.Items.Select(x => x.ProductKey).ToArray());
+
+
+            return new PagedCollection<IProduct>
+            {
+                CurrentPage = results.CurrentPage,
+                Items = products,
+                PageSize = results.ItemsPerPage,
+                TotalItems = results.TotalItems,
+                TotalPages = results.TotalPages,
+                SortField = orderExpression
+            };
+        }
+
+        private Sql BuildAdvancedProductSearchSql(string searchTerm, string[] includeFields)
+        {
+            searchTerm = searchTerm.Replace(",", " ");
+            var invidualTerms = searchTerm.Split(' ');
+
+            var terms = invidualTerms.Where(x => !string.IsNullOrEmpty(x)).ToList();
+
+            var validFields = ValidSearchFields.Where(includeFields.Contains).ToArray();
+
+            var sql = new Sql();
+            sql.Select("*").From<ProductVariantDto>(SqlSyntax);
+
+            if (terms.Any())
+            {
+                var preparedTerms = string.Format("%{0}%", string.Join("% ", terms)).Trim();
+
+                var fieldSql = string.Empty;
+                foreach (var field in validFields)
+                {
+                    if (!fieldSql.IsNullOrWhiteSpace()) fieldSql += " OR ";
+                    fieldSql += string.Format("{0} LIKE @prepped", field);
+                }
+
+                sql.Where(fieldSql, new { @prepped = preparedTerms });
+            }
+
+            sql.Where("master = @master", new { @master = true });
+
+            return sql;
         }
     }
 }

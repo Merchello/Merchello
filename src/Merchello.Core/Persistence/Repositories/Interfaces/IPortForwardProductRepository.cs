@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
 
+    using Merchello.Core.Models;
     using Merchello.Core.Persistence.Querying;
 
     using Umbraco.Core.Persistence;
@@ -326,5 +327,37 @@
         /// The <see cref="IEnumerable{String}"/> list of distinct manufacturers.
         /// </returns>
         IEnumerable<string> GetAllManufacturers();
+
+        /// <summary>
+        /// Special case advanced search.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="includeFields">
+        /// The include fields.
+        /// </param>
+        /// <param name="term">
+        /// The term.
+        /// </param>
+        /// <param name="manufacturer">
+        /// The manufacturer.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="direction">
+        /// The direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PagedCollection"/>.
+        /// </returns>
+        PagedCollection<IProduct> GetByAdvancedSearch(Guid collectionKey, string[] includeFields, string term, string manufacturer, long page, long itemsPerPage, string orderExpression, SortDirection direction = SortDirection.Ascending);
     }
 }

@@ -159,7 +159,7 @@ angular.module('merchello.directives').directive('merchelloListView',
                         scope.dateBtnText = scope.startDate + ' - ' + scope.endDate;
                     }
 
-                    scope.load()(query).then(function (response) {
+                    scope.load()(query, scope.options.filterOptions).then(function (response) {
                         var queryResult = queryResultDisplayBuilder.transform(response, scope.builder);
                         scope.listViewResultSet.items = queryResult.items;
                         scope.listViewResultSet.totalItems = queryResult.totalItems;

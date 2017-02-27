@@ -71,12 +71,40 @@
             }
 
 
-            function load(query) {
+            function load(query, filterOptions) {
+
+                if (filterOptions !== undefined && filterOptions !== null) {
+                    var includeFields = [];
+
+                    var name = getField(filterOptions, 'name');
+                    if (name.selected) {
+                        includeFields.push(name.field);
+                    }
+                    var sku = getField(filterOptions, 'sku');
+                    if (sku.selected) {
+                        includeFields.push(sku.field);
+                    }
+                    var manufacturer = getField(filterOptions, 'manufacturer');
+                    if (manufacturer.selected !== undefined && manufacturer.selected !== null && manufacturer.selected !== '') {
+                        includeFields.push(manufacturer.field);
+                        query.addCustomParam(manufacturer.field, manufacturer.selected);
+                    }
+                    if (includeFields.length > 0) {
+                        query.addCustomParam('includedFields', includeFields.join());
+                    }
+                }
+
+                console.info(query);
+
+                return productResource.advancedSearchProducts(query);
+
+                /*
                 if (query.hasCollectionKeyParam()) {
                     return entityCollectionResource.getCollectionEntities(query);
                 } else {
                     return productResource.searchProducts(query);
                 }
+                */
             }
 
 
@@ -193,6 +221,18 @@
                // } else {
                     return "#/merchello/merchello/productedit/" + product.key;
                // }
+            }
+
+            function getField(filterOptions, fieldName) {
+                if (filterOptions === undefined) {
+                    throw new Error('Value has not been set on the scope');
+                }
+
+                return _.find(filterOptions.fields, function (f) {
+                    if (f.field === fieldName) {
+                        return f;
+                    }
+                });
             }
 
             // Initialize the controller

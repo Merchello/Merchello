@@ -555,7 +555,7 @@
     <Compile Include="Persistence\Repositories\ProductRepository.BackOffice.cs">
       <DependentUpon>ProductRepository.cs</DependentUpon>
     </Compile>
-    <Compile Include="Persistence\Repositories\ProductRepository.collectionpricing.cs">
+    <Compile Include="Persistence\Repositories\ProductRepository.PortForward.cs">
       <DependentUpon>ProductRepository.cs</DependentUpon>
     </Compile>
     <Compile Include="Services\Interfaces\IProductQueryService.cs" />
