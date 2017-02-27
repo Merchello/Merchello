@@ -1932,6 +1932,7 @@
         /// <returns>
         /// The <see cref="Sql"/>.
         /// </returns>
+        [Obsolete]
         private Sql BuildProductSearchSql(string searchTerm)
         {
             searchTerm = searchTerm.Replace(",", " ");

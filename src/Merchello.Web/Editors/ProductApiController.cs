@@ -20,6 +20,8 @@
     using Merchello.Web.WebApi.Binders;
     using Merchello.Web.WebApi.Filters;
 
+    using Newtonsoft.Json;
+
     using Umbraco.Core;
     using Umbraco.Core.Models;
     using Umbraco.Web;
@@ -235,6 +237,34 @@
             var currentPage = query.CurrentPage + 1;
 
             var results = _productService.GetRecentlyUpdatedProducts(currentPage, itemsPerPage);
+
+            return results.ToQueryResultDisplay<IProduct, ProductDisplay>(MapToProductDisplay);
+        }
+
+        [HttpPost]
+        public QueryResultDisplay GetByAdvancedSearch(QueryDisplay query)
+        {
+            var itemsPerPage = query.ItemsPerPage;
+            var currentPage = query.CurrentPage + 1;
+            var collectionKey = query.Parameters.FirstOrDefault(x => x.FieldName == "collectionKey");
+            var includedFields = query.Parameters.FirstOrDefault(x => x.FieldName == "includedFields");
+            var searchTerm = query.Parameters.FirstOrDefault(x => x.FieldName == "term");
+            var manufacturerTerm = query.Parameters.FirstOrDefault(x => x.FieldName == "manufacturer");
+
+            var key = collectionKey == null ? Guid.Empty : new Guid(collectionKey.Value);
+            var incFields = includedFields == null ? new[] { "name", "sku" } : includedFields.Value.Split(',');
+            var term = searchTerm == null ? string.Empty : searchTerm.Value;
+            var manufacturer = manufacturerTerm == null ? string.Empty : manufacturerTerm.Value;
+
+            var results = ((ProductService)_productService).GetByAdvancedSearch(
+                key,
+                incFields,
+                term,
+                manufacturer,
+                currentPage,
+                itemsPerPage,
+                query.SortBy,
+                query.SortDirection);
 
             return results.ToQueryResultDisplay<IProduct, ProductDisplay>(MapToProductDisplay);
         }

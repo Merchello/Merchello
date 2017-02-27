@@ -540,6 +540,8 @@
     <Compile Include="Models\EntityBase\IDateStamped.cs" />
     <Compile Include="Models\Interfaces\IDeepCloneable.cs" />
     <Compile Include="Models\Interfaces\IShallowClone.cs" />
+    <Compile Include="Models\Querying\QueryBuilderParameter.cs" />
+    <Compile Include="Models\Querying\FieldMatchCondition.cs" />
     <Compile Include="Models\Rdbms\CountDto.cs" />
     <Compile Include="Models\Rdbms\DigitalMediaDto.cs" />
     <Compile Include="PagedCollection.cs" />
@@ -549,11 +551,11 @@
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoFourZero\AddShipmentTrackingUrlColumns.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoThreeOne\AlterProductAttributeColumnToNtext.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IProductBackOfficeRepository.cs" />
-    <Compile Include="Persistence\Repositories\Interfaces\IProductQueryRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IPortForwardProductRepository.cs" />
     <Compile Include="Persistence\Repositories\ProductRepository.BackOffice.cs">
       <DependentUpon>ProductRepository.cs</DependentUpon>
     </Compile>
-    <Compile Include="Persistence\Repositories\ProductRepository.collectionpricing.cs">
+    <Compile Include="Persistence\Repositories\ProductRepository.PortForward.cs">
       <DependentUpon>ProductRepository.cs</DependentUpon>
     </Compile>
     <Compile Include="Services\Interfaces\IProductQueryService.cs" />
@@ -750,7 +752,6 @@
     <Compile Include="Gateways\Notification\Triggering\OrderConfirmationTrigger.cs" />
     <Compile Include="Models\MonitorModels\ShipmentResultNotifyModel.cs" />
     <Compile Include="Models\NotifiedStatusBase.cs" />
-    <Compile Include="Models\Querying\InvoiceOrderByFields.cs" />
     <Compile Include="Models\Rdbms\CustomerIndexDto.cs" />
     <Compile Include="Models\Rdbms\IPageableDto.cs" />
     <Compile Include="Models\Rdbms\ShipmentStatusDto.cs" />

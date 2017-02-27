@@ -680,6 +680,7 @@
     <key alias="globalShippingIsTaxable">Verzendkosten zijn belastbaar</key>
     <key alias="globalTaxationApplication">BTW toepassen op</key>
     <key alias="defaultCultureName">Voorkeurstaal</key>
+    <key alias="listViewSettingsTitle">List settings</key>
     <key alias="stickyListView">Enable sticky list settings for general list.</key>
     <key alias="stickyCollectionView">Enable sticky list setting for collection lists.</key>
   </area>

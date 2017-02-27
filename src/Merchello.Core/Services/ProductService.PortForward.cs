@@ -33,6 +33,7 @@
             }
         }
 
+
         /// <summary>
         /// Gets the entity keys for distinct entities in multiple collections
         /// </summary>
@@ -294,6 +295,23 @@
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetKeysThatExistInAnyCollections(collectionKeys, term, min, max, page, itemsPerPage, orderExpression, sortDirection);
+            }
+        }
+
+        /// <inheritdoc/>
+        internal PagedCollection<IProduct> GetByAdvancedSearch(
+            Guid collectionKey,
+            string[] includeFields,
+            string term,
+            string manufacturer,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection direction = SortDirection.Ascending)
+        {
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetByAdvancedSearch(collectionKey, includeFields, term, manufacturer, page, itemsPerPage, orderExpression, direction);
             }
         }
     }

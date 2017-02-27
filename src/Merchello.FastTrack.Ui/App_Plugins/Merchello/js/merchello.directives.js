@@ -2045,8 +2045,8 @@ angular.module('merchello.directives').directive('merchelloCreateButton', functi
 });
 
 angular.module('merchello.directives').directive('merchelloListView',
-    ['$routeParams', '$log', '$filter', 'dialogService', 'eventsService', 'localizationService', 'merchelloListViewHelper', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
-    function($routeParams, $log, $filter, dialogService, eventsService, localizationService, merchelloListViewHelper, queryDisplayBuilder, queryResultDisplayBuilder) {
+    ['$routeParams', '$log', '$filter', '$compile', 'dialogService', 'eventsService', 'localizationService', 'merchelloListViewHelper', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
+    function($routeParams, $log, $filter, $compile, dialogService, eventsService, localizationService, merchelloListViewHelper, queryDisplayBuilder, queryResultDisplayBuilder) {
         return {
             restrict: 'E',
             replace: true,
@@ -2059,7 +2059,9 @@ angular.module('merchello.directives').directive('merchelloListView',
                 disableCollections: '@?',
                 includeDateFilter: '@?',
                 noTitle: '@?',
-                noFilter: '@?'
+                noFilter: '@?',
+                filterOptions: '=?',
+                settingsComponent: '=?'
             },
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/merchellolistview.tpl.html',
             link: function (scope, elm, attr) {
@@ -2085,7 +2087,7 @@ angular.module('merchello.directives').directive('merchelloListView',
                 scope.clearDates = clearDates;
                 scope.startDate = '';
                 scope.endDate = '';
-                scope.dateBtnText = ''
+                scope.dateBtnText = '';
                 var allDates = '';
 
                 var handleChanged = "merchello.collection.changed";
@@ -2120,6 +2122,7 @@ angular.module('merchello.directives').directive('merchelloListView',
                     if (!('ready' in attr)) {
                         scope.isReady = true;
                     }
+
                     scope.hasCollections = !('disableCollections' in attr);
                     scope.enableDateFilter = 'includeDateFilter' in attr;
                     scope.hasFilter = !('noFilter' in attr);
@@ -2139,6 +2142,13 @@ angular.module('merchello.directives').directive('merchelloListView',
 
                     if (cacheEnabled && cache.hasKey(OPTIONS_CACHE_KEY)) {
                         scope.options = cache.getValue(OPTIONS_CACHE_KEY);
+                    }
+
+                    if (scope.filterOptions !== undefined) {
+                        // assert scope.options has filterOptions
+                        if (!scope.options.hasOwnProperty('filterOptions')) {
+                            scope.options.filterOptions = scope.filterOptions;
+                        }
                     }
 
                     localizationService.localize('merchelloGeneral_allDates').then(function(value) {
@@ -2195,7 +2205,7 @@ angular.module('merchello.directives').directive('merchelloListView',
                         scope.dateBtnText = scope.startDate + ' - ' + scope.endDate;
                     }
 
-                    scope.load()(query).then(function (response) {
+                    scope.load()(query, scope.options.filterOptions).then(function (response) {
                         var queryResult = queryResultDisplayBuilder.transform(response, scope.builder);
                         scope.listViewResultSet.items = queryResult.items;
                         scope.listViewResultSet.totalItems = queryResult.totalItems;
@@ -2322,8 +2332,12 @@ angular.module('merchello.directives').directive('merchelloListView',
 
                 scope.openSettings = function() {
 
+                    var component = buildFilterOptionComponent();
+
                     var dialogData = {
-                        settings: cacheSettings
+                        settings: cacheSettings,
+                        entityType: scope.entityType,
+                        settingsComponent: component
                     };
 
                     dialogService.open({
@@ -2337,7 +2351,17 @@ angular.module('merchello.directives').directive('merchelloListView',
                 function processListViewSettings(dialogData) {
                     cacheSettings = merchelloListViewHelper.cacheSettings(scope.entityType, dialogData.settings);
                     cacheEnabled = scope.collectionKey !== '' ? cacheSettings.stickyCollectionList : cacheSettings.stickyList;
+                    search();
                 }
+
+                function buildFilterOptionComponent() {
+                    if (scope.settingsComponent !== undefined && scope.options.filterOptions !== undefined) {
+                        var htm = "<" + scope.settingsComponent + " value='options.filterOptions'></" + scope.settingsComponent + ">";
+                        return $compile(htm)(scope);
+                    }
+                    return undefined;
+                }
+
 
                 init();
             }
@@ -3618,6 +3642,49 @@ angular.module('merchello.directives').directive('productOptionsList', [
 
             init();
         }
+    }
+}]);
+
+angular.module('merchello.directives').directive('productListViewFilterOptions',
+    [
+    function() {
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                value: '='
+            },
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/product.listview.filteroptions.tpl.html',
+            link: function(scope, elm, attr) {
+
+                scope.name = {};
+                scope.sku = {};
+                scope.manufacturer = {};
+                scope.hasManufacturers = false;
+                scope.loaded = false;
+
+                function init() {
+                    scope.name = getField('name');
+                    scope.sku = getField('sku');
+                    scope.manufacturer = getField('manufacturer');
+                    scope.hasManufacturers = scope.manufacturer.input.values.length > 0;
+
+                }
+
+                function getField(fieldName) {
+                    if (scope.value === undefined) {
+                        throw new Error('Value has not been set on the scope');
+                    }
+
+                    return _.find(scope.value.fields, function (f) {
+                       if (f.field === fieldName) {
+                           return f;
+                       }
+                    });
+                }
+
+                init();
+            }
     }
 }]);
 

@@ -478,7 +478,7 @@ angular.module('merchello.services').service('merchelloListViewHelper',
                     $sessionStorage[cacheKey] = undefined;
                 }
             };
-        }
+        };
 
 }]);
 
