@@ -94,8 +94,6 @@
                     }
                 }
 
-                console.info(query);
-
                 return productResource.advancedSearchProducts(query);
 
                 /*

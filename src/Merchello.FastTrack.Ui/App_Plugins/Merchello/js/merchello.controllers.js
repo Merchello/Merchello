@@ -8376,8 +8376,6 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductFilterGroups
                     }
                 }
 
-                console.info(query);
-
                 return productResource.advancedSearchProducts(query);
 
                 /*
