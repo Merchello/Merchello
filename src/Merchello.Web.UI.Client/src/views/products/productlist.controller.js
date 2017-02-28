@@ -43,7 +43,7 @@
                         selected: '',
                         input: {
                             src: 'custom',
-                            values: [],
+                            values: []
                         }
                     }
                 ]
@@ -95,14 +95,6 @@
                 }
 
                 return productResource.advancedSearchProducts(query);
-
-                /*
-                if (query.hasCollectionKeyParam()) {
-                    return entityCollectionResource.getCollectionEntities(query);
-                } else {
-                    return productResource.searchProducts(query);
-                }
-                */
             }
 
 

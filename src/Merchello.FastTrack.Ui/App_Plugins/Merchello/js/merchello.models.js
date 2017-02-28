@@ -5167,8 +5167,8 @@ angular.module('merchello.models').factory('offerSettingsDisplayBuilder',
         };
     }]);
 angular.module('merchello.models').factory('merchelloTabsFactory',
-    ['MerchelloTabCollection',
-        function(MerchelloTabCollection) {
+    ['MerchelloTabCollection', 'merchelloListViewHelper',
+        function(MerchelloTabCollection, merchelloListViewHelper) {
 
             var Constructor = MerchelloTabCollection;
 
@@ -5178,8 +5178,14 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
 
             // creates tabs for the product listing page
             function createProductListTabs() {
+                var entityType = 'Product';
+                var settings = getCacheSettings(entityType);
                 var tabs = new Constructor();
-                tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
+                if (settings.stickListingTab && settings.collectionKey != '') {
+                    tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/' + settings.collectionKey);
+                } else {
+                    tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
+                }
                 tabs.addTab('sharedoptions', 'merchelloTabs_sharedProductOptions', '#/merchello/merchello/sharedoptions/manage');
                 tabs.addTab('filtergroups', 'merchelloTabs_filterGroups', '#/merchello/merchello/productfiltergroups/manage');
                 tabs.addTab('contentTypeList', 'merchelloTabs_contentTypes', '#/merchello/merchello/productcontenttypelist/manage');
@@ -5188,20 +5194,32 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
 
            // creates tabs for the product editor page
             function createNewProductEditorTabs() {
+                var entityType = 'Product';
+                var settings = getCacheSettings(entityType);
                 var tabs = new Constructor();
-                tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
+                if (settings.stickListingTab && settings.collectionKey != '') {
+                    tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/' + settings.collectionKey);
+                } else {
+                    tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
+                }
                 tabs.addTab('createproduct', 'merchelloTabs_product', '#/merchello/merchello/productedit/');
                 return tabs;
             }
 
             // creates tabs for the product editor page
             function createProductEditorTabs(productKey, hasVariants) {
+                var entityType = 'Product';
+                var settings = getCacheSettings(entityType);
                 if (hasVariants !== undefined && hasVariants === true)
                 {
                     return createProductEditorWithOptionsTabs(productKey);
                 }
                 var tabs = new Constructor();
-                tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
+                if (settings.stickListingTab && settings.collectionKey != '') {
+                    tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/' + settings.collectionKey);
+                } else {
+                    tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
+                }
                 tabs.addTab('productedit', 'merchelloTabs_product', '#/merchello/merchello/productedit/' + productKey);
                 tabs.addTab('productcontent', 'merchelloTabs_detachedContent', '#/merchello/merchello/productdetachedcontent/' + productKey);
                 tabs.addTab('optionslist', 'merchelloTabs_productOptions', '#/merchello/merchello/productoptionsmanager/' + productKey);
@@ -5216,8 +5234,14 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
 
             // creates tabs for the product editor with options tabs
             function createProductEditorWithOptionsTabs(productKey) {
+                var entityType = 'Product';
+                var settings = getCacheSettings(entityType);
                 var tabs = new Constructor();
-                tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
+                if (settings.stickListingTab && settings.collectionKey != '') {
+                    tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/' + settings.collectionKey);
+                } else {
+                    tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
+                }
                 tabs.addTab('productedit', 'merchelloTabs_product', '#/merchello/merchello/productedit/' + productKey);
                 tabs.addTab('productcontent', 'merchelloTabs_detachedContent', '#/merchello/merchello/productdetachedcontent/' + productKey);
                 tabs.addTab('variantlist', 'merchelloTabs_productVariants', '#/merchello/merchello/producteditwithoptions/' + productKey);
@@ -5227,8 +5251,14 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
 
             // creates tabs for the product variant editor
            function createProductVariantEditorTabs(productKey, productVariantKey) {
+               var entityType = 'Product';
+               var settings = getCacheSettings(entityType);
                 var tabs = new Constructor();
-                tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
+               if (settings.stickListingTab && settings.collectionKey != '') {
+                   tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/' + settings.collectionKey);
+               } else {
+                   tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
+               }
                 tabs.addTab('productedit', 'merchelloTabs_product', '#/merchello/merchello/productedit/' + productKey);
                 tabs.addTab('variantlist', 'merchelloTabs_productVariants', '#/merchello/merchello/producteditwithoptions/' + productKey);
                 tabs.addTab('varianteditor', 'merchelloTabs_productVariantEditor', '#/merchello/merchello/productedit/' + productKey + '?variantid=' + productVariantKey);
@@ -5239,15 +5269,28 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
 
             // creates tabs for the sales listing page
             function createSalesListTabs() {
+                var entityType = 'Invoice';
+                var settings = getCacheSettings(entityType);
                 var tabs = new Constructor();
-                tabs.addTab('saleslist', 'merchelloTabs_salesListing', '#/merchello/merchello/saleslist/manage');
+                if (settings.stickListingTab && settings.collectionKey != '') {
+                    tabs.addTab('saleslist', 'merchelloTabs_salesListing', '#/merchello/merchello/saleslist/' + settings.collectionKey);
+                } else {
+                    tabs.addTab('saleslist', 'merchelloTabs_salesListing', '#/merchello/merchello/saleslist/manage');
+                }
+
                 return tabs;
             }
 
             // creates the tabs for sales overview section
             function createSalesTabs(invoiceKey) {
+                var entityType = 'Invoice';
+                var settings = getCacheSettings(entityType);
                 var tabs = new Constructor();
-                tabs.addTab('saleslist', 'merchelloTabs_salesListing', '#/merchello/merchello/saleslist/manage');
+                if (settings.stickListingTab && settings.collectionKey != '') {
+                    tabs.addTab('saleslist', 'merchelloTabs_salesListing', '#/merchello/merchello/saleslist/' + settings.collectionKey);
+                } else {
+                    tabs.addTab('saleslist', 'merchelloTabs_salesListing', '#/merchello/merchello/saleslist/manage');
+                }
                 tabs.addTab('overview', 'merchelloTabs_sales', '#/merchello/merchello/saleoverview/' + invoiceKey);
                 tabs.addTab('payments', 'merchelloTabs_payments', '#/merchello/merchello/invoicepayments/' + invoiceKey);
                 tabs.addTab('shipments', 'merchelloTabs_shipments', '#/merchello/merchello/ordershipments/' + invoiceKey);
@@ -5256,15 +5299,28 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
 
             // creates the tabs for the customer list page
             function createCustomerListTabs() {
+                var entityType = 'Customer';
+                var settings = getCacheSettings(entityType);
                 var tabs = new Constructor();
-                tabs.addTab('customerlist', 'merchelloTabs_customerListing', '#/merchello/merchello/customerlist/manage');
+                if (settings.stickListingTab && settings.collectionKey != '') {
+                    tabs.addTab('customerlist', 'merchelloTabs_customerListing', '#/merchello/merchello/customerlist/' + settings.collectionKey);
+                } else {
+                    tabs.addTab('customerlist', 'merchelloTabs_customerListing', '#/merchello/merchello/customerlist/manage');
+                }
+
                 return tabs;
             }
 
             // creates the customer overview tabs
             function createCustomerOverviewTabs(customerKey, hasAddresses) {
+                var entityType = 'Customer';
+                var settings = getCacheSettings(entityType);
                 var tabs = new Constructor();
-                tabs.addTab('customerlist', 'merchelloTabs_customerListing', '#/merchello/merchello/customerlist/manage');
+                if (settings.stickListingTab && settings.collectionKey != '') {
+                    tabs.addTab('customerlist', 'merchelloTabs_customerListing', '#/merchello/merchello/customerlist/' + settings.collectionKey);
+                } else {
+                    tabs.addTab('customerlist', 'merchelloTabs_customerListing', '#/merchello/merchello/customerlist/manage');
+                }
                 tabs.addTab('overview', 'merchelloTabs_customer', '#/merchello/merchello/customeroverview/' + customerKey);
                 if(hasAddresses) {
                     tabs.addTab('addresses', 'merchelloTabs_customerAddresses', '#/merchello/merchello/customeraddresses/' + customerKey);
@@ -5275,6 +5331,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
             // creates the tabs for the gateway provider section
             function createGatewayProviderTabs() {
                 var tabs = new Constructor();
+                var settings = getCacheSettings(entityType);
                 tabs.addTab('providers', 'merchelloTabs_gatewayProviders', '#/merchello/merchello/gatewayproviderlist/manage');
                 tabs.addTab('notification', 'merchelloTabs_notification', '#/merchello/merchello/notificationproviders/manage');
                 tabs.addTab('payment', 'merchelloTabs_payment', '#/merchello/merchello/paymentproviders/manage');
@@ -5285,8 +5342,15 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
 
             // creates the tabs for the marketing section
             function createMarketingTabs() {
+                var entityType = 'Offer';
+                var settings = getCacheSettings(entityType);
                 var tabs = new Constructor();
-                tabs.addTab('offers', 'merchelloTabs_offerListing', '#/merchello/merchello/offerslist/manage');
+                if (settings.stickListingTab && settings.collectionKey != '') {
+                    tabs.addTab('offers', 'merchelloTabs_offerListing', '#/merchello/merchello/offerslist/' + settings.collectionKey);
+                } else {
+                    tabs.addTab('offers', 'merchelloTabs_offerListing', '#/merchello/merchello/offerslist/manage');
+                }
+
                 return tabs;
             }
 
@@ -5301,6 +5365,9 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 return tabs;
             }
 
+            function getCacheSettings(entityType) {
+                return merchelloListViewHelper.cacheSettings(entityType);
+            }
 
             return {
                 createDefault: createDefault,

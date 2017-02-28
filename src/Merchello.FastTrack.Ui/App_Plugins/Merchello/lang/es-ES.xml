@@ -679,6 +679,7 @@
     <key alias="listViewSettingsTitle">List settings</key>
     <key alias="stickyListView">Enable sticky list settings for general list.</key>
     <key alias="stickyCollectionView">Enable sticky list setting for collection lists.</key>
+    <key alias="stickListingTab"><![CDATA[Enable sticking <b>%0% Listing</b> tab.]]></key>
   </area>
 
   <area alias="merchelloShippingCountry">

@@ -90,6 +90,9 @@ angular.module('merchello.directives').directive('merchelloListView',
                             scope.enableDateFilter = false;
                         }
                         OPTIONS_CACHE_KEY = OPTIONS_CACHE_KEY + scope.collectionKey;
+                        cacheSettings.collectionKey = scope.collectionKey;
+                    } else {
+                        cacheSettings.collectionKey = '';
                     }
 
                     cacheEnabled = scope.collectionKey !== '' ? cacheSettings.stickyCollectionList : cacheSettings.stickyList;

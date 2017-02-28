@@ -2351,13 +2351,46 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
 
 
 angular.module('merchello').controller('Merchello.Common.Dialogs.ListViewSettingsController',
-    ['$scope', '$compile', '$element',
-     function($scope, $compile, $element) {
+    ['$scope', '$q', 'localizationService',
+     function($scope, $q, localizationService) {
 
-     if ($scope.dialogData.settingsComponent !== undefined) {
-         var appender = angular.element( document.querySelector( '#settingsComponent' ) );
-         appender.append($scope.dialogData.settingsComponent);
-     }
+         $scope.loaded = false;
+
+         $scope.stickListTabTitle = '';
+
+         function init() {
+
+             console.info($scope.dialogData.entityType);
+             var tokenKey = '';
+             switch ($scope.dialogData.entityType) {
+                 case 'Invoice':
+                     tokenKey = 'merchelloTabs_' + 'sales';
+                     break;
+                 case 'Customer':
+                     tokenKey = 'merchelloTabs_' + 'customer';
+                     break;
+                 case 'Offer':
+                     tokenKey = 'merchelloTabs_' + 'offer';
+                     break;
+                 default:
+                     tokenKey = 'merchelloTabs_' + 'product';
+                     break;
+             }
+
+
+             localizationService.localize(tokenKey).then(function(token) {
+                localizationService.localize('merchelloSettings_stickListingTab', [ token ]).then(function(title) {
+                    $scope.stickListTabTitle = title;
+                    if ($scope.dialogData.settingsComponent !== undefined) {
+                        var appender = angular.element( document.querySelector( '#settingsComponent' ) );
+                        appender.append($scope.dialogData.settingsComponent);
+                    }
+                    $scope.loaded = true;
+                });
+             });
+         }
+
+         init();
 
 }]);
 
@@ -8325,7 +8358,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductFilterGroups
                         selected: '',
                         input: {
                             src: 'custom',
-                            values: [],
+                            values: []
                         }
                     }
                 ]
@@ -8377,14 +8410,6 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductFilterGroups
                 }
 
                 return productResource.advancedSearchProducts(query);
-
-                /*
-                if (query.hasCollectionKeyParam()) {
-                    return entityCollectionResource.getCollectionEntities(query);
-                } else {
-                    return productResource.searchProducts(query);
-                }
-                */
             }
 
 

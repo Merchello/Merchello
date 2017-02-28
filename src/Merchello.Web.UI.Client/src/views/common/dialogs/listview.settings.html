@@ -1,4 +1,4 @@
-<div class="umb-panel merchello-side-panel" data-ng-controller="Merchello.Common.Dialogs.ListViewSettingsController">
+<div class="umb-panel merchello-side-panel" data-ng-controller="Merchello.Common.Dialogs.ListViewSettingsController" data-ng-show="loaded">
     <div class="umb-modalcolumn-header">
         <h4><localize key="merchelloSettings_listViewSettingsTitle" /> ({{dialogData.entityType}})</h4>
     </div>
@@ -6,6 +6,7 @@
         <form>
             <label class="label-checkbox" style="display: block"><input type="checkbox" data-ng-model="dialogData.settings.stickyList"> <span><localize key="merchelloSettings_stickyListView" /></span></label>
             <label class="label-checkbox" style="display: block"><input type="checkbox" data-ng-model="dialogData.settings.stickyCollectionList"> <span><localize key="merchelloSettings_stickyCollectionView" /></span></label>
+            <label class="label-checkbox" style="display: block" data-ng-hide="dialogData.entityType === 'Offer'"><input type="checkbox" data-ng-model="dialogData.settings.stickListingTab"> <span data-ng-bind-html="stickListTabTitle"></span></label>
         </form>
 
         <div id="settingsComponent"></div>
