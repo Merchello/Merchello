@@ -370,7 +370,9 @@
 
             var results = Database.Page<ProductVariantDto>(page, itemsPerPage, sql);
 
-            var products = GetAll(results.Items.Select(x => x.ProductKey).ToArray());
+            var products = results.Items.Any()
+                               ? GetAll(results.Items.Select(x => x.ProductKey).ToArray())
+                               : Enumerable.Empty<IProduct>();
 
 
             return new PagedCollection<IProduct>
