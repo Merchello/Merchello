@@ -2360,7 +2360,6 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.ListViewSetting
 
          function init() {
 
-             console.info($scope.dialogData.entityType);
              var tokenKey = '';
              switch ($scope.dialogData.entityType) {
                  case 'Invoice':

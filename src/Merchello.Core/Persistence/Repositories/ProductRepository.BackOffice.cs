@@ -21,8 +21,9 @@
 
             var results = Database.Page<ProductDto>(page, itemsPerPage, sql);
 
-            var products = GetAll(results.Items.Select(x => x.Key).ToArray());
-
+            var products = results.Items.Any()
+                   ? GetAll(results.Items.Select(x => x.Key).ToArray())
+                   : Enumerable.Empty<IProduct>();
 
             return new PagedCollection<IProduct>
                        {
