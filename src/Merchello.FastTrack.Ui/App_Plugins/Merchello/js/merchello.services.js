@@ -436,7 +436,9 @@ angular.module('merchello.services').service('merchelloListViewHelper',
                 if (settings === undefined) {
                     settings = {
                         stickyList: false,
-                        stickyCollectionList: false
+                        stickyCollectionList: false,
+                        stickListingTab: false,
+                        collectionKey: ''
                     };
                     $localStorage[cacheKey] = settings;
                 }
