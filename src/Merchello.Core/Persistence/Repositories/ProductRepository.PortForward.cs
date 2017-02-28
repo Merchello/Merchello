@@ -369,7 +369,9 @@
             }
 
             var results = Database.Page<ProductVariantDto>(page, itemsPerPage, sql);
-
+            
+            // We have to check if any results are returned before passing to get all or
+            // we WILL actually query every product.
             var products = results.Items.Any()
                                ? GetAll(results.Items.Select(x => x.ProductKey).ToArray())
                                : Enumerable.Empty<IProduct>();
