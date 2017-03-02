@@ -1767,6 +1767,16 @@ angular.module('merchello.resources').factory('noteResource', [
                         'Failed to search products');
                 },
 
+                advancedSearchProducts: function(query) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'GetByAdvancedSearch';
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(
+                            url,
+                            query
+                        ),
+                        'Failed to advanced search products');
+                },
+
                 getRecentlyUpdated: function(query) {
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'GetRecentlyUpdated';
                     return umbRequestHelper.resourcePromise(

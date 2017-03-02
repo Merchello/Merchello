@@ -676,6 +676,10 @@
     <key alias="globalShippingIsTaxable">Стоимость доставки облагается налогом</key>
     <key alias="globalTaxationApplication">Установить правила налогообложения</key>
     <key alias="defaultCultureName">Культура (язык) по-умолчанию</key>
+    <key alias="stickyListTitle">Sticky list settings</key>
+    <key alias="stickyListView">Enable sticky list settings for general list.</key>
+    <key alias="stickyCollectionView">Enable sticky list setting for collection lists.</key>
+    <key alias="stickListingTab"><![CDATA[Enable sticking <b>%0% Listing</b> tab.]]></key>
   </area>
 
   <area alias="merchelloShippingCountry">

@@ -1,0 +1,19 @@
+<div class="listview-filteroptions">
+
+    <h4>List Search Options</h4>
+
+    <h5>Fields include in filter</h5>
+    <div class="control-group row-fluid">
+        <label class="label-checkbox"><input name="name" type="checkbox" data-ng-model="name.selected" disabled> <span>{{name.title}}</span></label>
+        <label class="label-checkbox"><input name="sku" type="checkbox" data-ng-model="sku.selected"> <span>{{sku.title}}</span></label>
+    </div>
+    <div class="control-group row-fluid" data-ng-show="hasManufacturers">
+        <label for="manufacturers">Manufacturer</label>
+        <select data-ng-model="manufacturer.selected" data-ng-options="item for item in manufacturer.input.values">
+            <option value="">All Manufacturers</option>
+        </select>
+    </div>
+
+
+
+</div>

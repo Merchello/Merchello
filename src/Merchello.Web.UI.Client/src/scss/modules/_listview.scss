@@ -3,6 +3,12 @@
         color: #000;
     }
 
+    thead {
+        a.gear, a.gear:visited {
+            cursor: pointer;
+        }
+    }
+
     tbody tr:hover {
         i.icon {
             display: inline-block;
@@ -59,5 +65,11 @@
         float:right;
         padding-top:1px;
         padding-bottom:1px;
+    }
+}
+
+.listview-filteroptions {
+    label {
+        display: block;
     }
 }
