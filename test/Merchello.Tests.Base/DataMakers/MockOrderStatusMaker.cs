@@ -10,7 +10,7 @@ namespace Merchello.Tests.Base.DataMakers
         {
             return new OrderStatus()
                 {
-                    Key = Constants.DefaultKeys.OrderStatus.NotFulfilled,
+                    Key = Constants.OrderStatus.NotFulfilled,
                     Alias = "notfulfilled",
                     Name = "Not Fulfilled",
                     Active = true,
@@ -26,7 +26,7 @@ namespace Merchello.Tests.Base.DataMakers
         {
             return new OrderStatus()
                 {
-                    Key = Constants.DefaultKeys.OrderStatus.Fulfilled,
+                    Key = Constants.OrderStatus.Fulfilled,
                     Alias = "fulfilled",
                     Name = "Fulfilled",
                     Active = true,

@@ -35,7 +35,7 @@
         public void Can_Get_The_Default_Warehouse()
         {
             //// Arrange
-            var defaultWarehouseKey = Core.Constants.DefaultKeys.Warehouse.DefaultWarehouseKey;
+            var defaultWarehouseKey = Core.Constants.Warehouse.DefaultWarehouseKey;
 
             //// Act
             var warehouse = _warehouseService.GetDefaultWarehouse();
@@ -52,7 +52,7 @@
         public void Default_Warehouse_Contains_The_Default_Catalog()
         {
             //// Arrange
-            var defaultCatalogKey = Core.Constants.DefaultKeys.Warehouse.DefaultWarehouseCatalogKey;
+            var defaultCatalogKey = Core.Constants.Warehouse.DefaultWarehouseCatalogKey;
             
             //// Act
             var warehouse = _warehouseService.GetDefaultWarehouse();

@@ -380,7 +380,7 @@
         {
             var migrationSetting =
                             schemaResult.StoreSettings.FirstOrDefault(
-                                x => x.Key == Constants.StoreSettingKeys.MigrationKey);
+                                x => x.Key == Constants.StoreSetting.MigrationKey);
 
             var nullSettingKey = Guid.NewGuid().ToString();
             if (migrationSetting == null)
@@ -397,7 +397,7 @@
             {
                 var setting =
                     MerchelloContext.Current.Services.StoreSettingService.GetByKey(
-                        Constants.StoreSettingKeys.MigrationKey);
+                        Constants.StoreSetting.MigrationKey);
                 if (setting != null) setting.Value = migrationKey;
                 MerchelloContext.Current.Services.StoreSettingService.Save(setting);
             }
@@ -428,7 +428,7 @@
         /// </param>
         private void InsertMigrationKey(string migrationKey)
         {
-            _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Core.Constants.StoreSettingKeys.MigrationKey, Name = "migration", Value = migrationKey, TypeName = "System.Guid", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Core.Constants.StoreSetting.MigrationKey, Name = "migration", Value = migrationKey, TypeName = "System.Guid", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
         }
 
         /// <summary>

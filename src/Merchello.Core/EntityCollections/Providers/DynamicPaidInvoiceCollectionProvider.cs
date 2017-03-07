@@ -48,7 +48,7 @@
         /// </returns>
         protected override bool PerformExists(IInvoice entity)
         {
-            return entity.InvoiceStatusKey.Equals(Constants.DefaultKeys.InvoiceStatus.Paid);
+            return entity.InvoiceStatusKey.Equals(Constants.InvoiceStatus.Paid);
         }
 
         /// <summary>
@@ -100,7 +100,7 @@
             SortDirection sortDirection = SortDirection.Ascending)
         {
             var query =
-                Query<IInvoice>.Builder.Where(x => x.InvoiceStatusKey == Constants.DefaultKeys.InvoiceStatus.Paid);
+                Query<IInvoice>.Builder.Where(x => x.InvoiceStatusKey == Constants.InvoiceStatus.Paid);
 
             return _invoiceService.GetPagedKeys(query, page, itemsPerPage, sortBy, sortDirection);
         }
@@ -138,7 +138,7 @@
             return
                     this._invoiceService.GetInvoiceKeysMatchingInvoiceStatus(
                         args["searchTerm"].ToString(),
-                        Constants.DefaultKeys.InvoiceStatus.Paid,
+                        Constants.InvoiceStatus.Paid,
                         page,
                         itemsPerPage,
                         sortBy,
@@ -170,7 +170,7 @@
             SortDirection sortDirection = SortDirection.Ascending)
         {
             var query =
-                Query<IInvoice>.Builder.Where(x => x.InvoiceStatusKey != Constants.DefaultKeys.InvoiceStatus.Paid);
+                Query<IInvoice>.Builder.Where(x => x.InvoiceStatusKey != Constants.InvoiceStatus.Paid);
 
             return _invoiceService.GetPagedKeys(query, page, itemsPerPage, sortBy, sortDirection);
         }
@@ -209,7 +209,7 @@
             return
                 this._invoiceService.GetInvoiceKeysMatchingTermNotInvoiceStatus(
                     args["searchTerm"].ToString(),
-                    Constants.DefaultKeys.InvoiceStatus.Paid,
+                    Constants.InvoiceStatus.Paid,
                     page,
                     itemsPerPage,
                     sortBy,

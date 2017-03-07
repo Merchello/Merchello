@@ -1,7 +1,6 @@
 ﻿namespace Merchello.Providers.Payment.PayPal.Models
 {
     using Merchello.Providers.Models;
-    using Merchello.Providers.Payment.Models;
     using Merchello.Providers.Payment.PayPal;
 
     using Newtonsoft.Json;
@@ -25,6 +24,7 @@
             ApiSignature = string.Empty;
             ApplicationId = string.Empty;
             DeleteInvoiceOnCancel = false;
+            AddressOverride = 0;
         }
 
         /// <summary>
@@ -82,5 +82,11 @@
         /// Gets or sets a value indicating whether to delete the invoice on cancel.
         /// </summary>
         public bool DeleteInvoiceOnCancel { get; set; }
+
+        /// <summary>
+        /// Gets or sets the address override.
+        /// </summary>
+        /// <seealso cref="https://developer.paypal.com/webapps/developer/docs/classic/api/merchant/SetExpressCheckout_API_Operation_NVP/"/>
+        public int AddressOverride { get; set; }
 	}
 }

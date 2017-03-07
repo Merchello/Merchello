@@ -2,7 +2,7 @@
 {
     using AutoMapper;
 
-    using Merchello.Core.Models;
+    using Merchello.Core;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.TypeFields;
 

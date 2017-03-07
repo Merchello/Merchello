@@ -35,7 +35,7 @@ namespace Merchello.Tests.IntegrationTests.Invoices
             // Adding the shipmethod is typically done in the back office through the UI.
             // Interested in the use case to dynamically add theses?
             var key = Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey;
-            var defaultCatalogKey = Constants.DefaultKeys.Warehouse.DefaultWarehouseCatalogKey;
+            var defaultCatalogKey = Constants.Warehouse.DefaultWarehouseCatalogKey;
 
             // this would have to be done through the back office as it uses an internal service
             var us = MerchelloContext.Current.Services.StoreSettingService.GetCountryByCode("US");
@@ -95,7 +95,7 @@ namespace Merchello.Tests.IntegrationTests.Invoices
 
             var invoiceService = MerchelloContext.Current.Services.InvoiceService;
 
-            var invoice = invoiceService.CreateInvoice(Constants.DefaultKeys.InvoiceStatus.Unpaid);
+            var invoice = invoiceService.CreateInvoice(Constants.InvoiceStatus.Unpaid);
             // I'd say we need to add a parameter to the service so we don't have to do this
             // http://issues.merchello.com/youtrack/issue/M-434
             ((Invoice)invoice).CustomerKey = customer.Key;
@@ -113,7 +113,7 @@ namespace Merchello.Tests.IntegrationTests.Invoices
 
             var shipmentStatus =
                 MerchelloContext.Current.Services.ShipmentService.GetShipmentStatusByKey(
-                    Constants.DefaultKeys.ShipmentStatus.Quoted);
+                    Constants.ShipmentStatus.Quoted);
 
             // since we know all the items in the invoice will be shipped we don't need to filter
             var shipment = new Shipment(shipmentStatus, warehouse.AsAddress(), billingAddress, invoice.Items);

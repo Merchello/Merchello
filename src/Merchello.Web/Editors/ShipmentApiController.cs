@@ -399,14 +399,14 @@
                 // not fulfilled
                 if (order.ShippableItems().All(x => ((OrderLineItem)x).ShipmentKey == null))
                 {
-                    orderStatusKey = Constants.DefaultKeys.OrderStatus.NotFulfilled;
+                    orderStatusKey = Constants.OrderStatus.NotFulfilled;
                     this.SaveOrder(order, orderStatusKey);
                     continue;
                 }
 
                 if (order.ShippableItems().Any(x => ((OrderLineItem)x).ShipmentKey == null))
                 {
-                    orderStatusKey = Constants.DefaultKeys.OrderStatus.Open;
+                    orderStatusKey = Constants.OrderStatus.Open;
                     this.SaveOrder(order, orderStatusKey);
                     continue;
                 }
@@ -418,10 +418,10 @@
                 var shipments = _shipmentService.GetByKeys(shipmentKeys);
                 orderStatusKey =
                     shipments.All(x => 
-                        x.ShipmentStatusKey.Equals(Constants.DefaultKeys.ShipmentStatus.Delivered)
-                        || x.ShipmentStatusKey.Equals(Constants.DefaultKeys.ShipmentStatus.Shipped)) ? 
-                            Constants.DefaultKeys.OrderStatus.Fulfilled :
-                            Constants.DefaultKeys.OrderStatus.Open;
+                        x.ShipmentStatusKey.Equals(Constants.ShipmentStatus.Delivered)
+                        || x.ShipmentStatusKey.Equals(Constants.ShipmentStatus.Shipped)) ? 
+                            Constants.OrderStatus.Fulfilled :
+                            Constants.OrderStatus.Open;
 
                 this.SaveOrder(order, orderStatusKey);
             }

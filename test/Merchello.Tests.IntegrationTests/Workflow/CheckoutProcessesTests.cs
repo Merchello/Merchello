@@ -121,7 +121,7 @@ namespace Merchello.Tests.IntegrationTests.Workflow
 
             #region Settings
             //// http://issues.merchello.com/youtrack/issue/M-608
-            var storeSetting = DbPreTestDataWorker.StoreSettingService.GetByKey(Core.Constants.StoreSettingKeys.GlobalShippingIsTaxableKey);
+            var storeSetting = DbPreTestDataWorker.StoreSettingService.GetByKey(Core.Constants.StoreSetting.GlobalShippingIsTaxableKey);
             storeSetting.Value = true.ToString();
             DbPreTestDataWorker.StoreSettingService.Save(storeSetting);
 
@@ -351,7 +351,7 @@ namespace Merchello.Tests.IntegrationTests.Workflow
             // capture the payment
             invoice.CapturePayment(paymentResult.Payment.Result, paymentMethods.FirstOrDefault(), invoice.Total);
 
-            Assert.AreEqual(Constants.DefaultKeys.InvoiceStatus.Paid, invoice.InvoiceStatusKey);
+            Assert.AreEqual(Constants.InvoiceStatus.Paid, invoice.InvoiceStatusKey);
 
             if (paymentResult.ApproveOrderCreation)
             {

@@ -123,7 +123,7 @@
 
             #region Settings
             //// http://issues.merchello.com/youtrack/issue/M-608
-            var storeSetting = DbPreTestDataWorker.StoreSettingService.GetByKey(Core.Constants.StoreSettingKeys.GlobalShippingIsTaxableKey);
+            var storeSetting = DbPreTestDataWorker.StoreSettingService.GetByKey(Core.Constants.StoreSetting.GlobalShippingIsTaxableKey);
             storeSetting.Value = true.ToString();
             DbPreTestDataWorker.StoreSettingService.Save(storeSetting);
 

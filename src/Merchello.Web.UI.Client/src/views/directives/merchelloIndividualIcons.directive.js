@@ -172,4 +172,3 @@ angular.module('merchello.directives').directive('merchelloCreateButton', functi
         }
     }
 });
-

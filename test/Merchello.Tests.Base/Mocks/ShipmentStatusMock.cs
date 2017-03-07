@@ -8,7 +8,7 @@ namespace Merchello.Tests.Base.Mocks
     {
         public ShipmentStatusMock()
         {
-            Key = Constants.DefaultKeys.ShipmentStatus.Quoted;
+            Key = Constants.ShipmentStatus.Quoted;
             Alias = "quoted";
             Name = "Quoted";
             Active = true;

@@ -5,5 +5,51 @@
      MerchelloHelperViewPage<T> inherits from UmbracoViewPage<t> and exposes the MerchelloHelper as 'Merchello'
      Example usage:  var product = Merchello.TypedProductContent(YOURPRODUCTKEY);
 *@
+@{
+    var invoice = Model.Invoice;
+    var billingAddress = invoice.GetBillingAddress();
+    var customerName = billingAddress.Name;
 
-Here is a test email.
+    var shippingTotal = invoice.ShippingLineItems().Sum(x => x.TotalPrice).AsFormattedCurrency();
+    var taxTotal = invoice.TaxLineItems().Sum(x => x.TotalPrice).AsFormattedCurrency();
+    var invoiceTotal = invoice.Total.AsFormattedCurrency();
+}
+
+<p>Dear @customerName,</p>
+
+<p>Thank you for your recent purchase from the FastTrack store.</p>
+
+<strong>Invoice #: @invoice.PrefixedInvoiceNumber()</strong>
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Sku</th>
+            <th>Unit Price</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in invoice.Items.Where(x => x.LineItemType == LineItemType.Product))
+    {
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.Sku</td>
+            <td>@item.Price.AsFormattedCurrency()</td>
+            <td>@item.TotalPrice.AsFormattedCurrency()</td>
+        </tr>
+    }
+    <tr>
+        <td colspan="2" style="text-align: right"><b>Shipping:</b></td>
+        <td>@shippingTotal</td>
+    </tr>
+    <tr>
+        <td colspan="2" style="text-align: right"><b>Tax:</b></td>
+        <td>@taxTotal</td>
+    </tr>
+    <tr>
+        <td colspan="2" style="text-align: right"><b>Total:</b></td>
+        <td>@invoiceTotal</td>
+    </tr>
+    </tbody>
+</table>

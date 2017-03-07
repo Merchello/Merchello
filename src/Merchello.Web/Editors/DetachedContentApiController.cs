@@ -120,7 +120,7 @@
         {
             return
                 _contentTypeService.GetAllContentTypes()
-                    .OrderBy(x => x.SortOrder)
+                    .OrderBy(x => x.Name)
                     .Select(x => x.ToUmbContentTypeDisplay());
         }
 
@@ -148,7 +148,7 @@
             var list = _detachedContentTypeService.GetDetachedContentTypesByEntityTfKey(entityTfKey).OrderBy(x => x.Name);
             
             return list
-                .Where(x => x.Key != Core.Constants.DefaultKeys.DetachedPublishedContentType.DefaultProductVariantDetachedPublishedContentTypeKey)
+                .Where(x => x.Key != Core.Constants.DetachedPublishedContentType.DefaultProductVariantDetachedPublishedContentTypeKey)
                 .Select(x => x.ToDetachedContentTypeDisplay());
         }
 

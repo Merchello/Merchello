@@ -42,12 +42,14 @@
         /// Gets or sets the name.
         /// </summary>
         [Column("name")]
+        [Index(IndexTypes.NonClustered, Name = "IX_merchProductVariantName")]
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the price.
         /// </summary>
         [Column("price")]
+        [Index(IndexTypes.NonClustered, Name = "IX_merchProductVariantPrice")]
         public decimal Price { get; set; }
 
         /// <summary>
@@ -62,6 +64,7 @@
         /// </summary>
         [Column("salePrice")]
         [NullSetting(NullSetting = NullSettings.Null)]
+        [Index(IndexTypes.NonClustered, Name = "IX_merchProductVariantSalePrice")]
         public decimal? SalePrice { get; set; }
 
         /// <summary>
@@ -82,6 +85,7 @@
         /// </summary>
         [Column("modelNumber")]
         [NullSetting(NullSetting = NullSettings.Null)]
+        [Index(IndexTypes.NonClustered, Name = "IX_merchProductVariantManufacturer")]
         public string ManufacturerModelNumber { get; set; }
 
         /// <summary>
@@ -117,6 +121,7 @@
         /// </summary>
         [Column("barcode")]
         [NullSetting(NullSetting = NullSettings.Null)]
+        [Index(IndexTypes.NonClustered, Name = "IX_merchProductVariantBarcode")]
         public string Barcode { get; set; }
 
         /// <summary>

@@ -7,6 +7,7 @@
     using global::Examine;
     using global::Examine.SearchCriteria;
 
+    using Merchello.Core;
     using Merchello.Core.Models;
     using Merchello.Examine;
     using Merchello.Web.Models.ContentEditing;

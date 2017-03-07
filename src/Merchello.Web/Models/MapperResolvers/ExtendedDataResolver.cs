@@ -1,6 +1,8 @@
 ﻿namespace Merchello.Web.Models.MapperResolvers
 {
     using System.Collections.Generic;
+    using System.Linq;
+
     using AutoMapper;
     using Core.Models;
 

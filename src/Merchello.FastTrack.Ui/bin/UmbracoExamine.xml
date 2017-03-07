@@ -362,6 +362,14 @@
             Lock factory that wraps multiple factories
             </summary>
         </member>
+        <member name="M:UmbracoExamine.StaticFieldCollection.TryGetValue(System.String,UmbracoExamine.StaticField@)">
+            <summary>
+            Implements TryGetValue using the underlying dictionary
+            </summary>
+            <param name="key"></param>
+            <param name="field"></param>
+            <returns></returns>
+        </member>
         <member name="T:UmbracoExamine.UmbracoMemberIndexer">
             <summary>
             Custom indexer for members

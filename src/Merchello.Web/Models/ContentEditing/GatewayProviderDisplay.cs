@@ -4,6 +4,8 @@
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
 
+    using Core;
+
     using Merchello.Core.Models;
 
     /// <summary>

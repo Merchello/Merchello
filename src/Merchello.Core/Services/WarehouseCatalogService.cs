@@ -281,7 +281,7 @@
         /// </param>
         public void Delete(IWarehouseCatalog warehouseCatalog, bool raiseEvents = true)
         {
-            if (warehouseCatalog.Key == Core.Constants.DefaultKeys.Warehouse.DefaultWarehouseCatalogKey) return;
+            if (warehouseCatalog.Key == Core.Constants.Warehouse.DefaultWarehouseCatalogKey) return;
 
             if (raiseEvents)
             if (Deleting.IsRaisedEventCancelled(new DeleteEventArgs<IWarehouseCatalog>(warehouseCatalog), this))
@@ -317,7 +317,7 @@
         /// </param>
         public void Delete(IEnumerable<IWarehouseCatalog> warehouseCatalogs, bool raiseEvents = true)
         {
-            var catalogs = warehouseCatalogs.Where(x => x.Key != Core.Constants.DefaultKeys.Warehouse.DefaultWarehouseCatalogKey).ToArray();
+            var catalogs = warehouseCatalogs.Where(x => x.Key != Core.Constants.Warehouse.DefaultWarehouseCatalogKey).ToArray();
             if (!catalogs.Any()) return;
 
             if (raiseEvents)

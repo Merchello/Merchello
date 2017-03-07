@@ -65,7 +65,7 @@
     private string GetOrderStatus(InvoiceDisplay invoice)
     {
         // An invoice that has been paid through a provider and has not been viewed yet may not have an order at this point.
-        if (!invoice.Orders.Any() && invoice.InvoiceStatusKey == Merchello.Core.Constants.DefaultKeys.InvoiceStatus.Paid) return "Waiting";
+        if (!invoice.Orders.Any() && invoice.InvoiceStatusKey == Merchello.Core.Constants.InvoiceStatus.Paid) return "Waiting";
         var order = invoice.Orders.FirstOrDefault();
         if (order != null) return order.OrderStatus.Name;
         // This should not happen but is here for a final catch

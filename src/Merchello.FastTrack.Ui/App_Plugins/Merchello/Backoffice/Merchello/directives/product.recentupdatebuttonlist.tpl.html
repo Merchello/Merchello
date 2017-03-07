@@ -1,0 +1,9 @@
+<div class="btn-group pull-right recentlyupdatedddl" data-ng-show="visible">
+    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+        <localize key="merchelloProducts_recentlyUpdated"/>
+        <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu">
+        <li data-ng-repeat="product in products" data-ng-bind-html="getLink(product)"></li>
+    </ul>
+</div>

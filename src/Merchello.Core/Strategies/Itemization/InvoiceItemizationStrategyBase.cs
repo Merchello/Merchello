@@ -16,13 +16,13 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="InvoiceItemizationStrategyBase"/> class.
         /// </summary>
-        /// <param name="display">
+        /// <param name="invoice">
         /// The <see cref="Invoice"/>.
         /// </param>
-        protected InvoiceItemizationStrategyBase(Invoice display)
+        protected InvoiceItemizationStrategyBase(Invoice invoice)
         {
-            Ensure.ParameterNotNull(display, "invoice");
-            this.Invoice = display;
+            Ensure.ParameterNotNull(invoice, "invoice");
+            this.Invoice = invoice;
         }
 
         /// <summary>

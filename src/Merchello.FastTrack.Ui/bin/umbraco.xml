@@ -123,6 +123,21 @@
             API controller used for getting Gravatar urls
             </summary>
         </member>
+        <member name="T:Umbraco.Web.Editors.ParameterSwapControllerActionSelector">
+            <summary>
+            This is used to auto-select specific actions on controllers that would otherwise be ambiguous based on a single parameter type
+            </summary>
+            <remarks>
+            As an example, lets say we have 2 methods: GetChildren(int id) and GetChildren(Guid id), by default Web Api won't allow this since
+            it won't know what to select, but if this Tuple is passed in new Tuple{string, string}("GetChildren", "id")
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.Editors.ParameterSwapControllerActionSelector.#ctor(Umbraco.Web.Editors.ParameterSwapControllerActionSelector.ParameterSwapInfo[])">
+            <summary>
+            Constructor accepting a list of action name + parameter name
+            </summary>
+            <param name="actions"></param>
+        </member>
         <member name="T:Umbraco.Web.HealthCheck.HealthCheck">
             <summary>
             The abstract health check class
@@ -4352,6 +4367,11 @@
             <summary>
             API controller to deal with Macro data
             </summary>
+            <remarks>
+            Note that this implements IRequiresSessionState which will enable HttpContext.Session - generally speaking we don't normally
+            enable this for webapi controllers, however since this controller is used to render macro content and macros can access
+            Session, we don't want it to throw null reference exceptions.
+            </remarks>
         </member>
         <member name="M:Umbraco.Web.Editors.MacroController.GetMacroParameters(System.Int32)">
             <summary>
@@ -5045,6 +5065,19 @@
             <param name="query"></param>
             <param name="nodeContextId"></param>
             <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Editors.EntityController.GetAncestors(System.Int32,Umbraco.Web.Models.ContentEditing.UmbracoEntityTypes)">
+            <summary>
+            Get paged descendant entities by id
+            </summary>
+            <param name="id"></param>
+            <param name="type"></param>
+            <param name="pageNumber"></param>
+            <param name="pageSize"></param>
+            <param name="orderBy"></param>
+            <param name="orderDirection"></param>
+            <param name="filter"></param>
             <returns></returns>
         </member>
         <member name="M:Umbraco.Web.Editors.EntityController.ExamineSearch(System.String,Umbraco.Web.Models.ContentEditing.UmbracoEntityTypes,System.String)">
@@ -8827,9 +8860,15 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.Editors.MediaTypeController.GetAllowedChildren(System.String)">
+        <member name="M:Umbraco.Web.Editors.MediaTypeController.GetAllowedChildren(System.Int32)">
             <summary>
-            Returns the allowed child content type objects for the content item id passed in
+            Returns the allowed child content type objects for the content item id passed in - based on an INT id
+            </summary>
+            <param name="contentId"></param>
+        </member>
+        <member name="M:Umbraco.Web.Editors.MediaTypeController.GetAllowedChildren(System.Guid)">
+            <summary>
+            Returns the allowed child content type objects for the content item id passed in - based on a GUID id
             </summary>
             <param name="contentId"></param>
         </member>
@@ -8846,6 +8885,11 @@
             </summary>
             <param name="copy"></param>
             <returns></returns>
+        </member>
+        <member name="T:Umbraco.Web.Editors.MediaTypeController.MediaTypeControllerControllerConfigurationAttribute">
+            <summary>
+            Configures this controller with a custom action selector
+            </summary>
         </member>
         <member name="T:Umbraco.Web.Security.MembershipHelper">
             <summary>
@@ -13196,9 +13240,18 @@
         </member>
         <member name="M:Umbraco.Web.Editors.MediaController.GetChildFolders(System.Int32)">
             <summary>
-            Returns media items known to be a container of other media items
+            Returns media items known to be of a "Folder" type
             </summary>
             <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Editors.MediaController.GetChildFolders(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Returns a paged result of media items known to be of a "Folder" type
+            </summary>
+            <param name="id"></param>
+            <param name="pageNumber"></param>
+            <param name="pageSize"></param>
             <returns></returns>
         </member>
         <member name="M:Umbraco.Web.Editors.MediaController.GetRootMedia">
@@ -13206,10 +13259,23 @@
             Returns the root media objects
             </summary>
         </member>
-        <member name="M:Umbraco.Web.Editors.MediaController.GetChildren(System.String,System.Int32,System.Int32,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Boolean,System.String)">
+        <member name="M:Umbraco.Web.Editors.MediaController.GetChildren(System.Int32,System.Int32,System.Int32,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Boolean,System.String)">
             <summary>
-            Returns the child media objects
+            Returns the child media objects - using the entity INT id
             </summary>
+        </member>
+        <member name="M:Umbraco.Web.Editors.MediaController.GetChildren(System.Guid,System.Int32,System.Int32,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Boolean,System.String)">
+            <summary>
+            Returns the child media objects - using the entity GUID id
+            </summary>
+            <param name="id"></param>
+            <param name="pageNumber"></param>
+            <param name="pageSize"></param>
+            <param name="orderBy"></param>
+            <param name="orderDirection"></param>
+            <param name="orderBySystemField"></param>
+            <param name="filter"></param>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Web.Editors.MediaController.DeleteById(System.Int32)">
             <summary>
@@ -13277,6 +13343,11 @@
             <param name="nodeId">The content to lookup, if the contentItem is not specified</param>
             <param name="media">Specifies the already resolved content item to check against, setting this ignores the nodeId</param>
             <returns></returns>
+        </member>
+        <member name="T:Umbraco.Web.Editors.MediaController.MediaControllerControllerConfigurationAttribute">
+            <summary>
+            Configures this controller with a custom action selector
+            </summary>
         </member>
         <member name="T:Umbraco.Web.UrlHelperRenderExtensions">
             <summary>
@@ -13754,6 +13825,20 @@
             <summary>
             Applying this attribute to any webapi controller will ensure that it only contains one json formatter compatible with the angular json vulnerability prevention.
             </summary>
+        </member>
+        <member name="T:Umbraco.Web.WebApi.SessionHttpControllerRouteHandler">
+            <summary>
+            A custom WebApi route handler that enables session on the HttpContext - use with caution! 
+            </summary>
+            <remarks>
+            WebApi controllers (and REST in general) shouldn't have session state enabled since it's stateless,
+            enabling session state puts additional locks on requests so only use this when absolutley needed 
+            </remarks>
+        </member>
+        <member name="T:Umbraco.Web.WebApi.SessionHttpControllerRouteHandler.SessionHttpControllerHandler">
+            <summary>
+            A custom WebApi handler that enables session on the HttpContext
+            </summary>        
         </member>
         <member name="P:Umbraco.Web.WebApi.UmbracoApiControllerResolver.RegisteredUmbracoApiControllers">
             <summary>
@@ -20828,12 +20913,13 @@
             </summary>
             <param name="Documents">The documents.</param>
         </member>
-        <member name="M:umbraco.content.ClearDocumentCache(umbraco.cms.businesslogic.web.Document)">
+        <member name="M:umbraco.content.ClearDocumentCache(umbraco.cms.businesslogic.web.Document,System.Boolean)">
             <summary>
             Clears the document cache and removes the document from the xml db cache.
             This means the node gets unpublished from the website.
             </summary>
             <param name="doc">The document</param>
+            <param name="removeDbXmlEntry"></param>
         </member>
         <member name="M:umbraco.content.UnPublishNode(System.Int32)">
             <summary>
