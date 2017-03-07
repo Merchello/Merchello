@@ -1,4 +1,29 @@
 .merchello-list-view {
+    clear: both;
+
+    .merchello-list-view-config {
+        padding:0 0 0 0;
+
+        h4 {
+            margin: 0;
+            padding: 4px 0;
+        }
+
+        form {
+            margin: 0 0 0 10px;
+            padding: 0;
+
+            select {
+                margin:0;
+                padding:0 0 0 0;
+            }
+        }
+
+        .merchello-list-view-search, .merchello-list-view-pp {
+            padding:0 0 8px 0;
+        }
+    }
+
     a, a:visited {
         color: #000;
     }
@@ -16,7 +41,7 @@
     }
 
     tbody td a {
-        display:block;
+        display: block;
     }
 
     select {
@@ -62,9 +87,9 @@
     }
 
     .checkout-dialog-btn {
-        float:right;
-        padding-top:1px;
-        padding-bottom:1px;
+        float: right;
+        padding-top: 1px;
+        padding-bottom: 1px;
     }
 }
 
