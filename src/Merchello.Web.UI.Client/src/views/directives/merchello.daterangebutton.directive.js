@@ -1,5 +1,5 @@
 angular.module('merchello.directives').directive('merchelloDateRangeButton',
-    function($filter, settingsResource, dialogService, dateHelper) {
+    function($filter, settingsResource, dialogService, merchDateHelper) {
 
         return {
             restrict: 'E',
@@ -88,8 +88,8 @@ angular.module('merchello.directives').directive('merchelloDateRangeButton',
                 function reload() {
 
                     scope.reload()(
-                        dateHelper.convertToJsDate(scope.startDate, scope.settings.dateFormat),
-                        dateHelper.convertToJsDate(scope.endDate, scope.settings.dateFormat));
+                        merchDateHelper.convertToJsDate(scope.startDate, scope.settings.dateFormat),
+                        merchDateHelper.convertToJsDate(scope.endDate, scope.settings.dateFormat));
                 }
 
                 init();

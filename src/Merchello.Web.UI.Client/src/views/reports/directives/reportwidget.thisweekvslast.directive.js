@@ -1,5 +1,5 @@
 angular.module('merchello.directives').directive('reportWidgeThisWeekVsLast',
-    ['$q', '$log', '$filter', 'assetsService', 'localizationService', 'dateHelper',  'settingsResource', 'salesOverTimeResource', 'queryDisplayBuilder',
+    ['$q', '$log', '$filter', 'assetsService', 'localizationService', 'merchDateHelper',  'settingsResource', 'salesOverTimeResource', 'queryDisplayBuilder',
         function($q, $log, $filter, assetsService, localizationService, dateHelper, settingsResource, salesOverTimeResource, queryDisplayBuilder) {
 
             return {

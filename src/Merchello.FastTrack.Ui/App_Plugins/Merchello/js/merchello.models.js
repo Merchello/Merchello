@@ -5181,7 +5181,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 var entityType = 'Product';
                 var settings = getCacheSettings(entityType);
                 var tabs = new Constructor();
-                if (settings.stickListingTab && settings.collectionKey != '') {
+                if (settings.stickListingTab && settings.collectionKey !== '') {
                     tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/' + settings.collectionKey);
                 } else {
                     tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
@@ -5197,7 +5197,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 var entityType = 'Product';
                 var settings = getCacheSettings(entityType);
                 var tabs = new Constructor();
-                if (settings.stickListingTab && settings.collectionKey != '') {
+                if (settings.stickListingTab && settings.collectionKey !== '') {
                     tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/' + settings.collectionKey);
                 } else {
                     tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
@@ -5215,7 +5215,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                     return createProductEditorWithOptionsTabs(productKey);
                 }
                 var tabs = new Constructor();
-                if (settings.stickListingTab && settings.collectionKey != '') {
+                if (settings.stickListingTab && settings.collectionKey !== '') {
                     tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/' + settings.collectionKey);
                 } else {
                     tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
@@ -5237,7 +5237,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 var entityType = 'Product';
                 var settings = getCacheSettings(entityType);
                 var tabs = new Constructor();
-                if (settings.stickListingTab && settings.collectionKey != '') {
+                if (settings.stickListingTab && settings.collectionKey !== '') {
                     tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/' + settings.collectionKey);
                 } else {
                     tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
@@ -5254,7 +5254,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                var entityType = 'Product';
                var settings = getCacheSettings(entityType);
                 var tabs = new Constructor();
-               if (settings.stickListingTab && settings.collectionKey != '') {
+               if (settings.stickListingTab && settings.collectionKey !== '') {
                    tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/' + settings.collectionKey);
                } else {
                    tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
@@ -5272,7 +5272,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 var entityType = 'Invoice';
                 var settings = getCacheSettings(entityType);
                 var tabs = new Constructor();
-                if (settings.stickListingTab && settings.collectionKey != '') {
+                if (settings.stickListingTab && settings.collectionKey !== '') {
                     tabs.addTab('saleslist', 'merchelloTabs_salesListing', '#/merchello/merchello/saleslist/' + settings.collectionKey);
                 } else {
                     tabs.addTab('saleslist', 'merchelloTabs_salesListing', '#/merchello/merchello/saleslist/manage');
@@ -5286,7 +5286,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 var entityType = 'Invoice';
                 var settings = getCacheSettings(entityType);
                 var tabs = new Constructor();
-                if (settings.stickListingTab && settings.collectionKey != '') {
+                if (settings.stickListingTab && settings.collectionKey !== '') {
                     tabs.addTab('saleslist', 'merchelloTabs_salesListing', '#/merchello/merchello/saleslist/' + settings.collectionKey);
                 } else {
                     tabs.addTab('saleslist', 'merchelloTabs_salesListing', '#/merchello/merchello/saleslist/manage');
@@ -5302,7 +5302,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 var entityType = 'Customer';
                 var settings = getCacheSettings(entityType);
                 var tabs = new Constructor();
-                if (settings.stickListingTab && settings.collectionKey != '') {
+                if (settings.stickListingTab && settings.collectionKey !== '') {
                     tabs.addTab('customerlist', 'merchelloTabs_customerListing', '#/merchello/merchello/customerlist/' + settings.collectionKey);
                 } else {
                     tabs.addTab('customerlist', 'merchelloTabs_customerListing', '#/merchello/merchello/customerlist/manage');
@@ -5316,7 +5316,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 var entityType = 'Customer';
                 var settings = getCacheSettings(entityType);
                 var tabs = new Constructor();
-                if (settings.stickListingTab && settings.collectionKey != '') {
+                if (settings.stickListingTab && settings.collectionKey !== '') {
                     tabs.addTab('customerlist', 'merchelloTabs_customerListing', '#/merchello/merchello/customerlist/' + settings.collectionKey);
                 } else {
                     tabs.addTab('customerlist', 'merchelloTabs_customerListing', '#/merchello/merchello/customerlist/manage');
@@ -5344,7 +5344,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 var entityType = 'Offer';
                 var settings = getCacheSettings(entityType);
                 var tabs = new Constructor();
-                if (settings.stickListingTab && settings.collectionKey != '') {
+                if (settings.stickListingTab && settings.collectionKey !== '') {
                     tabs.addTab('offers', 'merchelloTabs_offerListing', '#/merchello/merchello/offerslist/' + settings.collectionKey);
                 } else {
                     tabs.addTab('offers', 'merchelloTabs_offerListing', '#/merchello/merchello/offerslist/manage');
