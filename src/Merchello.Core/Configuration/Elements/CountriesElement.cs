@@ -76,7 +76,7 @@
         /// </returns>
         private static IProvince CreateProvince(XElement xr)
         {
-            return new Province(xr.Attribute("name").Value, xr.Attribute("code").Value);
+            return new Province(xr.Attribute("code").Value, xr.Attribute("name").Value);
         }
     }
 }
