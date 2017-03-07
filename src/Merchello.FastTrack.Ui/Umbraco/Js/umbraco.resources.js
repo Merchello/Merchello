@@ -2890,7 +2890,9 @@ function mediaResource($q, $http, umbDataFormatter, umbRequestHelper) {
           * Retrieves all media children with types used as folders.
           * Uses the convention of looking for media items with mediaTypes ending in
           * *Folder so will match "Folder", "bannerFolder", "secureFolder" etc,
-          *
+          * 
+          * NOTE: This will return a max of 500 folders, if more is required it needs to be paged
+          * 
           * ##usage
           * <pre>
           * mediaResource.getChildFolders(1234)
@@ -2908,14 +2910,15 @@ function mediaResource($q, $http, umbDataFormatter, umbRequestHelper) {
                 parentId = -1;
             }
 
+            //NOTE: This will return a max of 500 folders, if more is required it needs to be paged
             return umbRequestHelper.resourcePromise(
                   $http.get(
                         umbRequestHelper.getApiUrl(
                               "mediaApiBaseUrl",
                               "GetChildFolders",
-                              [
-                                    { id: parentId }
-                              ])),
+                            {
+                                id: parentId
+                            })),
                   'Failed to retrieve child folders for media item ' + parentId);
         },
 
