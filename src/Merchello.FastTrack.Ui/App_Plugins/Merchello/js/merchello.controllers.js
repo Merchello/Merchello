@@ -15,7 +15,7 @@
  * The controller for offers list view controller
  */
 angular.module('merchello').controller('Merchello.Backoffice.OfferEditController',
-    ['$scope', '$routeParams', '$location', '$filter', 'dateHelper', 'assetsService', 'dialogService', 'eventsService', 'notificationsService', 'settingsResource', 'marketingResource', 'merchelloTabsFactory',
+    ['$scope', '$routeParams', '$location', '$filter', 'merchDateHelper', 'assetsService', 'dialogService', 'eventsService', 'notificationsService', 'settingsResource', 'marketingResource', 'merchelloTabsFactory',
         'dialogDataFactory', 'settingDisplayBuilder', 'offerProviderDisplayBuilder', 'offerSettingsDisplayBuilder', 'offerComponentDefinitionDisplayBuilder',
     function($scope, $routeParams, $location, $filter, dateHelper, assetsService, dialogService, eventsService, notificationsService, settingsResource, marketingResource, merchelloTabsFactory,
              dialogDataFactory, settingDisplayBuilder, offerProviderDisplayBuilder, offerSettingsDisplayBuilder, offerComponentDefinitionDisplayBuilder) {
