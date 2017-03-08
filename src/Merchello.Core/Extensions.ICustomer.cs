@@ -361,17 +361,21 @@ namespace Merchello.Core
             {
                 if (address.IsDefault && adr.Key != address.Key && adr.AddressType == address.AddressType) adr.IsDefault = false;
 
-                if (addresses.Any(x => x.Key == address.Key))
+                if (adr.Key == address.Key)
                 {
+                    //Update, add the new address
                     isUpdate = true;
+                    addressList.Add(address);
                 }
-
-                addressList.Add(adr);
+                else
+                {
+                    addressList.Add(adr);
+                }
             }
 
-            if (!isUpdate) addresses.Add(address);
+            if (!isUpdate) addressList.Add(address);
 
-            ((Customer)customer).Addresses = addresses;
+            ((Customer)customer).Addresses = addressList;
 
             merchelloContext.Services.CustomerService.Save(customer);
 
