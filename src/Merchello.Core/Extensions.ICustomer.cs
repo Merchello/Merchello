@@ -365,6 +365,8 @@ namespace Merchello.Core
                 {
                     //Update, add the new address
                     isUpdate = true;
+                    //Carry over the IsDefault setting
+                    address.IsDefault = adr.IsDefault;
                     addressList.Add(address);
                 }
                 else
