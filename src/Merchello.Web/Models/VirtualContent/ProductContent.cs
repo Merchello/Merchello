@@ -224,6 +224,17 @@
         }
 
         /// <summary>
+        /// Gets the update date.
+        /// </summary>
+        public override DateTime UpdateDate
+        {
+            get
+            {
+                return _display.UpdateDate;
+            }
+        }
+
+        /// <summary>
         /// Gets the product display.
         /// </summary>
         internal ProductDisplay ProductDisplay
