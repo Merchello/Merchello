@@ -8,6 +8,9 @@
 
     using Umbraco.Core;
     using Umbraco.Web;
+    using System.Linq;
+
+    using Merchello.Web.Trees;
 
     /// <summary>
     /// Represents an report controller resolver.
@@ -56,6 +59,14 @@
             get
             {
                 return InstanceTypes;
+            }
+        }
+
+        internal IEnumerable<Type> ResolvedTypesWithAttribute
+        {
+            get
+            {
+                return InstanceTypes.Where(x => x.GetCustomAttributes<BackOfficeTreeAttribute>(true) != null);
             }
         }
 
