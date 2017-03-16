@@ -2314,6 +2314,10 @@ angular.module('merchello.resources').factory('salesOverTimeResource',
              */
             getTypeFields: function () {
                 return getCachedOrApi("AllTypeFields", "GetTypeFields", "settings");
+            },
+
+            getReportBackofficeTrees: function() {
+                return getCachedOrApi("pluginReports", "GetReportBackofficeTrees", "BackofficeTree");
             }
 
         };

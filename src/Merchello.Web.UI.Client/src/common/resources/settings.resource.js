@@ -216,6 +216,10 @@
              */
             getTypeFields: function () {
                 return getCachedOrApi("AllTypeFields", "GetTypeFields", "settings");
+            },
+
+            getReportBackofficeTrees: function() {
+                return getCachedOrApi("pluginReports", "GetReportBackofficeTrees", "BackofficeTree");
             }
 
         };

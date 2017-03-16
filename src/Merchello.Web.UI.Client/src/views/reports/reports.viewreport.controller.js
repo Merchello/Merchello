@@ -9,8 +9,8 @@
      * This is a bootstrapper to allow reports that are plugins to be loaded using the merchello application route.
      */
     angular.module('merchello').controller('Merchello.Backoffice.ReportsViewReportController',
-        ['$scope', '$routeParams',
-         function($scope, $routeParams) {
+        ['$scope', '$routeParams', 'settingsResource',
+         function($scope, $routeParams, settingsResource) {
 
              $scope.loaded = true;
              $scope.preValuesLoaded = true;
@@ -18,12 +18,29 @@
              // Property to control the report to show
              $scope.reportParam = $routeParams.id;
 
-             var re = /(\\)/g;
-             var subst = '/';
+             settingsResource.getReportBackofficeTrees().then(function(trees) {
 
-             var result = $scope.reportParam.replace(re, subst);
+                 if(trees.length > 0) {
+                     console.info(trees);
+                     var tree = _.find(trees, function(t) {
 
-             //$scope.reportPath = "/App_Plugins/Merchello.ExportOrders|ExportOrders.html";
-             $scope.reportPath = "/App_Plugins/" + result + ".html";
+                     });
+
+                 } else {
+                     var re = /(\\)/g;
+                     var subst = '/';
+
+                     var result = $scope.reportParam.replace(re, subst);
+
+                     //$scope.reportPath = "/App_Plugins/Merchello.ExportOrders|ExportOrders.html";
+                     $scope.reportPath = "/App_Plugins/" + result + ".html";
+                 }
+             });
+
+
+
+
+
+
 
     }]);
