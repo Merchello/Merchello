@@ -59,9 +59,9 @@ namespace Merchello.Tests.Base.TestHelpers
 
             _serviceContext = new ServiceContext(new RepositoryFactory(cache, TestLogger, SqlSyntaxProvider), new PetaPocoUnitOfWorkProvider(TestLogger), TestLogger, new TransientMessageFactory());
 
-            WarehouseCatalog = new WarehouseCatalog(global::Merchello.Core.Constants.DefaultKeys.Warehouse.DefaultWarehouseKey)
+            WarehouseCatalog = new WarehouseCatalog(global::Merchello.Core.Constants.Warehouse.DefaultWarehouseKey)
             {
-                Key = global::Merchello.Core.Constants.DefaultKeys.Warehouse.DefaultWarehouseCatalogKey
+                Key = global::Merchello.Core.Constants.Warehouse.DefaultWarehouseCatalogKey
             }; 
         }
 
@@ -79,9 +79,9 @@ namespace Merchello.Tests.Base.TestHelpers
 
             _serviceContext = serviceContext;
 
-            WarehouseCatalog = new WarehouseCatalog(global::Merchello.Core.Constants.DefaultKeys.Warehouse.DefaultWarehouseKey)
+            WarehouseCatalog = new WarehouseCatalog(global::Merchello.Core.Constants.Warehouse.DefaultWarehouseKey)
             {
-                Key = global::Merchello.Core.Constants.DefaultKeys.Warehouse.DefaultWarehouseCatalogKey
+                Key = global::Merchello.Core.Constants.Warehouse.DefaultWarehouseCatalogKey
             };
         }
 

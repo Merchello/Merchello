@@ -16,7 +16,7 @@
  * The main application controller
  * 
  */
-function MainController($scope, $rootScope, $location, $routeParams, $timeout, $http, $log, appState, treeService, notificationsService, userService, navigationService, historyService, updateChecker, assetsService, eventsService, umbRequestHelper, tmhDynamicLocale) {
+function MainController($scope, $rootScope, $location, $routeParams, $timeout, $http, $log, appState, treeService, notificationsService, userService, navigationService, historyService, updateChecker, assetsService, eventsService, umbRequestHelper, tmhDynamicLocale, localStorageService) {
 
     //the null is important because we do an explicit bool check on this in the view
     //the avatar is by default the umbraco logo    
@@ -89,6 +89,14 @@ function MainController($scope, $rootScope, $location, $routeParams, $timeout, $
             $location.path("/").search("");
             historyService.removeAll();
             treeService.clearCache();
+
+            //if the user changed, clearout local storage too - could contain sensitive data
+            localStorageService.clearAll();
+        }
+
+        //if this is a new login (i.e. the user entered credentials), then clear out local storage - could contain sensitive data
+        if (data.loginType === "credentials") {            
+            localStorageService.clearAll();
         }
 
         //Load locale file
@@ -13279,7 +13287,8 @@ angular.module("umbraco").controller("Umbraco.PrevalueEditors.IncludePropertiesL
       function activate() {
           vm.itemsWithoutFolders = filterOutFolders($scope.items);
 
-          if($scope.entityType === 'media') {
+          //no need to make another REST/DB call if this data is not used when we are browsing the bin
+          if ($scope.entityType === 'media' && !vm.isRecycleBin) {
             mediaTypeHelper.getAllowedImagetypes(vm.nodeId).then(function (types) {
                 vm.acceptedMediatypes = types;
             });
@@ -13508,7 +13517,9 @@ function listViewController($rootScope, $scope, $routeParams, $injector, $cookie
    $scope.isNew = false;
    $scope.actionInProgress = false;
    $scope.selection = [];
-   $scope.folders = [];
+   $scope.folders = [];   
+   //tracks if we've already loaded the folders for the current node
+   var foldersLoaded = false;
    $scope.listViewResultSet = {
       totalPages: 0,
       items: []
@@ -13723,12 +13734,13 @@ function listViewController($rootScope, $scope, $routeParams, $injector, $cookie
             });
          }
 
-         if ($scope.entityType === 'media') {
-
+         if (!foldersLoaded && $scope.entityType === 'media') {
+            //The folders aren't loaded - we only need to do this once since we're never changing node ids
             mediaResource.getChildFolders($scope.contentId)
                     .then(function (folders) {
                        $scope.folders = folders;
                        $scope.viewLoaded = true;
+                       foldersLoaded = true;
                     });
 
          } else {

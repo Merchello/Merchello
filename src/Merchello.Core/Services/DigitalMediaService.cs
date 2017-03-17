@@ -149,7 +149,8 @@
         {
             var digitalMedia = new DigitalMedia() { 
                 FirstAccessed = null,
-                ProductVariantKey = productVariantKey
+                ProductVariantKey = productVariantKey,
+                ExtendedData = new ExtendedDataCollection()
             };
 
             if (raiseEvents)

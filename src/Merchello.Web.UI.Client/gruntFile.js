@@ -43,7 +43,7 @@
         // file locations
         src: {
             js: ['src/**/*.js', 'src/*.js'],
-            lib: ['lib/charts/*.js', 'lib/**/*.js'],
+            lib: ['lib/charts/*.js', 'lib/ngStorage/*.js', 'lib/**/*.js'],
             common: ['src/common/**/*.js'],
             specs: ['test/**/*.spec.js'],
             scenarios: ['test/**/*.scenario.js'],
@@ -84,7 +84,7 @@
             },
 
             lib: {
-                files: [{ dest: '<%= distdir %>/lib/', src: ['../lib/charts/*.*', '../lib/codemirror/*.*'], expand: true, cwd: 'lib/' }]
+                files: [{ dest: '<%= distdir %>/lib/', src: ['../lib/charts/*.*', '../lib/ngStorage/*.*', '../lib/codemirror/*.*'], expand: true, cwd: 'lib/' }]
             },
 
             config: {

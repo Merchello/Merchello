@@ -43,7 +43,7 @@
             {
                 var defaultCurrency =
                     this.CheckoutManager.Context.Services.StoreSettingService.GetByKey(
-                        Constants.StoreSettingKeys.CurrencyCodeKey);
+                        Constants.StoreSetting.CurrencyCodeKey);
 
                 foreach (var item in unTagged)
                 {

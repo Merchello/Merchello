@@ -45,7 +45,7 @@
         /// </returns>
         protected override bool PerformExists(IInvoice entity)
         {
-            return entity.InvoiceStatusKey.Equals(Constants.DefaultKeys.InvoiceStatus.Unpaid);
+            return entity.InvoiceStatusKey.Equals(Constants.InvoiceStatus.Unpaid);
         }
 
         /// <summary>

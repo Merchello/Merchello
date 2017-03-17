@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Web.UI;
 
+    using Merchello.Core;
     using Merchello.Core.Models.EntityBase;
 
     using Umbraco.Core.Persistence;
@@ -79,5 +80,36 @@
                        };
         }
 
+        /// <summary>
+        /// Maps <see cref="PagedCollection{TEntity}"/> to <see cref="QueryResultDisplay"/>.
+        /// </summary>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        /// <param name="mapper">
+        /// The mapper.
+        /// </param>
+        /// <typeparam name="TEntity">
+        /// The type of the entity
+        /// </typeparam>
+        /// <typeparam name="TDisplay">
+        /// the type of the display object
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="QueryResultDisplay"/>.
+        /// </returns>
+        public static QueryResultDisplay ToQueryResultDisplay<TEntity, TDisplay>(this PagedCollection<TEntity> collection, Func<TEntity, TDisplay> mapper)
+            where TEntity : IEntity
+            where TDisplay : class
+        {
+            return new QueryResultDisplay
+                       {
+                           CurrentPage = collection.CurrentPage,
+                           ItemsPerPage = collection.PageSize,
+                           TotalItems = collection.TotalItems,
+                           TotalPages = collection.TotalPages,
+                           Items = collection.Items.Select(mapper.Invoke) 
+                       };
+        }
     }
 }

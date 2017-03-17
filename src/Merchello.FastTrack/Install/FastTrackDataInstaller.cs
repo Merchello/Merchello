@@ -345,7 +345,7 @@
             MultiLogHelper.Info<FastTrackDataInstaller>("Adding example shipping data");
             var catalog =
                 warehouse.WarehouseCatalogs.FirstOrDefault(
-                    x => x.Key == Core.Constants.DefaultKeys.Warehouse.DefaultWarehouseCatalogKey);
+                    x => x.Key == Core.Constants.Warehouse.DefaultWarehouseCatalogKey);
             var country = merchelloServices.StoreSettingService.GetCountryByCode("US");
 
             // The following is internal to Merchello and not exposed in the public API

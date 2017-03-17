@@ -1,6 +1,6 @@
 angular.module('merchello.directives').directive('merchelloListView',
-    ['$routeParams', '$log', '$filter', 'dialogService', 'eventsService', 'localizationService', 'merchelloListViewHelper', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
-    function($routeParams, $log, $filter, dialogService, eventsService, localizationService, merchelloListViewHelper, queryDisplayBuilder, queryResultDisplayBuilder) {
+    ['$routeParams', '$log', '$filter', '$compile', 'dialogService', 'eventsService', 'localizationService', 'merchelloListViewHelper', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
+    function($routeParams, $log, $filter, $compile, dialogService, eventsService, localizationService, merchelloListViewHelper, queryDisplayBuilder, queryResultDisplayBuilder) {
         return {
             restrict: 'E',
             replace: true,
@@ -13,7 +13,9 @@ angular.module('merchello.directives').directive('merchelloListView',
                 disableCollections: '@?',
                 includeDateFilter: '@?',
                 noTitle: '@?',
-                noFilter: '@?'
+                noFilter: '@?',
+                filterOptions: '=?',
+                settingsComponent: '=?'
             },
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/merchellolistview.tpl.html',
             link: function (scope, elm, attr) {
@@ -39,7 +41,7 @@ angular.module('merchello.directives').directive('merchelloListView',
                 scope.clearDates = clearDates;
                 scope.startDate = '';
                 scope.endDate = '';
-                scope.dateBtnText = ''
+                scope.dateBtnText = '';
                 var allDates = '';
 
                 var handleChanged = "merchello.collection.changed";
@@ -47,6 +49,13 @@ angular.module('merchello.directives').directive('merchelloListView',
                 scope.config = merchelloListViewHelper.getConfig(scope.entityType);
 
                 //scope.goToEditor = goToEditor;
+
+                var cacheSettings = merchelloListViewHelper.cacheSettings(scope.entityType);
+                var cacheEnabled = false;
+
+
+                var cache = merchelloListViewHelper.cache(scope.entityType + '-listview');
+                var OPTIONS_CACHE_KEY = 'options';
 
                 scope.listViewResultSet = {
                     totalItems: 0,
@@ -67,21 +76,43 @@ angular.module('merchello.directives').directive('merchelloListView',
                     if (!('ready' in attr)) {
                         scope.isReady = true;
                     }
+
                     scope.hasCollections = !('disableCollections' in attr);
                     scope.enableDateFilter = 'includeDateFilter' in attr;
                     scope.hasFilter = !('noFilter' in attr);
                     scope.showTitle = !('noTitle' in attr);
+
+
                     if(scope.hasCollections) {
                         scope.collectionKey = $routeParams.id !== 'manage' ? $routeParams.id : '';
                         // none of the collections have the capability to filter by dates
                         if (scope.collectionKey !== '' && scope.enableDateFilter) {
                             scope.enableDateFilter = false;
                         }
+                        OPTIONS_CACHE_KEY = OPTIONS_CACHE_KEY + scope.collectionKey;
+                        cacheSettings.collectionKey = scope.collectionKey;
+                    } else {
+                        cacheSettings.collectionKey = '';
                     }
+
+                    cacheEnabled = scope.collectionKey !== '' ? cacheSettings.stickyCollectionList : cacheSettings.stickyList;
+
+                    if (cacheEnabled && cache.hasKey(OPTIONS_CACHE_KEY)) {
+                        scope.options = cache.getValue(OPTIONS_CACHE_KEY);
+                    }
+
+                    if (scope.filterOptions !== undefined) {
+                        // assert scope.options has filterOptions
+                        if (!scope.options.hasOwnProperty('filterOptions')) {
+                            scope.options.filterOptions = scope.filterOptions;
+                        }
+                    }
+
                     localizationService.localize('merchelloGeneral_allDates').then(function(value) {
                         allDates = value;
                         scope.dateBtnText = allDates;
                     });
+
 
                     scope.$watch('ready', function(newVal, oldVal) {
                         if (newVal === true) {
@@ -97,10 +128,17 @@ angular.module('merchello.directives').directive('merchelloListView',
                 }
 
                 function search() {
+
+                    if (cacheEnabled) {
+                        cache.setValue(OPTIONS_CACHE_KEY, scope.options);
+                    }
+
+
                     var page = scope.options.pageNumber - 1;
                     var perPage = scope.options.pageSize;
                     var sortBy = scope.options.orderBy;
                     var sortDirection = scope.options.orderDirection === 'asc' ? 'Ascending' : 'Descending';
+
 
                     var query = queryDisplayBuilder.createDefault();
                     query.currentPage = page;
@@ -124,7 +162,7 @@ angular.module('merchello.directives').directive('merchelloListView',
                         scope.dateBtnText = scope.startDate + ' - ' + scope.endDate;
                     }
 
-                    scope.load()(query).then(function (response) {
+                    scope.load()(query, scope.options.filterOptions).then(function (response) {
                         var queryResult = queryResultDisplayBuilder.transform(response, scope.builder);
                         scope.listViewResultSet.items = queryResult.items;
                         scope.listViewResultSet.totalItems = queryResult.totalItems;
@@ -248,6 +286,39 @@ angular.module('merchello.directives').directive('merchelloListView',
                     scope.endDate = dialogData.endDate;
                     search();
                 }
+
+                scope.openSettings = function() {
+
+                    var component = buildFilterOptionComponent();
+
+                    var dialogData = {
+                        settings: cacheSettings,
+                        entityType: scope.entityType,
+                        settingsComponent: component
+                    };
+
+                    dialogService.open({
+                        template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/listview.settings.html',
+                        show: true,
+                        callback: processListViewSettings,
+                        dialogData: dialogData
+                    });
+                }
+
+                function processListViewSettings(dialogData) {
+                    cacheSettings = merchelloListViewHelper.cacheSettings(scope.entityType, dialogData.settings);
+                    cacheEnabled = scope.collectionKey !== '' ? cacheSettings.stickyCollectionList : cacheSettings.stickyList;
+                    search();
+                }
+
+                function buildFilterOptionComponent() {
+                    if (scope.settingsComponent !== undefined && scope.options.filterOptions !== undefined) {
+                        var htm = "<" + scope.settingsComponent + " value='options.filterOptions'></" + scope.settingsComponent + ">";
+                        return $compile(htm)(scope);
+                    }
+                    return undefined;
+                }
+
 
                 init();
             }

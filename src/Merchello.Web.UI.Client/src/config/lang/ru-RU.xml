@@ -17,9 +17,10 @@
     <key alias="percentSymbol">%</key>
     <key alias="moneySymbol">$</key>
     <key alias="trackingNumber">№ квитанции </key>
-    <key alias="trackingUrl">Tracking URL</key>
+    <key alias="trackingUrl">URL отслеживания</key>
     <key alias="shipment">Доставка</key>
     <key alias="sku">Артикул</key>
+    <key alias="name">Название</key>
     <key alias="quantity">К-во</key>
     <key alias="fulfill">Завершен</key>
     <key alias="status">Состояние</key>
@@ -28,6 +29,7 @@
     <key alias="via">Через</key>
     <key alias="options">Опции</key>
     <key alias="select">Выбрать</key>
+    <key alias="selected">Выбрано</key>
     <key alias="all">Все</key>
     <key alias="none">Нет</key>
     <key alias="expired">Просрочен</key>
@@ -72,7 +74,7 @@
     <key alias="decrease">Уменьшить</key>
     <key alias="associateWith">Связать с</key>
     <key alias="shared">Совместное</key>
-    <key alias="custom">Custom</key>
+    <key alias="custom">Настраиваемое</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Товары</key>
@@ -142,7 +144,7 @@
     <key alias="addProvider">Добавить провайдер</key>
   </area>
   <area alias="merchelloCollections">
-    <key alias="selectedCollection">Selected collection</key>
+    <key alias="selectedCollection">Выбранная категория</key>
     <key alias="providers">Провайдеры списков</key>
     <key alias="newCollection">Новая категория</key>
     <key alias="manageCollection">Управление категорией</key>
@@ -166,7 +168,7 @@
     <key alias="allCustomer">Все покупатели</key>
     <key alias="allInvoice">Все продажи</key>
     <key alias="allOffer">Все предложения</key>
-    <key alias="allProductOption">Shared Product Options</key>
+    <key alias="allProductOption">Совместные свойства товаров</key>
     <key alias="productCollections">Категории товаров</key>
     <key alias="invoiceCollections">Списки счетов</key>
     <key alias="customerCollections">Списки покупателей</key>
@@ -180,11 +182,13 @@
   </area>
   <area alias="merchelloHeadline">
     <key alias="catalog">Каталог</key>
+    <key alias="productSpecFilters">Параметры фильтра</key>
   </area>
   <area alias="merchelloValidation">
     <key alias="nameFieldRequired">Наименование является обязательным</key>
     <key alias="contentTypeRequired">Тип документов является обязательным</key>
     <key alias="noteMessageRequired">Поле заметок является обязательным</key>
+    <key alias="oneChoiceRequired">Должен быть выбран как минимум один элемент.</key>
   </area>
   <area alias="merchelloTableCaptions">
     <key alias="name">Наименование</key>
@@ -219,9 +223,10 @@
     <key alias="copyProduct">Создать копию</key>
     <key alias="newProductName">Задайте наименование товара</key>
     <key alias="newProductSku">Задайте артикул товара</key>
-    <key alias="newPrice">New Price</key>
-    <key alias="newCostOfGoods">New Cost Of Goods</key>
-    <key alias="newSalePrice">New Sale Price</key>
+    <key alias="newPrice">Новая цена</key>
+    <key alias="newCostOfGoods">Новая стоимость товаров</key>
+    <key alias="newSalePrice">Новая цена в распродаже</key>
+    <key alias="recentlyUpdated">Недавно обновлено</key>
   </area>
   <area alias="merchelloSpecFilters">
     <key alias="manageProductFilters">Управление фильтрами товаров</key>
@@ -240,6 +245,11 @@
   <area alias="merchelloProductOptions">
     <key alias="newOption">Новое свойство</key>
     <key alias="sharedOption">Совместные свойства</key>
+    <key alias="addProductOption">Добавить свойство товара</key>
+    <key alias="editProductOption">Изменить свойство товара</key>
+    <key alias="choices">Выбранные варианты</key>
+    <key alias="customSettings">Свои настройки</key>
+    <key alias="uiOption">Интерфейсное свойство</key>
     <key alias="editOptions">
       <![CDATA[
       <strong>Изменение свойств</strong>
@@ -308,6 +318,7 @@
     <key alias="invoice">Счет</key>
     <key alias="invoiceNumber">Счет №</key>
     <key alias="invoiceNumberPrefix">Префикс № счета</key>
+    <key alias="createInvoice">Создать счет</key>
     <key alias="poNumber">Номер</key>
     <key alias="paymentStatus">Сост. оплаты</key>
     <key alias="sales">Продаж</key>
@@ -331,6 +342,10 @@
     <key alias="noBillingAddress">Нет плат. адреса</key>
     <key alias="shippingAddress">Адрес доставки</key>
     <key alias="noShippingAddress">Нет адреса доставки</key>
+    <key alias="noteInvoiceAddressChange">ВНИМАНИЕ: здесь изменится только адрес, связанный с ЭТИМ счетом.</key>
+    <key alias="noteShipmentAddressChange">ВНИМАНИЕ: это НЕ изменит ни одного из уже существующих адресов доставки.</key>
+    <key alias="editAddress">Изменить адрес</key>
+    <key alias="shippingMethod">Способ доставки</key>
     <key alias="paid">Оплачен</key>
     <key alias="unpaid">Не оплачен</key>
     <key alias="partial">Частично</key>
@@ -343,6 +358,8 @@
   <area alias="merchelloCustomers">
     <key alias="loginName">Логин</key>
     <key alias="newCustomer">Новый покупатель</key>
+    <key alias="customers">Покупатели</key>
+    <key alias="customerInformation">Данные покупателя</key>
     <key alias="basket">Корзина</key>
     <key alias="lastActivityDate">Дата последней активности</key>
     <key alias="lastInvoiceTotal">Сумма последнего счета</key>
@@ -381,10 +398,54 @@
     </key>
     <key alias="itemCacheEmpty">Не содержит товаров</key>
     <key alias="totalSpent">Всего проведено</key>
+    <key alias="actions">Действия</key>
+    <key alias="editAddress">Изменить адрес</key>
+    <key alias="deleteAddress">Удалить адрес</key>
+    <key alias="addNewAddress">Добавить новый адрес</key>
+    <key alias="billingAddresses">Адрес плательщика</key>
+    <key alias="billingAddressesHelper">Адрес плательщика, привязанный к этому покупателю</key>
+    <key alias="shippingAddresses">Адрес доставки</key>
+    <key alias="shippingAddressesHelper">Адрес доставки, привязанный к этому покупателю</key>
+
+    <!-- Address Form Labels -->
+    <key alias="label">Название</key>
+    <key alias="fullName">Полное имя</key>
+    <key alias="firstName">Имя</key>
+    <key alias="lastName">Фамилия</key>
+    <key alias="company">Организация</key>
+    <key alias="address">Адрес</key>
+    <key alias="addressLine2">Адрес (доп.)</key>
+    <key alias="city">Город</key>
+    <key alias="country">Страна</key>
+    <key alias="stateOrProvince">Область/регион</key>
+    <key alias="zipOrPostalCode">Почтовый индекс</key>
+    <key alias="phone">Телефон</key>
+    <key alias="primaryAddress">Главный адрес</key>
+    <key alias="email">Email-адрес</key>
+
+    <!-- Address Table Labels (shorter) -->
+    <key alias="tblLabel">Название</key>
+    <key alias="tblFullName">Имя</key>
+    <key alias="tblAddress">Адрес</key>
+    <key alias="tblAddressLine2">Адрес (доп.)</key>
+    <key alias="tblLocality">Местонахождение</key>
+    <key alias="tblRegion">Регион</key>
+    <key alias="tblCountry">Страна</key>
+    <key alias="tblPostalCode">Почт. индекс</key>
+
+    <!-- Address Form Validation Messages -->
+    <key alias="labelRequired">Название является обязательным</key>
+    <key alias="addressRequired">Адрес является обязательным</key>
+    <key alias="cityRequired">Город является обязательным</key>
+    <key alias="countryRequired">Страна является обязательным</key>
+    <key alias="zipOrPostalCodeRequired">Почтовый индекс является обязательным</key>
+    <key alias="emailRequired">Email-адрес является обязательным</key>
   </area>
   <area alias="merchelloMarketing">
     <key alias="currentOffers">Текущие предложения</key>
     <key alias="offerCode">Код предложения</key>
+    <key alias="offerCodeInUse">Уже использован</key>
+    <key alias="offerCodeIsOk">Ok!</key>
     <key alias="newOffer">Новое предложение</key>
     <key alias="noOffer">Нет текущих предложений</key>
     <key alias="newOfferPrompt">У Вас пока нет акций и спец. предложений для покупателей. Желаете создать?</key>
@@ -394,8 +455,15 @@
     <key alias="mustUniqueOfferCode">Коды предложений не должны повторяться.</key>
     <key alias="offerSetExpires">Установить временные рамки предложения.</key>
     <key alias="offerNeverExpires">Без окончания.</key>
+    <key alias="offerHasExpired">Срок предложения истек</key>
     <key alias="offerValidDates">Даты действия</key>
     <key alias="offerValidDatesInfo">Установите диапазон дат действия предложения.</key>
+    <key alias="offerValidAllDates">Предложение действительно без ограничения сроков</key>
+    <key alias="offerNotActive">Не активно</key>
+    <key alias="offerActive">Активно</key>
+    <key alias="thisOfferIsNotActive">Это предложение не активно</key>
+    <key alias="thisOfferIsActive">Это предложение активно</key>
+    <key alias="offerToSetActiveInfo"><![CDATA[ <strong>Чтобы активировать:</strong> Назначьте вознаграждения и настройте ограничения]]></key>
     <key alias="offerConstraintsInfo">Ограничения</key>
     <key alias="offerConstraintsConfig">Настройте ограничения для этого предложения.</key>
     <key alias="offerRewardsInfo">Вознаграждения</key>
@@ -515,7 +583,10 @@
     <key alias="shippingAddress">Адрес доставки</key>
     <key alias="billingAddress">Платежный адрес</key>
     <key alias="orderInformation">Данные заказа</key>
+    <key alias="invoiced">Счет выставлен</key>
     <!-- actions -->
+    <key alias="captureFunds">Получение средств</key>
+    <key alias="newPayment">Новый платеж</key>
     <!-- phrases -->
     <key alias="billingAndShippingAddressHelper">Адреса оплаты и доставки</key>
     <key alias="orderInformationHelper"><![CDATA[Товары и цены]]></key>
@@ -569,7 +640,7 @@
         <small>Список провайдеров и способов доставки, отсортированный по странам.</small>]]>
     </key>
     <key alias="warehouse">Склад</key>
-    <key alias="selectShipment">Select Shipment</key>
+    <key alias="selectShipment">Выбрать доставку</key>
   </area>
   <area alias="merchelloInventory">
     <!-- things -->
@@ -604,6 +675,10 @@
     <key alias="globalShippingIsTaxable">Стоимость доставки облагается налогом</key>
     <key alias="globalTaxationApplication">Установить правила налогообложения</key>
     <key alias="defaultCultureName">Культура (язык) по-умолчанию</key>
+    <key alias="stickyListTitle">Привязанные свойства списка</key>
+    <key alias="stickyListView">Разркшить привязанные свойства для всех списков.</key>
+    <key alias="stickyCollectionView">Разрешить привязанные свойства для списков коллекций.</key>
+    <key alias="stickListingTab"><![CDATA[Разрешить привязанную вкладку <b>Список %0%</b>.]]></key>
   </area>
 
   <area alias="merchelloShippingCountry">
@@ -755,6 +830,7 @@
     <key alias="variantInformation">Информация о товаре</key>
     <key alias="variantInformationHelper">Изменить варианты для этого товара.</key>
     <key alias="selectProduct">Выбрать товар...</key>
+    <key alias="selectProducts">Выбрать товары</key>
     <key alias="selectMerchelloProduct">Выберите товар магазина</key>
     <key alias="selectYourProduct">Выберите товар</key>
     <key alias="removeProduct">Отключить этот товар</key>

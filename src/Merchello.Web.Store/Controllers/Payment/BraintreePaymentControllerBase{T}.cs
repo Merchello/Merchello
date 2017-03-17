@@ -3,6 +3,7 @@
     using System;
     using System.Web.Mvc;
 
+    using Merchello.Core;
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Models;
     using Merchello.Providers.Payment.Braintree;

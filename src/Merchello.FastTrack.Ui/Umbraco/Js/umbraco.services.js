@@ -4889,6 +4889,19 @@ function mediaTypeHelper(mediaTypeResource, $q) {
 
     var mediaTypeHelperService = {
 
+        isFolderType: function(mediaEntity) {
+            if (!mediaEntity) {
+                throw "mediaEntity is null";
+            }
+            if (!mediaEntity.contentTypeAlias) {
+                throw "mediaEntity.contentTypeAlias is null";
+            }
+
+            //if you create a media type, which has an alias that ends with ...Folder then its a folder: ex: "secureFolder", "bannerFolder", "Folder"
+            //this is the exact same logic that is performed in MediaController.GetChildFolders
+            return mediaEntity.contentTypeAlias.endsWith("Folder");
+        },
+
         getAllowedImagetypes: function (mediaId){
 				
             // Get All allowedTypes
@@ -8744,7 +8757,7 @@ angular.module('umbraco.services')
                         //when it's successful, return the user data
                         setCurrentUser(data);
 
-                        var result = { user: data, authenticated: true, lastUserId: lastUserId };
+                        var result = { user: data, authenticated: true, lastUserId: lastUserId, loginType: "credentials" };
 
                         //broadcast a global event
                         eventsService.emit("app.authenticated", result);
@@ -8772,7 +8785,7 @@ angular.module('umbraco.services')
                     authResource.getCurrentUser()
                         .then(function (data) {
 
-                            var result = { user: data, authenticated: true, lastUserId: lastUserId };
+                            var result = { user: data, authenticated: true, lastUserId: lastUserId, loginType: "implicit" };
 
                             //TODO: This is a mega backwards compatibility hack... These variables SHOULD NOT exist in the server variables
                             // since they are not supposed to be dynamic but I accidentally added them there in 7.1.5 IIRC so some people might

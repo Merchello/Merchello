@@ -92,12 +92,12 @@
             if (this.ValidTables.Count == 0)
                 return new Version(0, 0, 0);
 
-            if (this.StoreSettings.All(x => x.Key != Constants.StoreSettingKeys.MigrationKey))
+            if (this.StoreSettings.All(x => x.Key != Constants.StoreSetting.MigrationKey))
             {
                 return new Version(1, 7, 0);
             }
 
-            if (StoreSettings.All(x => x.Key != Constants.StoreSettingKeys.GlobalTaxationApplicationKey))
+            if (StoreSettings.All(x => x.Key != Constants.StoreSetting.GlobalTaxationApplicationKey))
             {
                 return new Version(1, 9, 0);
             }
@@ -120,7 +120,7 @@
             }
 
             if (!this.ValidColumns.Contains("merchNote,internalOnly") ||
-                StoreSettings.All(x => x.Key != Constants.StoreSettingKeys.HasDomainRecordKey) ||
+                StoreSettings.All(x => x.Key != Constants.StoreSetting.HasDomainRecordKey) ||
                 !this.ValidColumns.Contains("merchNote,author") ||
                 !this.ValidColumns.Contains("merchCustomer,notes") ||
                 this.TypeFields.All(x => x.Key != Constants.TypeFieldKeys.PaymentMethod.RedirectKey))
@@ -165,6 +165,17 @@
             if (!this.ValidColumns.Contains("merchShipment,trackingUrl"))
             {
                 return new Version(2, 3, 1);
+            }
+
+            if (!this.ValidIndexes.Contains("IX_merchProductVariantName") ||
+                !this.ValidIndexes.Contains("IX_merchProductVariantPrice") ||
+                !this.ValidIndexes.Contains("IX_merchProductVariantSalePrice") ||
+                !this.ValidIndexes.Contains("IX_merchProductVariantBarcode") ||
+                !this.ValidIndexes.Contains("IX_merchProductVariantManufacturer") ||
+                !this.ValidIndexes.Contains("IX_merchInvoiceBillToPostalCode") ||
+                !this.ValidTables.Contains("merchDigitalMedia"))
+            {
+                return new Version(2, 4, 0);
             }
 
 	        // If Errors is empty or if TableDefinitions tables + columns correspond to valid tables + columns then we're at current version

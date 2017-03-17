@@ -5,6 +5,7 @@
     using System.Data;
     using System.Linq;
 
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.Models.EntityBase;
@@ -79,7 +80,7 @@
                 .From<CatalogInventoryDto>(SqlSyntax)
                 .InnerJoin<WarehouseCatalogDto>(SqlSyntax)
                 .On<CatalogInventoryDto, WarehouseCatalogDto>(SqlSyntax, left => left.CatalogKey, right => right.Key)
-                .Where<WarehouseCatalogDto>(x => x.WarehouseKey == warehouseKey);
+                .Where<WarehouseCatalogDto>(x => x.WarehouseKey == warehouseKey, SqlSyntax);
 
             var dtos = Database.Fetch<CatalogInventoryDto, WarehouseCatalogDto>(sql);
 
@@ -164,7 +165,7 @@
             var sql = new Sql();
             sql.Select("*")
                .From<ProductVariantDto>(SqlSyntax)
-               .Where<ProductVariantDto>(x => x.Sku == sku);
+               .Where<ProductVariantDto>(x => x.Sku == sku, SqlSyntax);
 
             return Database.Fetch<ProductVariantDto>(sql).Any();
         }
@@ -290,7 +291,7 @@
         /// </returns>
         public DetachedContentCollection<IProductVariantDetachedContent> GetDetachedContentCollection(Guid productVariantKey)
         {
-            var contents = this.GetProductVariantDetachedContents(productVariantKey);
+            var contents = this.GetProductVariantDetachedContents(productVariantKey).ToArray();
             return new DetachedContentCollection<IProductVariantDetachedContent> { contents };
         }
 
@@ -310,7 +311,7 @@
                .From<CatalogInventoryDto>(SqlSyntax)
                .InnerJoin<WarehouseCatalogDto>(SqlSyntax)
                .On<CatalogInventoryDto, WarehouseCatalogDto>(SqlSyntax, left => left.CatalogKey, right => right.Key)
-               .Where<CatalogInventoryDto>(x => x.ProductVariantKey == productVariantKey);
+               .Where<CatalogInventoryDto>(x => x.ProductVariantKey == productVariantKey, SqlSyntax);
 
             var dtos = Database.Fetch<CatalogInventoryDto, WarehouseCatalogDto>(sql);
 
@@ -376,7 +377,7 @@
 
             if (keys.Any())
             {
-                sql = sql.WhereIn<CatalogInventoryDto>(x => x.ProductVariantKey, keys);
+                sql = sql.WhereIn<CatalogInventoryDto>(x => x.ProductVariantKey, keys, SqlSyntax);
             }
 
             var inventoryDtos = Database.Fetch<CatalogInventoryDto, WarehouseCatalogDto>(sql);
@@ -700,7 +701,7 @@
 
             var factory = new ProductVariantDetachedContentFactory();
 
-            return dtos.Select(factory.BuildEntity);
+            return dtos.Where(x => x != null).Select(factory.BuildEntity);
         }
 
 
@@ -723,7 +724,7 @@
                     SqlSyntax,
                     left => left.DetachedContentTypeKey,
                     right => right.Key)
-                .WhereIn<ProductVariantDetachedContentDto>(x => x.ProductVariantKey, productVariantKeys);
+                .WhereIn<ProductVariantDetachedContentDto>(x => x.ProductVariantKey, productVariantKeys, SqlSyntax);
 
             var dtos = Database.Fetch<ProductVariantDetachedContentDto, DetachedContentTypeDto>(sql);
 
@@ -1115,7 +1116,7 @@
             var sql = new Sql();
             sql.Select("*")
                 .From<ProductVariantDto>(SqlSyntax)
-                .Where<ProductVariantDto>(x => x.Sku == sku && x.Key != productVariantKey);
+                .Where<ProductVariantDto>(x => x.Sku == sku && x.Key != productVariantKey, SqlSyntax);
 
             return Database.Fetch<ProductAttributeDto>(sql).Any();
         }
@@ -1136,7 +1137,13 @@
 
             sql = sql.Where(string.Join(" or ", whereClauses), null);
 
-            return Database.Fetch<ProductAttributeDto>(sql).Any();
+            var dtos = Database.Fetch<ProductAttributeDto>(sql).ToArray();
+            foreach (var dto in dtos)
+            {
+                MultiLogHelper.Warn<ProductVariantRepository>(string.Format("Duplicate SKU found: {0}", dto.Sku));
+            }
+
+            return dtos.Any();
         }
 
         /// <summary>

@@ -1,0 +1,861 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<language>
+  <area alias="sections">
+    <key alias="merchello">Merchello</key>
+  </area>
+  <area alias="merchelloGeneral">
+    <key alias="apply">Toepassen</key>
+    <key alias="price">Prijs</key>
+    <key alias="customer">Klant</key>
+    <key alias="total">Totaal</key>
+    <key alias="salePrice">Verkoopprijs</key>
+    <key alias="filter">Filter</key>
+    <key alias="filterBy">Filter Op</key>
+    <key alias="chooseMedia">Kies Media</key>
+    <key alias="multipleOptions">Meerdere Opties</key>
+    <key alias="optional">(optioneel)</key>
+    <key alias="percentSymbol" >%</key>
+    <key alias="moneySymbol">€</key>
+    <key alias="trackingNumber">Tracking # </key>
+    <key alias="trackingUrl">Tracking URL</key>
+    <key alias="shipment">Verzending</key>
+    <key alias="sku">SKU</key>
+    <key alias="name">Naam</key>
+    <key alias="quantity">Aantal</key>
+    <key alias="fulfill"> Afronden</key>
+    <key alias="status"> Status</key>
+    <key alias="type"> Type</key>
+    <key alias="amount"> Bedrag</key>
+    <key alias="via">Via</key>
+    <key alias="options">Opties</key>
+    <key alias="select">Selecteer</key>
+    <key alias="selected">Geselecteerd</key>
+    <key alias="all">Alle</key>
+    <key alias="none">Geen</key>
+    <key alias="expired">Verlopen</key>
+    <key alias="configured">Geconfigureerd</key>
+    <key alias="notConfigured">Niet geconfigureerd</key>
+    <key alias="some">Sommige</key>
+    <key alias="lineItems">Orderregels</key>
+    <key alias="setDateRange">Stel datum bereik in</key>
+    <key alias="allDates">Alle data</key>
+    <key alias="starting">Van</key>
+    <key alias="ending">Tot</key>
+    <key alias="jan">Januari</key>
+    <key alias="feb">Februari</key>
+    <key alias="mar">Maart</key>
+    <key alias="apr">April</key>
+    <key alias="may">Mei</key>
+    <key alias="jun">Juni</key>
+    <key alias="jul">Juli</key>
+    <key alias="aug">Augustus</key>
+    <key alias="sep">September</key>
+    <key alias="oct">Oktober</key>
+    <key alias="nov">November</key>
+    <key alias="dec">December</key>
+    <key alias="monday">Maandag</key>
+    <key alias="tuesday">Dinsdag</key>
+    <key alias="wednesday">Woensdag</key>
+    <key alias="thursday">Donderdag</key>
+    <key alias="friday">Vrijdag</key>
+    <key alias="saturday">Zaterdag</key>
+    <key alias="sunday">Zondag</key>
+    <key alias="day">Dag</key>
+    <key alias="item">Item</key>
+    <key alias="items">Items</key>
+    <key alias="totals">Totalen</key>
+    <key alias="quantity">Hoeveelheid</key>
+    <key alias="subTotal">Subtotaal</key>
+    <key alias="checkout">Afrekenen</key>
+    <key alias="author">Auteur</key>
+    <key alias="visibility">Zichtbaar</key>
+    <key alias="public">Publiek</key>
+    <key alias="private">Besloten</key>
+    <key alias="increase">Verhoog</key>
+    <key alias="decrease">Verlaag</key>
+    <key alias="associateWith">Associeer met</key>
+    <key alias="shared">Gedeeld</key>
+    <key alias="custom">Custom</key>
+  </area>
+  <area alias="merchelloTree">
+    <key alias="products">Producten</key>
+    <key alias="sales">Verkopen</key>
+    <key alias="customers">Klanten</key>
+    <key alias="marketing">Marketing</key>
+    <key alias="collections">Collecties</key>
+    <key alias="reports">Reportages</key>
+    <key alias="gateways">Gateway Providers</key>
+  </area>
+  <area alias="merchelloTabs">
+    <key alias="filterGroups">Filter Groepen</key>
+    <key alias="productListing">Productlijst</key>
+    <key alias="productContentTypes">Product Content Types</key>
+    <key alias="product">Product</key>
+    <key alias="productVariants">Product Varianten</key>
+    <key alias="productOptions">Product Opties</key>
+    <key alias="productVariantEditor">Product Variant bewerker</key>
+    <key alias="detachedContent">Uitgebreide Content</key>
+    <key alias="salesListing">Bestellingen</key>
+    <key alias="sales">Bestelling</key>
+    <key alias="payments">Betalingen</key>
+    <key alias="payment">Betaling</key>
+    <key alias="shipments">Verzendingen</key>
+    <key alias="shipping">Verzenden</key>
+    <key alias="customerListing">Klantenlijst</key>
+    <key alias="customer">Klant</key>
+    <key alias="customerAddresses">Adresgegevens</key>
+    <key alias="gatewayProviders">Gateway Providers</key>
+    <key alias="notification">Notificaties</key>
+    <key alias="taxation">Belasting</key>
+    <key alias="offerListing">Aanbiedingen</key>
+    <key alias="message">Bericht</key>
+    <key alias="offer">Aanbieding</key>
+    <key alias="coupon">Kortingsbon</key>
+    <key alias="reports">Reportages</key>
+    <key alias="render">Weergave</key>
+    <key alias="salesOverTime">Verkoop per datum</key>
+    <key alias="salesByItem">Verkoop per product</key>
+    <key alias="abandonedBasket">Verlaten winkelmandjes</key>
+    <key alias="contentTypes">Content Types</key>
+    <key alias="sharedProductOptions">Gedeelde Product Opties</key>
+  </area>
+  <area alias="merchelloReports">
+    <key alias="anonymousBaskets">Anonieme Winkelmandjes</key>
+    <key alias="anonymousCheckouts">Anonieme Afrekeningen</key>
+    <key alias="anonymousCheckoutPercent">Percentage anoniem afgerekend</key>
+    <key alias="customerBaskets">Winkelmandjes van klanten</key>
+    <key alias="customerCheckouts">Klant afrekeningen</key>
+    <key alias="customerCheckoutPercent">Percentage klant afrekeningen</key>
+    <key alias="thisWeekVsLast">Deze week t.o.v. Vorige week</key>
+    <key alias="monthlyTotalSales">Totaal maandelijkse verkopen</key>
+    <key alias="topSellingItems"><![CDATA[ Meest verkochte producten <small>Top 10</small> ]]></key>
+    <key alias="thisWeek">Deze week</key>
+    <key alias="lastWeek">Vorige week</key>
+    <key alias="quantitySold">Verkochte hoeveelheden</key>
+    <key alias="numberOfInvoices">Aantal facturen</key>
+    <key alias="abandonedBaskets">Verlaten winkelmandjes en geslaagde afrekeningen</key>
+  </area>
+  <area alias="merchelloProviders">
+    <key alias="unpaidInvoiceCollection">Onbetaalde facturen</key>
+    <key alias="partialPaidInvoiceCollection">Gedeeltelijk betaalde facturen</key>
+    <key alias="paidInvoiceCollection">Betaalde facturen</key>
+    <key alias="notFulfilledOrderCollection">Onafgehandelde bestellingen</key>
+    <key alias="openOrderCollection">Open bestellingen</key>
+    <key alias="fulfilledOrderCollection">Afgehandelde bestellingen</key>
+    <key alias="addProvider">Toevoegen provider</key>
+  </area>
+  <area alias="merchelloCollections">
+    <key alias="selectedCollection">Geselecteerde collectie</key>
+    <key alias="providers">Collectie Providers</key>
+    <key alias="newCollection">Nieuwe Collectie</key>
+    <key alias="manageCollection">Beheer Collectie</key>
+    <key alias="addEntities">Voeg nieuw collectie item toe</key>
+    <key alias="removeEntities">Verwijder collectie item</key>
+    <key alias="sortCollections">Sorteer collecties</key>
+    <key alias="staticProviders">Vaste Collecties</key>
+    <key alias="staticProvidersInfo">Sta gebruikers toe om collecties aan te maken zodat daar items aan toegevoegd kunnen worden.</key>
+    <key alias="product">Product Collecties</key>
+    <key alias="customer">Klant Collecties</key>
+    <key alias="invoice">Factuur Collecties</key>
+    <key alias="emptyCollection">De collectie is leeg.</key>
+    <key alias="noQualifyingEntities">Er zijn geen andere items meer die aan de collectie toegevoegd kunnen worden.</key>
+    <key alias="collectionPickerTitle">Collecties</key>
+    <key alias="collectionPickerInfo">Voeg dit item toe aan een of meerdere collecties.</key>
+    <key alias="filterPickerTitle">Gespecificeerde filters</key>
+    <key alias="filterPickerInfo">Voeg dit item toe aan een of meerdere gespecificeerde filters.</key>
+    <key alias="filterAssociateFilters">Geassocieerde Filters</key>
+    <key alias="allItems">Alle items</key>
+    <key alias="allProduct">Alle Producten</key>
+    <key alias="allCustomer">Alle Klanten</key>
+    <key alias="allInvoice">Alle Bestellingen</key>
+    <key alias="allOffer">Alle Aanbiedingen</key>
+    <key alias="allProductOption">Gedeelde Product Opties</key>
+    <key alias="productCollections">Product Collecties</key>
+    <key alias="invoiceCollections">Factuur Collecties</key>
+    <key alias="customerCollections">Klant Collecties</key>
+  </area>
+  <area alias="merchelloButtons">
+    <key alias="void">Annuleren</key>
+    <key alias="refund">Terugbetalen</key>
+    <key alias="delete">Verwijderen</key>
+    <key alias="select">Selecteren</key>
+    <key alias="remove">Verwijderen</key>
+  </area>
+  <area alias="merchelloHeadline">
+    <key alias="catalog">Catalogus</key>
+    <key alias="productSpecFilters">Filter Specificaties</key>
+  </area>
+  <area alias="merchelloValidation">
+    <key alias="nameFieldRequired">Het naam veld is verplicht</key>
+    <key alias="contentTypeRequired">Content type is verplicht</key>
+    <key alias="noteMessageRequired">Het notitie bericht is verplicht</key>
+    <key alias="oneChoiceRequired">Er moet een keuzemogelijkheid zijn gedefinieerd.</key>
+  </area>
+  <area alias="merchelloTableCaptions">
+    <key alias="name">Naam</key>
+    <key alias="alias">Alias</key>
+    <key alias="startDate">Begindatum</key>
+    <key alias="endDate">Einddatum</key>
+    <key alias="active">Actief</key>
+    <key alias="sortOrder">Sorteervolgorde</key>
+    <key alias="optionName">Optie Naam</key>
+    <key alias="optionUi">Optie UI</key>
+    <key alias="optionValues">Optie waardes</key>
+    <key alias="shared">Gedeeld</key>
+    <key alias="sharedCount">Aantal gedeeld</key>
+    <key alias="filterGroup">Filter Groep</key>
+    <key alias="filters">Filters</key>
+  </area>
+  <area alias="merchelloNotes">
+    <key alias="notes">Notities</key>
+    <key alias="note">Notitie</key>
+    <key alias="invoiceNotes">Notities over deze bestelling</key>
+    <key alias="customerNotes">Notities gerelateerd aan deze klant</key>
+    <key alias="paymentNotes">Notities gerelateerd aan deze betaling</key>
+    <key alias="addNote">Nieuwe notitie</key>
+    <key alias="editNote">Wijzig notitie</key>
+    <key alias="internalOnly">Deze notitie is alleen voor intern gebruik.</key>
+  </area>
+  <area alias="merchelloProducts">
+    <key alias="emptyProductCollection">Momenteel zijn er geen producten in deze collectie</key>
+    <key alias="shippable">Verzendklaar</key>
+    <key alias="taxable">Belastbaar</key>
+    <key alias="available">Beschikbaar</key>
+    <key alias="copyProduct">Kopieer Product</key>
+    <key alias="newProductName">Nieuw productnaam</key>
+    <key alias="newProductSku">Nieuw Product SKU</key>
+    <key alias="newPrice">Nieuwe prijs</key>
+    <key alias="newCostOfGoods">Nieuwe kostprijs</key>
+    <key alias="newSalePrice">Nieuwe verkoopsprijs</key>
+    <key alias="recentlyUpdated">Recently Updated</key>
+  </area>
+  <area alias="merchelloSpecFilters">
+    <key alias="manageProductFilters">Beheer Product Filters</key>
+    <key alias="editSpecFilter">
+      <![CDATA[
+      <strong>Aanpassen Filters</strong>
+      <small>Gebruik filters om navigatie en product filtering te verbeteren.</small>
+      ]]>
+    </key>
+    <key alias="noSpecFilters">
+      <![CDATA[
+      <h5>Je hebt nog geen specificatie filter ingesteld</h5>
+      ]]>
+    </key>
+  </area>
+  <area alias="merchelloProductOptions">
+    <key alias="newOption">Nieuw optie</key>
+    <key alias="sharedOption">Gedeelde Opties</key>
+    <key alias="addProductOption">Productoptie toevoegen</key>
+    <key alias="editProductOption">Productoptie wijzigen</key>
+    <key alias="choices">Keuzemogelijkheden</key>
+    <key alias="customSettings">Aangepaste instellingen</key>
+    <key alias="uiOption">Layout weergave</key>
+    <key alias="editOptions">
+      <![CDATA[
+      <strong>Aanpassen Opties</strong>
+      <small>Wanneer je een product-optie aanpast, zal dit doorgevoerd worden bij alle varianten van dit product.</small>
+      ]]>
+    </key>
+    <key alias="sharedCount">Aantal keren gedeeld</key>
+    <key alias="manageShared">Beheer gedeelde Product Opties</key>
+    <key alias="noSharedProductOptions">
+      <![CDATA[
+      <h5>Je hebt nog geen gedeelde product opties ingesteld</h5>
+      ]]>
+    </key>
+    <key alias="noProductOptions">
+      <![CDATA[
+      <h5>Je hebt nog geen opties ingesteld voor dit product</h5>
+      ]]>
+    </key>
+  </area>
+  <area alias="merchelloDetachedContent">
+    <key alias="selectContentType">Selecteer Content Type</key>
+    <key alias="contentTypes">Content Types</key>
+    <key alias="associateContentType">Associeer Content Type</key>
+    <key alias="productContentTypes">Product Content Types</key>
+    <key alias="slug">URL Slug</key>
+    <key alias="slugDescription">URL slug is het exacte adres van een specifieke pagina.</key>
+    <key alias="selectTemplate">Selecteer een template</key>
+    <key alias="canBeRendered">Toestaan dat deze content wordt weergegeven.</key>
+    <key alias="productContentTypesInfo">Umbraco Content Types (Document Types) die geassocieerd kunnen worden met Merchello producten en product varianten.</key>
+    <key alias="productContentType">Product Content Type</key>
+    <key alias="umbracoContentTypeName">Umbraco Content Type</key>
+    <key alias="umbracoContentTypeAlias">Umbraco Alias</key>
+    <key alias="tabs">Tabjes</key>
+    <key alias="noDetachedContentTypes">
+      <![CDATA[
+      <h5>Je hebt nog geen umbraco content types geassocieerd met Merchello</h5>
+      <p>Dit kun je doen via het Product context menu.</p>
+      ]]>
+    </key>
+    <key alias="noProductContentType">
+      <![CDATA[
+      <h5>Je hebt geen product content type geselecteerd</h5>
+    ]]>
+    </key>
+    <key alias="productOptionContentTypes">Product Optie Content Types</key>
+    <key alias="productOptionContentType">Optie Content Type</key>
+    <key alias="noProductOptionContentType">
+      <![CDATA[
+      <h5>Je hebt geen product optie content type geselecteerd</h5>
+    ]]>
+    </key>
+    <key alias="deleteWarning">
+      <![CDATA[
+    Dit zal ook alle gegevens verwijderen van producten dat geassocieerd zijn met dit product type.
+    ]]>
+    </key>
+    <key alias="removeDetachedContent">Verwijder uitgebreide informatie</key>
+    <key alias="removeDetachedContentWarning">
+      <![CDATA[
+    Het verwijderen van uitgebreide informatie zal niet het product of variant zelf verwijderen. Gebruik deze actie als je het volgende wilt doen
+    volledig verwijderen of wijzigen van het geassocieerde content type. Dit zal wel alle content verwijderen van alle talen die geconfigureerd zijn.
+    ]]>
+    </key>
+  </area>
+  <area alias="merchelloSales">
+    <key alias="invoice">Factuur</key>
+    <key alias="invoiceNumber">Factuur #</key>
+    <key alias="invoiceNumberPrefix">Factuur nummer voorvoegsel</key>
+    <key alias="createInvoice">Create Invoice</key>
+    <key alias="poNumber">PO Nummer</key>
+    <key alias="paymentStatus">Betalingsstatus</key>
+    <key alias="sales">Verkopen</key>
+    <key alias="capturePayment">Vastleggen betaling</key>
+    <key alias="processPayment">Verwerk betaling</key>
+    <key alias="voidPayment">Annuleer Betaling</key>
+    <key alias="refundPayment">Betaling terugstorten</key>
+    <key alias="voidPaymentConfirmMessage">Weet je zeker dat je deze betaling wilt annuleren?</key>
+    <key alias="paymentExpirationWarning">Mogelijk ontvang je geen betaling voor verlopen autorisaties.</key>
+    <key alias="processedBy">Verwerkt door</key>
+    <key alias="refundMethod">Terugbetalings methode</key>
+    <key alias="noSales">
+      <![CDATA[
+        <h5>Je hebt momenteel nog niks verkocht</h5>
+        <p>Maar dat komt vast snel!</p>
+      ]]>
+    </key>
+    <key alias="emptySalesCollection">Er zijn momenteel nog geen verkopen in deze collectie</key>
+    <key alias="invoiceNumber">Factuur #</key>
+    <key alias="paymentStatus">Betalingsstatus</key>
+    <key alias="fulfillmentStatus">Afgehandelde status</key>
+    <key alias="billingAddress">Factuuradres</key>
+    <key alias="noBillingAddress">Geen factuuradres</key>
+    <key alias="shippingAddress">Verzendadres</key>
+    <key alias="noShippingAddress">Geen verzendadres</key>
+    <key alias="noteInvoiceAddressChange">Let op: De wijzigingen hebben alleen betrekking op deze factuur.</key>
+    <key alias="noteShipmentAddressChange">Let op: De wijzigingen worden niet doorgevoerd bij reeds bestaande/verwerkte verzendingen.</key>
+    <key alias="editAddress">Wijzigen adresgegevens</key>
+    <key alias="shippingMethod">Verzendmethode</key>
+    <key alias="paid">Betaald</key>
+    <key alias="unpaid">Onbetaald</key>
+    <key alias="partial">Gedeeltelijk</key>
+    <key alias="balanceDue">Te betalen</key>
+    <key alias="manageAdjustments">Beheer aanpassingen</key>
+    <key alias="addAdjustment">Voeg aanpassing toe</key>
+    <key alias="adjustments">Aanpassingen</key>
+    <key alias="adjustmentAssignedBy">Toegewezen aan</key>
+  </area>
+  <area alias="merchelloCustomers">
+    <key alias="loginName">Inloggen</key>
+    <key alias="newCustomer">Nieuwe klant</key>
+    <key alias="customers">Klanten</key>
+    <key alias="customerInformation">Klant informatie</key>
+    <key alias="basket">Winkelmand</key>
+    <key alias="lastActivityDate">Datum van laatste activiteit</key>
+    <key alias="lastInvoiceTotal">Laatste factuur totaal</key>
+    <key alias="location">Locatie</key>
+    <key alias="customerBaskets">Klant winkelmandjes</key>
+    <key alias="noCustomers">
+      <![CDATA[
+        <h5>Je hebt nog geen klanten</h5>
+        <p>Maar dat zal vast snel veranderen!</p>
+      ]]>
+    </key>
+    <key alias="customerSaleHistory">
+      <![CDATA[
+      Verkoophistorie
+      <small>Een lijst van verkopen en de status van de klant</small>
+      ]]>
+    </key>
+    <key alias="emptyCustomerCollection">Er zijn momenteel geen klanten in deze collectie</key>
+    <key alias="customerNotes">
+      <![CDATA[
+      Klant notities
+      <small>Notities over deze klant (niet verkoop specifiek)</small>
+      ]]>
+    </key>
+    <key alias="customerBasket">
+      <![CDATA[
+      Winkelmand van klant
+      <small>Producten die momenteel in de winkelmand zitten van deze klant</small>
+      ]]>
+    </key>
+    <key alias="customerWishlist">
+      <![CDATA[
+      Wensenlijst van klant
+      <small>Producten die momenteel in de wensenlijst van de klant staan</small>
+      ]]>
+    </key>
+    <key alias="itemCacheEmpty">Bevat geen items</key>
+    <key alias="totalSpent">Totaal uitgegeven</key>
+    <key alias="actions">Acties</key>
+    <key alias="editAddress">Wijzigen adres</key>
+    <key alias="deleteAddress">Verwijderen adres</key>
+    <key alias="addNewAddress">Nieuw adres toevoegen</key>
+    <key alias="billingAddresses">Factuuradres</key>
+    <key alias="billingAddressesHelper">Factuuradres van deze klant</key>
+    <key alias="shippingAddresses">Verzendadres</key>
+    <key alias="shippingAddressesHelper">Verzendadres van deze klant</key>
+
+    <!-- Address Form Labels -->
+    <key alias="label">Adrestype</key>
+    <key alias="fullName">Volledige naam</key>
+    <key alias="firstName">Voornaam</key>
+    <key alias="lastName">Achternaam</key>
+    <key alias="company">Bedrijf</key>
+    <key alias="address">Straatnaam</key>
+    <key alias="addressLine2">Huisnummer</key>
+    <key alias="city">Plaats</key>
+    <key alias="country">Land</key>
+    <key alias="stateOrProvince">Provincie</key>
+    <key alias="zipOrPostalCode">Postcode</key>
+    <key alias="phone">Telefoonnummer</key>
+    <key alias="primaryAddress">Hoofdadres</key>
+    <key alias="email">E-mail</key>
+
+    <!-- Address Table Labels (shorter) -->
+    <key alias="tblLabel">Adrestype</key>
+    <key alias="tblFullName">Naam</key>
+    <key alias="tblAddress">Adres</key>
+    <key alias="tblAddressLine2">Huisnummer</key>
+    <key alias="tblLocality">Plaats</key>
+    <key alias="tblRegion">Regio</key>
+    <key alias="tblCountry">Land</key>
+    <key alias="tblPostalCode">Postcode</key>
+
+    <!-- Address Form Validation Messages -->
+    <key alias="labelRequired">Adrestype is een verplicht veld</key>
+    <key alias="addressRequired">Straatnaam is een verplicht veld</key>
+    <key alias="cityRequired">Plaats is een verplicht veld</key>
+    <key alias="countryRequired">Land is een verplicht veld</key>
+    <key alias="zipOrPostalCodeRequired">Postcode is een verplicht veld</key>
+    <key alias="emailRequired">E-mail is een verplicht veld</key>
+  </area>
+  <area alias="merchelloMarketing">
+    <key alias="currentOffers">Huidige aanbiedingen</key>
+    <key alias="offerCode">Aanbiedingscode</key>
+    <key alias="offerCodeInUse">Reeds in gebruik</key>
+    <key alias="offerCodeIsOk">Oke!</key>
+    <key alias="newOffer">Nieuwe aanbieding</key>
+    <key alias="noOffer">Momenteel geen aanbiedingen</key>
+    <key alias="newOfferPrompt">Je hebt jouw bezoekers nog geen speciale aanbiedingen gedaan. Wil je een aanbieding aanmaken?</key>
+    <key alias="offerInfo">Aanbiedings instellingen</key>
+    <key alias="configOffer">Configureer deze aanbieding</key>
+    <key alias="offerType">Soort aanbieding</key>
+    <key alias="mustUniqueOfferCode">Aanbiedingscodes moeten uniek zijn.</key>
+    <key alias="offerSetExpires">Deze aanbieding is alleen geldig voor bepaalde data.</key>
+    <key alias="offerNeverExpires">Zal niet verlopen.</key>
+    <key alias="offerHasExpired">Aanbieding is verlopen</key>
+    <key alias="offerValidDates">Geldige data voor de aanbieding</key>
+    <key alias="offerValidDatesInfo">Stel de data in waar deze deze aanbieding geldig voor is.</key>
+    <key alias="offerValidAllDates">Aanbieding is geldig voor alle data</key>
+    <key alias="offerNotActive">Niet actief</key>
+    <key alias="offerActive">Actief</key>
+    <key alias="thisOfferIsNotActive">Deze aanbieding is niet actief</key>
+    <key alias="thisOfferIsActive">Deze aanbieding is actief</key>
+    <key alias="offerToSetActiveInfo"><![CDATA[ <strong>Om te activeren:</strong> Wijs een beloning toe, configureer deze en voeg een voorwaarde toe. ]]></key>
+    <key alias="offerConstraintsInfo">Voorwaarden</key>
+    <key alias="offerConstraintsConfig">Configureer voorwaarden die horen bij deze aanbieding.</key>
+    <key alias="offerRewardsInfo">Beloningen</key>
+    <key alias="offerRewardsConfig">Configureer beloningen die horen bij deze aanbieding.</key>
+    <key alias="noConstraints">Geen voorwaarden beschikbaar</key>
+    <key alias="noRewards">Geen beloningen beschikbaar</key>
+    <key alias="noContraintsAssigned">Geen voorwaarden toegewezen</key>
+    <key alias="noRewardsAssigned">Geen beloningen toegewezen</key>
+    <key alias="componentAutoSaving">Onderdeel bijgewerkt - automatisch opslaan</key>
+    <key alias="lineItemNameInfo">
+      <![CDATA[Orderregel naam<small>Dit is de tekst die getoond wordt op de factuur als de beloning is toegekend.</small>]]>
+    </key>
+  </area>
+  <area alias="merchelloVariant">
+    <!-- things -->
+    <key alias="product">Product</key>
+    <key alias="variant">Variant</key>
+    <key alias="sku">SKU</key>
+    <key alias="costOfGoods">Kostprijs</key>
+    <key alias="baseSku">Basis Sku</key>
+    <key alias="barcode">Barcode</key>
+    <key alias="manufacturer">Fabrikant</key>
+    <key alias="manufacturerModel">Model/serienummer van de fabrikant</key>
+    <key alias="variantInfo">Product info</key>
+    <key alias="variantOptions">Variant Opties</key>
+    <key alias="downloads">Digitale Downloads</key>
+    <key alias="optionName">Optie Naam</key>
+    <key alias="optionValues">Optie Waardes</key>
+    <!-- actions -->
+    <key alias="newProduct">Nieuw Product</key>
+    <key alias="createProduct">Product aanmaken</key>
+    <key alias="createProductSub">Het naam veld (hierboven), Prijs, en SKU zijn verplicht.  Al het andere is optioneel.</key>
+    <key alias="newVariant">Nieuw Variant</key>
+    <key alias="newVariantFor">Nieuw Variant voor</key>
+    <key alias="newVariantOn">Dit zal een nieuw variant worden voor de</key>
+    <key alias="addVariant">Variant toevoegen</key>
+    <key alias="addVariantSub">Dit zal een nieuw variant worden voor de %0% product.</key>
+    <key alias="addOption">Nog een optie toevoegen</key>
+    <key alias="addOptions">Voeg opties aan deze variant toe en vul de aanvullende varianten voor elke optie automatisch in.</key>
+    <key alias="deleteProduct">Verwijder Product</key>
+    <key alias="deleteVariant">Verwijder Variant</key>
+    <key alias="toggleOnSale">In de uitverkoop</key>
+    <key alias="toggleAvailable">Beschikbaar</key>
+    <key alias="configVariant">Instellingen betreffende dit product(variant)</key>
+    <key alias="selectVariantOptions">Selecteer de variant/opties die je wilt aanmaken.</key>
+    <key alias="addFile">Voeg een bestand toe aan jouw product variant</key>
+    <key alias="trackInventory">Voorraad status voor dit variant</key>
+    <key alias="setInventoryPreferences">Stel voorkeuren in hoe om te gaan met uitverkochte items en het aanpassen van voorraad voor dit variant</key>
+    <!-- phrases -->
+    <key alias="barcodeExamples">Bijv. UPC, ISBN</key>
+    <key alias="optionNameExamples">(Bijv. (Kleding)Maat, Stijl, Kleur)</key>
+    <key alias="optionValueExamples">(Bijv. rood, groen, blauw)</key>
+    <key alias="hasDigitalDownload">Dit variant heeft digitale producten</key>
+    <key alias="hasOptions">Dit variant heeft opties (bijv. maat of kleur)</key>
+    <key alias="isTaxable">Dit variant is belastbaar</key>
+    <key alias="isShippable">Dit variant is verzendbaar</key>
+    <key alias="isOnSale">Dit variant is in de uitverkoop</key>
+    <key alias="isAvailable">Dit variant is beschikbaar voor verkoop</key>
+    <key alias="noProduct">Je hebt geen producten.</key>
+    <key alias="newProductPrompt">Zullen we er nu een aanmaken? Klik op de Nieuw Product knop.</key>
+    <key alias="limitSelect">Aantal producten om weer te geven</key>
+    <key alias="mustUniqueSku">Moet een uniek SKU hebben</key>
+    <key alias="inventoryWarning"><![CDATA[<p>Belangrijk: Als je kiest om d voorraad te volgen, dan moet je dat handmatig instellen voor elke variant (zodadelijk hieronder) wanneer dit product is opgeslagen.  Hoewel je de basis-standaard-voorraad kan instellen die toegepast worden op <strong>alle varianten</strong> hier.</p>]]></key>
+    <key alias="startingInventoryWarning"><![CDATA[(Beginnen met voorraad voor <strong>alle varianten</strong> en <strong>alle magazijnen</strong>)]]></key>
+    <key alias="productOnSale">In de uitverkoop</key>
+    <key alias="allowOutOfStockPurchase">Sta verkopen toe bij producten die niet voorradig zijn</key>
+  </area>
+  <area alias="merchelloOrder">
+    <!-- moved to sales -->
+    <key alias="invoice">Factuur</key>
+    <key alias="invoiceNumber">Factuur #</key>
+    <key alias="sales">Verkopen</key>
+    <key alias="saleInformation">Verkoop informatie</key>
+    <key alias="paymentStatus">Betalingsstatus</key>
+    <key alias="capturePayment">Betaling vastleggen</key>
+    <key alias="processPayment">Betaling verwerken</key>
+    <key alias="voidPayment">Betaling annuleren</key>
+    <key alias="refundPayment">Betaling terugstorten</key>
+    <key alias="voidPaymentConfirmMessage">Weet je zeker dat je deze betaling wilt annuleren?</key>
+    <key alias="paymentExpirationWarning">Mogelijk ontvang je geen betaling als de autorisatie verlopen is.</key>
+    <key alias="processedBy">Verwerkt door</key>
+    <key alias="refundMethod">Methode van terugstorten</key>
+
+    <!-- moved to general -->
+    <key alias="lineItems">Orderregels</key>
+
+    <key alias="order">Bestelling</key>
+    <key alias="orders">Bestellingen</key>
+    <key alias="orderNumber">Bestelling #</key>
+
+    <key alias="fulfillmentStatus">Verwerkingsstatus</key>
+    <key alias="orderName">[Bestelling Naam]</key>
+    <key alias="createOrder">Bestelling aanmaken</key>
+
+    <!-- to be removed -->
+    <key alias="filter">Filter Facturen</key>
+    <key alias="addDateFilters">Toevoegen datum filters</key>
+    <key alias="removeDateFilters">Verwijderen datum filters</key>
+    <key alias="resetFilters">Herstel Filters</key>
+    <key alias="invoicesPerPage">Facturen / Pagina</key>
+    <key alias="archiveSales">Archief verkopen</key>
+    <key alias="unarchiveSales">De-archiveer Verkopen</key>
+    <key alias="noSalesYet">Je hebt nog geen verkopen</key>
+    <key alias="butSoonYouWill">maar dat zal snel veranderen!</key>
+
+    <!-- phrases -->
+    <key alias="noOrders">Je hebt geen orders.</key>
+    <key alias="attentionRequired">Je hebt orders die jouw aandacht vergen</key>
+    <key alias="fulfilled">Verwerkt</key>
+    <key alias="unfulfilled">Onverwerkt</key>
+    <key alias="open">Open</key>
+  </area>
+  <area alias="merchelloOrderView">
+    <!-- things -->
+    <key alias="invoiceNumber">Factuur #</key>
+    <key alias="customerInformation">Klant Informatie</key>
+    <key alias="shippingAddress">Verzendadres</key>
+    <key alias="billingAddress">Factuuradres</key>
+    <key alias="orderInformation">Bestelling Informatie</key>
+    <key alias="invoiced">Gefactureerd</key>
+    <!-- actions -->
+    <key alias="captureFunds">Betaling vastleggen</key>
+    <key alias="newPayment">Nieuwe betaling</key>
+    <!-- phrases -->
+    <key alias="billingAndShippingAddressHelper">Factuur- en verzendadressen</key>
+    <key alias="orderInformationHelper"><![CDATA[Orderregels & kosten]]></key>
+    <key alias="captureUpTo">Vasteleggen tot aan</key>
+    <key alias="salesTax">BTW</key>
+    <key alias="authorized">Geautoriseerd</key>
+    <key alias="captured">Vastgelegd</key>
+    <key alias="paymentHistory"> Betalingshistorie</key>
+    <key alias="saleHistory">Verkoophistorie</key>
+    <key alias="saleHistoryHelper"><![CDATA[Tijdlijn van gebeurtenissen omtrent deze order]]></key>
+    <key alias="paymentHistoryHelper">Status regels voor een of meerdere betalingen</key>
+    <key alias="paymentProcessedBy">Betaling verwerkt door:</key>
+    <key alias="resetFilters">Herstel Filters</key>
+  </area>
+  <area alias="merchelloFulfillShipment">
+    <!-- phrases -->
+    <key alias="fulfillManually">Handmatig verwerken</key>
+    <key alias="createShipment">Aanmaken verzending</key>
+  </area>
+  <area alias="merchelloWarehouse">
+    <!-- things -->
+    <key alias="warehouse">Magazijn</key>
+    <key alias="warehouses">Magazijnen</key>
+    <key alias="stock">Voorraad</key>
+    <key alias="lowCount">Minimum aantal</key>
+    <key alias="location">Locatie</key>
+    <!-- actions -->
+    <!-- phrases -->
+  </area>
+
+  <!-- TODO KEEP THE MERCHELLO SHIPPING AREA -->
+  <area alias="merchelloShipping">
+    <!-- things -->
+    <key alias="shipping">Verzending</key>
+    <key alias="info">Verzendings informatie</key>
+    <key alias="weight">Gewicht</key>
+    <key alias="dimensions">Afmetingen</key>
+    <key alias="carrier">Carrier</key>
+    <!-- actions -->
+    <key alias="setVars">Instellen verzend variabelen: Gewicht, en afmetingen</key>
+    <!-- phrases -->
+    <key alias="editWarehouseHelper">Wijzig jouw magazijn</key>
+    <key alias="editWarehouse">Wijzig Magazijn</key>
+    <key alias="shippingMethods">Verzendmethodes</key>
+    <key alias="shippingMethodsHelper">Toevoegen verzendmethodes aan bestaande regios of maak een nieuwe regio aan</key>
+    <key alias="addCountry">Land toevoegen</key>
+    <key alias="addCatalog">Catalogus toevoegen</key>
+    <key alias="selectCatalog">Selecteer Catalogus</key>
+    <key alias="shippingProvidersMethodsTitle">Verzend Providers &amp; Methodes</key>
+    <key alias="shipContriesInfo">
+      <![CDATA[
+        Verzending naar landen
+        <small>Een lijst van de verzend-providers en methodes, gesorteerd bij land.</small>]]>
+    </key>
+    <key alias="warehouse">Magazijn</key>
+    <key alias="selectShipment">Selecteer verzending</key>
+  </area>
+  <area alias="merchelloInventory">
+    <!-- things -->
+    <key alias="base">Basis Inventaris</key>
+    <key alias="inventory">Inventaris</key>
+    <key alias="tracking">Inventaris bijhouden</key>
+    <!-- actions -->
+    <!-- phrases -->
+  </area>
+  <area alias="merchelloPlaceholders">
+    <key alias="enterProduct">Voer een productnaam in</key>
+    <key alias="enterOrder">Typ een ordernummer of naam...</key>
+    <key alias="addStyle">Voeg een stijl toe...</key>
+    <key alias="enterOffer">Voer een naam in voor de aanbieding</key>
+  </area>
+
+  <area alias="merchelloSettings">
+    <key alias="storeDefaults">Webshop instellingen</key>
+    <key alias="setDefaultSettingsHelper">Instellen van de standaard instellingen</key>
+    <key alias="currency">Munteenheid</key>
+    <key alias="dateFormat">Datumformaat</key>
+    <key alias="startingOrderNumber">Begin ordernummer bij</key>
+    <key alias="timeFormat">Tijdformaat</key>
+    <key alias="unitSystem">Meeteenheid</key>
+    <key alias="startingInvoiceNumber">Begin factuuurnummer bij</key>
+    <key alias="startingShipmentNumber">Begin verzendnummer bij</key>
+    <key alias="catalogDefaults">Catalogus Standaarden</key>
+    <key alias="catalogDefaultsHelper">Instellen van de standaard catalogus item (product) opties. Kan later gewijzigd worden per item.</key>
+    <key alias="globalTaxable">Alle items zijn belastbaar</key>
+    <key alias="globalShippable">Alle items zijn verzendbaar</key>
+    <key alias="globalTrackInventory"><![CDATA[Bijhouden inventaris voor alle items en varianten]]></key>
+    <key alias="globalShippingIsTaxable">Verzendkosten zijn belastbaar</key>
+    <key alias="globalTaxationApplication">BTW toepassen op</key>
+    <key alias="defaultCultureName">Voorkeurstaal</key>
+    <key alias="listViewSettingsTitle">List settings</key>
+    <key alias="stickyListView">Enable sticky list settings for general list.</key>
+    <key alias="stickyCollectionView">Enable sticky list setting for collection lists.</key>
+    <key alias="stickListingTab"><![CDATA[Enable sticking <b>%0% Listing</b> tab.]]></key>
+  </area>
+
+  <area alias="merchelloShippingCountry">
+    <key alias="addCountry">Toevoegen land</key>
+    <key alias="typeCountryName">Typ jouw landnaam</key>
+    <key alias="noneSelected" >-- niks geselecteerd --</key>
+  </area>
+  <area alias="merchelloShippingWarehouse">
+    <key alias="deleteComfirm">Weet je zeker dat je dit magazijn wilt verwijderen?</key>
+    <key alias="address">Adres</key>
+    <key alias="primaryWarehouse">Voorkeurs magazijn</key>
+    <key alias="streetAddress">Straatnaam</key>
+    <key alias="extendedAddress">Uitgebreide adres informatie</key>
+    <key alias="city">Plaats</key>
+    <key alias="stateProvince">Provincie</key>
+    <key alias="zip"> Postcode</key>
+    <key alias="country"> Land</key>
+    <key alias="selectCountry">Selecteer een land</key>
+    <key alias="makePrimaryWarehouse">Maak dit magazijn mijn voorkeur</key>
+    <key alias="addWarehouse">Magazijn toevoegen</key>
+    <key alias="editWarehouse">Magazijn wijzigen</key>
+  </area>
+  <area alias="merchelloShippingMethod">
+    <key alias="addEditShippingMethod">Toevoegen/wijzigen van de verzendkosten voor</key>
+    <key alias="method">Methode</key>
+    <key alias="setRange">Instellen bereik</key>
+    <key alias="addNewRange">Nieuw bereik toevoegen</key>
+    <key alias="adjustIndividualRegions">Aanpassen voor individuele regios</key>
+    <key alias="region">Regio</key>
+    <key alias="adjustRate">Kosten aanpassen</key>
+    <key alias="adjustBy">Aangepast door</key>
+  </area>
+  <area alias="merchelloShippingProvider">
+    <key alias="provider">Provider</key>
+    <key alias="addProvider">Toevoegen provider</key>
+    <key alias="selectProvider">Selecteer jouw Provider</key>
+    <key alias="selectResource">Selecteer jou bron</key>
+  </area>
+  <area alias="merchelloShippingHistory">
+    <key alias="shipmentHistory">Verzendhistorie</key>
+    <key alias="shipmentHistoryHelper">Status bestanden voor een of meerdere verzendingen</key>
+    <key alias="shipment">Verzending</key>
+    <key alias="trackingNumber">Tracking #</key>
+  </area>
+  <area alias="merchelloTaxation">
+    <key alias="taxation">Belastingen</key>
+    <key alias="taxMethods">Belasting methodes</key>
+    <key alias="taxMethodsHelper">Instellen belastingvrij voor jouw verzend regios</key>
+    <key alias="taxIncludeInProductPrice">Belasting is opgenomen in de productprijs</key>
+  </area>
+  <area alias="merchelloNotifications">
+    <key alias="notifications">Notificaties</key>
+    <key alias="addNotification">Notificatie toevoegen</key>
+  </area>
+  <area alias="merchelloNotificationsEdit">
+    <key alias="emailTemplate">E-mail Template</key>
+    <key alias="emailTemplateHelper">Wijzig jouw notificatie template</key>
+    <key alias="emailTemplateEditBody">Wijzig de e-mail inhoud</key>
+    <key alias="notificationSettings">Notificatie instellingen</key>
+    <key alias="notificationSettingsHelper">Instellen naar wie de notificatie verzonden moet worden en wanneer</key>
+    <key alias="description">Omschrijving</key>
+    <key alias="attachedEvent">Gekoppeld Event</key>
+    <key alias="resourceType"></key>
+    <key alias="eventAlias">Event Alias:</key>
+    <key alias="sendTo"><![CDATA[Verzend naar <small>(bijv. bestellingen@jouwdomein.nl)</small>]]></key>
+    <key alias="replyTo"><![CDATA[Antwoord (reply) naar <small>(bijv. antwoord@jouwdomein.nl)</small>]]></key>
+    <key alias="emailCustomer">Stuur e-mail naar de klant</key>
+  </area>
+  <area alias="merchelloNotificationsEditTemplate">
+    <key alias="header">Header</key>
+    <key alias="footer">Footer</key>
+    <key alias="templateHelper">Je kunt basis HTML-tags toevoegen aan jouw e-mail header- en footertemplates (bijv. &lt;br /&gt; voor een nieuwe regel)</key>
+  </area>
+  <area alias="merchelloNotificationsDelete">
+    <key alias="merchelloNotificationsDelete_deleteNotification">Verwijder een notificatie-methode</key>
+  </area>
+  <area alias="merchelloNotificationsMessage">
+    <add alias="replyTo">Antwoord naar</add>
+    <key alias="addEditMessage">Toevoegen/Wijzigen van Notificatie Bericht</key>
+    <key alias="attachedEvent">Gekoppeld Event</key>
+    <key alias="fromEmail"><![CDATA[Van (from) emailadres<small>(bijv. bevestiging@jouwdomein.nl)</small>]]></key>
+  </area>
+  <area alias="merchelloNotificationsMethod">
+    <key alias="addEditMethod">Toevoegen/Wijzigen van Notificatie-methode</key>
+    <key alias="notificationsMethodResource">Notificatie Methode</key>
+    <key alias="message">Bericht</key>
+    <key alias="notification">Notificatie</key>
+    <key alias="event">Event</key>
+    <key alias="sendTo">Verzenden aan</key>
+    <key alias="emailCustomer">Ook Klant emailen?</key>
+  </area>
+  <area alias="merchelloGatewayProvider">
+    <key alias="gatewayProvider">Gateway Providers</key>
+    <key alias="notificationProvider">Notification Providers</key>
+    <key alias="notificationProviderHelper">Activeer/Deactiveer jouw Notificatie Providers</key>
+    <key alias="paymentProvider">Payment Providers</key>
+    <key alias="paymentProviderHelper">Activeer/Deactiveer jouw Payment Providers</key>
+    <key alias="shippingProvider"> Shipping Providers</key>
+    <key alias="shippingProviderHelper">Activeer/Deactiveer jouw Shipping Providers</key>
+    <key alias="taxationProvider"> Taxation Providers</key>
+    <key alias="taxationProviderHelper">Activeer/Deactiveer jouw Taxation Providers</key>
+    <key alias="host">Host</key>
+    <key alias="username">Username</key>
+    <key alias="password">Password</key>
+    <key alias="enableSSL">Enable SSL</key>
+    <key alias="encryptProviderConfiguration"> Encrypt Provider Configuration</key>
+    <key alias="providerName">Provider Naam</key>
+    <key alias="activate">activeer</key>
+    <key alias="deactivate">deactiveer</key>
+  </area>
+  <area alias="merchelloPayment">
+    <key alias="paymentInfo">Betalings informatie</key>
+    <key alias="payment">Betaling</key>
+    <key alias="addPaymentMethod">Methode toevoegen</key>
+    <key alias="resourceType">Bron Type:</key>
+    <key alias="deletePayment">Verwijder een betaalmethode</key>
+    <key alias="paymentMethod">Betaalmethode</key>
+  </area>
+  <area alias="merchelloPaymentMethod">
+    <key alias="addEditPayment">Toevoegen/Wijzigen van een betaalmethode</key>
+  </area>
+  <area alias="merchelloMethodDelete">
+    <key alias="deleteConfirmation">Weet je zeker dat je deze methode wilt verwijderen?</key>
+  </area>
+  <area alias="merchelloDelete">
+    <key alias="deleteConfirmation">Verwijder Bevestiging</key>
+    <key alias="deleteConfirmMessage">Weet je zeker dat je dit item wilt verwijderen? </key>
+  </area>
+  <area alias="merchelloProductEdit">
+    <key alias="enterProductName">Voer een productnaam in</key>
+    <key alias="dragAndReorder">Sleep om Opties en varianten te herschikken</key>
+    <key alias="reorderVariants">Herschikken varianten</key>
+    <key alias="dragAndReorderHelper">Als je de opties en varianten herschikt, dan zal het de volgorde wijzigen zoals deze te zien is aan de voorkant. Sleep de opties (bijv. maat, stijl verticaal en de varianten (bijv. vrouwen, klein) horizontaal.</key>
+    <key alias="changePrices">Wijzig prijzen</key>
+    <key alias="updateInventory">Bijwerken voorraad</key>
+    <key alias="toggleTracksInventory">Wel/Niet voorraad bijhouden</key>
+    <key alias="toggleAvailable">Toggle Available</key>
+    <key alias="toggleOnSale">Toggle On Sale</key>
+    <key alias="duplicateVariant"> Dubbele Variant</key>
+    <key alias="inAnother">In een andere</key>
+    <key alias="editOptions">Wijzig opties</key>
+    <key alias="editOptionsHelper">Wijzigen of toevoegen opties, de varianten worden automatisch ge-update</key>
+    <key alias="optionName">Naam van de Optie</key>
+    <key alias="optionNameHelper">(bijv. Maat, Stijl, Kleur)</key>
+    <key alias="optionValue">Optie Waardes</key>
+    <key alias="optionValueHelper">(bijv. rood, groen, blauw)</key>
+    <key alias="addStyle">Toevoegen stijl...</key>
+    <key alias="addAnotherOption">Nog een optie toevoegen</key>
+    <key alias="variantInformation">Productinformatie</key>
+    <key alias="variantInformationHelper">Wijzig de varianten voor dit product.</key>
+    <key alias="selectProduct">Selecteer Product...</key>
+    <key alias="selectProducts">Selecteer producten</key>
+    <key alias="selectMerchelloProduct">Selecteer Merchello Product</key>
+    <key alias="selectYourProduct">Selecteer jouw Product</key>
+    <key alias="removeProduct">Ontkoppel dit product</key>
+    <key alias="itemLocation">Item Locatie</key>
+  </area>
+
+  <area alias="merchelloAuditLogs">
+    <key alias="notificationShipping">Bevestigings e-mail met verzendinformatie is verzonden naar %0%</key>
+    <key alias="notificationSalesConfirmation">Bevestigings e-mail van de bestelling is verzonden naar %0%</key>
+    <key alias="paymentCaptured">We hebben succesvol vastgelegd %0% %1%</key>
+    <key alias="paymentAuthorize">We waren geautoriseerd om vast te leggen %0% %1%</key>
+    <key alias="paymentVoided">Betaling is geannuleerd</key>
+    <key alias="paymentDeclined">Betaling is afgewezen</key>
+    <key alias="paymentRefunded">We hebben teruggestort %0% %1% van de betaling</key>
+    <key alias="invoiceDeleted">Factuur %0% is verwijderd</key>
+    <key alias="paymentDeleted">Betaling is verwijderd</key>
+    <key alias="invoiceCreated">Bestelling is gedaan. Factuur %0%</key>
+    <key alias="invoiceStatusChanged">Bestelling is gemarkeerd %0%</key>
+    <key alias="orderCreated">Bestelling %0% is aangemaakt</key>
+    <key alias="shipmentCreated">Verzending is aangemaakt met %0% orderregels</key>
+    <key alias="shipmentStatusChanged">Verzendstatus is gewijzigd naar %0%</key>
+  </area>
+</language>

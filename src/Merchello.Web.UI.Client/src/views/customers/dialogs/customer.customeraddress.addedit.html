@@ -5,33 +5,33 @@
     <form name="editAddressForm" id="editAddressForm">
         <div class="umb-panel-body with-header with-footer">
             <div class="form-group row-fluid">
-                <label for="label">*Label:</label>
-                <div class="error" data-ng-show="editAddressForm.label.$invalid && wasFormSubmitted">Label is a required field.</div>
+                <label for="label">*<localize key="merchelloCustomers_label" />:</label>
+                <div class="error" data-ng-show="editAddressForm.label.$invalid && wasFormSubmitted"><localize key="merchelloCustomers_labelRequired" /></div>
                 <input name="label" type="text" class="span12" placeholder="My House" data-ng-model="dialogData.customerAddress.label" required />
-                <label for="fullName">Full Name:</label>
+                <label for="fullName"><localize key="merchelloCustomers_fullName" />:</label>
                 <input name="fullName" type="text" class="span12" data-ng-model="dialogData.customerAddress.fullName" />
-                <label for="org">Company:</label>
+                <label for="org"><localize key="merchelloCustomers_company" />:</label>
                 <input name="org" type="text" class="span12" data-ng-model="dialogData.customerAddress.company" />
-                <label for="address1">*Address:</label>
-                <div class="error" data-ng-show="editAddressForm.address1.$invalid && wasFormSubmitted">Address is a required field.</div>
+                <label for="address1">*<localize key="merchelloCustomers_address" />:</label>
+                <div class="error" data-ng-show="editAddressForm.address1.$invalid && wasFormSubmitted"><localize key="merchelloCustomers_addressRequired" /></div>
                 <input name="address1" type="text" class="span12" data-ng-model="dialogData.customerAddress.address1" required />
-                <label for="address2">Address Line 2:</label>
+                <label for="address2"><localize key="merchelloCustomers_addressLine2" />:</label>
                 <input name="address2" type="text" class="span12" data-ng-model="dialogData.customerAddress.address2" />
-                <label for="locality">*City:</label>
-                <div class="error" data-ng-show="editAddressForm.locality.$invalid && wasFormSubmitted">City is a required field.</div>
+                <label for="locality">*<localize key="merchelloCustomers_city" />:</label>
+                <div class="error" data-ng-show="editAddressForm.locality.$invalid && wasFormSubmitted"><localize key="merchelloCustomers_cityRequired" /></div>
                 <input name="locality" type="text" class="span12" data-ng-model="dialogData.customerAddress.locality" required />
-                <label for="country">*Country:</label>
+                <label for="country">*<localize key="merchelloCustomers_country" />:</label>
                 <select name="country" class="span12" data-ng-model="dialogData.selectedCountry" data-ng-change="updateProvinceList()" data-ng-options="option.name for option in dialogData.countries"></select>
-                <label for="region">State/Province:</label>
+                <label for="region"><localize key="merchelloCustomers_stateOrProvince" />:</label>
                 <input name="region" type="text" class="span12" data-ng-show="dialogData.selectedCountry.provinces.length === 0" data-ng-model="currentAddress.region" />
                 <select name="regionSelect" class="span12" data-ng-show="dialogData.selectedCountry.provinces.length > 0" data-ng-model="dialogData.selectedProvince"  data-ng-options="option.name for option in dialogData.selectedCountry.provinces"></select>
-                <label for="postalCode">*Zip/Postal Code:</label>
-                <div class="error" data-ng-show="editAddressForm.postalCode.$invalid && wasFormSubmitted">Zip/Postal Code is a required field.</div>
+                <label for="postalCode">*<localize key="merchelloCustomers_zipOrPostalCode" />:</label>
+                <div class="error" data-ng-show="editAddressForm.postalCode.$invalid && wasFormSubmitted"><localize key="merchelloCustomers_zipOrPostalCodeRequired" /></div>
                 <input name="postalCode" type="text" class="span12" data-ng-model="dialogData.customerAddress.postalCode" required />
                 <div>
-                    <input type="checkbox" data-ng-model="dialogData.customerAddress.isDefault" data-ng-disabled="dialogData.setDefault" /> Primary Address
+                    <input type="checkbox" data-ng-model="dialogData.customerAddress.isDefault" data-ng-disabled="dialogData.setDefault" /> <localize key="merchelloCustomers_primaryAddress" />
                 </div><br />
-                <label for="phone">Phone:</label>
+                <label for="phone"><localize key="merchelloCustomers_phone" />:</label>
                 <input name="phone" type="tel" class="span12" data-ng-model="dialogData.customerAddress.phone" />
             </div>
         </div>
@@ -39,9 +39,9 @@
             <div class="umb-el-wrap umb-panel-buttons">
                 <div class="btn-toolbar umb-btn-toolbar pull-right">
                     <!-- ACTION: Cancel -->
-                    <a href data-ng-click="close()" class="btn btn-link"><localize key="general_cancel"></localize></a>
+                    <a href data-ng-click="close()" class="btn btn-link"><localize key="general_cancel" /></a>
                     <!-- ACTION: Submit DialogData -->
-                    <button class="btn btn-primary" data-ng-click="save()">Save</button>
+                    <button class="btn btn-primary" data-ng-click="save()"><localize key="buttons_save" /></button>
                 </div>
             </div>
         </div>

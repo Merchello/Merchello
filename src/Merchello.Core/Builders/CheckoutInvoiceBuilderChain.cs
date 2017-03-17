@@ -14,7 +14,7 @@
     /// A builder chain used by the checkout manager to create invoices.
     /// </summary>
     /// <remarks>
-    /// Supersedes the <see cref="InvoiceBuilderChain"/>
+    /// Supersedes the <see cref="CheckoutInvoiceBuilderChain"/>
     /// </remarks>
     internal sealed class CheckoutInvoiceBuilderChain : BuildChainBase<IInvoice>
     {
@@ -70,12 +70,17 @@
         public override Attempt<IInvoice> Build()
         {
             var unpaid =
-                _checkoutManager.Context.Services.InvoiceService.GetInvoiceStatusByKey(Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
+                _checkoutManager.Context.Services.InvoiceService.GetInvoiceStatusByKey(Core.Constants.InvoiceStatus.Unpaid);
 
             if (unpaid == null)
                 return Attempt<IInvoice>.Fail(new NullReferenceException("Unpaid invoice status query returned null"));
 
-            var invoice = new Invoice(unpaid) { VersionKey = _checkoutManager.Context.VersionKey };
+            //// Invoice needs to be created via the service so that the Creating / Created events get fired.
+            //// see http://issues.merchello.com/youtrack/issue/M-1290
+            var invoice = _checkoutManager.Context.Services.InvoiceService.CreateInvoice(unpaid.Key);
+            invoice.VersionKey = _checkoutManager.Context.VersionKey;
+
+            //// var invoice = new Invoice(unpaid) { VersionKey = _checkoutManager.Context.VersionKey };
 
             // Associate a customer with the invoice if it is a known customer.
             if (!_checkoutManager.Context.Customer.IsAnonymous) invoice.CustomerKey = _checkoutManager.Context.Customer.Key;

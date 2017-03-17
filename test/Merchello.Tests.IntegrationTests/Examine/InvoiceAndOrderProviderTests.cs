@@ -284,7 +284,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
 
             //// Assert
             Assert.NotNull(invoiceDisplay);
-            Assert.AreEqual(Constants.DefaultKeys.InvoiceStatus.Unpaid, invoiceDisplay.InvoiceStatus.Key);
+            Assert.AreEqual(Constants.InvoiceStatus.Unpaid, invoiceDisplay.InvoiceStatus.Key);
             Assert.AreEqual(invoice.Items.Count, invoiceDisplay.Items.Count());
         }
 

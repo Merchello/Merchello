@@ -4,17 +4,15 @@
     using System.Linq;
     using System.Web.Mvc;
 
+    using Merchello.Core;
     using Merchello.Core.Gateways;
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Logging;
-    using Merchello.Core.Models;
     using Merchello.Providers.Models;
     using Merchello.Providers.Payment.PayPal.Models;
-    using Merchello.Providers.Payment.PayPal.Services;
     using Merchello.Web.Controllers;
     using Merchello.Web.Store.Models;
 
-    using Umbraco.Core;
     using Umbraco.Web.Mvc;
 
     /// <summary>
@@ -184,7 +182,7 @@
                     // Assert the payment key matches - this is to ensure that the 
                     // payment matches the invoice
                     var ensure = payments.All(x => x.Key == paymentKey) || !payments.Any();
-                    if (ensure && invoice.InvoiceStatus.Key == Core.Constants.DefaultKeys.InvoiceStatus.Unpaid)
+                    if (ensure && invoice.InvoiceStatus.Key == Core.Constants.InvoiceStatus.Unpaid)
                     {
                         MultiLogHelper.Info<PayPalExpressPaymentController>(string.Format("Deleted invoice number {0} to prevent duplicate. PayPal ACK response not success", invoice.PrefixedInvoiceNumber()));
                         MerchelloServices.InvoiceService.Delete(invoice);

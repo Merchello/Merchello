@@ -3,6 +3,8 @@
     using System;
     using System.Linq;
 
+    using Core;
+
     using Merchello.Core.Builders;
     using Merchello.Core.Checkout;
     using Merchello.Core.Gateways.Payment;

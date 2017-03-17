@@ -18,6 +18,7 @@
 	javascript: [
 	    '~/App_Plugins/Merchello/lib/charts/Chart.js',
 	    '~/App_Plugins/Merchello/lib/charts/angular-chart.js',
+	    '~/App_Plugins/Merchello/lib/ngStorage/ngStorage.min.js',
 		'~/App_Plugins/Merchello/js/merchello.module.js',
 		'~/App_Plugins/Merchello/js/merchello.models.js',
 		'~/App_Plugins/Merchello/js/merchello.filters.js',

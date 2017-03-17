@@ -4,7 +4,10 @@
     using System.Globalization;
     using System.Linq;
     using System.Xml.Linq;
+
+    using Core;
     using Core.Models;
+
     using global::Examine;
     using global::Examine.LuceneEngine;
     using global::Examine.LuceneEngine.Config;
@@ -67,7 +70,7 @@
         /// </remarks>
         internal void AddOrderToIndex(IOrder order)
         {
-            var nodes = new List<XElement> {order.SerializeToXml().Root};
+            var nodes = new List<XElement> { order.SerializeToXml().Root };
             AddNodesToIndex(nodes, IndexTypes.Order);
         }
 

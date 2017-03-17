@@ -22,14 +22,14 @@
         public Guid Key { get; set; }
       
         /// <summary>
-        /// Used to calculate validity
+        /// Gets or sets a value to calculate validity
         /// </summary>
         [Column("firstAccessed")]
         [NullSetting(NullSetting = NullSettings.Null)]
         public DateTime? FirstAccessed { get; set; }
 
         /// <summary>
-        /// Used to retrieve download
+        /// Gets or sets a value used to retrieve download
         /// </summary>
         [Column("productVariantKey")]
         public Guid ProductVariantKey { get; set; }
@@ -48,6 +48,9 @@
         [Constraint(Default = "getdate()")]
         public DateTime CreateDate { get; set; }
 
+        /// <summary>
+        /// Gets or sets the extended data.
+        /// </summary>
         [Column("extendedData")]
         [NullSetting(NullSetting = NullSettings.Null)]
         [SpecialDbType(SpecialDbTypes.NTEXT)]

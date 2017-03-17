@@ -15,6 +15,7 @@
 
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
+    using Core;
 
     /// <summary>
     /// Extension methods to map examine (Lucene) documents to respective "Display" object classes
@@ -85,6 +86,7 @@
                 Download = FieldAsBoolean(result.Fields["download"]),
                 DownloadMediaId = FieldAsInteger(result, "downloadMediaId"),
                 VersionKey = FieldAsGuid(result, "versionKey"),
+                UpdateDate = FieldAsDateTime(result, "updateDate"),
                 Attributes = RawJsonFieldAsCollection<ProductAttributeDisplay>(result, "attributes"),
                 CatalogInventories = RawJsonFieldAsCollection<CatalogInventoryDisplay>(result, "catalogInventories"),
                 DetachedContents = GetProductVariantDetachedContentDisplayCollection(result, "detachedContents")

@@ -43,7 +43,7 @@
             </div>
 
             <div data-ng-show="dialogData.quotes.length > 0">
-                <h3>Shipping method</h3>
+                <h3><localize key="merchelloSales_shippingMethod" /></h3>
                 <select name="quote" class="col-xs-12 span12" data-ng-model="dialogData.selectedQuote" data-ng-options="formatQuote(p) for p in dialogData.quotes"></select>
             </div>
 
@@ -54,7 +54,7 @@
                     <!-- ACTION: Cancel -->
                     <a href data-ng-click="close()" class="btn btn-link"><localize key="general_cancel"></localize></a>
                     <!-- ACTION: Submit DialogData -->
-                    <button class="btn btn-primary" data-ng-click="submit(dialogData)">Create Invoice</button>
+                    <button class="btn btn-primary" data-ng-click="submit(dialogData)"><localize key="merchelloSales_createInvoice" /></button>
 
                 </div>
             </div>

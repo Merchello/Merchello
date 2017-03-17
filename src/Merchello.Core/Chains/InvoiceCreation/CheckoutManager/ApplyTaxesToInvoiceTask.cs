@@ -65,7 +65,7 @@
 
                     var currencyCode =
                         this.CheckoutManager.Context.Services.StoreSettingService.GetByKey(
-                            Core.Constants.StoreSettingKeys.CurrencyCodeKey).Value;
+                            Core.Constants.StoreSetting.CurrencyCodeKey).Value;
 
                     taxLineItem.ExtendedData.SetValue(Core.Constants.ExtendedDataKeys.CurrencyCode, currencyCode);
 

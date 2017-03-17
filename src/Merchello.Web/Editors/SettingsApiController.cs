@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Reflection;
     using System.Threading.Tasks;
     using System.Web.Http;
     using Core;
@@ -15,6 +16,8 @@
     using Merchello.Core.Configuration;
     using Merchello.Core.Logging;
     using Merchello.Core.Persistence.Migrations.Analytics;
+    using Merchello.Web.Reporting;
+    using Merchello.Web.Trees;
 
     using Models.ContentEditing;
 
@@ -208,13 +211,37 @@
             return MerchelloVersion.Current.ToString();
         }
 
-		/// <summary>
-		/// Updates existing global settings
-		///
-		/// PUT /umbraco/Merchello/SettingsApi/PutSettings
-		/// </summary>
-		/// <param name="setting">SettingDisplay object serialized from WebApi</param>
-		[AcceptVerbs("POST", "PUT")]
+        /// <summary>
+        /// Gets the report back office trees.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{BackOfficeTreeDisplay}"/>.
+        /// </returns>
+        [HttpGet]
+        public IEnumerable<BackOfficeTreeDisplay> GetReportBackofficeTrees()
+        {
+            var atts =
+                ReportApiControllerResolver.Current.ResolvedTypesWithAttribute.Select(
+                    x => x.GetCustomAttribute<BackOfficeTreeAttribute>(true)).Where(x => x != null).ToArray();
+        
+            return atts.Select(att => new BackOfficeTreeDisplay
+                {
+                    RouteId = att.RouteId,
+                    ParentRouteId = att.ParentRouteId,
+                    Icon = att.Icon,
+                    RoutePath = att.RoutePath,
+                    Title = att.Title,
+                    SortOrder = att.SortOrder
+                });
+        }
+
+        /// <summary>
+        /// Updates existing global settings
+        ///
+        /// PUT /umbraco/Merchello/SettingsApi/PutSettings
+        /// </summary>
+        /// <param name="setting">SettingDisplay object serialized from WebApi</param>
+        [AcceptVerbs("POST", "PUT")]
 		public HttpResponseMessage PutSettings(SettingDisplay setting)
 		{
 			var response = Request.CreateResponse(HttpStatusCode.OK);
@@ -247,7 +274,7 @@
         [HttpPost]
         public async Task<HttpResponseMessage> RecordDomain(MigrationDomain record)
         {
-            var setting = _storeSettingService.GetByKey(Constants.StoreSettingKeys.HasDomainRecordKey);
+            var setting = _storeSettingService.GetByKey(Constants.StoreSetting.HasDomainRecordKey);
 
             if (setting != null && setting.Value == "False")
             {
