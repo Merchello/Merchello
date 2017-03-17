@@ -15,7 +15,7 @@ namespace Merchello.Web.Models.ContentEditing
     using Merchello.Core.Models.Interfaces;
     using Merchello.Web.Models.Payments;
 
-    internal static class FullfillmentMappingExtensions
+    public static class FullfillmentMappingExtensions
 	{
 
 
