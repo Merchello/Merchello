@@ -90,8 +90,9 @@
     /// <summary>
     /// Extension methods for <see cref="InvoiceItemItemizationDisplay"/>.
     /// </summary>
-    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "Reviewed. Suppression is OK here.")]
-    internal static class InvoiceItemItemizationDisplayExtensions
+    // ReSharper disable once StyleCop.SA1204
+    // ReSharper disable once StyleCop.SA1402
+    public static class InvoiceItemItemizationDisplayExtensions
     {
         /// <summary>
         /// Maps <see cref="InvoiceItemItemization"/> to <see cref="InvoiceItemItemizationDisplay"/>.

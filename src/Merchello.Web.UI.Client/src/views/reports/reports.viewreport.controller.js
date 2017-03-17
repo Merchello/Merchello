@@ -22,7 +22,6 @@
              settingsResource.getReportBackofficeTrees().then(function(trees) {
 
                  if(trees.length > 0) {
-                     console.info(trees);
                      var tree = _.find(trees, function (t) {
                          if (t.routeId == reportParam) {
                              return t;

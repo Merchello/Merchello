@@ -65,8 +65,6 @@ angular.module('merchello.directives').directive('merchelloDateRangeButton',
                         endDate: scope.endDate
                     };
 
-                    console.info(dialogData);
-
                     dialogService.open({
                         template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/daterange.selection.html',
                         show: true,
