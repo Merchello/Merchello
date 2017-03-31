@@ -1972,8 +1972,8 @@ angular.module('merchello.resources').factory('productOptionResource',
 
         }]);
 angular.module('merchello.resources').factory('salesByItemResource',
-    ['$http', '$q', 'umbRequestHelper', 'queryResultDisplayBuilder', 'salesByItemResultBuilder',
-    function($http, $q, umbRequestHelper, queryResultDisplayBuilder, salesByItemResultBuilder) {
+    ['$http', '$q', 'umbRequestHelper', 'queryDisplayBuilder', 'queryResultDisplayBuilder', 'salesByItemResultBuilder',
+    function($http, $q, umbRequestHelper, queryDisplayBuilder, queryResultDisplayBuilder, salesByItemResultBuilder) {
 
         var baseUrl = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloSalesByItemApiBaseUrl'];
 
