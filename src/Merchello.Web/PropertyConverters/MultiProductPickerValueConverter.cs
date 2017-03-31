@@ -74,7 +74,7 @@
             }
             catch (Exception ex)
             {
-                MultiLogHelper.Error<ProductDisplayValueConverter>("Failed to Convert ProductDisplay property", ex);
+                MultiLogHelper.WarnWithException<MultiProductPickerValueConverter>("Failed to Convert property to IProductContent", ex);
                 return null;
             }
         }
