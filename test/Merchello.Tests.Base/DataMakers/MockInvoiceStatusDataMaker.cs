@@ -10,7 +10,7 @@ namespace Merchello.Tests.Base.DataMakers
         {
             return new InvoiceStatus()
             {
-                Key = Constants.DefaultKeys.InvoiceStatus.Unpaid,
+                Key = Constants.InvoiceStatus.Unpaid,
                 Alias = "unpaid",
                 Name = "Unpaid",
                 Active = true,
@@ -26,7 +26,7 @@ namespace Merchello.Tests.Base.DataMakers
         {
             return new InvoiceStatus()
             {
-                Key = Constants.DefaultKeys.InvoiceStatus.Paid,
+                Key = Constants.InvoiceStatus.Paid,
                 Alias = "completed",
                 Name = "Completed",
                 Active = true,

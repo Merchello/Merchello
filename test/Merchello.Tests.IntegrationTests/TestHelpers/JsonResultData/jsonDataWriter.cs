@@ -24,11 +24,11 @@
         public void OrderJsonResults()
         {
             var merchello = new MerchelloHelper();
-            var notFulfilled = Core.Constants.DefaultKeys.OrderStatus.NotFulfilled;
+            var notFulfilled = Core.Constants.OrderStatus.NotFulfilled;
             Console.WriteLine(notFulfilled);
 
             var orders = merchello.Query.Order.SearchByOrderStatus(
-                Core.Constants.DefaultKeys.OrderStatus.NotFulfilled,
+                Core.Constants.OrderStatus.NotFulfilled,
                 1,
                 10).Items;
 

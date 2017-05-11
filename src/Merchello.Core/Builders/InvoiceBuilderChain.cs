@@ -65,7 +65,7 @@
         public override Attempt<IInvoice> Build()
         {
             var unpaid =
-                _salePreparation.MerchelloContext.Services.InvoiceService.GetInvoiceStatusByKey(Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
+                _salePreparation.MerchelloContext.Services.InvoiceService.GetInvoiceStatusByKey(Core.Constants.InvoiceStatus.Unpaid);
 
             if (unpaid == null)
                 return Attempt<IInvoice>.Fail(new NullReferenceException("Unpaid invoice status query returned null"));

@@ -25,6 +25,13 @@
             this.parameters.push(queryParameter);
         }
 
+        function addCustomParam(fieldName, value) {
+            var param = new QueryParameterDisplay();
+            param.fieldName = fieldName;
+            param.value = value;
+            addParameter.call(this, param);
+        }
+
         function addCustomerKeyParam(customerKey) {
             var param = new QueryParameterDisplay();
             param.fieldName = 'customerKey';
@@ -90,6 +97,7 @@
             addParameter: addParameter,
             addCustomerKeyParam: addCustomerKeyParam,
             addCollectionKeyParam: addCollectionKeyParam,
+            addCustomParam: addCustomParam,
             addEntityTypeParam: addEntityTypeParam,
             applyInvoiceQueryDefaults: applyInvoiceQueryDefaults,
             addInvoiceDateParam: addInvoiceDateParam,

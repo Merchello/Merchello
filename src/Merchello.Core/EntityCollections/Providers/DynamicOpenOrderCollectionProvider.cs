@@ -50,7 +50,7 @@
         protected override bool PerformExists(IInvoice entity)
         {
             return !entity.Orders.Any()
-                || entity.Orders.All(x => x.OrderStatusKey == Constants.DefaultKeys.OrderStatus.Open);
+                || entity.Orders.All(x => x.OrderStatusKey == Constants.OrderStatus.Open);
         }
 
         /// <summary>
@@ -102,7 +102,7 @@
             SortDirection sortDirection = SortDirection.Ascending)
         {
             return _invoiceService.GetInvoiceKeysMatchingOrderStatus(
-                Constants.DefaultKeys.OrderStatus.Open,
+                Constants.OrderStatus.Open,
                 page,
                 itemsPerPage,
                 sortBy,
@@ -142,7 +142,7 @@
             return
                     this._invoiceService.GetInvoiceKeysMatchingOrderStatus(
                         args["searchTerm"].ToString(),
-                        Constants.DefaultKeys.OrderStatus.Open,
+                        Constants.OrderStatus.Open,
                         page,
                         itemsPerPage,
                         sortBy,
@@ -174,7 +174,7 @@
             SortDirection sortDirection = SortDirection.Ascending)
         {
             return _invoiceService.GetInvoiceKeysMatchingTermNotOrderStatus(
-                Constants.DefaultKeys.OrderStatus.Open,
+                Constants.OrderStatus.Open,
                 page,
                 itemsPerPage,
                 sortBy,
@@ -214,7 +214,7 @@
             return
                     this._invoiceService.GetInvoiceKeysMatchingTermNotOrderStatus(
                         args["searchTerm"].ToString(),
-                        Constants.DefaultKeys.OrderStatus.Open,
+                        Constants.OrderStatus.Open,
                         page,
                         itemsPerPage,
                         sortBy,

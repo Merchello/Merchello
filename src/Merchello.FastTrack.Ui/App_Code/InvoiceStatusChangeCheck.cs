@@ -2,6 +2,7 @@
 
 namespace Merchello.FastTrack.Tests
 {
+    using Merchello.Core.Gateways.Notification.Smtp;
     using Merchello.Core.Services;
 
     using Umbraco.Core.Logging;
@@ -14,6 +15,14 @@ namespace Merchello.FastTrack.Tests
 
             InvoiceService.StatusChanging += InvoiceService_StatusChanging;
             InvoiceService.StatusChanged += InvoiceService_StatusChanged;
+
+            SmtpNotificationGatewayMethod.Sending += SmtpNotificatoinGatewayMethod_Sending;
+        }
+
+        private void SmtpNotificatoinGatewayMethod_Sending(SmtpNotificationGatewayMethod sender, Core.Events.ObjectEventArgs<System.Net.Mail.MailMessage> e)
+        {
+            var msg = e.EventObject;
+            msg.BodyEncoding = System.Text.Encoding.UTF8;
         }
 
         private void InvoiceService_StatusChanging(IInvoiceService sender, Core.Events.StatusChangeEventArgs<Core.Models.IInvoice> e)

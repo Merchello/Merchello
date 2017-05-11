@@ -44,24 +44,24 @@ namespace Merchello.Tests.UnitTests.Services
             Assert.AreEqual(countries.Count(), distinctCodes.Count());
         }
 
-        /// <summary>
-        /// Test verifies that the service correctly removes countries passed an array of country codes
-        /// </summary>
-        [Test]
-        public void Can_Retrieve_A_RegionList_That_Excludes_Countries()
-        {
-            //// Arrange
-            var excludes = new[] {"SA", "DK"};
+        ///// <summary>
+        ///// Test verifies that the service correctly removes countries passed an array of country codes
+        ///// </summary>
+        //[Test]
+        //public void Can_Retrieve_A_RegionList_That_Excludes_Countries()
+        //{
+        //    //// Arrange
+        //    var excludes = new[] {"SA", "DK"};
 
-            //// Act
-            var regions = _storeSettingService.GetAllCountries(excludes);
+        //    //// Act
+        //    var regions = _storeSettingService.GetAllCountries(excludes);
 
-            //// Assert
-            Assert.IsTrue(regions.Any());
-            Assert.IsFalse(regions.Contains(new Country("SA")));
-            Assert.IsFalse(regions.Contains(new Country("DK")));
+        //    //// Assert
+        //    Assert.IsTrue(regions.Any());
+        //    Assert.IsFalse(regions.Contains(new Country("SA")));
+        //    Assert.IsFalse(regions.Contains(new Country("DK")));
 
-        }
+        //}
 
         /// <summary>
         /// Test verifies that the service correctly returns the RegionInfo for Denmark given the country code DK

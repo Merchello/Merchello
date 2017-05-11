@@ -76,7 +76,13 @@
         /// </param>
         public void Add(IEnumerable<T> items)
         {
-            items.ForEach(this.Add);
+            var count = items.Count();
+            var enumerable = items as T[] ?? items.ToArray();
+            if (!enumerable.Any()) return;
+            foreach (var item in enumerable)
+            {
+                Add(item);
+            }
         }
 
         /// <summary>

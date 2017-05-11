@@ -4616,6 +4616,11 @@
             
             </summary>
         </member>
+        <member name="P:Umbraco.Core.Models.Identity.IdentityUser`4.LastLoginDateUtc">
+            <summary>
+            Last login date
+            </summary>
+        </member>
         <member name="P:Umbraco.Core.Models.Identity.IdentityUser`4.Email">
             <summary>
             Email
@@ -7869,6 +7874,11 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:Umbraco.Core.Persistence.Querying.SqlExpressionExtensions">
+            <summary>
+            String extension methods used specifically to translate into SQL
+            </summary>
+        </member>
         <member name="T:Umbraco.Core.Persistence.Repositories.PetaPocoRepositoryBase`2">
             <summary>
             Represent an abstract Repository for PetaPoco based repositories
@@ -8061,6 +8071,32 @@
         <member name="P:Umbraco.Core.Persistence.Repositories.PetaPocoRepositoryBase`2.UnitOfWork">
             <summary>
             Returns the database Unit of Work added to the repository
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Persistence.Repositories.BaseQueryType.FullSingle">
+            <summary>
+            A query to return all information for a single item
+            </summary>
+            <remarks>
+            In some cases this will be the same as <see cref="F:Umbraco.Core.Persistence.Repositories.BaseQueryType.FullMultiple"/>
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Core.Persistence.Repositories.BaseQueryType.FullMultiple">
+            <summary>
+            A query to return all information for multiple items
+            </summary>
+            <remarks>
+            In some cases this will be the same as <see cref="F:Umbraco.Core.Persistence.Repositories.BaseQueryType.FullSingle"/>
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Core.Persistence.Repositories.BaseQueryType.Ids">
+            <summary>
+            A query to return the ids for items
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Persistence.Repositories.BaseQueryType.Count">
+            <summary>
+            A query to return the count for items 
             </summary>
         </member>
         <member name="T:Umbraco.Core.Persistence.Repositories.EntityContainerRepository">
@@ -12392,11 +12428,6 @@
             An interface that is shared between parameter and property value editors to access their views
             </summary>
         </member>
-        <member name="T:Umbraco.Core.Persistence.Querying.SqlStringExtensions">
-            <summary>
-            String extension methods used specifically to translate into SQL
-            </summary>
-        </member>
         <member name="T:Umbraco.Core.Persistence.Querying.StringPropertyMatchType">
             <summary>
             Determines how to match a string property value
@@ -13301,7 +13332,7 @@
             <para>The new published property type does not belong to a published content type.</para>
             </remarks>
         </member>
-        <member name="M:Umbraco.Core.Models.PublishedContent.PublishedPropertyType.#ctor(System.String,System.Int32,System.String)">
+        <member name="M:Umbraco.Core.Models.PublishedContent.PublishedPropertyType.#ctor(System.String,System.Int32,System.String,System.Boolean)">
             <summary>
             Initializes a new instance of the <see cref="T:Umbraco.Core.Models.PublishedContent.PublishedPropertyType"/> class with a property type alias,
             a datatype definition identifier, and a property editor alias.
@@ -13309,6 +13340,7 @@
             <param name="propertyTypeAlias">The property type alias.</param>
             <param name="dataTypeDefinitionId">The datatype definition identifier.</param>
             <param name="propertyEditorAlias">The property editor alias.</param>
+            <param name="initConverters">Generally used only for testing, in production this will always be true</param>
             <remarks>
             <para>The new published property type does not belong to a published content type.</para>
             <para>The values of <paramref name="dataTypeDefinitionId"/> and <paramref name="propertyEditorAlias"/> are
@@ -15887,6 +15919,21 @@
             <param name="providerName">Database Provider for the Connection String</param>
             <param name="logger"></param>
         </member>
+        <member name="M:Umbraco.Core.Persistence.Factories.ContentFactory.BuildEntity(Umbraco.Core.Models.Rdbms.DocumentDto,Umbraco.Core.Models.IContentType,Umbraco.Core.Models.Rdbms.DocumentPublishedReadOnlyDto)">
+            <summary>
+            Builds a IContent item from the dto(s) and content type
+            </summary>
+            <param name="dto">
+            This DTO can contain all of the information to build an IContent item, however in cases where multiple entities are being built,
+            a separate <see cref="T:Umbraco.Core.Models.Rdbms.DocumentPublishedReadOnlyDto"/> publishedDto entity will be supplied in place of the <see cref="T:Umbraco.Core.Models.Rdbms.DocumentDto"/>'s own 
+            ResultColumn DocumentPublishedReadOnlyDto
+            </param>
+            <param name="contentType"></param>
+            <param name="publishedDto">
+            When querying for multiple content items the main DTO will not contain the ResultColumn DocumentPublishedReadOnlyDto and a separate publishedDto instance will be supplied
+            </param>
+            <returns></returns>
+        </member>
         <member name="T:Umbraco.Core.Persistence.Mappers.ContentMapper">
             <summary>
             Represents a <see cref="T:Umbraco.Core.Models.Content"/> to DTO mapper used to translate the properties of the public api 
@@ -16610,6 +16657,13 @@
             </summary>
             <remarks>This object is stateful and cannot be re-used to parse an expression.</remarks>
         </member>
+        <member name="M:Umbraco.Core.Persistence.Querying.ModelToSqlExpressionVisitor`1.EndsWithConstant(System.Linq.Expressions.MemberExpression)">
+            <summary>
+            Determines if the MemberExpression ends in a Constant value
+            </summary>
+            <param name="m"></param>
+            <returns></returns>
+        </member>
         <member name="T:Umbraco.Core.Persistence.Querying.Query`1">
             <summary>
             Represents the Query Builder for building LINQ translatable queries
@@ -16643,6 +16697,11 @@
         <member name="T:Umbraco.Core.Persistence.Repositories.ContentRepository">
             <summary>
             Represents a repository for doing CRUD operations for <see cref="T:Umbraco.Core.Models.IContent"/>
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase`2.ThrowOnWarning">
+            <summary>
+            This is used for unit tests ONLY
             </summary>
         </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase`2.GetAllVersions(System.Int32)">
@@ -16699,7 +16758,7 @@
             <param name="entity"></param>
             <param name="tagRepo"></param>
         </member>
-        <member name="M:Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase`2.GetPagedResultsByQuery``1(Umbraco.Core.Persistence.Querying.IQuery{`1},System.Int64,System.Int32,System.Int64@,System.Tuple{System.String,System.String},System.Func{Umbraco.Core.Persistence.Sql,Umbraco.Core.Persistence.Sql,System.Collections.Generic.IEnumerable{`1}},System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Boolean,System.Func{System.Tuple{System.String,System.Object[]}})">
+        <member name="M:Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase`2.GetPagedResultsByQuery``1(Umbraco.Core.Persistence.Querying.IQuery{`1},System.Int64,System.Int32,System.Int64@,System.Tuple{System.String,System.String},System.Func{Umbraco.Core.Persistence.Sql,Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase{`0,`1}.PagingSqlQuery{``0},System.Collections.Generic.IEnumerable{`1}},System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Boolean,System.Func{System.Tuple{System.String,System.Object[]}})">
             <summary>
             A helper method for inheritors to get the paged results by query in a way that minimizes queries
             </summary>
@@ -16717,6 +16776,22 @@
             <returns></returns>
             <exception cref="T:System.ArgumentNullException">orderBy</exception>
         </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase`2.GetPropertyCollection(Umbraco.Core.Persistence.Sql,System.Collections.Generic.IReadOnlyCollection{Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase{`0,`1}.DocumentDefinition})">
+            <summary>
+            Gets the property collection for a non-paged query
+            </summary>
+            <param name="sql"></param>
+            <param name="documentDefs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase`2.GetPropertyCollection(Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase{`0,`1}.PagingSqlQuery,System.Collections.Generic.IReadOnlyCollection{Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase{`0,`1}.DocumentDefinition})">
+            <summary>
+            Gets the property collection for a query
+            </summary>
+            <param name="pagingSqlQuery"></param>
+            <param name="documentDefs"></param>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase`2.DeleteMediaFiles(System.Collections.Generic.IEnumerable{System.String})">
             <summary>
             Deletes all media files passed in.
@@ -16731,16 +16806,70 @@
             <param name="queryType"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase`2.DocumentDefinition.#ctor(System.Int32,System.Guid,System.DateTime,System.DateTime,Umbraco.Core.Models.IContentTypeComposition)">
+        <member name="M:Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase`2.DocumentDefinitionCollection.#ctor(System.Boolean)">
+            <summary>
+            Constructor specifying if all versions should be allowed, in that case the key for the collection becomes the versionId (GUID)
+            </summary>
+            <param name="includeAllVersions"></param>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase`2.DocumentDefinitionCollection.AddOrUpdate(Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase{`0,`1}.DocumentDefinition)">
+            <summary>
+            if this key already exists if it does then we need to check
+            if the existing item is 'older' than the new item and if that is the case we'll replace the older one
+            </summary>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase`2.DocumentDefinitionComparer">
+            <summary>
+            A custom comparer required for sorting entities by GUIDs to match how the sorting of GUIDs works on SQL server
+            </summary>
+            <remarks>
+            MySql sorts GUIDs as a string, MSSQL sorts based on byte sections, this comparer will allow sorting GUIDs to be the same as how SQL server does
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase`2.DocumentDefinition.#ctor(Umbraco.Core.Models.Rdbms.DocumentDto,Umbraco.Core.Models.IContentTypeComposition)">
             <summary>
             Initializes a new instance of the <see cref="T:System.Object"/> class.
             </summary>
+        </member>
+        <member name="P:Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase`2.DocumentDefinition.VersionId">
+            <summary>
+            This is used to determien which version is the most recent
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase`2.PagingSqlQuery">
+            <summary>
+            An object representing a query that may contain paging information
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase`2.PagingSqlQuery`1">
+            <summary>
+            An object representing a query that contains paging information
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase`2.PagingSqlQuery`1.BuildPagedQuery(System.String)">
+            <summary>
+            Creates a paged query based on the original query and subtitutes the selectColumns specified
+            </summary>
+            <param name="selectColumns"></param>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.RecycleBinRepository`2.EmptyRecycleBin">
             <summary>
             Empties the Recycle Bin by running single bulk-Delete queries
             against the Content- or Media's Recycle Bin.
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.RecycleBinRepository`2.FormatDeleteStatement(System.String,System.String)">
+            <summary>
+            A delete statement that will delete anything in the table specified where its PK (keyName) is found in the
+            list of umbracoNode.id that have trashed flag set
+            </summary>
+            <param name="tableName"></param>
+            <param name="keyName"></param>
             <returns></returns>
         </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.RecycleBinRepository`2.GetFilesInRecycleBinForUploadField">
@@ -16901,6 +17030,20 @@
             <param name="filter"></param>
             <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IContent"/> objects</returns>
         </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.ContentRepository.GetBaseQuery(Umbraco.Core.Persistence.Repositories.BaseQueryType)">
+            <summary>
+            Returns the base query to return Content
+            </summary>
+            <param name="queryType"></param>
+            <returns></returns>
+            <remarks>
+            Content queries will differ depending on what needs to be returned:
+            * FullSingle: When querying for a single document, this will include the Outer join to fetch the content item's published version info
+            * FullMultiple: When querying for multiple documents, this will exclude the Outer join to fetch the content item's published version info - this info would need to be fetched separately
+            * Ids: This would essentially be the same as FullMultiple however the columns specified will only return the Ids for the documents
+            * Count: A query to return the count for documents
+            </remarks>
+        </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.ContentRepository.BuildXmlCache">
             <summary>
             This builds the Xml document used for the XML cache
@@ -16949,25 +17092,28 @@
             <param name="filter">Search text filter</param>
             <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IContent"/> objects</returns>
         </member>
-        <member name="M:Umbraco.Core.Persistence.Repositories.ContentRepository.ProcessQuery(Umbraco.Core.Persistence.Sql,Umbraco.Core.Persistence.Sql,System.Boolean)">
+        <member name="M:Umbraco.Core.Persistence.Repositories.ContentRepository.ProcessQuery(Umbraco.Core.Persistence.Sql,Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase{System.Int32,Umbraco.Core.Models.IContent}.PagingSqlQuery,System.Boolean,System.Boolean)">
             <summary>
             This is the underlying method that processes most queries for this repository
             </summary>
             <param name="sqlFull">
-            The full SQL with the outer join to return all data required to create an IContent
+            The FullMultiple SQL without the outer join to return all data required to create an IContent excluding it's published state data which this will query separately
             </param>
-            <param name="sqlIds">
+            <param name="pagingSqlQuery">
             The Id SQL without the outer join to just return all document ids - used to process the properties for the content item
             </param>
             <param name="withCache"></param>
+            <param name="includeAllVersions">
+            Generally when querying for content we only want to return the most recent version of the content item, however in some cases like when 
+            we want to return all versions of a content item, we can't simply return the latest
+            </param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Core.Persistence.Repositories.ContentRepository.CreateContentFromDto(Umbraco.Core.Models.Rdbms.DocumentDto,System.Guid,Umbraco.Core.Persistence.Sql)">
+        <member name="M:Umbraco.Core.Persistence.Repositories.ContentRepository.CreateContentFromDto(Umbraco.Core.Models.Rdbms.DocumentDto,Umbraco.Core.Persistence.Sql)">
             <summary>
             Private method to create a content object from a DocumentDto, which is used by Get and GetByVersion.
             </summary>
             <param name="dto"></param>
-            <param name="versionId"></param>
             <param name="docSql"></param>
             <returns></returns>
         </member>
@@ -16978,6 +17124,11 @@
             <remarks>
             Ensure the unit of work is disposed
             </remarks>
+        </member>
+        <member name="T:Umbraco.Core.Persistence.Repositories.ContentRepository.DocumentPublishedReadOnlyDtoCollection">
+            <summary>
+            A keyed collection for fast lookup when retrieving a separate list of published version data
+            </summary>
         </member>
         <member name="T:Umbraco.Core.Persistence.Repositories.ContentTypeBaseRepository`1">
             <summary>
@@ -17174,6 +17325,14 @@
             We're doing this because when we query the db, we want to use dynamic so that it returns all available fields not just the ones
                 defined on the entity so we can them to additional data
             </remarks>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.EntityRepository.EntityDefinitionCollection.AddOrUpdate(Umbraco.Core.Persistence.Repositories.EntityRepository.EntityDefinition)">
+            <summary>
+            if this key already exists if it does then we need to check
+            if the existing item is 'older' than the new item and if that is the case we'll replace the older one
+            </summary>
+            <param name="item"></param>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.IMediaRepository.AddOrUpdateContentXml(Umbraco.Core.Models.IMedia,System.Func{Umbraco.Core.Models.IMedia,System.Xml.Linq.XElement})">
             <summary>
@@ -17378,6 +17537,19 @@
             Represents a repository for doing CRUD operations for <see cref="T:Umbraco.Core.Models.IMedia"/>
             </summary>
         </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.MediaRepository.ProcessQuery(Umbraco.Core.Persistence.Sql,Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase{System.Int32,Umbraco.Core.Models.IMedia}.PagingSqlQuery,System.Boolean)">
+            <summary>
+            This is the underlying method that processes most queries for this repository
+            </summary>
+            <param name="sqlFull">
+            The full SQL to select all media data 
+            </param>
+            <param name="pagingSqlQuery">
+            The Id SQL to just return all media ids - used to process the properties for the media item
+            </param>
+            <param name="withCache"></param>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.MediaRepository.GetPagedResultsByQuery(Umbraco.Core.Persistence.Querying.IQuery{Umbraco.Core.Models.IMedia},System.Int64,System.Int32,System.Int64@,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Boolean,System.String)">
             <summary>
             Gets paged media results
@@ -17392,12 +17564,11 @@
             <param name="filter">Search text filter</param>
             <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IMedia"/> objects</returns>
         </member>
-        <member name="M:Umbraco.Core.Persistence.Repositories.MediaRepository.CreateMediaFromDto(Umbraco.Core.Models.Rdbms.ContentVersionDto,System.Guid,Umbraco.Core.Persistence.Sql)">
+        <member name="M:Umbraco.Core.Persistence.Repositories.MediaRepository.CreateMediaFromDto(Umbraco.Core.Models.Rdbms.ContentVersionDto,Umbraco.Core.Persistence.Sql)">
             <summary>
             Private method to create a media object from a ContentDto
             </summary>
-            <param name="d"></param>
-            <param name="versionId"></param>
+            <param name="dto"></param>
             <param name="docSql"></param>
             <returns></returns>
         </member>
@@ -17462,12 +17633,24 @@
             The query supplied will ONLY work with data specifically on the cmsMember table because we are using PetaPoco paging (SQL paging)
             </remarks>
         </member>
-        <member name="M:Umbraco.Core.Persistence.Repositories.MemberRepository.CreateMemberFromDto(Umbraco.Core.Models.Rdbms.MemberDto,System.Guid,Umbraco.Core.Persistence.Sql)">
+        <member name="M:Umbraco.Core.Persistence.Repositories.MemberRepository.ProcessQuery(Umbraco.Core.Persistence.Sql,Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase{System.Int32,Umbraco.Core.Models.IMember}.PagingSqlQuery,System.Boolean)">
+            <summary>
+            This is the underlying method that processes most queries for this repository
+            </summary>
+            <param name="sqlFull">
+            The full SQL to select all member data 
+            </param>
+            <param name="pagingSqlQuery">
+            The Id SQL to just return all member ids - used to process the properties for the member item
+            </param>
+            <param name="withCache"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.MemberRepository.CreateMemberFromDto(Umbraco.Core.Models.Rdbms.MemberDto,Umbraco.Core.Persistence.Sql)">
             <summary>
             Private method to create a member object from a MemberDto
             </summary>
             <param name="dto"></param>
-            <param name="versionId"></param>
             <param name="docSql"></param>
             <returns></returns>
         </member>
@@ -25641,6 +25824,21 @@
             <param name="filter">Search text filter</param>
             <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IContent"/> objects</returns>
         </member>
+        <member name="M:Umbraco.Core.Services.IMediaService.GetPagedChildren(System.Int32,System.Int64,System.Int32,System.Int64@,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Boolean,System.String,System.Int32[])">
+            <summary>
+            Gets a collection of <see cref="T:Umbraco.Core.Models.IMedia"/> objects by Parent Id
+            </summary>
+            <param name="id">Id of the Parent to retrieve Children from</param>
+            <param name="pageIndex">Page number</param>
+            <param name="pageSize">Page size</param>
+            <param name="totalRecords">Total records query would return without paging</param>
+            <param name="orderBy">Field to order by</param>
+            <param name="orderDirection">Direction to order by</param>
+            <param name="orderBySystemField">Flag to indicate when ordering by system field</param>
+            <param name="filter">Search text filter</param>
+            <param name="contentTypeFilter">A list of content type Ids to filter the list by</param>
+            <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IContent"/> objects</returns>
+        </member>
         <member name="M:Umbraco.Core.Services.IMediaService.GetPagedDescendants(System.Int32,System.Int64,System.Int32,System.Int64@,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.String)">
             <summary>
             Gets a collection of <see cref="T:Umbraco.Core.Models.IMedia"/> objects by Parent Id
@@ -27631,6 +27829,21 @@
             <param name="orderDirection">Direction to order by</param>
             <param name="orderBySystemField">Flag to indicate when ordering by system field</param>
             <param name="filter">Search text filter</param>
+            <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IContent"/> objects</returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.MediaService.GetPagedChildren(System.Int32,System.Int64,System.Int32,System.Int64@,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Boolean,System.String,System.Int32[])">
+            <summary>
+            Gets a collection of <see cref="T:Umbraco.Core.Models.IMedia"/> objects by Parent Id
+            </summary>
+            <param name="id">Id of the Parent to retrieve Children from</param>
+            <param name="pageIndex">Page number</param>
+            <param name="pageSize">Page size</param>
+            <param name="totalChildren">Total records query would return without paging</param>
+            <param name="orderBy">Field to order by</param>
+            <param name="orderDirection">Direction to order by</param>
+            <param name="orderBySystemField">Flag to indicate when ordering by system field</param>
+            <param name="filter">Search text filter</param>
+            <param name="contentTypeFilter">A list of content type Ids to filter the list by</param>
             <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IContent"/> objects</returns>
         </member>
         <member name="M:Umbraco.Core.Services.MediaService.GetPagedDescendants(System.Int32,System.Int64,System.Int32,System.Int64@,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.String)">
@@ -33467,14 +33680,6 @@
             <summary>
             Extension methods for xml objects
             </summary>
-        </member>
-        <member name="M:Umbraco.Core.XmlExtensions.SaveAsync(System.Xml.XmlDocument,System.String)">
-            <summary>
-            Saves the xml document async
-            </summary>
-            <param name="xdoc"></param>
-            <param name="filename"></param>
-            <returns></returns>
         </member>
         <member name="M:Umbraco.Core.XmlExtensions.SelectNodes(System.Xml.XmlNode,System.String,System.Collections.Generic.IEnumerable{Umbraco.Core.Xml.XPathVariable})">
             <summary>

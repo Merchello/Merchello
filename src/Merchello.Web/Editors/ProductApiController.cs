@@ -10,6 +10,7 @@
 
     using Merchello.Core;
     using Merchello.Core.Chains.CopyEntity.Product;
+    using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Core.ValueConverters;
     using Merchello.Web.Models.ContentEditing;
@@ -18,6 +19,8 @@
     using Merchello.Web.WebApi;
     using Merchello.Web.WebApi.Binders;
     using Merchello.Web.WebApi.Filters;
+
+    using Newtonsoft.Json;
 
     using Umbraco.Core;
     using Umbraco.Core.Models;
@@ -216,7 +219,55 @@
                   query.ItemsPerPage,
                   query.SortBy,
                   query.SortDirection);
-        }        
+        }
+
+        /// <summary>
+        /// Gets the recently updated products.
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <returns>
+        /// The <see cref="QueryResultDisplay"/>.
+        /// </returns>
+        [HttpPost]
+        public QueryResultDisplay GetRecentlyUpdated(QueryDisplay query)
+        {
+            var itemsPerPage = query.ItemsPerPage;
+            var currentPage = query.CurrentPage + 1;
+
+            var results = _productService.GetRecentlyUpdatedProducts(currentPage, itemsPerPage);
+
+            return results.ToQueryResultDisplay<IProduct, ProductDisplay>(MapToProductDisplay);
+        }
+
+        [HttpPost]
+        public QueryResultDisplay GetByAdvancedSearch(QueryDisplay query)
+        {
+            var itemsPerPage = query.ItemsPerPage;
+            var currentPage = query.CurrentPage + 1;
+            var collectionKey = query.Parameters.FirstOrDefault(x => x.FieldName == "collectionKey");
+            var includedFields = query.Parameters.FirstOrDefault(x => x.FieldName == "includedFields");
+            var searchTerm = query.Parameters.FirstOrDefault(x => x.FieldName == "term");
+            var manufacturerTerm = query.Parameters.FirstOrDefault(x => x.FieldName == "manufacturer");
+
+            var key = collectionKey == null ? Guid.Empty : new Guid(collectionKey.Value);
+            var incFields = includedFields == null ? new[] { "name", "sku" } : includedFields.Value.Split(',');
+            var term = searchTerm == null ? string.Empty : searchTerm.Value;
+            var manufacturer = manufacturerTerm == null ? string.Empty : manufacturerTerm.Value;
+
+            var results = ((ProductService)_productService).GetByAdvancedSearch(
+                key,
+                incFields,
+                term,
+                manufacturer,
+                currentPage,
+                itemsPerPage,
+                query.SortBy,
+                query.SortDirection);
+
+            return results.ToQueryResultDisplay<IProduct, ProductDisplay>(MapToProductDisplay);
+        }
 
         /// <summary>
         /// Creates a new product with variants
@@ -497,6 +548,23 @@
         public IEnumerable<string> GetAllManufacturers()
         {
             return _productService.GetAllManufacturers();
+        }
+
+        /// <summary>
+        /// Maps <see cref="IProduct"/> to <see cref="ProductDisplay"/>.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
+        /// <remarks>
+        /// Delegated to mapping function
+        /// </remarks>
+        private static ProductDisplay MapToProductDisplay(IProduct product)
+        {
+            return product.ToProductDisplay(DetachedValuesConversionType.Editor);
         }
 
         /// <summary>

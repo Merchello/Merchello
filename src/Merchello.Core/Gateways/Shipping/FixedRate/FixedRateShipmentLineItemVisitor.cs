@@ -1,12 +1,15 @@
-﻿using Merchello.Core.Models;
-
-namespace Merchello.Core.Gateways.Shipping.FixedRate
+﻿namespace Merchello.Core.Gateways.Shipping.FixedRate
 {
+    using Merchello.Core.Models;
+
     /// <summary>
-    /// Vistor class that calculates 
+    /// Visitor class that calculates 
     /// </summary>
     public class FixedRateShipmentLineItemVisitor : ILineItemVisitor
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FixedRateShipmentLineItemVisitor"/> class.
+        /// </summary>
         public FixedRateShipmentLineItemVisitor()
         {
             TotalPrice = 0M;
@@ -14,6 +17,27 @@ namespace Merchello.Core.Gateways.Shipping.FixedRate
             UseOnSalePriceIfOnSale = false;
         }
 
+        /// <summary>
+        /// Gets a value the TotalWeight from ExtendedData
+        /// </summary>
+        public decimal TotalWeight { get; private set; }
+
+        /// <summary>
+        /// Gets a value the TotalPrice form ExtendedData
+        /// </summary>
+        public decimal TotalPrice { get; private set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether or not to use the OnSale price in the total price calculation
+        /// </summary>
+        public bool UseOnSalePriceIfOnSale { get; set; }
+
+        /// <summary>
+        /// Visits the line item.
+        /// </summary>
+        /// <param name="lineItem">
+        /// The line item.
+        /// </param>
         public void Visit(ILineItem lineItem)
         {
             if (!lineItem.ExtendedData.DefinesProductVariant()) return;
@@ -22,7 +46,7 @@ namespace Merchello.Core.Gateways.Shipping.FixedRate
             TotalWeight += lineItem.ExtendedData.GetWeightValue() * lineItem.Quantity;
 
             // adjust the total price
-            if(UseOnSalePriceIfOnSale)
+            if (UseOnSalePriceIfOnSale)
             {
                 TotalPrice += lineItem.ExtendedData.GetOnSaleValue()
                     ? lineItem.ExtendedData.GetSalePriceValue() * lineItem.Quantity
@@ -32,24 +56,6 @@ namespace Merchello.Core.Gateways.Shipping.FixedRate
             {
                 TotalPrice += lineItem.ExtendedData.GetPriceValue() * lineItem.Quantity;
             }
-        }
-
-        /// <summary>
-        /// Returns the TotalWeight from ExtendedData
-        /// </summary>
-        public decimal TotalWeight { get; private set; }
-
-        /// <summary>
-        /// Returns the TotalPrice form ExtendedData
-        /// </summary>
-        public decimal TotalPrice { get; private set; }
-
-        /// <summary>
-        /// True/false indicating whether or not to use the OnSale price in the total price calculation
-        /// </summary>
-        public bool UseOnSalePriceIfOnSale
-        {
-            get; set;
         }
     }
 }

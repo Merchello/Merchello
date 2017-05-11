@@ -6,17 +6,22 @@
     using System.Reflection;
     using System.Runtime.Serialization;
 
-    using Umbraco.Core;
+    using Merchello.Core.Models.EntityBase;
 
     /// <summary>
     /// Represents a country associated with a warehouse
     /// </summary>
-    public class ShipCountry : CountryBase, IShipCountry
+    public class ShipCountry : Entity, IShipCountry
     {
         /// <summary>
         /// The property selectors.
         /// </summary>
         private static readonly Lazy<PropertySelectors> _ps = new Lazy<PropertySelectors>();
+
+        /// <summary>
+        /// The <see cref="ICountry"/>.
+        /// </summary>
+        private readonly ICountry _country;
 
         /// <summary>
         /// The warehouse catalog key.
@@ -33,27 +38,10 @@
         /// The country.
         /// </param>
         public ShipCountry(Guid catalogKey, ICountry country)
-            : this(catalogKey, country.CountryCode, country.Provinces)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ShipCountry"/> class.
-        /// </summary>
-        /// <param name="catalogKey">
-        /// The catalog key.
-        /// </param>
-        /// <param name="countryCode">
-        /// The country code.
-        /// </param>
-        /// <param name="provinces">
-        /// The provinces.
-        /// </param>
-        internal ShipCountry(Guid catalogKey, string countryCode, IEnumerable<IProvince> provinces)
-            : base(countryCode, provinces)
         {
             Ensure.ParameterCondition(catalogKey != Guid.Empty, "catalogKey");
-
+            Ensure.ParameterNotNull(country, "country");
+            _country = country;
             _catalogKey = catalogKey;
         }
 
@@ -69,6 +57,61 @@
             internal set
             {
                 SetPropertyValueAndDetectChanges(value, ref _catalogKey, _ps.Value.CatalogKeySelector); 
+            }
+        }
+
+        /// <summary>
+        /// Gets the country code.
+        /// </summary>
+        public string CountryCode
+        {
+            get
+            {
+                return _country.CountryCode;
+            }
+        }
+
+        /// <summary>
+        /// Gets the name.
+        /// </summary>
+        public string Name
+        {
+            get
+            {
+                return _country.Name;
+            }
+        }
+
+        /// <summary>
+        /// Gets the ISO.
+        /// </summary>
+        public int Iso
+        {
+            get
+            {
+                return _country.Iso;
+            }
+        }
+
+        /// <summary>
+        /// Gets the province label.
+        /// </summary>
+        public string ProvinceLabel
+        {
+            get
+            {
+                return _country.ProvinceLabel;
+            }
+        }
+
+        /// <summary>
+        /// Gets the provinces.
+        /// </summary>
+        public IEnumerable<IProvince> Provinces
+        {
+            get
+            {
+                return _country.Provinces;
             }
         }
 

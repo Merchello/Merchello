@@ -1723,7 +1723,7 @@
         /// </returns>
         internal string GetDefaultCurrencyCode()
         {
-            return this._storeSettingService.GetByKey(Core.Constants.StoreSettingKeys.CurrencyCodeKey).Value;
+            return this._storeSettingService.GetByKey(Core.Constants.StoreSetting.CurrencyCodeKey).Value;
         }
 
         #region Key Queries

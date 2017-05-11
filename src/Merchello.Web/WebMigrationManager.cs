@@ -96,7 +96,7 @@
             {
                 var storeSettingService = MerchelloContext.Current.Services.StoreSettingService;
 
-                var setting = storeSettingService.GetByKey(Constants.StoreSettingKeys.HasDomainRecordKey);
+                var setting = storeSettingService.GetByKey(Constants.StoreSetting.HasDomainRecordKey);
                 if (setting != null)
                 {
                     setting.Value = false.ToString();

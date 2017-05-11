@@ -45,7 +45,7 @@
         /// </summary>
         public void Up()
         {
-            this._database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Core.Constants.StoreSettingKeys.GlobalTaxationApplicationKey, Name = "globalTaxationApplication", Value = TaxationApplication.Invoice.ToString(), TypeName = "System.String", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            this._database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Core.Constants.StoreSetting.GlobalTaxationApplicationKey, Name = "globalTaxationApplication", Value = TaxationApplication.Invoice.ToString(), TypeName = "System.String", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
         }
 
         /// <summary>
@@ -53,7 +53,7 @@
         /// </summary>
         public void Down()
         {
-            this._database.Delete("merchStoreSetting", "pk", null, Core.Constants.StoreSettingKeys.GlobalTaxationApplicationKey);
+            this._database.Delete("merchStoreSetting", "pk", null, Core.Constants.StoreSetting.GlobalTaxationApplicationKey);
         }
     }
 }

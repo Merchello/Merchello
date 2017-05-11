@@ -9,6 +9,8 @@
 
     using global::PayPal.PayPalAPIInterfaceService.Model;
 
+    using Merchello.Core;
+
     using Umbraco.Core;
 
     /// <summary>

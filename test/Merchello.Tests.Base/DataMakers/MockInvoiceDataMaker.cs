@@ -25,7 +25,7 @@ namespace Merchello.Tests.Base.DataMakers
         {
             var status = new InvoiceStatus()
                 {
-                    Key = global::Merchello.Core.Constants.DefaultKeys.InvoiceStatus.Unpaid,
+                    Key = global::Merchello.Core.Constants.InvoiceStatus.Unpaid,
                     Active = true,
                     Alias = "unpaid",
                     Name = "Unpaid",
@@ -65,7 +65,7 @@ namespace Merchello.Tests.Base.DataMakers
 
             var invoiceService = GetServiceContext().InvoiceService;
 
-            var invoice = invoiceService.CreateInvoice(Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
+            var invoice = invoiceService.CreateInvoice(Core.Constants.InvoiceStatus.Unpaid);
 
             invoice.SetBillingAddress(billToShipTo);
 

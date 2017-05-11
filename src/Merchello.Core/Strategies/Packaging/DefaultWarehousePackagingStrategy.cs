@@ -78,7 +78,7 @@
         {
             // All packaged shipments will start with a shipment status of "Quoted" as these are being used for the Shipment Rate Quote
             // NOTE:  the "Packaging" status to indicate the shipment is physically being packaged/boxed up.
-            var quoted = MerchelloContext.Services.ShipmentService.GetShipmentStatusByKey(Constants.DefaultKeys.ShipmentStatus.Quoted);
+            var quoted = MerchelloContext.Services.ShipmentService.GetShipmentStatusByKey(Constants.ShipmentStatus.Quoted);
 
             // filter basket items for shippable items
             var shippableVisitor = new ShippableProductVisitor();            
