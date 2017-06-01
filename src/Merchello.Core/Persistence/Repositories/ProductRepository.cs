@@ -1126,7 +1126,7 @@
                 .Append("FROM [merchProduct2EntityCollection]")
                 .Append(
                     "WHERE [merchProduct2EntityCollection].[entityCollectionKey] IN (@eckeys)",
-                    new { @eckey = collectionKeys })
+                    new { @eckeys = collectionKeys })
                 .Append("GROUP BY productKey")
                 .Append("HAVING COUNT(*) = @keyCount", new { @keyCount = collectionKeys.Count() })
                 .Append(")");
