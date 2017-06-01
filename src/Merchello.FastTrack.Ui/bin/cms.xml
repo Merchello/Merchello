@@ -19,15 +19,6 @@
              umbraco without changing the codebase.
              </summary>
         </member>
-        <member name="M:umbraco.BusinessLogic.Actions.Action.ReRegisterActionsAndHandlers">
-            <summary>
-            This is used when an IAction or IActionHandler is installed into the system
-            and needs to be loaded into memory.
-            </summary>
-            <remarks>
-            TODO: this shouldn't be needed... we should restart the app pool when a package is installed!
-            </remarks>
-        </member>
         <member name="M:umbraco.BusinessLogic.Actions.Action.ReturnJavascript(System.String)">
             <summary>
             Jacascript for the contextmenu
@@ -2855,6 +2846,11 @@
             id
             </summary>
         </member>
+        <member name="P:umbraco.cms.businesslogic.macro.Macro.Key">
+            <summary>
+            key
+            </summary>
+        </member>
         <member name="P:umbraco.cms.businesslogic.macro.Macro.UseInEditor">
             <summary>
             If set to true, the macro can be inserted on documents using the richtexteditor.
@@ -3021,6 +3017,11 @@
             </summary>
             <value>The id.</value>
         </member>
+        <member name="P:umbraco.cms.businesslogic.macro.MacroProperty.Key">
+            <summary>
+            Gets the key.
+            </summary>
+        </member>
         <member name="P:umbraco.cms.businesslogic.macro.MacroProperty.Macro">
             <summary>
             Gets or sets the macro.
@@ -3094,6 +3095,17 @@
             <summary>
             Occurs when a macro is saved.
             </summary>
+        </member>
+        <member name="M:umbraco.cms.businesslogic.packager.InstalledPackage.GetInstallationSummary(Umbraco.Core.Services.IContentTypeService,Umbraco.Core.Services.IDataTypeService,Umbraco.Core.Services.IFileService,Umbraco.Core.Services.ILocalizationService,Umbraco.Core.Services.IMacroService)">
+            <summary>
+            Used internally for creating an InstallationSummary (used in new PackagingService) representation of this InstalledPackage object.
+            </summary>
+            <param name="contentTypeService"></param>
+            <param name="dataTypeService"></param>
+            <param name="fileService"></param>
+            <param name="localizationService"></param>
+            <param name="macroService"></param>
+            <returns></returns>
         </member>
         <member name="E:umbraco.cms.businesslogic.packager.InstalledPackage.BeforeSave">
             <summary>
@@ -3217,7 +3229,7 @@
             <summary>
             The packager is a component which enables sharing of both data and functionality components between different umbraco installations.
             
-            The output is a .umb (a zip compressed file) which contains the exported documents/medias/macroes/documenttypes (etc.)
+            The output is a .umb (a zip compressed file) which contains the exported documents/medias/macros/documenttypes (etc.)
             in a Xml document, along with the physical files used (images/usercontrols/xsl documents etc.)
             
             Partly implemented, import of packages is done, the export is *under construction*.
@@ -4147,6 +4159,28 @@
             The delete event handler
             </summary>
         </member>
+        <member name="M:umbraco.cms.businesslogic.packager.repositories.Repository.GetPackageFile(System.String,System.Int32,System.Version)">
+            <summary>
+            Used to get the correct package file from the repo for the current umbraco version
+            </summary>
+            <param name="packageGuid"></param>
+            <param name="userId"></param>
+            <param name="currentUmbracoVersion"></param>
+            <returns></returns>
+        </member>
+        <member name="M:umbraco.cms.businesslogic.packager.repositories.Repository.fetch(System.String,System.String)">
+            <summary>
+            This goes and fetches the Byte array for the package from OUR, but it's pretty strange
+            </summary>
+            <param name="packageGuid">
+            The package ID for the package file to be returned
+            </param>
+            <param name="key">
+            This is a strange Umbraco version parameter - but it's not really an umbraco version, it's a special/odd version format like Version41
+            but it's actually not used for the 7.5+ package installs so it's obsolete/unused.
+            </param>
+            <returns></returns>
+        </member>
         <member name="M:umbraco.cms.businesslogic.packager.repositories.Repository.DisposeResources">
             <summary>
             Handles the disposal of resources. Derived from abstract class <see cref="T:Umbraco.Core.DisposableObject"/> which handles common required locking logic.
@@ -4293,6 +4327,21 @@
         <member name="M:umbraco.cms.businesslogic.packager.repositories.RepositoryWebservice.authenticateAsync(System.String,System.String,System.Object)">
             <remarks/>
         </member>
+        <member name="M:umbraco.cms.businesslogic.packager.repositories.RepositoryWebservice.GetPackageFile(System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:umbraco.cms.businesslogic.packager.repositories.RepositoryWebservice.BeginfetchPackageByVersion(System.String,System.String,System.AsyncCallback,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:umbraco.cms.businesslogic.packager.repositories.RepositoryWebservice.EndGetPackageFile(System.IAsyncResult)">
+            <remarks/>
+        </member>
+        <member name="M:umbraco.cms.businesslogic.packager.repositories.RepositoryWebservice.GetPackageFileAsync(System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:umbraco.cms.businesslogic.packager.repositories.RepositoryWebservice.GetPackageFileAsync(System.String,System.String,System.Object)">
+            <remarks/>
+        </member>
         <member name="M:umbraco.cms.businesslogic.packager.repositories.RepositoryWebservice.fetchPackageByVersion(System.String,umbraco.cms.businesslogic.packager.repositories.Version)">
             <remarks/>
         </member>
@@ -4428,6 +4477,9 @@
         <member name="E:umbraco.cms.businesslogic.packager.repositories.RepositoryWebservice.authenticateCompleted">
             <remarks/>
         </member>
+        <member name="E:umbraco.cms.businesslogic.packager.repositories.RepositoryWebservice.GetPackageFileCompleted">
+            <remarks/>
+        </member>
         <member name="E:umbraco.cms.businesslogic.packager.repositories.RepositoryWebservice.fetchPackageByVersionCompleted">
             <remarks/>
         </member>
@@ -4552,7 +4604,9 @@
             <remarks/>
         </member>
         <member name="F:umbraco.cms.businesslogic.packager.repositories.Version.Version41">
-            <remarks/>
+            <summary>
+            This is apparently the version number we pass in for all installs
+            </summary>
         </member>
         <member name="F:umbraco.cms.businesslogic.packager.repositories.Version.Version41Legacy">
             <remarks/>
@@ -4654,6 +4708,15 @@
             <remarks/>
         </member>
         <member name="P:umbraco.cms.businesslogic.packager.repositories.authenticateCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:umbraco.cms.businesslogic.packager.repositories.GetPackageFileCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:umbraco.cms.businesslogic.packager.repositories.GetPackageFileCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:umbraco.cms.businesslogic.packager.repositories.GetPackageFileCompletedEventArgs.Result">
             <remarks/>
         </member>
         <member name="T:umbraco.cms.businesslogic.packager.repositories.fetchPackageByVersionCompletedEventHandler">
