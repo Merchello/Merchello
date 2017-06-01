@@ -1133,7 +1133,7 @@
             sql.Select("*")
                 .From<ProductVariantDto>(SqlSyntax);
 
-            var whereClauses = entities.Select(entity => string.Format("(Sku = '{0}' and pk != '{1}')", entity.Sku, entity.Key)).ToList();
+            var whereClauses = entities.Select(entity => string.Format("(Sku = '{0}' and pk != '{1}')", entity.Sku.Replace("'", "''"), entity.Key)).ToList();
 
             sql = sql.Where(string.Join(" or ", whereClauses), null);
 
