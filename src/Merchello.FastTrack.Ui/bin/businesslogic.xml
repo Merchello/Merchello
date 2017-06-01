@@ -1746,6 +1746,11 @@
             File types that will not be allowed to be uploaded via the content/media upload control
             </summary>
         </member>
+        <member name="P:umbraco.UmbracoSettings.AllowedUploadFiles">
+            <summary>
+            File types that will be allowed to be uploaded via the content/media upload control
+            </summary>
+        </member>
         <member name="P:umbraco.UmbracoSettings.ImageFileTypes">
             <summary>
             Gets the allowed image file types.

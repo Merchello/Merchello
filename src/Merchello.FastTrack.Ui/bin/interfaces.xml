@@ -9,6 +9,11 @@
             Interface for created applications in the umbraco backoffice
             </summary>
         </member>
+        <member name="T:umbraco.interfaces.IDiscoverable">
+            <summary>
+            Marks a class or an interface as discoverable by PluginManager.
+            </summary>
+        </member>
         <member name="T:umbraco.interfaces.IApplicationStartupHandler">
             <summary>
             Any class that implements this interface will be instantiated at application startup

@@ -74,16 +74,17 @@
         <member name="P:umbraco.uicontrols.TreePicker.BaseTreePickerScripts.BaseTreePicker">
              <summary>
                Looks up a localized string similar to /// &lt;reference path=&quot;/umbraco_client/Application/NamespaceManager.js&quot; /&gt;
-            
-            Umbraco.Sys.registerNamespace(&quot;Umbraco.Controls&quot;);
-            
-            (function($) {
-                Umbraco.Controls.TreePicker = function(clientId, label, itemIdValueClientID, itemTitleClientID, itemPickerUrl, width, height, showHeader, umbracoPath) {
-                    var obj = {
-                        _itemPickerUrl: itemPickerUrl,
-                        _webServiceUrl: umbracoPath + &quot;/webservices/legacyAjaxCalls.asmx/GetNodeBreadcrumbs&quot;,
-                        _label: label,
-                        _wid [rest of string was truncated]&quot;;.
+            (function ($) {
+                $(document).ready(function () {
+                    // Tooltip only Text
+                    $(&apos;.umb-tree-picker a.choose&apos;).click(function () {
+                        var that = this;
+                        var s = $(that).data(&quot;section&quot;);
+                        UmbClientMgr.openAngularModalWindow({
+                            template: &apos;views/common/dialogs/treepicker.html&apos;,
+                            section: s,
+                            callback: function (data) {
+                                //this [rest of string was truncated]&quot;;.
              </summary>
         </member>
         <member name="T:umbraco.uicontrols.TreeUrlGenerator">

@@ -22,6 +22,41 @@ function authResource($q, $http, umbRequestHelper, angularHelper) {
 
     return {
 
+        get2FAProviders: function () {
+            
+            return umbRequestHelper.resourcePromise(
+                $http.get(
+                    umbRequestHelper.getApiUrl(
+                        "authenticationApiBaseUrl",
+                        "Get2FAProviders")),
+                'Could not retrive two factor provider info');
+        },
+
+        send2FACode: function (provider) {
+
+            return umbRequestHelper.resourcePromise(
+                $http.post(
+                    umbRequestHelper.getApiUrl(
+                        "authenticationApiBaseUrl",
+                        "PostSend2FACode"),
+                    angular.toJson(provider)),
+                'Could not send code');
+        },
+
+        verify2FACode: function (provider, code) {
+
+            return umbRequestHelper.resourcePromise(
+                $http.post(
+                    umbRequestHelper.getApiUrl(
+                        "authenticationApiBaseUrl",
+                        "PostVerify2FACode"),
+                    {
+                        code: code,
+                        provider: provider
+                    }),
+                'Could not verify code');
+        },
+
         /**
          * @ngdoc method
          * @name umbraco.resources.authResource#performLogin
@@ -373,6 +408,258 @@ function authResource($q, $http, umbRequestHelper, angularHelper) {
 }
 
 angular.module('umbraco.resources').factory('authResource', authResource);
+
+/**
+    * @ngdoc service
+    * @name umbraco.resources.codefileResource
+    * @description Loads in data for files that contain code such as js scripts, partial views and partial view macros
+    **/
+function codefileResource($q, $http, umbDataFormatter, umbRequestHelper) {
+
+    return {
+
+        /**
+         * @ngdoc method
+         * @name umbraco.resources.codefileResource#getByPath
+         * @methodOf umbraco.resources.codefileResource
+         *
+         * @description
+         * Gets a codefile item with a given path
+         *
+         * ##usage
+         * <pre>
+         * codefileResource.getByPath('scripts', 'oooh-la-la.js')
+         *    .then(function(codefile) {
+         *        alert('its here!');
+         *    });
+         * </pre>
+         * 
+         * <pre>
+         * codefileResource.getByPath('partialView', 'Grid%2fEditors%2fBase.cshtml')
+         *    .then(function(codefile) {
+         *        alert('its here!');
+         *    });
+         * </pre>
+         *
+         * @param {type} the type of script (partialView, partialViewMacro, script)
+         * @param {virtualpath} the virtual path of the script
+         * @returns {Promise} resourcePromise object.
+         *
+         */
+        getByPath: function (type, virtualpath) {
+
+            return umbRequestHelper.resourcePromise(
+               $http.get(
+                   umbRequestHelper.getApiUrl(
+                       "codeFileApiBaseUrl",
+                       "GetByPath",
+                       [{ type: type }, {virtualPath: virtualpath }])),
+               "Failed to retrieve data for " + type + " from virtual path " + virtualpath);
+        },
+
+        /**
+         * @ngdoc method
+         * @name umbraco.resources.codefileResource#getByAlias
+         * @methodOf umbraco.resources.codefileResource
+         *
+         * @description
+         * Gets a template item with a given alias
+         *
+         * ##usage
+         * <pre>
+         * codefileResource.getByAlias("upload")
+         *    .then(function(template) {
+         *        alert('its here!');
+         *    });
+         * </pre>
+         *
+         * @param {String} alias Alias of template to retrieve
+         * @returns {Promise} resourcePromise object.
+         *
+         */
+        getByAlias: function (alias) {
+
+            return umbRequestHelper.resourcePromise(
+               $http.get(
+                   umbRequestHelper.getApiUrl(
+                       "templateApiBaseUrl",
+                       "GetByAlias",
+                       [{ alias: alias }])),
+               "Failed to retrieve data for template with alias: " + alias);
+        },
+
+        /**
+         * @ngdoc method
+         * @name umbraco.resources.codefileResource#deleteByPath
+         * @methodOf umbraco.resources.codefileResource
+         *
+         * @description
+         * Deletes a codefile with a given type & path
+         *
+         * ##usage
+         * <pre>
+         * codefileResource.deleteByPath('scripts', 'oooh-la-la.js')
+         *    .then(function() {
+         *        alert('its gone!');
+         *    });
+         * </pre>
+         * 
+         * <pre>
+         * codefileResource.deleteByPath('partialViews', 'Grid%2fEditors%2fBase.cshtml')
+         *    .then(function() {
+         *        alert('its gone!');
+         *    });
+         * </pre>
+         *
+         * @param {type} the type of script (partialViews, partialViewMacros, scripts)
+         * @param {virtualpath} the virtual path of the script
+         * @returns {Promise} resourcePromise object.
+         *
+         */
+        deleteByPath: function (type, virtualpath) {
+            return umbRequestHelper.resourcePromise(
+                $http.post(
+                    umbRequestHelper.getApiUrl(
+                        "codeFileApiBaseUrl",
+                        "Delete",
+                        [{ type: type }, { virtualPath: virtualpath}])),
+                "Failed to delete item: " + virtualpath);
+        },
+
+        /**
+         * @ngdoc method
+         * @name umbraco.resources.codefileResource#save
+         * @methodOf umbraco.resources.codefileResource
+         *
+         * @description
+         * Saves or update a codeFile
+         * 
+         * ##usage
+         * <pre>
+         * codefileResource.save(codeFile)
+         *    .then(function(codeFile) {
+         *        alert('its saved!');
+         *    });
+         * </pre>
+         *
+         * @param {Object} template object to save
+         * @returns {Promise} resourcePromise object.
+         *
+         */
+        save: function (codeFile) {
+            return umbRequestHelper.resourcePromise(
+                 $http.post(
+                     umbRequestHelper.getApiUrl(
+                         "codeFileApiBaseUrl",
+                         "PostSave"),
+                         codeFile),
+                "Failed to save data for code file " + codeFile.virtualPath);
+        },
+
+        /**
+         * @ngdoc method
+         * @name umbraco.resources.codefileResource#getSnippets
+         * @methodOf umbraco.resources.codefileResource
+         *
+         * @description
+         * Gets code snippets for a given file type
+         * 
+         * ##usage
+         * <pre>
+         * codefileResource.getSnippets("partialViews")
+         *    .then(function(snippets) {
+         *        alert('its here!');
+         *    });
+         * </pre>
+         *
+         * @param {string} file type: (partialViews, partialViewMacros)
+         * @returns {Promise} resourcePromise object.
+         *
+         */
+        getSnippets: function (fileType) {
+            return umbRequestHelper.resourcePromise(
+                 $http.get(
+                     umbRequestHelper.getApiUrl(
+                         "codeFileApiBaseUrl",
+                         "GetSnippets?type=" + fileType )),
+                "Failed to get snippet for" + fileType);
+        },
+
+        /**
+         * @ngdoc method
+         * @name umbraco.resources.codefileResource#getScaffold
+         * @methodOf umbraco.resources.codefileResource
+         *
+         * @description
+         * Returns a scaffold of an empty codefile item.
+         * 
+         * The scaffold is used to build editors for code file editors that has not yet been populated with data.
+         * 
+         * ##usage
+         * <pre>
+         * codefileResource.getScaffold("partialViews", "Breadcrumb")
+         *    .then(function(data) {
+         *        alert('its here!');
+         *    });
+         * </pre>
+         *
+         * @param {string} File type: (scripts, partialViews, partialViewMacros).
+         * @param {string} Snippet name (Ex. Breadcrumb).
+         * @returns {Promise} resourcePromise object.
+         *
+         */
+
+        getScaffold: function (type, id, snippetName) {
+
+            var queryString = "?type=" + type + "&id=" + id;
+            if (snippetName) {
+                queryString += "&snippetName=" + snippetName;
+            }
+
+            return umbRequestHelper.resourcePromise(
+                 $http.get(
+                     umbRequestHelper.getApiUrl(
+                        "codeFileApiBaseUrl",
+                        "GetScaffold" + queryString)),
+                "Failed to get scaffold for" + type);
+        },
+
+        /**
+         * @ngdoc method
+         * @name umbraco.resources.codefileResource#createContainer
+         * @methodOf umbraco.resources.codefileResource
+         *
+         * @description
+         * Creates a container/folder
+         * 
+         * ##usage
+         * <pre>
+         * codefileResource.createContainer("partialViews", "folder%2ffolder", "folder")
+         *    .then(function(data) {
+         *        alert('its here!');
+         *    });
+         * </pre>
+         *
+         * @param {string} File type: (scripts, partialViews, partialViewMacros).
+         * @param {string} Parent Id: url encoded path
+         * @param {string} Container name
+         * @returns {Promise} resourcePromise object.
+         *
+         */
+
+        createContainer: function(type, parentId, name) {
+            return umbRequestHelper.resourcePromise(
+                $http.post(umbRequestHelper.getApiUrl(
+                    "codeFileApiBaseUrl", 
+                    "PostCreateContainer", 
+                    { type: type, parentId: parentId, name: encodeURIComponent(name) })),
+                'Failed to create a folder under parent id ' + parentId);
+        }
+
+    };
+}
+
+angular.module("umbraco.resources").factory("codefileResource", codefileResource);
 
 /**
   * @ngdoc service
@@ -853,20 +1140,20 @@ function contentResource($q, $http, umbDataFormatter, umbRequestHelper) {
             }
 
             return umbRequestHelper.resourcePromise(
-                  $http.get(
-                        umbRequestHelper.getApiUrl(
-                              "contentApiBaseUrl",
-                              "GetChildren",
-                              [
-                                    { id: parentId },
-                                    { pageNumber: options.pageNumber },
-                                    { pageSize: options.pageSize },
-                                    { orderBy: options.orderBy },
-                                    { orderDirection: options.orderDirection },
-                                    { orderBySystemField: toBool(options.orderBySystemField) },
-                                    { filter: options.filter }
-                              ])),
-                  'Failed to retrieve children for content item ' + parentId);
+                $http.get(
+                    umbRequestHelper.getApiUrl(
+                        "contentApiBaseUrl",
+                        "GetChildren",
+                        {
+                            id: parentId,
+                            pageNumber: options.pageNumber,
+                            pageSize: options.pageSize,
+                            orderBy: options.orderBy,
+                            orderDirection: options.orderDirection,
+                            orderBySystemField: toBool(options.orderBySystemField),
+                            filter: options.filter
+                        })),
+                'Failed to retrieve children for content item ' + parentId);
         },
 
         /**
@@ -1141,6 +1428,16 @@ function contentTypeResource($q, $http, umbRequestHelper, umbDataFormatter) {
                        "contentTypeApiBaseUrl",
                        "GetAllPropertyTypeAliases")),
                'Failed to retrieve property type aliases');
+        },
+
+        getAllStandardFields: function () {
+
+            return umbRequestHelper.resourcePromise(
+               $http.get(
+                   umbRequestHelper.getApiUrl(
+                       "contentTypeApiBaseUrl",
+                       "GetAllStandardFields")),
+               'Failed to retrieve standard fields');
         },
 
         getPropertyTypeScaffold : function (id) {
@@ -1852,6 +2149,10 @@ function entityResource($q, $http, umbRequestHelper) {
         
         getSafeAlias: function (value, camelCase) {
 
+            if (!value) {
+                return "";
+            }
+
             return umbRequestHelper.resourcePromise(
                $http.get(
                    umbRequestHelper.getApiUrl(
@@ -1870,7 +2171,7 @@ function entityResource($q, $http, umbRequestHelper) {
          *
          * ##usage
          * <pre>
-         * entityResource.getPath(id)
+         * entityResource.getPath(id, type)
          *    .then(function(pathArray) {
          *        alert('its here!');
          *    });
@@ -1882,6 +2183,11 @@ function entityResource($q, $http, umbRequestHelper) {
          *
          */
         getPath: function (id, type) {
+
+            if (id === -1 || id === "-1") {
+                return "-1";
+            }
+
             return umbRequestHelper.resourcePromise(
                $http.get(
                    umbRequestHelper.getApiUrl(
@@ -1889,6 +2195,42 @@ function entityResource($q, $http, umbRequestHelper) {
                        "GetPath",
                        [{ id: id }, {type: type }])),
                'Failed to retrieve path for id:' + id);
+        },
+
+        /**
+         * @ngdoc method
+         * @name umbraco.resources.entityResource#getUrl
+         * @methodOf umbraco.resources.entityResource
+         *
+         * @description
+         * Returns a url, given a node ID and type
+         *
+         * ##usage
+         * <pre>
+         * entityResource.getUrl(id, type)
+         *    .then(function(url) {
+         *        alert('its here!');
+         *    });
+         * </pre> 
+         * 
+         * @param {Int} id Id of node to return the public url to
+         * @param {string} type Object type name
+         * @returns {Promise} resourcePromise object containing the url.
+         *
+         */
+        getUrl: function (id, type) {
+
+            if (id === -1 || id === "-1") {
+                return "";
+            }
+
+            return umbRequestHelper.resourcePromise(
+               $http.get(
+                   umbRequestHelper.getApiUrl(
+                       "entityApiBaseUrl",
+                       "GetUrl",
+                       [{ id: id }, {type: type }])),
+               'Failed to retrieve url for id:' + id);
         },
 
         /**
@@ -1914,14 +2256,19 @@ function entityResource($q, $http, umbRequestHelper) {
          * @returns {Promise} resourcePromise object containing the entity.
          *
          */
-        getById: function (id, type) {            
+        getById: function (id, type) {      
+
+            if (id === -1 || id === "-1") {
+                return null;
+            }
+
             return umbRequestHelper.resourcePromise(
-               $http.get(
-                   umbRequestHelper.getApiUrl(
-                       "entityApiBaseUrl",
-                       "GetById",
-                       [{ id: id}, {type: type }])),
-               'Failed to retrieve entity data for id ' + id);
+                $http.get(
+                    umbRequestHelper.getApiUrl(
+                        "entityApiBaseUrl",
+                        "GetById",
+                        [{ id: id }, { type: type }])),
+                'Failed to retrieve entity data for id ' + id);
         },
 
         /**
@@ -1949,24 +2296,17 @@ function entityResource($q, $http, umbRequestHelper) {
          */
         getByIds: function (ids, type) {
             
-            var query = "";
-            _.each(ids, function(item) {
-                query += "ids=" + item + "&";
-            });
-
-            // if ids array is empty we need a empty variable in the querystring otherwise the service returns a error
-            if (ids.length === 0) {
-                query += "ids=&";
-            }
-
-            query += "type=" + type;
+            var query = "type=" + type;
 
             return umbRequestHelper.resourcePromise(
-               $http.get(
+               $http.post(
                    umbRequestHelper.getApiUrl(
                        "entityApiBaseUrl",
                        "GetByIds",
-                       query)),
+                       query),
+                   {
+                       ids: ids
+                   }),
                'Failed to retrieve entity data for ids ' + ids);
         },
 
@@ -2075,18 +2415,19 @@ function entityResource($q, $http, umbRequestHelper) {
         
         /**
          * @ngdoc method
-         * @name umbraco.resources.entityResource#getAncestors
+         * @name umbraco.resources.entityResource#getChildren
          * @methodOf umbraco.resources.entityResource
          *
          * @description
          * Gets children entities for a given item
          *        
-         * 
+         * @param {Int} parentid id of content item to return children of
          * @param {string} type Object type name        
          * @returns {Promise} resourcePromise object containing the entity.
          *
          */
         getChildren: function (id, type) {
+
             return umbRequestHelper.resourcePromise(
                $http.get(
                    umbRequestHelper.getApiUrl(
@@ -2094,6 +2435,146 @@ function entityResource($q, $http, umbRequestHelper) {
                        "GetChildren",
                        [{ id: id }, { type: type }])),
                'Failed to retrieve child data for id ' + id);
+        },
+
+        /**
+          * @ngdoc method
+          * @name umbraco.resources.entityResource#getPagedChildren
+          * @methodOf umbraco.resources.entityResource
+          *
+          * @description
+          * Gets paged children of a content item with a given id
+          *
+          * ##usage
+          * <pre>
+          * entityResource.getPagedChildren(1234, "Content", {pageSize: 10, pageNumber: 2})
+          *    .then(function(contentArray) {
+          *        var children = contentArray; 
+          *        alert('they are here!');
+          *    });
+          * </pre> 
+          * 
+          * @param {Int} parentid id of content item to return children of
+          * @param {string} type Object type name
+          * @param {Object} options optional options object
+          * @param {Int} options.pageSize if paging data, number of nodes per page, default = 1
+          * @param {Int} options.pageNumber if paging data, current page index, default = 100
+          * @param {String} options.filter if provided, query will only return those with names matching the filter
+          * @param {String} options.orderDirection can be `Ascending` or `Descending` - Default: `Ascending`
+          * @param {String} options.orderBy property to order items by, default: `SortOrder`
+          * @returns {Promise} resourcePromise object containing an array of content items.
+          *
+          */
+        getPagedChildren: function (parentId, type, options) {
+
+            var defaults = {
+                pageSize: 1,
+                pageNumber: 100,
+                filter: '',
+                orderDirection: "Ascending",
+                orderBy: "SortOrder"
+            };
+            if (options === undefined) {
+                options = {};
+            }
+            //overwrite the defaults if there are any specified
+            angular.extend(defaults, options);
+            //now copy back to the options we will use
+            options = defaults;
+            //change asc/desct
+            if (options.orderDirection === "asc") {
+                options.orderDirection = "Ascending";
+            }
+            else if (options.orderDirection === "desc") {
+                options.orderDirection = "Descending";
+            }
+
+            return umbRequestHelper.resourcePromise(
+                $http.get(
+                    umbRequestHelper.getApiUrl(
+                        "entityApiBaseUrl",
+                        "GetPagedChildren",
+                        {
+                            id: parentId,
+                            type: type,
+                            pageNumber: options.pageNumber,
+                            pageSize: options.pageSize,
+                            orderBy: options.orderBy,
+                            orderDirection: options.orderDirection,
+                            filter: encodeURIComponent(options.filter)
+                        }
+                    )),
+                'Failed to retrieve child data for id ' + parentId);
+        },
+
+        /**
+          * @ngdoc method
+          * @name umbraco.resources.entityResource#getPagedDescendants
+          * @methodOf umbraco.resources.entityResource
+          *
+          * @description
+          * Gets paged descendants of a content item with a given id
+          *
+          * ##usage
+          * <pre>
+          * entityResource.getPagedDescendants(1234, "Content", {pageSize: 10, pageNumber: 2})
+          *    .then(function(contentArray) {
+          *        var children = contentArray; 
+          *        alert('they are here!');
+          *    });
+          * </pre> 
+          * 
+          * @param {Int} parentid id of content item to return descendants of
+          * @param {string} type Object type name
+          * @param {Object} options optional options object
+          * @param {Int} options.pageSize if paging data, number of nodes per page, default = 1
+          * @param {Int} options.pageNumber if paging data, current page index, default = 100
+          * @param {String} options.filter if provided, query will only return those with names matching the filter
+          * @param {String} options.orderDirection can be `Ascending` or `Descending` - Default: `Ascending`
+          * @param {String} options.orderBy property to order items by, default: `SortOrder`
+          * @returns {Promise} resourcePromise object containing an array of content items.
+          *
+          */
+        getPagedDescendants: function (parentId, type, options) {
+
+            var defaults = {
+                pageSize: 1,
+                pageNumber: 100,
+                filter: '',
+                orderDirection: "Ascending",
+                orderBy: "SortOrder"
+            };
+            if (options === undefined) {
+                options = {};
+            }
+            //overwrite the defaults if there are any specified
+            angular.extend(defaults, options);
+            //now copy back to the options we will use
+            options = defaults;
+            //change asc/desct
+            if (options.orderDirection === "asc") {
+                options.orderDirection = "Ascending";
+            }
+            else if (options.orderDirection === "desc") {
+                options.orderDirection = "Descending";
+            }
+
+            return umbRequestHelper.resourcePromise(
+                $http.get(
+                    umbRequestHelper.getApiUrl(
+                        "entityApiBaseUrl",
+                        "GetPagedDescendants",
+                        {
+                            id: parentId,
+                            type: type,
+                            pageNumber: options.pageNumber,
+                            pageSize: options.pageSize,
+                            orderBy: options.orderBy,
+                            orderDirection: options.orderDirection,
+                            filter: encodeURIComponent(options.filter)
+                        }
+                    )),
+                'Failed to retrieve child data for id ' + parentId);
         },
      
         /**
@@ -2402,13 +2883,13 @@ angular.module('umbraco.resources').factory('logResource', logResource);
     * @ngdoc service
     * @name umbraco.resources.macroResource
     * @description Deals with data for macros
-    * 
+    *
     **/
 function macroResource($q, $http, umbRequestHelper) {
 
     //the factory object returned
     return {
-        
+
         /**
          * @ngdoc method
          * @name umbraco.resources.macroResource#getMacroParameters
@@ -2420,7 +2901,7 @@ function macroResource($q, $http, umbRequestHelper) {
          * @param {int} macroId The macro id to get parameters for
          *
          */
-        getMacroParameters: function (macroId) {            
+        getMacroParameters: function (macroId) {
             return umbRequestHelper.resourcePromise(
                $http.get(
                    umbRequestHelper.getApiUrl(
@@ -2429,7 +2910,7 @@ function macroResource($q, $http, umbRequestHelper) {
                        [{ macroId: macroId }])),
                'Failed to retrieve macro parameters for macro with id  ' + macroId);
         },
-        
+
         /**
          * @ngdoc method
          * @name umbraco.resources.macroResource#getMacroResult
@@ -2455,6 +2936,27 @@ function macroResource($q, $http, umbRequestHelper) {
                         macroParams: macroParamDictionary
                     }),
                 'Failed to retrieve macro result for macro with alias  ' + macroAlias);
+        },
+
+        /**
+         *
+         * @param {} filename
+         * @returns {}
+         */
+        createPartialViewMacroWithFile: function(virtualPath, filename) {
+
+            return umbRequestHelper.resourcePromise(
+                $http.post(
+                    umbRequestHelper.getApiUrl(
+                        "macroApiBaseUrl",
+                        "CreatePartialViewMacroWithFile"), {
+                            virtualPath: virtualPath,
+                            filename: filename
+                        }
+                ),
+                'Failed to create macro "' + filename + '"'
+            );
+
         }
     };
 }
@@ -2948,7 +3450,49 @@ function mediaResource($q, $http, umbDataFormatter, umbRequestHelper) {
                                "mediaApiBaseUrl",
                                "EmptyRecycleBin")),
                    'Failed to empty the recycle bin');
+        },
+
+        /**
+          * @ngdoc method
+          * @name umbraco.resources.mediaResource#search
+          * @methodOf umbraco.resources.mediaResource
+          *
+          * @description
+          * Empties the media recycle bin
+          *
+          * ##usage
+          * <pre>
+          * mediaResource.search("my search", 1, 100, -1)
+          *    .then(function(searchResult) {
+          *        alert('it's here!');
+          *    });
+          * </pre> 
+          *           
+          * @param {string} query The search query
+          * @param {int} pageNumber The page number
+          * @param {int} pageSize The number of media items on a page
+          * @param {int} searchFrom Id to search from
+          * @returns {Promise} resourcePromise object.
+          *
+          */
+        search: function (query, pageNumber, pageSize, searchFrom) {
+
+            var args = [
+                { "query": query }, 
+                { "pageNumber": pageNumber },
+                { "pageSize": pageSize },
+                { "searchFrom": searchFrom }
+            ];
+
+            return umbRequestHelper.resourcePromise(
+                  $http.get(
+                        umbRequestHelper.getApiUrl(
+                              "mediaApiBaseUrl",
+                              "Search",
+                              args)),
+                  'Failed to retrieve media items for search: ' + query);
         }
+
     };
 }
 
@@ -3533,15 +4077,14 @@ angular.module('umbraco.resources').factory('memberTypeResource', memberTypeReso
     **/
 function ourPackageRepositoryResource($q, $http, umbDataFormatter, umbRequestHelper) {
 
-    //var baseurl = "http://localhost:24292/webapi/packages/v1";
-    var baseurl = "https://our.umbraco.org/webapi/packages/v1";
+    var baseurl = Umbraco.Sys.ServerVariables.umbracoUrls.packagesRestApiBaseUrl;
 
     return {
         
         getDetails: function (packageId) {
 
             return umbRequestHelper.resourcePromise(
-               $http.get(baseurl + "/" + packageId),
+               $http.get(baseurl + "/" + packageId + "?version=" + Umbraco.Sys.ServerVariables.application.version),
                'Failed to get package details');
         },
 
@@ -4034,6 +4577,355 @@ angular.module('umbraco.resources').factory('stylesheetResource', stylesheetReso
 
 /**
     * @ngdoc service
+    * @name umbraco.resources.templateResource
+    * @description Loads in data for templates
+    **/
+function templateResource($q, $http, umbDataFormatter, umbRequestHelper) {
+
+    return {
+
+        /**
+         * @ngdoc method
+         * @name umbraco.resources.templateResource#getById
+         * @methodOf umbraco.resources.templateResource
+         *
+         * @description
+         * Gets a template item with a given id
+         *
+         * ##usage
+         * <pre>
+         * templateResource.getById(1234)
+         *    .then(function(template) {
+         *        alert('its here!');
+         *    });
+         * </pre>
+         *
+         * @param {Int} id id of template to retrieve
+         * @returns {Promise} resourcePromise object.
+         *
+         */
+        getById: function (id) {
+
+            return umbRequestHelper.resourcePromise(
+               $http.get(
+                   umbRequestHelper.getApiUrl(
+                       "templateApiBaseUrl",
+                       "GetById",
+                       [{ id: id }])),
+               "Failed to retrieve data for template id " + id);
+        },
+
+        /**
+         * @ngdoc method
+         * @name umbraco.resources.templateResource#getByAlias
+         * @methodOf umbraco.resources.templateResource
+         *
+         * @description
+         * Gets a template item with a given alias
+         *
+         * ##usage
+         * <pre>
+         * templateResource.getByAlias("upload")
+         *    .then(function(template) {
+         *        alert('its here!');
+         *    });
+         * </pre>
+         *
+         * @param {String} alias Alias of template to retrieve
+         * @returns {Promise} resourcePromise object.
+         *
+         */
+        getByAlias: function (alias) {
+
+            return umbRequestHelper.resourcePromise(
+               $http.get(
+                   umbRequestHelper.getApiUrl(
+                       "templateApiBaseUrl",
+                       "GetByAlias",
+                       [{ alias: alias }])),
+               "Failed to retrieve data for template with alias: " + alias);
+        },
+
+        /**
+         * @ngdoc method
+         * @name umbraco.resources.templateResource#getAll
+         * @methodOf umbraco.resources.templateResource
+         *
+         * @description
+         * Gets all templates
+         *
+         * ##usage
+         * <pre>
+         * templateResource.getAll()
+         *    .then(function(templates) {
+         *        alert('its here!');
+         *    });
+         * </pre>
+         *
+         * @returns {Promise} resourcePromise object.
+         *
+         */
+        getAll: function () {
+
+            return umbRequestHelper.resourcePromise(
+               $http.get(
+                   umbRequestHelper.getApiUrl(
+                       "templateApiBaseUrl",
+                       "GetAll")),
+               "Failed to retrieve data");
+        },
+
+
+        /**
+         * @ngdoc method
+         * @name umbraco.resources.templateResource#getScaffold
+         * @methodOf umbraco.resources.templateResource
+         *
+         * @description
+         * Returns a scaffold of an empty template item
+         *
+         * The scaffold is used to build editors for templates that has not yet been populated with data.
+         *
+         * ##usage
+         * <pre>
+         * templateResource.getScaffold()
+         *    .then(function(template) {
+         *        alert('its here!');
+         *    });
+         * </pre>
+         *
+         * @returns {Promise} resourcePromise object containing the template scaffold.
+         *
+         */
+        getScaffold: function (id) {
+
+            return umbRequestHelper.resourcePromise(
+               $http.get(
+                   umbRequestHelper.getApiUrl(
+                       "templateApiBaseUrl",
+                       "GetScaffold",
+                        [{ id: id }] )),
+               "Failed to retrieve data for empty template");
+        },
+
+        /**
+         * @ngdoc method
+         * @name umbraco.resources.templateResource#deleteById
+         * @methodOf umbraco.resources.templateResource
+         *
+         * @description
+         * Deletes a template with a given id
+         *
+         * ##usage
+         * <pre>
+         * templateResource.deleteById(1234)
+         *    .then(function() {
+         *        alert('its gone!');
+         *    });
+         * </pre>
+         *
+         * @param {Int} id id of template to delete
+         * @returns {Promise} resourcePromise object.
+         *
+         */
+        deleteById: function(id) {
+            return umbRequestHelper.resourcePromise(
+                $http.post(
+                    umbRequestHelper.getApiUrl(
+                        "templateApiBaseUrl",
+                        "DeleteById",
+                        [{ id: id }])),
+                "Failed to delete item " + id);
+        },
+
+        /**
+         * @ngdoc method
+         * @name umbraco.resources.templateResource#save
+         * @methodOf umbraco.resources.templateResource
+         *
+         * @description
+         * Saves or update a template
+         * 
+         * ##usage
+         * <pre>
+         * templateResource.save(template)
+         *    .then(function(template) {
+         *        alert('its saved!');
+         *    });
+         * </pre>
+         *
+         * @param {Object} template object to save
+         * @returns {Promise} resourcePromise object.
+         *
+         */
+        save: function (template) {
+            return umbRequestHelper.resourcePromise(
+                 $http.post(
+                     umbRequestHelper.getApiUrl(
+                         "templateApiBaseUrl", 
+                         "PostSave"), 
+                         template),
+                "Failed to save data for template id " + template.id);
+        }
+    };
+}
+
+angular.module("umbraco.resources").factory("templateResource", templateResource);
+
+/**
+ * @ngdoc service
+ * @name umbraco.resources.templateQueryResource
+ * @function
+ *
+ * @description
+ * Used by the query builder
+ */
+(function () {
+    'use strict';
+
+    function templateQueryResource($http, umbRequestHelper) {
+
+        /**
+         * @ngdoc function
+         * @name umbraco.resources.templateQueryResource#getAllowedProperties
+         * @methodOf umbraco.resources.templateQueryResource
+         * @function
+         *
+         * @description
+         * Called to get allowed properties
+         * ##usage
+         * <pre>
+         * templateQueryResource.getAllowedProperties()
+         *    .then(function(response) {
+         *
+         *    });
+         * </pre>
+         */
+        function getAllowedProperties() {
+            return umbRequestHelper.resourcePromise(
+                $http.get(
+                    umbRequestHelper.getApiUrl(
+                        "templateQueryApiBaseUrl",
+                        "GetAllowedProperties")),
+                'Failed to retrieve properties');
+        }
+
+        /**
+         * @ngdoc function
+         * @name umbraco.resources.templateQueryResource#getContentTypes
+         * @methodOf umbraco.resources.templateQueryResource
+         * @function
+         *
+         * @description
+         * Called to get content types
+         * ##usage
+         * <pre>
+         * templateQueryResource.getContentTypes()
+         *    .then(function(response) {
+         *
+         *    });
+         * </pre>
+         */
+        function getContentTypes() {
+            return umbRequestHelper.resourcePromise(
+                $http.get(
+                    umbRequestHelper.getApiUrl(
+                        "templateQueryApiBaseUrl",
+                        "GetContentTypes")),
+                'Failed to retrieve content types');
+        }
+
+        /**
+         * @ngdoc function
+         * @name umbraco.resources.templateQueryResource#getFilterConditions
+         * @methodOf umbraco.resources.templateQueryResource
+         * @function
+         *
+         * @description
+         * Called to the filter conditions
+         * ##usage
+         * <pre>
+         * templateQueryResource.getFilterConditions()
+         *    .then(function(response) {
+         *
+         *    });
+         * </pre>
+         */
+        function getFilterConditions() {
+            return umbRequestHelper.resourcePromise(
+                $http.get(
+                    umbRequestHelper.getApiUrl(
+                        "templateQueryApiBaseUrl",
+                        "GetFilterConditions")),
+                'Failed to retrieve filter conditions');
+        }
+
+        /**
+         * @ngdoc function
+         * @name umbraco.resources.templateQueryResource#postTemplateQuery
+         * @methodOf umbraco.resources.templateQueryResource
+         * @function
+         *
+         * @description
+         * Called to get content types
+         * ##usage
+         * <pre>
+         * var query = {
+         *     contentType: {
+         *         name: "Everything"
+         *      },
+         *      source: {
+         *          name: "My website"
+         *      },
+         *      filters: [
+         *          {
+         *              property: undefined,
+         *              operator: undefined
+         *          }
+         *      ],
+         *      sort: {
+         *          property: {
+         *              alias: "",
+         *              name: "",
+         *          },
+         *          direction: "ascending"
+         *      }
+         *  };
+         * 
+         * templateQueryResource.postTemplateQuery(query)
+         *    .then(function(response) {
+         *
+         *    });
+         * </pre>
+         * @param {object} query Query to build result
+         */
+        function postTemplateQuery(query) {
+            return umbRequestHelper.resourcePromise(
+                $http.post(
+                    umbRequestHelper.getApiUrl(
+                        "templateQueryApiBaseUrl",
+                        "PostTemplateQuery"),
+                        query),
+                'Failed to retrieve query');
+        }
+
+        var resource = {
+            getAllowedProperties: getAllowedProperties,
+            getContentTypes: getContentTypes,
+            getFilterConditions: getFilterConditions,
+            postTemplateQuery: postTemplateQuery
+        };
+
+        return resource;
+
+    }
+
+    angular.module('umbraco.resources').factory('templateQueryResource', templateQueryResource);
+
+})();
+
+/**
+    * @ngdoc service
     * @name umbraco.resources.treeResource
     * @description Loads in data for trees
     **/
@@ -4085,9 +4977,14 @@ function treeResource($q, $http, umbRequestHelper) {
             if (!options.isDialog) {
                 options.isDialog = false;
             }
-          
+
             //create the query string for the tree request, these are the mandatory options:
             var query = "application=" + options.section + "&tree=" + options.tree + "&isDialog=" + options.isDialog;
+
+            //if you need to load a not initialized tree set this value to false - default is true
+            if (options.onlyinitialized) {
+                query += "&onlyInitialized=" + options.onlyinitialized;
+            }
 
             //the options can contain extra query string parameters
             if (options.queryString) {
