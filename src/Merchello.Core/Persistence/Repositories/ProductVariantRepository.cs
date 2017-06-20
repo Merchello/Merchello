@@ -263,7 +263,6 @@
 
             ExecuteBatchUpdate(productVariants);
 
-
             SaveCatalogInventory(productVariants);
 
             SaveDetachedContents(productVariants);
@@ -456,7 +455,7 @@
                     sqlStatement = string.Empty;
                 }
             }
-
+            
             if (!string.IsNullOrEmpty(sqlStatement))
             {
                 Database.Execute(sqlStatement, parms.ToArray());
@@ -464,6 +463,7 @@
 
             if (inserts.Any())
             {
+
                 // Database.BulkInsertRecords won't work here because of the many to many and no pk.
                 foreach (var ins in inserts) Database.Insert(ins);
             }
