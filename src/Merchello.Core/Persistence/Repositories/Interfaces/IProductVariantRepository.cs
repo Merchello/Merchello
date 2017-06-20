@@ -123,6 +123,26 @@
         /// </param>
         void SaveDetachedContents(IProductVariant productVariant);
 
+
+        /// <summary>
+        /// Performs a get, exactly the same as base PerformGet
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        IProductVariant PerformGet(ProductDto dto);
+
+        /// <summary>
+        /// Performs a Get but improved performance by passing in collections
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <param name="productAttributeCollection"></param>
+        /// <param name="catalogInventoryCollection"></param>
+        /// <param name="productVariantDetachedContents"></param>
+        /// <returns></returns>
+        IProductVariant PerformGet(ProductDto dto, ProductAttributeCollection productAttributeCollection,
+                                                CatalogInventoryCollection catalogInventoryCollection,
+                                                DetachedContentCollection<IProductVariantDetachedContent> productVariantDetachedContents);
+
         #region Filter Queries
 
         // get a list of all products with Option "Color"

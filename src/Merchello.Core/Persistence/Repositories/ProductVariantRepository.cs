@@ -309,7 +309,7 @@
                .From<CatalogInventoryDto>(SqlSyntax)
                .InnerJoin<WarehouseCatalogDto>(SqlSyntax)
                .On<CatalogInventoryDto, WarehouseCatalogDto>(SqlSyntax, left => left.CatalogKey, right => right.Key)
-               .Where<CatalogInventoryDto>(x => x.ProductVariantKey == productVariantKey);
+               .Where<CatalogInventoryDto>(x => x.ProductVariantKey == productVariantKey, SqlSyntax);
 
             var dtos = Database.Fetch<CatalogInventoryDto, WarehouseCatalogDto>(sql);
 
@@ -375,7 +375,7 @@
 
             if (keys.Any())
             {
-                sql = sql.WhereIn<CatalogInventoryDto>(x => x.ProductVariantKey, keys);
+                sql = sql.WhereIn<CatalogInventoryDto>(x => x.ProductVariantKey, keys, SqlSyntax);
             }
 
             var inventoryDtos = Database.Fetch<CatalogInventoryDto, WarehouseCatalogDto>(sql);
@@ -745,7 +745,7 @@
                     SqlSyntax,
                     left => left.DetachedContentTypeKey,
                     right => right.Key)
-                .WhereIn<ProductVariantDetachedContentDto>(x => x.ProductVariantKey, productVariantKeys);
+                .WhereIn<ProductVariantDetachedContentDto>(x => x.ProductVariantKey, productVariantKeys, SqlSyntax);
 
             var dtos = Database.Fetch<ProductVariantDetachedContentDto, DetachedContentTypeDto>(sql);
 
@@ -790,6 +790,83 @@
         }
 
         /// <summary>
+        /// Gets the product variant
+        /// </summary>
+        /// <param name="dto">
+        /// ProductDto
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductVariant"/>.
+        /// </returns>
+        /// <remarks>
+        /// This is a combination of the overridden PerformGet(Guid) and the 
+        /// MerchelloRespositoryBase Get(Guid key). Not sure where else to put this method ^LM
+        /// </remarks>
+        public IProductVariant PerformGet(ProductDto dto)
+        {
+            if (IsCachedRepository)
+            {
+                var fromCache = TryGetFromCache(dto.ProductVariantDto.Key);
+                if (fromCache.Success)
+                {
+                    return fromCache.Result;
+                }
+            }
+
+            if (dto?.ProductVariantDto == null)
+                return null;
+
+            var factory = new ProductVariantFactory(_productOptionRepository.GetProductAttributeCollectionForVariant, GetCategoryInventoryCollection, GetDetachedContentCollection);
+            var variant = factory.BuildEntity(dto.ProductVariantDto);
+
+            if (variant != null)
+            {
+                RuntimeCache.GetCacheItem(GetCacheKey(dto.ProductVariantDto.Key), () => variant);
+                variant.ResetDirtyProperties();
+            }
+
+            return variant;
+        }
+
+        /// <summary>
+        /// PerformGet for bulk variants and associated data
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <param name="productAttributeCollection"></param>
+        /// <param name="catalogInventoryCollection"></param>
+        /// <param name="productVariantDetachedContents"></param>
+        /// <returns></returns>
+        public IProductVariant PerformGet(ProductDto dto,
+                ProductAttributeCollection productAttributeCollection,
+                CatalogInventoryCollection catalogInventoryCollection,
+                DetachedContentCollection<IProductVariantDetachedContent> productVariantDetachedContents)
+        {
+            //if (IsCachedRepository)
+            //{
+            //    var fromCache = TryGetFromCache(dto.ProductVariantDto.Key);
+            //    if (fromCache.Success)
+            //    {
+            //        return fromCache.Result;
+            //    }
+            //}
+
+            //if (dto?.ProductVariantDto == null)
+            //    return null;
+
+            //var factory = new ProductVariantFactory(productAttributeCollection, catalogInventoryCollection, productVariantDetachedContents);
+            //var variant = factory.BuildEntity(dto.ProductVariantDto);
+
+            //if (variant != null)
+            //{
+            //    RuntimeCache.GetCacheItem(GetCacheKey(dto.ProductVariantDto.Key), () => variant);
+            //    variant.ResetDirtyProperties();
+            //}
+
+            //return variant;
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// The perform get all.
         /// </summary>
         /// <param name="keys">
@@ -828,13 +905,49 @@
         /// </returns>
         protected override IEnumerable<IProductVariant> PerformGetByQuery(IQuery<IProductVariant> query)
         {
-            var sqlClause = GetBaseQuery(false);
-            var translator = new SqlTranslator<IProductVariant>(sqlClause, query);
-            var sql = translator.Translate();
+            var baseVariantClause = GetBaseQuery(false);
+            var variantTranslator = new SqlTranslator<IProductVariant>(baseVariantClause, query);
+            var variantSql = variantTranslator.Translate();                       
+            var variantDtos = Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(variantSql);
 
-            var dtos = Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(sql);
+            // Get all productvariantkeys 
+            var variantKeys = variantDtos.Select(x => x.ProductVariantDto.Key).Distinct().ToArray();
 
-            return dtos.DistinctBy(x => x.ProductVariantDto.Key).Select(dto => Get(dto.ProductVariantDto.Key));
+            #region Bulk Changes In Progress Here
+
+            //// TODO - GetProductAttributeCollectionForVariant(Guid productVariantKey) IN ProductOptionRepository
+            //// TODO - This WhereIn could potentially hold us up
+            //var prodAttrCollForVariantSql = new Sql();
+            //prodAttrCollForVariantSql.Select("*")
+            //    .From<ProductVariant2ProductAttributeDto>(SqlSyntax)
+            //    .InnerJoin<ProductAttributeDto>(SqlSyntax)
+            //    .On<ProductVariant2ProductAttributeDto, ProductAttributeDto>(SqlSyntax, left => left.ProductAttributeKey, right => right.Key)
+            //    .WhereIn<ProductVariant2ProductAttributeDto>(x => x.ProductVariantKey, variantKeys, SqlSyntax); // New Where in returns many
+
+            //var dtos = Database.Fetch<ProductVariant2ProductAttributeDto, ProductAttributeDto>(prodAttrCollForVariantSql);
+
+            //// TODO - Group by variant ID then loop below
+
+            //var factory = new ProductAttributeFactory();
+
+            //// This should be a Dictionary<Guid, Collection>
+            //var collection = new ProductAttributeCollection();
+            //foreach (var dto in dtos)
+            //{
+            //    var attribute = factory.BuildEntity(dto.ProductAttributeDto);
+            //    // TODO LM - Don't get this line?? It's got the attribute above? Should I not be checking for wh
+            //    RuntimeCache.GetCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProductAttribute>(attribute.Key), () => attribute);
+            //    collection.Add(attribute);
+            //}
+
+            //// TODO - CatalogInventoryCollection GetCategoryInventoryCollection(Guid productVariantKey)
+
+
+            //// TODO - GetDetachedContentCollection(Guid productVariantKey) >> GetProductVariantDetachedContents(Guid productVariantKey)
+  
+            #endregion
+
+            return variantKeys.Select(x => PerformGet(x));
         }
 
         /// <summary>
