@@ -884,6 +884,7 @@
             else
             {                
                 var dtos = Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(GetBaseQuery(false));
+                // TODO - This is really inefficient
                 foreach (var dto in dtos)
                 {
                     yield return Get(dto.ProductVariantDto.Key);
@@ -908,41 +909,66 @@
             var variantDtos = Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(variantSql);
 
             // Get all productvariantkeys 
-            var variantKeys = variantDtos.Select(x => x.ProductVariantDto.Key).Distinct().ToArray();
+            var distinctDtos = variantDtos.DistinctBy(x => x.ProductVariantDto.Key).ToArray();
+            var variantKeys = distinctDtos.Select(x => x.ProductVariantDto.Key).ToArray();
 
             #region Bulk Changes In Progress Here
 
             //// TODO - GetProductAttributeCollectionForVariant(Guid productVariantKey) IN ProductOptionRepository
-            //// TODO - This WhereIn could potentially hold us up
-            //var prodAttrCollForVariantSql = new Sql();
-            //prodAttrCollForVariantSql.Select("*")
-            //    .From<ProductVariant2ProductAttributeDto>(SqlSyntax)
-            //    .InnerJoin<ProductAttributeDto>(SqlSyntax)
-            //    .On<ProductVariant2ProductAttributeDto, ProductAttributeDto>(SqlSyntax, left => left.ProductAttributeKey, right => right.Key)
-            //    .WhereIn<ProductVariant2ProductAttributeDto>(x => x.ProductVariantKey, variantKeys, SqlSyntax); // New Where in returns many
+            //// TODO - This WhereIn could potentially hold us up due to the amount of clauses in the WhereIn!
+            var prodAttrCollForVariantSql = new Sql();
+                prodAttrCollForVariantSql.Select("*")
+                    .From<ProductVariant2ProductAttributeDto>(SqlSyntax)
+                    .InnerJoin<ProductAttributeDto>(SqlSyntax)
+                    .On<ProductVariant2ProductAttributeDto, ProductAttributeDto>(SqlSyntax, left => left.ProductAttributeKey, right => right.Key)
+                    .WhereIn<ProductVariant2ProductAttributeDto>(x => x.ProductVariantKey, variantKeys, SqlSyntax); // New Where in returns many
 
-            //var dtos = Database.Fetch<ProductVariant2ProductAttributeDto, ProductAttributeDto>(prodAttrCollForVariantSql);
+            // Execute the query
+            var dtos = Database.Fetch<ProductVariant2ProductAttributeDto, ProductAttributeDto>(prodAttrCollForVariantSql);
 
-            //// TODO - Group by variant ID then loop below
+            // Dump into LookUp table
+            var dtosLookUp = dtos.ToLookup(x => x.ProductVariantKey);
 
-            //var factory = new ProductAttributeFactory();
+            // Get a factory
+            var factory = new ProductAttributeFactory();
 
-            //// This should be a Dictionary<Guid, Collection>
-            //var collection = new ProductAttributeCollection();
-            //foreach (var dto in dtos)
-            //{
-            //    var attribute = factory.BuildEntity(dto.ProductAttributeDto);
-            //    // TODO LM - Don't get this line?? It's got the attribute above? Should I not be checking for wh
-            //    RuntimeCache.GetCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProductAttribute>(attribute.Key), () => attribute);
-            //    collection.Add(attribute);
-            //}
+            // This should be a Dictionary<Guid, Collection>
+            var collection = new Dictionary<Guid, ProductAttributeCollection>();
+            foreach (var dto in dtosLookUp)
+            {
+                var variantKey = dto.Key;
+                var productAttributeCollection = new ProductAttributeCollection();
+
+                // Loop through the group to get the attributes
+                foreach (var productVariant2ProductAttributeDto in dto)
+                {
+                    var attribute = factory.BuildEntity(productVariant2ProductAttributeDto.ProductAttributeDto);
+                    // TODO LM - Don't get this line?? It's got the attribute above? Should I not be checking for wh
+                    RuntimeCache.GetCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProductAttribute>(attribute.Key), () => attribute);
+                    productAttributeCollection.Add(attribute);
+                }
+                collection.Add(variantKey, productAttributeCollection);
+            }
 
             //// TODO - CatalogInventoryCollection GetCategoryInventoryCollection(Guid productVariantKey)
 
 
             //// TODO - GetDetachedContentCollection(Guid productVariantKey) >> GetProductVariantDetachedContents(Guid productVariantKey)
-  
+
             #endregion
+
+            //var productVariants = new List<IProductVariant>();
+            //foreach (var dto in distinctDtos)
+            //{
+            //    // Variant Key
+            //    var variantKey = dto.ProductVariantDto.Key;
+
+            //    // Attribute Collection
+            //    var productAttributeCollection = collection[variantKey];
+
+            //    productVariants.Add(PerformGet(dto, productAttributeCollection, ));
+            //}
+            //return productVariants;
 
             return variantKeys.Select(x => PerformGet(x));
         }
