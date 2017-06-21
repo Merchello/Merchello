@@ -778,15 +778,7 @@
 
             var dto = Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(sql).FirstOrDefault();
 
-            if (dto == null || dto.ProductVariantDto == null)
-                return null;
-
-            var factory = new ProductVariantFactory(_productOptionRepository.GetProductAttributeCollectionForVariant, GetCategoryInventoryCollection, GetDetachedContentCollection);
-            var variant = factory.BuildEntity(dto.ProductVariantDto);
-
-            variant.ResetDirtyProperties();
-
-            return variant;
+            return PerformGet(dto);
         }
 
         /// <summary>
@@ -804,6 +796,9 @@
         /// </remarks>
         public IProductVariant PerformGet(ProductDto dto)
         {
+            if (dto?.ProductVariantDto == null)
+                return null;
+
             if (IsCachedRepository)
             {
                 var fromCache = TryGetFromCache(dto.ProductVariantDto.Key);
@@ -813,10 +808,12 @@
                 }
             }
 
-            if (dto?.ProductVariantDto == null)
-                return null;
+            // Get needed collections
+            var productAttributeCollection = _productOptionRepository.GetProductAttributeCollectionForVariant(dto.ProductVariantDto.Key);
+            var catalogInventoryCollection = GetCategoryInventoryCollection(dto.ProductVariantDto.Key);
+            var detachedContentCollection = GetDetachedContentCollection(dto.ProductVariantDto.Key);
 
-            var factory = new ProductVariantFactory(_productOptionRepository.GetProductAttributeCollectionForVariant, GetCategoryInventoryCollection, GetDetachedContentCollection);
+            var factory = new ProductVariantFactory(productAttributeCollection, catalogInventoryCollection, detachedContentCollection);
             var variant = factory.BuildEntity(dto.ProductVariantDto);
 
             if (variant != null)
@@ -1000,10 +997,7 @@
 
             ((ProductVariant)entity).VersionKey = Guid.NewGuid();
 
-            var factory = new ProductVariantFactory(
-                pa => ((ProductVariant)entity).ProductAttributes,
-                ci => ((ProductVariant)entity).CatalogInventoryCollection,
-                dc => ((ProductVariant)entity).DetachedContents);
+            var factory = new ProductVariantFactory();
 
             var dto = factory.BuildDto(entity);
 
@@ -1051,10 +1045,7 @@
             ((Entity)entity).UpdatingEntity();
             ((ProductVariant)entity).VersionKey = Guid.NewGuid();
 
-            var factory = new ProductVariantFactory(
-                pa => ((ProductVariant)entity).ProductAttributes,
-                ci => ((ProductVariant)entity).CatalogInventoryCollection,
-                dc => ((ProductVariant)entity).DetachedContents);
+            var factory = new ProductVariantFactory();
 
             var dto = factory.BuildDto(entity);
 
