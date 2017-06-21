@@ -79,7 +79,7 @@
                 .From<CatalogInventoryDto>(SqlSyntax)
                 .InnerJoin<WarehouseCatalogDto>(SqlSyntax)
                 .On<CatalogInventoryDto, WarehouseCatalogDto>(SqlSyntax, left => left.CatalogKey, right => right.Key)
-                .Where<WarehouseCatalogDto>(x => x.WarehouseKey == warehouseKey);
+                .Where<WarehouseCatalogDto>(x => x.WarehouseKey == warehouseKey, SqlSyntax);
 
             var dtos = Database.Fetch<CatalogInventoryDto, WarehouseCatalogDto>(sql);
 
@@ -164,7 +164,7 @@
             var sql = new Sql();
             sql.Select("*")
                .From<ProductVariantDto>(SqlSyntax)
-               .Where<ProductVariantDto>(x => x.Sku == sku);
+               .Where<ProductVariantDto>(x => x.Sku == sku, SqlSyntax);
 
             return Database.Fetch<ProductVariantDto>(sql).Any();
         }
@@ -1241,7 +1241,7 @@
             var sql = new Sql();
             sql.Select("*")
                 .From<ProductVariantDto>(SqlSyntax)
-                .Where<ProductVariantDto>(x => x.Sku == sku && x.Key != productVariantKey);
+                .Where<ProductVariantDto>(x => x.Sku == sku && x.Key != productVariantKey, SqlSyntax);
 
             return Database.Fetch<ProductAttributeDto>(sql).Any();
         }
