@@ -366,19 +366,42 @@
         /// </remarks>
         internal void SaveCatalogInventory(IProductVariant[] productVariants)
         {
+            // Get any variant keys
             var keys = productVariants.Select(v => v.Key).ToArray();
-            var sql = new Sql();
-            sql.Select("*")
-                .From<CatalogInventoryDto>(SqlSyntax)
-                .InnerJoin<WarehouseCatalogDto>(SqlSyntax)
-                .On<CatalogInventoryDto, WarehouseCatalogDto>(SqlSyntax, left => left.CatalogKey, right => right.Key);
 
+            // List to hold the result of the query
+            var inventoryDtos = new List<CatalogInventoryDto>();
+
+            // Check for variant keys
             if (keys.Any())
             {
-                sql = sql.WhereIn<CatalogInventoryDto>(x => x.ProductVariantKey, keys, SqlSyntax);
-            }
+                // Split keys into chunks of 500 to stop SQL 2100 limit
+                var keysChunked = keys.Split(500);
 
-            var inventoryDtos = Database.Fetch<CatalogInventoryDto, WarehouseCatalogDto>(sql);
+                // Loop keys and execute query
+                foreach (var keyChunk in keysChunked)
+                {
+                    var sql = new Sql();
+                    sql.Select("*")
+                        .From<CatalogInventoryDto>(SqlSyntax)
+                        .InnerJoin<WarehouseCatalogDto>(SqlSyntax)
+                        .On<CatalogInventoryDto, WarehouseCatalogDto>(SqlSyntax, left => left.CatalogKey, right => right.Key)
+                        .WhereIn<CatalogInventoryDto>(x => x.ProductVariantKey, keyChunk, SqlSyntax);
+
+                    inventoryDtos.AddRange(Database.Fetch<CatalogInventoryDto, WarehouseCatalogDto>(sql));
+                }
+            }
+            else
+            {
+                // Not ideal as duplicate bits of query
+                var sql = new Sql();
+                sql.Select("*")
+                    .From<CatalogInventoryDto>(SqlSyntax)
+                    .InnerJoin<WarehouseCatalogDto>(SqlSyntax)
+                    .On<CatalogInventoryDto, WarehouseCatalogDto>(SqlSyntax, left => left.CatalogKey, right => right.Key);
+
+                inventoryDtos = Database.Fetch<CatalogInventoryDto, WarehouseCatalogDto>(sql);
+            }
 
             var isSqlCe = SqlSyntax is SqlCeSyntaxProvider;
 
@@ -432,7 +455,7 @@
                     {
                         inv.CreateDate = DateTime.Now;
                         inv.UpdateDate = DateTime.Now;
-                        inserts.Add(new CatalogInventoryDto()
+                        inserts.Add(new CatalogInventoryDto
                         {
                             CatalogKey = inv.CatalogKey,
                             ProductVariantKey = productVariant.Key,
@@ -556,7 +579,11 @@
         {
             var variants = productVariants as IProductVariant[] ?? productVariants.ToArray();
             var factory = new ProductVariantDetachedContentFactory();
-            var existing = this.GetProductVariantDetachedContents(variants.Select(x => x.Key)).ToArray();
+
+            // Get the variant keys and batch into Lists of 500
+            var variantKeys = variants.Select(x => x.Key).ToArray().Split(500).ToList();
+
+            var existing = this.GetProductVariantDetachedContents(variantKeys).ToArray();
 
             var sqlStatement = string.Empty;
 
@@ -735,23 +762,27 @@
         /// <returns>
         /// The <see cref="IEnumerable{IProductVariantDetachedContent}"/>.
         /// </returns>
+        [Obsolete("Don't use this as it has the possibility of failing")]
         internal IEnumerable<IProductVariantDetachedContent> GetProductVariantDetachedContents(IEnumerable<Guid> productVariantKeys)
         {
-            var sql = new Sql();
-            sql.Select("*")
-                .From<ProductVariantDetachedContentDto>(SqlSyntax)
-                .InnerJoin<DetachedContentTypeDto>(SqlSyntax)
-                .On<ProductVariantDetachedContentDto, DetachedContentTypeDto>(
-                    SqlSyntax,
-                    left => left.DetachedContentTypeKey,
-                    right => right.Key)
-                .WhereIn<ProductVariantDetachedContentDto>(x => x.ProductVariantKey, productVariantKeys, SqlSyntax);
+            var batchedKeys = productVariantKeys.ToArray().Split(500).ToList();
+            return GetProductVariantDetachedContents(batchedKeys);
 
-            var dtos = Database.Fetch<ProductVariantDetachedContentDto, DetachedContentTypeDto>(sql);
+            //var sql = new Sql();
+            //sql.Select("*")
+            //    .From<ProductVariantDetachedContentDto>(SqlSyntax)
+            //    .InnerJoin<DetachedContentTypeDto>(SqlSyntax)
+            //    .On<ProductVariantDetachedContentDto, DetachedContentTypeDto>(
+            //        SqlSyntax,
+            //        left => left.DetachedContentTypeKey,
+            //        right => right.Key)
+            //    .WhereIn<ProductVariantDetachedContentDto>(x => x.ProductVariantKey, productVariantKeys, SqlSyntax);
 
-            var factory = new ProductVariantDetachedContentFactory();
+            //var dtos = Database.Fetch<ProductVariantDetachedContentDto, DetachedContentTypeDto>(sql);
 
-            return dtos.Select(factory.BuildEntity);
+            //var factory = new ProductVariantDetachedContentFactory();
+
+            //return dtos.Select(factory.BuildEntity);
         }
 
         /// <summary>
@@ -925,7 +956,7 @@
                 // TODO - This is really inefficient
                 foreach (var dto in dtos)
                 {
-                    yield return Get(dto.ProductVariantDto.Key);
+                    yield return PerformGet(dto);
                 }
             }
         }
