@@ -20,22 +20,28 @@
         /// <param name="product">
         /// The product.
         /// </param>
+        /// <param name="variants">
+        /// List of variants to check against
+        /// </param>
         /// <param name="attributeKeys">
         /// The attribute Keys.
         /// </param>
         /// <returns>
         /// The <see cref="IProductVariant"/>.
         /// </returns>
-        IProductVariant GetProductVariantWithAttributes(IProduct product, Guid[] attributeKeys);
+        IProductVariant GetProductVariantWithAttributes(IProduct product, List<IProductVariant> variants, Guid[] attributeKeys);
 
         /// <summary>
         /// Compares the <see cref="ProductAttributeCollection"/> with other <see cref="IProductVariant"/>s of the <see cref="IProduct"/> pass
         /// to determine if the a variant already exists with the attributes passed
         /// </summary>
         /// <param name="product">The <see cref="IProduct"/> to reference</param>
+        /// <param name="variants">
+        /// List of variants to check against
+        /// </param>
         /// <param name="attributes"><see cref="ProductAttributeCollection"/> to compare</param>
         /// <returns>True/false indicating whether or not a <see cref="IProductVariant"/> already exists with the <see cref="ProductAttributeCollection"/> passed</returns>
-        bool ProductVariantWithAttributesExists(IProduct product, ProductAttributeCollection attributes);
+        bool ProductVariantWithAttributesExists(IProduct product, List<IProductVariant> variants, ProductAttributeCollection attributes);
             
         /// <summary>
         /// Gets a collection of <see cref="IProductVariant"/> object for a given Product Key

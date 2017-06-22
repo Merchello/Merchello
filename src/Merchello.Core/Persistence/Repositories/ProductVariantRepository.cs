@@ -92,15 +92,17 @@
         /// <param name="product">
         /// The product.
         /// </param>
+        /// <param name="variants">
+        /// Variants to check against
+        /// </param>
         /// <param name="attributeKeys">
         /// The attribute Keys.
         /// </param>
         /// <returns>
         /// The <see cref="IProductVariant"/>.
         /// </returns>
-        public IProductVariant GetProductVariantWithAttributes(IProduct product, Guid[] attributeKeys)
+        public IProductVariant GetProductVariantWithAttributes(IProduct product, List<IProductVariant> variants, Guid[] attributeKeys)
         {
-            var variants = GetByProductKey(product.Key);
             return variants.FirstOrDefault(x => x.Attributes.Count() == attributeKeys.Count() && attributeKeys.All(key => x.Attributes.FirstOrDefault(att => att.Key == key) != null));
         }
 
@@ -109,12 +111,13 @@
         /// to determine if the a variant already exists with the attributes passed
         /// </summary>
         /// <param name="product">The <see cref="IProduct"/> to reference</param>
+        /// <param name="variants">
+        /// Variants to check against
+        /// </param>
         /// <param name="attributes"><see cref="ProductAttributeCollection"/> to compare</param>
         /// <returns>True/false indicating whether or not a <see cref="IProductVariant"/> already exists with the <see cref="ProductAttributeCollection"/> passed</returns>
-        public bool ProductVariantWithAttributesExists(IProduct product, ProductAttributeCollection attributes)
+        public bool ProductVariantWithAttributesExists(IProduct product, List<IProductVariant> variants, ProductAttributeCollection attributes)
         {
-            var variants = GetByProductKey(product.Key).ToArray();
-
             var keys = attributes.Select(x => x.Key);
             return variants.Any(x => x.Attributes.All(z => keys.Contains(z.Key)));
         }
