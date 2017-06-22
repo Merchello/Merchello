@@ -264,7 +264,6 @@
 
             ExecuteBatchUpdate(productVariants);
 
-
             SaveCatalogInventory(productVariants);
 
             SaveDetachedContents(productVariants);
@@ -389,6 +388,7 @@
             var parms = new List<object>();
             var inserts = new List<CatalogInventoryDto>();
 
+            var variantIndex = 0;
             foreach (var productVariant in productVariants)
             {
                 foreach (var dto in inventoryDtos.Where(i => i.ProductVariantKey == productVariant.Key))
@@ -445,8 +445,18 @@
                         });
                     }
                 }
+                
+                //split into batches of 100
+                if (++variantIndex >= 100) {
+                    if (!string.IsNullOrEmpty(sqlStatement))
+                    {
+                    		Database.Execute(sqlStatement, parms.ToArray());
+                    }
+                		variantIndex = 0;
+                    sqlStatement = string.Empty;
+                }
             }
-
+            
             if (!string.IsNullOrEmpty(sqlStatement))
             {
                 Database.Execute(sqlStatement, parms.ToArray());
@@ -454,6 +464,7 @@
 
             if (inserts.Any())
             {
+
                 // Database.BulkInsertRecords won't work here because of the many to many and no pk.
                 foreach (var ins in inserts) Database.Insert(ins);
             }
@@ -554,6 +565,7 @@
             var paramIndex = 0;
             var inserts = new List<ProductVariantDetachedContentDto>();
 
+            var variantIndex = 0;
             foreach (var variant in variants)
             {
                 if (variant.DetachedContents.Any() || existing.Any(x => x.ProductVariantKey == variant.Key))
@@ -599,6 +611,16 @@
                             parms.Add(dto.ProductVariantKey);
                         }
                     }
+                }
+                
+                //split into batches of 100
+                if (++variantIndex >= 100) {
+                    if (!string.IsNullOrEmpty(sqlStatement))
+                    {
+                    		Database.Execute(sqlStatement, parms.ToArray());
+                    }
+                		variantIndex = 0;
+                    sqlStatement = string.Empty;
                 }
             }
 
