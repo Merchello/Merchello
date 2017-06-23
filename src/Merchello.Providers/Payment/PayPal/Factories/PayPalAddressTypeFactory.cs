@@ -48,7 +48,7 @@
                 var logData = MultiLogger.GetBaseLoggingData();
                 logData.AddCategory("PayPal");
 
-                MultiLogHelper.Error<PayPalBasicAmountTypeFactory>("Failed to build an AddressType", ex, logData);
+                MultiLogHelper.Error<PayPalAddressTypeFactory>("Failed to build an AddressType", ex, logData);
 
                 throw;
             }
