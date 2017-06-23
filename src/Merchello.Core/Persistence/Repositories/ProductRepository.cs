@@ -1687,11 +1687,11 @@
                 return null;
 
             var factory = new ProductFactory(
-                _productOptionRepository.GetProductAttributeCollectionForVariant,
-                _productVariantRepository.GetCategoryInventoryCollection, 
+                _productOptionRepository.GetProductAttributeCollectionForVariant(dto.ProductVariantDto.Key),
+                _productVariantRepository.GetCategoryInventoryCollection(dto.ProductVariantDto.Key), 
                 _productOptionRepository.GetProductOptionCollection, 
                 _productVariantRepository.GetProductVariantCollection,
-                _productVariantRepository.GetDetachedContentCollection);
+                _productVariantRepository.GetDetachedContentCollection(dto.ProductVariantDto.Key));
 
             var product = factory.BuildEntity(dto);
 
