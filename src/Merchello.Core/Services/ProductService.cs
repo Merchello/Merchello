@@ -1904,14 +1904,25 @@
             }
 
             var newVariants = new List<IProductVariant>();
+            
+            // This list is held for the checking against of existing variants
+            // previously, it would get new variants over and over again causing performance issues
+            var variantsToCheck = new List<IProductVariant>();
+
+            // Get all using PerformByQuery
+            variantsToCheck.AddRange(GetProductVariantsByProductKey(product.Key));
+
             foreach (var list in attributeLists)
             {
                 // Check to see if the variant exists
                 var productAttributes = list as IProductAttribute[] ?? list.ToArray();
 
                 if (product.GetProductVariantForPurchase(productAttributes) != null) continue;
-                   
-                var variant = ((ProductVariantService)_productVariantService).CreateProductVariant(product, productAttributes.ToProductAttributeCollection());
+
+                // We need to pass in the list of variants here from a single PerformGetBy Call
+                // And hold them in memory, then in the method below it will add them to the list
+                var variant = ((ProductVariantService)_productVariantService).CreateProductVariant(product, variantsToCheck, productAttributes.ToProductAttributeCollection());
+
                 newVariants.Add(variant);
                 foreach (var inv in product.CatalogInventories)
                 {
