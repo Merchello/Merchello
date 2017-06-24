@@ -218,6 +218,8 @@
     <key alias="copyProduct">Kopiuj produkt</key>
     <key alias="newProductName">Nazwa nowego produktu</key>
     <key alias="newProductSku">SKU nowego produktu</key>
+    <key alias="regenSkus">Regenerate SKUs</key>
+    <key alias="regenSkusConfirm">Please confirm you wish to regenerate the product variant SKUs</key>
   </area>
   <area alias="merchelloSpecFilters">
     <key alias="manageProductFilters">Zarządzaj filtrami produktów</key>

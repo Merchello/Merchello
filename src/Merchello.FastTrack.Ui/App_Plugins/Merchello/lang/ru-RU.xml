@@ -227,6 +227,8 @@
     <key alias="newCostOfGoods">Новая стоимость товаров</key>
     <key alias="newSalePrice">Новая цена в распродаже</key>
     <key alias="recentlyUpdated">Недавно обновлено</key>
+    <key alias="regenSkus">Regenerate SKUs</key>
+    <key alias="regenSkusConfirm">Please confirm you wish to regenerate the product variant SKUs</key>
   </area>
   <area alias="merchelloSpecFilters">
     <key alias="manageProductFilters">Управление фильтрами товаров</key>
