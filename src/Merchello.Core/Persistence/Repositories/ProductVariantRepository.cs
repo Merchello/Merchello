@@ -864,8 +864,10 @@
         /// </remarks>
         public IProductVariant PerformGet(ProductDto dto)
         {
-            if (dto?.ProductVariantDto == null)
+            if (dto == null || dto.ProductVariantDto == null)
+            {
                 return null;
+            }
 
             if (IsCachedRepository)
             {
@@ -911,8 +913,10 @@
                 CatalogInventoryCollection catalogInventoryCollection,
                 DetachedContentCollection<IProductVariantDetachedContent> detachedContentCollection)
         {
-            if (dto?.ProductVariantDto == null)
+            if (dto == null || dto.ProductVariantDto == null)
+            {
                 return null;
+            }
 
             if (IsCachedRepository)
             {
