@@ -150,7 +150,7 @@
 
             if (items.Count() != page.ItemsPerPage)
             {
-                MultiLogHelper.Warn<VirtualContentCache<TContent, TEntity>>("Could not map all items to virtual content");
+                MultiLogHelper.Debug<VirtualContentCache<TContent, TEntity>>("Could not map all items to virtual content");
             }
 
             return new PagedCollection<TContent>

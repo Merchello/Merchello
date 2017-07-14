@@ -1256,6 +1256,26 @@ function contentEditingHelper(fileManager, $q, $location, $routeParams, notifica
                 return true;
             }
             return false;
+        },
+
+        /**
+         * @ngdoc function
+         * @name umbraco.services.contentEditingHelper#redirectToRenamedContent
+         * @methodOf umbraco.services.contentEditingHelper
+         * @function
+         *
+         * @description
+         * For some editors like scripts or entites that have names as ids, these names can change and we need to redirect
+         * to their new paths, this is helper method to do that.
+         */
+        redirectToRenamedContent: function (id) {            
+            //clear the query strings
+            $location.search("");
+            //change to new path
+            $location.path("/" + $routeParams.section + "/" + $routeParams.tree + "/" + $routeParams.method + "/" + id);
+            //don't add a browser history for this
+            $location.replace();
+            return true;
         }
     };
 }
@@ -2378,6 +2398,36 @@ angular.module('umbraco.services')
         }
     };
 });
+
+(function() {
+   'use strict';
+
+   function entityHelper() {
+
+        function getEntityTypeFromSection(section) {
+            if (section === "member") {
+                return "Member";
+            }
+            else if (section === "media") {
+                return "Media";
+            } else {
+                return "Document";
+            }
+        }
+
+        ////////////
+
+        var service = {
+            getEntityTypeFromSection: getEntityTypeFromSection
+        };
+
+        return service;
+
+   }
+
+   angular.module('umbraco.services').factory('entityHelper', entityHelper);
+
+})();
 
 /** Used to broadcast and listen for global events and allow the ability to add async listeners to the callbacks */
 
@@ -4277,8 +4327,13 @@ angular.module('umbraco.services')
          *
          * @description
          * Checks the dictionary for a localized resource string
-         * @param {String} value the area/key to localize
-         * @param {Array} tokens if specified this array will be sent as parameter values 
+         * @param {String} value the area/key to localize in the format of 'section_key' 
+         * alternatively if no section is set such as 'key' then we assume the key is to be looked in
+         * the 'general' section
+         * 
+         * @param {Array} tokens if specified this array will be sent as parameter values
+         * This replaces %0% and %1% etc in the dictionary key value with the passed in strings
+         * 
          * @returns {String} localized resource string
          */
         localize: function (value, tokens) {
@@ -4287,6 +4342,143 @@ angular.module('umbraco.services')
                 return val;
             });
         },
+
+        /**
+         * @ngdoc method
+         * @name umbraco.services.localizationService#localizeMany
+         * @methodOf umbraco.services.localizationService
+         *
+         * @description
+         * Checks the dictionary for multipe localized resource strings at once, preventing the need for nested promises
+         * with localizationService.localize
+         * 
+         * ##Usage
+         * <pre>
+         * localizationService.localizeMany(["speechBubbles_templateErrorHeader", "speechBubbles_templateErrorText"]).then(function(data){
+         *      var header = data[0];
+         *      var message = data[1];
+         *      notificationService.error(header, message);
+         * });
+         * </pre>
+         * 
+         * @param {Array} keys is an array of strings of the area/key to localize in the format of 'section_key' 
+         * alternatively if no section is set such as 'key' then we assume the key is to be looked in
+         * the 'general' section
+         * 
+         * @returns {Array} An array of localized resource string in the same order
+         */
+        localizeMany: function(keys) {
+            if(keys){
+
+                //The LocalizationService.localize promises we want to resolve
+                var promises = [];
+
+                for(var i = 0; i < keys.length; i++){
+                    promises.push(service.localize(keys[i], undefined));
+                }
+
+                return $q.all(promises).then(function(localizedValues){
+                    return localizedValues;
+                });
+            }
+        },
+
+        /**
+         * @ngdoc method
+         * @name umbraco.services.localizationService#concat
+         * @methodOf umbraco.services.localizationService
+         *
+         * @description
+         * Checks the dictionary for multipe localized resource strings at once & concats them to a single string
+         * Which was not possible with localizationSerivce.localize() due to returning a promise
+         * 
+         * ##Usage
+         * <pre>
+         * localizationService.concat(["speechBubbles_templateErrorHeader", "speechBubbles_templateErrorText"]).then(function(data){
+         *      var combinedText = data;
+         * });
+         * </pre>
+         * 
+         * @param {Array} keys is an array of strings of the area/key to localize in the format of 'section_key' 
+         * alternatively if no section is set such as 'key' then we assume the key is to be looked in
+         * the 'general' section
+         * 
+         * @returns {String} An concatenated string of localized resource string passed into the function in the same order
+         */
+        concat: function(keys) {
+            if(keys){
+
+                //The LocalizationService.localize promises we want to resolve
+                var promises = [];
+
+                for(var i = 0; i < keys.length; i++){
+                    promises.push(service.localize(keys[i], undefined));
+                }
+
+                return $q.all(promises).then(function(localizedValues){
+
+                    //Build a concat string by looping over the array of resolved promises/translations
+                    var returnValue = "";
+
+                    for(var i = 0; i < localizedValues.length; i++){
+                        returnValue += localizedValues[i];
+                    }
+
+                    return returnValue;
+                });
+            }
+        },
+
+        /**
+         * @ngdoc method
+         * @name umbraco.services.localizationService#format
+         * @methodOf umbraco.services.localizationService
+         *
+         * @description
+         * Checks the dictionary for multipe localized resource strings at once & formats a tokenized message
+         * Which was not possible with localizationSerivce.localize() due to returning a promise
+         * 
+         * ##Usage
+         * <pre>
+         * localizationService.format(["template_insert", "template_insertSections"], "%0% %1%").then(function(data){
+         *      //Will return 'Insert Sections'
+         *      var formattedResult = data;
+         * });
+         * </pre>
+         * 
+         * @param {Array} keys is an array of strings of the area/key to localize in the format of 'section_key' 
+         * alternatively if no section is set such as 'key' then we assume the key is to be looked in
+         * the 'general' section
+         * 
+         * @param {String} message is the string you wish to replace containing tokens in the format of %0% and %1%
+         * with the localized resource strings
+         * 
+         * @returns {String} An concatenated string of localized resource string passed into the function in the same order
+         */
+        format: function(keys, message){
+            if(keys){
+
+                //The LocalizationService.localize promises we want to resolve
+                var promises = [];
+
+                for(var i = 0; i < keys.length; i++){
+                    promises.push(service.localize(keys[i], undefined));
+                }
+
+                return $q.all(promises).then(function(localizedValues){
+
+                    //Replace {0} and {1} etc in message with the localized values
+                    for(var i = 0; i < localizedValues.length; i++){
+                        var token = "%" + i + "%";
+                        var regex = new RegExp(token, "g");
+
+                        message = message.replace(regex, localizedValues[i]);
+                    }
+
+                    return message;
+                });
+            }
+        }
 
     };
 
@@ -4875,6 +5067,28 @@ function mediaHelper(umbRequestHelper) {
 
            return newFileTypesArray.join(",");
 
+        },
+
+        /**
+         * @ngdoc function
+         * @name umbraco.services.mediaHelper#getFileExtension
+         * @methodOf umbraco.services.mediaHelper
+         * @function
+         *
+         * @description
+         * Returns file extension
+         *
+         * @param {string} filePath File path, ex /media/1234/my-image.jpg
+         */
+        getFileExtension: function(filePath) {
+
+            if (!filePath) {
+                return false;
+            }
+
+            var lowered = filePath.toLowerCase();
+            var ext = lowered.substr(lowered.lastIndexOf(".") + 1);
+            return ext;
         }
         
     };
@@ -4889,8 +5103,23 @@ function mediaTypeHelper(mediaTypeResource, $q) {
 
     var mediaTypeHelperService = {
 
+        isFolderType: function(mediaEntity) {
+            if (!mediaEntity) {
+                throw "mediaEntity is null";
+            }
+            if (!mediaEntity.contentTypeAlias) {
+                throw "mediaEntity.contentTypeAlias is null";
+            }
+
+            //if you create a media type, which has an alias that ends with ...Folder then its a folder: ex: "secureFolder", "bannerFolder", "Folder"
+            //this is the exact same logic that is performed in MediaController.GetChildFolders
+            return mediaEntity.contentTypeAlias.endsWith("Folder");
+        },
+
         getAllowedImagetypes: function (mediaId){
-				
+
+            //TODO: This is horribly inneficient - why make one request per type!?
+
             // Get All allowedTypes
             return mediaTypeResource.getAllowedTypes(mediaId)
                 .then(function(types){
@@ -5016,6 +5245,96 @@ function umbracoMenuActions($q, treeService, $location, navigationService, appSt
 } 
 
 angular.module('umbraco.services').factory('umbracoMenuActions', umbracoMenuActions);
+(function () {
+    'use strict';
+
+    function miniEditorHelper(dialogService, editorState, fileManager, contentEditingHelper, $q) {
+
+        var launched = false;
+
+        function launchMiniEditor(node) {
+
+            var deferred = $q.defer();
+
+            launched = true;
+
+            //We need to store the current files selected in the file manager locally because the fileManager
+            // is a singleton and is shared globally. The mini dialog will also be referencing the fileManager 
+            // and we don't want it to be sharing the same files as the main editor. So we'll store the current files locally here,
+            // clear them out and then launch the dialog. When the dialog closes, we'll reset the fileManager to it's previous state.
+            var currFiles = _.groupBy(fileManager.getFiles(), "alias");
+            fileManager.clearFiles();
+
+            //We need to store the original editorState entity because it will need to change when the mini editor is loaded so that
+            // any property editors that are working with editorState get given the correct entity, otherwise strange things will 
+            // start happening.
+            var currEditorState = editorState.getCurrent();
+
+            dialogService.open({
+                template: "views/common/dialogs/content/edit.html",
+                id: node.id,
+                closeOnSave: true,
+                tabFilter: ["Generic properties"],
+                callback: function (data) {
+
+                    //set the node name back
+                    node.name = data.name;
+
+                    //reset the fileManager to what it was
+                    fileManager.clearFiles();
+                    _.each(currFiles, function (val, key) {
+                        fileManager.setFiles(key, _.map(currFiles['upload'], function (i) { return i.file; }));
+                    });
+
+                    //reset the editor state
+                    editorState.set(currEditorState);
+
+                    //Now we need to check if the content item that was edited was actually the same content item
+                    // as the main content editor and if so, update all property data	                
+                    if (data.id === currEditorState.id) {
+                        var changed = contentEditingHelper.reBindChangedProperties(currEditorState, data);
+                    }
+
+                    launched = false;
+                    
+                    deferred.resolve(data);
+
+                },
+                closeCallback: function () {
+                    //reset the fileManager to what it was
+                    fileManager.clearFiles();
+                    _.each(currFiles, function (val, key) {
+                        fileManager.setFiles(key, _.map(currFiles['upload'], function (i) { return i.file; }));
+                    });
+
+                    //reset the editor state
+                    editorState.set(currEditorState);
+
+                    launched = false;
+
+                    deferred.reject();
+
+                }
+            });
+
+            return deferred.promise;
+
+        }
+
+        var service = {
+            launchMiniEditor: launchMiniEditor
+        };
+
+        return service;
+
+    }
+
+
+    angular.module('umbraco.services').factory('miniEditorHelper', miniEditorHelper);
+
+
+})();
+
 /**
  * @ngdoc service
  * @name umbraco.services.navigationService
@@ -6090,6 +6409,30 @@ angular.module('umbraco.services')
 
 })();
 
+(function() {
+   'use strict';
+
+   function platformService() {
+
+        function isMac() {
+            return navigator.platform.toUpperCase().indexOf('MAC')>=0;
+        }
+
+        ////////////
+
+        var service = {
+            isMac: isMac
+        };
+
+        return service;
+
+   }
+
+   angular.module('umbraco.services').factory('platformService', platformService);
+
+
+})();
+
 /**
  * @ngdoc service
  * @name umbraco.services.searchService
@@ -6647,6 +6990,193 @@ function serverValidationManager($timeout) {
 }
 
 angular.module('umbraco.services').factory('serverValidationManager', serverValidationManager);
+(function() {
+   'use strict';
+
+   function templateHelperService(localizationService) {
+
+        //crappy hack due to dictionary items not in umbracoNode table
+        function getInsertDictionarySnippet(nodeName) {
+            return "@Umbraco.GetDictionaryValue(\"" + nodeName + "\")";
+        }
+
+        function getInsertPartialSnippet(parentId, nodeName) {
+
+            var partialViewName = nodeName.replace(".cshtml", "");
+
+            if(parentId) {
+                partialViewName = parentId + "/" + partialViewName;
+            }
+
+            return "@Html.Partial(\"" + partialViewName + "\")";
+        }
+
+        function getQuerySnippet(queryExpression) {
+            var code = "\n@{\n" + "\tvar selection = " + queryExpression + ";\n}\n";
+                code += "<ul>\n" +
+                            "\t@foreach(var item in selection){\n" +
+                                "\t\t<li>\n" +
+                                    "\t\t\t<a href=\"@item.Url\">@item.Name</a>\n" +
+                                "\t\t</li>\n" +
+                            "\t}\n" +
+                        "</ul>\n\n";
+            return code;
+        }
+
+        function getRenderBodySnippet() {
+            return "@RenderBody()";
+        }
+
+        function getRenderSectionSnippet(sectionName, mandatory) {
+            return "@RenderSection(\"" + sectionName + "\", " + mandatory + ")";
+        }
+
+        function getAddSectionSnippet(sectionName) {
+            return "@section " + sectionName + "\r\n{\r\n\r\n\t{0}\r\n\r\n}\r\n";
+        }
+        
+        function getGeneralShortcuts(){
+            return {
+			        "name": localizationService.localize("shortcuts_generalHeader"), 
+			        "shortcuts": [
+                        {
+                            "description": localizationService.localize("buttons_undo"),
+                            "keys": [{ "key": "ctrl" }, { "key": "z" }]
+                        },
+                        {
+                            "description": localizationService.localize("buttons_redo"),
+                            "keys": [{ "key": "ctrl" }, { "key": "y" }]
+                        },
+                        {
+                            "description": localizationService.localize("buttons_save"),
+                            "keys": [{ "key": "ctrl" }, { "key": "s" }]
+                        }
+			        ]
+			    };
+        }
+
+        function getEditorShortcuts(){
+            return {
+			        "name": localizationService.localize("shortcuts_editorHeader"),
+			        "shortcuts": [
+                        {
+                            "description": localizationService.localize("shortcuts_commentLine"),
+                            "keys": [{ "key": "ctrl" }, { "key": "/" }]
+                        },
+                        {
+                            "description": localizationService.localize("shortcuts_removeLine"),
+                            "keys": [{ "key": "ctrl" }, { "key": "d" }]
+                        },
+                        {
+                            "description": localizationService.localize("shortcuts_copyLineUp"),
+                            "keys": {
+                                "win": [{ "key": "alt" }, { "key": "shift" }, { "key": "up" }],
+                                "mac": [{ "key": "cmd" }, { "key": "alt" }, { "key": "up" }]
+                            }
+                        },
+                        {
+                            "description": localizationService.localize("shortcuts_copyLineDown"),
+                            "keys": {
+                                "win": [{ "key": "alt" }, { "key": "shift" }, { "key": "down" }],
+                                "mac": [{ "key": "cmd" }, { "key": "alt" }, { "key": "down" }]
+                            } 
+                        },
+                        {
+                            "description": localizationService.localize("shortcuts_moveLineUp"),
+                            "keys": [{ "key": "alt" }, { "key": "up" }]
+                        },
+                        {
+                            "description": localizationService.localize("shortcuts_moveLineDown"),
+                            "keys": [{ "key": "alt" }, { "key": "down" }]
+                        }
+                    ]
+			    };
+        }
+
+        function getTemplateEditorShortcuts(){
+            return {
+			        "name": "Umbraco", //No need to localise Umbraco is the same in all languages :)
+			        "shortcuts": [
+                        {
+                            "description": localizationService.format(["template_insert", "template_insertPageField"], "%0% %1%"),
+                            "keys": [{ "key": "alt" }, { "key": "shift" }, { "key": "v" }]
+                        },
+                        {
+                            "description": localizationService.format(["template_insert", "template_insertPartialView"], "%0% %1%"),
+                            "keys": [{ "key": "alt" }, { "key": "shift" }, { "key": "p" }]
+                        },
+                        {
+                            "description": localizationService.format(["template_insert", "template_insertDictionaryItem"], "%0% %1%"),
+                            "keys": [{ "key": "alt" }, { "key": "shift" }, { "key": "d" }]
+                        },
+                        {
+                            "description": localizationService.format(["template_insert", "template_insertMacro"], "%0% %1%"),
+                            "keys": [{ "key": "alt" }, { "key": "shift" }, { "key": "m" }]
+                        },
+                        {
+                            "description": localizationService.localize("template_queryBuilder"),
+                            "keys": [{ "key": "alt" }, { "key": "shift" }, { "key": "q" }]
+                        },
+                        {
+                            "description": localizationService.format(["template_insert", "template_insertSections"], "%0% %1%"),
+                            "keys": [{ "key": "alt" }, { "key": "shift" }, { "key": "s" }]
+                        },
+                        {
+                            "description": localizationService.localize("template_mastertemplate"),
+                            "keys": [{ "key": "alt" }, { "key": "shift" }, { "key": "t" }]
+                        }
+                    ]
+			    };
+        }
+
+        function getPartialViewEditorShortcuts(){
+            return {
+			        "name": "Umbraco", //No need to localise Umbraco is the same in all languages :)
+			        "shortcuts": [
+                        {
+                            "description": localizationService.format(["template_insert", "template_insertPageField"], "%0% %1%"),
+                            "keys": [{ "key": "alt" }, { "key": "shift" }, { "key": "v" }]
+                        },
+                        {
+                            "description": localizationService.format(["template_insert", "template_insertDictionaryItem"], "%0% %1%"),
+                            "keys": [{ "key": "alt" }, { "key": "shift" }, { "key": "d" }]
+                        },
+                        {
+                            "description": localizationService.format(["template_insert", "template_insertMacro"], "%0% %1%"),
+                            "keys": [{ "key": "alt" }, { "key": "shift" }, { "key": "m" }]
+                        },
+                        {
+                            "description": localizationService.localize("template_queryBuilder"),
+                            "keys": [{ "key": "alt" }, { "key": "shift" }, { "key": "q" }]
+                        }
+                    ]
+			    };
+        }
+
+        ////////////
+
+        var service = {
+            getInsertDictionarySnippet: getInsertDictionarySnippet,
+            getInsertPartialSnippet: getInsertPartialSnippet,
+            getQuerySnippet: getQuerySnippet,
+            getRenderBodySnippet: getRenderBodySnippet,
+            getRenderSectionSnippet: getRenderSectionSnippet,
+            getAddSectionSnippet: getAddSectionSnippet,
+            getGeneralShortcuts: getGeneralShortcuts,
+            getEditorShortcuts: getEditorShortcuts,
+            getTemplateEditorShortcuts: getTemplateEditorShortcuts,
+            getPartialViewEditorShortcuts: getPartialViewEditorShortcuts
+        };
+
+        return service;
+
+   }
+
+   angular.module('umbraco.services').factory('templateHelper', templateHelperService);
+
+
+})();
+
 /**
  * @ngdoc service
  * @name umbraco.services.tinyMceService
@@ -6744,11 +7274,20 @@ function tinyMceService(dialogService, $log, imageHelper, $http, $timeout, macro
 
                     if(selectedElm.nodeName === 'IMG'){
                         var img = $(selectedElm);
+
+                        var hasUdi = img.attr("data-udi") ? true : false;
+
                         currentTarget = {
                             altText: img.attr("alt"),
-                            url: img.attr("src"),
-                            id: img.attr("rel")
+                            url: img.attr("src")                            
                         };
+
+                        if (hasUdi) {
+                            currentTarget["udi"] = img.attr("data-udi");
+                        }
+                        else {
+                            currentTarget["id"] = img.attr("rel");
+                        }
                     }
 
                     userService.getCurrentUser().then(function(userData) {
@@ -6764,13 +7303,23 @@ function tinyMceService(dialogService, $log, imageHelper, $http, $timeout, macro
         insertMediaInEditor: function(editor, img) {
             if(img) {
 
+                var hasUdi = img.udi ? true : false;
+                
                var data = {
                    alt: img.altText || "",
-                   src: (img.url) ? img.url : "nothing.jpg",
-                   rel: img.id,
-                   'data-id': img.id,
+                   src: (img.url) ? img.url : "nothing.jpg",                   
                    id: '__mcenew'
-               };
+                };
+
+                if (hasUdi) {
+                    data["data-udi"] = img.udi;
+                }
+                else {
+                    //Considering these fixed because UDI will now be used and thus
+                    // we have no need for rel http://issues.umbraco.org/issue/U4-6228, http://issues.umbraco.org/issue/U4-6595
+                    data["rel"] = img.id;
+                    data["data-id"] = img.id;
+                }
 
                editor.insertContent(editor.dom.createHTML('img', data));
 
@@ -7321,8 +7870,17 @@ function tinyMceService(dialogService, $log, imageHelper, $http, $timeout, macro
 
                     //locallink detection, we do this here, to avoid poluting the dialogservice
                     //so the dialog service can just expect to get a node-like structure
-                    if(currentTarget.url.indexOf("localLink:") > 0){
-                        currentTarget.id = currentTarget.url.substring(currentTarget.url.indexOf(":")+1,currentTarget.url.length-1);
+                    if (currentTarget.url.indexOf("localLink:") > 0) {
+                        var linkId = currentTarget.url.substring(currentTarget.url.indexOf(":") + 1, currentTarget.url.length - 1);
+                        //we need to check if this is an INT or a UDI
+                        var parsedIntId = parseInt(linkId, 10);
+                        if (isNaN(parsedIntId)) {
+                            //it's a UDI
+                            currentTarget.udi = linkId;
+                        }
+                        else {
+                            currentTarget.id = linkId;
+                        }                        
                     }
                 }
 
@@ -7365,27 +7923,36 @@ function tinyMceService(dialogService, $log, imageHelper, $http, $timeout, macro
         insertLinkInEditor: function(editor, target, anchorElm) {
 
             var href = target.url;
+            // We want to use the Udi. If it is set, we use it, else fallback to id, and finally to null
+            var hasUdi = target.udi ? true : false;
+            var id = hasUdi ? target.udi : (target.id ? target.id : null);
+
+            //Create a json obj used to create the attributes for the tag
+            function createElemAttributes() {
+                var a = {
+                    href: href,
+                    title: target.name,
+                    target: target.target ? target.target : null,
+                    rel: target.rel ? target.rel : null                   
+                };
+                if (hasUdi) {
+                    a["data-udi"] = target.udi;
+                }
+                else if (target.id) {
+                    a["data-id"] = target.id;
+                }         
+                return a;
+            }
 
             function insertLink() {
                 if (anchorElm) {
-                    editor.dom.setAttribs(anchorElm, {
-                        href: href,
-                        title: target.name,
-                        target: target.target ? target.target : null,
-                        rel: target.rel ? target.rel : null,
-                        'data-id': target.id ? target.id : null
-                    });
+                    editor.dom.setAttribs(anchorElm, createElemAttributes());
 
                     editor.selection.select(anchorElm);
                     editor.execCommand('mceEndTyping');
-                } else {
-                    editor.execCommand('mceInsertLink', false, {
-                        href: href,
-                        title: target.name,
-                        target: target.target ? target.target : null,
-                        rel: target.rel ? target.rel : null,
-                        'data-id': target.id ? target.id : null
-                    });
+                }
+                else {
+                    editor.execCommand('mceInsertLink', false, createElemAttributes());
                 }
             }
 
@@ -7395,8 +7962,10 @@ function tinyMceService(dialogService, $log, imageHelper, $http, $timeout, macro
             }
 
             //if we have an id, it must be a locallink:id, aslong as the isMedia flag is not set
-            if(target.id && (angular.isUndefined(target.isMedia) || !target.isMedia)){
-                href = "/{localLink:" + target.id + "}";
+            if(id && (angular.isUndefined(target.isMedia) || !target.isMedia)){
+                
+                href = "/{localLink:" + id + "}";
+
                 insertLink();
                 return;
             }
@@ -8544,6 +9113,7 @@ angular.module('umbraco.services')
         var currentUser = null;
         var lastUserId = null;
         var loginDialog = null;
+        
         //this tracks the last date/time that the user's remainingAuthSeconds was updated from the server
         // this is used so that we know when to go and get the user's remaining seconds directly.
         var lastServerTimeoutSet = null;
@@ -8565,7 +9135,7 @@ angular.module('umbraco.services')
                     }
                 });
             }
-        }
+        }          
 
         function onLoginDialogClose(success) {
             loginDialog = null;
@@ -8722,8 +9292,7 @@ angular.module('umbraco.services')
             /** Internal method to display the login dialog */
             _showLoginDialog: function () {
                 openLoginDialog();
-            },
-
+            },            
             /** Returns a promise, sends a request to the server to check if the current cookie is authorized  */
             isAuthenticated: function () {
                 //if we've got a current user then just return true
@@ -8739,17 +9308,18 @@ angular.module('umbraco.services')
             authenticate: function (login, password) {
 
                 return authResource.performLogin(login, password)
-                    .then(function (data) {
+                    .then(this.setAuthenticationSuccessful);
+            },
+            setAuthenticationSuccessful:function (data) {
 
-                        //when it's successful, return the user data
-                        setCurrentUser(data);
+                //when it's successful, return the user data
+                setCurrentUser(data);
 
                         var result = { user: data, authenticated: true, lastUserId: lastUserId, loginType: "credentials" };
 
-                        //broadcast a global event
-                        eventsService.emit("app.authenticated", result);
-                        return result;
-                    });
+                //broadcast a global event
+                eventsService.emit("app.authenticated", result);
+                return result;
             },
 
             /** Logs the user out

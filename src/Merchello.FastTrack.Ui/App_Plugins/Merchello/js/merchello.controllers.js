@@ -15,7 +15,7 @@
  * The controller for offers list view controller
  */
 angular.module('merchello').controller('Merchello.Backoffice.OfferEditController',
-    ['$scope', '$routeParams', '$location', '$filter', 'dateHelper', 'assetsService', 'dialogService', 'eventsService', 'notificationsService', 'settingsResource', 'marketingResource', 'merchelloTabsFactory',
+    ['$scope', '$routeParams', '$location', '$filter', 'merchDateHelper', 'assetsService', 'dialogService', 'eventsService', 'notificationsService', 'settingsResource', 'marketingResource', 'merchelloTabsFactory',
         'dialogDataFactory', 'settingDisplayBuilder', 'offerProviderDisplayBuilder', 'offerSettingsDisplayBuilder', 'offerComponentDefinitionDisplayBuilder',
     function($scope, $routeParams, $location, $filter, dateHelper, assetsService, dialogService, eventsService, notificationsService, settingsResource, marketingResource, merchelloTabsFactory,
              dialogDataFactory, settingDisplayBuilder, offerProviderDisplayBuilder, offerSettingsDisplayBuilder, offerComponentDefinitionDisplayBuilder) {
@@ -6949,7 +6949,7 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
         $scope.toggleAvailable = toggleAvailable;
         $scope.redirectToEditor = redirectToEditor;
         $scope.getVariantAttributeForOption = getVariantAttributeForOption;
-
+        $scope.regenSkus = regenSkus;
 
         $scope.toggleChecks = function() {
             if ($scope.checkAll === true) {
@@ -7164,6 +7164,16 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
         // Dialog Event Handlers
         //--------------------------------------------------------------------------------------
 
+        function regenSkus() {
+            var dialogData = { name: $scope.product.name }
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/productvariant.bulk.skuupdate.html',
+                show: true,
+                callback: regenSkusConfirm,
+                dialogData: dialogData
+            });
+        }
+
         /**
          * @ngdoc method
          * @name changePrices
@@ -7262,6 +7272,10 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
                     productResource.saveVariant(pv);
                 });
             notificationsService.success("Updated prices");
+        }
+
+        function regenSkusConfirm() {
+            console.info('Got here');
         }
 
         function assertActiveShippingCatalog() {
@@ -9772,22 +9786,44 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.AbandonedBa
      * This is a bootstrapper to allow reports that are plugins to be loaded using the merchello application route.
      */
     angular.module('merchello').controller('Merchello.Backoffice.ReportsViewReportController',
-        ['$scope', '$routeParams',
-         function($scope, $routeParams) {
+        ['$scope', '$routeParams', 'settingsResource',
+         function($scope, $routeParams, settingsResource) {
 
-             $scope.loaded = true;
-             $scope.preValuesLoaded = true;
+             $scope.loaded = false;
+
+             $scope.reportPath = '';
 
              // Property to control the report to show
-             $scope.reportParam = $routeParams.id;
+             var reportParam  = $routeParams.id;
 
-             var re = /(\\)/g;
-             var subst = '/';
+             settingsResource.getReportBackofficeTrees().then(function(trees) {
 
-             var result = $scope.reportParam.replace(re, subst);
+                 if(trees.length > 0) {
+                     var tree = _.find(trees, function (t) {
+                         if (t.routeId == reportParam) {
+                             return t;
+                         }
+                     });
 
-             //$scope.reportPath = "/App_Plugins/Merchello.ExportOrders|ExportOrders.html";
-             $scope.reportPath = "/App_Plugins/" + result + ".html";
+                     if (tree !== undefined) {
+                        $scope.reportPath = tree.routePath;
+                     }
+                 }
+
+                 if($scope.routePath === '') {
+                     var re = /(\\)/g;
+                     var subst = '/';
+
+                     var result = reportParam.replace(re, subst);
+
+                     //$scope.reportPath = "/App_Plugins/Merchello.ExportOrders|ExportOrders.html";
+                     $scope.reportPath = "/App_Plugins/" + result + ".html";
+                 }
+
+                 $scope.loaded = true;
+             });
+
+
 
     }]);
 

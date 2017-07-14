@@ -41,11 +41,11 @@
 		<PackageName>Merchello</PackageName>
     <TestPackageName>Merchello Test Helpers</TestPackageName>
     <FastTrackPackageName>Merchello FastTrack</FastTrackPackageName>
-		<MinUmbracoVersion>7.4.0</MinUmbracoVersion>
+		<MinUmbracoVersion>7.5.0</MinUmbracoVersion>
 		<Readme>Merchello - Open source eCommerce package for Umbraco</Readme>
     <TestReadme>Merchello - Provides testing base classes for extending Merchello</TestReadme>
     <FastTrackReadme>Merchello FastTrack - Base UI components for implementing Merchello Stores</FastTrackReadme>
-		<AuthorName>Rusty Swayne and community contributors</AuthorName>
+		<AuthorName>Rusty Swayne, Across the Pond LLC, and community contributors</AuthorName>
 		<AuthorUrl>https://github.com/rustyswayne/Merchello/graphs/contributors</AuthorUrl>
 		<PackageLicenseName>MIT license</PackageLicenseName>
 		<PackageLicenseUrl>http://opensource.org/licenses/MIT</PackageLicenseUrl>
@@ -57,7 +57,7 @@
 		<PackageId>Merchello.Core</PackageId>
     <TestPackageId>Merchello.TestsBase</TestPackageId>
     <FastTrackPackageId>Merchello.FastTrack</FastTrackPackageId>
-		<Copyright>Copyright &#169; 2015 - 2016 Across the Pond, LLC, Our Umbraco and other contributors</Copyright>
+		<Copyright>Copyright &#169; 2015 - 2017 Across the Pond, LLC, Our Umbraco and other contributors</Copyright>
 		<Owners>Across the Pond, LLC</Owners>
 		<IconUrl>https://github.com/rustyswayne/Merchello/tree/appveyor/build/icon40x40-transparent.png</IconUrl>
 		<Tags>umbraco ecommerce merchello</Tags>

@@ -94,6 +94,7 @@
 
             if (context.IsNewVersion && basket.Validate())
             {
+                // TODO - review redundant call to basket.Validate().
                 if (!context.ItemCache.Items.Any() && basket.Validate())
                 {
                     // this is either a new preparation or a reset due to version
