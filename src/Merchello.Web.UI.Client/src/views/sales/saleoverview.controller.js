@@ -500,6 +500,9 @@
                     dialogData.warning = localizationService.localize('merchelloSales_noteShipmentAddressChange');
                 }
 
+                // Show email and phone
+                dialogData.showPhone = true;
+                dialogData.showEmail = true;
 
                 dialogService.open({
                     template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/edit.address.html',
