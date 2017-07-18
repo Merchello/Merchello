@@ -722,9 +722,8 @@ namespace Merchello.Core
         /// </param>
         public static void AddAddress(this ExtendedDataCollection extendedData, IAddress address, AddressType addressType)
         {
-            extendedData.AddAddress(
-                            address,
-                            addressType == AddressType.Shipping ? Constants.ExtendedDataKeys.ShippingDestinationAddress : Constants.ExtendedDataKeys.BillingAddress);
+            extendedData.AddAddress(address, addressType == AddressType.Shipping 
+                            ? Constants.ExtendedDataKeys.ShippingDestinationAddress : Constants.ExtendedDataKeys.BillingAddress);
         }
 
         /// <summary>
@@ -740,12 +739,8 @@ namespace Merchello.Core
         /// The dictionary key used to reference the serialized <see cref="IAddress"/>
         /// </param>
         public static void AddAddress(this ExtendedDataCollection extendedData, IAddress address, string dictionaryKey)
-        {
-            var addressXml = SerializationHelper.SerializeToXml(address as Address);
-
-            ////var addressJson = JsonConvert.SerializeObject(address);
-
-            extendedData.SetValue(dictionaryKey, addressXml);
+        {            
+            extendedData.SetValue(dictionaryKey, JsonConvert.SerializeObject(address as Address));
         }
 
         /// <summary>
@@ -787,8 +782,17 @@ namespace Merchello.Core
         {
             if (!extendedData.ContainsKey(dictionaryKey)) return null;
 
-            var attempt = SerializationHelper.DeserializeXml<Address>(extendedData.GetValue(dictionaryKey));
+            // Get the address data from the extendedData
+            var addressData = extendedData.GetValue(dictionaryKey);
 
+            // Firstly try JSON convert
+            // TODO - Should really make this is a bit more fool proof
+            if (addressData.Contains("{"))
+            {
+                return JsonConvert.DeserializeObject<Address>(addressData);
+            }
+
+            var attempt = SerializationHelper.DeserializeXml<Address>(extendedData.GetValue(dictionaryKey));
             return attempt.Success ? attempt.Result : null;
         }
 

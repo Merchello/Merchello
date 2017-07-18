@@ -21,8 +21,10 @@
                         var extendedData = new Constructor();
                         if (jsonResult !== undefined) {
                             var items = genericModelBuilder.transform(jsonResult, ExtendedDataItemDisplay);
-                            if(items.length > 0) {
+                            if (items.length > 0) {
                                 extendedData.items = items;
+                            } else {
+                                extendedData.items = null;
                             }
                         }
                         return extendedData;
