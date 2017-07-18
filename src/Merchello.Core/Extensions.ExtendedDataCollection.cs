@@ -13,6 +13,7 @@ namespace Merchello.Core
     using Merchello.Core.Models;
 
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// Extensions methods for <see cref="ExtendedDataCollection"/>.
@@ -786,8 +787,7 @@ namespace Merchello.Core
             var addressData = extendedData.GetValue(dictionaryKey);
 
             // Firstly try JSON convert
-            // TODO - Should really make this is a bit more fool proof
-            if (addressData.Contains("{"))
+            if (IsValidJson(addressData))
             {
                 return JsonConvert.DeserializeObject<Address>(addressData);
             }
@@ -797,7 +797,6 @@ namespace Merchello.Core
         }
 
         #endregion
-
 
         #region IShipment
 
@@ -1010,6 +1009,38 @@ namespace Merchello.Core
         public static string ExtendedDataAsJson(this IHasExtendedData entity)
         {
             return JsonConvert.SerializeObject(entity.ExtendedData.AsEnumerable());
+        }
+
+        /// <summary>
+        /// Checks a string to see if it's valid JSON or not
+        /// </summary>
+        /// <param name="strInput">
+        /// Potential Json string
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public static bool IsValidJson(string strInput)
+        {
+            strInput = strInput.Trim();
+            if (strInput.StartsWith("{") && strInput.EndsWith("}") || //For object
+                strInput.StartsWith("[") && strInput.EndsWith("]")) //For array
+            {
+                try
+                {
+                    var obj = JToken.Parse(strInput);
+                    return true;
+                }
+                catch (JsonReaderException)
+                {
+                    return false;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+            return false;
         }
 
         #endregion
