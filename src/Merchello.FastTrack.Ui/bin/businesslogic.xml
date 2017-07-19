@@ -934,6 +934,11 @@
             	<c>true</c> if the specified URL is reserved; otherwise, <c>false</c>.
             </returns>
         </member>
+        <member name="P:umbraco.GlobalSettings.UmbracoMvcArea">
+            <summary>
+            This returns the string of the MVC Area route.
+            </summary>
+        </member>
         <member name="P:umbraco.GlobalSettings.ReservedUrls">
             <summary>
             Gets the reserved urls from web.config.
@@ -1739,6 +1744,11 @@
         <member name="P:umbraco.UmbracoSettings.DisallowedUploadFiles">
             <summary>
             File types that will not be allowed to be uploaded via the content/media upload control
+            </summary>
+        </member>
+        <member name="P:umbraco.UmbracoSettings.AllowedUploadFiles">
+            <summary>
+            File types that will be allowed to be uploaded via the content/media upload control
             </summary>
         </member>
         <member name="P:umbraco.UmbracoSettings.ImageFileTypes">

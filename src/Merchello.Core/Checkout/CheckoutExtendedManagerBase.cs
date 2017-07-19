@@ -108,13 +108,14 @@
         /// </param>
         public void SaveNotes(IEnumerable<string> messages)
         {
+            // TODO - why are we clearing the notes here first?
             this._messages.Value.Clear();
             this._messages.Value.AddRange(messages);
             SaveCustomerTempData(Core.Constants.ExtendedDataKeys.Note, this._messages.Value);
         }
 
         /// <summary>
-        /// Adds to get associated with the invoice as a note on invoice creation.
+        /// Adds a message to be associated with the invoice as a note on invoice creation.
         /// </summary>
         /// <param name="message">
         /// The message or note body text.

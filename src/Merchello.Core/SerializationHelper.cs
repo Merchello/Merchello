@@ -4,6 +4,7 @@
     using System.IO;
     using System.Runtime.Serialization;
     using System.Xml;
+    using System.Xml.Serialization;
     using Umbraco.Core;
 
     /// <summary>
@@ -37,9 +38,10 @@
                 {
                     var serializer = new DataContractSerializer(typeof(T));      
           
-                    serializer.WriteObject(xmlWriter, entity);                   
+                    serializer.WriteObject(xmlWriter, entity);
                 }
 
+                // Get the xml string
                 return sw.ToString();
             }
         }
@@ -70,6 +72,66 @@
                     }                    
                 }
             }
-        }         
+        }
+
+
+
+        /// <summary>
+        /// Deserialize a string of XML to the specified object
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="toDeserialize"></param>
+        /// <returns></returns>
+        public static T Deserialize<T>(string toDeserialize)
+        {
+            try
+            {
+                // Return if empty
+                if (string.IsNullOrEmpty(toDeserialize)) return default(T);
+
+                // Deserialise
+                var xmlSerializer = new XmlSerializer(typeof(T));
+                using (var textReader = new StringReader(toDeserialize))
+                {
+                    return (T)xmlSerializer.Deserialize(textReader);
+                }
+            }
+            catch
+            {
+                return default(T);
+            }
+        }
+
+        /// <summary>
+        /// Serialze object to Xml
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="toSerialize"></param>
+        /// <returns></returns>
+        public static string Serialize<T>(T toSerialize)
+        {
+            try
+            {
+                // Return if empty
+                if (toSerialize == null) return null;
+
+                // Serialise object
+                //var xmlSerializer = new XmlSerializer(typeof(T));
+                var xmlSerializer = new XmlSerializer(toSerialize.GetType());
+                using (var textWriter = new StringWriter())
+                {
+                    // Define a blank/empty Namespace that will allow the generated
+                    // XML to contain no Namespace declarations.
+                    var emptyNs = new XmlSerializerNamespaces(new[] { new XmlQualifiedName("", "") });
+
+                    xmlSerializer.Serialize(textWriter, toSerialize, emptyNs);
+                    return textWriter.ToString();
+                }
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
     }
 }

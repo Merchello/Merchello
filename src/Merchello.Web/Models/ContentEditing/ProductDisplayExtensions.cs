@@ -745,7 +745,7 @@
 
                     destinationProductAttribute = attribute.ToProductAttribute(destinationProductAttribute);
 
-                    ProductAttributeCollection variantAttributes = destination.Attributes as ProductAttributeCollection;
+                    var variantAttributes = (ProductAttributeCollection)destination.Attributes;
                     variantAttributes.Add(destinationProductAttribute);
                 }
             }

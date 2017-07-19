@@ -33,11 +33,11 @@
         /// </summary>
         public ProductFactory()
             : this(
-                pac => new ProductAttributeCollection(),
-                cic => new CatalogInventoryCollection(),
+                new ProductAttributeCollection(),
+                new CatalogInventoryCollection(),
                 poc => new ProductOptionCollection(),
                 pvc => new ProductVariantCollection(),
-                dcc => new DetachedContentCollection<IProductVariantDetachedContent>())
+                new DetachedContentCollection<IProductVariantDetachedContent>())
         {            
         }
 
@@ -60,11 +60,11 @@
         /// Gets the detached content collection
         /// </param>
         public ProductFactory(
-            Func<Guid, ProductAttributeCollection> getProductAttributes,
-            Func<Guid, CatalogInventoryCollection> getCatalogInventories,
+            ProductAttributeCollection getProductAttributes,
+            CatalogInventoryCollection getCatalogInventories,
             Func<Guid, ProductOptionCollection> getProductOptions,
             Func<Guid, ProductVariantCollection> getProductVariantCollection,
-            Func<Guid, DetachedContentCollection<IProductVariantDetachedContent>> getDetachedContentCollection)
+            DetachedContentCollection<IProductVariantDetachedContent> getDetachedContentCollection)
         {
             _productVariantFactory = new ProductVariantFactory(getProductAttributes, getCatalogInventories, getDetachedContentCollection);
             this._getProductOptionCollection = getProductOptions;

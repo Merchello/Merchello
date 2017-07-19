@@ -10,11 +10,11 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultInvoiceItemizationStrategy"/> class.
         /// </summary>
-        /// <param name="display">
+        /// <param name="invoice">
         /// The display.
         /// </param>
-        public DefaultInvoiceItemizationStrategy(Invoice display)
-            : base(display)
+        public DefaultInvoiceItemizationStrategy(Invoice invoice)
+            : base(invoice)
         {
         }
 

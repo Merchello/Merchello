@@ -507,7 +507,7 @@
             </remarks>
             <param name="nodeId">ID of the node to delete</param>
         </member>
-        <member name="M:UmbracoExamine.UmbracoContentIndexer.ReindexWithXmlEntries``1(System.String,System.Int32,System.Func{``0[]},System.Func{System.String,System.Int32,System.Int32,System.Tuple{System.Int64,System.Xml.Linq.XElement[]}},System.Func{System.Int32,Umbraco.Core.Models.IContentBase})">
+        <member name="M:UmbracoExamine.UmbracoContentIndexer.ReindexWithXmlEntries``1(System.String,System.Int32,System.Func{``0[]},System.Func{System.String,System.Int32,System.Int32,System.Tuple{System.Xml.Linq.XElement[],System.Boolean}},System.Func{System.Int32,Umbraco.Core.Models.IContentBase})">
             <summary>
             Performs a reindex of a type based on looking up entries from the cmsContentXml table - but using callbacks to get this data since
             we don't have a common underlying service interface for the media/content stuff

@@ -236,10 +236,6 @@
 			if (entity != null)
 			{
                 RuntimeCache.GetCacheItem(GetCacheKey(key), () => entity);
-			}
-
-			if (entity != null)
-			{
 				entity.ResetDirtyProperties();
 			}
 			

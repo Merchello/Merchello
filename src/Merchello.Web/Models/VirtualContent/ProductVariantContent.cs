@@ -138,6 +138,17 @@
         }
 
         /// <summary>
+        /// Gets the update date.
+        /// </summary>
+        public override DateTime UpdateDate
+        {
+            get
+            {
+                return _variant.UpdateDate;
+            }
+        }
+
+        /// <summary>
         /// Gets the parent.
         /// </summary>
         public override IPublishedContent Parent

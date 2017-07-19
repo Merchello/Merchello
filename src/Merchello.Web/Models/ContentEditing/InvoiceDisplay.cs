@@ -2,16 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
-    using System.Linq;
 
-    using Merchello.Core;
     using Merchello.Core.Models;
-    using Merchello.Web.Models.Interfaces;
-
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Converters;
 
     /// <summary>
     /// The invoice display.
@@ -157,10 +150,10 @@
     /// <summary>
     /// The invoice display extensions.
     /// </summary>
-    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:StaticElementsMustAppearBeforeInstanceElements", Justification = "Reviewed. Suppression is OK here."),SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "Reviewed. Suppression is OK here.")]
+    // ReSharper disable once StyleCop.SA1204
+    // ReSharper disable once StyleCop.SA1402
     public static class InvoiceDisplayExtensions
     {
-
         /// <summary>
         /// Utility extension method to add an <see cref="IAddress"/> to an <see cref="IInvoice"/>
         /// </summary>

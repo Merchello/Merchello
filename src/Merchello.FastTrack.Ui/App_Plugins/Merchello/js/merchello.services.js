@@ -6,7 +6,7 @@
 
 (function() { 
 
-angular.module('merchello.services').service('dateHelper', [
+angular.module('merchello.services').service('merchDateHelper', [
     '$q', 'localizationService',
     function($q, localizationService) {
 

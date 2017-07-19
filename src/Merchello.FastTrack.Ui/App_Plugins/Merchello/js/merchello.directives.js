@@ -1699,7 +1699,7 @@ angular.module('merchello.directives').directive('merchEnter', function() {
 });
 
 angular.module('merchello.directives').directive('merchelloDateRangeButton',
-    function($filter, settingsResource, dialogService, dateHelper) {
+    function($filter, settingsResource, dialogService, merchDateHelper) {
 
         return {
             restrict: 'E',
@@ -1765,8 +1765,6 @@ angular.module('merchello.directives').directive('merchelloDateRangeButton',
                         endDate: scope.endDate
                     };
 
-                    console.info(dialogData);
-
                     dialogService.open({
                         template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/daterange.selection.html',
                         show: true,
@@ -1788,8 +1786,8 @@ angular.module('merchello.directives').directive('merchelloDateRangeButton',
                 function reload() {
 
                     scope.reload()(
-                        dateHelper.convertToJsDate(scope.startDate, scope.settings.dateFormat),
-                        dateHelper.convertToJsDate(scope.endDate, scope.settings.dateFormat));
+                        merchDateHelper.convertToJsDate(scope.startDate, scope.settings.dateFormat),
+                        merchDateHelper.convertToJsDate(scope.endDate, scope.settings.dateFormat));
                 }
 
                 init();
@@ -3296,7 +3294,41 @@ angular.module('merchello.directives').directive('productOptionsAssociateShared'
                         return true;
                     }
 
-                    if (!scope.defaultChoice.isSet && scope.selectedChoices.length > 0) {
+                    // if a choice has been previously specified to be the default for the product,
+                    // then set this as the default 
+                    if (typeof scope.productOption !== "undefined") {
+                        if (typeof scope.productOption.choices !== "undefined") {
+                            if (scope.productOption.choices.length > 0) {
+
+                                // find the first selected choice
+                                var productDefaultChoice = _.find(scope.productOption.choices, function(c) {
+                                    var exists = _.find(scope.selectedChoices, function() {
+                                        return c.isDefaultChoice === true;
+                                    });
+                                    if (exists) {
+                                        return c;
+                                    }
+                                });
+
+                                if (productDefaultChoice) {
+                                    //var choice = scope.sharedOption.choices[0];
+                                    scope.defaultChoice.current = productDefaultChoice;
+                                    scope.defaultChoice.previous = productDefaultChoice;
+                                    scope.defaultChoice.isSet = true;
+
+                                    _.each(scope.sharedOption.choices, function(c) {
+                                        c.isDefaultChoice = c.key === productDefaultChoice.key;
+                                    });
+
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+
+                    // if a choice has not previously been specified to be the default,
+                    // then use the default as specified in the option settings as the default 
+                    if (scope.selectedChoices.length > 0) {
                         // handles legacy no previous default setting
 
                         // find the first selected choice
@@ -4259,7 +4291,7 @@ angular.module('merchello.directives').directive('reportWidgetCustomerBaskets',
             }
         }]);
 angular.module('merchello.directives').directive('reportWidgeThisWeekVsLast',
-    ['$q', '$log', '$filter', 'assetsService', 'localizationService', 'dateHelper',  'settingsResource', 'salesOverTimeResource', 'queryDisplayBuilder',
+    ['$q', '$log', '$filter', 'assetsService', 'localizationService', 'merchDateHelper',  'settingsResource', 'salesOverTimeResource', 'queryDisplayBuilder',
         function($q, $log, $filter, assetsService, localizationService, dateHelper, settingsResource, salesOverTimeResource, queryDisplayBuilder) {
 
             return {

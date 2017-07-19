@@ -327,7 +327,7 @@
             var sql = new Sql();
             sql.Select("COUNT(*)")
                 .From<Product2ProductOptionDto>(SqlSyntax)
-                .Where<Product2ProductOptionDto>(x => x.OptionKey == optionKey);
+                .Where<Product2ProductOptionDto>(x => x.OptionKey == optionKey, SqlSyntax);
 
             return Database.ExecuteScalar<int>(sql);
         }
@@ -346,7 +346,7 @@
             var sql = new Sql();
             sql.Select("COUNT(*)")
                 .From<ProductOptionAttributeShareDto>(SqlSyntax)
-                .Where<ProductOptionAttributeShareDto>(x => x.AttributeKey == attributeKey);
+                .Where<ProductOptionAttributeShareDto>(x => x.AttributeKey == attributeKey, SqlSyntax);
 
             return Database.ExecuteScalar<int>(sql);
         }
@@ -397,7 +397,7 @@
                 .From<ProductVariant2ProductAttributeDto>(SqlSyntax)
                 .InnerJoin<ProductAttributeDto>(SqlSyntax)
                 .On<ProductVariant2ProductAttributeDto, ProductAttributeDto>(SqlSyntax, left => left.ProductAttributeKey, right => right.Key)
-                .Where<ProductVariant2ProductAttributeDto>(x => x.ProductVariantKey == productVariantKey);
+                .Where<ProductVariant2ProductAttributeDto>(x => x.ProductVariantKey == productVariantKey, SqlSyntax);
 
             var dtos = Database.Fetch<ProductVariant2ProductAttributeDto, ProductAttributeDto>(sql);
 
@@ -427,7 +427,7 @@
             var sql = new Sql();
             sql.Select("*")
                 .From<ProductAttributeDto>(SqlSyntax)
-                .Where<ProductAttributeDto>(x => x.OptionKey == optionKey)
+                .Where<ProductAttributeDto>(x => x.OptionKey == optionKey, SqlSyntax)
                 .OrderBy<ProductAttributeDto>(x => x.SortOrder, SqlSyntax);
 
             return GetProductAttributeCollection(sql);
@@ -796,14 +796,14 @@
                         SqlSyntax,
                         left => left.Key,
                         right => right.AttributeKey)
-                    .Where<ProductOptionAttributeShareDto>(x => x.ProductKey == productKey && x.OptionKey == option.Key)
+                    .Where<ProductOptionAttributeShareDto>(x => x.ProductKey == productKey && x.OptionKey == option.Key, SqlSyntax)
                     .OrderBy<ProductAttributeDto>(x => x.SortOrder, SqlSyntax);
             }
             else
             {
                 sql.Select("*")
                     .From<ProductAttributeDto>(SqlSyntax)
-                    .Where<ProductAttributeDto>(x => x.OptionKey == option.Key)
+                    .Where<ProductAttributeDto>(x => x.OptionKey == option.Key, SqlSyntax)
                     .OrderBy<ProductAttributeDto>(x => x.SortOrder, SqlSyntax);
             }
 
@@ -1178,7 +1178,7 @@
                .From<ProductOptionDto>(SqlSyntax)
                .InnerJoin<Product2ProductOptionDto>(SqlSyntax)
                .On<ProductOptionDto, Product2ProductOptionDto>(SqlSyntax, left => left.Key, right => right.OptionKey)
-               .Where<Product2ProductOptionDto>(x => x.ProductKey == productKey);
+               .Where<Product2ProductOptionDto>(x => x.ProductKey == productKey, SqlSyntax);
 
             var dtos = Database.Fetch<ProductOptionDto, Product2ProductOptionDto>(sql);
 
@@ -1413,7 +1413,7 @@
         private IProductAttribute GetAttributeByKey(Guid key)
         {
             var sql =
-                new Sql("SELECT *").From<ProductAttributeDto>(SqlSyntax).Where<ProductAttributeDto>(x => x.Key == key);
+                new Sql("SELECT *").From<ProductAttributeDto>(SqlSyntax).Where<ProductAttributeDto>(x => x.Key == key, SqlSyntax);
             var dto = Database.Fetch<ProductAttributeDto>(sql).FirstOrDefault();
             if (dto != null)
             {
