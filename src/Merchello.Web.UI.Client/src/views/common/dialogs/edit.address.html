@@ -9,29 +9,29 @@
                 <p class="text-warning">{{ dialogData.warning }}</p>
             </div>
             <div class="form-group row-fluid">
-                <label for="name"><localize key="merchelloCustomer_fullName" />:</label>
+                <label for="name"><localize key="merchelloCustomers_fullName" />:</label>
                 <input name="name" type="text" class="span12" data-ng-model="address.name" />
-                <label for="org"><localize key="merchelloCustomer_company" />:</label>
+                <label for="org"><localize key="merchelloCustomers_company" />:</label>
                 <input name="org" type="text" class="span12" data-ng-model="address.organization" />
-                <label for="address1">*<localize key="merchelloCustomer_address" />:</label>
+                <label for="address1">*<localize key="merchelloCustomers_address" />:</label>
                 <!--<div class="error" data-ng-show="editAddressForm.address1.$invalid && wasFormSubmitted">Address is a required field.</div>-->
                 <input name="address1" type="text" class="span12" data-ng-model="address.address1" required />
-                <label for="address2"><localize key="merchelloCustomer_addressLine2" />:</label>
+                <label for="address2"><localize key="merchelloCustomers_addressLine2" />:</label>
                 <input name="address2" type="text" class="span12" data-ng-model="address.address2" />
-                <label for="locality"><localize key="merchelloCustomer_city" />:</label>
+                <label for="locality"><localize key="merchelloCustomers_city" />:</label>
                 <!--<div class="error" data-ng-show="editAddressForm.locality.$invalid && wasFormSubmitted">City is a required field.</div>-->
                 <input name="locality" type="text" class="span12" data-ng-model="address.locality" required />
-                <label for="country"><localize key="merchelloCustomer_country" />:</label>
+                <label for="country"><localize key="merchelloCustomers_country" />:</label>
                 <!--<div class="error" data-ng-show="$scope.dialogData.filters.country.id == -1 && wasFormSubmitted">Country is a required field.</div>-->
                 <select name="country" class="span12" data-ng-model="dialogData.selectedCountry" data-ng-options="option.name for option in dialogData.countries"></select>
-                <label for="region"><localize key="merchelloCustomer_stateOrProvince" />:</label>
+                <label for="region"><localize key="merchelloCustomers_stateOrProvince" />:</label>
                 <input name="region" type="text" class="span12" data-ng-hide="dialogData.selectedCountry.provinces.length > 0" data-ng-model="dialogData.address.region" />
                 <select name="regionSelect" class="span12" data-ng-hide="dialogData.selectedCountry.provinces.length === 0" data-ng-model="dialogData.selectedProvince" data-ng-options="option.name for option in dialogData.selectedCountry.provinces"></select>
-                <label for="postalCode"><localize key="merchelloCustomer_zipOrPostalCode" />:</label>
+                <label for="postalCode"><localize key="merchelloCustomers_zipOrPostalCode" />:</label>
                 <input name="postalCode" type="text" class="span12" data-ng-model="address.postalCode" required />
-                <label for="phone" data-ng-hide="!dialogData.showPhone"><localize key="merchelloCustomer_phone" />:</label>
+                <label for="phone" data-ng-hide="!dialogData.showPhone"><localize key="merchelloCustomers_phone" />:</label>
                 <input name="phone" type="tel" class="span12"  data-ng-hide="!dialogData.showPhone" data-ng-model="dialogData.address.phone" />
-                <label for="email" data-ng-hide="!dialogData.showEmail"><localize key="merchelloCustomer_email" />:</label>
+                <label for="email" data-ng-hide="!dialogData.showEmail"><localize key="merchelloCustomers_email" />:</label>
                 <input name="email" type="email" class="span12"  data-ng-hide="!dialogData.showEmail" data-ng-model="dialogData.address.email" />
                <br />
             </div>
