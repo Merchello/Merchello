@@ -82,7 +82,7 @@
                 <invoice-header invoice="invoice" refresh="refresh()"></invoice-header>
                 <!-- Invoice & Order Status -->
                 <div class="well invoice-order-info">
-                    <div class="pull-right" data-ng-show="!invoice.isPaid()">
+                    <div class="pull-right" data-ng-show="invoice.getFulfillmentStatus() !== 'Fulfilled'">
                         <merchello-edit-icon do-edit="openAddressAddEditDialog(billingAddress)"></merchello-edit-icon>
                     </div>
                     <h4><localize key="merchelloSales_billingAddress" /></h4>
