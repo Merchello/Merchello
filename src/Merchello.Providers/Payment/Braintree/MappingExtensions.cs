@@ -1,7 +1,7 @@
 ﻿namespace Merchello.Providers.Payment.Braintree
 {
     using System.Diagnostics.CodeAnalysis;
-
+    using System.Text;
     using AutoMapper;
 
     using global::Braintree;
@@ -179,6 +179,27 @@
         public static void SetBraintreeTransaction(this ExtendedDataCollection extendedData, Transaction transaction)
         {
             extendedData.SetValue(Constants.Braintree.ExtendedDataKeys.BraintreeTransaction, JsonConvert.SerializeObject(transaction));
+        }
+
+        /// <summary>
+        /// Adds the AVS and CVV data to the payment so it can be displayed in the back office
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <param name="transaction"></param>
+        public static void SetAvsCvvData(this ExtendedDataCollection extendedData, Transaction transaction)
+        {
+            // Pull out all the AVS and CVV Data as we need to display this
+            var sb = new StringBuilder();
+            if (!string.IsNullOrEmpty(transaction.AvsErrorResponseCode))
+            {
+                sb.Append($"AvsErrorResponseCode: {transaction.AvsErrorResponseCode} | ");
+            }
+            sb.Append($"AvsPostalCodeResponseCode: {transaction.AvsPostalCodeResponseCode} | ");
+            sb.Append($"AvsStreetAddressResponseCode: {transaction.AvsStreetAddressResponseCode} | ");
+            sb.Append($"CvvResponseCode: {transaction.CvvResponseCode}");
+
+            // Set it into the Extended data
+            extendedData.SetValue(Core.Constants.ExtendedDataKeys.AvsCvvData, sb.ToString());
         }
 
         /// <summary>

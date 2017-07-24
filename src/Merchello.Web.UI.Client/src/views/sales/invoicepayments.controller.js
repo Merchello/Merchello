@@ -30,6 +30,30 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
             $scope.showVoid = showVoid;
             $scope.showRefund = showRefund;
 
+            // Helper to check for AvsCvvData
+            $scope.hasAvsCvvData = function(items) {
+                var hasAvsCvv = false;
+                if (items) {
+                    for (var i = 0; i < items.length; i++) {
+                        if (items[i].key === "merchAvsCvvData") {
+                            hasAvsCvv = true;
+                            break;
+                        }
+                    }
+                }
+                return hasAvsCvv;
+            };
+
+            // Helper to show the data
+            $scope.showAvsCvvData = function(items) {
+                for (var i = 0; i < items.length; i++) {
+                    if (items[i].key === "merchAvsCvvData") {
+                        return items[i].value;
+                    }
+                }
+                return "-";
+            };
+
             function init() {
                 var key = $routeParams.id;
                 loadInvoice(key);
@@ -168,8 +192,8 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
 
                     if (key === 'removed') {
                         var empty = paymentMethodDisplayBuilder.createDefault();
-                            $scope.paymentMethods.push(empty)
-                        }   
+                        $scope.paymentMethods.push(empty);
+                    }   
                         var promise = paymentGatewayProviderResource.getPaymentMethodByKey(key);
                         promise.then(function(method) {
                             $scope.paymentMethods.push(method);
