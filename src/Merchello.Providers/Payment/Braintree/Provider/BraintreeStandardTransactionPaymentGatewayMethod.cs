@@ -192,6 +192,9 @@
             {
                 payment.ExtendedData.SetBraintreeTransaction(result.Target);
 
+                // AVS and CVV data
+                payment.ExtendedData.SetAvsCvvData(result.Target);
+
                 if (option == TransactionOption.Authorize) payment.Authorized = true;
                 if (option == TransactionOption.SubmitForSettlement)
                 {

@@ -44,8 +44,9 @@
     <tr data-ng-show="itemization.adjustments.length > 0" data-ng-repeat="adjustmentItem in itemization.adjustments">
         <td colspan="4" class="adjustment-name">
             {{adjustmentItem.name}}
-            <span data-ng-show="adjustmentItem.userName !== ''"><localize key="merchelloSales_adjustmentAssignedBy"></localize>: {{ adjustmentItem.userName}}</span>
-            <span data-ng-show="adjustmentItem.email !== ''">(<a href="mailto:{{ adjustmentItem.email }}"><small>{{adjustmentItem.email}}</small></a>)</span>
+            <span data-ng-show="adjustmentItem.extendedData.items[0].value !== ''">
+                <localize key="merchelloSales_adjustmentAssignedBy"></localize>: {{ adjustmentItem.extendedData.items[0].value}} (<small>{{adjustmentItem.extendedData.items[1].value}}</small>)
+            </span>             
         </td>
         <td class="text-right">
             <span data-ng-show="adjustmentItem.price < 0">({{adjustmentItem.absPrice() | currency : currencySymbol}})</span>
