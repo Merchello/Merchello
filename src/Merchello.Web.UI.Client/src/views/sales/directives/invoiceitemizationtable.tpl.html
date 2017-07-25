@@ -11,7 +11,9 @@
     <tbody>
     <tr data-ng-repeat="lineItem in itemization.products">
         <td>{{lineItem.name}}</td>
-        <td class="break-all">{{lineItem.sku}}</td>
+        <td class="break-all">
+            <a href ng-click="lineItemPreview(lineItem.sku)">{{lineItem.sku}}</a>            
+        </td>
         <td class="text-center">{{lineItem.quantity}}</td>
         <td class="text-right">{{lineItem.price | currency : currencySymbol}}</td>
         <td class="text-right">{{lineItem.quantity * lineItem.price | currency : currencySymbol}}</td>
