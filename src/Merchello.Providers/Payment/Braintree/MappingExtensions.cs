@@ -192,11 +192,11 @@
             var sb = new StringBuilder();
             if (!string.IsNullOrEmpty(transaction.AvsErrorResponseCode))
             {
-                sb.Append($"AvsErrorResponseCode: {transaction.AvsErrorResponseCode} | ");
+                sb.AppendFormat("AvsErrorResponseCode: {0} | ", transaction.AvsErrorResponseCode);
             }
-            sb.Append($"AvsPostalCodeResponseCode: {transaction.AvsPostalCodeResponseCode} | ");
-            sb.Append($"AvsStreetAddressResponseCode: {transaction.AvsStreetAddressResponseCode} | ");
-            sb.Append($"CvvResponseCode: {transaction.CvvResponseCode}");
+            sb.AppendFormat("AvsPostalCodeResponseCode: {0} | ", transaction.AvsPostalCodeResponseCode);
+            sb.AppendFormat("AvsStreetAddressResponseCode: {0} | ", transaction.AvsStreetAddressResponseCode);
+            sb.AppendFormat("CvvResponseCode: {0}" , transaction.CvvResponseCode);
 
             // Set it into the Extended data
             extendedData.SetValue(Core.Constants.ExtendedDataKeys.AvsCvvData, sb.ToString());
