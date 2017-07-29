@@ -4849,7 +4849,9 @@ angular.module('merchello.directives').directive('invoiceHeader',
 
             function saveInvoice(dialogData) {
                 invoiceResource.saveInvoice(dialogData.invoice);
-                scope.refresh();
+                scope.invoice.poNumber = dialogData.invoice.poNumber;
+                scope.invoice.invoiceNumberPrefix = dialogData.invoice.invoiceNumberPrefix;
+                //scope.refresh();
             }
             
             function init() {
@@ -4867,8 +4869,8 @@ angular.module('merchello.directives').directive('invoiceHeader',
 }])
 
 angular.module('merchello.directives').directive('invoiceItemizationTable',
-    ['$q', 'localizationService', 'invoiceResource', 'invoiceHelper',
-        function($q, localizationService, invoiceResource, invoiceHelper) {
+    ['$q', 'localizationService', 'invoiceResource', 'invoiceHelper', 'dialogService', 'productResource',
+        function ($q, localizationService, invoiceResource, invoiceHelper, dialogService, productResource) {
             return {
                 restrict: 'E',
                 replace: true,
@@ -4898,10 +4900,36 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                     function init() {
 
                         // ensure that the parent scope promises have been resolved
-                        scope.$watch('preValuesLoaded', function(pvl) {
-                            if(pvl === true) {
-                               loadInvoice();
+                        scope.$watch('preValuesLoaded', function (pvl) {
+                            if (pvl === true) {
+                                loadInvoice();
                             }
+                        });
+                    }
+
+
+                    // Previews a line item on invoice in a dialog
+                    scope.lineItemPreview = function (sku) {
+
+                        // Setup the dialog data
+                        var dialogData = {
+                            product: {},
+                            sku: sku
+                        };
+
+                        // Get the product if it exists! We call the vairant service as this seems
+                        // to return the base product too
+                        productResource.getVariantBySku(sku).then(function (result) {
+                            // If we get something back then add it to the diaglogData
+                            if (result) {
+                                dialogData.product = result;
+                            }
+                        });
+
+                        dialogService.open({
+                            template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/sales.previewlineitem.html',
+                            show: true,
+                            dialogData: dialogData
                         });
                     }
 
@@ -5000,7 +5028,7 @@ angular.module('merchello.directives').directive('manageInvoiceAdjustments',
                 function manageAdjustmentsDialogConfirm(adjustments) {
                     if (adjustments.items !== undefined) {
 
-                    var user = userService.getCurrentUser().then(function(user) {
+                    userService.getCurrentUser().then(function(user) {
 
                         _.each(adjustments.items, function(item) {
                             if (item.key === '') {
