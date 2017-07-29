@@ -193,6 +193,17 @@
                 get { return "merchPaymentMethod"; }
             }
 
+            /// <summary>
+            /// Gets the AvsCvvData extended data key
+            /// </summary>
+            public static string AvsCvvData
+            {
+                get
+                {
+                    return "merchAvsCvvData";
+                }
+            }
+
             //// ProductVariant -----------------------------------------------------------------
 
             /// <summary>

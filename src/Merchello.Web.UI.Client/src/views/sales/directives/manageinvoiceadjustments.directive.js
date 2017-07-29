@@ -56,7 +56,7 @@ angular.module('merchello.directives').directive('manageInvoiceAdjustments',
                 function manageAdjustmentsDialogConfirm(adjustments) {
                     if (adjustments.items !== undefined) {
 
-                    var user = userService.getCurrentUser().then(function(user) {
+                    userService.getCurrentUser().then(function(user) {
 
                         _.each(adjustments.items, function(item) {
                             if (item.key === '') {

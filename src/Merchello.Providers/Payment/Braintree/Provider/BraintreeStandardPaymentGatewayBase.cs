@@ -1,7 +1,6 @@
 ﻿namespace Merchello.Providers.Payment.Braintree.Provider
 {
     using System;
-
     using Merchello.Core;
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Models;
@@ -168,6 +167,9 @@
             if (result.IsSuccess())
             {
                 payment.ExtendedData.SetBraintreeTransaction(result.Target);
+
+                // AVS and CVV data
+                payment.ExtendedData.SetAvsCvvData(result.Target);
 
                 if (option == TransactionOption.Authorize) payment.Authorized = true;
                 if (option == TransactionOption.SubmitForSettlement)
