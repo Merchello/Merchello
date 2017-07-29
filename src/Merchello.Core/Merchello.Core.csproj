@@ -9,6 +9,7 @@
     <PackageReference Include="JetBrains.Annotations" Version="11.0.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="1.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="1.1.2" />
+    <PackageReference Include="NodaMoney" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Extensions.*.cs">
