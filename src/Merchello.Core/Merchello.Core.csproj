@@ -548,6 +548,7 @@
     <Compile Include="Services\ProductService.PortForward.cs">
       <DependentUpon>ProductService.cs</DependentUpon>
     </Compile>
+    <Compile Include="SkuHelper.cs" />
     <Compile Include="Strategies\Itemization\DefaultInvoiceItemizationStrategy.cs" />
     <Compile Include="Strategies\Itemization\ProductBasedTaxationInvoiceItemazationStrategy.cs" />
     <Compile Include="Strategies\Itemization\InvoiceItemItemization.cs" />

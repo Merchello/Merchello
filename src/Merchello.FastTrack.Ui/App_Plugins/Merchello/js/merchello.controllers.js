@@ -7275,6 +7275,10 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
         }
 
         function regenSkusConfirm() {
+            console.info($scope.product);
+            productResource.resetSkus($scope.product).then(function() {
+                $scope.reload();
+            });
             console.info('Got here');
         }
 

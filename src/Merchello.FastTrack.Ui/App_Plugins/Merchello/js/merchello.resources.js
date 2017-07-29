@@ -1782,6 +1782,18 @@ angular.module('merchello.resources').factory('noteResource', [
                         'Failed to delete detached content');
                 },
 
+                resetSkus: function(product)
+                {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProductWithResetSkus';
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: url,
+                            method: "GET",
+                            params: { productKey: product.key }
+                        }),
+                        'Failed to reset skus');
+                },
+
                 /**
                  * @ngdoc method
                  * @name searchProducts
