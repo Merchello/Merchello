@@ -13,6 +13,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.UnitTests", "..\t
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.IntegrationTests", "..\tests\Merchello.IntegrationTests\Merchello.IntegrationTests.csproj", "{D60631BB-DF20-4745-9CB9-4F20221544FF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Anaylisis", "Anaylisis", "{6ACB616F-8D6E-41D0-9BF3-4142473EACEF}"
+	ProjectSection(SolutionItems) = preProject
+		..\Merchello.MostRules.Error.ruleset = ..\Merchello.MostRules.Error.ruleset
+		..\Merchello.ruleset = ..\Merchello.ruleset
+		..\Merchello.Tests.ruleset = ..\Merchello.Tests.ruleset
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
