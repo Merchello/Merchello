@@ -80,7 +80,11 @@
                 modelBuilder.AddConfiguration(entityConfiguration);
             }
 
-           
+            modelBuilder.Entity(typeof(MerchAuditLog),
+                (entity) =>
+                    {
+                       entity.HasAlternateKey 
+                    });
 
             modelBuilder.Entity<MerchAuditLog>(entity =>
             {

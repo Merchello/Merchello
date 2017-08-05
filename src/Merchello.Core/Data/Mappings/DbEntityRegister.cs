@@ -46,9 +46,9 @@
         /// <returns>
         /// The collection of instantiated builder configurations.
         /// </returns>
-        public IEnumerable<DbEntityConfiguration<object>> GetInstantiations()
+        public IEnumerable<dynamic> GetInstantiations()
         {
-            return this.InstanceTypes.Select(t => (DbEntityConfiguration<object>)Activator.CreateInstance(t));
+            return this.InstanceTypes.Select(Activator.CreateInstance);
         }
 
         /// <summary>

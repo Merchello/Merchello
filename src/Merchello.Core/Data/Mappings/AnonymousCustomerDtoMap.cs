@@ -1,5 +1,7 @@
 ﻿namespace Merchello.Core.Data.Mappings
 {
+    using System;
+
     using Merchello.Core.Data.Models;
 
     using Microsoft.EntityFrameworkCore;
