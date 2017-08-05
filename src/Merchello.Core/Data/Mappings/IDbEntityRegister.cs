@@ -1,11 +1,13 @@
-﻿namespace Merchello.Core.Registers
+﻿namespace Merchello.Core.Data.Mappings
 {
     using System.Collections.Generic;
+
+    using Merchello.Core.Registers;
 
     /// <summary>
     /// Represents a register of Model Type Mapping Configurations.
     /// </summary>
-    public interface IDBMappingRegister : ITypeRegister
+    public interface IDbEntityRegister : ITypeRegister
     {
         /// <summary>
         /// Returns instantiations of resolved instance types.
@@ -13,6 +15,6 @@
         /// <returns>
         /// The collection of instantiated configuration types .
         /// </returns>
-        IEnumerable<dynamic> GetInstantiations();
+        IEnumerable<DbEntityConfiguration<object>> GetInstantiations();
     }
 }

@@ -1,17 +1,16 @@
-﻿namespace Merchello.Core.Registers
+﻿namespace Merchello.Core.Data.Mappings
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
 
-    using Merchello.Core.Data.Mappings;
     using Merchello.Core.Logging;
 
     /// <summary>
-    /// A register for database mapping types.
+    /// A register for Entity Framework entities types.
     /// </summary>
-    internal class DbMappingRegister : IDBMappingRegister
+    internal class DbEntityRegister : IDbEntityRegister
     {
         /// <summary>
         /// The <see cref="Type"/>s registered.
@@ -24,12 +23,12 @@
         private readonly ILogger _logger;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DbMappingRegister"/> class.
+        /// Initializes a new instance of the <see cref="DbEntityRegister"/> class.
         /// </summary>
         /// <param name="logger">
         /// The <see cref="ILogger"/>.
         /// </param>
-        public DbMappingRegister(ILogger logger)
+        public DbEntityRegister(ILogger logger)
         {
             this._logger = logger;
             this.Initialize();
@@ -47,9 +46,9 @@
         /// <returns>
         /// The collection of instantiated builder configurations.
         /// </returns>
-        public IEnumerable<dynamic> GetInstantiations()
+        public IEnumerable<DbEntityConfiguration<object>> GetInstantiations()
         {
-            return this.InstanceTypes.Select(Activator.CreateInstance);
+            return this.InstanceTypes.Select(t => (DbEntityConfiguration<object>)Activator.CreateInstance(t));
         }
 
         /// <summary>
@@ -57,7 +56,7 @@
         /// </summary>
         public void Initialize()
         {
-            this._logger.Info<DbMappingRegister>("Initializing");
+            this._logger.Info<DbEntityRegister>("Initializing");
 
             var typesToRegister =
                 this.GetType()
@@ -70,15 +69,15 @@
                     .Select(ti => ti.AsType())
                     .ToArray();
 
-            this._logger.Info<DbMappingRegister>($"Found {typesToRegister.Count()} types to register");
+            this._logger.Info<DbEntityRegister>($"Found {typesToRegister.Count()} types to register");
 
             foreach (var t in typesToRegister)
             {
-                this._logger.Info<DbMappingRegister>($"Adding {t.FullName} to registry");
+                this._logger.Info<DbEntityRegister>($"Adding {t.FullName} to registry");
                 this._types.Add(t);
             }
 
-            this._logger.Info<DbMappingRegister>("Completed adding types to register");
+            this._logger.Info<DbEntityRegister>("Completed adding types to register");
         }
     }
 }
