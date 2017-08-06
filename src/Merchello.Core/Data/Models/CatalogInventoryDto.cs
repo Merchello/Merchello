@@ -2,7 +2,7 @@
 {
     using System;
 
-    internal partial class MerchCatalogInventory
+    internal partial class CatalogInventoryDto
     {
         public Guid CatalogKey { get; set; }
 

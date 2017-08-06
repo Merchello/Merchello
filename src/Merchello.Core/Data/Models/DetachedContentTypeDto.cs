@@ -3,9 +3,9 @@
     using System;
     using System.Collections.Generic;
 
-    internal sealed partial class MerchDetachedContentType
+    internal sealed partial class DetachedContentTypeDto
     {
-        public MerchDetachedContentType()
+        public DetachedContentTypeDto()
         {
             this.MerchProductOption = new HashSet<MerchProductOption>();
             this.MerchProductVariantDetachedContent = new HashSet<MerchProductVariantDetachedContent>();

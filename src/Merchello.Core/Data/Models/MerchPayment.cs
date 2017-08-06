@@ -40,7 +40,7 @@
 
         public ICollection<AppliedPaymentDto> MerchAppliedPayment { get; set; }
 
-        public MerchCustomer CustomerKeyNavigation { get; set; }
+        public CustomerDto CustomerDtoKeyNavigation { get; set; }
 
         public MerchPaymentMethod PaymentMethodKeyNavigation { get; set; }
     }

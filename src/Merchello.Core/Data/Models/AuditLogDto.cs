@@ -2,7 +2,7 @@
 {
     using System;
 
-    internal partial class MerchAuditLog
+    internal partial class AuditLogDto
     {
         public Guid Pk { get; set; }
 

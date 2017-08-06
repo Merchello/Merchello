@@ -26,6 +26,6 @@
 
         public DateTime CreateDate { get; set; }
 
-        public virtual MerchInvoice InvoiceKeyNavigation { get; set; }
+        public virtual InvoiceDto InvoiceDtoKeyNavigation { get; set; }
     }
 }

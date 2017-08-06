@@ -3,13 +3,13 @@
     using System;
     using System.Collections.Generic;
 
-    internal sealed partial class MerchCustomer
+    internal sealed partial class CustomerDto
     {
-        public MerchCustomer()
+        public CustomerDto()
         {
-            this.MerchCustomer2EntityCollection = new HashSet<MerchCustomer2EntityCollection>();
-            this.MerchCustomerAddress = new HashSet<MerchCustomerAddress>();
-            this.MerchInvoice = new HashSet<MerchInvoice>();
+            this.MerchCustomer2EntityCollection = new HashSet<Customer2EntityCollectionDto>();
+            this.MerchCustomerAddress = new HashSet<CustomerAddressDto>();
+            this.MerchInvoice = new HashSet<InvoiceDto>();
             this.MerchPayment = new HashSet<MerchPayment>();
         }
 
@@ -35,13 +35,13 @@
 
         public DateTime CreateDate { get; set; }
 
-        public ICollection<MerchCustomer2EntityCollection> MerchCustomer2EntityCollection { get; set; }
+        public ICollection<Customer2EntityCollectionDto> MerchCustomer2EntityCollection { get; set; }
 
-        public ICollection<MerchCustomerAddress> MerchCustomerAddress { get; set; }
+        public ICollection<CustomerAddressDto> MerchCustomerAddress { get; set; }
 
-        public MerchCustomerIndex MerchCustomerIndex { get; set; }
+        public CustomerIndexDto CustomerIndexDto { get; set; }
 
-        public ICollection<MerchInvoice> MerchInvoice { get; set; }
+        public ICollection<InvoiceDto> MerchInvoice { get; set; }
 
         public ICollection<MerchPayment> MerchPayment { get; set; }
     }

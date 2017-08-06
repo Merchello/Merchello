@@ -2,7 +2,7 @@
 {
     using System;
 
-    internal partial class MerchInvoice2EntityCollection
+    internal partial class Invoice2EntityCollectionDto
     {
         public Guid InvoiceKey { get; set; }
 
@@ -12,8 +12,8 @@
 
         public DateTime CreateDate { get; set; }
 
-        public virtual MerchEntityCollection EntityCollectionKeyNavigation { get; set; }
+        public virtual EntityCollectionDto EntityCollectionDtoKeyNavigation { get; set; }
 
-        public virtual MerchInvoice InvoiceKeyNavigation { get; set; }
+        public virtual InvoiceDto InvoiceDtoKeyNavigation { get; set; }
     }
 }

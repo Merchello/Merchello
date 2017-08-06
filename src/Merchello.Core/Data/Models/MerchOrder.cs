@@ -34,7 +34,7 @@
 
         public ICollection<MerchOrderItem> MerchOrderItem { get; set; }
 
-        public MerchInvoice InvoiceKeyNavigation { get; set; }
+        public InvoiceDto InvoiceDtoKeyNavigation { get; set; }
 
         public MerchOrderStatus OrderStatusKeyNavigation { get; set; }
     }

@@ -7,7 +7,7 @@
     {
         public MerchInvoiceStatus()
         {
-            this.MerchInvoice = new HashSet<MerchInvoice>();
+            this.MerchInvoice = new HashSet<InvoiceDto>();
         }
 
         public Guid Pk { get; set; }
@@ -26,6 +26,6 @@
 
         public DateTime CreateDate { get; set; }
 
-        public ICollection<MerchInvoice> MerchInvoice { get; set; }
+        public ICollection<InvoiceDto> MerchInvoice { get; set; }
     }
 }

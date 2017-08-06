@@ -15,20 +15,22 @@
             this.entityRegister = entityRegister;
         }
 
+        #region  DbSets
+
         public virtual DbSet<AnonymousCustomerDto> MerchAnonymousCustomer { get; set; }
         public virtual DbSet<AppliedPaymentDto> MerchAppliedPayment { get; set; }
-        public virtual DbSet<MerchAuditLog> MerchAuditLog { get; set; }
-        public virtual DbSet<MerchCatalogInventory> MerchCatalogInventory { get; set; }
-        public virtual DbSet<MerchCustomer> MerchCustomer { get; set; }
-        public virtual DbSet<MerchCustomer2EntityCollection> MerchCustomer2EntityCollection { get; set; }
-        public virtual DbSet<MerchCustomerAddress> MerchCustomerAddress { get; set; }
-        public virtual DbSet<MerchCustomerIndex> MerchCustomerIndex { get; set; }
-        public virtual DbSet<MerchDetachedContentType> MerchDetachedContentType { get; set; }
-        public virtual DbSet<MerchDigitalMedia> MerchDigitalMedia { get; set; }
-        public virtual DbSet<MerchEntityCollection> MerchEntityCollection { get; set; }
-        public virtual DbSet<MerchGatewayProviderSettings> MerchGatewayProviderSettings { get; set; }
-        public virtual DbSet<MerchInvoice> MerchInvoice { get; set; }
-        public virtual DbSet<MerchInvoice2EntityCollection> MerchInvoice2EntityCollection { get; set; }
+        public virtual DbSet<AuditLogDto> MerchAuditLog { get; set; }
+        public virtual DbSet<CatalogInventoryDto> MerchCatalogInventory { get; set; }
+        public virtual DbSet<CustomerDto> MerchCustomer { get; set; }
+        public virtual DbSet<Customer2EntityCollectionDto> MerchCustomer2EntityCollection { get; set; }
+        public virtual DbSet<CustomerAddressDto> MerchCustomerAddress { get; set; }
+        public virtual DbSet<CustomerIndexDto> MerchCustomerIndex { get; set; }
+        public virtual DbSet<DetachedContentTypeDto> MerchDetachedContentType { get; set; }
+        public virtual DbSet<DigitalMediaDto> MerchDigitalMedia { get; set; }
+        public virtual DbSet<EntityCollectionDto> MerchEntityCollection { get; set; }
+        public virtual DbSet<GatewayProviderSettingsDto> MerchGatewayProviderSettings { get; set; }
+        public virtual DbSet<InvoiceDto> MerchInvoice { get; set; }
+        public virtual DbSet<Invoice2EntityCollectionDto> MerchInvoice2EntityCollection { get; set; }
         public virtual DbSet<MerchInvoiceIndex> MerchInvoiceIndex { get; set; }
         public virtual DbSet<MerchInvoiceItem> MerchInvoiceItem { get; set; }
         public virtual DbSet<MerchInvoiceStatus> MerchInvoiceStatus { get; set; }
@@ -66,6 +68,8 @@
         public virtual DbSet<MerchWarehouse> MerchWarehouse { get; set; }
         public virtual DbSet<MerchWarehouseCatalog> MerchWarehouseCatalog { get; set; }
 
+        #endregion
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
@@ -75,608 +79,11 @@
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
-            foreach (var entityConfiguration in this.entityRegister.GetInstantiations())
+            foreach (var entityMap in this.entityRegister.GetInstantiations())
             {
-                modelBuilder.AddConfiguration(entityConfiguration);
+                entityMap.Configure(modelBuilder);
             }
-
-            modelBuilder.Entity(typeof(MerchAuditLog),
-                (entity) =>
-                    {
-                       entity.HasAlternateKey 
-                    });
-
-            modelBuilder.Entity<MerchAuditLog>(entity =>
-            {
-                entity.HasKey(e => e.Pk)
-                    .HasName("PK_merchAuditLog");
-
-                entity.ToTable("merchAuditLog");
-
-                entity.Property(e => e.Pk)
-                    .HasColumnName("pk")
-                    .HasDefaultValueSql("'newid()'");
-
-                entity.Property(e => e.CreateDate)
-                    .HasColumnName("createDate")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("getdate()");
-
-                entity.Property(e => e.EntityKey).HasColumnName("entityKey");
-
-                entity.Property(e => e.EntityTfKey).HasColumnName("entityTfKey");
-
-                entity.Property(e => e.ExtendedData)
-                    .HasColumnName("extendedData")
-                    .HasColumnType("ntext");
-
-                entity.Property(e => e.IsError).HasColumnName("isError");
-
-                entity.Property(e => e.Message)
-                    .HasColumnName("message")
-                    .HasColumnType("ntext");
-
-                entity.Property(e => e.UpdateDate)
-                    .HasColumnName("updateDate")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("getdate()");
-
-                entity.Property(e => e.Verbosity)
-                    .HasColumnName("verbosity")
-                    .HasDefaultValueSql("'0'");
-            });
-
-            modelBuilder.Entity<MerchCatalogInventory>(entity =>
-            {
-                entity.HasKey(e => new { e.CatalogKey, e.ProductVariantKey })
-                    .HasName("PK_merchCatalogInventory");
-
-                entity.ToTable("merchCatalogInventory");
-
-                entity.HasIndex(e => e.Location)
-                    .HasName("IX_merchCatalogInventoryLocation");
-
-                entity.Property(e => e.CatalogKey).HasColumnName("catalogKey");
-
-                entity.Property(e => e.ProductVariantKey).HasColumnName("productVariantKey");
-
-                entity.Property(e => e.Count).HasColumnName("count");
-
-                entity.Property(e => e.CreateDate)
-                    .HasColumnName("createDate")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("getdate()");
-
-                entity.Property(e => e.Location)
-                    .HasColumnName("location")
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.LowCount).HasColumnName("lowCount");
-
-                entity.Property(e => e.UpdateDate)
-                    .HasColumnName("updateDate")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("getdate()");
-
-                entity.HasOne(d => d.CatalogKeyNavigation)
-                    .WithMany(p => p.MerchCatalogInventory)
-                    .HasForeignKey(d => d.CatalogKey)
-                    .OnDelete(DeleteBehavior.Restrict)
-                    .HasConstraintName("FK_merchCatalogInventory_merchWarehouseCatalog");
-
-                entity.HasOne(d => d.ProductVariantKeyNavigation)
-                    .WithMany(p => p.MerchCatalogInventory)
-                    .HasForeignKey(d => d.ProductVariantKey)
-                    .OnDelete(DeleteBehavior.Restrict)
-                    .HasConstraintName("FK_merchWarehouseInventory_merchProductVariant");
-            });
-
-            modelBuilder.Entity<MerchCustomer>(entity =>
-            {
-                entity.HasKey(e => e.Pk)
-                    .HasName("PK_merchCustomer");
-
-                entity.ToTable("merchCustomer");
-
-                entity.HasIndex(e => e.LoginName)
-                    .HasName("IX_merchCustomerLoginName")
-                    .IsUnique();
-
-                entity.Property(e => e.Pk)
-                    .HasColumnName("pk")
-                    .HasDefaultValueSql("'newid()'");
-
-                entity.Property(e => e.CreateDate)
-                    .HasColumnName("createDate")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("getdate()");
-
-                entity.Property(e => e.Email)
-                    .IsRequired()
-                    .HasColumnName("email")
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.ExtendedData)
-                    .HasColumnName("extendedData")
-                    .HasColumnType("ntext");
-
-                entity.Property(e => e.FirstName)
-                    .IsRequired()
-                    .HasColumnName("firstName")
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.LastActivityDate)
-                    .HasColumnName("lastActivityDate")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("getdate()");
-
-                entity.Property(e => e.LastName)
-                    .IsRequired()
-                    .HasColumnName("lastName")
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.LoginName)
-                    .IsRequired()
-                    .HasColumnName("loginName")
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.Notes)
-                    .HasColumnName("notes")
-                    .HasColumnType("ntext");
-
-                entity.Property(e => e.TaxExempt).HasColumnName("taxExempt");
-
-                entity.Property(e => e.UpdateDate)
-                    .HasColumnName("updateDate")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("getdate()");
-            });
-
-            modelBuilder.Entity<MerchCustomer2EntityCollection>(entity =>
-            {
-                entity.HasKey(e => new { e.CustomerKey, e.EntityCollectionKey })
-                    .HasName("PK_merchCustomer2EntityCollection");
-
-                entity.ToTable("merchCustomer2EntityCollection");
-
-                entity.Property(e => e.CustomerKey).HasColumnName("customerKey");
-
-                entity.Property(e => e.EntityCollectionKey).HasColumnName("entityCollectionKey");
-
-                entity.Property(e => e.CreateDate)
-                    .HasColumnName("createDate")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("getdate()");
-
-                entity.Property(e => e.UpdateDate)
-                    .HasColumnName("updateDate")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("getdate()");
-
-                entity.HasOne(d => d.CustomerKeyNavigation)
-                    .WithMany(p => p.MerchCustomer2EntityCollection)
-                    .HasForeignKey(d => d.CustomerKey)
-                    .OnDelete(DeleteBehavior.Restrict)
-                    .HasConstraintName("FK_merchCustomer2EntityCollection_merchInvoice");
-
-                entity.HasOne(d => d.EntityCollectionKeyNavigation)
-                    .WithMany(p => p.MerchCustomer2EntityCollection)
-                    .HasForeignKey(d => d.EntityCollectionKey)
-                    .OnDelete(DeleteBehavior.Restrict)
-                    .HasConstraintName("FK_merchCustomer2EntityCollection_merchEntityCollection");
-            });
-
-            modelBuilder.Entity<MerchCustomerAddress>(entity =>
-            {
-                entity.HasKey(e => e.Pk)
-                    .HasName("PK_merchCustomerAddress");
-
-                entity.ToTable("merchCustomerAddress");
-
-                entity.Property(e => e.Pk)
-                    .HasColumnName("pk")
-                    .HasDefaultValueSql("'newid()'");
-
-                entity.Property(e => e.Address1)
-                    .HasColumnName("address1")
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.Address2)
-                    .HasColumnName("address2")
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.AddressTfKey).HasColumnName("addressTfKey");
-
-                entity.Property(e => e.Company)
-                    .HasColumnName("company")
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.CountryCode)
-                    .HasColumnName("countryCode")
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.CreateDate)
-                    .HasColumnName("createDate")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("getdate()");
-
-                entity.Property(e => e.CustomerKey).HasColumnName("customerKey");
-
-                entity.Property(e => e.FullName)
-                    .HasColumnName("fullName")
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.IsDefault).HasColumnName("isDefault");
-
-                entity.Property(e => e.Label)
-                    .HasColumnName("label")
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.Locality)
-                    .HasColumnName("locality")
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.Phone)
-                    .HasColumnName("phone")
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.PostalCode)
-                    .HasColumnName("postalCode")
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.Region)
-                    .HasColumnName("region")
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.UpdateDate)
-                    .HasColumnName("updateDate")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("getdate()");
-
-                entity.HasOne(d => d.CustomerKeyNavigation)
-                    .WithMany(p => p.MerchCustomerAddress)
-                    .HasForeignKey(d => d.CustomerKey)
-                    .OnDelete(DeleteBehavior.Restrict)
-                    .HasConstraintName("FK_merchCustomerAddress_merchCustomer");
-            });
-
-            modelBuilder.Entity<MerchCustomerIndex>(entity =>
-            {
-                entity.ToTable("merchCustomerIndex");
-
-                entity.HasIndex(e => e.CustomerKey)
-                    .HasName("IX_merchCustomerIndex")
-                    .IsUnique();
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.CreateDate)
-                    .HasColumnName("createDate")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("getdate()");
-
-                entity.Property(e => e.CustomerKey).HasColumnName("customerKey");
-
-                entity.Property(e => e.UpdateDate)
-                    .HasColumnName("updateDate")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("getdate()");
-
-                entity.HasOne(d => d.CustomerKeyNavigation)
-                    .WithOne(p => p.MerchCustomerIndex)
-                    .HasForeignKey<MerchCustomerIndex>(d => d.CustomerKey)
-                    .OnDelete(DeleteBehavior.Restrict)
-                    .HasConstraintName("FK_merchCustomerIndex_merchCustomer");
-            });
-
-            modelBuilder.Entity<MerchDetachedContentType>(entity =>
-            {
-                entity.HasKey(e => e.Pk)
-                    .HasName("PK_merchDetachedContentType");
-
-                entity.ToTable("merchDetachedContentType");
-
-                entity.Property(e => e.Pk)
-                    .HasColumnName("pk")
-                    .HasDefaultValueSql("'newid()'");
-
-                entity.Property(e => e.ContentTypeKey).HasColumnName("contentTypeKey");
-
-                entity.Property(e => e.CreateDate)
-                    .HasColumnName("createDate")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("getdate()");
-
-                entity.Property(e => e.Description)
-                    .HasColumnName("description")
-                    .HasMaxLength(1000);
-
-                entity.Property(e => e.EntityTfKey).HasColumnName("entityTfKey");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasColumnName("name")
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.UpdateDate)
-                    .HasColumnName("updateDate")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("getdate()");
-            });
-
-            modelBuilder.Entity<MerchDigitalMedia>(entity =>
-            {
-                entity.HasKey(e => e.Pk)
-                    .HasName("PK_merchDigitalMedia");
-
-                entity.ToTable("merchDigitalMedia");
-
-                entity.Property(e => e.Pk)
-                    .HasColumnName("pk")
-                    .HasDefaultValueSql("'newid()'");
-
-                entity.Property(e => e.CreateDate)
-                    .HasColumnName("createDate")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("getdate()");
-
-                entity.Property(e => e.ExtendedData)
-                    .HasColumnName("extendedData")
-                    .HasColumnType("ntext");
-
-                entity.Property(e => e.FirstAccessed)
-                    .HasColumnName("firstAccessed")
-                    .HasColumnType("datetime");
-
-                entity.Property(e => e.ProductVariantKey).HasColumnName("productVariantKey");
-
-                entity.Property(e => e.UpdateDate)
-                    .HasColumnName("updateDate")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("getdate()");
-            });
-
-            modelBuilder.Entity<MerchEntityCollection>(entity =>
-            {
-                entity.HasKey(e => e.Pk)
-                    .HasName("PK_merchEntityCollection");
-
-                entity.ToTable("merchEntityCollection");
-
-                entity.Property(e => e.Pk)
-                    .HasColumnName("pk")
-                    .HasDefaultValueSql("'newid()'");
-
-                entity.Property(e => e.CreateDate)
-                    .HasColumnName("createDate")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("getdate()");
-
-                entity.Property(e => e.EntityTfKey).HasColumnName("entityTfKey");
-
-                entity.Property(e => e.ExtendedData)
-                    .HasColumnName("extendedData")
-                    .HasColumnType("ntext");
-
-                entity.Property(e => e.IsFilter).HasColumnName("isFilter");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasColumnName("name")
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.ParentKey).HasColumnName("parentKey");
-
-                entity.Property(e => e.ProviderKey).HasColumnName("providerKey");
-
-                entity.Property(e => e.SortOrder)
-                    .HasColumnName("sortOrder")
-                    .HasDefaultValueSql("'0'");
-
-                entity.Property(e => e.UpdateDate)
-                    .HasColumnName("updateDate")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("getdate()");
-
-                entity.HasOne(d => d.ParentKeyNavigation)
-                    .WithMany(p => p.InverseParentKeyNavigation)
-                    .HasForeignKey(d => d.ParentKey)
-                    .HasConstraintName("FK_merchEntityCollection_merchEntityCollection");
-            });
-
-            modelBuilder.Entity<MerchGatewayProviderSettings>(entity =>
-            {
-                entity.HasKey(e => e.Pk)
-                    .HasName("PK_merchGatewayProviderSettings");
-
-                entity.ToTable("merchGatewayProviderSettings");
-
-                entity.Property(e => e.Pk)
-                    .HasColumnName("pk")
-                    .HasDefaultValueSql("'newid()'");
-
-                entity.Property(e => e.CreateDate)
-                    .HasColumnName("createDate")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("getdate()");
-
-                entity.Property(e => e.Description)
-                    .HasColumnName("description")
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.EncryptExtendedData)
-                    .HasColumnName("encryptExtendedData")
-                    .HasDefaultValueSql("'0'");
-
-                entity.Property(e => e.ExtendedData)
-                    .HasColumnName("extendedData")
-                    .HasColumnType("ntext");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasColumnName("name")
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.ProviderTfKey).HasColumnName("providerTfKey");
-
-                entity.Property(e => e.UpdateDate)
-                    .HasColumnName("updateDate")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("getdate()");
-            });
-
-            modelBuilder.Entity<MerchInvoice>(entity =>
-            {
-                entity.HasKey(e => e.Pk)
-                    .HasName("PK_merchInvoice");
-
-                entity.ToTable("merchInvoice");
-
-                entity.HasIndex(e => e.BillToPostalCode)
-                    .HasName("IX_merchInvoiceBillToPostalCode");
-
-                entity.HasIndex(e => e.InvoiceDate)
-                    .HasName("IX_merchInvoiceDate");
-
-                entity.HasIndex(e => e.InvoiceNumber)
-                    .HasName("IX_merchInvoiceNumber")
-                    .IsUnique();
-
-                entity.Property(e => e.Pk)
-                    .HasColumnName("pk")
-                    .HasDefaultValueSql("'newid()'");
-
-                entity.Property(e => e.Archived).HasColumnName("archived");
-
-                entity.Property(e => e.BillToAddress1)
-                    .HasColumnName("billToAddress1")
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.BillToAddress2)
-                    .HasColumnName("billToAddress2")
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.BillToCompany)
-                    .HasColumnName("billToCompany")
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.BillToCountryCode)
-                    .HasColumnName("billToCountryCode")
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.BillToEmail)
-                    .HasColumnName("billToEmail")
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.BillToLocality)
-                    .HasColumnName("billToLocality")
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.BillToName)
-                    .HasColumnName("billToName")
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.BillToPhone)
-                    .HasColumnName("billToPhone")
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.BillToPostalCode)
-                    .HasColumnName("billToPostalCode")
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.BillToRegion)
-                    .HasColumnName("billToRegion")
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.CreateDate)
-                    .HasColumnName("createDate")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("getdate()");
-
-                entity.Property(e => e.CurrencyCode)
-                    .IsRequired()
-                    .HasColumnName("currencyCode")
-                    .HasMaxLength(3);
-
-                entity.Property(e => e.CustomerKey).HasColumnName("customerKey");
-
-                entity.Property(e => e.Exported).HasColumnName("exported");
-
-                entity.Property(e => e.InvoiceDate)
-                    .HasColumnName("invoiceDate")
-                    .HasColumnType("datetime");
-
-                entity.Property(e => e.InvoiceNumber).HasColumnName("invoiceNumber");
-
-                entity.Property(e => e.InvoiceNumberPrefix)
-                    .HasColumnName("invoiceNumberPrefix")
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.InvoiceStatusKey).HasColumnName("invoiceStatusKey");
-
-                entity.Property(e => e.PoNumber)
-                    .HasColumnName("poNumber")
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.Total)
-                    .HasColumnName("total")
-                    .HasColumnType("numeric");
-
-                entity.Property(e => e.UpdateDate)
-                    .HasColumnName("updateDate")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("getdate()");
-
-                entity.Property(e => e.VersionKey)
-                    .HasColumnName("versionKey")
-                    .HasDefaultValueSql("'newid()'");
-
-                entity.HasOne(d => d.CustomerKeyNavigation)
-                    .WithMany(p => p.MerchInvoice)
-                    .HasForeignKey(d => d.CustomerKey)
-                    .HasConstraintName("FK_merchInvoice_merchCustomer");
-
-                entity.HasOne(d => d.InvoiceStatusKeyNavigation)
-                    .WithMany(p => p.MerchInvoice)
-                    .HasForeignKey(d => d.InvoiceStatusKey)
-                    .OnDelete(DeleteBehavior.Restrict)
-                    .HasConstraintName("FK_merchInvoice_merchInvoiceStatus");
-            });
-
-            modelBuilder.Entity<MerchInvoice2EntityCollection>(entity =>
-            {
-                entity.HasKey(e => new { e.InvoiceKey, e.EntityCollectionKey })
-                    .HasName("PK_merchInvoice2EntityCollection");
-
-                entity.ToTable("merchInvoice2EntityCollection");
-
-                entity.Property(e => e.InvoiceKey).HasColumnName("invoiceKey");
-
-                entity.Property(e => e.EntityCollectionKey).HasColumnName("entityCollectionKey");
-
-                entity.Property(e => e.CreateDate)
-                    .HasColumnName("createDate")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("getdate()");
-
-                entity.Property(e => e.UpdateDate)
-                    .HasColumnName("updateDate")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("getdate()");
-
-                entity.HasOne(d => d.EntityCollectionKeyNavigation)
-                    .WithMany(p => p.MerchInvoice2EntityCollection)
-                    .HasForeignKey(d => d.EntityCollectionKey)
-                    .OnDelete(DeleteBehavior.Restrict)
-                    .HasConstraintName("FK_merchInvoice2EntityCollection_merchEntityCollection");
-
-                entity.HasOne(d => d.InvoiceKeyNavigation)
-                    .WithMany(p => p.MerchInvoice2EntityCollection)
-                    .HasForeignKey(d => d.InvoiceKey)
-                    .OnDelete(DeleteBehavior.Restrict)
-                    .HasConstraintName("FK_merchInvoice2EntityCollection_merchInvoice");
-            });
-
+           
             modelBuilder.Entity<MerchInvoiceIndex>(entity =>
             {
                 entity.ToTable("merchInvoiceIndex");
@@ -699,7 +106,7 @@
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("getdate()");
 
-                entity.HasOne(d => d.InvoiceKeyNavigation)
+                entity.HasOne(d => d.InvoiceDtoKeyNavigation)
                     .WithOne(p => p.MerchInvoiceIndex)
                     .HasForeignKey<MerchInvoiceIndex>(d => d.InvoiceKey)
                     .OnDelete(DeleteBehavior.Restrict)
@@ -756,7 +163,7 @@
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("getdate()");
 
-                entity.HasOne(d => d.InvoiceKeyNavigation)
+                entity.HasOne(d => d.InvoiceDtoKeyNavigation)
                     .WithMany(p => p.MerchInvoiceItem)
                     .HasForeignKey(d => d.InvoiceKey)
                     .OnDelete(DeleteBehavior.Restrict)
@@ -1076,7 +483,7 @@
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("getdate()");
 
-                entity.HasOne(d => d.InvoiceKeyNavigation)
+                entity.HasOne(d => d.InvoiceDtoKeyNavigation)
                     .WithMany(p => p.MerchOfferRedeemed)
                     .HasForeignKey(d => d.InvoiceKey)
                     .OnDelete(DeleteBehavior.Restrict)
@@ -1188,7 +595,7 @@
                     .HasColumnName("versionKey")
                     .HasDefaultValueSql("'newid()'");
 
-                entity.HasOne(d => d.InvoiceKeyNavigation)
+                entity.HasOne(d => d.InvoiceDtoKeyNavigation)
                     .WithMany(p => p.MerchOrder)
                     .HasForeignKey(d => d.InvoiceKey)
                     .HasConstraintName("FK_merchOrder_merchInvoice");
@@ -1395,7 +802,7 @@
                     .HasColumnName("voided")
                     .HasDefaultValueSql("'0'");
 
-                entity.HasOne(d => d.CustomerKeyNavigation)
+                entity.HasOne(d => d.CustomerDtoKeyNavigation)
                     .WithMany(p => p.MerchPayment)
                     .HasForeignKey(d => d.CustomerKey)
                     .HasConstraintName("FK_merchPayment_merchCustomer");
@@ -1493,7 +900,7 @@
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("getdate()");
 
-                entity.HasOne(d => d.EntityCollectionKeyNavigation)
+                entity.HasOne(d => d.EntityCollectionDtoKeyNavigation)
                     .WithMany(p => p.MerchProduct2EntityCollection)
                     .HasForeignKey(d => d.EntityCollectionKey)
                     .OnDelete(DeleteBehavior.Restrict)
@@ -1636,7 +1043,7 @@
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("getdate()");
 
-                entity.HasOne(d => d.DetachedContentTypeKeyNavigation)
+                entity.HasOne(d => d.DetachedContentTypeDtoKeyNavigation)
                     .WithMany(p => p.MerchProductOption)
                     .HasForeignKey(d => d.DetachedContentTypeKey)
                     .HasConstraintName("FK_merchProductOptionDetachedContent_merchProductOption");
@@ -1907,7 +1314,7 @@
                     .HasColumnName("values")
                     .HasColumnType("ntext");
 
-                entity.HasOne(d => d.DetachedContentTypeKeyNavigation)
+                entity.HasOne(d => d.DetachedContentTypeDtoKeyNavigation)
                     .WithMany(p => p.MerchProductVariantDetachedContent)
                     .HasForeignKey(d => d.DetachedContentTypeKey)
                     .OnDelete(DeleteBehavior.Restrict)

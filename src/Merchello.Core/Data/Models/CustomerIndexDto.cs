@@ -4,7 +4,7 @@
 
     // TODO drop this class
     // FYI we are not going to use Examine for customers
-    internal partial class MerchCustomerIndex
+    internal partial class CustomerIndexDto
     {
         public int Id { get; set; }
 
@@ -14,6 +14,6 @@
 
         public DateTime CreateDate { get; set; }
 
-        public virtual MerchCustomer CustomerKeyNavigation { get; set; }
+        public virtual CustomerDto CustomerDtoKeyNavigation { get; set; }
     }
 }

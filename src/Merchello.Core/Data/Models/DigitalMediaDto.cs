@@ -2,7 +2,7 @@
 {
     using System;
 
-    internal partial class MerchDigitalMedia
+    internal partial class DigitalMediaDto
     {
         public Guid Pk { get; set; }
 

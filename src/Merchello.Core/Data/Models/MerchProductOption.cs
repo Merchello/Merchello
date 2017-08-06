@@ -38,6 +38,6 @@
         public ICollection<MerchProductVariant2ProductAttribute> MerchProductVariant2ProductAttribute { get;
             set; }
 
-        public MerchDetachedContentType DetachedContentTypeKeyNavigation { get; set; }
+        public DetachedContentTypeDto DetachedContentTypeDtoKeyNavigation { get; set; }
     }
 }

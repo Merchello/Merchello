@@ -15,6 +15,6 @@
         /// <returns>
         /// The collection of instantiated configuration types .
         /// </returns>
-        IEnumerable<dynamic> GetInstantiations();
+        IEnumerable<IEntityMap> GetInstantiations();
     }
 }

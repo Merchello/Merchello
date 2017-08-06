@@ -35,7 +35,7 @@
 
         public ICollection<MerchShipRateTier> MerchShipRateTier { get; set; }
 
-        public MerchGatewayProviderSettings ProviderKeyNavigation { get; set; }
+        public GatewayProviderSettingsDto ProviderKeyNavigation { get; set; }
 
         public MerchShipCountry ShipCountryKeyNavigation { get; set; }
     }

@@ -3,12 +3,12 @@
     using System;
     using System.Collections.Generic;
 
-    internal sealed partial class MerchEntityCollection
+    internal sealed partial class EntityCollectionDto
     {
-        public MerchEntityCollection()
+        public EntityCollectionDto()
         {
-            this.MerchCustomer2EntityCollection = new HashSet<MerchCustomer2EntityCollection>();
-            this.MerchInvoice2EntityCollection = new HashSet<MerchInvoice2EntityCollection>();
+            this.MerchCustomer2EntityCollection = new HashSet<Customer2EntityCollectionDto>();
+            this.MerchInvoice2EntityCollection = new HashSet<Invoice2EntityCollectionDto>();
             this.MerchProduct2EntityCollection = new HashSet<MerchProduct2EntityCollection>();
         }
 
@@ -32,14 +32,14 @@
 
         public DateTime CreateDate { get; set; }
 
-        public ICollection<MerchCustomer2EntityCollection> MerchCustomer2EntityCollection { get; set; }
+        public ICollection<Customer2EntityCollectionDto> MerchCustomer2EntityCollection { get; set; }
 
-        public ICollection<MerchInvoice2EntityCollection> MerchInvoice2EntityCollection { get; set; }
+        public ICollection<Invoice2EntityCollectionDto> MerchInvoice2EntityCollection { get; set; }
 
         public ICollection<MerchProduct2EntityCollection> MerchProduct2EntityCollection { get; set; }
 
-        public MerchEntityCollection ParentKeyNavigation { get; set; }
+        public EntityCollectionDto ParentKeyNavigation { get; set; }
 
-        public ICollection<MerchEntityCollection> InverseParentKeyNavigation { get; set; }
+        public ICollection<EntityCollectionDto> InverseParentKeyNavigation { get; set; }
     }
 }
