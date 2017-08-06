@@ -22,6 +22,6 @@
 
         public DateTime CreateDate { get; set; }
 
-        public virtual MerchGatewayProviderSettings ProviderKeyNavigation { get; set; }
+        public virtual GatewayProviderSettingsDto ProviderKeyNavigation { get; set; }
     }
 }

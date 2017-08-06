@@ -15,6 +15,6 @@
         /// <returns>
         /// The collection of instantiated configuration types .
         /// </returns>
-        IEnumerable<DbEntityConfiguration<object>> GetInstantiations();
+        IEnumerable<IEntityMap> GetInstantiations();
     }
 }

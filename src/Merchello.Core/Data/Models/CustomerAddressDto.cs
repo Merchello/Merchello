@@ -2,7 +2,7 @@
 {
     using System;
 
-    internal partial class MerchCustomerAddress
+    internal partial class CustomerAddressDto
     {
         public Guid Pk { get; set; }
 
@@ -36,6 +36,6 @@
 
         public DateTime CreateDate { get; set; }
 
-        public virtual MerchCustomer CustomerKeyNavigation { get; set; }
+        public virtual CustomerDto CustomerDtoKeyNavigation { get; set; }
     }
 }

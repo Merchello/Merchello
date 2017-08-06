@@ -46,9 +46,9 @@
         /// <returns>
         /// The collection of instantiated builder configurations.
         /// </returns>
-        public IEnumerable<DbEntityConfiguration<object>> GetInstantiations()
+        public IEnumerable<IEntityMap> GetInstantiations()
         {
-            return this.InstanceTypes.Select(t => (DbEntityConfiguration<object>)Activator.CreateInstance(t));
+            return this.InstanceTypes.Select(t => Activator.CreateInstance(t) as IEntityMap).Where(i => i != null);
         }
 
         /// <summary>
@@ -62,10 +62,14 @@
                 this.GetType()
                     .GetTypeInfo()
                     .Assembly.DefinedTypes.Where(ti => !string.IsNullOrEmpty(ti.Namespace))
-                    .Where(
-                        ti =>
-                            ti.BaseType != null && ti.BaseType.IsConstructedGenericType
-                            && ti.BaseType.GetGenericTypeDefinition() == typeof(DbEntityConfiguration<>))
+                    .Where(ti =>
+                        ti.IsClass &&
+                        typeof(IEntityMap).IsAssignableFrom(ti.AsType())
+                        )
+                    //.Where(
+                    //    ti =>
+                    //        ti.BaseType != null && ti.BaseType.IsConstructedGenericType
+                    //        && typeof(IEntityMap).IsAssignableFrom(ti.AsType()))
                     .Select(ti => ti.AsType())
                     .ToArray();
 

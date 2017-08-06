@@ -3,12 +3,12 @@
     using System;
     using System.Collections.Generic;
 
-    internal sealed partial class MerchInvoice
+    internal sealed partial class InvoiceDto
     {
-        public MerchInvoice()
+        public InvoiceDto()
         {
             this.MerchAppliedPayment = new HashSet<AppliedPaymentDto>();
-            this.MerchInvoice2EntityCollection = new HashSet<MerchInvoice2EntityCollection>();
+            this.MerchInvoice2EntityCollection = new HashSet<Invoice2EntityCollectionDto>();
             this.MerchInvoiceItem = new HashSet<MerchInvoiceItem>();
             this.MerchOfferRedeemed = new HashSet<MerchOfferRedeemed>();
             this.MerchOrder = new HashSet<MerchOrder>();
@@ -64,7 +64,7 @@
 
         public ICollection<AppliedPaymentDto> MerchAppliedPayment { get; set; }
 
-        public ICollection<MerchInvoice2EntityCollection> MerchInvoice2EntityCollection { get; set; }
+        public ICollection<Invoice2EntityCollectionDto> MerchInvoice2EntityCollection { get; set; }
 
         public MerchInvoiceIndex MerchInvoiceIndex { get; set; }
 
@@ -74,7 +74,7 @@
 
         public ICollection<MerchOrder> MerchOrder { get; set; }
 
-        public MerchCustomer CustomerKeyNavigation { get; set; }
+        public CustomerDto CustomerDtoKeyNavigation { get; set; }
 
         public MerchInvoiceStatus InvoiceStatusKeyNavigation { get; set; }
     }

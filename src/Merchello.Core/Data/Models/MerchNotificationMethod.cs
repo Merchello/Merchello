@@ -26,6 +26,6 @@
 
         public ICollection<MerchNotificationMessage> MerchNotificationMessage { get; set; }
 
-        public MerchGatewayProviderSettings ProviderKeyNavigation { get; set; }
+        public GatewayProviderSettingsDto ProviderKeyNavigation { get; set; }
     }
 }

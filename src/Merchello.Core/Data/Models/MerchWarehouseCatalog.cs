@@ -7,7 +7,7 @@
     {
         public MerchWarehouseCatalog()
         {
-            this.MerchCatalogInventory = new HashSet<MerchCatalogInventory>();
+            this.MerchCatalogInventory = new HashSet<CatalogInventoryDto>();
             this.MerchShipCountry = new HashSet<MerchShipCountry>();
         }
 
@@ -23,7 +23,7 @@
 
         public DateTime CreateDate { get; set; }
 
-        public ICollection<MerchCatalogInventory> MerchCatalogInventory { get; set; }
+        public ICollection<CatalogInventoryDto> MerchCatalogInventory { get; set; }
 
         public ICollection<MerchShipCountry> MerchShipCountry { get; set; }
 

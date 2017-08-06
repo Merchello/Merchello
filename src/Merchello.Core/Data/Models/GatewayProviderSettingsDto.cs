@@ -3,9 +3,9 @@
     using System;
     using System.Collections.Generic;
 
-    internal sealed partial class MerchGatewayProviderSettings
+    internal sealed partial class GatewayProviderSettingsDto
     {
-        public MerchGatewayProviderSettings()
+        public GatewayProviderSettingsDto()
         {
             this.MerchNotificationMethod = new HashSet<MerchNotificationMethod>();
             this.MerchPaymentMethod = new HashSet<MerchPaymentMethod>();

@@ -24,7 +24,7 @@
 
         public DateTime CreateDate { get; set; }
 
-        public virtual MerchDetachedContentType DetachedContentTypeKeyNavigation { get; set; }
+        public virtual DetachedContentTypeDto DetachedContentTypeDtoKeyNavigation { get; set; }
 
         public virtual MerchProductVariant ProductVariantKeyNavigation { get; set; }
     }

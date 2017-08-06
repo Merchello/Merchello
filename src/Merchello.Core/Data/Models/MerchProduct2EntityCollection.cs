@@ -12,7 +12,7 @@
 
         public DateTime CreateDate { get; set; }
 
-        public virtual MerchEntityCollection EntityCollectionKeyNavigation { get; set; }
+        public virtual EntityCollectionDto EntityCollectionDtoKeyNavigation { get; set; }
 
         public virtual MerchProduct ProductKeyNavigation { get; set; }
     }

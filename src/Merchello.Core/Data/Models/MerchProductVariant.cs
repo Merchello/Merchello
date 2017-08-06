@@ -7,7 +7,7 @@
     {
         public MerchProductVariant()
         {
-            this.MerchCatalogInventory = new HashSet<MerchCatalogInventory>();
+            this.MerchCatalogInventory = new HashSet<CatalogInventoryDto>();
             this.MerchProductVariant2ProductAttribute = new HashSet<MerchProductVariant2ProductAttribute>();
             this.MerchProductVariantDetachedContent = new HashSet<MerchProductVariantDetachedContent>();
         }
@@ -64,7 +64,7 @@
 
         public DateTime CreateDate { get; set; }
 
-        public ICollection<MerchCatalogInventory> MerchCatalogInventory { get; set; }
+        public ICollection<CatalogInventoryDto> MerchCatalogInventory { get; set; }
 
         public ICollection<MerchProductVariant2ProductAttribute> MerchProductVariant2ProductAttribute { get;
             set; }
