@@ -989,11 +989,13 @@ namespace Merchello.Core
         internal static ExtendedDataCollection AsExtendedDataCollection(this IEnumerable<KeyValuePair<string, string>> source)
         {
             var ed = new ExtendedDataCollection();
-            foreach (var item in source.ToArray())
+            if (source != null)
             {
-                ed.SetValue(item.Key, item.Value);
+                foreach (var item in source.ToArray())
+                {
+                    ed.SetValue(item.Key, item.Value);
+                }
             }
-
             return ed;
         }
 
