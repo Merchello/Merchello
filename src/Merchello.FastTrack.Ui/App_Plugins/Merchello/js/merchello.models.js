@@ -165,7 +165,10 @@ angular.module('merchello.models').constant('EntityUseCount', EntityUseCount);
     ExtendedDataDisplay.prototype = (function() {
 
         function isEmpty() {
-            return this.items.length === 0;
+            if (this.items) {
+                return this.items.length === 0;
+            }
+            return true;
         }
 
         function getValue(key) {
@@ -188,6 +191,11 @@ angular.module('merchello.models').constant('EntityUseCount', EntityUseCount);
         }
 
         function setValue(key, value) {
+
+            // See if items is null and if so, make it an array
+            if (!this.items) {
+                this.items = [];
+            }
 
             var existing = _.find(this.items, function(item) {
               return item.key === key;

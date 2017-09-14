@@ -20,9 +20,7 @@
                     <!--<div class="merchello-section-label">
                         <localize key="merchelloPayment_paymentInfo" />
                         <small>Payment methods &amp; dates</small>
-                    </div>-->
-       
-
+                    </div>-->      
                         <div class="row-fluid">
 
                             <div data-ng-repeat="payment in payments" data-ng-show="preValuesLoaded">
@@ -30,11 +28,16 @@
                                 <h4>
                                     <localize key="merchelloPayment_paymentMethod" />: {{payment.paymentMethodName}}
                                 </h4>
+                                
+                                <div ng-show="hasAvsCvvData(payment.extendedData.items)">
+                                    <h5>AVS/CVV</h5>
+                                    {{ showAvsCvvData(payment.extendedData.items) }}
+                                </div>                               
 
                                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                                     <button class="btn btn-default text-right" data-ng-click="openVoidPaymentDialog(payment)" data-ng-show="showVoid(payment)"><localize key="merchelloButtons_void" /></button>
                                     <button class="btn btn-default text-right" data-ng-show="showRefund(payment)" data-ng-click="openRefundPaymentDialog(payment)"><localize key="merchelloButtons_refund" /></button>
-                                </div>
+                                </div>                               
 
                                 <h5>History</h5>
 

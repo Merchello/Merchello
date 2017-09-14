@@ -33,7 +33,7 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
             // Helper to check for AvsCvvData
             $scope.hasAvsCvvData = function(items) {
                 var hasAvsCvv = false;
-                if (items) {
+                if (items != null) {
                     for (var i = 0; i < items.length; i++) {
                         if (items[i].key === "merchAvsCvvData") {
                             hasAvsCvv = true;
@@ -45,11 +45,13 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
             };
 
             // Helper to show the data
-            $scope.showAvsCvvData = function(items) {
-                for (var i = 0; i < items.length; i++) {
-                    if (items[i].key === "merchAvsCvvData") {
-                        return items[i].value;
-                    }
+            $scope.showAvsCvvData = function (items) {
+                if (items != null) {
+                    for (var i = 0; i < items.length; i++) {
+                        if (items[i].key === "merchAvsCvvData") {
+                            return items[i].value;
+                        }
+                    }   
                 }
                 return "-";
             };
