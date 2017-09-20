@@ -1,24 +1,34 @@
 <form novalidate name="customerForm" data-ng-controller="Merchello.Backoffice.CustomerOverviewController" data-ng-show="loaded" data-ng-submit="save()">
     <umb-panel val-show-validation>
-        <umb-header>
-            <div class="span7">
-                <div class="umb-headline-editor-wrapper">
-                    <h1>{{customer.firstName}} {{customer.lastName}}</h1>
+
+      <div class="umb-editor-header umb-panel-header">
+        <div class="umb-panel-header-content-wrapper">
+
+          <div class="umb-panel-header-content">
+            <div class="umb-panel-header-left-side -top-position">
+              <div class="umb-panel-header-title-wrapper">
+                <div class="umb-panel-header-name">
+                  {{customer.firstName}} {{customer.lastName}}
                 </div>
-            </div>
-            <div class="span5">
+              </div>
+              <div class="umb-editor-header__actions-menu">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
-                    <div class="btn-group">
-                        <a href="#" class="btn dropdown-toggle" data-toggle="dropdown"><localize key="general_actions" /> <i class="icon-navigation-down"></i></a>
-                        <ul class="dropdown-menu merchello-action-menu">
-                            <li><a data-ng-click="openDeleteCustomerDialog()"><localize key="general_delete" /></a></li>
-                        </ul>
-                    </div>
+                  <div class="btn-group">
+                    <a href="#" class="btn dropdown-toggle" data-toggle="dropdown"><localize key="general_actions" /> <i class="icon-navigation-down"></i></a>
+                    <ul class="dropdown-menu merchello-action-menu">
+                      <li><a data-ng-click="openDeleteCustomerDialog()"><localize key="general_delete" /></a></li>
+                    </ul>
+                  </div>
                 </div>
+              </div>
             </div>
-            <merchello-tabs tabs="tabs"></merchello-tabs>
-        </umb-header>
-        <merchello-panel class="row-fluid">
+          </div>
+
+          <merchello-tabs tabs="tabs"></merchello-tabs>
+        </div>
+      </div>
+
+      <merchello-panel class="row-fluid">
             <div class="merchello-pane secondary span12">
                 <div class="row-fluid flex-row">
                     <!-- Customer Info -->

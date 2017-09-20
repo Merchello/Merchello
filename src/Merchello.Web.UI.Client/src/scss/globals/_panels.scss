@@ -1,5 +1,81 @@
 ﻿
+// Global Panel - Contains entire contents. All pages should be wrapped in this
+.merchello {
+
+}  
+
+// This covers the main content, not including the header
 .merchello-panel-body {
+    // Form groups
+    .form-group {
+        label {
+            display: block;
+            clear: both;
+
+            small {
+                padding-top: 0;
+            }
+        }
+    }
+    // Form elements
+    .label-checkbox {
+        margin: 5px 0;
+
+        input[type=checkbox] {
+            float: left;
+            margin: 3px 5px 0 0;
+            top: auto;
+        }
+    }
+    // This is an overide to stop umbraco hiding the icons on hover
+    .umb-listview .table-striped tbody .merchello-icon i:not(.handle):hover {
+        display: inline-block !important;
+    }
+
+    // Panels Opened and closed
+    .closed {
+        opacity: 0;
+        max-height: 0;
+        overflow: hidden;
+        @include transition;
+
+        &.control-group {
+            margin-bottom: 0 !important;
+            padding-bottom: 0;
+            border-bottom: solid 1px #fff;
+        }
+
+        &.well {
+            padding: 0;
+            margin-bottom: 0;
+            min-height: 0;
+        }
+    }
+
+    .open {
+        opacity: 1;
+        max-height: 99999px;
+        @include transition;
+
+        &.control-group {
+            padding-bottom: 30px;
+            margin-bottom: 25px !important;
+            border-bottom: 1px solid #f8f8f8;
+        }
+
+        &.well {
+            padding: 19px;
+            margin-bottom: 20px;
+        }
+    }
+}
+
+// This is the tabs panel
+.merchello-tabs {
+
+}
+
+/*.merchello-panel-body {
     position: absolute;
     top: 101px;
     bottom: 0;
@@ -104,41 +180,7 @@
         }
     }
 
-    .closed {
-        opacity: 0;
-        max-height: 0;
-        overflow: hidden;
-        @include transition;
 
-        &.control-group {
-            margin-bottom: 0 !important;
-            padding-bottom: 0;
-            border-bottom: solid 1px #fff;
-        }
-
-        &.well {
-            padding: 0;
-            margin-bottom: 0;
-            min-height: 0;
-        }
-    }
-
-    .open {
-        opacity: 1;
-        max-height: 99999px;
-        @include transition;
-
-        &.control-group {
-            padding-bottom: 30px;
-            margin-bottom: 25px !important;
-            border-bottom: 1px solid #f8f8f8;
-        }
-
-        &.well {
-            padding: 19px;
-            margin-bottom: 20px;
-        }
-    }
 
     .row-fluid {
         @include box-sizing;
@@ -985,4 +1027,4 @@
             display: block;
         }
     }
-}
+}*/

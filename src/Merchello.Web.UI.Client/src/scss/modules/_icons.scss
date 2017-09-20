@@ -45,10 +45,6 @@
     }
 }
 
-// This is an overide to stop umbraco hiding the icons on hover
-.umb-listview .table-striped tbody .merchello-icon i:not(.handle):hover{
-    display: inline-block !important;
-}
 
 .merchello-icon-container {
     text-align: right;
