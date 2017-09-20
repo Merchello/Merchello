@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
     var output, Converter;
     if (typeof exports === "object" && typeof require === "function") { // we're in a CommonJS (e.g. Node.js) module
         output = exports;

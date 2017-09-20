@@ -145,6 +145,69 @@
               Looks up a localized string similar to The &apos;{0}&apos; method on class &apos;{1}&apos; does not have the expected signature &apos;void {0}(IAppBuilder)&apos;..
             </summary>
         </member>
+        <member name="T:Microsoft.Owin.Host.SystemWeb.SystemWebChunkingCookieManager">
+            <summary>
+            This handles cookies that are limited by per cookie length. It breaks down long cookies for responses, and reassembles them
+            from requests. The cookies are stored in the System.Web object model rather than directly in the headers.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Owin.Host.SystemWeb.SystemWebChunkingCookieManager.#ctor">
+            <summary>
+            This handles cookies that are limited by per cookie length. It breaks down long cookies for responses, and reassembles them
+            from requests. The cookies are stored in the System.Web object model rather than directly in the headers.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Owin.Host.SystemWeb.SystemWebChunkingCookieManager.GetRequestCookie(Microsoft.Owin.IOwinContext,System.String)">
+            <summary>
+            Get the reassembled cookie. Non chunked cookies are returned normally.
+            Cookies with missing chunks just have their "chunks:XX" header returned.
+            </summary>
+            <param name="context"></param>
+            <param name="key"></param>
+            <returns>The reassembled cookie, if any, or null.</returns>
+        </member>
+        <member name="M:Microsoft.Owin.Host.SystemWeb.SystemWebChunkingCookieManager.AppendResponseCookie(Microsoft.Owin.IOwinContext,System.String,System.String,Microsoft.Owin.CookieOptions)">
+            <summary>
+            Appends a new response cookie to the Set-Cookie header. If the cookie is larger than the given size limit
+            then it will be broken down into multiple cookies as follows:
+            Set-Cookie: CookieName=chunks:3; path=/
+            Set-Cookie: CookieNameC1=Segment1; path=/
+            Set-Cookie: CookieNameC2=Segment2; path=/
+            Set-Cookie: CookieNameC3=Segment3; path=/
+            </summary>
+            <param name="context"></param>
+            <param name="key"></param>
+            <param name="value"></param>
+            <param name="options"></param>
+        </member>
+        <member name="M:Microsoft.Owin.Host.SystemWeb.SystemWebChunkingCookieManager.DeleteCookie(Microsoft.Owin.IOwinContext,System.String,Microsoft.Owin.CookieOptions)">
+            <summary>
+            Deletes the cookie with the given key by setting an expired state. If a matching chunked cookie exists on
+            the request, delete each chunk.
+            </summary>
+            <param name="context"></param>
+            <param name="key"></param>
+            <param name="options"></param>
+        </member>
+        <member name="P:Microsoft.Owin.Host.SystemWeb.SystemWebChunkingCookieManager.Fallback">
+            <summary>
+            A fallback manager used if HttpContextBase can't be located.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Owin.Host.SystemWeb.SystemWebChunkingCookieManager.ChunkSize">
+             <summary>
+             The maximum size of cookie to send back to the client. If a cookie exceeds this size it will be broken down into multiple
+             cookies. Set this value to null to disable this behavior. The default is 4090 characters, which is supported by all
+             common browsers.
+            
+             Note that browsers may also have limits on the total size of all cookies per domain, and on the number of cookies per domain.
+             </summary>
+        </member>
+        <member name="P:Microsoft.Owin.Host.SystemWeb.SystemWebChunkingCookieManager.ThrowForPartialCookies">
+            <summary>
+            Throw if not all chunks of a cookie are available on a request for re-assembly.
+            </summary>
+        </member>
         <member name="T:Microsoft.Owin.Host.SystemWeb.DataProtection.MachineKeyDataProtectionProvider">
             <summary>
             Used to provide the data protection services that are derived from the MachineKey API. It is the best choice of
@@ -298,6 +361,11 @@
               Looks up a localized string similar to Cannot register for &apos;OnSendingHeaders&apos; event after response headers have been sent..
             </summary>
         </member>
+        <member name="P:Microsoft.Owin.Host.SystemWeb.Resources.Exception_CookieLimitTooSmall">
+            <summary>
+              Looks up a localized string similar to The cookie key and options are larger than ChunksSize, leaving no room for data..
+            </summary>
+        </member>
         <member name="P:Microsoft.Owin.Host.SystemWeb.Resources.Exception_DuplicateKey">
             <summary>
               Looks up a localized string similar to The key &apos;{0}&apos; is already present in the dictionary..
@@ -311,6 +379,11 @@
         <member name="P:Microsoft.Owin.Host.SystemWeb.Resources.Exception_HowToSpecifyAppStartup">
             <summary>
               Looks up a localized string similar to To specify the OWIN startup Assembly, Class, or Method, add the appSetting owin:AppStartup with the fully qualified startup class or configuration method name in your web.config..
+            </summary>
+        </member>
+        <member name="P:Microsoft.Owin.Host.SystemWeb.Resources.Exception_ImcompleteChunkedCookie">
+            <summary>
+              Looks up a localized string similar to The chunked cookie is incomplete. Only {0} of the expected {1} chunks were found, totaling {2} characters. A client size limit may have been exceeded..
             </summary>
         </member>
         <member name="P:Microsoft.Owin.Host.SystemWeb.Resources.Exception_UnsupportedPipelineStage">
@@ -521,6 +594,46 @@
             <param name="constraints">A regular expression that specifies valid values for a URL parameter.</param>
             <param name="dataTokens">Custom values that are passed to the route handler, but which are not used to determine whether the route matches a specific URL pattern. These values are passed to the route handler, where they can be used for processing the request.</param>
             <param name="startup">The method to initialize the pipeline that processes requests for the route.</param>
+        </member>
+        <member name="T:Microsoft.Owin.Host.SystemWeb.SystemWebCookieManager">
+            <summary>
+            An implementation of ICookieManager that uses the System.Web.HttpContextBase object model.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Owin.Host.SystemWeb.SystemWebCookieManager.#ctor">
+            <summary>
+            Creates a new instance of SystemWebCookieManager.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Owin.Host.SystemWeb.SystemWebCookieManager.GetRequestCookie(Microsoft.Owin.IOwinContext,System.String)">
+            <summary>
+            Reads the requested cookie from System.Web.HttpContextBase.Request.Cookies.
+            </summary>
+            <param name="context"></param>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Owin.Host.SystemWeb.SystemWebCookieManager.AppendResponseCookie(Microsoft.Owin.IOwinContext,System.String,System.String,Microsoft.Owin.CookieOptions)">
+            <summary>
+            Appends the requested cookie to System.Web.HttpContextBase.Response.Cookies.
+            </summary>
+            <param name="context"></param>
+            <param name="key"></param>
+            <param name="value"></param>
+            <param name="options"></param>
+        </member>
+        <member name="M:Microsoft.Owin.Host.SystemWeb.SystemWebCookieManager.DeleteCookie(Microsoft.Owin.IOwinContext,System.String,Microsoft.Owin.CookieOptions)">
+            <summary>
+            Deletes the requested cookie by appending an expired cookie to System.Web.HttpContextBase.Response.Cookies.
+            </summary>
+            <param name="context"></param>
+            <param name="key"></param>
+            <param name="options"></param>
+        </member>
+        <member name="P:Microsoft.Owin.Host.SystemWeb.SystemWebCookieManager.Fallback">
+            <summary>
+            A fallback manager used if HttpContextBase can't be located.
+            </summary>
         </member>
     </members>
 </doc>

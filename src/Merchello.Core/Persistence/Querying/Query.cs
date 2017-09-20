@@ -6,6 +6,9 @@ using Umbraco.Core.Persistence.Querying;
 
 namespace Merchello.Core.Persistence.Querying
 {
+    using System.Text;
+    using Umbraco.Core.Persistence;
+
     /// <summary>
     /// Represents the Query Builder for building LINQ translatable queries
     /// </summary>
@@ -22,11 +25,7 @@ namespace Merchello.Core.Persistence.Querying
             get { return new Query<T>(); }
         }
 
-        /// <summary>
-        /// Adds a where clause to the query
-        /// </summary>
-        /// <param name="predicate"></param>
-        /// <returns>This instance so calls to this method are chainable</returns>
+        /// <inheritdoc />
         public virtual IQuery<T> Where(Expression<Func<T, bool>> predicate)
         {
             if (predicate != null)
@@ -36,6 +35,46 @@ namespace Merchello.Core.Persistence.Querying
 
                 _wheres.Add(new Tuple<string, object[]>(whereExpression, expressionHelper.GetSqlParameters()));
             }
+            return this;
+        }
+
+        /// <inheritdoc />
+        public IQuery<T> WhereAny(IEnumerable<Expression<Func<T, bool>>> predicates)
+        {
+            if (predicates == null) return this;
+
+            StringBuilder sb = null;
+            List<object> parameters = null;
+            Sql sql = null;
+            foreach (var predicate in predicates)
+            {
+                // see notes in Where()
+                var expressionHelper = new ModelToSqlExpressionHelper<T>();
+                var whereExpression = expressionHelper.Visit(predicate);
+
+                if (sb == null)
+                {
+                    sb = new StringBuilder("(");
+                    parameters = new List<object>();
+                    sql = new Sql();
+                }
+                else
+                {
+                    sb.Append(" OR ");
+                    sql.Append(" OR ");
+                }
+
+                sb.Append(whereExpression);
+                parameters.AddRange(expressionHelper.GetSqlParameters());
+                sql.Append(whereExpression, expressionHelper.GetSqlParameters());
+            }
+
+            if (sb == null) return this;
+
+            sb.Append(")");
+            //_wheres.Add(Tuple.Create(sb.ToString(), parameters.ToArray()));
+            _wheres.Add(Tuple.Create("(" + sql.SQL + ")", sql.Arguments));
+
             return this;
         }
 

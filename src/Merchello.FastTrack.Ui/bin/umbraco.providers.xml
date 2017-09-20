@@ -14,6 +14,26 @@
             Custom Membership Provider for Umbraco Members (User authentication for Frontend applications NOT umbraco CMS)  
             </summary>
         </member>
+        <member name="P:umbraco.providers.members.UmbracoMembershipProvider.DefaultMinNonAlphanumericChars">
+            <summary>
+            Override to maintain backwards compatibility with 0 required non-alphanumeric chars
+            </summary>
+        </member>
+        <member name="P:umbraco.providers.members.UmbracoMembershipProvider.DefaultMinPasswordLength">
+            <summary>
+            Override to maintain backwards compatibility with only 4 required length
+            </summary>
+        </member>
+        <member name="P:umbraco.providers.members.UmbracoMembershipProvider.DefaultUseLegacyEncoding">
+            <summary>
+            Override to maintain backwards compatibility
+            </summary>
+        </member>
+        <member name="P:umbraco.providers.members.UmbracoMembershipProvider.AllowManuallyChangingPassword">
+            <summary>
+            For backwards compatibility, this provider supports this option
+            </summary>
+        </member>
         <member name="M:umbraco.providers.members.UmbracoMembershipProvider.Initialize(System.String,System.Collections.Specialized.NameValueCollection)">
             <summary>
             Initializes the provider.
@@ -222,26 +242,6 @@
             <param name="m">The m.</param>
             <returns></returns>
         </member>
-        <member name="P:umbraco.providers.members.UmbracoMembershipProvider.DefaultMinNonAlphanumericChars">
-            <summary>
-            Override to maintain backwards compatibility with 0 required non-alphanumeric chars
-            </summary>
-        </member>
-        <member name="P:umbraco.providers.members.UmbracoMembershipProvider.DefaultMinPasswordLength">
-            <summary>
-            Override to maintain backwards compatibility with only 4 required length
-            </summary>
-        </member>
-        <member name="P:umbraco.providers.members.UmbracoMembershipProvider.DefaultUseLegacyEncoding">
-            <summary>
-            Override to maintain backwards compatibility
-            </summary>
-        </member>
-        <member name="P:umbraco.providers.members.UmbracoMembershipProvider.AllowManuallyChangingPassword">
-            <summary>
-            For backwards compatibility, this provider supports this option
-            </summary>
-        </member>
         <member name="M:umbraco.providers.members.UmbracoProfileProvider.GetPropertyValues(System.Configuration.SettingsContext,System.Configuration.SettingsPropertyCollection)">
             <summary>
             Returns the collection of settings property values for the current umbraco member.
@@ -263,6 +263,13 @@
             <summary>
             A role provider for members
             </summary>
+        </member>
+        <member name="P:umbraco.providers.members.UmbracoRoleProvider.ApplicationName">
+            <summary>
+            Gets or sets the name of the application to store and retrieve role information for.
+            </summary>
+            <value></value>
+            <returns>The name of the application to store and retrieve role information for.</returns>
         </member>
         <member name="M:umbraco.providers.members.UmbracoRoleProvider.Initialize(System.String,System.Collections.Specialized.NameValueCollection)">
             <summary>
@@ -361,13 +368,6 @@
             true if the role name already exists in the data source for the configured applicationName; otherwise, false.
             </returns>
         </member>
-        <member name="P:umbraco.providers.members.UmbracoRoleProvider.ApplicationName">
-            <summary>
-            Gets or sets the name of the application to store and retrieve role information for.
-            </summary>
-            <value></value>
-            <returns>The name of the application to store and retrieve role information for.</returns>
-        </member>
         <member name="T:umbraco.providers.SecUtility">
             <summary>
             Security Helper Methods
@@ -451,6 +451,26 @@
         <member name="T:umbraco.providers.UsersMembershipProvider">
             <summary>
             Custom Membership Provider for Umbraco Users (User authentication for Umbraco Backend CMS)  
+            </summary>
+        </member>
+        <member name="P:umbraco.providers.UsersMembershipProvider.DefaultMinNonAlphanumericChars">
+            <summary>
+            Override to maintain backwards compatibility with 0 required non-alphanumeric chars
+            </summary>
+        </member>
+        <member name="P:umbraco.providers.UsersMembershipProvider.DefaultMinPasswordLength">
+            <summary>
+            Override to maintain backwards compatibility with only 4 required length
+            </summary>
+        </member>
+        <member name="P:umbraco.providers.UsersMembershipProvider.DefaultUseLegacyEncoding">
+            <summary>
+            Override to maintain backwards compatibility
+            </summary>
+        </member>
+        <member name="P:umbraco.providers.UsersMembershipProvider.AllowManuallyChangingPassword">
+            <summary>
+            For backwards compatibility, this provider supports this option
             </summary>
         </member>
         <member name="M:umbraco.providers.UsersMembershipProvider.PerformChangePassword(System.String,System.String,System.String)">
@@ -591,6 +611,7 @@
             </summary>
             <param name="username">The user to reset the password for.</param>
             <param name="answer">The password answer for the specified user.</param>
+            <param name="generatedPassword"></param>
             <returns>The new password for the specified user.</returns>
         </member>
         <member name="M:umbraco.providers.UsersMembershipProvider.UnlockUser(System.String)">
@@ -639,37 +660,29 @@
             <param name="user">The user.</param>
             <returns></returns>
         </member>
-        <member name="P:umbraco.providers.UsersMembershipProvider.DefaultMinNonAlphanumericChars">
-            <summary>
-            Override to maintain backwards compatibility with 0 required non-alphanumeric chars
-            </summary>
-        </member>
-        <member name="P:umbraco.providers.UsersMembershipProvider.DefaultMinPasswordLength">
-            <summary>
-            Override to maintain backwards compatibility with only 4 required length
-            </summary>
-        </member>
-        <member name="P:umbraco.providers.UsersMembershipProvider.DefaultUseLegacyEncoding">
-            <summary>
-            Override to maintain backwards compatibility
-            </summary>
-        </member>
-        <member name="P:umbraco.providers.UsersMembershipProvider.AllowManuallyChangingPassword">
-            <summary>
-            For backwards compatibility, this provider supports this option
-            </summary>
-        </member>
         <member name="T:umbraco.providers.UsersMembershipUser">
             <summary>
             Wrapper for the umbraco.BusinessLogic.User class.
             </summary>
+        </member>
+        <member name="P:umbraco.providers.UsersMembershipUser.FullName">
+            <summary>
+            Gets or sets the full name.
+            </summary>
+            <value>The full name.</value>
+        </member>
+        <member name="P:umbraco.providers.UsersMembershipUser.Language">
+            <summary>
+            Gets or sets the language.
+            </summary>
+            <value>The language.</value>
         </member>
         <member name="M:umbraco.providers.UsersMembershipUser.#ctor">
             <summary>
             Initializes a new instance of the <see cref="!:UmbracoMembershipUser"/> class.
             </summary>
         </member>
-        <member name="M:umbraco.providers.UsersMembershipUser.#ctor(System.String,System.String,System.Object,System.String,System.String,System.String,System.Boolean,System.Boolean,System.DateTime,System.DateTime,System.DateTime,System.DateTime,System.DateTime,System.String,System.String,umbraco.BusinessLogic.UserType)">
+        <member name="M:umbraco.providers.UsersMembershipUser.#ctor(System.String,System.String,System.Object,System.String,System.String,System.String,System.Boolean,System.Boolean,System.DateTime,System.DateTime,System.DateTime,System.DateTime,System.DateTime,System.String,System.String)">
             <summary>
             Initializes a new instance of the <see cref="!:UmbracoMembershipUser"/> class.
             </summary>
@@ -688,30 +701,18 @@
             <param name="lastLockoutDate">The last lockout date.</param>
             <param name="fullName">The full name.</param>
             <param name="language">The language.</param>
-            <param name="userType">Type of the user.</param>
-        </member>
-        <member name="P:umbraco.providers.UsersMembershipUser.FullName">
-            <summary>
-            Gets or sets the full name.
-            </summary>
-            <value>The full name.</value>
-        </member>
-        <member name="P:umbraco.providers.UsersMembershipUser.Language">
-            <summary>
-            Gets or sets the language.
-            </summary>
-            <value>The language.</value>
-        </member>
-        <member name="P:umbraco.providers.UsersMembershipUser.UserType">
-            <summary>
-            Gets or sets the type of the user.
-            </summary>
-            <value>The type of the user.</value>
         </member>
         <member name="T:umbraco.providers.UsersRoleProvider">
             <summary>
             Custom Roles Provider for Umbraco
             </summary>
+        </member>
+        <member name="P:umbraco.providers.UsersRoleProvider.ApplicationName">
+            <summary>
+            Gets or sets the name of the application to store and retrieve role information for.
+            </summary>
+            <value></value>
+            <returns>The name of the application to store and retrieve role information for.</returns>
         </member>
         <member name="M:umbraco.providers.UsersRoleProvider.Initialize(System.String,System.Collections.Specialized.NameValueCollection)">
             <summary>
@@ -809,13 +810,6 @@
             <returns>
             true if the role name already exists in the data source for the configured applicationName; otherwise, false.
             </returns>
-        </member>
-        <member name="P:umbraco.providers.UsersRoleProvider.ApplicationName">
-            <summary>
-            Gets or sets the name of the application to store and retrieve role information for.
-            </summary>
-            <value></value>
-            <returns>The name of the application to store and retrieve role information for.</returns>
         </member>
     </members>
 </doc>
