@@ -1602,6 +1602,23 @@ angular.module('merchello.directives').directive('contentTypeDropDown',
 
     /**
      * @ngdoc directive
+     * @name merchello-drawer
+     * @function
+     *
+     * @description
+     * Directive to wrap the main function buttons in the footer of a page
+     */
+     angular.module('merchello.directives').directive('merchelloDrawer', function() {
+         return {
+             restrict: 'E',
+             replace: true,
+             transclude: 'true',
+             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/html/merchellodrawer.tpl.html'
+         };
+     });
+
+    /**
+     * @ngdoc directive
      * @name merchello-panel
      * @function
      *
@@ -1638,10 +1655,9 @@ angular.module('merchello.directives').directive('contentTypeDropDown',
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/html/merchelloslidepanelopen.tpl.html',
             link: function ($scope, $element, attrs) {
 
-                if ($scope.classes == undefined) {
-                    $scope.classes = 'control-group umb-control-group';
-                }
-
+                //if ($scope.classes == undefined) {
+                //    $scope.classes = 'control-group umb-control-group';
+                //}
 
             }
         };

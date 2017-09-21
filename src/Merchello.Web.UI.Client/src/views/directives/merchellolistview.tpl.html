@@ -13,20 +13,21 @@
             </div>
             <div class="span6">
                 <div class="pull-right clearfix">
-                    
-                    <form class="pull-right ng-pristine ng-valid input-prepend merchello-list-view-search" novalidate data-ng-show="hasFilter">
-                        <i class="icon-search add-on" data-ng-click="enterSearch($event)"></i>
-                        <input type="text" data-ng-model="options.filter" on-keyup="search()" prevent-enter-submit no-dirty-check class="ng-pristine ng-valid">
-                    </form>
+                  
+                  <form class="pull-right ng-pristine ng-valid input-prepend merchello-list-view-search" novalidate data-ng-show="hasFilter">
+                      <i class="icon-search add-on" data-ng-click="enterSearch($event)"></i>
+                      <input type="text" data-ng-model="options.filter" on-keyup="search()" prevent-enter-submit no-dirty-check class="ng-pristine ng-valid">
+                  </form>
 
-                    <form class="pull-right ng-pristine ng-valid merchello-list-view-pp" novalidate>
-                        <select data-ng-model="options.pageSize" data-ng-change="setPageSize()">
-                            <option value="10">10</option>
-                            <option value="25">25</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                        </select>
-                    </form>
+                  <form class="pull-right ng-pristine ng-valid merchello-list-view-pp" novalidate>
+                    <select data-ng-model="options.pageSize" data-ng-change="setPageSize()">
+                      <option value="10">10</option>
+                      <option value="25">25</option>
+                      <option value="50">50</option>
+                      <option value="100">100</option>
+                    </select>
+                  </form>
+
                 </div>
             </div>
         </div>

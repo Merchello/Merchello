@@ -11,6 +11,13 @@
                   <localize key="merchelloHeadline_catalog" />
                 </div>
               </div>
+              <div class="umb-editor-header__actions-menu" data-ng-show="context !== 'createproduct'">
+                <div class="pull-right" style="position: relative;">
+                  
+                  <product-recent-updates-button />
+
+                </div>
+              </div>
             </div>
           </div>
 
@@ -21,13 +28,8 @@
       <merchello-panel>
             <div class="merchello-pane" data-ng-show="preValuesLoaded">
 
-                <product-recent-updates-button />
-
                 <merchello-list-view builder="productDisplayBuilder" load="load" get-column-value="getColumnValue" entity-type="entityType" filter-options="filterOptions" settings-component="settingsComponent">
-
                 </merchello-list-view>
-
-
 
                 <!-- Prompt to create products if no products in the catalog -->
                 <div class="pager well" data-ng-show="products.length == 0 && collectionKey===''">

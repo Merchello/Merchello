@@ -1,7 +1,13 @@
 ﻿
 // Global Panel - Contains entire contents. All pages should be wrapped in this
 .merchello {
-
+    .umb-editor-drawer {
+        .umb-button-group {
+            .umb-button {
+                margin-left:4px;
+            }
+        }
+    }
 }  
 
 // This covers the main content, not including the header
@@ -41,8 +47,6 @@
 
         &.control-group {
             margin-bottom: 0 !important;
-            padding-bottom: 0;
-            border-bottom: solid 1px #fff;
         }
 
         &.well {
@@ -59,8 +63,6 @@
 
         &.control-group {
             padding-bottom: 30px;
-            margin-bottom: 25px !important;
-            border-bottom: 1px solid #f8f8f8;
         }
 
         &.well {

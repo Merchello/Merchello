@@ -1,9 +1,14 @@
 <div class="merchello-panel-body umb-editor-container umb-panel-body umb-scrollable row-fluid">
     <div class="umb-pane">
-        <div ng-transclude>
+        <div class="form-horizontal tab-content row-fluid" data-ng-show="preValuesLoaded">
+            <div class="merchello-pane">
 
+                <div ng-transclude>
+
+                </div>
+                <merchello-spinner />
+            </div>
         </div>
-        <merchello-spinner/>
-    </div>  
+    </div>
 </div>
 
