@@ -1,47 +1,55 @@
-<div data-ng-show="preValuesLoaded">
+<div data-ng-show="preValuesLoaded" class="merchello-list-view umb-listview clearfix">
+    
+    <div class="umb-editor-sub-header">
 
-    <div class="control-group umb-control-group">
-
-        <div class="merchello-section-label">
-            <localize key="merchelloSpecFilters_editSpecFilter"></localize>
+        <div class="umb-editor-sub-header__content-left">
+            <div class="umb-editor-sub-header__section">
+                <localize key="merchelloSpecFilters_editSpecFilter"></localize>
+            </div>
         </div>
-        <div class="merchello-controls merchello-list-view umb-listview">
 
-            <!-- button data-ng-hide="hideSortButton" data-ng-click="updateSorts()" class="btn btn-success"><localize key="buttons_save" /></button -->
+    </div>
+    
+    <div class="umb-table">
 
-            <table class="table table-striped spec-filter-list">
-                <thead>
-                <tr>
-                    <td>
-                        <a  data-ng-show="collections.length > 0" data-ng-click="openSort()" class="sort-icon" prevent-default><localize key="merchelloTableCaptions_filterGroup" /></a>
-                        <span data-ng-hide="collections.length > 0"><localize key="merchelloTableCaptions_filterGroup" /></span>
-                    </td>
-                    <td><localize key="merchelloTableCaptions_filters" /></td>
-                    <td></td>
-                </tr>
-                </thead>
-                <tbody  data-ng-show="collections.length > 0">
-                <tr class="merchello-icon-container" data-ng-repeat="group in collections">
-                    <td><a prevent-default data-ng-click="edit(group)">{{getColumnValue('name', group)}}</a></td>
-                    <td data-ng-bind="getColumnValue('filters', group)"></td>
-                    <td class="text-right">
-                        <merchello-icon-bar show-add="false" show-edit="true" show-delete="showDelete(group)" do-edit="edit(group)" do-delete="delete(group)"></merchello-icon-bar>
-                    </td>
-                </tr>
-                </tbody>
-                <tbody data-ng-hide="collections.length > 0" >
-                <td colspan="3" data-ng-bind-html-unsafe="noResults">
+        <div class="umb-table-head">
+            <div class="umb-table-row">
+                <div class="umb-table-cell not-fixed umb-table__name">
+                    <a  data-ng-show="collections.length > 0" data-ng-click="openSort()" class="sort-icon" prevent-default><localize key="merchelloTableCaptions_filterGroup" /></a>
+                    <span data-ng-hide="collections.length > 0"><localize key="merchelloTableCaptions_filterGroup" /></span>
+                </div>
+                <div class="umb-table-cell"><localize key="merchelloTableCaptions_filters" /></div>
+                <div class="umb-table-cell"></div>
+            </div> 
+        </div>
 
-                </td>
-                </tbody>
+        <div class="umb-table-body" data-ng-show="collections.length > 0">
+            <div class="umb-table-row" data-ng-repeat="group in collections">
+                <div class="umb-table-cell not-fixed umb-table__name">
+                    <a prevent-default data-ng-click="edit(group)">{{getColumnValue('name', group)}}</a>
+                </div>
+                <div class="umb-table-cell">
+                    <span data-ng-bind="getColumnValue('filters', group)"></span>
+                </div>
+                <div class="umb-table-cell">
+                    <merchello-icon-bar show-add="false" show-edit="true" show-delete="showDelete(group)" do-edit="edit(group)" do-delete="delete(group)"></merchello-icon-bar>
+                </div>
+            </div>
 
-            </table>
-
-            <div class="text-center">
-                <merchello-add-icon do-add="add()"></merchello-add-icon>
+        </div>
+        <div class="umb-table-body" data-ng-hide="collections.length > 0">
+            <div class="umb-table-row">
+                <div class="umb-empty-state -center">
+                    <p class="faded"><localize key="content_listViewNoItems">There are no items show in the list.</localize></p>
+                </div>                
             </div>
         </div>
     </div>
+    
+    <hr/>
 
+    <div class="text-center">
+        <merchello-add-icon do-add="add()"></merchello-add-icon>
+    </div>
 
 </div>

@@ -1,39 +1,40 @@
 <div  data-ng-show="ready">
 
-<form name="productOptionForm" id="productOptionForm" data-ng-show="optionSelected">
+    <form name="productOptionForm" id="productOptionForm" data-ng-show="optionSelected">
 
-    <div class="form-group row-fluid">
-        <b>Selected:</b> {{ sharedOption.name }} <merchello-delete-icon do-delete="removeOption()" data-ng-if="!sharedOptionsEditor"></merchello-delete-icon>
-    </div>
+        <div class="form-group row-fluid">
+            <b>Selected:</b> {{ sharedOption.name }} <merchello-delete-icon do-delete="removeOption()" data-ng-if="!sharedOptionsEditor"></merchello-delete-icon>
+        </div>
 
-    <div class="form-group row-fluid">
-        <label for="name"><localize key="general_name" /></label>
-        <small>You can use a different name than that of the share option here.</small>
-        <div class="error" data-ng-show="productOptionForm.name.$invalid && wasFormSubmitted">Name is a required field.</div>
-        <input name="name" id="name" data-ng-model="sharedOption.useName" class="span8" type="text" required />
-    </div>
+        <div class="form-group row-fluid">
+            <label for="name"><localize key="general_name" /></label>
+            <small>You can use a different name than that of the share option here.</small>
+            <div class="error" data-ng-show="productOptionForm.name.$invalid && wasFormSubmitted">Name is a required field.</div>
+            <input name="name" id="name" data-ng-model="sharedOption.useName" class="span8" type="text" required />
+        </div>
 
-    <table class="table settings-table col-xs-6 span6" data-ng-show="sharedOption.choices.length > 0">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Sku</th>
-            <th>Include Choice</th>
-            <th>Selected</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody data-ng-model="sharedOption.choices">
-        <tr data-ng-repeat="choice in sharedOption.choices">
-            <td>{{ choice.name }}</td>
-            <td>{{ choice.sku }}</td>
-            <td class="text-center"><input type="checkbox" data-ng-model="selectedChoices" data-ng-change="addRemoveChoice(choice)" data-ng-value="choice.key" data-ng-checked="choice.selected" /></td>
-            <td><input type="radio" data-ng-model="defaultChoice.current" data-ng-value="choice" data-ng-change="validateDefaultChoice($event)" /></td>
-            <td></td>
-        </tr>
-        </tbody>
-    </table>
-</form>
+        <table class="table settings-table col-xs-6 span6" data-ng-show="sharedOption.choices.length > 0">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Sku</th>
+                <th>Include Choice</th>
+                <th>Selected</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody data-ng-model="sharedOption.choices">
+            <tr data-ng-repeat="choice in sharedOption.choices">
+                <td>{{ choice.name }}</td>
+                <td>{{ choice.sku }}</td>
+                <td class="text-center"><input type="checkbox" data-ng-model="selectedChoices" data-ng-change="addRemoveChoice(choice)" data-ng-value="choice.key" data-ng-checked="choice.selected" /></td>
+                <td><input type="radio" data-ng-model="defaultChoice.current" data-ng-value="choice" data-ng-change="validateDefaultChoice($event)" /></td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+
     <div class="merchello-controls merchello-list-view umb-listview" data-ng-hide="optionSelected">
 
         <table class="table table-striped">

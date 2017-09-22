@@ -1,31 +1,30 @@
-<div ng-controller="Merchello.Backoffice.ProductFilterGroupsController" ng-show="loaded">
-    <umb-panel>
+<div ng-controller="Merchello.Backoffice.ProductFilterGroupsController" ng-show="loaded" class="merchello">
+    <div class="umb-panel umb-editor-wrapper">
 
-      <div class="umb-editor-header umb-panel-header">
-        <div class="umb-panel-header-content-wrapper">
+        <div class="umb-editor-header umb-panel-header">
+            <div class="umb-panel-header-content-wrapper">
 
-          <div class="umb-panel-header-content">
-            <div class="umb-panel-header-left-side -top-position">
-              <div class="umb-panel-header-title-wrapper">
-                <div class="umb-panel-header-name">
-                  <localize key="merchelloHeadline_productSpecFilters" />
+                <div class="umb-panel-header-content">
+                    <div class="umb-panel-header-left-side -top-position">
+                        <div class="umb-panel-header-title-wrapper">
+                            <div class="umb-panel-header-name">
+                                <localize key="merchelloHeadline_productSpecFilters" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
+
+                <merchello-tabs tabs="tabs"></merchello-tabs>
             </div>
-          </div>
-
-          <merchello-tabs tabs="tabs"></merchello-tabs>
         </div>
-      </div>
 
-      <merchello-panel>
-            <div class="merchello-pane" data-ng-show="preValuesLoaded">
-
-                <h4><localize key="merchelloSpecFilters_manageProductFilters">Manage Product Filters</localize></h4>
+        <merchello-panel>
+            <div data-ng-show="preValuesLoaded">
+               
                 <entity-filter-group-list pre-values-loaded="preValuesLoaded" entity-type="entityType" do-add="add" do-edit="edit"></entity-filter-group-list>
 
             </div>
 
         </merchello-panel>
-    </umb-panel>
+    </div>
 </div>
