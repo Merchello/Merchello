@@ -1,31 +1,44 @@
 <div class="umb-panel merchello-side-panel" data-ng-controller="Merchello.Common.Dialogs.ListViewSettingsController" data-ng-show="loaded">
-    <div class="umb-modalcolumn-header">
-        <h4><localize key="merchelloSettings_listViewSettingsTitle" /> ({{dialogData.entityType}})</h4>
-    </div>
-    <div class="umb-panel-body with-header with-footer">
-        <form>
-            <label class="label-checkbox" style="display: block"><input type="checkbox" data-ng-model="dialogData.settings.stickyList"> <span><localize key="merchelloSettings_stickyListView" /></span></label>
-            <label class="label-checkbox" style="display: block"><input type="checkbox" data-ng-model="dialogData.settings.stickyCollectionList"> <span><localize key="merchelloSettings_stickyCollectionView" /></span></label>
-            <label class="label-checkbox" style="display: block" data-ng-hide="dialogData.entityType === 'Offer'"><input type="checkbox" data-ng-model="dialogData.settings.stickListingTab"> <span data-ng-bind-html="stickListTabTitle"></span></label>
-        </form>
+    <div class="umb-overlay umb-overlay-right">
+        <div class="umb-overlay__form">
+            <div class="umb-overlay-header">
+                <h4 class="umb-overlay__title"><localize key="merchelloSettings_listViewSettingsTitle" /> ({{dialogData.entityType}})</h4>
+                <!--<p class="umb-overlay__subtitle"></p>-->
+            </div>
 
-        <div id="settingsComponent"></div>
-    </div>
+            <div class="umb-overlay-container form-horizontal merchello-panel-body">
+                <p>Enabling sticky options in lists, means it will remember the last page you were on or search term when you go back and forth between products and collections/lists making it much easier to manage products.</p>
+                <form>
+                    <label class="label-checkbox" style="display: block"><input type="checkbox" data-ng-model="dialogData.settings.stickyList"> <span><localize key="merchelloSettings_stickyListView"/></span></label>
+                    <label class="label-checkbox" style="display: block"><input type="checkbox" data-ng-model="dialogData.settings.stickyCollectionList"> <span><localize key="merchelloSettings_stickyCollectionView"/></span></label>
+                    <label class="label-checkbox" style="display: block" data-ng-hide="dialogData.entityType === 'Offer'"><input type="checkbox" data-ng-model="dialogData.settings.stickListingTab"> <span data-ng-bind-html="stickListTabTitle"></span></label>
+                </form>
 
-    <div class="umb-panel-footer">
-        <div class="umb-el-wrap umb-panel-buttons">
-            <div class="btn-toolbar umb-btn-toolbar pull-right">
+                <div id="settingsComponent"></div>
+            </div>
 
-                <a href data-ng-click="close()" class="btn btn-link">
-                    <localize key="general_cancel"></localize>
-                </a>
 
-                <button class="btn-success"
-                        data-ng-click="submit(dialogData)">
-                    <localize key="buttons_save"></localize>
-                </button>
+            <div class="umb-overlay-drawer">
+                <div class="umb-overlay-drawer__align-right">
+                
+                    <div class="umb-button">
+                        <a href data-ng-click="close()" class="btn btn-link">
+                            <localize key="general_cancel"></localize>
+                        </a>
+                    </div>
+
+                    <div class="umb-button">
+                        <button class="btn btn-success" data-ng-click="submit(dialogData)">
+                            <localize key="buttons_save"></localize>
+                        </button>
+                    </div>
+                </div>
 
             </div>
-        </div>
+        </div>   
     </div>
 </div>
+
+
+
+

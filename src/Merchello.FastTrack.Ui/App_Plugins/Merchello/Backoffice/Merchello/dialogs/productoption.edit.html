@@ -1,34 +1,41 @@
 <div class="umb-panel merchello-side-panel" ng-controller="Merchello.ProductOption.Dialogs.ProductOptionEditController">
-    <div class="umb-modalcolumn-header">
-        <h4><localize key="merchelloProductOptions_editProductOption" /></h4>
+    <div class="umb-overlay umb-overlay-right">
+        <div class="umb-overlay__form">
 
-        <!-- Tabs for Variants & Options -->
-    </div>
+            <div class="umb-overlay-header">
+                <h4 class="umb-overlay__title"><localize key="merchelloProductOptions_editProductOption" /></h4>
+                <div class="product-option-tabs" data-ng-show="dialogData.showTabs">
+                    <merchello-tabs tabs="tabs" data-ng-if="dialogData.showTabs"></merchello-tabs>
+                </div>
+            </div>
 
-    <div class="umb-panel-body with-header with-footer">
+            <div class="umb-overlay-container form-horizontal merchello-panel-body">
 
-        <div data-ng-show="visiblePanel === 'newoption'">
-            <product-options-add-edit option="dialogData.option"></product-options-add-edit>
-        </div>
+                <div data-ng-show="visiblePanel === 'newoption'">
+                    <product-options-add-edit option="dialogData.option"></product-options-add-edit>
+                </div>
 
-        <div data-ng-show="visiblePanel === 'sharedoption'">
-            <product-options-associate-shared option="dialogData.option" exclude="dialogData.exclude" shared-options-editor="dialogData.sharedOptionEditor"></product-options-associate-shared>
-        </div>
+                <div data-ng-show="visiblePanel === 'sharedoption'">
+                    <product-options-associate-shared option="dialogData.option" exclude="dialogData.exclude"></product-options-associate-shared>
+                </div>
 
-    </div>
-    <div class="umb-panel-footer">
-        <div class="umb-el-wrap umb-panel-buttons">
-            <div class="btn-toolbar umb-btn-toolbar pull-right">
+            </div>
 
-                <a href data-ng-click="close()" class="btn btn-link">
-                    <localize key="general_cancel">Cancel</localize>
-                </a>
+            <div class="umb-overlay-drawer">
+                <div class="umb-overlay-drawer__align-right">
 
-                <button class="btn btn-primary"
-                        data-ng-click="validate()">
-                    <localize key="buttons_save">Save</localize>
-                </button>
+                    <div class="umb-button">
+                        <a href data-ng-click="close()" class="btn btn-link">
+                            <localize key="general_cancel"></localize>
+                        </a>
+                    </div>
 
+                    <div class="umb-button">
+                        <button class="btn btn-success" data-ng-click="validate()">
+                            <localize key="buttons_save"></localize>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

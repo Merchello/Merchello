@@ -1,43 +1,4 @@
 <div class="merchello-list-view umb-listview clearfix">
-    <!--<div class="merchello-list-view-config">
-        <div class="row-fluid">
-            <div class="span6">
-
-                <a data-ng-click="openSettings()" class="gear" prevent-default>
-                    <i class="icon icon-settings-alt-2 large"></i>
-                </a>
-                <div data-ng-show="showTitle">
-                    <entity-collection-title-bar collection-key="collectionKey" entity-type="entityType"></entity-collection-title-bar>
-                </div>
-
-            </div>
-            <div class="span6">
-                <div class="pull-right clearfix">
-
-                    <form class="pull-right ng-pristine ng-valid input-prepend merchello-list-view-search" novalidate data-ng-show="hasFilter">
-                        <i class="icon-search add-on" data-ng-click="enterSearch($event)"></i>
-                        <input type="text" data-ng-model="options.filter" on-keyup="search()" prevent-enter-submit no-dirty-check class="ng-pristine ng-valid">
-                    </form>
-
-                    <form class="pull-right ng-pristine ng-valid merchello-list-view-pp" novalidate>
-                        <select data-ng-model="options.pageSize" data-ng-change="setPageSize()">
-                            <option value="10">10</option>
-                            <option value="25">25</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                        </select>
-                    </form>
-
-                    <div data-ng-show="enableDateFilter">
-                        <div class="btn-group pull-right">
-                            <a href="#" class="btn btn-small" data-ng-click="openDateRangeDialog()" prevent-default>{{ dateBtnText }}</a>
-                            <a href="#" class="btn btn-small" prevent-default data-ng-click="clearDates()" data-ng-show="startDate !== '' && endDate !== ''">X</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>-->
 
     <div class="umb-editor-sub-header">
 
@@ -89,7 +50,7 @@
 
         <div class="umb-table-head">
             <div class="umb-table-row">
-                <div class="umb-table-cell not-fixed" data-ng-repeat="col in config.columns">
+                <div class="umb-table-cell not-fixed" data-ng-repeat="col in config.columns" ng-class="{'umb-table__name': col == config.columns[0]}">
                     <a href="#" data-ng-click="sort(col.name, !col.resultColumn)" prevent-default data-ng-class="{sortable : !col.resultColumn }" data-ng-hide="col.localizeKey === ''" class="umb-table-head__link">
                         <span><localize key="{{ col.localizeKey }}" /></span>
                         <i class="umb-table-head__icon icon" ng-class="{'icon-navigation-up': isSortDirection(col.name, 'asc'), 'icon-navigation-down': isSortDirection(col.name, 'desc')}"></i>
@@ -107,11 +68,15 @@
             </div>
 
             <div class="umb-table-row" ng-show="listViewResultSet.totalItems === 0 && preValuesLoaded">
-                <p><localize key="content_listViewNoItems">There are no items show in the list.</localize></p>
+                <div class="umb-empty-state -center">
+                    <p class="faded"><localize key="content_listViewNoItems">There are no items show in the list.</localize></p>
+                </div>                
             </div>
 
             <div class="umb-table-row" ng-repeat="result in listViewResultSet.items" data-ng-class="{selected:result.selected}">
-                <div class="umb-table-cell not-fixed" data-ng-repeat="col in config.columns" data-ng-bind-html="getColumnValue()(result, col)"></div>
+                <div class="umb-table-cell not-fixed" data-ng-repeat="col in config.columns" ng-class="{'umb-table__name': col == config.columns[0]}">
+                    <span data-ng-bind-html="getColumnValue()(result, col)"></span>
+                </div>
             </div>
 
         </div>

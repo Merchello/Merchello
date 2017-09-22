@@ -8,7 +8,7 @@
             }
         }
     }
-}  
+}
 
 // This covers the main content, not including the header
 .merchello-panel-body {
@@ -26,6 +26,7 @@
     // Form elements
     .label-checkbox {
         margin: 5px 0;
+        display: block;
 
         input[type=checkbox] {
             float: left;
@@ -37,7 +38,6 @@
     .umb-listview .table-striped tbody .merchello-icon i:not(.handle):hover {
         display: inline-block !important;
     }
-
     // Panels Opened and closed
     .closed {
         opacity: 0;

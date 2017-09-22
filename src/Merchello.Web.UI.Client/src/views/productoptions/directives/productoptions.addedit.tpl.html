@@ -16,10 +16,9 @@
             <thead>
             <tr>
                 <th data-ng-show="option.choices.length > 1"></th>
-                <th><localize key="merchelloGeneral_name" /></th>
-                <th><localize key="merchelloGeneral_sku" /></th>
+                <th><localize key="merchelloGeneral_name" /> / <localize key="merchelloGeneral_sku" /></th>
                 <th><localize key="merchelloGeneral_selected" /></th>
-                <th colspan="2"></th>
+                <th></th>
             </tr>
             </thead>
             <tbody data-ui-sortable="sortableOptions" data-ng-model="option.choices">
@@ -27,12 +26,16 @@
                 <td data-ng-show="option.choices.length > 1">
                     <merchello-sort-icon data-ng-if="option.choices.length > 1"></merchello-sort-icon>
                 </td>
-                <td><input type="text" data-ng-model="choice.name" /></td>
-                <td><input type="text" data-ng-model="choice.sku" /></td>
-                <td><input type="radio" name="choiceSelected" data-ng-value="choice" data-ng-change="setSelectedChoice()" data-ng-model="selectedAttribute.current" /></td>
-                <td><merchello-save-icon do-save="addDetachedContent(choice)" show-save="contentType && option.key !== ''" /></td>
                 <td>
-                    <merchello-delete-icon do-delete="remove($index)" data-ng-if="showDelete(choice)" />
+                    <p><input type="text" data-ng-model="choice.name" localize="placeholder" placeholder="@merchelloGeneral_name" /></p>
+                    <input type="text" data-ng-model="choice.sku" localize="placeholder" placeholder="@merchelloGeneral_sku" />
+                </td>
+                <td><input type="radio" name="choiceSelected" data-ng-value="choice" data-ng-change="setSelectedChoice()" data-ng-model="selectedAttribute.current" /></td>
+                <td>
+                    <div class="merchello-icons">
+                    <merchello-save-icon do-save="addDetachedContent(choice)" show-save="contentType && option.key !== ''"/>
+                    <merchello-delete-icon do-delete="remove($index)" data-ng-if="showDelete(choice)"/>
+                    </div>
                 </td>
             </tr>
             </tbody>
