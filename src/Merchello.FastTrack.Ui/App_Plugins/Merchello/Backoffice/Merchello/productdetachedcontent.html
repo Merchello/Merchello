@@ -21,25 +21,20 @@
                                 required/>
                         </div>
                         <div class="umb-editor-header__actions-menu">
-                            <div class="btn-toolbar pull-right umb-btn-toolbar">
-
                                 <div class="pull-right" style="position: relative;">
-                                    <!-- options button -->
                                     <a class="btn btn-info" href="#" data-toggle="dropdown">
                                         <localize key="general_actions" class="ng-isolate-scopee">Actions</localize>
                                         <span class="caret"></span>
                                     </a>
-                                    <!-- actions -->
                                     <ul class="dropdown-menu umb-actions" role="menu" aria-labelledby="dLabel">
                                         <li class="action"><a data-ng-click="openCopyProductDialog()"><localize key="merchelloProducts_copyProduct"/></a></li>
                                         <li class="action"><a data-ng-click="deleteProductDialog()"><localize key="merchelloVariant_deleteProduct"/></a></li>
-                                        <li class="action"><a data-ng-click="openRemoveDetachedContentDialog()" data-ng-show="productVariant.detachedContents.length > 0"><localize key="merchelloDetachedContent_removeDetachedContent">Remove Extended Content</localize></a></li>
+                                        <li class="action sep"><a data-ng-click="openRemoveDetachedContentDialog()" data-ng-show="productVariant.detachedContents.length > 0"><localize key="merchelloDetachedContent_removeDetachedContent">Remove Extended Content</localize></a></li>
                                         <li class="action" data-ng-repeat="lang in languages" ng-class="{'sep': lang == languages[0]}">
                                             <a href data-ng-click="setLanguage(lang)" prevent-default>Edit {{lang.name}}</a>
                                         </li>
                                     </ul>
                                 </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -50,9 +45,8 @@
 
         <merchello-panel>
             <div class="form-horizontal tab-content row-fluid" data-ng-show="preValuesLoaded">
-                <div class="umb-pane" data-ng-show="isConfigured">
-                    <i class="icon icon-flag-alt"></i> {{ language.isoCode }}
-
+                <div data-ng-show="isConfigured">
+                    
                     <umb-property property="property" ng-repeat="property in currentTab.properties">
                         <umb-editor model="property"></umb-editor>
                     </umb-property>
@@ -64,18 +58,30 @@
                         <localize key="merchelloDetachedContent_noProductContentType"/>
                         <detached-content-type-select data-ng-if="!isConfigured" entity-type="Product" selected-content-type="contentType" show-save="preValuesLoaded" save="saveContentType(contentType)"></detached-content-type-select>
                     </div>
-                </div>
-                <!-- /merchello-pane -->
+                </div>        
             </div>
         </merchello-panel>
 
 
         <merchello-drawer>
+            
+            <div class="umb-editor-drawer-content__left-side">
+                
+                <ul class="umb-breadcrumbs">
+                    <li class="umb-breadcrumbs__ancestor">
+                        <span class="umb-breadcrumbs__ancestor-text"><i class="icon icon-flag-alt"></i> Editing {{ language.isoCode }}</span>
+                    </li>
+                </ul>
 
-            <div class="umb-button">
-                <button data-ng-disabled="productVariantForm.$invalid" type="button" data-ng-click="save(productVariantForm)" hotkey="ctrl+s" hotkey-when-hidden="true" class="btn btn-success"><localize key="buttons_save"/></button>
             </div>
-
+            
+            <div class="umb-editor-drawer-content__right-side">
+                <div class="btn-group umb-button-group">
+                    <div class="umb-button">
+                        <button data-ng-disabled="productVariantForm.$invalid" type="button" data-ng-click="save(productVariantForm)" hotkey="ctrl+s" hotkey-when-hidden="true" class="btn btn-success"><localize key="buttons_save"/></button>
+                    </div>
+                </div>
+            </div>
         </merchello-drawer>
 
     </div>

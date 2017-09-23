@@ -89,10 +89,16 @@
         </merchello-panel>
         
         <merchello-drawer>
+            
+            <div class="umb-editor-drawer-content__right-side">
+                <div class="btn-group umb-button-group">
+                    <div class="umb-button">
+                        <button data-ng-disabled="productVariantForm.$invalid" type="button" data-ng-click="save(productVariantForm)" hotkey="ctrl+s" hotkey-when-hidden="true" class="btn btn-success"><localize key="buttons_save"/></button>
+                    </div> 
 
-          <div class="umb-button">
-                <button data-ng-disabled="productVariantForm.$invalid" type="button" data-ng-click="save(productVariantForm)" hotkey="ctrl+s" hotkey-when-hidden="true" class="btn btn-success"><localize key="buttons_save"/></button>
-            </div> 
+                </div>
+            </div>
+
 
         </merchello-drawer>
 
