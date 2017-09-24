@@ -9,11 +9,6 @@
             Interface for created applications in the umbraco backoffice
             </summary>
         </member>
-        <member name="T:umbraco.interfaces.IDiscoverable">
-            <summary>
-            Marks a class or an interface as discoverable by PluginManager.
-            </summary>
-        </member>
         <member name="T:umbraco.interfaces.IApplicationStartupHandler">
             <summary>
             Any class that implements this interface will be instantiated at application startup
@@ -26,6 +21,70 @@
         <member name="T:umbraco.interfaces.IDataFieldWithButtons">
             <summary>
             Summary description for IDataFieldWithButtons.
+            </summary>
+        </member>
+        <member name="T:umbraco.interfaces.IDiscoverable">
+            <summary>
+            Marks a class or an interface as discoverable by PluginManager.
+            </summary>
+        </member>
+        <member name="T:umbraco.interfaces.IAction">
+            <summary>
+            Summary description for ActionI.
+            </summary>
+        </member>
+        <member name="P:umbraco.interfaces.IAction.JsSource">
+            <summary>
+            A path to a supporting JavaScript file for the IAction. A script tag will be rendered out with the reference to the JavaScript file.
+            </summary>
+        </member>
+        <member name="T:umbraco.interfaces.ICacheRefresher">
+            <summary>
+            The IcacheRefresher Interface is used for loadbalancing.
+            
+            </summary>
+        </member>
+        <member name="T:umbraco.interfaces.IDataValueSetter">
+            <summary>
+            Internal interface used to decorate any IData that can be optimized when exporting
+            XML like in the packaging service. Instead of relying on the IData to go get the value
+            from the db, any IData that implements this can have it's value set from the packaging service.
+            </summary>
+        </member>
+        <member name="T:umbraco.interfaces.IData">
+            <summary>
+            The IData is part of the IDataType interface for creating new data types in the umbraco backoffice. 
+            The IData represents the actual value entered by the user.
+            </summary>
+        </member>
+        <member name="P:umbraco.interfaces.IData.PropertyId">
+            <summary>
+            Gets or sets the property id.
+            </summary>
+            <value>The property id.</value>
+        </member>
+        <member name="M:umbraco.interfaces.IData.ToXMl(System.Xml.XmlDocument)">
+            <summary>
+            Converts the data to XML.
+            </summary>
+            <param name="data">The data.</param>
+            <returns>The data as XML.</returns>
+        </member>
+        <member name="P:umbraco.interfaces.IData.Value">
+            <summary>
+            Gets or sets the value.
+            </summary>
+            <value>The value.</value>
+        </member>
+        <member name="M:umbraco.interfaces.IData.MakeNew(System.Int32)">
+            <summary>
+            Creates a new value
+            </summary>
+            <param name="PropertyId">The property id.</param>
+        </member>
+        <member name="M:umbraco.interfaces.IData.Delete">
+            <summary>
+            Deletes this instance.
             </summary>
         </member>
         <member name="T:umbraco.interfaces.IDataEditor">
@@ -58,70 +117,6 @@
             Gets the editor control
             </summary>
             <value>The editor.</value>
-        </member>
-        <member name="T:umbraco.interfaces.ITask">
-            <summary>
-            Summary description for ITask.
-            </summary>
-        </member>
-        <member name="T:umbraco.interfaces.IAction">
-            <summary>
-            Summary description for ActionI.
-            </summary>
-        </member>
-        <member name="P:umbraco.interfaces.IAction.JsSource">
-            <summary>
-            A path to a supporting JavaScript file for the IAction. A script tag will be rendered out with the reference to the JavaScript file.
-            </summary>
-        </member>
-        <member name="T:umbraco.interfaces.ICacheRefresher">
-            <summary>
-            The IcacheRefresher Interface is used for loadbalancing.
-            
-            </summary>
-        </member>
-        <member name="T:umbraco.interfaces.IDataValueSetter">
-            <summary>
-            Internal interface used to decorate any IData that can be optimized when exporting
-            XML like in the packaging service. Instead of relying on the IData to go get the value
-            from the db, any IData that implements this can have it's value set from the packaging service.
-            </summary>
-        </member>
-        <member name="T:umbraco.interfaces.IData">
-            <summary>
-            The IData is part of the IDataType interface for creating new data types in the umbraco backoffice. 
-            The IData represents the actual value entered by the user.
-            </summary>
-        </member>
-        <member name="M:umbraco.interfaces.IData.ToXMl(System.Xml.XmlDocument)">
-            <summary>
-            Converts the data to XML.
-            </summary>
-            <param name="data">The data.</param>
-            <returns>The data as XML.</returns>
-        </member>
-        <member name="M:umbraco.interfaces.IData.MakeNew(System.Int32)">
-            <summary>
-            Creates a new value
-            </summary>
-            <param name="PropertyId">The property id.</param>
-        </member>
-        <member name="M:umbraco.interfaces.IData.Delete">
-            <summary>
-            Deletes this instance.
-            </summary>
-        </member>
-        <member name="P:umbraco.interfaces.IData.PropertyId">
-            <summary>
-            Gets or sets the property id.
-            </summary>
-            <value>The property id.</value>
-        </member>
-        <member name="P:umbraco.interfaces.IData.Value">
-            <summary>
-            Gets or sets the value.
-            </summary>
-            <value>The value.</value>
         </member>
         <member name="T:umbraco.interfaces.IDataPrevalue">
             <summary>
@@ -243,22 +238,15 @@
             Summary description for INotFoundHandler.
             </summary>
         </member>
+        <member name="T:umbraco.interfaces.ITask">
+            <summary>
+            Summary description for ITask.
+            </summary>
+        </member>
         <member name="T:umbraco.interfaces.ITree">
             <summary>
             Interface for created application trees in the umbraco backoffice
             </summary>
-        </member>
-        <member name="M:umbraco.interfaces.ITree.Render(System.Xml.XmlDocument@)">
-            <summary>
-            Renders the specified tree.
-            </summary>
-            <param name="Tree">The tree.</param>
-        </member>
-        <member name="M:umbraco.interfaces.ITree.RenderJS(System.Text.StringBuilder@)">
-            <summary>
-            Renders the client side script associatied with the tree.
-            </summary>
-            <param name="Javascript">The javascript.</param>
         </member>
         <member name="P:umbraco.interfaces.ITree.id">
             <summary>
@@ -271,6 +259,18 @@
             Sets the applicatin alias.
             </summary>
             <value>The app.</value>
+        </member>
+        <member name="M:umbraco.interfaces.ITree.Render(System.Xml.XmlDocument@)">
+            <summary>
+            Renders the specified tree.
+            </summary>
+            <param name="Tree">The tree.</param>
+        </member>
+        <member name="M:umbraco.interfaces.ITree.RenderJS(System.Text.StringBuilder@)">
+            <summary>
+            Renders the client side script associatied with the tree.
+            </summary>
+            <param name="Javascript">The javascript.</param>
         </member>
     </members>
 </doc>

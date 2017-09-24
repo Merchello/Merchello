@@ -9,6 +9,21 @@
             Constructor, set defaults.
             </summary>
         </member>
+        <member name="P:umbraco.uicontrols.TreePicker.BaseTreePicker.Value">
+            <summary>
+            Wraps the hidden vield value
+            </summary>
+        </member>
+        <member name="P:umbraco.uicontrols.TreePicker.BaseTreePicker.TreePickerUrl">
+            <summary>
+            Need to specify the tree picker url (iframe)
+            </summary>
+        </member>
+        <member name="P:umbraco.uicontrols.TreePicker.BaseTreePicker.ModalWindowTitle">
+            <summary>
+            The title to specify for the picker window
+            </summary>
+        </member>
         <member name="M:umbraco.uicontrols.TreePicker.BaseTreePicker.GetItemTitle">
             <summary>
             If item has been selected or stored, this will query the db for its title
@@ -39,21 +54,6 @@
             Registers the JavaScript required for the control to function and hides/shows controls depending on it's properties
             </summary>
             <param name="e"></param>
-        </member>
-        <member name="P:umbraco.uicontrols.TreePicker.BaseTreePicker.Value">
-            <summary>
-            Wraps the hidden vield value
-            </summary>
-        </member>
-        <member name="P:umbraco.uicontrols.TreePicker.BaseTreePicker.TreePickerUrl">
-            <summary>
-            Need to specify the tree picker url (iframe)
-            </summary>
-        </member>
-        <member name="P:umbraco.uicontrols.TreePicker.BaseTreePicker.ModalWindowTitle">
-            <summary>
-            The title to specify for the picker window
-            </summary>
         </member>
         <member name="T:umbraco.uicontrols.TreePicker.BaseTreePickerScripts">
             <summary>
