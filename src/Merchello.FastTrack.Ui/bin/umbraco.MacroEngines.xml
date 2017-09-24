@@ -30,6 +30,19 @@
             <param name="result"></param>
             <returns></returns>
         </member>
+        <member name="M:umbraco.MacroEngines.ExamineBackedMedia.#ctor(Examine.SearchResult,Examine.Providers.BaseIndexProvider,Examine.Providers.BaseSearchProvider)">
+            <summary>
+            Internal constructor used for unit tests
+            </summary>
+            <param name="result"></param>
+            <param name="indexer"></param>
+            <param name="searcher"></param>
+        </member>
+        <member name="F:umbraco.MacroEngines.Library.RazorLibraryCore._htmlHelper">
+            <summary>
+            An empty HtmlHelper with a blank ViewContext, used only to access some htmlHelper extension methods
+            </summary>
+        </member>
         <member name="F:umbraco.MacroEngines.DynamicNode.GetDataTypeCallback">
             <summary>
             This callback is used only so we can set it dynamically for use in unit tests
@@ -49,24 +62,19 @@
             </summary>
             <returns>Successful if the owners list is not null, false if the owners list could not be created and remains null</returns>
         </member>
-        <member name="M:umbraco.MacroEngines.ExamineBackedMedia.#ctor(Examine.SearchResult,Examine.Providers.BaseIndexProvider,Examine.Providers.BaseSearchProvider)">
-            <summary>
-            Internal constructor used for unit tests
-            </summary>
-            <param name="result"></param>
-            <param name="indexer"></param>
-            <param name="searcher"></param>
-        </member>
-        <member name="F:umbraco.MacroEngines.Library.RazorLibraryCore._htmlHelper">
-            <summary>
-            An empty HtmlHelper with a blank ViewContext, used only to access some htmlHelper extension methods
-            </summary>
-        </member>
         <member name="T:umbraco.MacroEngines.RazorBuildProvider">
             <summary>
             Stub Build Provider If Want To Implement Anything Advanced In The Future
             Also Allows Us To Register Build Provider In Medium Trust
             </summary>
+        </member>
+        <member name="M:umbraco.MacroEngines.RazorMacroEngine.GetHash(System.String)">
+            <summary>
+            Generates a hash based on the text string passed in.  This method will detect the 
+            security requirements (is FIPS enabled) and return an appropriate hash.
+            </summary>
+            <param name="text">String value to hash</param>
+            <returns>The hash of the text string</returns>
         </member>
         <member name="M:umbraco.MacroEngines.RazorMacroEngine.CreateTemporaryRazorFile(System.String,System.String,System.Boolean)">
             <summary>
