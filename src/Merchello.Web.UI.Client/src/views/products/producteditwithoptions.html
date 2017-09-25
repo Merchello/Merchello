@@ -1,9 +1,9 @@
 <form novalidate name="productForm"
       data-ng-controller="Merchello.Backoffice.ProductEditWithOptionsController"
       data-ng-show="loaded"
-      data-ng-submit="save()">
+      data-ng-submit="save()" class="merchello">
 
-    <umb-panel val-show-validation>
+    <div class="umb-panel umb-editor-wrapper" val-show-validation>
       
       
       <div class="umb-editor-header umb-panel-header">
@@ -12,26 +12,33 @@
           <div class="umb-panel-header-content">
             <div class="umb-panel-header-left-side -top-position">
               <div class="umb-panel-header-title-wrapper">
-                <umb-content-name
-                  ng-model="product.name"
-                  localize="placeholder"
-                  placeholder="@merchelloProductEdit_enterProductName">
-                </umb-content-name>
+                  <input
+                      type="text"
+                      class="umb-panel-header-name-input"
+                      localize="placeholder"
+                      placeholder="@merchelloPlaceholders_enterProduct"
+                      name="headerName"
+                      ng-model="product.name"
+                      umb-auto-focus
+                      val-server-field="Name"
+                      required />
               </div>
-              <div class="umb-editor-header__actions-menu">
-                <div class="btn-toolbar pull-right umb-btn-toolbar">
-                  <div class="btn-group">
-                    <button data-ng-disabled="productForm.$invalid" data-ng-click="save(productForm)" class="btn btn-success"><localize key="buttons_save" /></button>
-                    <button class="btn dropdown-toggle btn-success" data-toggle="dropdown">
-                      <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu merchello-action-menu" role="menu">
-                      <li><a data-ng-click="openCopyProductDialog()"><localize key="merchelloProducts_copyProduct" /></a></li>
-                      <li><a data-ng-click="deleteProductDialog()"><localize key="merchelloVariant_deleteProduct" /></a></li>
-                    </ul>
-                  </div>
+                <div class="umb-editor-header__actions-menu">
+                    
+                    <div class="pull-right" style="position: relative;">
+                        <!-- options button -->
+                        <a class="btn btn-info" href="#" data-toggle="dropdown">
+                            <localize key="general_actions" class="ng-isolate-scopee">Actions</localize>
+                            <span class="caret"></span>
+                        </a>
+                        <!-- actions -->
+                        <ul class="dropdown-menu umb-actions" role="menu" aria-labelledby="dLabel">
+                            <li><a data-ng-click="openCopyProductDialog()"><localize key="merchelloProducts_copyProduct"/></a></li>
+                            <li><a data-ng-click="deleteProductDialog()"><localize key="merchelloVariant_deleteProduct"/></a></li>
+                        </ul>
+                    </div>
+                    
                 </div>
-              </div>
             </div>
           </div>
 
@@ -40,60 +47,30 @@
       </div>
       
 
-      <!--<umb-header>
-
-            <div class="span4">
-                <umb-content-name
-                        ng-model="product.name"
-                        localize="placeholder"
-                        placeholder="@merchelloProductEdit_enterProductName">
-                </umb-content-name>
-            </div>
-
-            <div class="col-xs-8 span8">
-                <div class="btn-toolbar pull-right umb-btn-toolbar">
-                    <div class="btn-group">
-                        <button data-ng-disabled="productForm.$invalid" data-ng-click="save(productForm)" class="btn btn-success"><localize key="buttons_save" /></button>
-                        <button class="btn dropdown-toggle btn-success" data-toggle="dropdown">
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu merchello-action-menu" role="menu">
-                            <li><a data-ng-click="openCopyProductDialog()"><localize key="merchelloProducts_copyProduct" /></a></li>
-                            <li><a data-ng-click="deleteProductDialog()"><localize key="merchelloVariant_deleteProduct" /></a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <merchello-tabs tabs="tabs"></merchello-tabs>
-        </umb-header>-->
-
         <merchello-panel>
-            <div class="merchello-pane">
-                <!---------------------------------------------------------------------------------------
-                    Variants tab
-                ----------------------------------------------------------------------------------------->
+
                 <div class="control-group umb-control-group">
-                    <label class="merchello-control-label">
-                        <localize key="merchelloProductEdit_variantInformation" />
-                        <small><localize key="merchelloProductEdit_variantInformationHelper" /></small>
-                    </label>
-
-
-
                     <div class="merchello-controls row-fluid">
-
                         <product-option-attributes-select product="product" on-select-variants="selectVariants(attributeToSelect)"></product-option-attributes-select>
-
                         <product-variants-view-table product="product" currency-symbol="currencySymbol" reload="init()"></product-variants-view-table>
-
                     </div>
-
+                </div>
+     
+        </merchello-panel>
+        
+        <merchello-drawer>
+            
+            <div class="umb-editor-drawer-content__right-side">
+                <div class="btn-group umb-button-group">
+                    <div class="umb-button">
+                        <button data-ng-disabled="productForm.$invalid" type="button" data-ng-click="save(productForm)" hotkey="ctrl+s" hotkey-when-hidden="true" class="btn btn-success"><localize key="buttons_save"/></button>
+                    </div> 
 
                 </div>
             </div>
-        </merchello-panel>
 
 
-    </umb-panel>
+        </merchello-drawer>
+
+    </div>
 </form>
