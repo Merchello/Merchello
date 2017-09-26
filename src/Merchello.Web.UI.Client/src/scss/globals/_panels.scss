@@ -4,9 +4,17 @@
     .umb-editor-drawer {
         .umb-button-group {
             .umb-button {
-                margin-left:4px;
+                margin-left: 4px;
             }
         }
+    }
+
+    .panel-right-padding {
+        padding-right: 20px;
+    }
+
+    .panel-left-padding {
+        padding-left: 20px;
     }
 }
 
@@ -70,11 +78,38 @@
             margin-bottom: 20px;
         }
     }
+    // Button bar
+    .button-bar {
+        margin-bottom: 20px;
+    }
+    // Tables
+    table {
+        tr {
+            td {
+                color: #817f85;
+                font-size: 14px;
+            }
+        }
+
+        tr {
+            th {
+                font-size: 13px;
+                line-height: 13px;
+            }
+        }
+    }
 }
 
 // This is the tabs panel
 .merchello-tabs {
 
+}
+
+// Forms
+.form-group {
+    .error {
+        color:firebrick;
+    }
 }
 
 /*.merchello-panel-body {
