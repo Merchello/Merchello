@@ -434,6 +434,31 @@
         }
 
         /// <summary>
+        /// Resets all the product SKUs to default values
+        /// </summary>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
+        [HttpGet]
+        public ProductDisplay PutProductWithResetSkus(Guid productKey)
+        {
+            var merchProduct = _productService.GetByKey(productKey);
+            if (!merchProduct.ProductVariants.Any()) return merchProduct.ToProductDisplay(DetachedValuesConversionType.Editor);
+
+            foreach (var variant in merchProduct.ProductVariants)
+            {
+                variant.Sku = SkuHelper.GenerateSkuForVariant(merchProduct, variant);
+            }
+
+            _productService.Save(merchProduct);
+
+            return merchProduct.ToProductDisplay(DetachedValuesConversionType.Editor);
+        }
+
+        /// <summary>
         /// The put product with detached content.
         /// </summary>
         /// <param name="detachedContentItem">

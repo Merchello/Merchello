@@ -356,6 +356,8 @@
     <key alias="addAdjustment">Add adjustment</key>
     <key alias="adjustments">Adjustments</key>
     <key alias="adjustmentAssignedBy">Assigned by</key>
+    <key alias="lineItemPreview">Line Item Preview</key>
+    <key alias="noLineItemPreview">Unable to preview line item</key>
   </area>
   <area alias="merchelloCustomers">
     <key alias="loginName">Login</key>

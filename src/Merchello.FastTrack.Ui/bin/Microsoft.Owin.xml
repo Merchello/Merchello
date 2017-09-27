@@ -481,10 +481,75 @@
             Returns the original value from the constructor.
             </summary>
         </member>
+        <member name="T:Microsoft.Owin.Infrastructure.CookieManager">
+            <summary>
+            An implementation of ICookieManager that writes directly to IOwinContext.Response.Cookies.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Owin.Infrastructure.ICookieManager">
+            <summary>
+            An abstraction for reading request cookies and writing response cookies.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Owin.Infrastructure.ICookieManager.GetRequestCookie(Microsoft.Owin.IOwinContext,System.String)">
+            <summary>
+            Read a cookie with the given name from the request.
+            </summary>
+            <param name="context"></param>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Owin.Infrastructure.ICookieManager.AppendResponseCookie(Microsoft.Owin.IOwinContext,System.String,System.String,Microsoft.Owin.CookieOptions)">
+            <summary>
+            Append a cookie to the response.
+            </summary>
+            <param name="context"></param>
+            <param name="key"></param>
+            <param name="value"></param>
+            <param name="options"></param>
+        </member>
+        <member name="M:Microsoft.Owin.Infrastructure.ICookieManager.DeleteCookie(Microsoft.Owin.IOwinContext,System.String,Microsoft.Owin.CookieOptions)">
+            <summary>
+            Append a delete cookie to the response.
+            </summary>
+            <param name="context"></param>
+            <param name="key"></param>
+            <param name="options"></param>
+        </member>
+        <member name="M:Microsoft.Owin.Infrastructure.CookieManager.GetRequestCookie(Microsoft.Owin.IOwinContext,System.String)">
+            <summary>
+            Read a cookie with the given name from the request.
+            </summary>
+            <param name="context"></param>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Owin.Infrastructure.CookieManager.AppendResponseCookie(Microsoft.Owin.IOwinContext,System.String,System.String,Microsoft.Owin.CookieOptions)">
+            <summary>
+            Appends a new response cookie to the Set-Cookie header.
+            </summary>
+            <param name="context"></param>
+            <param name="key"></param>
+            <param name="value"></param>
+            <param name="options"></param>
+        </member>
+        <member name="M:Microsoft.Owin.Infrastructure.CookieManager.DeleteCookie(Microsoft.Owin.IOwinContext,System.String,Microsoft.Owin.CookieOptions)">
+            <summary>
+            Deletes the cookie with the given key by appending an expired cookie.
+            </summary>
+            <param name="context"></param>
+            <param name="key"></param>
+            <param name="options"></param>
+        </member>
         <member name="T:Microsoft.Owin.Infrastructure.ChunkingCookieManager">
             <summary>
             This handles cookies that are limited by per cookie length. It breaks down long cookies for responses, and reassembles them
             from requests.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Owin.Infrastructure.ChunkingCookieManager.#ctor">
+            <summary>
+            Creates a new instance of ChunkingCookieManager.
             </summary>
         </member>
         <member name="M:Microsoft.Owin.Infrastructure.ChunkingCookieManager.GetRequestCookie(Microsoft.Owin.IOwinContext,System.String)">

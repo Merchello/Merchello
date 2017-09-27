@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
 
     //JavaScript extension methods on the core JavaScript objects (like String, Date, etc...)
     if (!Date.prototype.toIsoDateTimeString) {

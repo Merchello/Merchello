@@ -10,45 +10,6 @@
             Specifically designed to serialize/deserialize the options as JSON.
             </summary>
         </member>
-        <member name="T:umbraco.editorControls.AbstractPrevalueEditor">
-            <summary>
-            Abstract class for the PreValue Editor.
-            </summary>
-        </member>
-        <member name="M:umbraco.editorControls.AbstractPrevalueEditor.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:umbraco.editorControls.AbstractPrevalueEditor"/> class.
-            </summary>
-        </member>
-        <member name="M:umbraco.editorControls.AbstractPrevalueEditor.Save">
-            <summary>
-            Saves this instance.
-            </summary>
-        </member>
-        <member name="M:umbraco.editorControls.AbstractPrevalueEditor.OnInit(System.EventArgs)">
-            <summary>
-            Raises the <see cref="E:System.Web.UI.Control.Init"/> event.
-            </summary>
-            <param name="e">An <see cref="T:System.EventArgs"/> object that contains the event data.</param>
-        </member>
-        <member name="M:umbraco.editorControls.AbstractPrevalueEditor.RenderBeginTag(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Renders the HTML opening tag of the control to the specified writer. This method is used primarily by control developers.
-            </summary>
-            <param name="writer">A <see cref="T:System.Web.UI.HtmlTextWriter"/> that represents the output stream to render HTML content on the client.</param>
-        </member>
-        <member name="M:umbraco.editorControls.AbstractPrevalueEditor.RenderEndTag(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Renders the HTML closing tag of the control into the specified writer. This method is used primarily by control developers.
-            </summary>
-            <param name="writer">A <see cref="T:System.Web.UI.HtmlTextWriter"/> that represents the output stream to render HTML content on the client.</param>
-        </member>
-        <member name="P:umbraco.editorControls.AbstractPrevalueEditor.Editor">
-            <summary>
-            Gets the editor.
-            </summary>
-            <value>The editor.</value>
-        </member>
         <member name="F:umbraco.editorControls.AbstractJsonPrevalueEditor.m_DataType">
             <summary>
             The underlying base data-type.
@@ -102,6 +63,45 @@
             </summary>
             <param name="loadDefaults">if set to <c>true</c> [load defaults].</param>
         </member>
+        <member name="T:umbraco.editorControls.AbstractPrevalueEditor">
+            <summary>
+            Abstract class for the PreValue Editor.
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.AbstractPrevalueEditor.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:umbraco.editorControls.AbstractPrevalueEditor"/> class.
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.AbstractPrevalueEditor.Editor">
+            <summary>
+            Gets the editor.
+            </summary>
+            <value>The editor.</value>
+        </member>
+        <member name="M:umbraco.editorControls.AbstractPrevalueEditor.Save">
+            <summary>
+            Saves this instance.
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.AbstractPrevalueEditor.OnInit(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Web.UI.Control.Init"/> event.
+            </summary>
+            <param name="e">An <see cref="T:System.EventArgs"/> object that contains the event data.</param>
+        </member>
+        <member name="M:umbraco.editorControls.AbstractPrevalueEditor.RenderBeginTag(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Renders the HTML opening tag of the control to the specified writer. This method is used primarily by control developers.
+            </summary>
+            <param name="writer">A <see cref="T:System.Web.UI.HtmlTextWriter"/> that represents the output stream to render HTML content on the client.</param>
+        </member>
+        <member name="M:umbraco.editorControls.AbstractPrevalueEditor.RenderEndTag(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Renders the HTML closing tag of the control into the specified writer. This method is used primarily by control developers.
+            </summary>
+            <param name="writer">A <see cref="T:System.Web.UI.HtmlTextWriter"/> that represents the output stream to render HTML content on the client.</param>
+        </member>
         <member name="T:umbraco.editorControls.PickerRelations.PickerRelationsDataEditor">
             <summary>
             
@@ -122,6 +122,31 @@
             Literal used to render status (Enabled || Disabled)
             this datatype is only enabled and active if it can find the property alias on the current node (as defined in PreValueEditor) and 
             the relation type parent object type (or child if reverse index used) matches the object type of the current node which this datatype is on
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.PickerRelations.PickerRelationsDataEditor.TreatAsRichTextEditor">
+            <summary>
+            Gets a value indicating whether this is an RTE - this Property expected by Umbraco
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.PickerRelations.PickerRelationsDataEditor.ShowLabel">
+            <summary>
+            Gets a value indicating whether the label should be shown when editing - this Property exected by Umbraco
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.PickerRelations.PickerRelationsDataEditor.Editor">
+            <summary>
+            Gets the DataEditor - Property expected by Umbraco
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.PickerRelations.PickerRelationsDataEditor.CurrentContentId">
+            <summary>
+            Gets the id of the current (content || media || member) node on which this datatype is a property
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.PickerRelations.PickerRelationsDataEditor.CurrentContextObjectType">
+            <summary>
+            Gets the UmbracoObjectType on which this datatype is a property of
             </summary>
         </member>
         <member name="M:umbraco.editorControls.PickerRelations.PickerRelationsDataEditor.#ctor(umbraco.interfaces.IData,umbraco.editorControls.PickerRelations.PickerRelationsOptions)">
@@ -170,31 +195,6 @@
             <returns>
             	<c>true</c> if [is content object type valid] [the specified content object type]; otherwise, <c>false</c>.
             </returns>
-        </member>
-        <member name="P:umbraco.editorControls.PickerRelations.PickerRelationsDataEditor.TreatAsRichTextEditor">
-            <summary>
-            Gets a value indicating whether this is an RTE - this Property expected by Umbraco
-            </summary>
-        </member>
-        <member name="P:umbraco.editorControls.PickerRelations.PickerRelationsDataEditor.ShowLabel">
-            <summary>
-            Gets a value indicating whether the label should be shown when editing - this Property exected by Umbraco
-            </summary>
-        </member>
-        <member name="P:umbraco.editorControls.PickerRelations.PickerRelationsDataEditor.Editor">
-            <summary>
-            Gets the DataEditor - Property expected by Umbraco
-            </summary>
-        </member>
-        <member name="P:umbraco.editorControls.PickerRelations.PickerRelationsDataEditor.CurrentContentId">
-            <summary>
-            Gets the id of the current (content || media || member) node on which this datatype is a property
-            </summary>
-        </member>
-        <member name="P:umbraco.editorControls.PickerRelations.PickerRelationsDataEditor.CurrentContextObjectType">
-            <summary>
-            Gets the UmbracoObjectType on which this datatype is a property of
-            </summary>
         </member>
         <member name="T:umbraco.editorControls.PickerRelations.PickerRelationsDataType">
             <summary>
@@ -294,11 +294,6 @@
             Data Class, used to store the configuration options for the PickerRelationsPreValueEditor
             </summary>
         </member>
-        <member name="M:umbraco.editorControls.PickerRelations.PickerRelationsOptions.#ctor">
-            <summary>
-            Initializes an instance of PickerRelationsOptions
-            </summary>
-        </member>
         <member name="P:umbraco.editorControls.PickerRelations.PickerRelationsOptions.PropertyAlias">
             <summary>
             Alias of the pickerProperty to get a csv value of IDs from //TODO: a known format for xml fragments would be good too
@@ -317,6 +312,11 @@
         <member name="P:umbraco.editorControls.PickerRelations.PickerRelationsOptions.HideDataEditor">
             <summary>
             if true then the property is hidden
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.PickerRelations.PickerRelationsOptions.#ctor">
+            <summary>
+            Initializes an instance of PickerRelationsOptions
             </summary>
         </member>
         <member name="T:umbraco.editorControls.PickerRelations.PickerRelationsPreValueEditor">
@@ -369,6 +369,16 @@
             Currently selected RelationType
             </summary>
         </member>
+        <member name="P:umbraco.editorControls.PickerRelations.PickerRelationsPreValueEditor.Options">
+            <summary>
+            Lazy load the options data object that represents the current state of this datatypes configuration
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.PickerRelations.PickerRelationsPreValueEditor.RelationType">
+            <summary>
+            Lazy load currently selected RelationType
+            </summary>
+        </member>
         <member name="M:umbraco.editorControls.PickerRelations.PickerRelationsPreValueEditor.#ctor(umbraco.cms.businesslogic.datatype.BaseDataType)">
             <summary>
             Initialize a new instance of PickerRelationsPreValueEditor
@@ -402,16 +412,6 @@
             Replaces the base class writer and instead uses the shared uComponents extension method, to inject consistant markup
             </summary>
             <param name="writer"></param>
-        </member>
-        <member name="P:umbraco.editorControls.PickerRelations.PickerRelationsPreValueEditor.Options">
-            <summary>
-            Lazy load the options data object that represents the current state of this datatypes configuration
-            </summary>
-        </member>
-        <member name="P:umbraco.editorControls.PickerRelations.PickerRelationsPreValueEditor.RelationType">
-            <summary>
-            Lazy load currently selected RelationType
-            </summary>
         </member>
         <member name="P:umbraco.editorControls.BaseDataType.SqlHelper">
             <summary>
@@ -530,14 +530,14 @@
             Summary description for DataTypeDatefieldMultiple.
             </summary>
         </member>
-        <member name="T:umbraco.editorControls.datepicker.DateDataType">
-            <summary>
-            Summary description for DateDataType.
-            </summary>
-        </member>
         <member name="T:umbraco.editorControls.datepicker.DateData">
             <summary>
             Summary description for DateData.
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.datepicker.DateDataType">
+            <summary>
+            Summary description for DateDataType.
             </summary>
         </member>
         <member name="T:umbraco.editorControls.dateField">
@@ -562,6 +562,11 @@
             <param name="xmlDocument"></param>
             <returns></returns>		
         </member>
+        <member name="P:umbraco.editorControls.DefaultPrevalueEditor.SqlHelper">
+            <summary>
+            Unused, please do not use
+            </summary>
+        </member>
         <member name="M:umbraco.editorControls.DefaultPrevalueEditor.#ctor(umbraco.cms.businesslogic.datatype.BaseDataType,System.Boolean)">
             <summary>
             The default editor for editing the built-in pre values in umbraco
@@ -576,11 +581,6 @@
             </summary>
             <param name="DataType">The DataType to be parsed (note: the BaseDataType from editorControls is obsolete)</param>
             <param name="DisplayTextBox">Whether to use the default text box</param>
-        </member>
-        <member name="P:umbraco.editorControls.DefaultPrevalueEditor.SqlHelper">
-            <summary>
-            Unused, please do not use
-            </summary>
         </member>
         <member name="T:umbraco.editorControls.dictionaryPicker.dictionaryPicker">
             <summary>
@@ -777,11 +777,6 @@
             Returns the selected Macro's in a comma separated string
             </summary>
         </member>
-        <member name="M:umbraco.editorControls.macrocontainer.PrevalueEditor.Save">
-            <summary>
-            Save settings
-            </summary>
-        </member>
         <member name="P:umbraco.editorControls.macrocontainer.PrevalueEditor.Datatype">
             <summary>
             Reference to the datatype 
@@ -790,6 +785,11 @@
         <member name="P:umbraco.editorControls.macrocontainer.PrevalueEditor.Editor">
             <summary>
             Reference to the editor
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.macrocontainer.PrevalueEditor.Save">
+            <summary>
+            Save settings
             </summary>
         </member>
         <member name="T:umbraco.editorControls.mediaChooser">
@@ -959,19 +959,6 @@
             The start node id determined by the defined id and by the user's defined id
             </summary>
         </member>
-        <member name="M:umbraco.editorControls.MultiNodeTreePicker.FilteredContentTree.CreateRootNode(umbraco.cms.presentation.Trees.XmlTreeNode@)">
-            <summary>
-            Creates the root node.
-            </summary>
-            <param name="rootNode">The root node.</param>
-        </member>
-        <member name="M:umbraco.editorControls.MultiNodeTreePicker.FilteredContentTree.OnRenderNode(umbraco.cms.presentation.Trees.XmlTreeNode@,umbraco.cms.businesslogic.web.Document)">
-            <summary>
-            Called when [render node].
-            </summary>
-            <param name="xNode">The x node.</param>
-            <param name="doc">The doc.</param>
-        </member>
         <member name="P:umbraco.editorControls.MultiNodeTreePicker.FilteredContentTree.UserStartNodeDoc">
             <summary>
             Returns the Document object of the starting node for the current User. This ensures
@@ -989,6 +976,19 @@
             Determines the allowed start node id based on the users start node id and the 
             defined start node id in the data type.
             </summary>
+        </member>
+        <member name="M:umbraco.editorControls.MultiNodeTreePicker.FilteredContentTree.CreateRootNode(umbraco.cms.presentation.Trees.XmlTreeNode@)">
+            <summary>
+            Creates the root node.
+            </summary>
+            <param name="rootNode">The root node.</param>
+        </member>
+        <member name="M:umbraco.editorControls.MultiNodeTreePicker.FilteredContentTree.OnRenderNode(umbraco.cms.presentation.Trees.XmlTreeNode@,umbraco.cms.businesslogic.web.Document)">
+            <summary>
+            Called when [render node].
+            </summary>
+            <param name="xNode">The x node.</param>
+            <param name="doc">The doc.</param>
         </member>
         <member name="T:umbraco.editorControls.MultiNodeTreePicker.FilteredMediaTree">
             <summary>
@@ -1011,9 +1011,27 @@
             
             </summary>
         </member>
+        <member name="P:umbraco.editorControls.MultiNodeTreePicker.FilteredMediaTree.UserStartNodeDoc">
+            <summary>
+            Returns the Media object of the starting node for the current User. This ensures
+            that the Media object is only instantiated once.
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.MultiNodeTreePicker.FilteredMediaTree.DefinedStartNodeMedia">
+            <summary>
+            Returns the Media object of the starting node that is defined in the prevalue editor. This ensures
+            that the Media object is only instantiated once.
+            </summary>
+        </member>
         <member name="F:umbraco.editorControls.MultiNodeTreePicker.FilteredMediaTree.m_DeterminedStartNodeId">
             <summary>
             The start node id determined by the defined id and by the user's defined id
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.MultiNodeTreePicker.FilteredMediaTree.StartNodeID">
+            <summary>
+            Determines the allowed start node id based on the users start node id and the 
+            defined start node id in the data type.
             </summary>
         </member>
         <member name="M:umbraco.editorControls.MultiNodeTreePicker.FilteredMediaTree.CreateRootNode(umbraco.cms.presentation.Trees.XmlTreeNode@)">
@@ -1029,24 +1047,6 @@
             <param name="sender">The sender.</param>
             <param name="node">The node.</param>
             <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
-        </member>
-        <member name="P:umbraco.editorControls.MultiNodeTreePicker.FilteredMediaTree.UserStartNodeDoc">
-            <summary>
-            Returns the Media object of the starting node for the current User. This ensures
-            that the Media object is only instantiated once.
-            </summary>
-        </member>
-        <member name="P:umbraco.editorControls.MultiNodeTreePicker.FilteredMediaTree.DefinedStartNodeMedia">
-            <summary>
-            Returns the Media object of the starting node that is defined in the prevalue editor. This ensures
-            that the Media object is only instantiated once.
-            </summary>
-        </member>
-        <member name="P:umbraco.editorControls.MultiNodeTreePicker.FilteredMediaTree.StartNodeID">
-            <summary>
-            Determines the allowed start node id based on the users start node id and the 
-            defined start node id in the data type.
-            </summary>
         </member>
         <member name="T:umbraco.editorControls.MultiNodeTreePicker.HttpCookieExtensions">
             <summary>
@@ -1300,6 +1300,11 @@
             Initializes a new instance of the <see cref="T:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataEditor"/> class.
             </summary>
         </member>
+        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataEditor.Value">
+            <summary>
+            This is used for validation purposes only, see the [ValidationProperty("Value")] attribute above.
+            </summary>
+        </member>
         <member name="F:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataEditor.MinItemsValidator">
             <summary>
             
@@ -1323,90 +1328,6 @@
         <member name="F:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataEditor.RightColumn">
             <summary>
             
-            </summary>
-        </member>
-        <member name="M:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataEditor.OnInit(System.EventArgs)">
-            <summary>
-            Initialize the control, make sure children are created
-            </summary>
-            <param name="e">An <see cref="T:System.EventArgs"/> object that contains the event data.</param>
-        </member>
-        <member name="M:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataEditor.OnLoad(System.EventArgs)">
-            <summary>
-            Add the resources (sytles/scripts)
-            </summary>
-            <param name="e"></param>
-        </member>
-        <member name="M:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataEditor.CreateChildControls">
-            <summary>
-            Creates the child controls for this control
-            </summary>
-        </member>
-        <member name="M:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataEditor.DataBind">
-            <summary>
-            Ensure the repeater is data bound
-            </summary>
-        </member>
-        <member name="M:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataEditor.SelectedValues_ItemDataBound(System.Object,System.Web.UI.WebControls.RepeaterItemEventArgs)">
-            <summary>
-            Event handler for the selected node repeater. 
-            This will fill in all of the text values, icons, etc.. for nodes based on their ID.
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataEditor.OnPreRender(System.EventArgs)">
-            <summary>
-            set the nodekey to the id of this datatype
-            </summary>
-            <remarks>
-            this is how get the xpath out of the cookie to know how the tree knows how to filter things.
-            generally the nodekey is used for a string id, but we'll use it for something different.
-            </remarks>
-            <param name="e"></param>
-        </member>
-        <member name="M:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataEditor.Render(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Override render to control the exact output of what is rendered this includes instantiating the jquery plugin
-            </summary>
-            <param name="writer">The <see cref="T:System.Web.UI.HtmlTextWriter"/> object that receives the server control content.</param>
-            <remarks>
-            Generally i don't like to do this but there's a few div's, etc... to render so this makes more sense.
-            </remarks>
-        </member>
-        <member name="M:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataEditor.ConvertToXDocument(System.Collections.Generic.IEnumerable{System.String})">
-            <summary>
-            converts a list of Ids to the XDocument structure
-            </summary>
-            <param name="val">The value.</param>
-            <returns></returns>
-        </member>
-        <member name="M:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataEditor.RenderTooltip(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            this will render the tooltip object on the page so long as another 
-            one hasn't already been registered. There should only be one tooltip.
-            </summary>
-        </member>
-        <member name="M:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataEditor.SavePersistentValuesForTree(System.String)">
-            <summary>
-            This will update the multi-node tree picker data which is used to store
-            the xpath data and xpath match type for this control id.
-            </summary>
-            <param name="xpath">The xpath.</param>
-            <remarks>
-            This will save the data into a cookie and also into the request cookie. It must save
-            it to both locations in case the request cookie has been changed and the request cookie
-            is different than the response cookie.
-            </remarks>
-        </member>
-        <member name="F:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataEditor.IconPath">
-            <summary>
-            A reference path to where the icons are actually stored as compared to where the tree themes folder is
-            </summary>
-        </member>
-        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataEditor.Value">
-            <summary>
-            This is used for validation purposes only, see the [ValidationProperty("Value")] attribute above.
             </summary>
         </member>
         <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataEditor.SelectedIds">
@@ -1501,6 +1422,85 @@
             The height of the tree control box in pixels
             </summary>
         </member>
+        <member name="M:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataEditor.OnInit(System.EventArgs)">
+            <summary>
+            Initialize the control, make sure children are created
+            </summary>
+            <param name="e">An <see cref="T:System.EventArgs"/> object that contains the event data.</param>
+        </member>
+        <member name="M:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataEditor.OnLoad(System.EventArgs)">
+            <summary>
+            Add the resources (sytles/scripts)
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataEditor.CreateChildControls">
+            <summary>
+            Creates the child controls for this control
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataEditor.DataBind">
+            <summary>
+            Ensure the repeater is data bound
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataEditor.SelectedValues_ItemDataBound(System.Object,System.Web.UI.WebControls.RepeaterItemEventArgs)">
+            <summary>
+            Event handler for the selected node repeater. 
+            This will fill in all of the text values, icons, etc.. for nodes based on their ID.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataEditor.OnPreRender(System.EventArgs)">
+            <summary>
+            set the nodekey to the id of this datatype
+            </summary>
+            <remarks>
+            this is how get the xpath out of the cookie to know how the tree knows how to filter things.
+            generally the nodekey is used for a string id, but we'll use it for something different.
+            </remarks>
+            <param name="e"></param>
+        </member>
+        <member name="M:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataEditor.Render(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Override render to control the exact output of what is rendered this includes instantiating the jquery plugin
+            </summary>
+            <param name="writer">The <see cref="T:System.Web.UI.HtmlTextWriter"/> object that receives the server control content.</param>
+            <remarks>
+            Generally i don't like to do this but there's a few div's, etc... to render so this makes more sense.
+            </remarks>
+        </member>
+        <member name="M:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataEditor.ConvertToXDocument(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            converts a list of Ids to the XDocument structure
+            </summary>
+            <param name="val">The value.</param>
+            <returns></returns>
+        </member>
+        <member name="M:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataEditor.RenderTooltip(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            this will render the tooltip object on the page so long as another 
+            one hasn't already been registered. There should only be one tooltip.
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataEditor.SavePersistentValuesForTree(System.String)">
+            <summary>
+            This will update the multi-node tree picker data which is used to store
+            the xpath data and xpath match type for this control id.
+            </summary>
+            <param name="xpath">The xpath.</param>
+            <remarks>
+            This will save the data into a cookie and also into the request cookie. It must save
+            it to both locations in case the request cookie has been changed and the request cookie
+            is different than the response cookie.
+            </remarks>
+        </member>
+        <member name="F:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataEditor.IconPath">
+            <summary>
+            A reference path to where the icons are actually stored as compared to where the tree themes folder is
+            </summary>
+        </member>
         <member name="T:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataType">
             <summary>
             Multi-node tree picker data type
@@ -1519,6 +1519,23 @@
         <member name="F:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataType.m_PreValues">
             <summary>
             Internal pre value editor to render
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataType.Id">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataType.DataTypeName">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataType.Data">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataType.StoreAsCommaDelimited">
+            <summary>
+            Value indicating whether to store as comma separated or Xml
             </summary>
         </member>
         <member name="M:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataType.Tree_Init(System.Object,System.EventArgs)">
@@ -1540,7 +1557,12 @@
             Handle the saving event, need to give data to Umbraco
             </summary>
             <param name="sender">The source of the event.</param>
-            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+            <param name="e">The <see cref="T:System.EventArgs" /> instance containing the event data.</param>
+        </member>
+        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataType.PrevalueEditor">
+            <summary>
+            return a custom pre value editor
+            </summary>
         </member>
         <member name="M:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataType.ClearCookiePersistence">
             <summary>
@@ -1548,31 +1570,74 @@
             This is used on app startup and after editing the pre-value editor
             </summary>
         </member>
-        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataType.Id">
-            <summary>
-            </summary>
-        </member>
-        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataType.DataTypeName">
-            <summary>
-            </summary>
-        </member>
-        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataType.Data">
-            <summary>
-            </summary>
-        </member>
-        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataType.StoreAsCommaDelimited">
-            <summary>
-            Value indicating whether to store as comma separated or Xml
-            </summary>
-        </member>
-        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataType.PrevalueEditor">
-            <summary>
-            return a custom pre value editor
-            </summary>
-        </member>
         <member name="T:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor">
             <summary>
             The pre-value editor for the multi node tree picker.
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.SelectedTreeType">
+            <summary>
+            The chosen tree type to render
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.XPathFilter">
+            <summary>
+            An xpath filter to disable nodes to be selectable
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.MaxNodeCount">
+            <summary>
+            The number of nodes this picker will support picking
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.MinNodeCount">
+            <summary>
+            The minimum number of nodes this picker will support picking
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.ShowToolTip">
+            <summary>
+            A boolean value indicating whether or not to show the informational tool tips 
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.StoreAsCommaDelimited">
+            <summary>
+            Value to check if the data should be stored as CSV or XML
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.StartNodeXPathExpression">
+            <summary>
+            The XPath expression used when the node type selection is Xpath
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.StartNodeXPathExpressionType">
+            <summary>
+            The type of xpath expression used for the xpathexpressiontext if using an xpath node selection
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.StartNodeSelectionType">
+            <summary>
+            The type of selection type to use for the start node
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.XPathFilterMatchType">
+            <summary>
+            The type of xpath filter applied
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.StartNodeId">
+            <summary>
+            The start node id used when the node selection is a picker
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.ShowThumbnailsForMedia">
+            <summary>
+            A boolean value indicating whether or not to show the thumbnails for media 
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.ControlHeight">
+            <summary>
+             Returns the control height in pixels
             </summary>
         </member>
         <member name="F:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.ControlHeightTextBox">
@@ -1718,9 +1783,19 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.Editor">
+            <summary>
+             returns this as it's own editor
+            </summary>
+        </member>
         <member name="M:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.Save">
             <summary>
             Saves data to Umbraco
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.PropertyIndex">
+            <summary>
+            Used to determine the index number of where the property is saved in the pre values repository
             </summary>
         </member>
         <member name="M:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.SavePreValue(umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.PropertyIndex,System.String,System.Collections.SortedList)">
@@ -1740,81 +1815,6 @@
             <param name="defaultVal"></param>
             <typeparam name="T"></typeparam>
             <returns></returns>
-        </member>
-        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.SelectedTreeType">
-            <summary>
-            The chosen tree type to render
-            </summary>
-        </member>
-        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.XPathFilter">
-            <summary>
-            An xpath filter to disable nodes to be selectable
-            </summary>
-        </member>
-        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.MaxNodeCount">
-            <summary>
-            The number of nodes this picker will support picking
-            </summary>
-        </member>
-        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.MinNodeCount">
-            <summary>
-            The minimum number of nodes this picker will support picking
-            </summary>
-        </member>
-        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.ShowToolTip">
-            <summary>
-            A boolean value indicating whether or not to show the informational tool tips 
-            </summary>
-        </member>
-        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.StoreAsCommaDelimited">
-            <summary>
-            Value to check if the data should be stored as CSV or XML
-            </summary>
-        </member>
-        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.StartNodeXPathExpression">
-            <summary>
-            The XPath expression used when the node type selection is Xpath
-            </summary>
-        </member>
-        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.StartNodeXPathExpressionType">
-            <summary>
-            The type of xpath expression used for the xpathexpressiontext if using an xpath node selection
-            </summary>
-        </member>
-        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.StartNodeSelectionType">
-            <summary>
-            The type of selection type to use for the start node
-            </summary>
-        </member>
-        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.XPathFilterMatchType">
-            <summary>
-            The type of xpath filter applied
-            </summary>
-        </member>
-        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.StartNodeId">
-            <summary>
-            The start node id used when the node selection is a picker
-            </summary>
-        </member>
-        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.ShowThumbnailsForMedia">
-            <summary>
-            A boolean value indicating whether or not to show the thumbnails for media 
-            </summary>
-        </member>
-        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.ControlHeight">
-            <summary>
-             Returns the control height in pixels
-            </summary>
-        </member>
-        <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.Editor">
-            <summary>
-             returns this as it's own editor
-            </summary>
-        </member>
-        <member name="T:umbraco.editorControls.MultiNodeTreePicker.MNTP_PrevalueEditor.PropertyIndex">
-            <summary>
-            Used to determine the index number of where the property is saved in the pre values repository
-            </summary>
         </member>
         <member name="T:umbraco.editorControls.MultiNodeTreePicker.NodeSelectionType">
             <summary>
@@ -1901,6 +1901,24 @@
             The HiddenField to store the selected values.
             </summary>
         </member>
+        <member name="P:umbraco.editorControls.MultipleTextstring.MultipleTextstringControl.Options">
+            <summary>
+            Gets or sets the options.
+            </summary>
+            <value>The options.</value>
+        </member>
+        <member name="P:umbraco.editorControls.MultipleTextstring.MultipleTextstringControl.IsValid">
+            <summary>
+            Gets the value of IsValid.
+            </summary>
+            <value>Returns 'Valid' if valid, otherwise an empty string.</value>
+        </member>
+        <member name="P:umbraco.editorControls.MultipleTextstring.MultipleTextstringControl.Values">
+            <summary>
+            Gets or sets the values.
+            </summary>
+            <value>The values.</value>
+        </member>
         <member name="M:umbraco.editorControls.MultipleTextstring.MultipleTextstringControl.OnInit(System.EventArgs)">
             <summary>
             Initialize the control, make sure children are created
@@ -1930,24 +1948,6 @@
             </summary>
             <param name="writer">The <see cref="T:System.Web.UI.HtmlTextWriter"/> object that receives the server control content.</param>
         </member>
-        <member name="P:umbraco.editorControls.MultipleTextstring.MultipleTextstringControl.Options">
-            <summary>
-            Gets or sets the options.
-            </summary>
-            <value>The options.</value>
-        </member>
-        <member name="P:umbraco.editorControls.MultipleTextstring.MultipleTextstringControl.IsValid">
-            <summary>
-            Gets the value of IsValid.
-            </summary>
-            <value>Returns 'Valid' if valid, otherwise an empty string.</value>
-        </member>
-        <member name="P:umbraco.editorControls.MultipleTextstring.MultipleTextstringControl.Values">
-            <summary>
-            Gets or sets the values.
-            </summary>
-            <value>The values.</value>
-        </member>
         <member name="T:umbraco.editorControls.MultipleTextstring.MultipleTextstringDataType">
             <summary>
             Data Editor for the Multiple Textstring data type.
@@ -1973,19 +1973,6 @@
             Initializes a new instance of the <see cref="T:umbraco.editorControls.MultipleTextstring.MultipleTextstringDataType"/> class.
             </summary>
         </member>
-        <member name="M:umbraco.editorControls.MultipleTextstring.MultipleTextstringDataType.m_Control_Init(System.Object,System.EventArgs)">
-            <summary>
-            Handles the Init event of the control.
-            </summary>
-            <param name="sender">The source of the event.</param>
-            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
-        </member>
-        <member name="M:umbraco.editorControls.MultipleTextstring.MultipleTextstringDataType.DataEditorControl_OnSave(System.EventArgs)">
-            <summary>
-            Saves the data for the editor control.
-            </summary>
-            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
-        </member>
         <member name="P:umbraco.editorControls.MultipleTextstring.MultipleTextstringDataType.Id">
             <summary>
             Gets the id of the data-type.
@@ -2009,6 +1996,19 @@
             Gets the prevalue editor.
             </summary>
             <value>The prevalue editor.</value>
+        </member>
+        <member name="M:umbraco.editorControls.MultipleTextstring.MultipleTextstringDataType.m_Control_Init(System.Object,System.EventArgs)">
+            <summary>
+            Handles the Init event of the control.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:umbraco.editorControls.MultipleTextstring.MultipleTextstringDataType.DataEditorControl_OnSave(System.EventArgs)">
+            <summary>
+            Saves the data for the editor control.
+            </summary>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
         </member>
         <member name="T:umbraco.editorControls.MultipleTextstring.MultipleTextstringOptions">
             <summary>
@@ -2215,29 +2215,6 @@
             The jQuery UI Slider control.
             </summary>
         </member>
-        <member name="M:umbraco.editorControls.Slider.SliderControl.OnInit(System.EventArgs)">
-            <summary>
-            Initialize the control, make sure children are created
-            </summary>
-            <param name="e">An <see cref="T:System.EventArgs"/> object that contains the event data.</param>
-        </member>
-        <member name="M:umbraco.editorControls.Slider.SliderControl.OnLoad(System.EventArgs)">
-            <summary>
-            Add the resources (sytles/scripts)
-            </summary>
-            <param name="e">The <see cref="T:System.EventArgs"/> object that contains the event data.</param>
-        </member>
-        <member name="M:umbraco.editorControls.Slider.SliderControl.CreateChildControls">
-            <summary>
-            Called by the ASP.NET page framework to notify server controls that use composition-based implementation to create any child controls they contain in preparation for posting back or rendering.
-            </summary>
-        </member>
-        <member name="M:umbraco.editorControls.Slider.SliderControl.Render(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Sends server control content to a provided <see cref="T:System.Web.UI.HtmlTextWriter"/> object, which writes the content to be rendered on the client.
-            </summary>
-            <param name="writer">The <see cref="T:System.Web.UI.HtmlTextWriter"/> object that receives the server control content.</param>
-        </member>
         <member name="P:umbraco.editorControls.Slider.SliderControl.Options">
             <summary>
             Gets or sets the slider options.
@@ -2262,6 +2239,29 @@
             </summary>
             <value>The div slider control.</value>
         </member>
+        <member name="M:umbraco.editorControls.Slider.SliderControl.OnInit(System.EventArgs)">
+            <summary>
+            Initialize the control, make sure children are created
+            </summary>
+            <param name="e">An <see cref="T:System.EventArgs"/> object that contains the event data.</param>
+        </member>
+        <member name="M:umbraco.editorControls.Slider.SliderControl.OnLoad(System.EventArgs)">
+            <summary>
+            Add the resources (sytles/scripts)
+            </summary>
+            <param name="e">The <see cref="T:System.EventArgs"/> object that contains the event data.</param>
+        </member>
+        <member name="M:umbraco.editorControls.Slider.SliderControl.CreateChildControls">
+            <summary>
+            Called by the ASP.NET page framework to notify server controls that use composition-based implementation to create any child controls they contain in preparation for posting back or rendering.
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.Slider.SliderControl.Render(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Sends server control content to a provided <see cref="T:System.Web.UI.HtmlTextWriter"/> object, which writes the content to be rendered on the client.
+            </summary>
+            <param name="writer">The <see cref="T:System.Web.UI.HtmlTextWriter"/> object that receives the server control content.</param>
+        </member>
         <member name="T:umbraco.editorControls.Slider.SliderDataType">
             <summary>
             A jQuery UI Slider data-type for Umbraco.
@@ -2282,19 +2282,6 @@
             Initializes a new instance of the <see cref="T:umbraco.editorControls.Slider.SliderDataType"/> class.
             </summary>
         </member>
-        <member name="M:umbraco.editorControls.Slider.SliderDataType.m_Control_Init(System.Object,System.EventArgs)">
-            <summary>
-            Handles the Init event of the m_Placeholder control.
-            </summary>
-            <param name="sender">The source of the event.</param>
-            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
-        </member>
-        <member name="M:umbraco.editorControls.Slider.SliderDataType.DataEditorControl_OnSave(System.EventArgs)">
-            <summary>
-            Saves the editor control value.
-            </summary>
-            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
-        </member>
         <member name="P:umbraco.editorControls.Slider.SliderDataType.Id">
             <summary>
             Gets the id of the data-type.
@@ -2312,6 +2299,19 @@
             Gets the prevalue editor.
             </summary>
             <value>The prevalue editor.</value>
+        </member>
+        <member name="M:umbraco.editorControls.Slider.SliderDataType.m_Control_Init(System.Object,System.EventArgs)">
+            <summary>
+            Handles the Init event of the m_Placeholder control.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:umbraco.editorControls.Slider.SliderDataType.DataEditorControl_OnSave(System.EventArgs)">
+            <summary>
+            Saves the editor control value.
+            </summary>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
         </member>
         <member name="T:umbraco.editorControls.Slider.SliderOptions">
             <summary>
@@ -2576,6 +2576,11 @@
             Unused, please do not use
             </summary>
         </member>
+        <member name="P:umbraco.editorControls.userControlGrapper.usercontrolPrevalueEditor.SqlHelper">
+            <summary>
+            Unused, please do not use
+            </summary>
+        </member>
         <member name="T:umbraco.editorControls.tinyMCE3.webcontrol.plugin.ConfigSection">
             <summary>
             Description of ConfigSection.
@@ -2636,6 +2641,21 @@
             
             </summary>
         </member>
+        <member name="P:umbraco.editorControls.tinyMCE3.webcontrol.plugin.GzipCompressor.NoCompression">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.tinyMCE3.webcontrol.plugin.GzipCompressor.DiskCache">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.tinyMCE3.webcontrol.plugin.GzipCompressor.CachePath">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.GzipCompressor.AddFile(System.String)">
             <summary>
             
@@ -2654,25 +2674,14 @@
             </summary>
             <param name="to_stream"></param>
         </member>
-        <member name="P:umbraco.editorControls.tinyMCE3.webcontrol.plugin.GzipCompressor.NoCompression">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:umbraco.editorControls.tinyMCE3.webcontrol.plugin.GzipCompressor.DiskCache">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:umbraco.editorControls.tinyMCE3.webcontrol.plugin.GzipCompressor.CachePath">
-            <summary>
-            
-            </summary>
-        </member>
         <member name="T:umbraco.editorControls.tinyMCE3.webcontrol.plugin.GzipModule">
             <summary>
             Description of HttpHandler.
             </summary>
+        </member>
+        <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.GzipModule.ProcessRequest(System.Web.HttpContext)">
+            <summary></summary>
+            <param name="context">Request context.</param>
         </member>
         <member name="T:umbraco.editorControls.tinyMCE3.webcontrol.plugin.IModule">
             <summary>
@@ -2684,10 +2693,6 @@
             
             </summary>
             <param name="context"></param>
-        </member>
-        <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.GzipModule.ProcessRequest(System.Web.HttpContext)">
-            <summary></summary>
-            <param name="context">Request context.</param>
         </member>
         <member name="T:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSON">
             <summary>
@@ -2791,18 +2796,6 @@
             </summary>
             <param name="reader"></param>
         </member>
-        <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONReader.Read">
-            <summary>
-            
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONReader.ToString">
-            <summary>
-            
-            </summary>
-            <returns></returns>
-        </member>
         <member name="P:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONReader.Location">
             <summary>
             
@@ -2817,6 +2810,18 @@
             <summary>
             
             </summary>
+        </member>
+        <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONReader.Read">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONReader.ToString">
+            <summary>
+            
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONLocation">
             <summary>
@@ -2899,6 +2904,12 @@
             <param name="str"></param>
             <returns></returns>
         </member>
+        <member name="P:umbraco.editorControls.ultimatepicker.ultimatePickerDataEditor.IsValid">
+            <summary>
+            Internal logic for validation controls to detect whether or not it's valid (has to be public though) 
+            </summary>
+            <value>Am I valid?</value>
+        </member>
         <member name="M:umbraco.editorControls.ultimatepicker.ultimatePickerDataEditor.addListControlNode(umbraco.cms.businesslogic.Content,System.Int32,System.Boolean,System.Web.UI.WebControls.ListControl,System.String[])">
             <summary>
             Adds sub nodes to the ListControl object passed into the method, based on the Content node passed in
@@ -2914,11 +2925,10 @@
             Sets up the autocomplete functionality
             </summary>
         </member>
-        <member name="P:umbraco.editorControls.ultimatepicker.ultimatePickerDataEditor.IsValid">
+        <member name="P:umbraco.editorControls.ultimatepicker.ultimatePickerPrevalueEditor.SqlHelper">
             <summary>
-            Internal logic for validation controls to detect whether or not it's valid (has to be public though) 
+            Unused, please do not use
             </summary>
-            <value>Am I valid?</value>
         </member>
         <member name="M:umbraco.editorControls.ultimatepicker.ultimatePickerPrevalueEditor.validateFilterInput(System.String)">
             <summary>
@@ -2926,11 +2936,6 @@
             </summary>
             <param name="filterInput">The filter string to be validated</param>
             <returns>A validated filtered comma separated string</returns>
-        </member>
-        <member name="P:umbraco.editorControls.ultimatepicker.ultimatePickerPrevalueEditor.SqlHelper">
-            <summary>
-            Unused, please do not use
-            </summary>
         </member>
         <member name="T:umbraco.editorControls.uploadfield.DataTypeUploadField">
             <summary>
@@ -2947,6 +2952,20 @@
             Always returns FileHandlerData
             </summary>
         </member>
+        <member name="P:umbraco.editorControls.uploadfield.uploadFieldPreValue.SqlHelper">
+            <summary>
+            Unused, please do not use
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.uploadField.IsValid">
+            <summary>
+            Internal logic for validation controls to detect whether or not it's valid (has to be public though) 
+            </summary>
+            <value>Am I valid?</value>   
+            <remarks>
+            This is used for the required and regex validation of a document type's property
+            </remarks>     
+        </member>
         <member name="M:umbraco.editorControls.uploadField.IsValidFile(System.Web.HttpPostedFile)">
             <summary>
             Checks if the file is valid based on our dissallowed file types
@@ -2959,25 +2978,6 @@
             Render this control to the output parameter specified.
             </summary>
             <param name="output"> The HTML writer to write out to </param>
-        </member>
-        <member name="P:umbraco.editorControls.uploadField.IsValid">
-            <summary>
-            Internal logic for validation controls to detect whether or not it's valid (has to be public though) 
-            </summary>
-            <value>Am I valid?</value>   
-            <remarks>
-            This is used for the required and regex validation of a document type's property
-            </remarks>     
-        </member>
-        <member name="P:umbraco.editorControls.uploadfield.uploadFieldPreValue.SqlHelper">
-            <summary>
-            Unused, please do not use
-            </summary>
-        </member>
-        <member name="P:umbraco.editorControls.userControlGrapper.usercontrolPrevalueEditor.SqlHelper">
-            <summary>
-            Unused, please do not use
-            </summary>
         </member>
         <member name="T:umbraco.editorControls.XmlData">
             <summary>
@@ -3017,6 +3017,26 @@
             Field for the checkbox list.
             </summary>
         </member>
+        <member name="P:umbraco.editorControls.XPathCheckBoxList.XPathCheckBoxListDataEditor.TreatAsRichTextEditor">
+            <summary>
+            Gets a value indicating whether [treat as rich text editor].
+            </summary>
+            <value>
+                <c>true</c> if [treat as rich text editor]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:umbraco.editorControls.XPathCheckBoxList.XPathCheckBoxListDataEditor.ShowLabel">
+            <summary>
+            Gets a value indicating whether [show label].
+            </summary>
+            <value><c>true</c> if [show label]; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:umbraco.editorControls.XPathCheckBoxList.XPathCheckBoxListDataEditor.Editor">
+            <summary>
+            Gets the editor.
+            </summary>
+            <value>The editor.</value>
+        </member>
         <member name="M:umbraco.editorControls.XPathCheckBoxList.XPathCheckBoxListDataEditor.#ctor(umbraco.interfaces.IData,umbraco.editorControls.XPathCheckBoxList.XPathCheckBoxListOptions)">
             <summary>
             Initializes a new instance of XPathCheckBoxListDataEditor
@@ -3039,26 +3059,6 @@
             <summary>
             Called by Umbraco when saving the node
             </summary>
-        </member>
-        <member name="P:umbraco.editorControls.XPathCheckBoxList.XPathCheckBoxListDataEditor.TreatAsRichTextEditor">
-            <summary>
-            Gets a value indicating whether [treat as rich text editor].
-            </summary>
-            <value>
-                <c>true</c> if [treat as rich text editor]; otherwise, <c>false</c>.
-            </value>
-        </member>
-        <member name="P:umbraco.editorControls.XPathCheckBoxList.XPathCheckBoxListDataEditor.ShowLabel">
-            <summary>
-            Gets a value indicating whether [show label].
-            </summary>
-            <value><c>true</c> if [show label]; otherwise, <c>false</c>.</value>
-        </member>
-        <member name="P:umbraco.editorControls.XPathCheckBoxList.XPathCheckBoxListDataEditor.Editor">
-            <summary>
-            Gets the editor.
-            </summary>
-            <value>The editor.</value>
         </member>
         <member name="T:umbraco.editorControls.XPathCheckBoxList.XPathCheckBoxListDataType">
             <summary>
@@ -3203,6 +3203,11 @@
             Data object used to define the configuration status of this PreValueEditor
             </summary>
         </member>
+        <member name="P:umbraco.editorControls.XPathCheckBoxList.XPathCheckBoxListPreValueEditor.Options">
+            <summary>
+            Gets the options data object that represents the current state of this datatypes configuration
+            </summary>
+        </member>
         <member name="M:umbraco.editorControls.XPathCheckBoxList.XPathCheckBoxListPreValueEditor.#ctor(umbraco.cms.businesslogic.datatype.BaseDataType)">
             <summary>
             Initialize a new instance of XPathCheckBoxlistPreValueEditor
@@ -3238,11 +3243,6 @@
             </summary>
             <param name="writer"></param>
         </member>
-        <member name="P:umbraco.editorControls.XPathCheckBoxList.XPathCheckBoxListPreValueEditor.Options">
-            <summary>
-            Gets the options data object that represents the current state of this datatypes configuration
-            </summary>
-        </member>
         <member name="T:umbraco.editorControls.XPathDropDownList.XPathDropDownListDataEditor">
             <summary>
             XPath configurabale DropDownList Data Type
@@ -3268,6 +3268,26 @@
             Field for the DropDownList.
             </summary>
         </member>
+        <member name="P:umbraco.editorControls.XPathDropDownList.XPathDropDownListDataEditor.TreatAsRichTextEditor">
+            <summary>
+            Gets a value indicating whether [treat as rich text editor].
+            </summary>
+            <value>
+            	<c>true</c> if [treat as rich text editor]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:umbraco.editorControls.XPathDropDownList.XPathDropDownListDataEditor.ShowLabel">
+            <summary>
+            Gets a value indicating whether [show label].
+            </summary>
+            <value><c>true</c> if [show label]; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:umbraco.editorControls.XPathDropDownList.XPathDropDownListDataEditor.Editor">
+            <summary>
+            Gets the editor.
+            </summary>
+            <value>The editor.</value>
+        </member>
         <member name="M:umbraco.editorControls.XPathDropDownList.XPathDropDownListDataEditor.#ctor(umbraco.interfaces.IData,umbraco.editorControls.XPathDropDownList.XPathDropDownListOptions)">
             <summary>
             Initializes a new instance of XPathCheckBoxListDataEditor
@@ -3290,26 +3310,6 @@
             <summary>
             Called by Umbraco when saving the node
             </summary>
-        </member>
-        <member name="P:umbraco.editorControls.XPathDropDownList.XPathDropDownListDataEditor.TreatAsRichTextEditor">
-            <summary>
-            Gets a value indicating whether [treat as rich text editor].
-            </summary>
-            <value>
-            	<c>true</c> if [treat as rich text editor]; otherwise, <c>false</c>.
-            </value>
-        </member>
-        <member name="P:umbraco.editorControls.XPathDropDownList.XPathDropDownListDataEditor.ShowLabel">
-            <summary>
-            Gets a value indicating whether [show label].
-            </summary>
-            <value><c>true</c> if [show label]; otherwise, <c>false</c>.</value>
-        </member>
-        <member name="P:umbraco.editorControls.XPathDropDownList.XPathDropDownListDataEditor.Editor">
-            <summary>
-            Gets the editor.
-            </summary>
-            <value>The editor.</value>
         </member>
         <member name="T:umbraco.editorControls.XPathDropDownList.XPathDropDownListDataType">
             <summary>
@@ -3360,11 +3360,6 @@
             Lazy load an empty DefaultData object, this is used to pass data between the PreValueEditor and the DataEditor
             </summary>
         </member>
-        <member name="M:umbraco.editorControls.XPathDropDownList.XPathDropDownListOptions.#ctor">
-            <summary>
-            Initializes an instance of XPathDropDownListOptions
-            </summary>
-        </member>
         <member name="P:umbraco.editorControls.XPathDropDownList.XPathDropDownListOptions.Type">
             <summary>
             
@@ -3385,6 +3380,11 @@
             Gets the UmbracoObjectType from the stored string guid
             </summary>
             <value>a Document, Media or Member</value>
+        </member>
+        <member name="M:umbraco.editorControls.XPathDropDownList.XPathDropDownListOptions.#ctor">
+            <summary>
+            Initializes an instance of XPathDropDownListOptions
+            </summary>
         </member>
         <member name="F:umbraco.editorControls.XPathDropDownList.XPathDropDownListPreValueEditor.typeRadioButtonList">
             <summary>
@@ -3414,6 +3414,11 @@
         <member name="F:umbraco.editorControls.XPathDropDownList.XPathDropDownListPreValueEditor.options">
             <summary>
             Data object used to define the configuration status of this PreValueEditor
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.XPathDropDownList.XPathDropDownListPreValueEditor.Options">
+            <summary>
+            Gets the options data object that represents the current state of this datatypes configuration
             </summary>
         </member>
         <member name="M:umbraco.editorControls.XPathDropDownList.XPathDropDownListPreValueEditor.#ctor(umbraco.cms.businesslogic.datatype.BaseDataType)">
@@ -3450,11 +3455,6 @@
             Replaces the base class writer and instead uses the shared uComponents extension method, to inject consistant markup
             </summary>
             <param name="writer"></param>
-        </member>
-        <member name="P:umbraco.editorControls.XPathDropDownList.XPathDropDownListPreValueEditor.Options">
-            <summary>
-            Gets the options data object that represents the current state of this datatypes configuration
-            </summary>
         </member>
         <member name="T:umbraco.editorControls.yesNo">
             <summary>

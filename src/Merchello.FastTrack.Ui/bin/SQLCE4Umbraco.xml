@@ -33,11 +33,6 @@
             <param name="commandParameters"></param>
             <returns></returns>
         </member>
-        <member name="M:SQLCE4Umbraco.SqlCeContextGuardian.CloseBackgroundConnection">
-            <summary>
-            Sometimes we need to ensure this is closed especially in unit tests
-            </summary>
-        </member>
         <member name="T:SqlCE4Umbraco.SqlCeDataReaderHelper">
             <summary>
             Class that adapts a SqlDataReader.SqlDataReader to a RecordsReaderAdapter.
@@ -140,12 +135,6 @@
         <member name="F:SqlCE4Umbraco.SqlCEInstaller.m_VersionSpecs">
             <summary>The specifications to determine the database version.</summary>
         </member>
-        <member name="M:SqlCE4Umbraco.SqlCEInstaller.#ctor(SqlCE4Umbraco.SqlCEHelper)">
-            <summary>
-            Initializes a new instance of the <see cref="T:SqlCE4Umbraco.SqlCEInstaller"/> class.
-            </summary>
-            <param name="sqlHelper">The SQL helper.</param>
-        </member>
         <member name="P:SqlCE4Umbraco.SqlCEInstaller.CanConnect">
             <summary>
             This ensures that the database exists, then runs the base method
@@ -166,6 +155,12 @@
             Only first matching specification is taken into account.
             </summary>
             <value>The version specifications.</value>
+        </member>
+        <member name="M:SqlCE4Umbraco.SqlCEInstaller.#ctor(SqlCE4Umbraco.SqlCEHelper)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SqlCE4Umbraco.SqlCEInstaller"/> class.
+            </summary>
+            <param name="sqlHelper">The SQL helper.</param>
         </member>
         <member name="P:SqlCE4Umbraco.SqlCEInstaller.FullInstallSql">
             <summary>
@@ -269,6 +264,11 @@
             Creates a table utility.
             </summary>
             <returns>The table utility</returns>
+        </member>
+        <member name="M:SQLCE4Umbraco.SqlCeContextGuardian.CloseBackgroundConnection">
+            <summary>
+            Sometimes we need to ensure this is closed especially in unit tests
+            </summary>
         </member>
     </members>
 </doc>
