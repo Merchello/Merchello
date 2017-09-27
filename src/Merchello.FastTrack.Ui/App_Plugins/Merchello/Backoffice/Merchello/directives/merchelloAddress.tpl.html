@@ -1,12 +1,11 @@
-<div class="vcard">
-    <span class="fn" data-ng-show="invoice.billToName != ''">{{address.name}}</span><br/>
-    <span class="org" data-ng-show="address.organization != ''">{{address.organization}}<br /></span>
-        <span class="adr">
-            <span class="street-address">{{address.address1}}<br /></span>
-            <span class="extended-address" data-ng-show="address.address2 != ''">{{address.address2}}<br /></span>
-            <span class="locality">{{address.locality}}</span><span data-ng-hide="address.region === '' || address.locality === ''">,</span> <span class="region">{{address.region}}</span><br /> <span class="postal-code">{{address.postalCode}}</span>
-            <span class="country-name">{{address.countryCode}}</span>
-        </span><br />
-    <span class="tel" data-ng-show="address.phone !== '' && address.phone !== null">Phone: {{address.phone}}<br /></span>
-    <span data-ng-show="address.email != ''"><a data-ng-href="mailto:{{address.email}}" class="email">{{address.email}}</a></span>
+<div>
+    <p data-ng-show="address.label != '' || address.label !== null"><strong>{{address.label}}</strong></p>
+    <span data-ng-show="address.fullName != '' || address.fullName !== null">{{address.fullName}}<br/></span>
+    <span data-ng-show="address.company != '' || address.company !== null">{{address.company}}<br/></span>
+    <span class="street-address">{{address.address1}}</span><span class="extended-address" data-ng-show="address.address2 != '' || address.address2 !== null">, {{address.address2}}</span>
+    <span class="locality" data-ng-show="address.locality != '' || address.locality !== null">{{address.locality}}, </span><span class="region">{{address.region}}</span><br/>
+    <span class="postal-code">{{address.postalCode}}</span><br/>
+    <span class="country-name">{{address.countryCode}}</span><br/>
+    <span class="tel" data-ng-show="address.phone !== '' || address.phone !== null">Phone: {{address.phone}}</span>
+    <span data-ng-show="address.email !== '' || address.email !== null">{{address.email}}</span>
 </div>

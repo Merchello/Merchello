@@ -328,11 +328,9 @@
 
                 // Use the basket checkout manager for facilate the checkout
                 var checkoutManager = basket.GetCheckoutManager();
-                checkoutManager.Customer.SaveBillToAddress(
-                    billing.AsAddress(string.Format("{0} {1}", customer.FirstName, customer.LastName)));
+                checkoutManager.Customer.SaveBillToAddress(billing.AsAddress(string.Format("{0} {1}", customer.FirstName, customer.LastName)));
 
-                checkoutManager.Customer.SaveShipToAddress(
-                    shipping.AsAddress(string.Format("{0} {1}", customer.FirstName, customer.LastName)));
+                checkoutManager.Customer.SaveShipToAddress(shipping.AsAddress(string.Format("{0} {1}", customer.FirstName, customer.LastName)));
 
                 // quote the shipment and then save it to the checkout manager
                 var shipment = basket.PackageBasket(checkoutManager.Customer.GetShipToAddress()).FirstOrDefault();

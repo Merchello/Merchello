@@ -1,124 +1,135 @@
-<form novalidate name="customerForm" data-ng-controller="Merchello.Backoffice.CustomerOverviewController" data-ng-show="loaded" data-ng-submit="save()">
-    <umb-panel val-show-validation>
+<form novalidate name="customerForm" data-ng-controller="Merchello.Backoffice.CustomerOverviewController"
+      data-ng-show="loaded" data-ng-submit="save()" class="merchello">
 
-      <div class="umb-editor-header umb-panel-header">
-        <div class="umb-panel-header-content-wrapper">
+    <div class="umb-panel umb-editor-wrapper" val-show-validation>
 
-          <div class="umb-panel-header-content">
-            <div class="umb-panel-header-left-side -top-position">
-              <div class="umb-panel-header-title-wrapper">
-                <div class="umb-panel-header-name">
-                  {{customer.firstName}} {{customer.lastName}}
+        <div class="umb-editor-header umb-panel-header">
+            <div class="umb-panel-header-content-wrapper">
+
+                <div class="umb-panel-header-content">
+                    <div class="umb-panel-header-left-side -top-position">
+                        <div class="umb-panel-header-title-wrapper">
+                            <div class="umb-panel-header-name">
+                                {{customer.firstName}} {{customer.lastName}}
+                            </div>
+                        </div>
+                        <div class="umb-editor-header__actions-menu">
+                            <div class="pull-right" style="position: relative;">
+                                <!-- options button -->
+                                <a class="btn btn-info" href="#" data-toggle="dropdown">
+                                    <localize key="general_actions">Actions</localize>
+                                    <span class="caret"></span>
+                                </a>
+                                <!-- actions -->
+                                <ul class="dropdown-menu umb-actions" role="menu" aria-labelledby="dLabel">
+                                    <li><a data-ng-click="openDeleteCustomerDialog()"><localize key="general_delete" /></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-              <div class="umb-editor-header__actions-menu">
-                <div class="btn-toolbar pull-right umb-btn-toolbar">
-                  <div class="btn-group">
-                    <a href="#" class="btn dropdown-toggle" data-toggle="dropdown"><localize key="general_actions" /> <i class="icon-navigation-down"></i></a>
-                    <ul class="dropdown-menu merchello-action-menu">
-                      <li><a data-ng-click="openDeleteCustomerDialog()"><localize key="general_delete" /></a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
+
+                <merchello-tabs tabs="tabs"></merchello-tabs>
             </div>
-          </div>
-
-          <merchello-tabs tabs="tabs"></merchello-tabs>
         </div>
-      </div>
 
-      <merchello-panel class="row-fluid">
-            <div class="merchello-pane secondary span12">
-                <div class="row-fluid flex-row">
-                    <!-- Customer Info -->
-                    <div class="span4">
-                        <div class="well customer-info flex-col">
+        <merchello-panel>
+
+
+            <div class="row-fluid">
+                <!-- Customer Info -->
+                <div class="span4">
+                    <div style="padding: 5px">
+                        <div class="well customer-info">
                             <img class="customer-avatar photo pull-left" data-ng-show="avatarUrl != ''" data-ng-src="{{ avatarUrl }}" alt="" />
                             <div class="pull-right">
                                 <merchello-edit-icon do-edit="openEditInfoDialog()"></merchello-edit-icon>
                             </div>
                             <h4>{{customer.firstName}} {{customer.lastName}}</h4>
-                            <div class="span12"><a href="mailto:{{customer.email}}">{{customer.email}}</a></div>
+                            <p>{{customer.email}}</p>
                         </div>
                     </div>
-                    <!-- Billing Address -->
-                    <div class="span4">
-                        <div class="well billing-address-info flex-col">
+                </div>
+                <!-- Billing Address -->
+                <div class="span4">
+                    <div style="padding: 5px">
+                        <div class="well billing-address-info">
                             <div class="pull-right">
                                 <merchello-edit-icon do-edit="openAddressAddEditDialog(defaultBillingAddress)"></merchello-edit-icon>
                             </div>
                             <h4>
                                 <localize key="merchelloSales_billingAddress"></localize>
                             </h4>
-                            <div class="vcard span12" data-ng-show="!defaultBillingAddress.isEmpty()">
+                            <div data-ng-show="!defaultBillingAddress.isEmpty()">
                                 <h5>{{defaultBillingAddress.label}}</h5>
-                                <span class="fn" data-ng-show="defaultBillingAddress.fullName != ''">{{defaultBillingAddress.fullName}}</span>
-                                <span class="org" data-ng-show="defaultBillingAddress.company != ''">{{defaultBillingAddress.company}}</span>
-                                <span class="adr">
-                                    <span class="street-address">{{defaultBillingAddress.address1}}</span>
-                                    <span class="extended-address" data-ng-show="defaultBillingAddress.address2 != ''">{{defaultBillingAddress.address2}}</span>
-                                    <span class="locality">{{defaultBillingAddress.locality}}</span>, <span class="region">{{defaultBillingAddress.region}}</span>, <span class="postal-code">{{defaultBillingAddress.postalCode}}</span>
-                                    <span class="country-name">{{defaultBillingAddress.countryCode}}</span>
-                                    <span class="tel" data-ng-show="defaultBillingAddress.phone != ''">Phone: {{defaultBillingAddress.phone}}</span>
-                                </span>
+                                <span data-ng-show="defaultBillingAddress.fullName != ''">{{defaultBillingAddress.fullName}}<br /></span>
+                                <span data-ng-show="defaultBillingAddress.company != ''">{{defaultBillingAddress.company}}<br /></span>
+                                <span class="street-address">{{defaultBillingAddress.address1}}</span><span class="extended-address" data-ng-show="defaultBillingAddress.address2 != ''">, {{defaultBillingAddress.address2}}</span>
+                                <span class="locality" data-ng-show="defaultBillingAddress.locality != ''">{{defaultBillingAddress.locality}}, </span><span class="region">{{defaultBillingAddress.region}}</span><br />
+                                <span class="postal-code">{{defaultBillingAddress.postalCode}}</span><br />
+                                <span class="country-name">{{defaultBillingAddress.countryCode}}</span><br />
+                                <span class="tel" data-ng-show="defaultBillingAddress.phone != ''">Phone: {{defaultBillingAddress.phone}}</span>
                             </div>
-                            <div class="span12" data-ng-show="defaultBillingAddress.isEmpty()">
-                                <h5><localize key="merchelloSales_noBillingAddress"></localize></h5>
+                            <div data-ng-show="defaultBillingAddress.isEmpty()">
+                                <p>
+                                    <i><localize key="merchelloSales_noBillingAddress"></localize></i>
+                                </p>
                             </div>
                         </div>
                     </div>
-                    <!-- Shipping Address -->
-                    <div class="span4">
-                        <div class="well shipping-address-info flex-col">
+                </div>
+                <!-- Shipping Address -->
+                <div class="span4">
+                    <div style="padding: 5px">
+                        <div class="well shipping-address-info">
                             <div class="pull-right">
                                 <merchello-edit-icon do-edit="openAddressAddEditDialog(defaultShippingAddress)"></merchello-edit-icon>
                             </div>
-                            <h4><localize key="merchelloSales_shippingAddress"></localize></h4>
-                            <div class="vcard span12" data-ng-show="!defaultShippingAddress.isEmpty()">
+                            <h4>
+                                <localize key="merchelloSales_shippingAddress"></localize>
+                            </h4>
+                            <div data-ng-show="!defaultShippingAddress.isEmpty()">
                                 <h5>{{defaultShippingAddress.label}}</h5>
-                                <span class="fn" data-ng-show="defaultShippingAddress.fullName != ''">{{defaultShippingAddress.fullName}}</span>
-                                <span class="org" data-ng-show="defaultShippingAddress.company != ''">{{defaultShippingAddress.company}}</span>
-                                <span class="adr">
-                                    <span class="street-address">{{defaultShippingAddress.address1}}</span>
-                                    <span class="extended-address" data-ng-show="defaultShippingAddress.address2 != ''">{{defaultShippingAddress.address2}}</span>
-                                    <span class="locality">{{defaultShippingAddress.locality}}</span>, <span class="region">{{defaultShippingAddress.region}}</span>, <span class="postal-code">{{defaultShippingAddress.postalCode}}</span>
-                                    <span class="country-name">{{defaultShippingAddress.countryCode}}</span>
-                                    <span class="tel" data-ng-show="defaultShippingAddress.phone != ''">Phone: {{defaultShippingAddress.phone}}</span>
-                                </span>
+                                <span data-ng-show="defaultShippingAddress.fullName != ''">{{defaultShippingAddress.fullName}}<br /></span>
+                                <span data-ng-show="defaultShippingAddress.company != ''">{{defaultShippingAddress.company}}<br /></span>
+                                <span class="street-address">{{defaultShippingAddress.address1}}</span><span class="extended-address" data-ng-show="defaultShippingAddress.address2 != ''">, {{defaultShippingAddress.address2}}</span>
+                                <span class="locality" data-ng-show="defaultShippingAddress.locality != ''">{{defaultShippingAddress.locality}}, </span><span class="region">{{defaultShippingAddress.region}}</span><br />
+                                <span class="postal-code">{{defaultShippingAddress.postalCode}}</span><br />
+                                <span class="country-name">{{defaultShippingAddress.countryCode}}</span><br />
+                                <span class="tel" data-ng-show="defaultShippingAddress.phone != ''">Phone: {{defaultShippingAddress.phone}}</span>
                             </div>
-                            <div class="span12" data-ng-show="defaultShippingAddress.isEmpty()">
-                                <h5><localize key="merchelloSales_noShippingAddress"></localize></h5>
+                            <div data-ng-show="defaultShippingAddress.isEmpty()">
+                                <p>
+                                    <i><localize key="merchelloSales_noShippingAddress"></localize></i>
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
 
             <div class="merchello-pane item-cache secondary span12">
                 <div class="row-fluid">
                     <div class="span6 basket">
                         <customer-item-cache-table item-cache-type="Basket" customer="customer" do-add="addToItemCache" do-move="moveToWishList" do-delete="removeFromItemCache" do-edit="editItemCacheItem"></customer-item-cache-table>
                     </div>
-                    <div class="span6 wishlist pull-right">
+                    <div class="span6 wishlist">
                         <customer-item-cache-table item-cache-type="Wishlist" do-move="moveToBasket" do-add="addToItemCache" do-delete="removeFromItemCache" do-edit="editItemCacheItem" customer="customer"></customer-item-cache-table>
                     </div>
                 </div>
             </div>
-
-            <div class="merchello-pane sales-history primary span12">
+            <hr />
+            <div class="sales-history">
                 <h4><localize key="merchelloCustomers_customerSaleHistory"></localize></h4>
-                <merchello-list-view builder="invoiceDisplayBuilder" load="load" get-column-value="getColumnValue" entity-type="listViewEntityType" ready="preValuesLoaded" disable-collections no-title no-filter>
+                <merchello-list-view builder="invoiceDisplayBuilder" load="load" get-column-value="getColumnValue" entity-type="listViewEntityType" ready="preValuesLoaded" disable-collections no-title no-filter></merchello-list-view>
+            </div>
+            <hr/>
+            <div class="control-group umb-control-group">
+                <merchello-notes-table entity-type="entityType" notes="customer.notes" save="saveCustomer()" delete="deleteNote"></merchello-notes-table>
             </div>
 
-            <div class="merchello-pane secondary span12">
-                <div class="control-group umb-control-group">
-                    <merchello-notes-table entity-type="entityType" notes="customer.notes" save="saveCustomer()" delete="deleteNote"></merchello-notes-table>
-                </div>
+            <entity-static-collections pre-values-loaded="preValuesLoaded" entity-type="entityType" entity="customer"></entity-static-collections>
 
-                <entity-static-collections pre-values-loaded="preValuesLoaded" entity-type="entityType" entity="customer"></entity-static-collections>
-            </div>
         </merchello-panel>
-    </umb-panel>
+    </div>
 </form>

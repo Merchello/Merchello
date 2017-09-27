@@ -3301,6 +3301,10 @@ angular.module('merchello').controller('Merchello.Customer.Dialogs.CustomerNewCu
                     customer.firstName = $scope.firstName;
                     customer.lastName = $scope.lastName;
 
+                    if (customer.extendedData.items.length <= 0) {
+                        customer.extendedData.items = null;
+                    }
+
                     var promiseSaveCustomer = customerResource.AddCustomer(customer);
                     promiseSaveCustomer.then(function (customerResponse) {
                         notificationsService.success("Customer Saved", "");

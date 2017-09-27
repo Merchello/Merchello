@@ -635,6 +635,7 @@ angular.module('merchello.models').constant('EntityCollectionProviderDisplay', E
         self.company = '';
         self.countryCode = '';
         self.phone = '';
+        self.email = '';
         self.isDefault = false;
     };
 
