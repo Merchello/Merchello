@@ -32,8 +32,8 @@
                     </select>
                 </form>
             </div>
-            <div class="umb-editor-sub-header__section">
-                <form class="form-search -no-margin-bottom pull-right" novalidate data-ng-show="hasFilter">
+            <div class="umb-editor-sub-header__section" data-ng-show="hasFilter">
+                <form class="form-search -no-margin-bottom pull-right" novalidate>
                     <div class="inner-addon left-addon">
                         <i class="icon icon-search" ng-click="enterSearch($event)"></i>
                         <input class="form-control search-input ng-pristine ng-valid" type="text" localize="placeholder" placeholder="@general_typeToSearch" data-ng-model="options.filter" on-keyup="search()" prevent-enter-submit no-dirty-check>

@@ -76,6 +76,7 @@
         &.well {
             padding: 19px;
             margin-bottom: 20px;
+            clear:both;
         }
     }
     // Button bar
@@ -108,7 +109,11 @@
 // Forms
 .form-group {
     .error {
-        color:firebrick;
+        color: firebrick;
+    }
+
+    .warning {
+        color: $warning;
     }
 }
 

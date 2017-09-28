@@ -1,75 +1,85 @@
-<div data-ng-controller="Merchello.Backoffice.NotificationProvidersController" data-ng-show="loaded">
+<div data-ng-controller="Merchello.Backoffice.NotificationProvidersController" data-ng-show="loaded" class="merchello">
 
-    <umb-panel>
+    <div class="umb-panel umb-editor-wrapper">
 
-      <div class="umb-editor-header umb-panel-header">
-        <div class="umb-panel-header-content-wrapper">
+        <div class="umb-editor-header umb-panel-header">
+            <div class="umb-panel-header-content-wrapper">
 
-          <div class="umb-panel-header-content">
-            <div class="umb-panel-header-left-side -top-position">
-              <div class="umb-panel-header-title-wrapper">
-                <div class="umb-panel-header-name">
-                  <localize key="merchelloNotifications_notifications" />
-                </div>
-              </div>
-              <div class="umb-editor-header__actions-menu">
-                <div class="btn-toolbar pull-right umb-btn-toolbar">
-                  <div class="btn-group">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <merchello-tabs tabs="tabs"></merchello-tabs>
-        </div>
-      </div>
-
-
-      <merchello-panel>
-
-            <div class="merchello-pane row-fluid" data-ng-show="preValuesLoaded">
-
-                <div class="control-group umb-control-group" data-ng-repeat="provider in notificationGatewayProviders">
-                    <label class="merchello-control-label">
-                        {{provider.name}}
-                        <small data-ng-bind="provider.description"></small>
-                        <div data-ng-show="provider.gatewayResources.length > 0">
-                            <a data-ng-click="provider.showSelectResource = !provider.showSelectResource"><i class="icon-chat"></i><localize key="merchelloNotifications_addNotification" /> </a>
-                            <div class="well" data-ng-class="{ 'open': provider.showSelectResource, 'closed': (!provider.showSelectResource) }">
-                                <label><localize key="merchelloPayment_resourceType" /> </label>
-                                <select class="form-control col-xs-12 span12" data-ng-model="provider.selectedGatewayResource" data-ng-options="r.name for r in provider.gatewayResources track by r.serviceCode"></select>
-                                <a data-ng-click="addNotificationMethod(provider, provider.selectedGatewayResource)"><localize key="general_add" /></a>
+                <div class="umb-panel-header-content">
+                    <div class="umb-panel-header-left-side -top-position">
+                        <div class="umb-panel-header-title-wrapper">
+                            <div class="umb-panel-header-name">
+                                <localize key="merchelloNotifications_notifications" />
                             </div>
                         </div>
-                    </label>
+                        <div class="umb-editor-header__actions-menu">
 
-                    <div class="merchello-controls">
+                        </div>
+                    </div>
+                </div>
+
+                <merchello-tabs tabs="tabs"></merchello-tabs>
+            </div>
+        </div>
+
+
+        <merchello-panel>
+
+            <div data-ng-show="preValuesLoaded">
+
+                <div class="control-group umb-control-group" data-ng-repeat="provider in notificationGatewayProviders">
+
+                    <div class="row-fluid">
+                        <div class="span6">
+                            <label class="merchello-control-label">
+                                {{provider.name}}
+                                <small data-ng-bind="provider.description"></small>
+                            </label>
+                        </div>
+                        <div class="span6" data-ng-show="provider.gatewayResources.length > 0">
+
+                            <a data-ng-click="provider.showSelectResource = !provider.showSelectResource" class="btn btn-info pull-right" style="margin-bottom: 5px;">
+                                <localize key="merchelloNotifications_addNotification" />
+                            </a>
+                            <div class="well clearfix" data-ng-class="{ 'open': provider.showSelectResource, 'closed': (!provider.showSelectResource) }">
+                                <select class="form-control umb-editor" data-ng-model="provider.selectedGatewayResource" data-ng-options="r.name for r in provider.gatewayResources track by r.serviceCode"></select>
+                                <a data-ng-click="addNotificationMethod(provider, provider.selectedGatewayResource)" class="btn btn-success">
+                                    <localize key="general_add"></localize>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="merchello-list-view merchello-controls">
                         <div class="row-fluid">
 
                             <table class="table table-striped merchello-striped-table form-horizontal">
                                 <thead>
-                                <tr>
-                                    <th><localize key="general_name" /></th>
-                                    <th><localize key="merchelloNotificationsEdit_description" /></th>
-                                    <th>Messages</th>
-                                    <th></th>
-                                </tr>
+                                    <tr>
+                                        <th><localize key="general_name" /></th>
+                                        <th><localize key="merchelloNotificationsEdit_description" /></th>
+                                        <th>Messages</th>
+                                        <th></th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                <tr data-ng-repeat="method in provider.notificationMethods">
-                                    <td>{{method.name}}</td>
-                                    <td>{{method.description}}</td>
-                                    <td>
-                                        <div data-ng-repeat="msg in method.notificationMessages">
-                                            <a prevent-default data-ng-click="goToEditor(msg)">{{ msg.name }}</a>
-                                        </div>
-                                        <a prevent-default data-ng-click="addNotificationMessage(method)">Add message</a>
-                                    </td>
-                                    <td class="merchello-icon-container pull-right">
-                                        <merchello-icon-bar show-edit="true" show-delete="true" do-edit="editNotificationMethod(method)" do-delete="deleteNotificationMethod(method)" />
-                                    </td>
-                                </tr>
+                                    <tr data-ng-repeat="method in provider.notificationMethods">
+                                        <td>{{method.name}}</td>
+                                        <td>{{method.description}}</td>
+                                        <td>
+                                            <ul>
+                                                <li data-ng-repeat="msg in method.notificationMessages">
+                                                    <a prevent-default href data-ng-click="goToEditor(msg)">{{ msg.name }}</a>
+                                                </li> 
+                                            </ul>
+                                            <a prevent-default href data-ng-click="addNotificationMessage(method)" class="btn btn-info btn-small">Add message</a>
+                                        </td>
+                                        <td class="merchello-icon-container">
+                                            <div class="pull-right">
+                                                <merchello-icon-bar show-edit="true" show-delete="true" do-edit="editNotificationMethod(method)" do-delete="deleteNotificationMethod(method)"/>
+                                            </div>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -83,5 +93,5 @@
             </div>
         </merchello-panel>
 
-    </umb-panel>
+    </div>
 </div>

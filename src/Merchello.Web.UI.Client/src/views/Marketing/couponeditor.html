@@ -1,79 +1,76 @@
 <form novalidate name="offerForm" data-ng-controller="Merchello.Backoffice.OfferEditController"
-      data-ng-show="loaded" data-ng-submit="save()">
-    <umb-panel val-show-validation>
-        <!--<umb-header>
-            <div class="span7">
-                <umb-content-name ng-model="offerSettings.name" localize="placeholder" placeholder="@merchelloPlaceholders_enterOffer">
-                </umb-content-name>
-            </div>
-            <div class="span5">
-                <div class="btn-toolbar pull-right umb-btn-toolbar">
-                    <div class="btn-group">
-                        <button data-ng-disabled="offerForm.$invalid" data-ng-click="saveOffer(offerForm)" class="btn btn-success"><localize key="buttons_save" /></button>
-                        <button class="btn dropdown-toggle btn-success" data-toggle="dropdown" data-ng-show="context !== 'create'">
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu merchello-action-menu" role="menu"  data-ng-show="context !== 'createproduct'">
-                            <li><a data-ng-click="openDeleteOfferDialog()" data-ng-show="context !== 'create'"><localize key="merchelloButtons_delete" /></a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <merchello-tabs tabs="tabs"></merchello-tabs>
-        </umb-header>-->
-      
-      <div class="umb-editor-header umb-panel-header">
-        <div class="umb-panel-header-content-wrapper">
+      data-ng-show="loaded" data-ng-submit="save()" class="merchello">
 
-          <div class="umb-panel-header-content">
-            <div class="umb-panel-header-left-side -top-position">
-              <div class="umb-panel-header-title-wrapper">
-                <umb-content-name ng-model="offerSettings.name" localize="placeholder" placeholder="@merchelloPlaceholders_enterOffer">
-                </umb-content-name>
-              </div>
-              <div class="umb-editor-header__actions-menu">
-                <div class="btn-toolbar pull-right umb-btn-toolbar">
-                  <div class="btn-group">
-                    <button data-ng-disabled="offerForm.$invalid" data-ng-click="saveOffer(offerForm)" class="btn btn-success"><localize key="buttons_save" /></button>
-                    <button class="btn dropdown-toggle btn-success" data-toggle="dropdown" data-ng-show="context !== 'create'">
-                      <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu merchello-action-menu" role="menu"  data-ng-show="context !== 'createproduct'">
-                      <li><a data-ng-click="openDeleteOfferDialog()" data-ng-show="context !== 'create'"><localize key="merchelloButtons_delete" /></a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+    <div class="umb-panel umb-editor-wrapper" val-show-validation>
 
-          <merchello-tabs tabs="tabs"></merchello-tabs>
-        </div>
-      </div>
-      
+        <div class="umb-editor-header umb-panel-header">
+            <div class="umb-panel-header-content-wrapper">
 
-      <merchello-panel>
-            <div class="form-horizontal tab-content row-fluid" data-ng-show="preValuesLoaded">
-                <div class="merchello-pane">
-                    <form id="offerForm" name="offerForm">
-                        <div class="control-group umb-control-group">
-                            <label class="merchello-control-label">
-                                <localize key="merchelloMarketing_offerInfo"/>
-                                <small><localize key="merchelloMarketing_configOffer" /></small>
-                            </label>
-                            <div class="merchello-controls">
-                                <offer-main-properties settings="settings" offer="offerSettings" context="context" toggle-offer-expires="toggleOfferExpires()"></offer-main-properties>
+                <div class="umb-panel-header-content">
+                    <div class="umb-panel-header-left-side -top-position">
+                        <div class="umb-panel-header-title-wrapper">
+                            <input type="text"
+                                   class="umb-panel-header-name-input"
+                                   localize="placeholder"
+                                   placeholder="@merchelloPlaceholders_enterOffer"
+                                   name="headerName"
+                                   ng-model="offerSettings.name"
+                                   umb-auto-focus
+                                   val-server-field="Name"
+                                   required />
+                        </div>
+                        <div class="umb-editor-header__actions-menu">
+                            <div class="pull-right" style="position: relative;" data-ng-show="context !== 'create'">
+                                <a class="btn btn-info" href="#" data-toggle="dropdown">
+                                    <localize key="general_actions">Actions</localize>
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu umb-actions" role="menu" aria-labelledby="dLabel">
+                                    <li><a data-ng-click="openDeleteOfferDialog()" data-ng-show="context !== 'create'"><localize key="merchelloButtons_delete" /></a></li>
+                                </ul>
                             </div>
                         </div>
-                        <div data-ng-show="offerSettings.key !== ''">
-                            <div class="control-group umb-control-group">
-                                <label class="merchello-control-label">
-                                    <localize key="merchelloMarketing_offerRewardsInfo"/>
+                    </div>
+                </div>
+
+                <merchello-tabs tabs="tabs"></merchello-tabs>
+            </div>
+        </div>
+
+
+        <merchello-panel>
+            <div class="row-fluid" data-ng-show="preValuesLoaded">
+
+                <div class="umb-property">
+                    <div class="control-group umb-control-group">
+                        <div class="umb-el-wrap">
+                            <label class="control-label">
+                                <localize key="merchelloMarketing_offerInfo" />
+                                <small><localize key="merchelloMarketing_configOffer" /></small>
+                            </label>
+
+                            <div class="controls">
+
+                                <offer-main-properties settings="settings" offer="offerSettings" context="context" toggle-offer-expires="toggleOfferExpires()"></offer-main-properties>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div data-ng-show="offerSettings.key !== ''">
+
+                    <div class="umb-property">
+                        <div class="control-group umb-control-group">
+                            <div class="umb-el-wrap">
+                                <label class="control-label">
+                                    <localize key="merchelloMarketing_offerRewardsInfo" />
                                     <small><localize key="merchelloMarketing_offerRewardsConfig" /></small>
                                 </label>
-                                <div class="merchello-controls">
 
-                                    <offer-components settings="settings" offer-settings="offerSettings" save-offer-settings="saveOffer()"  pre-values-loaded="preValuesLoaded" components="allComponents" component-type="Reward"></offer-components>
+                                <div class="controls">
+                                    <offer-components settings="settings" offer-settings="offerSettings" save-offer-settings="saveOffer()" pre-values-loaded="preValuesLoaded" components="allComponents" component-type="Reward"></offer-components>
 
                                     <div class="row-fluid" data-ng-show="hasReward">
                                         <div class="form-group col-xs-5 span5 offset6 each-matching">
@@ -83,21 +80,42 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
 
-                            <div class="control-group umb-control-group">
-                                <label class="merchello-control-label">
+                    <div class="umb-property">
+                        <div class="control-group umb-control-group">
+                            <div class="umb-el-wrap">
+                                
+                                <label class="control-label">
                                     <localize key="merchelloMarketing_offerConstraintsInfo"/>
-                                    <small><localize key="merchelloMarketing_offerConstraintsConfig" /></small>
+                                    <small><localize key="merchelloMarketing_offerConstraintsConfig"/></small>
                                 </label>
-                                <div class="merchello-controls">
-                                    <offer-components settings="settings" offer-settings="offerSettings"  save-offer-settings="saveOffer()" pre-values-loaded="preValuesLoaded" components="allComponents" component-type="Constraint"></offer-components>
+
+                                <div class="controls">
+                                    <offer-components settings="settings" offer-settings="offerSettings" save-offer-settings="saveOffer()" pre-values-loaded="preValuesLoaded" components="allComponents" component-type="Constraint"></offer-components>
                                 </div>
+
                             </div>
                         </div>
-                    </form>
+                    </div>
+
                 </div>
-                <!-- /merchello-pane -->
+
             </div>
         </merchello-panel>
-    </umb-panel>
+
+        <merchello-drawer>
+
+            <div class="umb-editor-drawer-content__right-side">
+                <div class="btn-group umb-button-group">
+                    <div class="umb-button">
+                        <button data-ng-disabled="offerForm.$invalid" type="button" data-ng-click="saveOffer(offerForm)" hotkey="ctrl+s" hotkey-when-hidden="true" class="btn btn-success"><localize key="buttons_save" /></button>
+                    </div>
+                </div>
+            </div>
+
+        </merchello-drawer>
+
+    </div>
 </form>
