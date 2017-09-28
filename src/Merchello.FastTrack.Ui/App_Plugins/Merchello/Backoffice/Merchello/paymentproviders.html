@@ -1,77 +1,82 @@
-
 <div data-ng-controller="Merchello.Backoffice.PaymentProvidersController"  data-ng-show="loaded">
+    <div class="umb-panel umb-editor-wrapper">
+        
+        <div class="umb-editor-header umb-panel-header">
+            <div class="umb-panel-header-content-wrapper">
 
-      <div class="umb-editor-header umb-panel-header">
-        <div class="umb-panel-header-content-wrapper">
-
-          <div class="umb-panel-header-content">
-            <div class="umb-panel-header-left-side -top-position">
-              <div class="umb-panel-header-title-wrapper">
-                <div class="umb-panel-header-name">
-                  <localize key="merchelloPayment_payment" />
-                </div>
-              </div>
-              <div class="">
-                <div class="btn-toolbar pull-right umb-btn-toolbar">
-                  <div class="btn-group">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <merchello-tabs tabs="tabs"></merchello-tabs>
-        </div>
-      </div>
-
-      <merchello-panel>
-
-            <div class="merchello-pane row-fluid">
-
-                <div class="control-group umb-control-group" data-ng-repeat="provider in paymentGatewayProviders">
-                    <label class="merchello-control-label">
-                        {{provider.name}}
-                        <small data-ng-bind="provider.description"></small>
-                        <div data-ng-show="provider.gatewayResources.length > 0">
-                            <a data-ng-click="provider.showSelectResource = !provider.showSelectResource"><i class="icon-bill-dollar"></i> <localize key="merchelloPayment_addPaymentMethod" /></a>
-                            <div class="well" data-ng-class="{ 'open': provider.showSelectResource, 'closed': (!provider.showSelectResource) }">
-                                <label><localize key="merchelloPayment_resourceType" /> </label>
-                                <select class="form-control col-xs-12 span12" data-ng-model="provider.selectedGatewayResource" data-ng-options="r.name for r in provider.gatewayResources track by r.serviceCode"></select>
-                                <a data-ng-click="addEditPaymentMethod(provider)"><localize key="general_add" /></a>
+                <div class="umb-panel-header-content">
+                    <div class="umb-panel-header-left-side -top-position">
+                        <div class="umb-panel-header-title-wrapper">
+                            <div class="umb-panel-header-name">
+                                <localize key="merchelloPayment_payment"/>
                             </div>
                         </div>
-                    </label>
-
-                    <div class="merchello-controls row-fluid">
-
-                        <div class="row-fluid">
-
-                            <table class="table table-striped merchello-striped-table form-horizontal">
-                                <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th colspan="2"><localize key="merchelloNotificationsEdit_description" /></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr data-ng-repeat="method in provider.paymentMethods">
-                                    <td>{{method.name}}</td>
-                                    <td>{{method.description}}</td>
-                                    <td class="merchello-icon-container pull-right">
-                                        <merchello-icon-bar show-edit="true" show-delete="true" do-edit="addEditPaymentMethod(provider, method)" do-delete="deletePaymentMethod(method)" />
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
                     </div>
                 </div>
-                <div class="control-group umb-control-group warning" data-ng-show="preValuesLoaded && paymentGatewayProviders.length == 0">
-                    There are no providers activated.  Please go to the Gateway Providers section and activate a Payment provider.
+
+                <merchello-tabs tabs="tabs"></merchello-tabs>
+            </div>
+        </div>
+
+        <merchello-panel>
+
+            <div class="control-group umb-control-group" data-ng-repeat="provider in paymentGatewayProviders">
+                
+                
+                <div class="row-fluid">
+                    <div class="span6">
+                        <label class="merchello-control-label">
+                            {{provider.name}}
+                            <small data-ng-bind="provider.description"></small>
+                        </label>
+                    </div>
+                    <div class="span6" data-ng-show="provider.gatewayResources.length > 0">
+
+                        <a data-ng-click="provider.showSelectResource = !provider.showSelectResource" class="btn btn-info pull-right" style="margin-bottom: 5px;">
+                            <localize key="merchelloPayment_addPaymentMethod" />
+                        </a>
+                        <div class="well clearfix" data-ng-class="{ 'open': provider.showSelectResource, 'closed': (!provider.showSelectResource) }">
+                            <select class="form-control umb-editor" data-ng-model="provider.selectedGatewayResource" data-ng-options="r.name for r in provider.gatewayResources track by r.serviceCode"></select>
+                            <a data-ng-click="addEditPaymentMethod(provider)" class="btn btn-success">
+                                <localize key="general_add"></localize>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+
+                <div class="merchello-list-view merchello-controls">
+
+                    <div class="row-fluid">
+
+                        <table class="table table-striped merchello-striped-table form-horizontal">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th colspan="2"><localize key="merchelloNotificationsEdit_description"/></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="method in provider.paymentMethods">
+                                <td>{{method.name}}</td>
+                                <td>{{method.description}}</td>
+                                <td class="merchello-icon-container">
+                                    <div class="pull-right">
+                                        <merchello-icon-bar show-edit="true" show-delete="true" do-edit="addEditPaymentMethod(provider, method)" do-delete="deletePaymentMethod(method)"/>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
                 </div>
             </div>
+                <div class="control-group umb-control-group warning" data-ng-show="preValuesLoaded && paymentGatewayProviders.length == 0">
+                    There are no providers activated. Please go to the Gateway Providers section and activate a Payment provider.
+                </div>
+       
         </merchello-panel>
 
-    </umb-panel>
+    </div>
 </div>

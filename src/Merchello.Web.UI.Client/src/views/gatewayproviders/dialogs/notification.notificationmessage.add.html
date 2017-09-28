@@ -1,50 +1,49 @@
 <div class="umb-panel merchello-side-panel" ng-controller="Merchello.GatewayProviders.Dialogs.NotificationsMessageAddController">
-    <div class="umb-modalcolumn-header">
-        <h4><localize key="merchelloNotificationsMessage_addEditMessage" /></h4>
-    </div>
-    <div class="umb-panel-body with-header with-footer">
+    <div class="umb-overlay umb-overlay-right">
+        <form class="umb-overlay__form" name="addManualNotificationMessageForm">
 
-        <!-- Flyout when edit or Add a Method is clicked -->
-        <form name="addManualNotificationMessageForm">
-            <div class="row-fluid">
-                <div class="col-xs-12 span12">
+            <div class="umb-overlay-header">
+                <h4 class="umb-overlay__title"><localize key="merchelloNotificationsMessage_addEditMessage" /></h4>
+            </div>
+
+            <div class="umb-overlay-container form-horizontal merchello-panel-body">
+
+                <div class="form-group control-group">
                     <label for="event"><localize key="merchelloNotificationsMessage_attachedEvent" /></label>
-                    <select name="event" class="col-xs-12 span12" data-ng-model="dialogData.selectedMonitor" data-ng-change="setMonitorDefaults()" data-ng-options="n.name for n in dialogData.notificationMonitors" required></select>
+                    <select name="event" class="form-control umb-editor" data-ng-model="dialogData.selectedMonitor" data-ng-change="setMonitorDefaults()" data-ng-options="n.name for n in dialogData.notificationMonitors" required></select>
+                </div>
+                <div class="form-group control-group">
+                    <label><localize key="general_name" /> / Subject</label>
+                    <input type="text" class="form-control umb-editor" data-ng-model="dialogData.notificationMessage.name" required />
+                </div>
+                <div class="form-group control-group">
+                    <label><localize key="merchelloNotificationsMessage_fromEmail" /></label>
+                    <input type="text" class="form-control umb-editor" data-ng-model="dialogData.notificationMessage.fromAddress" required />
+                </div>
+                <div class="form-group control-group">
+                    <label><localize key="merchelloNotificationsEdit_description " /></label>
+                    <textarea class="form-control umb-editor" rows="5" data-ng-model="dialogData.notificationMessage.description"></textarea>
+                </div>
+
+            </div>
+
+            <div class="umb-overlay-drawer">
+                <div class="umb-overlay-drawer__align-right">
+
+                    <div class="umb-button">
+                        <a href data-ng-click="close()" class="btn btn-link">
+                            <localize key="general_cancel"></localize>
+                        </a>
+                    </div>
+
+                    <div class="umb-button">
+                        <button class="btn btn-success" data-ng-disabled="addManualNotificationMessageForm.$invalid" data-ng-click="save()">
+                            <localize key="buttons_save"></localize>
+                        </button>
+                    </div>
+
                 </div>
             </div>
-            <div class="form-group row-fluid">
-                <label><localize key="general_name" /> / Subject</label>
-                <input type="text" class="col-xs-12 span12" data-ng-model="dialogData.notificationMessage.name" required />
-            </div>
-            <div class="form-group row-fluid">
-                <label><localize key="merchelloNotificationsMessage_fromEmail" /></label>
-                <input type="text" class="col-xs-12 span12" data-ng-model="dialogData.notificationMessage.fromAddress" required/>
-            </div>
-            <div class="form-group row-fluid">
-                <label><localize key="merchelloNotificationsEdit_description " /></label>
-                <textarea class="col-xs-12 span12" rows="4" data-ng-model="dialogData.notificationMessage.description"></textarea>
-            </div>
-
         </form>
-
-    </div>
-
-    <div class="umb-panel-footer">
-        <div class="umb-el-wrap umb-panel-buttons">
-            <div class="btn-toolbar umb-btn-toolbar pull-right">
-
-                <a href data-ng-click="close()" class="btn btn-link">
-                    <localize key="general_cancel"></localize>
-                </a>
-
-                <button class="btn btn-primary"
-                        data-ng-disabled="addManualNotificationMessageForm.$invalid"
-                        data-ng-click="save()">
-                    <localize key="buttons_save"></localize>
-                </button>
-
-            </div>
-        </div>
     </div>
 </div>
-
