@@ -12,18 +12,11 @@
     using Merchello.Core.Persistence.Migrations.Analytics;
     using Merchello.Core.Persistence.Migrations.Initial;
 
-    using Semver;
-
-    using umbraco.BusinessLogic;
-
     using Umbraco.Core;
-    using Umbraco.Core.Events;
     using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Migrations;
     using Umbraco.Core.Persistence.SqlSyntax;
-    using Umbraco.Web;
-    using Umbraco.Web.Cache;
 
     using Constants = Merchello.Core.Constants;
 
@@ -166,11 +159,9 @@
             baseDataCreation.InitializeBaseData("merchShipmentStatus");
 
             // Add 'merchello' to the admin group
-            ApplicationContext.Current.Services.SectionService.MakeNew("merchello", "merchello", "Merchello-Icon.png");
+            var ug = new UserGroup2AppDto { UserGroupId = 1, AppAlias = "merchello" };
+            _database.Insert(ug);
 
-            //var ug = new UserGroup2AppDto { UserGroupId = 1, AppAlias = "merchello" };
-            //_database.Insert(ug);
-            
             // TODO clear cache
 
             return false;
