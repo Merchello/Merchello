@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Core", "Merchello.Core\Merchello.Core.csproj", "{2A83A229-C24B-4D8D-B806-7C9999EB9461}"
 EndProject
@@ -26,7 +26,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Tests.Integration
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Examine", "Merchello.Examine\Merchello.Examine.csproj", "{28A665A9-2AAD-4230-AB8C-0F0B0F1B2115}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Providers", "Merchello.Providers\Merchello.Providers.csproj", "{6AB9B56E-91D1-400C-8977-B343F59702BE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Providers", "Merchello.Providers\Merchello.Providers.csproj", "{90C37AC8-CFE3-4199-A7B2-826278EB59E5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Web.Store", "Merchello.Web.Store\Merchello.Web.Store.csproj", "{FD39D1AA-8F6E-474F-AF2D-24219E1934FE}"
 EndProject
@@ -118,22 +118,22 @@ Global
 		{28A665A9-2AAD-4230-AB8C-0F0B0F1B2115}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{28A665A9-2AAD-4230-AB8C-0F0B0F1B2115}.Release|x64.ActiveCfg = Release|Any CPU
 		{28A665A9-2AAD-4230-AB8C-0F0B0F1B2115}.Release|x86.ActiveCfg = Release|Any CPU
-		{6AB9B56E-91D1-400C-8977-B343F59702BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6AB9B56E-91D1-400C-8977-B343F59702BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6AB9B56E-91D1-400C-8977-B343F59702BE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{6AB9B56E-91D1-400C-8977-B343F59702BE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{6AB9B56E-91D1-400C-8977-B343F59702BE}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{6AB9B56E-91D1-400C-8977-B343F59702BE}.Debug|x64.Build.0 = Debug|Any CPU
-		{6AB9B56E-91D1-400C-8977-B343F59702BE}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{6AB9B56E-91D1-400C-8977-B343F59702BE}.Debug|x86.Build.0 = Debug|Any CPU
-		{6AB9B56E-91D1-400C-8977-B343F59702BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6AB9B56E-91D1-400C-8977-B343F59702BE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6AB9B56E-91D1-400C-8977-B343F59702BE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{6AB9B56E-91D1-400C-8977-B343F59702BE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{6AB9B56E-91D1-400C-8977-B343F59702BE}.Release|x64.ActiveCfg = Release|Any CPU
-		{6AB9B56E-91D1-400C-8977-B343F59702BE}.Release|x64.Build.0 = Release|Any CPU
-		{6AB9B56E-91D1-400C-8977-B343F59702BE}.Release|x86.ActiveCfg = Release|Any CPU
-		{6AB9B56E-91D1-400C-8977-B343F59702BE}.Release|x86.Build.0 = Release|Any CPU
+		{90C37AC8-CFE3-4199-A7B2-826278EB59E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90C37AC8-CFE3-4199-A7B2-826278EB59E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90C37AC8-CFE3-4199-A7B2-826278EB59E5}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{90C37AC8-CFE3-4199-A7B2-826278EB59E5}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{90C37AC8-CFE3-4199-A7B2-826278EB59E5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{90C37AC8-CFE3-4199-A7B2-826278EB59E5}.Debug|x64.Build.0 = Debug|Any CPU
+		{90C37AC8-CFE3-4199-A7B2-826278EB59E5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{90C37AC8-CFE3-4199-A7B2-826278EB59E5}.Debug|x86.Build.0 = Debug|Any CPU
+		{90C37AC8-CFE3-4199-A7B2-826278EB59E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90C37AC8-CFE3-4199-A7B2-826278EB59E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90C37AC8-CFE3-4199-A7B2-826278EB59E5}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{90C37AC8-CFE3-4199-A7B2-826278EB59E5}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{90C37AC8-CFE3-4199-A7B2-826278EB59E5}.Release|x64.ActiveCfg = Release|Any CPU
+		{90C37AC8-CFE3-4199-A7B2-826278EB59E5}.Release|x64.Build.0 = Release|Any CPU
+		{90C37AC8-CFE3-4199-A7B2-826278EB59E5}.Release|x86.ActiveCfg = Release|Any CPU
+		{90C37AC8-CFE3-4199-A7B2-826278EB59E5}.Release|x86.Build.0 = Release|Any CPU
 		{FD39D1AA-8F6E-474F-AF2D-24219E1934FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FD39D1AA-8F6E-474F-AF2D-24219E1934FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD39D1AA-8F6E-474F-AF2D-24219E1934FE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU

@@ -737,7 +737,6 @@
     <Compile Include="PackageActions\AddConfigSection.cs" />
     <Compile Include="PackageActions\AddExamineConfigs.cs" />
     <Compile Include="PackageActions\CreateDatabase.cs" />
-    <Compile Include="PackageActions\GrantPermissionForApp.cs" />
     <Compile Include="Search\ProductQuery.cs" />
     <Compile Include="CustomerExtensions.cs" />
     <Compile Include="Editors\ProductApiController.cs" />

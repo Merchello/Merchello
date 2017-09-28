@@ -524,6 +524,7 @@
     <Compile Include="Models\Querying\FieldMatchCondition.cs" />
     <Compile Include="Models\Rdbms\CountDto.cs" />
     <Compile Include="Models\Rdbms\DigitalMediaDto.cs" />
+    <Compile Include="Models\Rdbms\UserGroup2AppDto.cs" />
     <Compile Include="PagedCollection.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoFiveZero\AddDigitalMediaTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoFiveZero\AddIndexesToInvoice.cs" />
