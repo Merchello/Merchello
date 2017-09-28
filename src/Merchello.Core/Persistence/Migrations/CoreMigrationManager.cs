@@ -23,6 +23,7 @@
     using Umbraco.Core.Persistence.Migrations;
     using Umbraco.Core.Persistence.SqlSyntax;
     using Umbraco.Web;
+    using Umbraco.Web.Cache;
 
     using Constants = Merchello.Core.Constants;
 
@@ -163,6 +164,14 @@
             baseDataCreation.InitializeBaseData("merchGatewayProviderSettings");
             baseDataCreation.InitializeBaseData("merchStoreSetting");
             baseDataCreation.InitializeBaseData("merchShipmentStatus");
+
+            // Add 'merchello' to the admin group
+            ApplicationContext.Current.Services.SectionService.MakeNew("merchello", "merchello", "Merchello-Icon.png");
+
+            //var ug = new UserGroup2AppDto { UserGroupId = 1, AppAlias = "merchello" };
+            //_database.Insert(ug);
+            
+            // TODO clear cache
 
             return false;
         }
