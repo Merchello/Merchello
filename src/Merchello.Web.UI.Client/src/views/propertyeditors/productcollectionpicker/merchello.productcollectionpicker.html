@@ -1,11 +1,17 @@
 <div data-ng-controller="Merchello.PropertyEditors.MerchelloProductCollectionPickerController">
-    <a href="#" data-ng-click="openCollectionSelectionDialog()" class="gear pull-right" prevent-default>
-        <i class="icon icon-settings-alt-2 large"></i>
-    </a>
-    <div>
-        <strong><localize key="merchelloCollections_selectedCollection" />:</strong>
-        <span data-ng-show="model.value === ''"></span>
-        <span data-ng-hide="model.value === ''">{{ collection.name }}</span>
-    </div>
-    <a href="#" prevent-default data-ng-click="delete()" data-ng-show="model.value !== ''"><localize key="general_delete" /></a>
+    <span class="merchello-icons pull-right">
+        <a class="merchello-icon" ng-click="openCollectionSelectionDialog()" prevent-default="">
+            <i class="icon icon-add"></i>
+        </a>
+    </span>
+    <label><localize key="merchelloCollections_selectedCollection"/>:</label>
+    <h4 data-ng-show="model.value === ''"></h4>
+    <h4 data-ng-hide="model.value === ''">
+        <span class="merchello-icons pull-left" style="margin:-7px 10px 0 0;">
+            <a class="merchello-icon" ng-click="delete()" data-ng-show="model.value !== ''" prevent-default="">
+                <i class="icon icon-remove"></i>
+            </a>
+        </span>
+        {{ collection.name }}
+    </h4>
 </div>

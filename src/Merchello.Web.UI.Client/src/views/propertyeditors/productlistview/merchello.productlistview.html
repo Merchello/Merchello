@@ -4,9 +4,11 @@
             <entity-collection-title-bar collection-key="model.value" entity-type="entityTypeName"></entity-collection-title-bar>
         </div>
         <div class="span6">
-            <form class="pull-right ng-pristine ng-valid" ng-show="listViewResultSet.totalItems > 10" novalidate>
-                <i class="icon-search" data-ng-click="enterSearch($event)"></i>
-                <input type="text" data-ng-model="options.filter" on-keyup="loadProducts()" prevent-enter-submit no-dirty-check class="ng-pristine ng-valid">
+            <form class="form-search pull-right" novalidate="" style="margin-left: 10px;">
+                <div class="inner-addon left-addon">
+                    <i class="icon icon-search" ng-click="enterSearch($event)"></i>
+                    <input class="form-control search-input ng-pristine ng-valid" type="text" localize="placeholder" placeholder="@general_typeToSearch" data-ng-model="options.filter" on-keyup="loadProducts()" prevent-enter-submit no-dirty-check>
+                </div>
             </form>
             <a href="#" data-ng-click="openCollectionSelectionDialog()" class="btn btn-info pull-right" prevent-default>
                 Config
@@ -16,7 +18,6 @@
     <div class="merchello-list-view">
         
         <div class="umb-table">
-
             <div class="umb-table-head">
                 <div class="umb-table-row">
                     <div class="umb-table-cell not-fixed umb-table__name">
@@ -52,12 +53,10 @@
                     <div class="umb-table-cell">
                         <localize key="merchelloTabs_render"></localize>
                     </div>
-                    <div class="umb-table-cell">sdfsd</div>
                 </div>
             </div>
 
             <div class="umb-table-body">
-
                 <div class="umb-table-row" data-ng-show="!preValuesLoaded">
                     <div class="umb-loader-wrapper">
                         <div class="umb-loader"></div>
@@ -82,20 +81,16 @@
                     </div>
                     <div class="umb-table-cell">
                         <span data-ng-show="result.hasVariants() && !result.anyVariantsOnSale()"><localize key="general_no" /></span>
-                        <span data-ng-show="result.hasVariants() && result.anyVariantsOnSale()">{{result.variantsMinimumPrice(true) | currency : currencySymbol}} - {{result.variantsMaximumPrice(true) | currency : currencySymbol}}</span>                        
-                    </div>
-                    <div class="umb-table-cell">
+                        <span data-ng-show="result.hasVariants() && result.anyVariantsOnSale()">{{result.variantsMinimumPrice(true) | currency : currencySymbol}} - {{result.variantsMaximumPrice(true) | currency : currencySymbol}}</span>
                         <span data-ng-show="!result.hasVariants() && !result.onSale"><localize key="general_no" /></span>
-                        <span data-ng-show="!result.hasVariants() && result.onSale">{{product.salePrice | currency : currencySymbol}}</span>
+                        <span data-ng-show="!result.hasVariants() && result.onSale">{{result.salePrice | currency : currencySymbol}}</span>
                     </div>
-                    <!-- price -->
                     <div class="umb-table-cell">
                         <span data-ng-hide="result.hasVariants()">{{result.price | currency : currencySymbol}}</span>
                         <span data-ng-show="result.hasVariants()">{{result.variantsMinimumPrice() | currency : currencySymbol}} - {{result.variantsMaximumPrice() | currency : currencySymbol}}</span>                        
                     </div>
                     <div class="umb-table-cell"><i class="icon-check" data-ng-show="result.canBeRendered()"></i></div>
                 </div>
-
             </div>
         </div>
         
