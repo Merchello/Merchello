@@ -1,46 +1,47 @@
 <div class="umb-panel merchello-side-panel" ng-controller="Merchello.GatewayProviders.Dialogs.NotificationsMethodAddEditController">
-    <div class="umb-modalcolumn-header">
-        <h4>Add/Edit a Notification Method</h4>
-    </div>
-    <div class="umb-panel-body with-header with-footer">
+    <div class="umb-overlay umb-overlay-right">
+        <form class="umb-overlay__form" name="addManualNotificationMethodForm">
 
-        <!-- Flyout when edit or Add a Method is clicked -->
-        <form name="addManualNotificationMethodForm">
-            <div class="form-group row-fluid" data-ng-show="dialogData.resources.length > 0">
-                <div class="col-xs-8 span8">
+            <div class="umb-overlay-header">
+                <h4 class="umb-overlay__title">Add/Edit a Notification Method</h4>
+            </div>
+
+            <div class="umb-overlay-container form-horizontal merchello-panel-body">
+
+                <div class="form-group control-group" data-ng-show="dialogData.resources.length > 0">
                     <label for="event">Notification Method</label>
-                    <select name="event" class="col-xs-8 span8" data-ng-model="dialogData.notificationMethod.serviceCode" data-ng-options="n.name for n in dialogData.resources track by n.ServiceCode"></select>
+                    <select name="event" class="form-control umb-editor" data-ng-model="dialogData.notificationMethod.serviceCode" data-ng-options="n.name for n in dialogData.resources track by n.ServiceCode"></select>
+                </div>
+                <div class="form-group control-group">
+                    <label><localize key="general_name" /></label>
+                    <input type="text" class="form-control umb-editor" data-ng-model="dialogData.notificationMethod.name" required />
+                </div>
+                <div class="form-group control-group">
+                    <label><localize key="merchelloNotificationsEdit_description " /></label>
+                    <textarea class="form-control umb-editor" rows="5" data-ng-model="dialogData.notificationMethod.description"></textarea>
+                </div>
+
+            </div>
+
+            <div class="umb-overlay-drawer">
+                <div class="umb-overlay-drawer__align-right">
+
+                    <div class="umb-button">
+                        <a href data-ng-click="close()" class="btn btn-link">
+                            <localize key="general_cancel"></localize>
+                        </a>
+                    </div>
+
+                    <div class="umb-button">
+                        <button class="btn btn-success"
+                                data-ng-disabled="addManualNotificationMethodForm.$invalid"
+                                data-ng-click="submit(dialogData)">
+                            <localize key="buttons_save"></localize>
+                        </button>
+                    </div>
+
                 </div>
             </div>
-            <div class="form-group row-fluid">
-                <label><localize key="general_name" /></label>
-                <input type="text" class="col-xs-12 span12" data-ng-model="dialogData.notificationMethod.name" required/>
-            </div>
-            <div class="form-group row-fluid">
-                <label><localize key="merchelloNotificationsEdit_description " /></label>
-                <textarea class="col-xs-12 span12" rows="4" data-ng-model="dialogData.notificationMethod.description"></textarea>
-            </div>
-
         </form>
-
-    </div>
-
-    <div class="umb-panel-footer">
-        <div class="umb-el-wrap umb-panel-buttons">
-            <div class="btn-toolbar umb-btn-toolbar pull-right">
-
-                <a href data-ng-click="close()" class="btn btn-link">
-                    <localize key="general_cancel"></localize>
-                </a>
-
-                <button class="btn btn-primary"
-                        data-ng-disabled="addManualNotificationMethodForm.$invalid"
-                        data-ng-click="submit(dialogData)">
-                    <localize key="buttons_save"></localize>
-                </button>
-
-            </div>
-        </div>
     </div>
 </div>
-

@@ -1,50 +1,43 @@
-<div data-ng-controller="Merchello.Backoffice.CustomerAddressesController" data-ng-show="loaded">
-    <umb-panel>
-        <umb-header>
-            <div class="span7">
-                <div class="umb-headline-editor-wrapper">
-                    <h1><localize key="merchelloOrder_sales" /> / <localize key="merchelloOrderView_invoiceNumber" />{{invoice.invoiceNumber}}</h1>
+<div data-ng-controller="Merchello.Backoffice.CustomerAddressesController" data-ng-show="loaded" class="merchello">
+    <div class="umb-panel umb-editor-wrapper">
+
+        <div class="umb-editor-header umb-panel-header">
+            <div class="umb-panel-header-content-wrapper">
+
+                <div class="umb-panel-header-content">
+                    <div class="umb-panel-header-left-side -top-position">
+                        <div class="umb-panel-header-title-wrapper">
+                            <div class="umb-panel-header-name">
+                                <localize key="merchelloOrder_sales" /> / <localize key="merchelloOrderView_invoiceNumber" />{{invoice.invoiceNumber}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <merchello-tabs tabs="tabs"></merchello-tabs>
+            </div>
+        </div>
+
+        <merchello-panel>
+            <div class="control-group umb-control-group">
+                <div class="merchello-section-label">
+                    <p><localize key="merchelloCustomers_billingAddresses" /></p>
+                    <small><localize key="merchelloCustomers_billingAddressesHelper" /></small>
+                </div>
+                <div class="row-fluid">
+                    <customer-address-table customer="customer" addresses="billingAddresses" countries="countries" address-type="Billing" save="save(customer)"></customer-address-table>
                 </div>
             </div>
-            <div class="span5">
-                <div class="btn-toolbar pull-right umb-btn-toolbar">
-                    <!-- New Order Button -->
-                    <div class="btn-group">
-                        <!--<a href="#" class="btn btn-standard">Print</a>-->
-                    </div>
+            <div class="control-group umb-control-group">
+                <div class="merchello-section-label">
+                    <p><localize key="merchelloCustomers_shippingAddresses" /></p>
+                    <small><localize key="merchelloCustomers_shippingAddressesHelper" /></small>
+                </div>
+                <div class="row-fluid">
+                    <customer-address-table customer="customer" addresses="shippingAddresses" countries="countries" address-type="Shipping" save="save(customer)"></customer-address-table>
                 </div>
             </div>
-            <merchello-tabs tabs="tabs"></merchello-tabs>
-        </umb-header>
-        <merchello-panel class="row-fluid">
-            <!-- Main Content Area -->
-            <div class="merchello-pane primary">
-                <div class="control-group umb-control-group">
-                    <div class="merchello-section-label">
-                        <localize key="merchelloCustomers_billingAddresses" />
-                        <small><localize key="merchelloCustomers_billingAddressesHelper" /></small>
-                    </div>
-                    <div class="merchello-controls">
 
-                        <div class="row-fluid">
-                            <customer-address-table customer="customer" addresses="billingAddresses" countries="countries" address-type="Billing" save="save(customer)"></customer-address-table>
-                        </div><br />
-
-                    </div>
-                </div>
-                <div class="control-group umb-control-group">
-                    <div class="merchello-section-label">
-                        <localize key="merchelloCustomers_shippingAddresses" />
-                        <small><localize key="merchelloCustomers_shippingAddressesHelper" /></small>
-                    </div>
-                    <div class="merchello-controls">
-
-                        <div class="row-fluid">
-                            <customer-address-table customer="customer" addresses="shippingAddresses" countries="countries" address-type="Shipping" save="save(customer)"></customer-address-table>
-                        </div><br />
-                    </div>
-                </div>
-            </div>
         </merchello-panel>
-    </umb-panel>
+    </div>
 </div>

@@ -12,10 +12,10 @@ angular.module('merchello.directives').directive('detachedContentTypeSelect',
                 showSave: '=?',
                 save: '&'
             },
-            template:         '<div class="detached-content-select">' +
+            template: '<div class="detached-content-select">' +
             '<div data-ng-show="detachedContentTypes.length > 0">' +
             '<label><localize key="merchelloDetachedContent_productContentTypes" /></label>' +
-            '<select data-ng-model="selectedContentType" data-ng-options="ct.name for ct in detachedContentTypes track by ct.key" data-ng-show="loaded">' +
+            '<select data-ng-model="selectedContentType" data-ng-options="ct.name for ct in detachedContentTypes track by ct.key" data-ng-show="loaded" class="form-control umb-editor">' +
             '<option value="">{{ noSelection }}</option>' +
             '</select>' +
             ' <merchello-save-icon show-save="showSave" do-save="save()"></merchello-save-icon>' +

@@ -1,60 +1,147 @@
-<div data-ng-controller="Merchello.Backoffice.MerchelloDashboardController" data-ng-show="loaded" class="merchellodashboard">
-    <h3 class="logo">
-        <a href="https://merchello.com" target="_blank">
-            <img src="/App_Plugins/Merchello/assets/images/logo.png" alt="Merchello, the eCommerce package" />
-        </a> Version {{merchelloVersion}}
-    </h3>
+<div class="merchellodashboard">
+    <div class="grid-section umb-dashboard-grid">
 
-    <div class="row">
+        <div data-ng-controller="Merchello.Backoffice.MerchelloDashboardController" data-ng-show="loaded">
 
-        <div class="span4">
-            <div class="merchello-block">
-                <a href="https://merchello.com/training-support/" target="_blank">
-                    <img src="/App_Plugins/Merchello/assets/images/support.png" class="img-responsive" alt="Premium Support">
-                </a>
-                <h3>Premium Support / Development</h3>
-                <p>
-                    Struggling with a Merchello project or custom Merchello Gateway Provider? Need a specific feature in Merchello straight away? 
-                    You can now get support direct from Merchello.
-                </p>
-                <p>Support/Consultancy is done via Skype sessions and are charged per hour, in addition development sprints can now be sponsored.</p>
+            <div class="span12 column dash-section">
 
-                <a href="https://merchello.com/training-support/" target="_blank" class="btn btn-merchello">
-                    Find Out More
-                </a>
+                <div class="row clearfix dash-row">
+                    <div class="dash-inner-row">
+                        <div class="span12 column dash-area">
+                            <div class="dash-inner-area">
+
+                                <div class="dash-control dash-control-">
+                                    <div class="dash-inner-control">
+                                        <div class="merchello-logo">
+                                            <img src="/App_Plugins/Merchello/assets/images/logo.png" alt="Merchello, the eCommerce package" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="dash-control dash-control-">
+                                    <div class="dash-inner-control">
+                                        <div>
+                                            <div class="intro-text">
+                                                Welcome to v{{merchelloVersion}} of Merchello - we hope you like everything we've added.
+                                                And if there is something missing, well... It's open source so feel free to ping us a PR on Github!
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row clearfix dash-row">
+                    <div class="dash-inner-row">
+
+                        <div class="span3 column dash-area">
+                            <div class="dash-inner-area">
+                                <div class="dash-control dash-control-">
+                                    <div class="dash-inner-control">
+                                        <div>
+                                            <a href="https://our.umbraco.org/projects/collaboration/merchello/merchello/" target="_blank" class="info-box">
+                                                <div class="info-box__title">Support/Help</div>
+                                                <div class="info-box__description">Post on the our.umbraco forums if you need help.</div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="span3 column dash-area">
+                            <div class="dash-inner-area">
+                                <div class="dash-control dash-control-">
+                                    <div class="dash-inner-control">
+                                        <div>
+                                            <a href="https://github.com/Merchello/Merchello/issues" target="_blank" class="info-box">
+                                                <div class="info-box__title">Issues</div>
+                                                <div class="info-box__description">If you find a bug, then please add it to our issues page.</div>
+                                            </a>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="span3 column dash-area">
+                            <div class="dash-inner-area">
+                                <div class="dash-control dash-control-">
+                                    <div class="dash-inner-control">
+                                        <div>
+                                            <a href="https://merchello.readme.io" target="_blank" class="info-box">
+                                                <div class="info-box__title">Documentation</div>
+                                                <div class="info-box__description">It's the best we've got at the moment ;)</div>
+                                            </a>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="span3 column dash-area">
+                            <div class="dash-inner-area">
+                                <div class="dash-control dash-control-">
+                                    <div class="dash-inner-control">
+                                        <div>
+                                            <a href="https://merchello.com/newsletter/" target="_blank" class="info-box">
+                                                <div class="info-box__title">Newsletter</div>
+                                                <div class="info-box__description">Sign up to our newsletter to get the latest updates</div>
+                                            </a>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row clearfix dash-row">
+                    <div class="dash-inner-row">
+
+                        <div class="span6 column dash-area">
+                            <div class="dash-inner-area">
+                                <div class="dash-control dash-control-">
+                                    <div class="dash-inner-control">
+                                        <div>
+                                            <div class="post-card ">
+                                                <div class="post-card__content">
+                                                    <div class="post-card__title">Gratitude License</div>
+                                                    <div class="post-card__teaser">Just finished a client site using Merchello? Then why not say a quick thank you and buy a $25 gratitude license</div>
+                                                    <a class="button" target="_blank" href="https://www.paypal.com/cgi-bin/webscr@?cmd=_xclick&business=payments@merchello.com&lc=GB&item_name=Merchello+Gratitude+License&amount=25&currency_code=USD&button_subtype=services&no_note=1&no_shipping=2&rm=1&return=https://www.merchello.com/gratitude-thank-you/&cancel_return=https://www.merchello.com&item_number=MERCHGRAT">Purchase $25 Gratitude License</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="span6 column dash-area">
+                            <div class="dash-inner-area">
+                                <div class="dash-control dash-control-">
+                                    <div class="dash-inner-control">
+                                        <div>
+                                            <div class="post-card ">
+                                                <div class="post-card__content">
+                                                    <div class="post-card__title">Solution Partners</div>
+                                                    <div class="post-card__teaser">Use Merchello a lot? Want to get more Merchello work? Want to help support the project and get listed on our website?</div>
+                                                    <a class="button" target="_blank" href="https://merchello.com/solution-partners/">Find Out More Here</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <div class="span4">
-            <div class="merchello-block love-merchello">
-                <a href="https://merchello.com/gratitude-license/" target="_blank">
-                    <img src="/App_Plugins/Merchello/assets/images/heart.png" class="img-responsive" alt="Gratitude License">
-                </a>
-                <h3>Love Merchello</h3>
-                <p>
-                    Then please help us out. Everything we develop, create and spend time on here at Merchello is <strong>self funded</strong> and given to you entirely for <strong>FREE</strong>.
-                </p>
-                <p>Buying a small $50 Gratitude license ensures that we can put in the extra time to polish and enhance Merchello so all of the community benefit.</p>
-                <p>Also we really appreciate it! #h5yr</p>
-                <a href="https://www.paypal.com/cgi-bin/webscr@?cmd=_xclick&business=payments@merchello.com&lc=GB&item_name=Merchello+Gratitude+License&amount=50&currency_code=USD&button_subtype=services&no_note=1&no_shipping=2&rm=1&return=https://www.merchello.com/gratitude-thank-you/&cancel_return=https://www.merchello.com&item_number=MERCHGRAT" target="_blank" class="btn btn-merchello">
-                    Purchase Gratitude License
-                </a>
-            </div>
-        </div>
-
-        <div class="span4">
-            <div class="merchello-block">
-                <a href="https://merchello.com/solution-partners/" target="_blank">
-                    <img src="/App_Plugins/Merchello/assets/images/partner-doc.png" class="img-responsive" alt="Merchello Solution Partner">
-                </a>
-                <h3>Solution Partner</h3>
-                <p>Merchello's goal is to make you and your clients successful. Because the needs of every partner are different, we offer two levels of partnership - Gold and Silver.</p>
-                <p>Each level has unique benefits, all with the goal of connecting partners to our community and helping them succeed.</p>
-                <a href="https://merchello.com/solution-partners/" target="_blank" class="btn btn-merchello">
-                    Find Out More
-                </a>
-            </div>
         </div>
 
     </div>
 </div>
+

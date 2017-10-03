@@ -1,33 +1,44 @@
 <div class="umb-panel merchello-side-panel" ng-controller="Merchello.Marketing.Dialogs.OfferConstraintCollectionPriceRulesController" data-ng-show="loaded">
-    <div class="umb-modalcolumn-header">
-        <h4>Set collection total price rules</h4>
-    </div>
-    <form name="priceConstraintForm" id="priceConstraintForm">
-    <div class="umb-panel-body with-header with-footer">
-        <!-- Flyout when Change Prices is clicked -->
+    <div class="umb-overlay umb-overlay-right">
+        <form class="umb-overlay__form" name="priceConstraintForm" id="priceConstraintForm">
 
-            <div class="form-group row-fluid input-prepend">
+            <div class="umb-overlay-header">
+                <h4 class="umb-overlay__title">Set collection total price rules</h4>
+            </div>
+
+
+            <div class="umb-overlay-container form-horizontal merchello-panel-body">
+                <!-- Flyout when Change Prices is clicked -->
+                
                 <label for="new-price">Price of matching items<small>Values should be entered as positive numbers.</small></label>
-                <span class="add-on">{{currencySymbol}}</span>
-                <input name="new-price" data-ng-model="price" class=" col-xs-5 span5" type="number" />
+                <div class="form-group row-fluid input-prepend">
+                    <span class="add-on">{{currencySymbol}}</span>
+                    <input name="new-price" data-ng-model="price" class=" col-xs-5 span5" type="number" />
+                </div>
+                <div class="form-group row-fluid offer-constraint-controls">
+                    <comparison-operator-radio-buttons operator="operator"></comparison-operator-radio-buttons>
+                </div>
             </div>
-            <div class="form-group row-fluid offer-constraint-controls">
-                <comparison-operator-radio-buttons operator="operator"></comparison-operator-radio-buttons>
-            </div>
-    </div>
 
-    <div class="umb-panel-footer" >
-        <div class="umb-el-wrap umb-panel-buttons">
-            <div class="btn-toolbar umb-btn-toolbar pull-right">
-                <!-- ACTION: Cancel -->
-                <a href data-ng-click="close()" class="btn btn-link"><localize key="general_cancel">Cancel</localize></a>
+            <div class="umb-overlay-drawer">
+                <div class="umb-overlay-drawer__align-right">
+                    
+                    <div class="umb-button">
+                        <a href data-ng-click="close()" class="btn btn-link">
+                            <localize key="general_cancel"></localize>
+                        </a>
+                    </div>
 
-                <button class="btn btn-primary"
-                        data-ng-click="save()">
-                    <localize key="buttons_save">Save</localize>
-                </button>
+                    <div class="umb-button">
+                        <button class="btn btn-success" data-ng-click="save()">
+                            <localize key="buttons_save"></localize>
+                        </button>
+                    </div>
+
+                </div>
             </div>
-        </div>
+
+
+        </form>
     </div>
-</form>
 </div>
