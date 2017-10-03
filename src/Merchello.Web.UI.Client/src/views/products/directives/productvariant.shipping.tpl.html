@@ -1,9 +1,9 @@
 <div>
-    <label class="merchello-control-label">
+    <label class="control-label">
         <localize key="merchelloShipping_info" />
         <small><localize key="merchelloShipping_setVars" /></small>
     </label>
-    <div class="merchello-controls">
+    <div class="merchello-controls controls">
         <div class="row-fluid shipping-dimensions" data-ng-show="productVariant.shippable">
             <div class="form-group span6 col-xs-6">
                 <label for="weight">
@@ -29,29 +29,60 @@
 
         <div class="row-fluid">
             <div class="span10 col-xs-10" data-ng-repeat="warehouse in warehouses">
-                <h4><localize key="merchelloWarehouse_warehouse" />: {{warehouse.name}}</h4>
-                <table class="table">
-                    <tr>
-                        <td colspan="3"><localize key="merchelloProductEdit_itemLocation" /></td>
-                        <td colspan="2" data-ng-hide="!productVariant.trackInventory"><localize key="merchelloInventory_inventory" /></td>
-                    </tr>
-                    <tr>
-                        <th></th>
-                        <th class="name"><localize key="merchelloHeadline_catalog" /></th>
-                        <th><localize key="merchelloWarehouse_location" /></th>
-                        <th data-ng-hide="!productVariant.trackInventory"><localize key="merchelloWarehouse_stock" /></th>
-                        <th data-ng-hide="!productVariant.trackInventory"><localize key="merchelloWarehouse_lowCount" /></th>
-                    </tr>
-                        <tr data-ng-repeat="catalog in warehouse.warehouseCatalogs">
-                            <td class="span1 col-xs-1"><input name="incatalog" type="checkbox" data-ng-model="mapToCatalog(catalog).active" data-ng-change="toggleCatalog()"></td>
-                            <td class="name">{{catalog.name}}</td>
-                            <td><input type="text" class="col-xs-8 span8" data-ng-model="mapToCatalog(catalog).location" /></td>
-                            <td data-ng-hide="!productVariant.trackInventory"><input type="text" class="col-xs-8 span8" data-ng-disabled="!productVariant.trackInventory" data-ng-disabled="!productVariant.trackInventory" data-ng-model="mapToCatalog(catalog).count" /></td>
-                            <td data-ng-hide="!productVariant.trackInventory"><input type="text" class="col-xs-8 span8" data-ng-disabled="!productVariant.trackInventory" data-ng-model="mapToCatalog(catalog).lowCount" /></td>
-                        </tr>
-                    </tbody>
+              <h4><localize key="merchelloWarehouse_warehouse" />: {{warehouse.name}}</h4>
+              
+              <div class="umb-table">
 
-                </table>
+                <div class="umb-table-head">
+                  <div class="umb-table-row">
+
+                    <div class="umb-table-cell"></div>
+
+                    <div class="umb-table-cell">
+                      <localize key="merchelloHeadline_catalog" />
+                    </div>
+
+                    <div class="umb-table-cell">
+                      <localize key="merchelloWarehouse_location" />
+                    </div>
+
+                    <div class="umb-table-cell" data-ng-hide="!productVariant.trackInventory">
+                      <localize key="merchelloWarehouse_stock" />
+                    </div>
+
+                    <div class="umb-table-cell" data-ng-hide="!productVariant.trackInventory">
+                      <localize key="merchelloWarehouse_lowCount" />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="umb-table-body">
+                  <div class="umb-table-row" data-ng-repeat="catalog in warehouse.warehouseCatalogs">
+
+                    <!--<div class="umb-table-cell">
+          <i class="umb-table-body__icon umb-table-body__fileicon icon-newspaper"></i>
+        </div>-->
+
+                    <div class="umb-table-cell">
+                      <input name="incatalog" type="checkbox" data-ng-model="mapToCatalog(catalog).active" data-ng-change="toggleCatalog()">
+                    </div>
+                    <div class="umb-table-cell">
+                      <span>{{catalog.name}}</span>
+                    </div>
+                    <div class="umb-table-cell">
+                      <input type="text" class="form-control umb-editor" data-ng-model="mapToCatalog(catalog).location" />
+                    </div>
+                    <div class="umb-table-cell" data-ng-hide="!productVariant.trackInventory">
+                      <input type="text" class="form-control umb-editor" data-ng-disabled="!productVariant.trackInventory" data-ng-disabled="!productVariant.trackInventory" data-ng-model="mapToCatalog(catalog).count" />
+                    </div>
+                    <div class="umb-table-cell" data-ng-hide="!productVariant.trackInventory">
+                      <input type="text" class="form-control umb-editor" data-ng-disabled="!productVariant.trackInventory" data-ng-model="mapToCatalog(catalog).lowCount" />
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
             </div>
 
         </div>

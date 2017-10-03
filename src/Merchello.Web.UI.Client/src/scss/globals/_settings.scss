@@ -1,9 +1,11 @@
 ﻿// ----------------------------------------------------------------------
 // VARIABLES, IMPORTS, RESETS, MIXINS & EXTENDS
 // ----------------------------------------------------------------------
-$orange: #f57020; //Umbraco's orange
+$orange: #675e7a; //This was Umbraco's orange (#f57020) .. It's now Umbracos purple
 $green: #53a93f; //Umbraco's green button color
 $blue: #049cdb; //Umbraco's blue nav tab hover color
+
+$well-blue: #F2FCFC; // The blue coour of a postcard box on the new Umb dashboard
 $active: lighten($green, 50%);
 $selected: lighten($blue, 50%);
 $warning: lighten($orange, 40%);

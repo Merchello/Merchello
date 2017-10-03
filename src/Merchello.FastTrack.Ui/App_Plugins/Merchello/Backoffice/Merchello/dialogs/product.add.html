@@ -1,44 +1,48 @@
-<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Product.Dialogs.ProductAddController">
-    <!-- Flyout when Change Prices is clicked -->
-    <form name="addProductForm" id="addProductForm">
-        <div class="form-group row-fluid" style="padding: 1em">
-            <div class="control-group">
-                <label for="name"><localize key="merchelloProducts_newProductName" /></label>
-                <div class="error" data-ng-show="addProductForm.name.$invalid && wasFormSubmitted">Name is a required field.</div>
-                <input name="name" id="name" data-ng-model="product.name" class="span8" type="text" data-ng-required="true" />
-            </div>
-            <div class="control-group">
-                <label for="sku"><localize key="merchelloProducts_newProductSku" /></label>
-                <div class="error" data-ng-show="addProductForm.sku.$invalid && wasFormSubmitted">SKU is a required field.</div>
-                <div class="error" data-ng-show="!isUnique">SKU is not unique</div>
-                <input name="sku" id="sku" data-ng-model="product.sku" class="span8" data-ng-blur="checkUniqueSku(productVariant.sku)" type="text" data-ng-required="true" />
-                <span data-ng-show="isUnique">
-                    <i class="icon-check"></i> Ok!
-                </span>
-            </div>
-            <div class="control-group input-prepend">
-                <label for="price"><localize key="merchelloGeneral_price" /></label>
-                <span class="add-on">{{currencySymbol}}</span>
-                <input id="price" name="price" required data-ng-pattern="/^\d+(\.\d+)?$/" type="text" class="form-control col-xs-8 span8" data-ng-model="product.price" />
-            </div>
-            <div class="control-group">
-            <detached-content-type-select entity-type="Product" selected-content-type="contentType" save="saveContentType(contentType)"></detached-content-type-select>
-            </div>
-        </div>
-    </form>
-    <div class="umb-el-wrap umb-panel-buttons">
-        <div class="umb-el-wrap umb-panel-buttons">
-            <div class="btn-toolbar umb-btn-toolbar pull-right">
+<div ng-controller="Merchello.Product.Dialogs.ProductAddController">
+    <div class="umb-dialog-body with-footer">
+        <div class="umb-pane">
 
-                <a href data-ng-click="nav.hideNavigation()" class="btn btn-link"><localize key="general_cancel"></localize></a>
+            <form name="addProductForm" id="addProductForm">
 
-                <button class="btn btn-primary"
-                        data-ng-click="save()">
-                    <localize key="buttons_save">Save</localize>
-                </button>
+                <div class="form-control control-group">
+                    <label for="name"><localize key="merchelloProducts_newProductName" /></label>
+                    <div class="error" data-ng-show="addProductForm.name.$invalid && wasFormSubmitted">Name is a required field.</div>
+                    <input name="name" id="name" data-ng-model="product.name" class="form-control umb-editor" type="text" data-ng-required="true" />
+                </div>
+                <div class="form-control control-group">
+                    <label for="sku">
+                        <localize key="merchelloProducts_newProductSku" /><span data-ng-show="isUnique">
+                            <i class="icon-check"></i>
+                        </span>
+                    </label>
+                    <div class="error" data-ng-show="addProductForm.sku.$invalid && wasFormSubmitted">SKU is a required field. </div>
+                    <div class="error" data-ng-show="!isUnique">SKU is not unique</div>
+                    <input name="sku" id="sku" data-ng-model="product.sku" class="form-control umb-editor" data-ng-blur="checkUniqueSku(productVariant.sku)" type="text" data-ng-required="true" />
+                </div>
+                <div class="form-control control-group">
+                    <label for="price"><localize key="merchelloGeneral_price" /></label>
+                    <div class="input-prepend" style="display: block; padding-bottom: 10px;">
+                        <span class="add-on">{{currencySymbol}}</span>
+                        <input id="price" name="price" required data-ng-pattern="/^\d+(\.\d+)?$/" type="number" data-ng-model="product.price" />
+                    </div>
+                </div>
+                <div class="form-control control-group">
+                    <detached-content-type-select entity-type="Product" selected-content-type="contentType" save="saveContentType(contentType)"></detached-content-type-select>
+                </div>
 
-            </div>
+            </form>
         </div>
     </div>
 
+    <div class="umb-dialog-footer btn-toolbar umb-btn-toolbar">
+        <!--<button class="btn btn-info" ng-click="nav.hideDialog(true)">
+            <localize key="buttons_somethingElse" class="ng-isolate-scope ng-scope">Do something else</localize>
+        </button>-->
+        <a href data-ng-click="nav.hideNavigation()" class="btn btn-link"><localize key="general_cancel"></localize></a>
+
+        <button class="btn btn-success" data-ng-click="save()">
+            <localize key="buttons_save">Save</localize>
+        </button>
+
+    </div>
 </div>

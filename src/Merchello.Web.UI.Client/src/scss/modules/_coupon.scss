@@ -1,101 +1,109 @@
 #offer-settings {
-  position: relative;
+    position: relative;
 
-  .date-settings {
-    margin-top: 1em;
-  }
+    .date-settings {
+        margin-top: 1em;
+    }
 }
 
 .offer-components-table {
-  caption {
-    font-weight: bold;
-  }
-  thead em {
-    color: $green;
-  }
-  td small {
-    display: block;
-  }
-  .sortable {
-    cursor: move
-  }
+    caption {
+        font-weight: bold;
+    }
+
+    thead em {
+        color: $green;
+    }
+
+    td small {
+        display: block;
+    }
+
+    .sortable {
+        cursor: move
+    }
 }
 
 .offer-constraint-controls {
-  label {
-    display: block;
-    strong {
-      display: inline;
+    label {
+        display: block;
+
+        strong {
+            display: inline;
+        }
     }
-  }
 }
+
 #offer-components {
-  .component-not-ready {
-    color: $orange;
-  }
-  .component-configured {
-    color: $green;
-  }
+    .component-not-ready {
+        color: $orange;
+    }
+
+    .component-configured {
+        color: $green;
+    }
 }
+
 #unique-offer-code {
-  .small-loader {
-    width: 15px;
-    margin-right: 1em;
-  }
+    .small-loader {
+        width: 15px;
+        margin-right: 1em;
+    }
 }
 
 #unique-offer-check {
-  display: inline;
-  span {
-    color: $green;
-  }
-  span.warn {
-    color: red;
-  }
-}
+    display: inline;
 
-#priceAdjustForm {
-  .adjustment-type {
-    label {
-      display: inline-block;
-      margin-right: 1em;
+    span {
+        color: $green;
     }
-  }
+
+    span.warn {
+        color: red;
+    }
 }
 
 .each-matching {
-  padding-left: .5em;
-  input[type=checkbox] {
-    margin-right: .5em;
-  }
+    padding-left: .5em;
+
+    input[type=checkbox] {
+        margin-right: .5em;
+    }
 }
 
 .constraint-product-selector {
-  strong { display: inline; }
-  .product-selection-form {
-    margin-top: 2em;
-    clear: both;
-  }
-  .add-product-controls {
-    margin-bottom: 2em;
-  }
-  .well {
-    .variant-selection {
-      background-color: white;
-      border: 1px;
-      border-color: lightgrey;
-      padding: 1em;
-      margin-top: 1em;
-      input[type=checkbox] {
-        margin-right: 1em;
-      }
+    strong {
+        display: inline;
     }
-   a {
-      text-decoration: underline;
-    }
-  }
 
-  span, small {
-    display: block;
-  }
+    .product-selection-form {
+        margin-top: 2em;
+        clear: both;
+    }
+
+    .add-product-controls {
+        margin-bottom: 2em;
+    }
+
+    .well {
+        .variant-selection {
+            background-color: white;
+            border: 1px;
+            border-color: lightgrey;
+            padding: 1em;
+            margin-top: 1em;
+
+            input[type=checkbox] {
+                margin-right: 1em;
+            }
+        }
+
+        a {
+            text-decoration: underline;
+        }
+    }
+
+    span, small {
+        display: block;
+    }
 }

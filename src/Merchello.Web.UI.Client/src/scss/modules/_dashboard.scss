@@ -1,39 +1,230 @@
 ﻿.merchellodashboard {
-    .logo {
-        img {
-            width: 240px;
-            margin: 0 14px 0 0;
-        }
-
-        a, a:visited {
-            &:hover {
-                text-decoration: none !important;
-            }
-        }
+    .merchello-logo {
+        text-align:center;
+        padding-bottom:15px;
     }
 
-    .merchello-block {
-        padding: 15px 18px 50px 18px;
-        position: relative;
+    .umb-dashboard-grid {
+        max-width: 1200px
+    }
+
+    .umb-dashboard-grid .dash-inner-area {
+        margin: 10px 0px;
+        padding: 10px;
+    }
+
+    .dash-inner-area a {
+        text-decoration: underline;
+    }
+
+    .umb-dashboard-grid {
+        line-height: 1.6em;
+        color: #666666;
+        font-family: 'Open Sans', sans-serif;
+    }
+
+    .umb-dashboard-grid .dash-inner-control {
+        margin-bottom: 0px;
+    }
+    /* Buttons */
+    .umb-dashboard-grid .button {
+        border-radius: 3px;
+        background-color: #39D18C;
+        color: #ffffff;
+        text-decoration: none;
+        padding: 10px 20px;
+        display: inline-block;
+        transition: background-color 150ms ease-in-out;
+    }
+
+    .umb-dashboard-grid .button:hover {
+        background-color: #2ab777;
+    }
+
+    .umb-dashboard-grid .add-image {
+        display: block;
+        width: 120px;
+        height: 120px;
+        line-height: 120px;
+        color: #d9d9d9;
         text-align: center;
+        text-decoration: none;
+        border: 2px #d9d9d9 dashed;
+        transition: all 150ms ease-in-out;
+        width: 100%;
+        box-sizing: border-box;
+    }
 
-        h3 {
-            font-size: 22px;
-            line-height: 24px;
+    .umb-dashboard-grid .add-image:hover {
+        color: #2e8aea;
+        border-color: #2e8aea;
+    }
+    /* Control settings */
+    .umb-dashboard-grid label {
+        color: #000000;
+        display: block;
+    }
+
+    .umb-dashboard-grid .input-help {
+        font-size: 12px;
+        line-height: 1.5em;
+    }
+
+    .umb-dashboard-grid textarea {
+        width: 100%;
+    }
+
+    .umb-dashboard-grid .input-wrapper {
+        margin-bottom: 15px;
+    }
+
+    .umb-dashboard-grid .control-settings {
+        padding: 15px;
+    }
+
+    .umb-dashboard-grid .invisible-input {
+        border: none;
+        width: 100%;
+        display: block;
+    }
+    /* Control: Title */
+    .umb-dashboard-grid .title {
+        font-size: 30px;
+        color: #363636;
+        line-height: 1.3em;
+        text-align: center;
+        max-width: 750px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+    /* Control: Intro text */
+    .umb-dashboard-grid .intro-text {
+        font-size: 18px;
+        color: #666666;
+        text-align: center;
+        max-width: 750px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.6em;
+    }
+    /* Control: Info Box */
+    .umb-dashboard-grid .info-box {
+        background-color: #F2FCFC;
+        border-radius: 3px;
+        border: 2px solid transparent;
+        padding: 25px;
+        margin-bottom: 10px;
+        text-decoration: none;
+        display: block;
+        color: #666;
+    }
+
+    .umb-dashboard-grid .info-box:hover {
+        border: 2px solid #00BEC1;
+        cursor: pointer;
+        transition: border-color 150ms ease-in-out;
+    }
+
+    .umb-dashboard-grid .info-box__title {
+        color: #00BEC1;
+        font-size: 16px;
+        text-align: center;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .umb-dashboard-grid .info-box__description {
+        text-align: center;
+        line-height: 1.4em;
+    }
+    /* Control: Post Card */
+    .umb-dashboard-grid .post-card {
+        background-color: #F8F8F8;
+        border-radius: 3px;
+        margin-bottom: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .umb-dashboard-grid .post-card__image-wrapper {
+        flex: 0 0 auto;
+        width: 100%;
+        margin-bottom: 30px;
+        max-height: 225px;
+        overflow: hidden;
+    }
+
+    .umb-dashboard-grid .post-card__image {
+        cursor: pointer;
+        border-radius: 3px 3px 0 0;
+        width: 100%;
+    }
+
+    .umb-dashboard-grid .post-card__image-wrapper + .post-card__content {
+        padding-top: 0px;
+    }
+
+    .umb-dashboard-grid .post-card__content {
+        padding: 30px;
+    }
+
+    .umb-dashboard-grid .post-card__title {
+        color: #363636;
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        line-height: 1.6em;
+    }
+
+    .umb-dashboard-grid .post-card__teaser {
+        font-size: 13px;
+        margin-bottom: 15px;
+    }
+    /* featured */
+    .umb-dashboard-grid .post-card--featured {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .umb-dashboard-grid .post-card--featured .post-card__image-wrapper {
+        flex: 0 0 50%;
+        margin-bottom: 0;
+        max-height: none;
+    }
+
+    .umb-dashboard-grid .post-card--featured .post-card__background-image {
+        background-repeat: no-repeat;
+        background-size: cover;
+        align-self: stretch;
+        background-position: center center;
+        min-height: 300px;
+    }
+
+    .umb-dashboard-grid .post-card--featured .post-card__content {
+        padding: 50px;
+        align-self: center;
+    }
+
+    .umb-dashboard-grid .post-card--featured .post-card__title {
+        font-size: 24px;
+    }
+
+    .umb-dashboard-grid .post-card--featured .post-card__teaser {
+        font-size: 16px;
+        line-height: 1.6em;
+    }
+
+    @media (max-width: 992px) {
+
+        .umb-dashboard-grid .post-card--featured {
+            flex-direction: column;
         }
 
-        a, a:visited {
-            img {
-                border: 1px #e6e6e6 solid;
-            }
-        }
-
-        .btn-merchello {
-            position: absolute;
-            bottom: 0;
-            left: 15px;
-            right: 15px;
-            width: auto;
+        .umb-dashboard-grid .post-card--featured .post-card__image-wrapper {
+            flex: 0 0 auto;
         }
     }
 }

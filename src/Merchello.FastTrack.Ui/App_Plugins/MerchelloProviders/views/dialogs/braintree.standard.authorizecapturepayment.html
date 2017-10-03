@@ -1,55 +1,58 @@
 <div class="umb-panel merchello-side-panel" ng-controller="Merchello.Providers.Dialogs.BraintreeStandardAuthorizeCapturePaymentController">
-    <div class="umb-modalcolumn-header">
-        <h4>Authorize Capture {{dialogData.paymentMethodName}} Payment</h4>
-    </div>
-    <div class="umb-panel-body with-header with-footer" data-ng-show="loaded">
-        <div class="braintree">
-            <form action="/" method="post" id="cardForm" >
-                <label class="hosted-fields--label" for="amount">Amount</label>
-                <div class="input-prepend">
-                    <span class="add-on">{{dialogData.currencySymbol}}</span>
-                    <input class="col-xs-4 span4" type="text" id="amount" name="amount" data-ng-model="dialogData.amount">
-                </div>
-                <div class="error" data-ng-show="cardForm.amount.$invalid && wasFormSubmitted">Amount between {{0 | currency: dialogData.currencySymbol }} & {{ dialogData.invoiceBalance | currency: dialogData.currencySymbol }}.</div>
+    <div class="umb-overlay umb-overlay-right">
+        <form class="umb-overlay__form" action="/" method="post" id="cardForm">
 
-                <label class="hosted-fields--label" for="card-number">Card Number</label>
-                <div id="card-number" class="hosted-field"></div>
-
-                <label class="hosted-fields--label" for="expiration-date">Expiration Date</label>
-                <div id="expiration-date" class="hosted-field"></div>
-
-                <label class="hosted-fields--label" for="cvv">CVV</label>
-                <div id="cvv" class="hosted-field"></div>
-
-                <label class="hosted-fields--label" for="postal-code">Postal Code</label>
-                <div id="postal-code" class="hosted-field"></div>
-
-                <div class="button-container">
-                    <input type="submit" class="button button--small button--green" value="Purchase" id="submit"/>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div class="umb-panel-footer" data-ng-show="loaded">
-        <div class="umb-el-wrap umb-panel-buttons">
-            <div class="btn-toolbar umb-btn-toolbar pull-right">
-
-                <a href data-ng-click="close()" class="btn btn-link">
-                    <localize key="general_cancel">Cancel</localize>
-                </a>
-
-                <!--button class="btn btn-primary"
-                        data-ng-click="save(dialogData)">
-                    <localize key="merchelloOrder_processPayment" />
-                </button-->
-
+            <div class="umb-overlay-header">
+                <h4 class="umb-overlay__title">Authorize Capture {{dialogData.paymentMethodName}} Payment</h4>
             </div>
-        </div>
-    </div>
 
-    <!-- Loader -->
-    <div class="pager" data-ng-show="!loaded">
-        <img src="/umbraco/assets/img/loader.gif" />
+            <div class="umb-overlay-container form-horizontal merchello-panel-body">
+                <!-- Loader -->
+                <div class="pager" data-ng-show="!loaded">
+                    <p>Please wait, connecting to braintree</p>
+                    <p><img src="/umbraco/assets/img/loader.gif" /></p>
+                </div>
+                <div class="braintree" data-ng-show="loaded">
+
+                    <label class="hosted-fields--label" for="amount">Amount</label>
+                    <div class="input-prepend">
+                        <span class="add-on">{{dialogData.currencySymbol}}</span>
+                        <input class="col-xs-4 span4" type="text" id="amount" name="amount" data-ng-model="dialogData.amount">
+                    </div>
+                    <div class="error" data-ng-show="cardForm.amount.$invalid && wasFormSubmitted">Amount between {{0 | currency: dialogData.currencySymbol }} & {{ dialogData.invoiceBalance | currency: dialogData.currencySymbol }}.</div>
+
+                    <label class="hosted-fields--label" for="card-number">Card Number</label>
+                    <div id="card-number" class="hosted-field"></div>
+
+                    <label class="hosted-fields--label" for="expiration-date">Expiration Date</label>
+                    <div id="expiration-date" class="hosted-field"></div>
+
+                    <label class="hosted-fields--label" for="cvv">CVV</label>
+                    <div id="cvv" class="hosted-field"></div>
+
+                    <label class="hosted-fields--label" for="postal-code">Postal Code</label>
+                    <div id="postal-code" class="hosted-field"></div>
+                </div>
+            </div>
+
+            <div class="umb-overlay-drawer">
+                <div class="umb-overlay-drawer__align-right">
+                   
+                    
+                    <div class="umb-button" data-ng-show="loaded">
+                        <a href data-ng-click="close()" class="btn btn-link">
+                            <localize key="general_cancel"></localize>
+                        </a>
+                    </div>
+
+                    <div class="umb-button" data-ng-show="loaded">
+                        <input type="submit" class="btb btn-success" value="Purchase" id="submit" />
+                    </div>
+
+                </div>
+            </div>
+
+
+        </form>
     </div>
 </div>

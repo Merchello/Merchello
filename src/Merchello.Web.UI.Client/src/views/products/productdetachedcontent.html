@@ -1,39 +1,52 @@
 <form novalidate name="productVariantForm" data-ng-controller="Merchello.Backoffice.ProductDetachedContentController"
-      data-ng-show="loaded" data-ng-submit="save()" val-form-manager>
-    <umb-panel val-show-validation>
-        <umb-header>
-            <div class="span7">
-                <umb-content-name ng-model="productVariant.name" localize="placeholder" placeholder="@merchelloPlaceholders_enterProduct">
-                </umb-content-name>
-            </div>
-            <div class="span5">
-                <div class="btn-toolbar pull-right umb-btn-toolbar">
-                    <div class="btn-group" data-ng-show="productVariant.detachedContents.length > 0">
-                        <button data-ng-disabled="productVariantForm.$invalid"  data-ng-click="save()" class="btn btn-success" prevent-default><localize key="buttons_save" /></button>
-                        <button class="btn dropdown-toggle btn-success" data-toggle="dropdown">
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu merchello-action-menu" role="menu">
-                            <li><a data-ng-click="openRemoveDetachedContentDialog()"><localize key="merchelloDetachedContent_removeDetachedContent">Remove Extended Content</localize></a></li>
-                        </ul>
+      data-ng-show="loaded" data-ng-submit="save()" val-form-manager class="merchello">
+    
+    <div class="umb-panel umb-editor-wrapper" val-show-validation>
+
+        <div class="umb-editor-header umb-panel-header">
+            <div class="umb-panel-header-content-wrapper">
+
+                <div class="umb-panel-header-content">
+                    <div class="umb-panel-header-left-side -top-position">
+                        <div class="umb-panel-header-title-wrapper">
+                            <input
+                                type="text"
+                                class="umb-panel-header-name-input"
+                                localize="placeholder"
+                                placeholder="@merchelloPlaceholders_enterProduct"
+                                name="headerName"
+                                ng-model="productVariant.name"
+                                umb-auto-focus
+                                val-server-field="Name"
+                                required/>
+                        </div>
+                        <div class="umb-editor-header__actions-menu">
+                                <div class="pull-right" style="position: relative;">
+                                    <a class="btn btn-info" href="#" data-toggle="dropdown">
+                                        <localize key="general_actions" class="ng-isolate-scopee">Actions</localize>
+                                        <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu umb-actions" role="menu" aria-labelledby="dLabel">
+                                        <li class="action"><a data-ng-click="openCopyProductDialog()"><localize key="merchelloProducts_copyProduct"/></a></li>
+                                        <li class="action"><a data-ng-click="deleteProductDialog()"><localize key="merchelloVariant_deleteProduct"/></a></li>
+                                        <li class="action sep"><a data-ng-click="openRemoveDetachedContentDialog()" data-ng-show="productVariant.detachedContents.length > 0"><localize key="merchelloDetachedContent_removeDetachedContent">Remove Extended Content</localize></a></li>
+                                        <li class="action" data-ng-repeat="lang in languages" ng-class="{'sep': lang == languages[0]}">
+                                            <a href data-ng-click="setLanguage(lang)" prevent-default>Edit {{lang.name}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                        </div>
                     </div>
                 </div>
+
+                <merchello-tabs tabs="tabs"></merchello-tabs>
             </div>
-            <merchello-tabs tabs="tabs"></merchello-tabs>
-        </umb-header>
+        </div>
 
         <merchello-panel>
             <div class="form-horizontal tab-content row-fluid" data-ng-show="preValuesLoaded">
-                <div class="umb-pane" data-ng-show="isConfigured">
-                    <div class="btn-group merch-language-select pull-right">
-                        <a href="#" class="btn dropdown-toggle" data-toggle="dropdown"><i class="icon icon-flag-alt"></i> {{ language.isoCode }} <i class="icon-navigation-down"></i></a>
-                        <ul class="dropdown-menu">
-                            <li data-ng-repeat="lang in languages">
-                                <a href data-ng-click="setLanguage(lang)" prevent-default>{{lang.name}}</a>
-                            </li>
-                        </ul>
-                    </div>
-
+                <div data-ng-show="isConfigured">
+                    
                     <umb-property property="property" ng-repeat="property in currentTab.properties">
                         <umb-editor model="property"></umb-editor>
                     </umb-property>
@@ -42,12 +55,34 @@
 
                 <div class="merchello-pane">
                     <div class="pager well" data-ng-hide="isConfigured">
-                        <localize key="merchelloDetachedContent_noProductContentType" />
+                        <localize key="merchelloDetachedContent_noProductContentType"/>
                         <detached-content-type-select data-ng-if="!isConfigured" entity-type="Product" selected-content-type="contentType" show-save="preValuesLoaded" save="saveContentType(contentType)"></detached-content-type-select>
                     </div>
-                </div>
-                <!-- /merchello-pane -->
+                </div>        
             </div>
         </merchello-panel>
-    </umb-panel>
+
+
+        <merchello-drawer>
+            
+            <div class="umb-editor-drawer-content__left-side">
+                
+                <ul class="umb-breadcrumbs">
+                    <li class="umb-breadcrumbs__ancestor">
+                        <span class="umb-breadcrumbs__ancestor-text"><i class="icon icon-flag-alt"></i> Editing {{ language.isoCode }}</span>
+                    </li>
+                </ul>
+
+            </div>
+            
+            <div class="umb-editor-drawer-content__right-side">
+                <div class="btn-group umb-button-group">
+                    <div class="umb-button">
+                        <button data-ng-disabled="productVariantForm.$invalid" type="button" data-ng-click="save(productVariantForm)" hotkey="ctrl+s" hotkey-when-hidden="true" class="btn btn-success"><localize key="buttons_save"/></button>
+                    </div>
+                </div>
+            </div>
+        </merchello-drawer>
+
+    </div>
 </form>

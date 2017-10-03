@@ -1,43 +1,50 @@
 <div class="umb-panel merchello-side-panel" ng-controller="Merchello.Product.Dialogs.ProductVariantBulkUpdateInventoryController">
-    <div class="umb-modalcolumn-header">
-        <h4>Update Inventory For All Selected Items</h4>
-    </div>
-    <div class="umb-panel-body with-header with-footer">
+    <div class="umb-overlay umb-overlay-right">
+        <form class="umb-overlay__form">
+            <div class="umb-overlay-header">
+                <h4 class="umb-overlay__title">Update Inventory For All Selected Items</h4>
+            </div>
+            <div class="umb-overlay-container form-horizontal merchello-panel-body">
+                
+                <div class="control-group">
+                    <div class="form-group row-fluid">
+                        <label for="update-inventory">New quantity</label>
+                        <input name="update-inventory" data-ng-model="dialogData.count" class="col-xs-3 span3" type="number" />
+                    </div>
+                </div>
 
-        <!-- Flyout when Update Inventory is clicked -->
-        <form>
-            <div class="form-group row-fluid">
-                <label for="update-inventory">New quantity</label>
-                <input name="update-inventory" data-ng-model="dialogData.count" class="col-xs-3 span3" type="number" />
+                <div class="control-group">
+                    <div class="form-group row-fluid">
+                        <label class="label-checkbox"><input name="includeLowCount" type="checkbox" data-ng-model="dialogData.includeLowCount"> <span>Update low count.</span></label>
+                    </div>
+                    <div class="form-group row-fluid" data-ng-show="dialogData.includeLowCount">
+                        <label for="update-inventory">New low stock quantity</label>
+                        <input name="update-inventory" data-ng-model="dialogData.lowCount" class="col-xs-3 span3" type="number" />
+                    </div>
+                </div>
+
+                <p class="text-warning" data-ng-show="dialogData.warning != ''">{{dialogData.warning}}</p>
+
             </div>
-            <div class="form-group row-fluid">
-                <label class="label-checkbox"><input name="includeLowCount" type="checkbox" data-ng-model="dialogData.includeLowCount"> <span>Update low count.</span></label>
-            </div>
-            <div class="form-group row-fluid" data-ng-show="dialogData.includeLowCount">
-                <label for="update-inventory">New low stock quantity</label>
-                <input name="update-inventory" data-ng-model="dialogData.lowCount" class="col-xs-3 span3" type="number" />
+
+            <div class="umb-overlay-drawer">
+                <div class="umb-overlay-drawer__align-right">
+                    
+                    <div class="umb-button">
+                        <a href data-ng-click="close()" class="btn btn-link">
+                            <localize key="general_cancel"></localize>
+                        </a>
+                    </div>
+
+                    <div class="umb-button">
+                        <button class="btn btn-success" data-ng-click="submit(dialogData)">
+                            <localize key="buttons_save"></localize>
+                        </button>
+                    </div>
+
+                </div>
             </div>
         </form>
-
-        <p class="text-warning" data-ng-show="dialogData.warning != ''">{{dialogData.warning}}</p>
-
-    </div>
-
-    <div class="umb-panel-footer">
-        <div class="umb-el-wrap umb-panel-buttons">
-            <div class="btn-toolbar umb-btn-toolbar pull-right">
-
-                <a href data-ng-click="close()" class="btn btn-link">
-                    <localize key="general_cancel">Cancel</localize>
-                </a>
-
-                <button class="btn btn-primary"
-                        data-ng-click="submit(dialogData)">
-                    <localize key="buttons_save">Save</localize>
-                </button>
-
-            </div>
-        </div>
     </div>
 </div>
 

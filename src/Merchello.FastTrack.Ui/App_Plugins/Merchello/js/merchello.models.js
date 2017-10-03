@@ -635,6 +635,7 @@ angular.module('merchello.models').constant('EntityCollectionProviderDisplay', E
         self.company = '';
         self.countryCode = '';
         self.phone = '';
+        self.email = '';
         self.isDefault = false;
     };
 
@@ -1760,8 +1761,12 @@ OfferComponentDefinitionDisplay.prototype = (function() {
         }
         // hack catch for save call where there's a context switch on this to window
         // happens when saving the offer settings
-        if (this.extendedData.items !== undefined) {
-            return !this.extendedData.isEmpty();
+        if (this.extendedData) {
+            if (this.extendedData.items !== undefined && this.extendedData.items !== null) {
+                return !this.extendedData.isEmpty();
+            } else {
+                return true;
+            }
         } else {
             return true;
         }
