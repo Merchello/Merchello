@@ -1,28 +1,37 @@
 <div class="umb-panel merchello-side-panel">
-    <div class="umb-modalcolumn-header">
-        <h4><localize key="merchelloProducts_regenSkus" /></h4>
-    </div>
+    
+<div class="umb-overlay umb-overlay-right">
+    <div class="umb-overlay__form">
+        
+        <div class="umb-overlay-header">
+            <h4 class="umb-overlay__title"><localize key="merchelloProducts_regenSkus" /></h4>
+        </div>
 
-    <div class="umb-panel-body with-header with-footer">
-        <h4><localize key="merchelloProducts_regenSkusConfirm" /> '<span data-ng-bind-html="dialogData.name"></span>'? </h4>
+        <div class="umb-overlay-container form-horizontal merchello-panel-body">
+            
+            <h4><localize key="merchelloProducts_regenSkusConfirm"/> '<span data-ng-bind-html="dialogData.name"></span>'? </h4>
 
-    </div>
+        </div>
 
-    <div class="umb-panel-footer">
-        <div class="umb-el-wrap umb-panel-buttons">
-            <div class="btn-toolbar umb-btn-toolbar pull-right">
+        <div class="umb-overlay-drawer">
+            <div class="umb-overlay-drawer__align-right">
 
-                <a href data-ng-click="close()" class="btn btn-link">
-                    <localize key="general_cancel">Cancel</localize>
-                </a>
+                <div class="umb-button">
+                    <a href data-ng-click="close()" class="btn btn-link">
+                        <localize key="general_cancel"></localize>
+                    </a>
+                </div>
 
-                <button class="btn btn-primary"
-                        data-ng-click="submit()">
-                    <localize key="buttons_save">Save</localize>
-                </button>
+                <div class="umb-button">
+                    <button class="btn btn-success" data-ng-click="submit()">
+                        <localize key="buttons_save"></localize>
+                    </button>
+                </div>
 
             </div>
         </div>
+
     </div>
+</div>
 </div>
 

@@ -1,49 +1,91 @@
 <div class="umb-panel merchello-side-panel" ng-controller="Merchello.Customer.Dialogs.CustomerAddressAddEditController">
-    <div class="umb-modalcolumn-header">
-        <h4>Add/Edit {{toTitleCase(dialogData.customerAddress.addressType)}} Address</h4>
-    </div>
-    <form name="editAddressForm" id="editAddressForm">
-        <div class="umb-panel-body with-header with-footer">
-            <div class="form-group row-fluid">
-                <label for="label">*<localize key="merchelloCustomers_label" />:</label>
-                <div class="error" data-ng-show="editAddressForm.label.$invalid && wasFormSubmitted"><localize key="merchelloCustomers_labelRequired" /></div>
-                <input name="label" type="text" class="span12" placeholder="My House" data-ng-model="dialogData.customerAddress.label" required />
-                <label for="fullName"><localize key="merchelloCustomers_fullName" />:</label>
-                <input name="fullName" type="text" class="span12" data-ng-model="dialogData.customerAddress.fullName" />
-                <label for="org"><localize key="merchelloCustomers_company" />:</label>
-                <input name="org" type="text" class="span12" data-ng-model="dialogData.customerAddress.company" />
-                <label for="address1">*<localize key="merchelloCustomers_address" />:</label>
-                <div class="error" data-ng-show="editAddressForm.address1.$invalid && wasFormSubmitted"><localize key="merchelloCustomers_addressRequired" /></div>
-                <input name="address1" type="text" class="span12" data-ng-model="dialogData.customerAddress.address1" required />
-                <label for="address2"><localize key="merchelloCustomers_addressLine2" />:</label>
-                <input name="address2" type="text" class="span12" data-ng-model="dialogData.customerAddress.address2" />
-                <label for="locality">*<localize key="merchelloCustomers_city" />:</label>
-                <div class="error" data-ng-show="editAddressForm.locality.$invalid && wasFormSubmitted"><localize key="merchelloCustomers_cityRequired" /></div>
-                <input name="locality" type="text" class="span12" data-ng-model="dialogData.customerAddress.locality" required />
-                <label for="country">*<localize key="merchelloCustomers_country" />:</label>
-                <select name="country" class="span12" data-ng-model="dialogData.selectedCountry" data-ng-change="updateProvinceList()" data-ng-options="option.name for option in dialogData.countries"></select>
-                <label for="region"><localize key="merchelloCustomers_stateOrProvince" />:</label>
-                <input name="region" type="text" class="span12" data-ng-show="dialogData.selectedCountry.provinces.length === 0" data-ng-model="currentAddress.region" />
-                <select name="regionSelect" class="span12" data-ng-show="dialogData.selectedCountry.provinces.length > 0" data-ng-model="dialogData.selectedProvince"  data-ng-options="option.name for option in dialogData.selectedCountry.provinces"></select>
-                <label for="postalCode">*<localize key="merchelloCustomers_zipOrPostalCode" />:</label>
-                <div class="error" data-ng-show="editAddressForm.postalCode.$invalid && wasFormSubmitted"><localize key="merchelloCustomers_zipOrPostalCodeRequired" /></div>
-                <input name="postalCode" type="text" class="span12" data-ng-model="dialogData.customerAddress.postalCode" required />
-                <div>
-                    <input type="checkbox" data-ng-model="dialogData.customerAddress.isDefault" data-ng-disabled="dialogData.setDefault" /> <localize key="merchelloCustomers_primaryAddress" />
-                </div><br />
-                <label for="phone"><localize key="merchelloCustomers_phone" />:</label>
-                <input name="phone" type="tel" class="span12" data-ng-model="dialogData.customerAddress.phone" />
+
+    <div class="umb-overlay umb-overlay-right">
+        <form class="umb-overlay__form" name="editAddressForm" id="editAddressForm">
+
+            <div class="umb-overlay-header">
+                <h4 class="umb-overlay__title">Add/Edit {{toTitleCase(dialogData.customerAddress.addressType)}} Address</h4>
             </div>
-        </div>
-        <div class="umb-panel-footer">
-            <div class="umb-el-wrap umb-panel-buttons">
-                <div class="btn-toolbar umb-btn-toolbar pull-right">
-                    <!-- ACTION: Cancel -->
-                    <a href data-ng-click="close()" class="btn btn-link"><localize key="general_cancel" /></a>
-                    <!-- ACTION: Submit DialogData -->
-                    <button class="btn btn-primary" data-ng-click="save()"><localize key="buttons_save" /></button>
+
+            <div class="umb-overlay-container form-horizontal merchello-panel-body">
+                <div class="row-fluid">
+                    <div class="form-group control-group">
+                        <div class="error" data-ng-show="editAddressForm.label.$invalid && wasFormSubmitted">
+                            <localize key="merchelloCustomers_labelRequired"/>
+                        </div>
+                        <label for="label">*<localize key="merchelloCustomers_label"/>:</label>
+                        <input name="label" type="text" class="span12" placeholder="My House" data-ng-model="dialogData.customerAddress.label" required/>
+                    </div>
+                    <div class="form-group control-group">
+                        <label for="fullName"><localize key="merchelloCustomers_fullName"/>:</label>
+                        <input name="fullName" type="text" class="span12" data-ng-model="dialogData.customerAddress.fullName"/>
+                    </div>
+                    <div class="form-group control-group">                        
+                        <label for="org"><localize key="merchelloCustomers_company"/>:</label>
+                        <input name="org" type="text" class="span12" data-ng-model="dialogData.customerAddress.company"/>
+                    </div>
+                    <div class="form-group control-group">
+                        <label for="address1">*<localize key="merchelloCustomers_address"/>:</label>
+                        <input name="address1" type="text" class="span12" data-ng-model="dialogData.customerAddress.address1" required/>
+                        <div class="error" data-ng-show="editAddressForm.address1.$invalid && wasFormSubmitted">
+                            <localize key="merchelloCustomers_addressRequired"/>
+                        </div>
+                    </div>
+                    <div class="form-group control-group">
+                        <label for="address2"><localize key="merchelloCustomers_addressLine2"/>:</label>
+                        <input name="address2" type="text" class="span12" data-ng-model="dialogData.customerAddress.address2"/>
+                    </div>
+                    <div class="form-group control-group">
+                        <label for="locality">*<localize key="merchelloCustomers_city"/>:</label>
+                        <input name="locality" type="text" class="span12" data-ng-model="dialogData.customerAddress.locality" required/>
+                        <div class="error" data-ng-show="editAddressForm.locality.$invalid && wasFormSubmitted">
+                            <localize key="merchelloCustomers_cityRequired"/>
+                        </div>
+                    </div>
+                    <div class="form-group control-group">
+                        <label for="country">*<localize key="merchelloCustomers_country"/>:</label>
+                        <select name="country" class="span12" data-ng-model="dialogData.selectedCountry" data-ng-change="updateProvinceList()" data-ng-options="option.name for option in dialogData.countries"></select>
+                    </div>
+                    <div class="form-group control-group">                        
+                        <label for="region"><localize key="merchelloCustomers_stateOrProvince"/>:</label>
+                        <input name="region" type="text" class="span12" data-ng-show="dialogData.selectedCountry.provinces.length === 0" data-ng-model="dialogData.customerAddress.region"/>
+                        <select name="regionSelect" class="span12" data-ng-show="dialogData.selectedCountry.provinces.length > 0" data-ng-model="dialogData.selectedProvince" data-ng-options="option.name for option in dialogData.selectedCountry.provinces"></select>
+                    </div>
+                    <div class="form-group control-group">
+                        <label for="postalCode">*<localize key="merchelloCustomers_zipOrPostalCode"/>:</label>
+                        <input name="postalCode" type="text" class="span12" data-ng-model="dialogData.customerAddress.postalCode" required/>
+                        <div class="error" data-ng-show="editAddressForm.postalCode.$invalid && wasFormSubmitted">
+                            <localize key="merchelloCustomers_zipOrPostalCodeRequired"/>
+                        </div>
+                    </div>
+                    <div class="form-group control-group">
+                        <label for="phone"><localize key="merchelloCustomers_phone"/>:</label>
+                        <input name="phone" type="tel" class="span12" data-ng-model="dialogData.customerAddress.phone"/>
+                    </div>
+                    <div class="form-group control-group">
+                            <input type="checkbox" data-ng-model="dialogData.customerAddress.isDefault" data-ng-disabled="dialogData.setDefault"/> <localize key="merchelloCustomers_primaryAddress"/>
+                    </div>    
                 </div>
             </div>
-        </div>
-    </form>
+
+            <div class="umb-overlay-drawer">
+                <div class="umb-overlay-drawer__align-right">
+                    
+                    <div class="umb-button">
+                        <a href data-ng-click="close()" class="btn btn-link">
+                            <localize key="general_cancel"></localize>
+                        </a>
+                    </div>
+
+                    <div class="umb-button">
+                        <button class="btn btn-success" data-ng-click="save()">
+                            <localize key="buttons_save"></localize>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+        </form>
+    </div>
 </div>

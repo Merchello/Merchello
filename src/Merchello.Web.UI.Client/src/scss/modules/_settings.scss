@@ -1,10 +1,5 @@
 .merchello-settings {
-
-  // hacky fix for global style override
-  label {
-    vertical-align: middle;
-    span {
-      display: inline-block;
+    .umb-editor-drawer {
+        margin: 0px -20px 0 -20px;
     }
-  }
 }

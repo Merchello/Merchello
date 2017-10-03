@@ -1,22 +1,35 @@
-<div class="umb-panel-body no-header" ng-controller="Merchello.Customer.Dialogs.CustomerNewCustomerController">
-    <form name="editInfoForm" id="editInfoForm">
-        <div class="form-group row-fluid" style="padding: 1em">
-            <label for="firstName"><localize key="merchelloCustomers_firstName" />:</label>
-            <input name="firstName" type="text" class="span11" data-ng-model="firstName"  />
-            <label for="lastName"><localize key="merchelloCustomers_lastName" />:</label>
-            <input name="lastName" type="text" class="span11" data-ng-model="lastName" />
-            <label for="email">*<localize key="merchelloCustomers_email" />:</label>
-            <div class="error" data-ng-show="editInfoForm.email.$invalid && wasFormSubmitted"><localize key="merchelloCustomers_emailRequired" /></div>
-            <input name="email" type="email" class="span11" data-ng-model="email" required />
-        </div>
-        <div class="umb-el-wrap umb-panel-buttons">
-            <div class="btn-toolbar umb-btn-toolbar pull-right">
-                <!-- ACTION: Cancel -->
-                <a href data-ng-click="nav.hideNavigation()" class="btn btn-link"><localize key="general_cancel"></localize></a>
-                <!-- ACTION: Submit DialogData -->
-                <button class="btn btn-primary" data-ng-click="save()"><localize key="buttons_save" /></button>
+<div ng-controller="Merchello.Customer.Dialogs.CustomerNewCustomerController">
 
+    <form name="editInfoForm" id="editInfoForm">
+
+        <div class="umb-dialog-body with-footer">
+            <div class="umb-pane">
+                <div class="row-fluid">
+                    <div class="form-group control-group">
+                        <label for="firstName"><localize key="merchelloCustomers_firstName" />:</label>
+                        <input name="firstName" type="text" class="span11" data-ng-model="firstName" />
+                    </div>
+                    <div class="form-group control-group">
+                        <label for="lastName"><localize key="merchelloCustomers_lastName" />:</label>
+                        <input name="lastName" type="text" class="span11" data-ng-model="lastName" />
+                    </div>
+                    <div class="form-group control-group">
+                        <label for="email">*<localize key="merchelloCustomers_email" />:</label>
+                        <input name="email" type="email" class="span11" data-ng-model="email" required />
+                        <div class="error" data-ng-show="editInfoForm.email.$invalid && wasFormSubmitted">
+                            <localize key="merchelloCustomers_emailRequired" />
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+
+        <div class="umb-dialog-footer btn-toolbar umb-btn-toolbar">
+            <!-- ACTION: Cancel -->
+            <a href data-ng-click="nav.hideNavigation()" class="btn btn-link"><localize key="general_cancel"></localize></a>
+            <!-- ACTION: Submit DialogData -->
+            <button class="btn btn-primary" data-ng-click="save()"><localize key="buttons_save" /></button>
+        </div>
     </form>
+
 </div>

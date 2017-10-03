@@ -25,7 +25,6 @@
             $scope.tabs = [];
             $scope.entityType = 'product';
 
-
             // settings - contains defaults for the checkboxes
             $scope.settings = {};
 
