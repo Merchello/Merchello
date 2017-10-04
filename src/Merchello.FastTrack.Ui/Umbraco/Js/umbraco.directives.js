@@ -10839,8 +10839,8 @@ Use this directive to render a user group preview, where you can see the permiss
         };
     }
     angular.module('umbraco.directives.validation').directive('valEmail', valEmail).factory('valEmailExpression', function () {
-        //NOTE: This is the fixed regex which is part of the newer angular
-        return { EMAIL_REGEXP: /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i };
+        var emailRegex = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
+        return { EMAIL_REGEXP: emailRegex };
     });
     /**
 * @ngdoc directive

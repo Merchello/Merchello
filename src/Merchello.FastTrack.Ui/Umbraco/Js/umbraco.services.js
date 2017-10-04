@@ -3519,7 +3519,8 @@
                 var isSelected = false;
                 for (var i = 0; selection.length > i; i++) {
                     var selectedItem = selection[i];
-                    if (item.id === selectedItem.id || item.key === selectedItem.key) {
+                    // if item.id is 2147483647 (int.MaxValue) use item.key
+                    if (item.id !== 2147483647 && item.id === selectedItem.id || item.key === selectedItem.key) {
                         isSelected = true;
                     }
                 }
@@ -3545,7 +3546,8 @@
             function deselectItem(item, selection) {
                 for (var i = 0; selection.length > i; i++) {
                     var selectedItem = selection[i];
-                    if (item.id === selectedItem.id) {
+                    // if item.id is 2147483647 (int.MaxValue) use item.key
+                    if (item.id !== 2147483647 && item.id === selectedItem.id || item.key === selectedItem.key) {
                         selection.splice(i, 1);
                         item.selected = false;
                     }
@@ -3603,7 +3605,10 @@
                 for (var i = 0; i < items.length; i++) {
                     var item = items[i];
                     if (checkbox.checked) {
-                        selection.push({ id: item.id });
+                        selection.push({
+                            id: item.id,
+                            key: item.key
+                        });
                     } else {
                         clearSelection = true;
                     }
@@ -3632,7 +3637,8 @@
                     var item = items[itemIndex];
                     for (var selectedIndex = 0; selection.length > selectedIndex; selectedIndex++) {
                         var selectedItem = selection[selectedIndex];
-                        if (item.id === selectedItem.id) {
+                        // if item.id is 2147483647 (int.MaxValue) use item.key
+                        if (item.id !== 2147483647 && item.id === selectedItem.id || item.key === selectedItem.key) {
                             numberOfSelectedItem++;
                         }
                     }
@@ -8774,6 +8780,17 @@
                     'color': 'warning'
                 }
             ];
+            angular.forEach(userStates, function (userState) {
+                var key = 'user_state' + userState.key;
+                localizationService.localize(key).then(function (value) {
+                    var reg = /^\[[\S\s]*]$/g;
+                    var result = reg.test(value);
+                    if (result === false) {
+                        // Only translate if key exists
+                        userState.name = value;
+                    }
+                });
+            });
             function getUserStateFromValue(value) {
                 var foundUserState;
                 angular.forEach(userStates, function (userState) {
