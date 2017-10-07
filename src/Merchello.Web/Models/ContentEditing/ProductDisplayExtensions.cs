@@ -250,18 +250,20 @@
             {
                 destinationProductAttribute.Key = productAttributeDisplay.Key;
             }
-
-            var validPropertyTypeAliases = productAttributeDisplay.DetachedDataValues.Select(x => x.Key);
-            var removeAtts = destinationProductAttribute.DetachedDataValues.Where(x => validPropertyTypeAliases.All(y => y != x.Key));
-            foreach (var remove in removeAtts)
+            if (productAttributeDisplay.DetachedDataValues != null)
             {
-                destinationProductAttribute.DetachedDataValues.RemoveValue(remove.Key);
-            }
+                var validPropertyTypeAliases = productAttributeDisplay.DetachedDataValues.Select(x => x.Key);     
+                var removeAtts = destinationProductAttribute.DetachedDataValues.Where(x => validPropertyTypeAliases.All(y => y != x.Key));
+                foreach (var remove in removeAtts)
+                {
+                    destinationProductAttribute.DetachedDataValues.RemoveValue(remove.Key);
+                }
 
-            foreach (var item in productAttributeDisplay.DetachedDataValues)
-            {
-                if (!item.Key.IsNullOrWhiteSpace())
-                    destinationProductAttribute.DetachedDataValues.AddOrUpdate(item.Key, item.Value, (x, y) => item.Value);
+                foreach (var item in productAttributeDisplay.DetachedDataValues)
+                {
+                    if (!item.Key.IsNullOrWhiteSpace())
+                        destinationProductAttribute.DetachedDataValues.AddOrUpdate(item.Key, item.Value, (x, y) => item.Value);
+                }               
             }
 
 
@@ -745,7 +747,7 @@
 
                     destinationProductAttribute = attribute.ToProductAttribute(destinationProductAttribute);
 
-                    ProductAttributeCollection variantAttributes = destination.Attributes as ProductAttributeCollection;
+                    var variantAttributes = (ProductAttributeCollection)destination.Attributes;
                     variantAttributes.Add(destinationProductAttribute);
                 }
             }

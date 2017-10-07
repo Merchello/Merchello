@@ -97,5 +97,10 @@
         /// Gets or sets the detached content values.
         /// </summary>
         public IEnumerable<ProductVariantDetachedContentDisplay> DetachedContents { get; set; }
+
+        /// <summary>
+        /// Gets or sets the update date.
+        /// </summary>
+        public DateTime UpdateDate { get; set; }
     }
 }

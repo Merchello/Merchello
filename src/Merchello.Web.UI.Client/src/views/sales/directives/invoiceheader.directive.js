@@ -31,7 +31,9 @@ angular.module('merchello.directives').directive('invoiceHeader',
 
             function saveInvoice(dialogData) {
                 invoiceResource.saveInvoice(dialogData.invoice);
-                scope.refresh();
+                scope.invoice.poNumber = dialogData.invoice.poNumber;
+                scope.invoice.invoiceNumberPrefix = dialogData.invoice.invoiceNumberPrefix;
+                //scope.refresh();
             }
             
             function init() {

@@ -148,9 +148,9 @@
         {
             var items = page.Items.Select(GetByKey).Where(x => x != null).ToArray();
 
-            if (items.Count() != page.ItemsPerPage)
+            if (items.Count() != page.Items.Count)
             {
-                MultiLogHelper.Warn<VirtualContentCache<TContent, TEntity>>("Could not map all items to virtual content");
+                MultiLogHelper.Debug<VirtualContentCache<TContent, TEntity>>("Could not map all items to virtual content");
             }
 
             return new PagedCollection<TContent>

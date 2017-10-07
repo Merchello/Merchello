@@ -13,6 +13,7 @@ namespace Merchello.Core
     using Merchello.Core.Models;
 
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// Extensions methods for <see cref="ExtendedDataCollection"/>.
@@ -722,9 +723,8 @@ namespace Merchello.Core
         /// </param>
         public static void AddAddress(this ExtendedDataCollection extendedData, IAddress address, AddressType addressType)
         {
-            extendedData.AddAddress(
-                            address,
-                            addressType == AddressType.Shipping ? Constants.ExtendedDataKeys.ShippingDestinationAddress : Constants.ExtendedDataKeys.BillingAddress);
+            extendedData.AddAddress(address, addressType == AddressType.Shipping 
+                            ? Constants.ExtendedDataKeys.ShippingDestinationAddress : Constants.ExtendedDataKeys.BillingAddress);
         }
 
         /// <summary>
@@ -740,12 +740,8 @@ namespace Merchello.Core
         /// The dictionary key used to reference the serialized <see cref="IAddress"/>
         /// </param>
         public static void AddAddress(this ExtendedDataCollection extendedData, IAddress address, string dictionaryKey)
-        {
-            var addressXml = SerializationHelper.SerializeToXml(address as Address);
-
-            ////var addressJson = JsonConvert.SerializeObject(address);
-
-            extendedData.SetValue(dictionaryKey, addressXml);
+        {            
+            extendedData.SetValue(dictionaryKey, JsonConvert.SerializeObject(address as Address));
         }
 
         /// <summary>
@@ -787,13 +783,20 @@ namespace Merchello.Core
         {
             if (!extendedData.ContainsKey(dictionaryKey)) return null;
 
-            var attempt = SerializationHelper.DeserializeXml<Address>(extendedData.GetValue(dictionaryKey));
+            // Get the address data from the extendedData
+            var addressData = extendedData.GetValue(dictionaryKey);
 
+            // Firstly try JSON convert
+            if (IsValidJson(addressData))
+            {
+                return JsonConvert.DeserializeObject<Address>(addressData);
+            }
+
+            var attempt = SerializationHelper.DeserializeXml<Address>(extendedData.GetValue(dictionaryKey));
             return attempt.Success ? attempt.Result : null;
         }
 
         #endregion
-
 
         #region IShipment
 
@@ -986,11 +989,13 @@ namespace Merchello.Core
         internal static ExtendedDataCollection AsExtendedDataCollection(this IEnumerable<KeyValuePair<string, string>> source)
         {
             var ed = new ExtendedDataCollection();
-            foreach (var item in source.ToArray())
+            if (source != null)
             {
-                ed.SetValue(item.Key, item.Value);
+                foreach (var item in source.ToArray())
+                {
+                    ed.SetValue(item.Key, item.Value);
+                }
             }
-
             return ed;
         }
 
@@ -1006,6 +1011,38 @@ namespace Merchello.Core
         public static string ExtendedDataAsJson(this IHasExtendedData entity)
         {
             return JsonConvert.SerializeObject(entity.ExtendedData.AsEnumerable());
+        }
+
+        /// <summary>
+        /// Checks a string to see if it's valid JSON or not
+        /// </summary>
+        /// <param name="strInput">
+        /// Potential Json string
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public static bool IsValidJson(string strInput)
+        {
+            strInput = strInput.Trim();
+            if (strInput.StartsWith("{") && strInput.EndsWith("}") || //For object
+                strInput.StartsWith("[") && strInput.EndsWith("]")) //For array
+            {
+                try
+                {
+                    var obj = JToken.Parse(strInput);
+                    return true;
+                }
+                catch (JsonReaderException)
+                {
+                    return false;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+            return false;
         }
 
         #endregion

@@ -138,10 +138,14 @@
         /// The <see cref="PaymentMethodDisplay"/>.
         /// </returns>
         [HttpGet]
-        public PaymentMethodDisplay GetPaymentMethodByKey(Guid key)
+        public PaymentMethodDisplay GetPaymentMethodByKey(Guid? key)
         {
-            var method = _paymentContext.GetPaymentGatewayMethods().FirstOrDefault(x => x.PaymentMethod.Key == key);
-            return method != null ? method.ToPaymentMethodDisplay() : null;
+            if (key != null)
+            {
+                var method = _paymentContext.GetPaymentGatewayMethods().FirstOrDefault(x => x.PaymentMethod.Key == key.Value);
+                return method != null ? method.ToPaymentMethodDisplay() : null;
+            }
+            return null;
         }
 
         /// <summary>

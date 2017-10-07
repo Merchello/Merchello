@@ -1,116 +1,107 @@
 <div class="merchello-list-view umb-listview clearfix">
-    <div class="merchello-list-view-config">
-        <div class="row-fluid">
-            <div class="span6">
-                
-                <a data-ng-click="openSettings()" class="gear" prevent-default>
-                    <i class="icon icon-settings-alt-2 large"></i>
-                </a>
-                <div data-ng-show="showTitle">
-                    <entity-collection-title-bar collection-key="collectionKey" entity-type="entityType"></entity-collection-title-bar>
-                </div>
 
-            </div>
-            <div class="span6">
-                <div class="pull-right clearfix">
-                    
-                    <form class="pull-right ng-pristine ng-valid input-prepend merchello-list-view-search" novalidate data-ng-show="hasFilter">
-                        <i class="icon-search add-on" data-ng-click="enterSearch($event)"></i>
-                        <input type="text" data-ng-model="options.filter" on-keyup="search()" prevent-enter-submit no-dirty-check class="ng-pristine ng-valid">
-                    </form>
+    <div class="umb-editor-sub-header">
 
-                    <form class="pull-right ng-pristine ng-valid merchello-list-view-pp" novalidate>
-                        <select data-ng-model="options.pageSize" data-ng-change="setPageSize()">
-                            <option value="10">10</option>
-                            <option value="25">25</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                        </select>
-                    </form>
+        <div class="umb-editor-sub-header__content-left">
+            <div class="umb-editor-sub-header__section">
+                <div class="btn-group">
+                    <a class="btn btn-default" data-ng-click="openSettings()" prevent-default>
+                        Config
+                    </a>
                 </div>
             </div>
         </div>
+
+        <div class="umb-editor-sub-header__content-right">
+          
+          <div class="umb-editor-sub-header__section" data-ng-show="enableDateFilter">
+            <div class="pull-right -no-margin-bottom">
+              <div class="btn-group pull-right">
+                <a href="#" class="btn btn-small" data-ng-click="openDateRangeDialog()" prevent-default>{{ dateBtnText }}</a>
+                <a href="#" class="btn btn-small" prevent-default data-ng-click="clearDates()" data-ng-show="startDate !== '' && endDate !== ''">X</a>
+              </div>
+            </div>
+          </div>
+          <div class="umb-editor-sub-header__section">
+                <form class="pull-right ng-pristine ng-valid -no-margin-bottom" novalidate>
+                    <select data-ng-model="options.pageSize" data-ng-change="setPageSize()">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </form>
+            </div>
+            <div class="umb-editor-sub-header__section" data-ng-show="hasFilter">
+                <form class="form-search -no-margin-bottom pull-right" novalidate>
+                    <div class="inner-addon left-addon">
+                        <i class="icon icon-search" ng-click="enterSearch($event)"></i>
+                        <input class="form-control search-input ng-pristine ng-valid" type="text" localize="placeholder" placeholder="@general_typeToSearch" data-ng-model="options.filter" on-keyup="search()" prevent-enter-submit no-dirty-check>
+                    </div>
+                </form>
+            </div>
+        </div>
+
     </div>
 
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <td data-ng-repeat="col in config.columns">
-                    <a href="#" data-ng-click="sort(col.name, !col.resultColumn)" prevent-default data-ng-class="{sortable : !col.resultColumn }" data-ng-hide="col.localizeKey === ''">
-                        <localize key="{{ col.localizeKey }}" />
-                        <i class="icon" ng-class="{'icon-navigation-up': isSortDirection(col.name, 'asc'), 'icon-navigation-down': isSortDirection(col.name, 'desc')}"></i>
+    <div class="umb-table">
+
+        <div class="umb-table-head">
+            <div class="umb-table-row">
+                <div class="umb-table-cell not-fixed" data-ng-repeat="col in config.columns" ng-class="{'umb-table__name': col == config.columns[0]}">
+                    <a href="#" data-ng-click="sort(col.name, !col.resultColumn)" prevent-default data-ng-class="{sortable : !col.resultColumn }" data-ng-hide="col.localizeKey === ''" class="umb-table-head__link">
+                        <span><localize key="{{ col.localizeKey }}" /></span>
+                        <i class="umb-table-head__icon icon" ng-class="{'icon-navigation-up': isSortDirection(col.name, 'asc'), 'icon-navigation-down': isSortDirection(col.name, 'desc')}"></i>
                     </a>
-                </td>
-            </tr>
-            <tr data-ng-show="enableDateFilter">
-                <td colspan="{{ config.columns.length + 3}}">
-                    <div class="btn-group pull-right">
-                        <a href="#" class="btn btn-small" data-ng-click="openDateRangeDialog()" prevent-default>{{ dateBtnText }}</a>
-                        <a href="#" class="btn btn-small" prevent-default data-ng-click="clearDates()" data-ng-show="startDate !== '' && endDate !== ''">X</a>
-                    </div>
-                </td>
-            </tr>
-        </thead>
+                </div>
+            </div>
+        </div>
 
-        <tbody data-ng-show="!preValuesLoaded">
-            <tr>
-                <td colspan="{{ config.columns.length + 3 }}">
-                    <div class="umb-loader-wrapper">
-                        <div class="umb-loader"></div>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
+        <div class="umb-table-body">
 
-        <tbody ng-show="listViewResultSet.totalItems === 0 && preValuesLoaded">
-            <tr>
-                <td colspan="{{ config.columns.length + 3 }}">
-                    <p>
-                        <localize key="content_listViewNoItems">There are no items show in the list.</localize>
-                    </p>
-                </td>
-            </tr>
-        </tbody>
+            <div class="umb-table-row" data-ng-show="!preValuesLoaded">
+                <div class="umb-loader-wrapper">
+                    <div class="umb-loader"></div>
+                </div>
+            </div>
 
+            <div class="umb-table-row" ng-show="listViewResultSet.totalItems === 0 && preValuesLoaded">
+                <div class="umb-empty-state -center">
+                    <p class="faded"><localize key="content_listViewNoItems">There are no items show in the list.</localize></p>
+                </div>                
+            </div>
 
-        <tbody ng-show="listViewResultSet.totalItems > 0">
-            <tr ng-repeat="result in listViewResultSet.items" data-ng-class="{selected:result.selected}">
-                <td data-ng-repeat="col in config.columns" data-ng-bind-html="getColumnValue()(result, col)"></td>
-            </tr>
-        </tbody>
+            <div class="umb-table-row" ng-repeat="result in listViewResultSet.items" data-ng-class="{selected:result.selected}">
+                <div class="umb-table-cell not-fixed" data-ng-repeat="col in config.columns" ng-class="{'umb-table__name': col == config.columns[0]}">
+                    <span data-ng-bind-html="getColumnValue()(result, col)"></span>
+                </div>
+            </div>
 
-        <tfoot ng-show="pagination.length > 1">
-            <tr>
-                <th colspan="{{config.columns.length + 3}}">
-                    <div class="pull-left">
-                    </div>
-                    <div class="pagination pagination-right">
-                        <ul>
-                            <li ng-class="{disabled:options.pageNumber <= 1}">
-                                <a href="#" ng-click="prev()" prevent-default>
-                                    <localize key="general_previous">Previous</localize>
-                                </a>
-                            </li>
+        </div>
+    </div>
+    <div class="flex justify-center">
+        <div class="umb-pagination pagination" ng-show="pagination.length > 1">
+            <ul>
+                <li ng-class="{disabled:options.pageNumber <= 1}">
+                    <a href="#" ng-click="prev()" prevent-default>
+                        <localize key="general_previous">Previous</localize>
+                    </a>
+                </li>
 
-                            <li ng-repeat="pgn in pagination"
-                                ng-class="{active:pgn.isActive}">
+                <li ng-repeat="pgn in pagination" ng-class="{active:pgn.isActive}">
+                    <a href="#" ng-click="goToPage(pgn.val - 1)" prevent-default
+                       ng-bind="pgn.name ? pgn.name : pgn.val"
+                       ng-if="pgn.val != '...'"></a>
+                    <span ng-bind="pgn.val" ng-if="pgn.val == '...'"></span>
+                </li>
 
-                                <a href="#" ng-click="goToPage(pgn.val - 1)" prevent-default
-                                   ng-bind="pgn.name ? pgn.name : pgn.val"
-                                   ng-if="pgn.val != '...'"></a>
-                                <span ng-bind="pgn.val" ng-if="pgn.val == '...'"></span>
-                            </li>
-
-                            <li ng-class="{disabled:options.pageNumber >= listViewResultSet.totalPages}">
-                                <a href="#" ng-click="next()" prevent-default>
-                                    <localize key="general_next">Next</localize>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </th>
-            </tr>
-        </tfoot>
-    </table>
+                <li ng-class="{disabled:options.pageNumber >= listViewResultSet.totalPages}">
+                    <a href="#" ng-click="next()" prevent-default>
+                        <localize key="general_next">Next</localize>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
 
 </div>

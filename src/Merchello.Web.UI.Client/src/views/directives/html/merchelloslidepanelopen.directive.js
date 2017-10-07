@@ -19,10 +19,9 @@
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/html/merchelloslidepanelopen.tpl.html',
             link: function ($scope, $element, attrs) {
 
-                if ($scope.classes == undefined) {
-                    $scope.classes = 'control-group umb-control-group';
-                }
-
+                //if ($scope.classes == undefined) {
+                //    $scope.classes = 'control-group umb-control-group';
+                //}
 
             }
         };

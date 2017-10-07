@@ -1,63 +1,82 @@
-<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Customer.Dialogs.CustomerCheckoutController">
-    <div class="umb-modalcolumn-header">
-        <h4><localize key="merchelloGeneral_checkout"></localize></h4>
-    </div>
-    <form name="editInfoForm" id="editInfoForm">
-        <div class="umb-panel-body with-header with-footer">
+<div class="merchello">
+    <div class="umb-panel merchello-side-panel" ng-controller="Merchello.Customer.Dialogs.CustomerCheckoutController">
 
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th><localize key="merchelloGeneral_item" /></th>
-                    <th><localize key="merchelloVariant_sku" /></th>
-                    <th><localize key="merchelloGeneral_quantity" /></th>
-                    <th><localize key="merchelloGeneral_price"/></th>
-                    <th><localize key="merchelloGeneral_subTotal"/></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr data-ng-repeat="item in dialogData.items">
-                    <td>{{item.name}}</td>
-                    <td>{{item.sku}}</td>
-                    <td>{{item.quantity}}</td>
-                    <td>{{item.price  | currency : dialogData.currencySymbol }}</td>
-                    <td>{{item.price * item.quantity  | currency : dialogData.currencySymbol}}</td>
-
-                </tr>
-                <tr>
-                    <td colspan="3"></td>
-                    <td><localize key="merchelloGeneral_total" /></td>
-                    <td>{{ dialogData.total | currency : dialogData.currencySymbol }}</td>
-                </tr>
-                </tbody>
-            </table>
-
-            <div class="well checkout-address">
-                <h3><localize key="merchelloSales_billingAddress" /></h3>
-                <merchello-address address="billingAddress"></merchello-address>
-            </div>
-
-            <div class="well checkout-address">
-                <h3><localize key="merchelloSales_shippingAddress" /></h3>
-                <merchello-address address="shippingAddress"></merchello-address>
-            </div>
-
-            <div data-ng-show="dialogData.quotes.length > 0">
-                <h3><localize key="merchelloSales_shippingMethod" /></h3>
-                <select name="quote" class="col-xs-12 span12" data-ng-model="dialogData.selectedQuote" data-ng-options="formatQuote(p) for p in dialogData.quotes"></select>
-            </div>
-
-        </div>
-        <div class="umb-panel-footer">
-            <div class="umb-el-wrap umb-panel-buttons">
-                <div class="btn-toolbar umb-btn-toolbar pull-right">
-                    <!-- ACTION: Cancel -->
-                    <a href data-ng-click="close()" class="btn btn-link"><localize key="general_cancel"></localize></a>
-                    <!-- ACTION: Submit DialogData -->
-                    <button class="btn btn-primary" data-ng-click="submit(dialogData)"><localize key="merchelloSales_createInvoice" /></button>
-
+        <div class="umb-overlay umb-overlay-right">
+            <form class="umb-overlay__form" name="editInfoForm" id="editInfoForm">
+                
+                <div class="umb-overlay-header">
+                    <h4 class="umb-overlay__title"><localize key="merchelloGeneral_checkout"></localize></h4>
                 </div>
-            </div>
+
+                <div class="umb-overlay-container form-horizontal merchello-panel-body">
+                    <div class="merchello-list-view">                        
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th><localize key="merchelloGeneral_item"/></th>
+                                <th><localize key="merchelloVariant_sku"/></th>
+                                <th><localize key="merchelloGeneral_quantity"/></th>
+                                <th><localize key="merchelloGeneral_price"/></th>
+                                <th><localize key="merchelloGeneral_subTotal"/></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="item in dialogData.items">
+                                <td>{{item.name}}</td>
+                                <td>{{item.sku}}</td>
+                                <td>{{item.quantity}}</td>
+                                <td>{{item.price | currency : dialogData.currencySymbol }}</td>
+                                <td>{{item.price * item.quantity | currency : dialogData.currencySymbol}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3"></td>
+                                <td><localize key="merchelloGeneral_total"/></td>
+                                <td>{{ dialogData.total | currency : dialogData.currencySymbol }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="well checkout-address">
+                        <h4>
+                            <localize key="merchelloSales_billingAddress"/>
+                        </h4>
+                        <merchello-address address="billingAddress"></merchello-address>
+                    </div>
+
+                    <div class="well checkout-address">
+                        <h4>
+                            <localize key="merchelloSales_shippingAddress"/>
+                        </h4>
+                        <merchello-address address="shippingAddress"></merchello-address>
+                    </div>
+
+                    <div data-ng-show="dialogData.quotes.length > 0">
+                        <h4>
+                            <localize key="merchelloSales_shippingMethod"/>
+                        </h4>
+                        <select name="quote" data-ng-model="dialogData.selectedQuote" data-ng-options="formatQuote(p) for p in dialogData.quotes"></select>
+                    </div>
+                </div>
+
+                <div class="umb-overlay-drawer">
+                    <div class="umb-overlay-drawer__align-right">
+                        
+                        <div class="umb-button">
+                            <a href data-ng-click="close()" class="btn btn-link">
+                                <localize key="general_cancel"></localize>
+                            </a>
+                        </div>
+
+                        <div class="umb-button">
+                            <button class="btn btn-success" data-ng-click="submit(dialogData)" prevent-default>
+                                <localize key="merchelloSales_createInvoice"></localize>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
         </div>
-    </form>
+    </div>
 </div>

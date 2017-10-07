@@ -1,55 +1,60 @@
 <div class="umb-panel merchello-side-panel" ng-controller="Merchello.GatewayProviders.Dialogs.NotificationsProviderSettingsSmtpController">
-    <div class="umb-modalcolumn-header">
-        <h4><localize key="general_edit" /> <b>{{dialogData.provider.name}}</b></h4>
-    </div>
-    <div class="umb-panel-body with-header with-footer">
+    <div class="umb-overlay umb-overlay-right">
+        <form class="umb-overlay__form" name="editTemplateForm">
 
-        <!--network host="127.0.0.1" userName="username" password="password" /-->
-        <!-- Flyout when Edit is clicked -->
-        <form name="editTemplateForm" class="well" data-ng-class="{ 'open': flyouts.editTemplate, 'closed': !flyouts.editTemplate }">
-            <div class="form-group">
-                <label><localize key="merchelloGatewayProvider_host" /></label>
-                <input type="text" data-ng-model="notificationProviderSettings.Host" />
+            <div class="umb-overlay-header">
+                <h4 class="umb-overlay__title"><localize key="general_edit" /> <b>{{dialogData.provider.name}}</b></h4>
             </div>
-            <div class="form-group">
-                <label>Port</label><!-- KSW: Need localization for this, not sure how to find it. -->
-                <input type="text" data-ng-model="notificationProviderSettings.Port" />
+
+            <div class="umb-overlay-container form-horizontal merchello-panel-body">
+
+                    <div class="form-group control-group">
+                        <label><localize key="merchelloGatewayProvider_host" /></label>
+                        <input type="text" data-ng-model="notificationProviderSettings.Host" class="form-control umb-editor"/>
+                    </div>
+                    <div class="form-group control-group">
+                        <label>Port</label><!-- KSW: Need localization for this, not sure how to find it. -->
+                        <input type="text" data-ng-model="notificationProviderSettings.Port" class="form-control umb-editor" />
+                    </div>
+                    <div class="form-group control-group">
+                        <label><localize key="user_username" /></label>
+                        <input type="text" data-ng-model="notificationProviderSettings.UserName" class="form-control umb-editor" />
+                    </div>
+                <div class="form-group control-group">
+                    <label><localize key="user_password" /></label>
+                    <input type="text" data-ng-model="notificationProviderSettings.Password" class="form-control umb-editor" />
+                </div>
+                <div class="form-group control-group">
+                    <label class="label-checkbox">
+                        <input type="checkbox" data-ng-model="notificationProviderSettings.EnableSsl"> 
+                        <span><localize key="merchelloGatewayProvider_enableSSL" /></span>
+                    </label>
+                </div>
+                <div class="form-group control-group">
+                    <label class="label-checkbox">
+                        <input type="checkbox" data-ng-model="dialogData.provider.encryptExtendedData">
+                        <span><localize key="merchelloGatewayProvider_encryptProviderConfiguration" /></span>
+                    </label>
+                </div>
             </div>
-            <div class="form-group">
-                <label><localize key="user_username" /></label>
-                <input type="text" data-ng-model="notificationProviderSettings.UserName" />
+
+            <div class="umb-overlay-drawer">
+                <div class="umb-overlay-drawer__align-right">
+                    
+                    <div class="umb-button">
+                        <a href data-ng-click="close()" class="btn btn-link">
+                            <localize key="general_cancel"></localize>
+                        </a>
+                    </div>
+
+                    <div class="umb-button">
+                        <button class="btn btn-success" data-ng-click="submit(dialogData)">
+                            <localize key="buttons_save"></localize>
+                        </button>
+                    </div>
+
+                </div>
             </div>
-            <div class="form-group">
-                <label><localize key="user_password" /></label>
-                <input type="text" data-ng-model="notificationProviderSettings.Password" />
-            </div>
-            <label class="checkbox col-xs-6 span6">
-                <input type="checkbox" data-ng-model="notificationProviderSettings.EnableSsl"> <localize key="merchelloGatewayProvider_enableSSL" />
-            </label>
-            <label class="checkbox col-xs-6 span6">
-                <input type="checkbox" data-ng-model="dialogData.provider.encryptExtendedData"><localize key="merchelloGatewayProvider_encryptProviderConfiguration" />
-            </label>
-            <div class="clearfix"></div>
         </form>
-
-
-    </div>
-
-    <div class="umb-panel-footer">
-        <div class="umb-el-wrap umb-panel-buttons">
-            <div class="btn-toolbar umb-btn-toolbar pull-right">
-
-                <a href data-ng-click="close()" class="btn btn-link">
-                    <localize key="general_cancel"><localize key="general_cancel" /></localize>
-                </a>
-
-                <button class="btn btn-primary"
-                        data-ng-click="submit(dialogData)">
-                    <localize key="buttons_save"><localize key="buttons_save" /></localize>
-                </button>
-
-            </div>
-        </div>
     </div>
 </div>
-

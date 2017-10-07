@@ -1,8 +1,8 @@
 /**
  * plugin.js
  *
- * Copyright, Moxiecode Systems AB
  * Released under LGPL License.
+ * Copyright (c) 1999-2015 Ephox Corp. All rights reserved
  *
  * License: http://www.tinymce.com/license
  * Contributing: http://www.tinymce.com/contributing
@@ -412,6 +412,9 @@ tinymce.PluginManager.add('fullpage', function(editor) {
 		// Add new
 		tinymce.each(headerFragment.getAll('link'), function(stylesheet) {
 			var href = stylesheet.attr('href');
+			if (!href) {
+				return true;
+			}
 
 			if (!currentStyleSheetsMap[href] && stylesheet.attr('rel') == 'stylesheet') {
 				dom.add(headElm, 'link', {

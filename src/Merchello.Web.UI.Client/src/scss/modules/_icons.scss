@@ -1,5 +1,5 @@
 .merchello-icons {
-    margin: -6px 0;
+    margin: 0 0;
     display: inline-block;
 
     &.merchello-icons-interactive {
@@ -15,7 +15,7 @@
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
         padding: 4px 0;
-        text-align:center;
+        text-align: center;
         margin: 2px;
         cursor: pointer;
         background: #fff;
@@ -27,15 +27,15 @@
 
         .icon {
             display: block;
-            font-size: 16px !important;
-            margin:0 auto;
+            font-size: 19px !important;
+            margin: 1px auto 0 auto;
             color: #5f5f5f;
         }
 
         &:hover {
             color: white;
-            background: #2e8aea;
-            border-color: #2e8aea;
+            background: $orange;
+            border-color: $orange;
             text-decoration: none;
 
             > .icon {
@@ -45,10 +45,6 @@
     }
 }
 
-// This is an overide to stop umbraco hiding the icons on hover
-.umb-listview .table-striped tbody .merchello-icon i:not(.handle):hover{
-    display: inline-block !important;
-}
 
 .merchello-icon-container {
     text-align: right;

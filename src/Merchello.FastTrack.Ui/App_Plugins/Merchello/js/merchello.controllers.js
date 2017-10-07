@@ -3301,6 +3301,10 @@ angular.module('merchello').controller('Merchello.Customer.Dialogs.CustomerNewCu
                     customer.firstName = $scope.firstName;
                     customer.lastName = $scope.lastName;
 
+                    if (customer.extendedData.items.length <= 0) {
+                        customer.extendedData.items = null;
+                    }
+
                     var promiseSaveCustomer = customerResource.AddCustomer(customer);
                     promiseSaveCustomer.then(function (customerResponse) {
                         notificationsService.success("Customer Saved", "");
@@ -6949,7 +6953,7 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
         $scope.toggleAvailable = toggleAvailable;
         $scope.redirectToEditor = redirectToEditor;
         $scope.getVariantAttributeForOption = getVariantAttributeForOption;
-
+        $scope.regenSkus = regenSkus;
 
         $scope.toggleChecks = function() {
             if ($scope.checkAll === true) {
@@ -7164,6 +7168,16 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
         // Dialog Event Handlers
         //--------------------------------------------------------------------------------------
 
+        function regenSkus() {
+            var dialogData = { name: $scope.product.name }
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/productvariant.bulk.skuupdate.html',
+                show: true,
+                callback: regenSkusConfirm,
+                dialogData: dialogData
+            });
+        }
+
         /**
          * @ngdoc method
          * @name changePrices
@@ -7262,6 +7276,14 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
                     productResource.saveVariant(pv);
                 });
             notificationsService.success("Updated prices");
+        }
+
+        function regenSkusConfirm() {
+            console.info($scope.product);
+            productResource.resetSkus($scope.product).then(function() {
+                $scope.reload();
+            });
+            console.info('Got here');
         }
 
         function assertActiveShippingCatalog() {
@@ -7791,7 +7813,6 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
             $scope.preValuesLoaded = false;
             $scope.tabs = [];
             $scope.entityType = 'product';
-
 
             // settings - contains defaults for the checkboxes
             $scope.settings = {};
@@ -9772,22 +9793,44 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.AbandonedBa
      * This is a bootstrapper to allow reports that are plugins to be loaded using the merchello application route.
      */
     angular.module('merchello').controller('Merchello.Backoffice.ReportsViewReportController',
-        ['$scope', '$routeParams',
-         function($scope, $routeParams) {
+        ['$scope', '$routeParams', 'settingsResource',
+         function($scope, $routeParams, settingsResource) {
 
-             $scope.loaded = true;
-             $scope.preValuesLoaded = true;
+             $scope.loaded = false;
+
+             $scope.reportPath = '';
 
              // Property to control the report to show
-             $scope.reportParam = $routeParams.id;
+             var reportParam  = $routeParams.id;
 
-             var re = /(\\)/g;
-             var subst = '/';
+             settingsResource.getReportBackofficeTrees().then(function(trees) {
 
-             var result = $scope.reportParam.replace(re, subst);
+                 if(trees.length > 0) {
+                     var tree = _.find(trees, function (t) {
+                         if (t.routeId == reportParam) {
+                             return t;
+                         }
+                     });
 
-             //$scope.reportPath = "/App_Plugins/Merchello.ExportOrders|ExportOrders.html";
-             $scope.reportPath = "/App_Plugins/" + result + ".html";
+                     if (tree !== undefined) {
+                        $scope.reportPath = tree.routePath;
+                     }
+                 }
+
+                 if($scope.routePath === '') {
+                     var re = /(\\)/g;
+                     var subst = '/';
+
+                     var result = reportParam.replace(re, subst);
+
+                     //$scope.reportPath = "/App_Plugins/Merchello.ExportOrders|ExportOrders.html";
+                     $scope.reportPath = "/App_Plugins/" + result + ".html";
+                 }
+
+                 $scope.loaded = true;
+             });
+
+
 
     }]);
 
@@ -10278,6 +10321,20 @@ angular.module('merchello').controller('Merchello.Sales.Dialogs.ManageAdjustment
 
     }]);
 
+angular.module('merchello').controller('Merchello.Sales.Dialogs.PreviewLineItemController',
+    ['$scope',
+        function ($scope) {
+
+            function init() {
+
+                $scope.loaded = true;
+
+                // $scope.dialogData.selectedProvince
+            }
+
+            init();
+        }]);
+
 /**
  * @ngdoc controller
  * @name Merchello.Dashboards.InvoicePaymentsController
@@ -10309,6 +10366,32 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
             $scope.openRefundPaymentDialog = openRefundPaymentDialog;
             $scope.showVoid = showVoid;
             $scope.showRefund = showRefund;
+
+            // Helper to check for AvsCvvData
+            $scope.hasAvsCvvData = function(items) {
+                var hasAvsCvv = false;
+                if (items != null) {
+                    for (var i = 0; i < items.length; i++) {
+                        if (items[i].key === "merchAvsCvvData") {
+                            hasAvsCvv = true;
+                            break;
+                        }
+                    }
+                }
+                return hasAvsCvv;
+            };
+
+            // Helper to show the data
+            $scope.showAvsCvvData = function (items) {
+                if (items != null) {
+                    for (var i = 0; i < items.length; i++) {
+                        if (items[i].key === "merchAvsCvvData") {
+                            return items[i].value;
+                        }
+                    }   
+                }
+                return "-";
+            };
 
             function init() {
                 var key = $routeParams.id;
@@ -10448,8 +10531,8 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
 
                     if (key === 'removed') {
                         var empty = paymentMethodDisplayBuilder.createDefault();
-                            $scope.paymentMethods.push(empty)
-                        }   
+                        $scope.paymentMethods.push(empty);
+                    }   
                         var promise = paymentGatewayProviderResource.getPaymentMethodByKey(key);
                         promise.then(function(method) {
                             $scope.paymentMethods.push(method);
@@ -11312,6 +11395,9 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     dialogData.warning = localizationService.localize('merchelloSales_noteShipmentAddressChange');
                 }
 
+                // Show email and phone
+                dialogData.showPhone = true;
+                dialogData.showEmail = true;
 
                 dialogService.open({
                     template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/edit.address.html',

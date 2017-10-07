@@ -124,6 +124,24 @@
         }
 
         /// <summary>
+        /// Returns Product by sku
+        /// 
+        /// GET /umbraco/Merchello/ProductApi/GetProduct/{sku}
+        /// </summary>
+        /// <param name="sku">
+        /// The product sku
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
+        [HttpGet]
+        public ProductDisplay GetProductBySku(string sku)
+        {
+            var product = _merchello.Query.Product.GetBySku(sku);
+            return product;
+        }
+
+        /// <summary>
         /// Returns a Product Variant by id (key)
         /// 
         /// GET /umbraco/Merchello/ProductApi/GetProductVariant/{guid}
@@ -138,6 +156,24 @@
         public ProductVariantDisplay GetProductVariant(Guid id)
         {
             var variant = _merchello.Query.Product.GetProductVariantByKey(id);
+            return variant;
+        }
+
+        /// <summary>
+        /// Returns a Product Variant by sku
+        /// 
+        /// GET /umbraco/Merchello/ProductApi/GetProductVariant/{sku}
+        /// </summary>
+        /// <param name="sku">
+        /// The sku.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductVariantDisplay"/>.
+        /// </returns>
+        [HttpGet]
+        public ProductVariantDisplay GetProductVariantBySku(string sku)
+        {
+            var variant = _merchello.Query.Product.GetProductVariantBySku(sku);
             return variant;
         }
 
@@ -391,6 +427,31 @@
             }
 
             merchProduct = product.ToProduct(merchProduct);
+
+            _productService.Save(merchProduct);
+
+            return merchProduct.ToProductDisplay(DetachedValuesConversionType.Editor);
+        }
+
+        /// <summary>
+        /// Resets all the product SKUs to default values
+        /// </summary>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
+        [HttpGet]
+        public ProductDisplay PutProductWithResetSkus(Guid productKey)
+        {
+            var merchProduct = _productService.GetByKey(productKey);
+            if (!merchProduct.ProductVariants.Any()) return merchProduct.ToProductDisplay(DetachedValuesConversionType.Editor);
+
+            foreach (var variant in merchProduct.ProductVariants)
+            {
+                variant.Sku = SkuHelper.GenerateSkuForVariant(merchProduct, variant);
+            }
 
             _productService.Save(merchProduct);
 

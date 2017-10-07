@@ -14,5 +14,7 @@
         /// The collection of all <see cref="ReportController"/>s
         /// </returns>
         IEnumerable<ReportController> GetAll();
+
+
     }
 }

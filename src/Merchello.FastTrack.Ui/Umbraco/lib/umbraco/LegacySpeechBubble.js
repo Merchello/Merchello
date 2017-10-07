@@ -1,4 +1,4 @@
-﻿
+
 //TODO: WE NEED TO CONVERT ALL OF THESE METHODS TO PROXY TO OUR APPLICATION SINCE MANY CUSTOM APPS USE THIS!
 
 Umbraco.Sys.registerNamespace("Umbraco.Application");

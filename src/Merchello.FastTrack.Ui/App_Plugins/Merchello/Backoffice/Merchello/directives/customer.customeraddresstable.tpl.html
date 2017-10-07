@@ -1,5 +1,5 @@
-<div>
-<table class="table table-striped">
+<div class="merchello-list-view">
+<table class="table">
     <thead>
         <tr>
             <th><localize key="merchelloCustomers_tblLabel" /></th>
@@ -27,9 +27,12 @@
             <td>{{ address.countryCode }}</td>
             <td>{{ address.postalCode }}</td>
             <td>
-                <div class="btn-group">
-                    <a href="#" class="btn dropdown-toggle" data-toggle="dropdown"><localize key="merchelloCustomers_actions" /> <i class="icon-navigation-down"></i></a>
-                    <ul class="dropdown-menu">
+                <div class="pull-right" style="position: relative;">
+                    <a class="btn btn-info" href="#" data-toggle="dropdown">
+                        <localize key="general_actions">Actions</localize>
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu umb-actions" role="menu" aria-labelledby="dLabel">
                         <li><a data-ng-click="openAddressAddEditDialog(address)"><localize key="merchelloCustomers_editAddress" /></a></li>
                         <li><a data-ng-click="openDeleteAddressDialog(address)"><localize key="merchelloCustomers_deleteAddress" /></a></li>
                     </ul>
@@ -38,5 +41,5 @@
         </tr>
     </tbody>
 </table>
-    <a data-ng-click="openAddressAddEditDialog()" class="btn btn-default"><localize key="merchelloCustomers_addNewAddress" /></a>
+    <a data-ng-click="openAddressAddEditDialog()" class="btn btn-info"><localize key="merchelloCustomers_addNewAddress" /></a>
 </div>

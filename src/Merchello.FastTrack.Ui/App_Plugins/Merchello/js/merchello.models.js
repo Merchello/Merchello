@@ -165,7 +165,10 @@ angular.module('merchello.models').constant('EntityUseCount', EntityUseCount);
     ExtendedDataDisplay.prototype = (function() {
 
         function isEmpty() {
-            return this.items.length === 0;
+            if (this.items) {
+                return this.items.length === 0;
+            }
+            return true;
         }
 
         function getValue(key) {
@@ -188,6 +191,11 @@ angular.module('merchello.models').constant('EntityUseCount', EntityUseCount);
         }
 
         function setValue(key, value) {
+
+            // See if items is null and if so, make it an array
+            if (!this.items) {
+                this.items = [];
+            }
 
             var existing = _.find(this.items, function(item) {
               return item.key === key;
@@ -627,6 +635,7 @@ angular.module('merchello.models').constant('EntityCollectionProviderDisplay', E
         self.company = '';
         self.countryCode = '';
         self.phone = '';
+        self.email = '';
         self.isDefault = false;
     };
 
@@ -1752,8 +1761,12 @@ OfferComponentDefinitionDisplay.prototype = (function() {
         }
         // hack catch for save call where there's a context switch on this to window
         // happens when saving the offer settings
-        if (this.extendedData.items !== undefined) {
-            return !this.extendedData.isEmpty();
+        if (this.extendedData) {
+            if (this.extendedData.items !== undefined && this.extendedData.items !== null) {
+                return !this.extendedData.isEmpty();
+            } else {
+                return true;
+            }
         } else {
             return true;
         }
@@ -4987,8 +5000,10 @@ angular.module('merchello.models').factory('entityUseCountBuilder',
                         var extendedData = new Constructor();
                         if (jsonResult !== undefined) {
                             var items = genericModelBuilder.transform(jsonResult, ExtendedDataItemDisplay);
-                            if(items.length > 0) {
+                            if (items.length > 0) {
                                 extendedData.items = items;
+                            } else {
+                                extendedData.items = null;
                             }
                         }
                         return extendedData;

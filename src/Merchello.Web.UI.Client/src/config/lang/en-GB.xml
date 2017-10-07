@@ -227,6 +227,8 @@
     <key alias="newCostOfGoods">New Cost Of Goods</key>
     <key alias="newSalePrice">New Sale Price</key>
     <key alias="recentlyUpdated">Recently Updated</key>
+    <key alias="regenSkus">Regenerate SKUs</key>
+    <key alias="regenSkusConfirm">Please confirm you wish to regenerate the product variant SKUs for </key>
   </area>
   <area alias="merchelloSpecFilters">
     <key alias="manageProductFilters">Manage Product Filters</key>
@@ -354,6 +356,8 @@
     <key alias="addAdjustment">Add adjustment</key>
     <key alias="adjustments">Adjustments</key>
     <key alias="adjustmentAssignedBy">Assigned by</key>
+    <key alias="lineItemPreview">Line Item Preview</key>
+    <key alias="noLineItemPreview">Unable to preview line item</key>
   </area>
   <area alias="merchelloCustomers">
     <key alias="loginName">Login</key>

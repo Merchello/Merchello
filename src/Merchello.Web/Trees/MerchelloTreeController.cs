@@ -56,6 +56,11 @@
         private readonly string[] _collectiontrees = { "products", "sales", "customers" };
 
         /// <summary>
+        /// Trees that can be filled via attributes.
+        /// </summary>
+        private readonly string[] _attributetrees = { "reports" };
+
+        /// <summary>
         /// The <see cref="EntityCollectionProviderResolver"/>.
         /// </summary>
         private readonly EntityCollectionProviderResolver _entityCollectionProviderResolver = EntityCollectionProviderResolver.Current;
@@ -104,28 +109,14 @@
         /// </returns>
         protected override TreeNodeCollection GetTreeNodes(string id, FormDataCollection queryStrings)
         {
-            var collection = new TreeNodeCollection();
-            var backoffice = MerchelloConfiguration.Current.BackOffice;            
+            var collection = new TreeNodeCollection();         
             var currentTree = _rootTrees.FirstOrDefault(x => x.Id == id && x.Visible);
             var splitId = new SplitRoutePath(id);
 
             collection.AddRange(
                 currentTree != null
-                    ? _collectiontrees.Contains(splitId.CollectionId) ?
-
-                        this.GetTreeNodesForCollections(splitId.CollectionId, MakeCollectionRoutePathId(splitId.CollectionId, splitId.CollectionKey), queryStrings) 
-
-                            :
-                        currentTree.SubTree.GetTrees().Where(x => x.Visible)
-                            .Select(tree => GetTreeNodeFromConfigurationElement(tree, queryStrings, currentTree))                            
-
-                    : 
-                    _collectiontrees.Contains(splitId.CollectionId) ?
-
-                    this.GetTreeNodesForCollections(splitId.CollectionId, MakeCollectionRoutePathId(splitId.CollectionId, splitId.CollectionKey), queryStrings, false) :
-
-                    backoffice.GetTrees().Where(x => x.Visible)
-                            .Select(tree => GetTreeNodeFromConfigurationElement(tree, queryStrings)));
+                    ? InitializeTree(currentTree, splitId, queryStrings)
+                    : InitializeTree(splitId, queryStrings));
 
             return collection;
         }
@@ -251,8 +242,6 @@
                        ? collectionId
                        : string.Format("{0}_{1}", collectionId, collectionKey);
         }
-
-
 
         /// <summary>
         /// Gets tree nodes for collections.
@@ -508,6 +497,11 @@
                 hasSubs = this.GetCollectionProviderInfo(tree.Id).ManagedCollections.Any()
                           || tree.SelfManagedEntityCollectionProviderCollections.EntityCollectionProviders().Any();
 
+            if (_attributetrees.Contains(tree.Id))
+            {
+               hasSubs = GetAttributeDefinedTrees(queryStrings).Any();
+            }
+
             return CreateTreeNode(
                 tree.Id,
                 parentTree == null ? string.Empty : parentTree.Id,
@@ -547,10 +541,10 @@
         /// </returns>
         private IEnumerable<TreeNode> GetAttributeDefinedTrees(FormDataCollection queryStrings)
         {
-            var types = ReportApiControllerResolver.Current.ResolvedTypes.ToArray();
+            var types = ReportApiControllerResolver.Current.ResolvedTypesWithAttribute.ToArray();
             if (!types.Any()) return new TreeNode[] { };
 
-            var atts = types.Select(x => x.GetCustomAttribute<BackOfficeTreeAttribute>(true)).OrderBy(x => x.SortOrder);
+            var atts = types.Select(x => x.GetCustomAttribute<BackOfficeTreeAttribute>(true)).Where(x => x != null).OrderBy(x => x.SortOrder);
             
             // TODO RSS refactor
             return
@@ -563,10 +557,7 @@
                         att.Title,
                         att.Icon,
                         false,
-                        att.RoutePath.StartsWith("~/App_Plugins/", StringComparison.InvariantCultureIgnoreCase) ||
-                        att.RoutePath.StartsWith("#")
-                        ? att.RoutePath 
-                        : string.Format("{0}{1}", "/merchello/merchello/reports.viewreport/", att.RoutePath)));
+                        string.Format("{0}{1}", "/merchello/merchello/reports.viewreport/", att.RouteId)));
         }
 
         /// <summary>
@@ -607,6 +598,79 @@
 
             return info;
         }
+
+
+        /// <summary>
+        /// Initializes the tree with a current starting node.
+        /// </summary>
+        /// <param name="currentTree">
+        /// The current Tree.
+        /// </param>
+        /// <param name="splitId">
+        /// The split id.
+        /// </param>
+        /// <param name="queryStrings">
+        /// The query strings.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{TreeNode}"/>.
+        /// </returns>
+        private IEnumerable<TreeNode> InitializeTree(TreeElement currentTree, SplitRoutePath splitId, FormDataCollection queryStrings)
+        {
+            // collection tree
+            if (_collectiontrees.Contains(splitId.CollectionId))
+            {
+                return this.GetTreeNodesForCollections(
+                    splitId.CollectionId,
+                    MakeCollectionRoutePathId(splitId.CollectionId, splitId.CollectionKey),
+                    queryStrings);
+            }
+
+            if (_attributetrees.Contains(splitId.CollectionId))
+            {
+                return GetAttributeDefinedTrees(queryStrings);
+            }
+
+            return currentTree.SubTree.GetTrees()
+                    .Where(x => x.Visible)
+                    .Select(tree => GetTreeNodeFromConfigurationElement(tree, queryStrings, currentTree));
+        }
+
+        /// <summary>
+        /// Initializes the tree without a current starting node.
+        /// </summary>
+        /// <param name="splitId">
+        /// The split id.
+        /// </param>
+        /// <param name="queryStrings">
+        /// The query strings.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{TreeNode}"/>.
+        /// </returns>
+        private IEnumerable<TreeNode> InitializeTree(SplitRoutePath splitId, FormDataCollection queryStrings)
+        {
+            var backoffice = MerchelloConfiguration.Current.BackOffice;
+
+            if (_collectiontrees.Contains(splitId.CollectionId))
+            {
+                return this.GetTreeNodesForCollections(
+                    splitId.CollectionId,
+                    MakeCollectionRoutePathId(splitId.CollectionId, splitId.CollectionKey),
+                    queryStrings,
+                    false);
+            }
+
+            if (_attributetrees.Contains(splitId.CollectionId))
+            {
+                return GetAttributeDefinedTrees(queryStrings);
+            }
+
+            return backoffice.GetTrees()
+                        .Where(x => x.Visible)
+                        .Select(tree => GetTreeNodeFromConfigurationElement(tree, queryStrings));
+        }
+
 
         /// <summary>
         /// The split route path.

@@ -1,33 +1,36 @@
 <div class="umb-panel merchello-side-panel">
-    <div class="umb-modalcolumn-header">
-        <h4>Warehouse Catalogs</h4>
-    </div>
-    <div class="umb-panel-body with-header with-footer">
+<div class="umb-overlay umb-overlay-right">
+<div class="umb-overlay__form">
 
-        <div class="form-group row-fluid provider-dropdown">
+    <div class="umb-overlay-header">
+        <h4 class="umb-overlay__title">Warehouse Catalogs</h4>
+    </div>
+    <div class="umb-overlay-container form-horizontal merchello-panel-body">
+
+        <div class="form-group control-group provider-dropdown">
             <label for="catalog-name">Select Your Catalog</label>
-            <div class="input-append col-xs-12 span12">
-                <select name="availableCatalogs" data-ng-model="dialogData.selectedWarehouseCatalog" data-ng-options="item.name for item in dialogData.warehouse.warehouseCatalogs">
-                </select>
-            </div>
+            <select name="availableCatalogs" class="form-control umb-editor" data-ng-model="dialogData.selectedWarehouseCatalog" data-ng-options="item.name for item in dialogData.warehouse.warehouseCatalogs"></select>
         </div>
 
     </div>
 
-    <div class="umb-panel-footer">
-        <div class="umb-el-wrap umb-panel-buttons">
-            <div class="btn-toolbar umb-btn-toolbar pull-right">
+    <div class="umb-overlay-drawer">
+        <div class="umb-overlay-drawer__align-right">
 
+            <div class="umb-button">
                 <a href data-ng-click="close()" class="btn btn-link">
                     <localize key="general_cancel"></localize>
                 </a>
-
-                <button class="btn btn-primary"
-                        data-ng-click="submit(dialogData)">
-                    Confirm
-                </button>
-
             </div>
+
+            <div class="umb-button">
+                <button class="btn btn-success" data-ng-click="submit(dialogData)">
+                    <localize key="buttons_save"></localize>
+                </button>
+            </div>
+
         </div>
     </div>
+</div>
+</div>
 </div>

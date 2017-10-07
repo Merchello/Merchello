@@ -31,7 +31,7 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
         $scope.toggleAvailable = toggleAvailable;
         $scope.redirectToEditor = redirectToEditor;
         $scope.getVariantAttributeForOption = getVariantAttributeForOption;
-
+        $scope.regenSkus = regenSkus;
 
         $scope.toggleChecks = function() {
             if ($scope.checkAll === true) {
@@ -246,6 +246,16 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
         // Dialog Event Handlers
         //--------------------------------------------------------------------------------------
 
+        function regenSkus() {
+            var dialogData = { name: $scope.product.name }
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/productvariant.bulk.skuupdate.html',
+                show: true,
+                callback: regenSkusConfirm,
+                dialogData: dialogData
+            });
+        }
+
         /**
          * @ngdoc method
          * @name changePrices
@@ -344,6 +354,14 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
                     productResource.saveVariant(pv);
                 });
             notificationsService.success("Updated prices");
+        }
+
+        function regenSkusConfirm() {
+            console.info($scope.product);
+            productResource.resetSkus($scope.product).then(function() {
+                $scope.reload();
+            });
+            console.info('Got here');
         }
 
         function assertActiveShippingCatalog() {

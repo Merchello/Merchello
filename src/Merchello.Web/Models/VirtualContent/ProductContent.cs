@@ -34,7 +34,8 @@
         /// <summary>
         /// The variant content.
         /// </summary>
-        private Lazy<IEnumerable<IProductVariantContent>> _variantContent;
+        //// private Lazy<IEnumerable<IProductVariantContent>> _variantContent;
+        private IEnumerable<IProductVariantContent> _varaintContent;
 
         /// <summary>
         /// The options collection.
@@ -156,7 +157,8 @@
         {
             get
             {
-                return _variantContent.Value;
+                //return _variantContent.Value;
+                return _varaintContent;
             }
         }
 
@@ -224,6 +226,17 @@
         }
 
         /// <summary>
+        /// Gets the update date.
+        /// </summary>
+        public override DateTime UpdateDate
+        {
+            get
+            {
+                return _display.UpdateDate;
+            }
+        }
+
+        /// <summary>
         /// Gets the product display.
         /// </summary>
         internal ProductDisplay ProductDisplay
@@ -268,7 +281,8 @@
         private void Initialize()
         {
             _options = _display.ProductOptions.Select(x => x.ProductOptionAsProductOptionWrapper(this, this.OptionContentTypes)).ToArray();
-            _variantContent = new Lazy<IEnumerable<IProductVariantContent>>(() => _display.ProductVariantsAsProductVariantContent(this.OptionContentTypes, _options, CultureName, this));
+            //_variantContent = new Lazy<IEnumerable<IProductVariantContent>>(() => _display.ProductVariantsAsProductVariantContent(this.OptionContentTypes, _options, CultureName, this));
+            _varaintContent = _display.ProductVariantsAsProductVariantContent(this.OptionContentTypes, _options, CultureName, this);
         }
     }
 }

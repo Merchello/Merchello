@@ -22,6 +22,7 @@
         self.company = '';
         self.countryCode = '';
         self.phone = '';
+        self.email = '';
         self.isDefault = false;
     };
 

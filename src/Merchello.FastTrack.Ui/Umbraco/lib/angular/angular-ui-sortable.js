@@ -1,4 +1,4 @@
-﻿/* 
+/* 
  jQuery UI Sortable plugin wrapper
 
  @param [ui-sortable] {object} Options to pass to $.fn.sortable() merged onto ui.config

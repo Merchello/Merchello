@@ -1329,10 +1329,10 @@ angular.module('merchello.directives').directive('detachedContentTypeSelect',
                 showSave: '=?',
                 save: '&'
             },
-            template:         '<div class="detached-content-select">' +
+            template: '<div class="detached-content-select">' +
             '<div data-ng-show="detachedContentTypes.length > 0">' +
             '<label><localize key="merchelloDetachedContent_productContentTypes" /></label>' +
-            '<select data-ng-model="selectedContentType" data-ng-options="ct.name for ct in detachedContentTypes track by ct.key" data-ng-show="loaded">' +
+            '<select data-ng-model="selectedContentType" data-ng-options="ct.name for ct in detachedContentTypes track by ct.key" data-ng-show="loaded" class="form-control umb-editor">' +
             '<option value="">{{ noSelection }}</option>' +
             '</select>' +
             ' <merchello-save-icon show-save="showSave" do-save="save()"></merchello-save-icon>' +
@@ -1602,6 +1602,23 @@ angular.module('merchello.directives').directive('contentTypeDropDown',
 
     /**
      * @ngdoc directive
+     * @name merchello-drawer
+     * @function
+     *
+     * @description
+     * Directive to wrap the main function buttons in the footer of a page
+     */
+     angular.module('merchello.directives').directive('merchelloDrawer', function() {
+         return {
+             restrict: 'E',
+             replace: true,
+             transclude: 'true',
+             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/html/merchellodrawer.tpl.html'
+         };
+     });
+
+    /**
+     * @ngdoc directive
      * @name merchello-panel
      * @function
      *
@@ -1638,10 +1655,9 @@ angular.module('merchello.directives').directive('contentTypeDropDown',
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/html/merchelloslidepanelopen.tpl.html',
             link: function ($scope, $element, attrs) {
 
-                if ($scope.classes == undefined) {
-                    $scope.classes = 'control-group umb-control-group';
-                }
-
+                //if ($scope.classes == undefined) {
+                //    $scope.classes = 'control-group umb-control-group';
+                //}
 
             }
         };
@@ -1764,8 +1780,6 @@ angular.module('merchello.directives').directive('merchelloDateRangeButton',
                         startDate: scope.startDate,
                         endDate: scope.endDate
                     };
-
-                    console.info(dialogData);
 
                     dialogService.open({
                         template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/daterange.selection.html',
@@ -3296,7 +3310,41 @@ angular.module('merchello.directives').directive('productOptionsAssociateShared'
                         return true;
                     }
 
-                    if (!scope.defaultChoice.isSet && scope.selectedChoices.length > 0) {
+                    // if a choice has been previously specified to be the default for the product,
+                    // then set this as the default 
+                    if (typeof scope.productOption !== "undefined") {
+                        if (typeof scope.productOption.choices !== "undefined") {
+                            if (scope.productOption.choices.length > 0) {
+
+                                // find the first selected choice
+                                var productDefaultChoice = _.find(scope.productOption.choices, function(c) {
+                                    var exists = _.find(scope.selectedChoices, function() {
+                                        return c.isDefaultChoice === true;
+                                    });
+                                    if (exists) {
+                                        return c;
+                                    }
+                                });
+
+                                if (productDefaultChoice) {
+                                    //var choice = scope.sharedOption.choices[0];
+                                    scope.defaultChoice.current = productDefaultChoice;
+                                    scope.defaultChoice.previous = productDefaultChoice;
+                                    scope.defaultChoice.isSet = true;
+
+                                    _.each(scope.sharedOption.choices, function(c) {
+                                        c.isDefaultChoice = c.key === productDefaultChoice.key;
+                                    });
+
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+
+                    // if a choice has not previously been specified to be the default,
+                    // then use the default as specified in the option settings as the default 
+                    if (scope.selectedChoices.length > 0) {
                         // handles legacy no previous default setting
 
                         // find the first selected choice
@@ -4817,7 +4865,9 @@ angular.module('merchello.directives').directive('invoiceHeader',
 
             function saveInvoice(dialogData) {
                 invoiceResource.saveInvoice(dialogData.invoice);
-                scope.refresh();
+                scope.invoice.poNumber = dialogData.invoice.poNumber;
+                scope.invoice.invoiceNumberPrefix = dialogData.invoice.invoiceNumberPrefix;
+                //scope.refresh();
             }
             
             function init() {
@@ -4835,8 +4885,8 @@ angular.module('merchello.directives').directive('invoiceHeader',
 }])
 
 angular.module('merchello.directives').directive('invoiceItemizationTable',
-    ['$q', 'localizationService', 'invoiceResource', 'invoiceHelper',
-        function($q, localizationService, invoiceResource, invoiceHelper) {
+    ['$q', 'localizationService', 'invoiceResource', 'invoiceHelper', 'dialogService', 'productResource',
+        function ($q, localizationService, invoiceResource, invoiceHelper, dialogService, productResource) {
             return {
                 restrict: 'E',
                 replace: true,
@@ -4866,10 +4916,36 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                     function init() {
 
                         // ensure that the parent scope promises have been resolved
-                        scope.$watch('preValuesLoaded', function(pvl) {
-                            if(pvl === true) {
-                               loadInvoice();
+                        scope.$watch('preValuesLoaded', function (pvl) {
+                            if (pvl === true) {
+                                loadInvoice();
                             }
+                        });
+                    }
+
+
+                    // Previews a line item on invoice in a dialog
+                    scope.lineItemPreview = function (sku) {
+
+                        // Setup the dialog data
+                        var dialogData = {
+                            product: {},
+                            sku: sku
+                        };
+
+                        // Get the product if it exists! We call the vairant service as this seems
+                        // to return the base product too
+                        productResource.getVariantBySku(sku).then(function (result) {
+                            // If we get something back then add it to the diaglogData
+                            if (result) {
+                                dialogData.product = result;
+                            }
+                        });
+
+                        dialogService.open({
+                            template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/sales.previewlineitem.html',
+                            show: true,
+                            dialogData: dialogData
                         });
                     }
 
@@ -4968,7 +5044,7 @@ angular.module('merchello.directives').directive('manageInvoiceAdjustments',
                 function manageAdjustmentsDialogConfirm(adjustments) {
                     if (adjustments.items !== undefined) {
 
-                    var user = userService.getCurrentUser().then(function(user) {
+                    userService.getCurrentUser().then(function(user) {
 
                         _.each(adjustments.items, function(item) {
                             if (item.key === '') {

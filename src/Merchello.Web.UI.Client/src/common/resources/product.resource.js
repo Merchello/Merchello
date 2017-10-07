@@ -77,6 +77,21 @@
                         'Failed to retreive data for product key ' + key);
                 },
 
+                /**
+                 * @ngdoc method
+                 * @name getBySku
+                 * @description Gets a product via it's SKU with an API call to the server
+                 **/
+                getBySku: function (sku) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'GetProductBySku';
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: url + '?sku=' + sku,
+                            method: "GET"
+                        }),
+                        'Failed to retreive data for product sku ' + sku);
+                },
+
                 getByKeys: function(keys) {
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'GetByKeys';
                     return umbRequestHelper.resourcePromise(
@@ -99,6 +114,21 @@
                             method: "GET"
                         }),
                         'Failed to retreive data for product variant key ' + key);
+                },
+
+
+                /**
+                 * @ngdoc method
+                 * @name getVariantBySku
+                 * @description Gets a product variant via it's sku with an API call to the server
+                 **/
+                getVariantBySku: function (sku) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'GetProductVariantBySku';
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: url + '?sku=' + sku,
+                            method: "GET"
+                        }), 'Failed to retreive data for product variant sku ' + sku);
                 },
 
                 getManufacturers: function()
@@ -247,6 +277,18 @@
                             variant
                         ),
                         'Failed to delete detached content');
+                },
+
+                resetSkus: function(product)
+                {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProductWithResetSkus';
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: url,
+                            method: "GET",
+                            params: { productKey: product.key }
+                        }),
+                        'Failed to reset skus');
                 },
 
                 /**
