@@ -41,7 +41,7 @@
 		<PackageName>Merchello</PackageName>
     <TestPackageName>Merchello Test Helpers</TestPackageName>
     <FastTrackPackageName>Merchello FastTrack</FastTrackPackageName>
-		<MinUmbracoVersion>7.5.0</MinUmbracoVersion>
+		<MinUmbracoVersion>7.7.0</MinUmbracoVersion>
 		<Readme>Merchello - Open source eCommerce package for Umbraco</Readme>
     <TestReadme>Merchello - Provides testing base classes for extending Merchello</TestReadme>
     <FastTrackReadme>Merchello FastTrack - Base UI components for implementing Merchello Stores</FastTrackReadme>
