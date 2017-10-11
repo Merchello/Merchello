@@ -25,6 +25,8 @@
     /// </summary>
     internal class ProductVariantRepository : MerchelloBulkOperationRepository<IProductVariant, ProductVariantDto>, IProductVariantRepository
     {
+
+        private const int ChunkSize = 100;
         /// <summary>
         /// The <see cref="IProductOptionRepository"/>.
         /// </summary>
@@ -39,7 +41,7 @@
         /// <param name="cache">
         /// The cache.
         /// </param>
-        /// <param name="logger">
+        /// <param name="logger">SaveCatalogInventory
         /// The logger.
         /// </param>
         /// <param name="sqlSyntax">
@@ -378,8 +380,11 @@
             // Check for variant keys
             if (keys.Any())
             {
-                // Split keys into chunks of 500 to stop SQL 2100 limit
-                var keysChunked = keys.Split(500);
+
+
+                // Split keys into chunks  to stop SQL 2100 limit
+                var keysChunked = keys.Split(ChunkSize);
+
 
                 // Loop keys and execute query
                 foreach (var keyChunk in keysChunked)
@@ -393,6 +398,7 @@
 
                     inventoryDtos.AddRange(Database.Fetch<CatalogInventoryDto, WarehouseCatalogDto>(sql));
                 }
+
             }
             else
             {
@@ -414,78 +420,109 @@
             var inserts = new List<CatalogInventoryDto>();
 
             var variantIndex = 0;
+
             foreach (var productVariant in productVariants)
             {
-                foreach (var dto in inventoryDtos.Where(i => i.ProductVariantKey == productVariant.Key))
+                var delChunks =
+                    inventoryDtos.Where(i => i.ProductVariantKey == productVariant.Key).ToArray().Split(ChunkSize);
+                foreach (var delChunk in delChunks)
                 {
-                    if (!((ProductVariant)productVariant).CatalogInventoryCollection.Contains(dto.CatalogKey))
+                    foreach (var dto in delChunk)
                     {
-                        if (isSqlCe)
+                        if (!((ProductVariant)productVariant).CatalogInventoryCollection.Contains(dto.CatalogKey))
                         {
-                            SqlCeDeleteCatalogInventory(dto.ProductVariantKey, dto.CatalogKey);
-                        }
-                        else
-                        {
-                            sqlStatement += string.Format(" DELETE FROM merchCatalogInventory WHERE productVariantKey = @{0} AND catalogKey = @{1}", paramIndex++, paramIndex++);
-                            parms.Add(dto.ProductVariantKey);
-                            parms.Add(dto.CatalogKey);
+                            if (isSqlCe)
+                            {
+                                SqlCeDeleteCatalogInventory(dto.ProductVariantKey, dto.CatalogKey);
+                            }
+                            else
+                            {
+                                sqlStatement +=
+                                    string.Format(
+                                        " DELETE FROM merchCatalogInventory WHERE productVariantKey = @{0} AND catalogKey = @{1}",
+                                        paramIndex++, paramIndex++);
+                                parms.Add(dto.ProductVariantKey);
+                                parms.Add(dto.CatalogKey);
+                            }
+
                         }
 
                     }
-                }
-
-                foreach (var inv in productVariant.CatalogInventories)
-                {
-                    inv.UpdateDate = DateTime.Now;
-                    if (inventoryDtos.Any(i => i.ProductVariantKey == productVariant.Key && i.CatalogKey == inv.CatalogKey))
-                    {
-                        if (isSqlCe)
-                        {
-                            SqlCeUpdateCatalogInventory(inv);
-                        }
-                        else
-                        {
-                            sqlStatement += string.Format(" UPDATE merchCatalogInventory SET Count = @{0}, LowCount = @{1}, Location = @{2}, UpdateDate = @{3} WHERE catalogKey = @{4} AND productVariantKey = @{5}", paramIndex++, paramIndex++, paramIndex++, paramIndex++, paramIndex++, paramIndex++);
-                            parms.Add(inv.Count);
-                            parms.Add(inv.LowCount);
-                            parms.Add(inv.Location);
-                            parms.Add(inv.UpdateDate);
-                            parms.Add(inv.CatalogKey);
-                            parms.Add(inv.ProductVariantKey);
-                        }
-                    }
-                    else
-                    {
-                        inv.CreateDate = DateTime.Now;
-                        inv.UpdateDate = DateTime.Now;
-                        inserts.Add(new CatalogInventoryDto
-                        {
-                            CatalogKey = inv.CatalogKey,
-                            ProductVariantKey = productVariant.Key,
-                            Count = inv.Count,
-                            LowCount = inv.LowCount,
-                            Location = inv.Location,
-                            CreateDate = inv.CreateDate,
-                            UpdateDate = inv.UpdateDate
-                        });
-                    }
-                }
-                
-                //split into batches of 100
-                if (++variantIndex >= 100) {
                     if (!string.IsNullOrEmpty(sqlStatement))
                     {
-                    		Database.Execute(sqlStatement, parms.ToArray());
+                        Database.Execute(sqlStatement, parms.ToArray());
+                        sqlStatement = string.Empty;
                     }
-                		variantIndex = 0;
+                }
+
+                var pVchunks = productVariant.CatalogInventories.ToArray().Split(ChunkSize);
+
+                foreach (var pvChunk in pVchunks)
+                {
+
+                    foreach (var inv in pvChunk)
+                    {
+                        inv.UpdateDate = DateTime.Now;
+                        if (
+                            inventoryDtos.Any(
+                                i => i.ProductVariantKey == productVariant.Key && i.CatalogKey == inv.CatalogKey))
+                        {
+                            if (isSqlCe)
+                            {
+                                SqlCeUpdateCatalogInventory(inv);
+                            }
+                            else
+                            {
+                                sqlStatement +=
+                                    string.Format(
+                                        " UPDATE merchCatalogInventory SET Count = @{0}, LowCount = @{1}, Location = @{2}, UpdateDate = @{3} WHERE catalogKey = @{4} AND productVariantKey = @{5}",
+                                        paramIndex++, paramIndex++, paramIndex++, paramIndex++, paramIndex++,
+                                        paramIndex++);
+                                parms.Add(inv.Count);
+                                parms.Add(inv.LowCount);
+                                parms.Add(inv.Location);
+                                parms.Add(inv.UpdateDate);
+                                parms.Add(inv.CatalogKey);
+                                parms.Add(inv.ProductVariantKey);
+                            }
+                        }
+                        else
+                        {
+                            inv.CreateDate = DateTime.Now;
+                            inv.UpdateDate = DateTime.Now;
+                            inserts.Add(new CatalogInventoryDto
+                            {
+                                CatalogKey = inv.CatalogKey,
+                                ProductVariantKey = productVariant.Key,
+                                Count = inv.Count,
+                                LowCount = inv.LowCount,
+                                Location = inv.Location,
+                                CreateDate = inv.CreateDate,
+                                UpdateDate = inv.UpdateDate
+                            });
+                        }
+                    }
+
+
+                    if (!string.IsNullOrEmpty(sqlStatement))
+                    {
+
+                        Database.Execute(sqlStatement, parms.ToArray());
+                    }
+                }
+
+                //split into batches of 100
+                if (++variantIndex >= 100)
+                {
+                    if (!string.IsNullOrEmpty(sqlStatement))
+                    {
+                        Database.Execute(sqlStatement, parms.ToArray());
+                    }
+                    variantIndex = 0;
                     sqlStatement = string.Empty;
                 }
             }
-            
-            if (!string.IsNullOrEmpty(sqlStatement))
-            {
-                Database.Execute(sqlStatement, parms.ToArray());
-            }
+
 
             if (inserts.Any())
             {
@@ -507,14 +544,14 @@
                 new Sql(
                     "UPDATE merchCatalogInventory SET Count = @ct, LowCount = @lct, Location = @loc, UpdateDate = @ud WHERE catalogKey = @ck AND productVariantKey = @pvk",
                     new
-                        {
-                            @ct = inv.Count,
-                            @lct = inv.LowCount,
-                            @loc = inv.Location,
-                            @ud = DateTime.Now,
-                            @ck = inv.CatalogKey,
-                            @pvk = inv.ProductVariantKey
-                        });
+                    {
+                        @ct = inv.Count,
+                        @lct = inv.LowCount,
+                        @loc = inv.Location,
+                        @ud = DateTime.Now,
+                        @ck = inv.CatalogKey,
+                        @pvk = inv.ProductVariantKey
+                    });
 
             Database.Execute(sql);
         }
@@ -583,8 +620,9 @@
             var variants = productVariants as IProductVariant[] ?? productVariants.ToArray();
             var factory = new ProductVariantDetachedContentFactory();
 
-            // Get the variant keys and batch into Lists of 500
-            var variantKeys = variants.Select(x => x.Key).ToArray().Split(500).ToList();
+            // Get the variant keys and batch into Lists 
+            var variantKeys = variants.Select(x => x.Key).ToArray().Split(ChunkSize).ToList();
+
 
             var existing = this.GetProductVariantDetachedContents(variantKeys).ToArray();
 
@@ -641,14 +679,15 @@
                         }
                     }
                 }
-                
+
                 //split into batches of 100
-                if (++variantIndex >= 100) {
+                if (++variantIndex >= 100)
+                {
                     if (!string.IsNullOrEmpty(sqlStatement))
                     {
-                    		Database.Execute(sqlStatement, parms.ToArray());
+                        Database.Execute(sqlStatement, parms.ToArray());
                     }
-                		variantIndex = 0;
+                    variantIndex = 0;
                     sqlStatement = string.Empty;
                 }
             }
@@ -712,16 +751,16 @@
                 Database.Execute(
                     Update,
                     new
-                        {
-                            @Dctk = dto.DetachedContentTypeKey,
-                            @Tid = dto.TemplateId,
-                            @Slug = dto.Slug,
-                            @Vals = dto.Values,
-                            @Cbr = dto.CanBeRendered,
-                            @Ud = dto.UpdateDate,
-                            @Cn = dto.CultureName,
-                            @Pvk = dto.ProductVariantKey
-                        });
+                    {
+                        @Dctk = dto.DetachedContentTypeKey,
+                        @Tid = dto.TemplateId,
+                        @Slug = dto.Slug,
+                        @Vals = dto.Values,
+                        @Cbr = dto.CanBeRendered,
+                        @Ud = dto.UpdateDate,
+                        @Cn = dto.CultureName,
+                        @Pvk = dto.ProductVariantKey
+                    });
             }
         }
 
@@ -768,24 +807,12 @@
         [Obsolete("Don't use this as it has the possibility of failing")]
         internal IEnumerable<IProductVariantDetachedContent> GetProductVariantDetachedContents(IEnumerable<Guid> productVariantKeys)
         {
-            var batchedKeys = productVariantKeys.ToArray().Split(500).ToList();
+
+
+            var batchedKeys = productVariantKeys.ToArray().Split(ChunkSize).ToList();
+
             return GetProductVariantDetachedContents(batchedKeys);
 
-            //var sql = new Sql();
-            //sql.Select("*")
-            //    .From<ProductVariantDetachedContentDto>(SqlSyntax)
-            //    .InnerJoin<DetachedContentTypeDto>(SqlSyntax)
-            //    .On<ProductVariantDetachedContentDto, DetachedContentTypeDto>(
-            //        SqlSyntax,
-            //        left => left.DetachedContentTypeKey,
-            //        right => right.Key)
-            //    .WhereIn<ProductVariantDetachedContentDto>(x => x.ProductVariantKey, productVariantKeys, SqlSyntax);
-
-            //var dtos = Database.Fetch<ProductVariantDetachedContentDto, DetachedContentTypeDto>(sql);
-
-            //var factory = new ProductVariantDetachedContentFactory();
-
-            //return dtos.Select(factory.BuildEntity);
         }
 
         /// <summary>
@@ -939,6 +966,17 @@
             return variant;
         }
 
+
+
+        /// <summary>
+        /// The perform get all.
+        /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProductVariant}"/>.
+        /// </returns>
         /// <summary>
         /// The perform get all.
         /// </summary>
@@ -958,7 +996,7 @@
                 }
             }
             else
-            {                
+            {
                 var dtos = Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(GetBaseQuery(false));
                 // TODO - This is really inefficient
                 foreach (var dto in dtos)
@@ -984,7 +1022,7 @@
         {
             var baseVariantClause = GetBaseQuery(false);
             var variantTranslator = new SqlTranslator<IProductVariant>(baseVariantClause, query);
-            var variantSql = variantTranslator.Translate();                       
+            var variantSql = variantTranslator.Translate();
             var variantDtos = Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(variantSql);
 
             if (variantDtos.Any())
@@ -1039,7 +1077,7 @@
                         productAttributeCollection.Add(attribute);
                     }
                     productAttributeCollectionDictionary.Add(variantKey, productAttributeCollection);
-                } 
+                }
 
                 #endregion
 
@@ -1096,7 +1134,7 @@
                 foreach (var vdc in variantsDetachedContent)
                 {
                     variantsDetachedContentDictionary.Add(vdc.Key, new DetachedContentCollection<IProductVariantDetachedContent> { vdc });
-                } 
+                }
 
                 #endregion
 
@@ -1342,7 +1380,7 @@
             Mandate.ParameterCondition(entity.ProductKey != Guid.Empty, "productKey must be set");
 
             if (!((ProductVariant)entity).Master)
-                Mandate.ParameterCondition(entity.Attributes.Any(), "Product variant must have attributes");            
+                Mandate.ParameterCondition(entity.Attributes.Any(), "Product variant must have attributes");
 
             return true;
         }
@@ -1397,7 +1435,7 @@
                     invLocation = inv.Location,
                     invUpdateDate = inv.UpdateDate,
                     catalogKey = inv.CatalogKey,
-                    productVariantKey = inv.ProductVariantKey                    
+                    productVariantKey = inv.ProductVariantKey
                 });
         }
 
