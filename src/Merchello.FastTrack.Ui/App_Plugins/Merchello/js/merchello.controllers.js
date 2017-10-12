@@ -10263,6 +10263,9 @@ angular.module('merchello').controller('Merchello.Sales.Dialogs.ManageAdjustment
         $scope.invoiceNumber = '';
         $scope.adjustments = [];
         $scope.amount = 0.0;
+        $scope.sku = 'adj';
+        $scope.lineItemType = 'Adjustment';
+        $scope.amount = 0.0;
         $scope.name = '';
 
         function init() {
@@ -10291,14 +10294,16 @@ angular.module('merchello').controller('Merchello.Sales.Dialogs.ManageAdjustment
                 lineItem.quantity = 1;
                 lineItem.name = $scope.name;
                 lineItem.containerKey = $scope.dialogData.invoice.key;
-                lineItem.lineItemType = 'Adjustment';
+                lineItem.lineItemType = $scope.lineItemType;
                 var amount = Math.abs($scope.amount);
                 lineItem.price = $scope.operator === '+' ? amount : -1 * amount;
-                lineItem.sku = 'adj';
+                lineItem.sku = $scope.sku;
                 lineItem.isNew = true;
                 $scope.name = '';
                 $scope.amount = 0;
                 $scope.operator = '-';
+                $scope.sku = 'adj';
+                $scope.lineItemType = 'Adjustment';
                 $scope.adjustments.push(lineItem);
             }
         }
@@ -10307,7 +10312,7 @@ angular.module('merchello').controller('Merchello.Sales.Dialogs.ManageAdjustment
             
             var items = [];
             _.each($scope.adjustments, function(adj) {
-               items.push({ key: adj.key, name: adj.name, price: adj.price });
+                items.push({ key: adj.key, name: adj.name, price: adj.price, sku: adj.sku, lineItemType: adj.lineItemType });
             });
 
             var invoiceAdjustmentDisplay = {

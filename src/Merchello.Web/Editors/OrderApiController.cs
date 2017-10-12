@@ -173,7 +173,7 @@
                 throw new KeyNotFoundException("Invoice with id passed not found");
             }
 
-            var shipmentLineItem = invoice.Items.FirstOrDefault(x => x.LineItemType == LineItemType.Shipping);
+            var shipmentLineItem = invoice.Items.FirstOrDefault(x => x.LineItemType == LineItemType.Shipping && x.ExtendedData != null && x.ExtendedData.Count > 2);
 
             if (shipmentLineItem == null)
             {
