@@ -174,6 +174,27 @@
         public ProductVariantDisplay GetProductVariantBySku(string sku)
         {
             var variant = _merchello.Query.Product.GetProductVariantBySku(sku);
+
+            // See if we have a variant
+            // TODO - should document this properly (edge case)            
+            if (variant == null)
+            {
+                // See if the sku contains a pipe. This is a special charactor to split a SKU up
+                // so we can seperate out the same product within the sales list. But return data from a base SKU
+                // i.e. may-product-sku may be a product, and you have the same product that you have added some custom items to
+                //      so generate a new sku.. may-product-sku|some-key ..using a pipe to delimit the extra key and force the product
+                //      to appear on another line item. However, the preview won't work as SKU is not recognised. So we need to strip out
+                //      the pipe onwards on the sku and try that.
+                if (sku.Contains("|"))
+                {
+                    // Remove end of sku
+                    sku = sku.Substring(0, sku.LastIndexOf("|"));
+
+                    // try and get it with new sku
+                    variant = _merchello.Query.Product.GetProductVariantBySku(sku);
+                }
+            }
+
             return variant;
         }
 
