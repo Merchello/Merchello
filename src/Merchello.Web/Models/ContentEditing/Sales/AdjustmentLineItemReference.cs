@@ -83,6 +83,7 @@
             {
                 item.ExtendedData.SetValue("userName", adj.UserName);
                 item.ExtendedData.SetValue("email", adj.Email);
+                item.ExtendedData.SetValue(Constants.ExtendedDataKeys.Adjustment, adj.LineItemType);
             }
             else
             {

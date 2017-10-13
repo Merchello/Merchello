@@ -71,7 +71,8 @@
                     "merchProvinceTaxRate",
                     "merchTaxTransactionResults",
                     "merchSmtpProviderSettings",
-                    "merchBasketItemChoices"
+                    "merchBasketItemChoices",
+                    "merchAdjustment"
                 }; 
             }
         }
@@ -110,6 +111,14 @@
             public static string LineItem
             {
                 get { return "merchLineItem"; }
+            }
+
+            /// <summary>
+            /// Gets the Adjustment
+            /// </summary>
+            public static string Adjustment
+            {
+                get { return "merchAdjustment"; }
             }
 
             /// <summary>
