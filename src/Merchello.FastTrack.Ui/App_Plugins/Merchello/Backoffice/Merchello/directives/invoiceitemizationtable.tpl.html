@@ -12,7 +12,12 @@
     <tr data-ng-repeat="lineItem in itemization.products">
         <td>{{lineItem.name}}</td>
         <td class="break-all">
-            <a href ng-click="lineItemPreview(lineItem.sku)">{{lineItem.sku}}</a>            
+            <span ng-show="lineItem.extendedData.getValue('merchAdjustment') != ''">
+                <small><localize key="merchelloSales_adjustments"></localize></small>
+            </span>
+            <span ng-show="lineItem.extendedData.getValue('merchAdjustment') == ''">
+                <a href ng-click="lineItemPreview(lineItem.sku)">{{lineItem.sku}}</a>
+            </span>
         </td>
         <td class="text-center">{{lineItem.quantity}}</td>
         <td class="text-right">{{lineItem.price | currency : currencySymbol}}</td>
@@ -47,7 +52,7 @@
         <td colspan="4" class="adjustment-name">
             {{adjustmentItem.name}}
             <span data-ng-show="adjustmentItem.extendedData.items[0].value !== ''">
-                <localize key="merchelloSales_adjustmentAssignedBy"></localize>: {{ adjustmentItem.extendedData.items[0].value}} (<small>{{adjustmentItem.extendedData.items[1].value}}</small>)
+                <localize key="merchelloSales_adjustmentAssignedBy"></localize>: {{ adjustmentItem.extendedData.getValue('userName')}}
             </span>             
         </td>
         <td class="text-right">
@@ -59,7 +64,7 @@
         <td colspan="4" class="text-right"><localize key="merchelloGeneral_total" /></td>
         <td class="text-right">{{itemization.invoiceTotal | currency : currencySymbol}}</td>
     </tr>
-    <tr data-ng-repeat="payment in payments" data-ng-hide="payments.length == 0">
+    <!--<tr data-ng-repeat="payment in payments" data-ng-hide="payments.length == 0">
         <td colspan="2"><i data-ng-class="{ 'icon-credit-card': payment.paymentMethodType === 'CreditCard', 'icon-receipt-dollar': payment.paymentMethodType === 'Cash' }"></i></td>
         <td>
             <span data-ng-show="payment.paymentMethodType == 'CreditCard'" class="card-no">xxxx-xxxx-xxxx-xxxx</span>
@@ -67,7 +72,7 @@
         </td>
         <td class="text-right">{{authorizedCapturedLabel}}:</td>
         <td class="text-right">{{payment.amount | currency : currencySymbol}}</td>
-    </tr>
+    </tr>-->
     <tr ng-hide="remainingBalance == 0">
         <td colspan="4" class="text-right">Collected:</td>
         <td class="text-right">{{invoice.total - remainingBalance | currency : currencySymbol }}</td>

@@ -20,6 +20,7 @@
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
     using Umbraco.Core.Persistence.SqlSyntax;
+    using Constants = Core.Constants;
 
     /// <summary>
     /// Represents the InvoiceService
@@ -1651,13 +1652,14 @@
         {
             if (invoice != null)
             {
-                var existing = invoice.Items.Where(x => x.LineItemType == LineItemType.Adjustment).ToArray();
+                var existing = invoice.Items.Where(x => x.LineItemType == LineItemType.Adjustment || x.ExtendedData != null && x.ExtendedData.ContainsKey(Constants.ExtendedDataKeys.Adjustment)).ToArray();
 
                 var invoiceLineItems = adjustments as IInvoiceLineItem[] ?? adjustments.ToArray();
                 var goodKeys = invoiceLineItems.Where(z => z.Key != Guid.Empty).Select(y => y.Key);
 
                 // remove existing adjustments not found
                 var removers = existing.Any() && !invoiceLineItems.Any() ? existing : existing.Where(x => goodKeys.All(y => y != x.Key));
+
                 foreach (var remove in removers)
                 {
                     invoice.Items.Remove(remove.Sku);

@@ -85,12 +85,7 @@
                                 <div class="span6">
                                     <div class="form-group">
                                         <label>Line Item Type</label>
-                                        <select ng-model="lineItemType">
-                                            <option>Adjustment</option>
-                                            <option>Product</option>
-                                            <option>Shipping</option>
-                                            <option>Tax</option>
-                                        </select>
+                                        <select ng-model="lineItemType" ng-options="o as o for o in lineItemTypes"></select>
                                     </div>
                                 </div>
                                 <div class="span6">

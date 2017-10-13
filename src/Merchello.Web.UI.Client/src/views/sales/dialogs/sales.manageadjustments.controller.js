@@ -12,11 +12,18 @@ angular.module('merchello').controller('Merchello.Sales.Dialogs.ManageAdjustment
         $scope.adjustments = [];
         $scope.amount = 0.0;
         $scope.sku = 'adj';
-        $scope.lineItemType = 'Adjustment';
+        $scope.lineItemType = '';
+        $scope.lineItemTypes = [];
         $scope.amount = 0.0;
         $scope.name = '';
 
         function init() {
+            // Setup the Adjustment types
+            $scope.lineItemTypes = ["Adjustment", "Product", "Shipping", "Tax"];
+
+            // Set the default type
+            $scope.lineItemType = $scope.lineItemTypes[0];
+
             $scope.invoiceNumber = $scope.dialogData.invoice.prefixedInvoiceNumber();
             var adjustments = $scope.dialogData.invoice.getAdjustmentLineItems();
             if (adjustments !== undefined && adjustments !== null) {
@@ -47,12 +54,14 @@ angular.module('merchello').controller('Merchello.Sales.Dialogs.ManageAdjustment
                 lineItem.price = $scope.operator === '+' ? amount : -1 * amount;
                 lineItem.sku = $scope.sku;
                 lineItem.isNew = true;
+                $scope.adjustments.push(lineItem);
+
+                // Reset
                 $scope.name = '';
                 $scope.amount = 0;
                 $scope.operator = '-';
                 $scope.sku = 'adj';
-                $scope.lineItemType = 'Adjustment';
-                $scope.adjustments.push(lineItem);
+                $scope.lineItemType = $scope.lineItemTypes[0];
             }
         }
 

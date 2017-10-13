@@ -12,7 +12,12 @@
     <tr data-ng-repeat="lineItem in itemization.products">
         <td>{{lineItem.name}}</td>
         <td class="break-all">
-            <a href ng-click="lineItemPreview(lineItem.sku)">{{lineItem.sku}}</a>            
+            <span ng-show="lineItem.extendedData.getValue('merchAdjustment') != ''">
+                <small><localize key="merchelloSales_adjustments"></localize></small>
+            </span>
+            <span ng-show="lineItem.extendedData.getValue('merchAdjustment') == ''">
+                <a href ng-click="lineItemPreview(lineItem.sku)">{{lineItem.sku}}</a>
+            </span>
         </td>
         <td class="text-center">{{lineItem.quantity}}</td>
         <td class="text-right">{{lineItem.price | currency : currencySymbol}}</td>
@@ -47,7 +52,7 @@
         <td colspan="4" class="adjustment-name">
             {{adjustmentItem.name}}
             <span data-ng-show="adjustmentItem.extendedData.items[0].value !== ''">
-                <localize key="merchelloSales_adjustmentAssignedBy"></localize>: {{ adjustmentItem.extendedData.items[0].value}} (<small>{{adjustmentItem.extendedData.items[1].value}}</small>)
+                <localize key="merchelloSales_adjustmentAssignedBy"></localize>: {{ adjustmentItem.extendedData.getValue('userName')}}
             </span>             
         </td>
         <td class="text-right">

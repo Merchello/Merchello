@@ -136,7 +136,11 @@
         }
 
         function getAdjustmentLineItems() {
-            return ensureArray(_.filter(this.items, function(item) {
+            return ensureArray(_.filter(this.items, function (item) {
+                var adjustmentExtendedData = item.extendedData.getValue('merchAdjustment');
+                if (adjustmentExtendedData !== "") {
+                    return true;
+                }
                return item.lineItemTypeField.alias === 'Adjustment';
             }));
         }
