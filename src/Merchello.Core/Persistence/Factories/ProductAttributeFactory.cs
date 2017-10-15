@@ -35,7 +35,6 @@
                 CreateDate = dto.CreateDate
             };
 
-
             return attribute;
         }
 
