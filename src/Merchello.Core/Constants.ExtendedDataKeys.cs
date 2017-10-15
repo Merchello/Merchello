@@ -71,7 +71,8 @@
                     "merchProvinceTaxRate",
                     "merchTaxTransactionResults",
                     "merchSmtpProviderSettings",
-                    "merchBasketItemChoices"
+                    "merchBasketItemChoices",
+                    "merchTransactionId"
                 }; 
             }
         }
@@ -524,6 +525,15 @@
             {
                 get { return "merchTaxTransactionResults"; }
             }
+
+            /// <summary>
+            /// Gets the transaction id for a payment
+            /// </summary>
+            public static string TransactionId
+            {
+                get { return "merchTransactionId"; }
+            }
+
 
             //// SMTP ---------------------------------------------------------------------------
 

@@ -356,6 +356,8 @@
     <key alias="addAdjustment">Добавить корректировку</key>
     <key alias="adjustments">Корректировки</key>
     <key alias="adjustmentAssignedBy">Кем сделана</key>
+    <key alias="lineItemPreview">Просмотр позиции заказа</key>
+    <key alias="noLineItemPreview">Просмотр позиции заказа невозможен</key>
   </area>
   <area alias="merchelloCustomers">
     <key alias="loginName">Логин</key>

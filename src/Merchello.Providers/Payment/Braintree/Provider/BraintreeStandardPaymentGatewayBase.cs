@@ -171,6 +171,9 @@
                 // AVS and CVV data
                 payment.ExtendedData.SetAvsCvvData(result.Target);
 
+                // Set the transaction ID as an extended data item
+                payment.ExtendedData.SetValue(Core.Constants.ExtendedDataKeys.TransactionId, result.Target.Id);
+
                 if (option == TransactionOption.Authorize) payment.Authorized = true;
                 if (option == TransactionOption.SubmitForSettlement)
                 {
