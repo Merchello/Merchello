@@ -6,7 +6,8 @@
     using System.Web;
 
     using Umbraco.Core;
-
+    using Umbraco.Core.Configuration;
+     
     /// <summary>
     /// The path helper.
     /// </summary>
@@ -50,6 +51,11 @@
         /// </returns>
         internal static string ConvertToSlug(string value)
         {
+            foreach (var n in UmbracoConfig.For.UmbracoSettings().RequestHandler.CharCollection)
+            {
+                if (n.Char != "")
+                    value = value.Replace(n.Char, n.Replacement);
+            }
             return RemoveSpecialCharacters(value).SafeEncodeUrlSegments().ToLowerInvariant().EnsureNotStartsOrEndsWith('/');
         }
 
