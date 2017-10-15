@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Data;
     using System.Linq;
 
     using Merchello.Core.Models;
@@ -25,6 +24,11 @@
     /// </summary>
     internal class ProductVariantRepository : MerchelloBulkOperationRepository<IProductVariant, ProductVariantDto>, IProductVariantRepository
     {
+        /// <summary>
+        /// Chunk size for SQL statements
+        /// </summary>
+        private const int ChunkSize = 300;
+
         /// <summary>
         /// The <see cref="IProductOptionRepository"/>.
         /// </summary>
@@ -200,8 +204,21 @@
             BulkInsertRecordsWithKey<ProductVariantDto>(dtos);
             BulkInsertRecordsWithKey<ProductVariantIndexDto>(dtos.Select(v => v.ProductVariantIndexDto));
 
-            // We have to look up the examine ids
-            var idDtos = Database.Fetch<ProductVariantIndexDto>("WHERE productVariantKey IN (@pvkeys)", new { @pvkeys = dtos.Select(x => x.Key) });
+            // Split keys into chunks  to stop SQL 2100 limit
+            var keys = dtos.Select(x => x.Key).ToArray();
+
+            // Chunk the keys
+            var keysChunked = keys.Split(ChunkSize);
+
+            // List of ProductVariantIndexDto's
+            var idDtos = new List<ProductVariantIndexDto>();
+
+            // Loop keys
+            foreach (var pvkeys in keysChunked)
+            {
+                // We have to look up the examine ids and add them to the existing list
+                idDtos.AddRange(Database.Fetch<ProductVariantIndexDto>("WHERE productVariantKey IN (@pvkeys)", new { pvkeys }));
+            }
 
             foreach (var entity in productVariants)
             {
@@ -379,7 +396,7 @@
             if (keys.Any())
             {
                 // Split keys into chunks of 500 to stop SQL 2100 limit
-                var keysChunked = keys.Split(500);
+                var keysChunked = keys.Split(ChunkSize);
 
                 // Loop keys and execute query
                 foreach (var keyChunk in keysChunked)
@@ -584,7 +601,7 @@
             var factory = new ProductVariantDetachedContentFactory();
 
             // Get the variant keys and batch into Lists of 500
-            var variantKeys = variants.Select(x => x.Key).ToArray().Split(500).ToList();
+            var variantKeys = variants.Select(x => x.Key).ToArray().Split(ChunkSize).ToList();
 
             var existing = this.GetProductVariantDetachedContents(variantKeys).ToArray();
 
@@ -768,7 +785,7 @@
         [Obsolete("Don't use this as it has the possibility of failing")]
         internal IEnumerable<IProductVariantDetachedContent> GetProductVariantDetachedContents(IEnumerable<Guid> productVariantKeys)
         {
-            var batchedKeys = productVariantKeys.ToArray().Split(500).ToList();
+            var batchedKeys = productVariantKeys.ToArray().Split(ChunkSize).ToList();
             return GetProductVariantDetachedContents(batchedKeys);
 
             //var sql = new Sql();
@@ -799,7 +816,8 @@
         /// </returns>
         internal IEnumerable<IProductVariantDetachedContent> GetProductVariantDetachedContents(List<IEnumerable<Guid>> productVariantKeys)
         {
-            var dtos = new List<ProductVariantDetachedContentDto>();
+            var dtos = new List<IProductVariantDetachedContent>();
+            var factory = new ProductVariantDetachedContentFactory();
 
             foreach (var pvks in productVariantKeys)
             {
@@ -813,12 +831,10 @@
                         right => right.Key)
                     .WhereIn<ProductVariantDetachedContentDto>(x => x.ProductVariantKey, pvks, SqlSyntax);
 
-                dtos.AddRange(Database.Fetch<ProductVariantDetachedContentDto, DetachedContentTypeDto>(sql));
+                dtos.AddRange(Database.Fetch<ProductVariantDetachedContentDto, DetachedContentTypeDto>(sql).Select(factory.BuildEntity));
             }
 
-            var factory = new ProductVariantDetachedContentFactory();
-
-            return dtos.Select(factory.BuildEntity);
+            return dtos;
         }
 
 
@@ -994,7 +1010,7 @@
 
                 // We get all the variant keys, and split into lists of 500 max each
                 // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
-                var variantKeyLists = distinctDtos.Select(x => x.ProductVariantDto.Key).ToArray().Split(500).ToList();
+                var variantKeyLists = distinctDtos.Select(x => x.ProductVariantDto.Key).ToArray().Split(ChunkSize).ToList();
 
                 #region productVariant2ProductAttributeDtos
 
