@@ -42,23 +42,24 @@
                     </label>
                 </div>
             </div>
-        </div>
+       
 
-        <div class="umb-overlay-drawer">
-            <div class="umb-overlay-drawer__align-right">
+            <div class="umb-overlay-drawer">
+                <div class="umb-overlay-drawer__align-right">
 
-                <div class="umb-button">
-                    <a href data-ng-click="close()" class="btn btn-link">
-                        <localize key="general_cancel"></localize>
-                    </a>
+                    <div class="umb-button">
+                        <a href data-ng-click="close()" class="btn btn-link">
+                            <localize key="general_cancel"></localize>
+                        </a>
+                    </div>
+
+                    <div class="umb-button">
+                        <button class="btn btn-success" data-ng-click="submit(dialogData)">
+                            <localize key="buttons_save"></localize>
+                        </button>
+                    </div>
+
                 </div>
-
-                <div class="umb-button">
-                    <button class="btn btn-success" data-ng-click="submit(dialogData)">
-                        <localize key="buttons_save"></localize>
-                    </button>
-                </div>
-
             </div>
         </div>
     </div>

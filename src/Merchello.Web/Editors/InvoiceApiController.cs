@@ -101,7 +101,12 @@
         /// TODO rename to GetByKey
         public InvoiceDisplay GetInvoice(Guid id)
         {
-            return _merchello.Query.Invoice.GetByKey(id);
+            // TODO - Removed the cached get here as too many backoffice issues
+            //return _merchello.Query.Invoice.GetByKey(id);
+
+            // Get the invoice fresh to see if it solves back office problems
+            var invoice = _invoiceService.GetByKey(id);
+            return AutoMapper.Mapper.Map<InvoiceDisplay>(invoice);
         }
 
         /// <summary>

@@ -35,7 +35,7 @@
                                 <localize key="merchelloPayment_paymentMethod" />: {{payment.paymentMethodName}}
                             </h4>
 
-                            <div ng-show="hasAvsCvvData(payment.extendedData.items)">
+                            <div ng-show="hasExtendedDataKey(payment.extendedData.items, 'merchAvsCvvData')">
                                 <h5>AVS/CVV</h5>
                                 {{ showAvsCvvData(payment.extendedData.items) }}
                             </div>
@@ -60,7 +60,10 @@
                                     <tbody>
                                     <tr data-ng-repeat="applied in payment.appliedPayments">
                                         <td>{{applied.createDate | date : settings.dateFormat }}</td>
-                                        <td>{{applied.description}}</td>
+                                        <td>{{applied.description}} 
+                                            <span ng-show="hasExtendedDataKey(payment.extendedData.items, 'merchTransactionId')">
+                                                ({{payment.extendedData.getValue('merchTransactionId')}})
+                                            </span></td>
                                         <td class="text-right">{{applied.amount | currency: currencySymbol }}</td>
                                         <td class="text-center">
                                             <button class="btn btn-default" data-ng-click="voidPayment()" data-ng-hide="true">
