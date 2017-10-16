@@ -72,7 +72,7 @@
                     "merchTaxTransactionResults",
                     "merchSmtpProviderSettings",
                     "merchBasketItemChoices",
-                    "merchTransactionId"
+                    "merchTransactionId",
                     "merchAdjustment"
                 }; 
             }

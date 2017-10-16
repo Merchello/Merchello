@@ -11121,7 +11121,8 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 var paymentsPromise = paymentResource.getPaymentsByInvoice(key);
                 paymentsPromise.then(function(payments) {
                     $scope.allPayments = paymentDisplayBuilder.transform(payments);
-                    $scope.payments = _.filter($scope.allPayments, function(p) { return !p.voided && !p.collected && p.authorized; });
+                    $scope.payments = _.filter($scope.allPayments, function (p) { return !p.voided && !p.collected && p.authorized; });
+
                     loadPaymentMethods();
                     $scope.preValuesLoaded = true;
 

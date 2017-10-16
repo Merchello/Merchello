@@ -77,7 +77,9 @@
         <td></td>
     </tr>
     <tr data-ng-repeat="payment in payments" data-ng-hide="payments.length == 0">
-        <td colspan="2"><i data-ng-class="{ 'icon-credit-card': payment.paymentMethodType === 'CreditCard', 'icon-receipt-dollar': payment.paymentMethodType === 'Cash' }"></i></td>
+        <td colspan="2">
+            <i data-ng-class="{ 'icon-credit-card': payment.paymentMethodType === 'CreditCard', 'icon-receipt-dollar': payment.paymentMethodType === 'Cash' }"></i>
+        </td>
         <td>
             <span data-ng-show="payment.paymentMethodType == 'CreditCard'" class="card-no">xxxx-xxxx-xxxx-xxxx</span>
             <span class="payment-method"><localize key="merchelloOrderView_paymentProcessedBy" /> {{payment.paymentMethodName}}</span>
