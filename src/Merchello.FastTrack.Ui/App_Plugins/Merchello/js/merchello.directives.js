@@ -4964,8 +4964,7 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                             item.email = item.extendedData.getValue("email");
                         });
 
-                        scope.remainingBalance =
-                            invoiceHelper.round(scope.invoice.remainingBalance(scope.allPayments), 2);
+                        scope.remainingBalance = invoiceHelper.round(scope.invoice.remainingBalance(scope.allPayments), 2);
 
                         var label  = scope.remainingBalance == '0' ? 'merchelloOrderView_captured' : 'merchelloOrderView_authorized';
 

@@ -36,7 +36,8 @@
             $scope.debugAllowDelete = false;
             $scope.newPaymentOpen = false;
             $scope.entityType = 'Invoice';
-            
+
+            $scope.remainingBalance = 0;
 
             // exposed methods
             //  dialogs
@@ -155,7 +156,6 @@
 
                    $scope.tabs.appendCustomerTab($scope.invoice.customerKey);
 
-
                 }, function (reason) {
                     notificationsService.error("Invoice Load Failed", reason.message);
                 });
@@ -203,6 +203,10 @@
                     $scope.payments = _.filter($scope.allPayments, function(p) { return !p.voided && !p.collected && p.authorized; });
                     loadPaymentMethods();
                     $scope.preValuesLoaded = true;
+
+                    // Set the remaining balance after the payments have loaded
+                    $scope.remainingBalance = invoiceHelper.round($scope.invoice.remainingBalance($scope.allPayments), 2);
+
                 }, function(reason) {
                     notificationsService.error('Failed to load payments for invoice', reason.message);
                 });
@@ -275,7 +279,7 @@
             function capturePayment() {
                 var dialogData = dialogDataFactory.createCapturePaymentDialogData();
                 dialogData.setPaymentData($scope.payments[0]);
-                dialogData.setInvoiceData($scope.payments, $scope.invoice, $scope.currencySymbol);
+                dialogData.setInvoiceData($scope.allPayments, $scope.invoice, $scope.currencySymbol, invoiceHelper);
                 if (!dialogData.isValid()) {
                     return false;
                 }

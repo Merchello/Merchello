@@ -6,6 +6,7 @@
         <th class="text-center">Qty</th>
         <th class="text-right">Unit Price</th>
         <th class="text-right">Total Price</th>
+        <th class="text-right"></th>
     </tr>
     </thead>
     <tbody>
@@ -13,7 +14,7 @@
         <td>{{lineItem.name}}</td>
         <td class="break-all">
             <span ng-show="lineItem.extendedData.getValue('merchAdjustment') != ''">
-                <small><localize key="merchelloSales_adjustments"></localize></small>
+                <small><localize key="merchelloSales_adjustmentAssignedBy"></localize>: {{ adjustmentItem.extendedData.getValue('userName')}}</small>
             </span>
             <span ng-show="lineItem.extendedData.getValue('merchAdjustment') == ''">
                 <a href ng-click="lineItemPreview(lineItem.sku)">{{lineItem.sku}}</a>
@@ -22,6 +23,11 @@
         <td class="text-center">{{lineItem.quantity}}</td>
         <td class="text-right">{{lineItem.price | currency : currencySymbol}}</td>
         <td class="text-right">{{lineItem.quantity * lineItem.price | currency : currencySymbol}}</td>
+        <td>
+            <span class="merchello-icons">
+                <a class="merchello-icon merchello-icon-edit" ng-click="doEdit()" title="Edit" prevent-default><i class="icon icon-edit"></i></a>
+            </span>
+        </td>
     </tr>
     <tr data-ng-show="itemization.custom.length > 0" data-ng-repeat="customItem in itemization.custom">
         <td>{{customItem.name}}</td>
@@ -29,6 +35,7 @@
         <td class="text-center">{{customItem.quantity}}</td>
         <td class="text-right">{{customItem.price | currency : currencySymbol}}</td>
         <td class="text-right">{{customItem.quantity * customItem.price | currency : currencySymbol}}</td>
+        <td></td>
     </tr>
     <tr data-ng-show="itemization.discounts.length > 0" data-ng-repeat="discountItem in itemization.discounts">
         <td>{{discountItem.name}}</td>
@@ -36,20 +43,21 @@
         <td class="text-center">{{discountItem.quantity}}</td>
         <td class="text-right">({{discountItem.price | currency : currencySymbol}})</td>
         <td class="text-right">({{discountItem.quantity * discountItem.price | currency : currencySymbol}})</td>
+        <td></td>
     </tr>
     <tr>
-        <td colspan="4" class="text-right"><localize key="merchelloShipping_shipping" /></td>
+        <td colspan="5" class="text-right"><localize key="merchelloShipping_shipping" /></td>
         <td class="text-right">{{itemization.shippingTotal | currency : currencySymbol}}</td>
     </tr>
     <tr>
-        <td colspan="4" class="text-right"><localize key="merchelloOrderView_salesTax" /></td>
+        <td colspan="5" class="text-right"><localize key="merchelloOrderView_salesTax" /></td>
         <td class="text-right">{{itemization.taxTotal | currency : currencySymbol}}</td>
     </tr>
     <tr data-ng-show="adjustmentLineItems.length > 0">
-        <td colspan="5"><strong><localize key="merchelloSales_adjustments"></localize></strong></td>
+        <td colspan="6"><strong><localize key="merchelloSales_adjustments"></localize></strong></td>
     </tr>
     <tr data-ng-show="itemization.adjustments.length > 0" data-ng-repeat="adjustmentItem in itemization.adjustments">
-        <td colspan="4" class="adjustment-name">
+        <td colspan="5" class="adjustment-name">
             {{adjustmentItem.name}}
             <span data-ng-show="adjustmentItem.extendedData.items[0].value !== ''">
                 <localize key="merchelloSales_adjustmentAssignedBy"></localize>: {{ adjustmentItem.extendedData.getValue('userName')}}
@@ -61,11 +69,11 @@
         </td>
     </tr>
     <tr>
-        <td colspan="4" class="text-right"><localize key="merchelloGeneral_total" /></td>
+        <td colspan="5" class="text-right"><localize key="merchelloGeneral_total" /></td>
         <td class="text-right">{{itemization.invoiceTotal | currency : currencySymbol}}</td>
     </tr>
     <tr data-ng-repeat="payment in payments" data-ng-hide="payments.length == 0">
-        <td colspan="2"><i data-ng-class="{ 'icon-credit-card': payment.paymentMethodType === 'CreditCard', 'icon-receipt-dollar': payment.paymentMethodType === 'Cash' }"></i></td>
+        <td colspan="3"><i data-ng-class="{ 'icon-credit-card': payment.paymentMethodType === 'CreditCard', 'icon-receipt-dollar': payment.paymentMethodType === 'Cash' }"></i></td>
         <td>
             <span data-ng-show="payment.paymentMethodType == 'CreditCard'" class="card-no">xxxx-xxxx-xxxx-xxxx</span>
             <span class="payment-method"><localize key="merchelloOrderView_paymentProcessedBy" /> {{payment.paymentMethodName}}</span>
@@ -74,11 +82,11 @@
         <td class="text-right">{{payment.amount | currency : currencySymbol}}</td>
     </tr>
     <tr ng-hide="remainingBalance == 0">
-        <td colspan="4" class="text-right">Collected:</td>
+        <td colspan="5" class="text-right">Collected:</td>
         <td class="text-right">{{invoice.total - remainingBalance | currency : currencySymbol }}</td>
     </tr>
     <tr>
-        <td colspan="4" class="text-right"><localize key="merchelloSales_balanceDue">Balance due</localize>:
+        <td colspan="5" class="text-right"><localize key="merchelloSales_balanceDue">Balance due</localize>:
         </td>
         <td class="text-right">{{remainingBalance | currency : currencySymbol }}</td>
     </tr>

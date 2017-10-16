@@ -10945,7 +10945,8 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             $scope.debugAllowDelete = false;
             $scope.newPaymentOpen = false;
             $scope.entityType = 'Invoice';
-            
+
+            $scope.remainingBalance = 0;
 
             // exposed methods
             //  dialogs
@@ -11064,7 +11065,6 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
 
                    $scope.tabs.appendCustomerTab($scope.invoice.customerKey);
 
-
                 }, function (reason) {
                     notificationsService.error("Invoice Load Failed", reason.message);
                 });
@@ -11112,6 +11112,10 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     $scope.payments = _.filter($scope.allPayments, function(p) { return !p.voided && !p.collected && p.authorized; });
                     loadPaymentMethods();
                     $scope.preValuesLoaded = true;
+
+                    // Set the remaining balance after the payments have loaded
+                    $scope.remainingBalance = invoiceHelper.round($scope.invoice.remainingBalance($scope.allPayments), 2);
+
                 }, function(reason) {
                     notificationsService.error('Failed to load payments for invoice', reason.message);
                 });
@@ -11184,7 +11188,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             function capturePayment() {
                 var dialogData = dialogDataFactory.createCapturePaymentDialogData();
                 dialogData.setPaymentData($scope.payments[0]);
-                dialogData.setInvoiceData($scope.payments, $scope.invoice, $scope.currencySymbol);
+                dialogData.setInvoiceData($scope.allPayments, $scope.invoice, $scope.currencySymbol, invoiceHelper);
                 if (!dialogData.isValid()) {
                     return false;
                 }
