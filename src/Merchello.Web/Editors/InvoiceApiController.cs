@@ -315,7 +315,8 @@
 
                 merchInvoice = invoice.ToInvoice(merchInvoice);
 
-                _invoiceService.Save(merchInvoice);
+                ((InvoiceService)_invoiceService).ReSyncInvoiceTotal(merchInvoice);
+
             }
             catch (Exception ex)
             {
