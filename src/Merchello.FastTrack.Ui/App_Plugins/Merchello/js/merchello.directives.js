@@ -4897,7 +4897,8 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                     paymentMethods: '=',
                     preValuesLoaded: '=',
                     currencySymbol: '=',
-                    save: '&'
+                    save: '&',
+                    reload:'&'
                 },
                 templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/invoiceitemizationtable.tpl.html',
                 link: function (scope, elm, attr) {
@@ -5030,9 +5031,9 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                             var invoiceSavePromise = invoiceResource.saveInvoice(scope.invoice);
                             invoiceSavePromise.then(function () {
                                 $timeout(function () {
-                                    loadInvoice();
+                                    scope.reload();
                                     notificationsService.success('Invoice line Items Updated.');
-                                }, 400);
+                                }, 1500);
                             }, function (reason) {
                                 notificationsService.error("Failed to update invoice line items", reason.message);
                             });

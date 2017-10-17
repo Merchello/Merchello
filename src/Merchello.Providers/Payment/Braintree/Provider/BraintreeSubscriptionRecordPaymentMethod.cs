@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Providers.Payment.Braintree.Provider
 {
+    using System;
     using System.Linq;
 
     using global::Braintree;
@@ -63,7 +64,13 @@
         /// </returns>
         protected override IPaymentResult PerformAuthorizePayment(IInvoice invoice, ProcessorArgumentCollection args)
         {
-            var payment = this.GatewayProviderService.CreatePayment(PaymentMethodType.CreditCard, invoice.Total, this.PaymentMethod.Key);
+            var authorizeAmount = invoice.Total;
+            if (args.ContainsKey("authorizePaymentAmount"))
+            {
+                authorizeAmount = Convert.ToDecimal(args["authorizePaymentAmount"]);
+            }
+
+            var payment = this.GatewayProviderService.CreatePayment(PaymentMethodType.CreditCard, authorizeAmount, this.PaymentMethod.Key);
             payment.CustomerKey = invoice.CustomerKey;
             payment.PaymentMethodName = this.PaymentMethod.Name;
             payment.ReferenceNumber = this.PaymentMethod.PaymentCode + "-" + invoice.PrefixedInvoiceNumber();

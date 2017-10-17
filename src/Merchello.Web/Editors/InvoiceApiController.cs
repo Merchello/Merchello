@@ -101,13 +101,12 @@
         /// TODO rename to GetByKey
         public InvoiceDisplay GetInvoice(Guid id)
         {
-            // TODO - Removed the cached get here as too many backoffice issues
-            //return _merchello.Query.Invoice.GetByKey(id);
+            return _merchello.Query.Invoice.GetByKey(id);
 
             // Get the invoice fresh to see if it solves back office problems
-            var invoice = _invoiceService.GetByKey(id);
-            var invoiceDisplay = AutoMapper.Mapper.Map<InvoiceDisplay>(invoice);
-            return invoiceDisplay;
+            //var invoice = _invoiceService.GetByKey(id);
+            //var invoiceDisplay = AutoMapper.Mapper.Map<InvoiceDisplay>(invoice);
+            //return invoiceDisplay;
         }
 
         /// <summary>
@@ -316,16 +315,20 @@
             var response = Request.CreateResponse(HttpStatusCode.OK);
 
             try
-            {
+            {                
                 var merchInvoice = _invoiceService.GetByKey(invoice.Key);
 
                 merchInvoice = invoice.ToInvoice(merchInvoice);
 
-                _invoiceService.Save(merchInvoice);
-                
-                // TODO - This was for invoice changes like qty and removal of line items
-                //((InvoiceService)_invoiceService).ReSyncInvoiceTotal(merchInvoice);
-
+                // Do we need to do a syncronise and not just a save
+                if (invoice.SyncLineItems)
+                {
+                    ((InvoiceService)_invoiceService).ReSyncInvoiceTotal(merchInvoice);
+                }
+                else
+                {
+                    _invoiceService.Save(merchInvoice);
+                }               
             }
             catch (Exception ex)
             {
