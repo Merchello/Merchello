@@ -106,7 +106,8 @@
 
             // Get the invoice fresh to see if it solves back office problems
             var invoice = _invoiceService.GetByKey(id);
-            return AutoMapper.Mapper.Map<InvoiceDisplay>(invoice);
+            var invoiceDisplay = AutoMapper.Mapper.Map<InvoiceDisplay>(invoice);
+            return invoiceDisplay;
         }
 
         /// <summary>
@@ -320,7 +321,10 @@
 
                 merchInvoice = invoice.ToInvoice(merchInvoice);
 
-                ((InvoiceService)_invoiceService).ReSyncInvoiceTotal(merchInvoice);
+                _invoiceService.Save(merchInvoice);
+                
+                // TODO - This was for invoice changes like qty and removal of line items
+                //((InvoiceService)_invoiceService).ReSyncInvoiceTotal(merchInvoice);
 
             }
             catch (Exception ex)
