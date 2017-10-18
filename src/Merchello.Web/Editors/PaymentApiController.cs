@@ -211,7 +211,14 @@
             }
             else
             {
-                authorize.Payment.Result.AuditPaymentAuthorize(authorize.Invoice);    
+                if (request.Amount > 0)
+                {
+                    authorize.Payment.Result.AuditPaymentAuthorize(authorize.Invoice, request.Amount);
+                }
+                else
+                {
+                    authorize.Payment.Result.AuditPaymentAuthorize(authorize.Invoice);
+                }                
             }
                        
             return result;
@@ -288,7 +295,7 @@
             }
             else
             {
-                authorizeCapture.Payment.Result.AuditPaymentAuthorize(authorizeCapture.Invoice);
+                authorizeCapture.Payment.Result.AuditPaymentAuthorize(authorizeCapture.Invoice, request.Amount);
                 authorizeCapture.Payment.Result.AuditPaymentCaptured(request.Amount);
             }
             

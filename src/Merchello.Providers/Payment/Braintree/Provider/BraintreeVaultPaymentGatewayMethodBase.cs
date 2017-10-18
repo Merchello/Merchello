@@ -181,7 +181,7 @@
             payment.PaymentMethodName = this.BackOfficePaymentMethodName;
             payment.ExtendedData.SetValue(Constants.Braintree.ProcessorArguments.PaymentMethodNonce, token);
 
-            var result = this.BraintreeApiService.Transaction.VaultSale(invoice, token, option);
+            var result = this.BraintreeApiService.Transaction.VaultSale(invoice, amount, token, option);
 
             if (result.IsSuccess())
             {

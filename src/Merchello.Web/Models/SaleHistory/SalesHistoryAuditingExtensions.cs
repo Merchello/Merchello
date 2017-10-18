@@ -175,6 +175,31 @@
         }
 
         /// <summary>
+        /// Logs an authorized payment
+        /// </summary>
+        /// <param name="payment">
+        /// The payment to be collected
+        /// </param>
+        /// <param name="invoice">
+        /// The invoice for which the payment was authorized 
+        /// </param>
+        /// <param name="amount">
+        /// The amount authorized
+        /// </param>
+        public static void AuditPaymentAuthorize(this IPayment payment, IInvoice invoice, decimal amount)
+        {
+            var obj = new
+            {
+                area = Area,
+                key = "paymentAuthorize",
+                invoiceTotal = invoice.Total,
+                currencyCode = invoice.Items.First().ExtendedData.GetValue(Constants.ExtendedDataKeys.CurrencyCode)
+            };
+
+            UpdateAuditLog(payment.Key, EntityType.Payment, obj.Serialize());
+        }
+
+        /// <summary>
         /// Logs a captured payment
         /// </summary>
         /// <param name="payment">
