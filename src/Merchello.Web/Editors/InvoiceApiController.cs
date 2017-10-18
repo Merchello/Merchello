@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Web.Editors
 {
     using System;
+    using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
     using System.Net;
@@ -40,6 +41,11 @@
         private readonly IInvoiceService _invoiceService;
 
         /// <summary>
+        /// The <see cref="IProductService"/>.
+        /// </summary>
+        private readonly IProductService _productService;
+
+        /// <summary>
         /// The note service.
         /// </summary>
         private readonly INoteService _noteService;
@@ -48,6 +54,8 @@
         /// The <see cref="MerchelloHelper"/>
         /// </summary>
         private readonly MerchelloHelper _merchello;
+
+        
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InvoiceApiController"/> class.
@@ -68,6 +76,7 @@
         {
             _storeSettingService = MerchelloContext.Services.StoreSettingService as StoreSettingService;
             _invoiceService = merchelloContext.Services.InvoiceService;
+            _productService = merchelloContext.Services.ProductService;
             _noteService = merchelloContext.Services.NoteService;
             _merchello = new MerchelloHelper(merchelloContext, false);
         }
@@ -376,6 +385,81 @@
                 response = Request.CreateResponse(HttpStatusCode.InternalServerError, string.Format("{0}", ex.Message));
             }
             
+
+            return response;
+        }
+
+        /// <summary>
+        /// Puts new products on an invoice
+        /// </summary>
+        /// <param name="invoiceAddItems"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public HttpResponseMessage PutInvoiceNewProducts(InvoiceAddItems invoiceAddItems)
+        {
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+
+            //var currentUser = Umbraco.UmbracoContext.Security.CurrentUser;
+
+            try
+            {
+                if(invoiceAddItems.Items != null)
+                {
+                    // Get the invoice
+                    var merchInvoice = _invoiceService.GetByKey(invoiceAddItems.InvoiceKey);
+
+                    if (merchInvoice != null)
+                    {
+                        // Loop through and get the variants
+                        var variants = new Dictionary<string, IProductVariant>();
+
+                        // Loop and add the new products as InvoiceLineItemDisplay to the InvoiceDisplay
+                        foreach (var invoiceAddItem in invoiceAddItems.Items)
+                        {
+                            // Get the variant
+                            var variant = !invoiceAddItem.IsProductVariant
+                                ? _productService.GetByKey(invoiceAddItem.Key).ProductVariants.FirstOrDefault()
+                                : _productService.GetProductVariantByKey(invoiceAddItem.Key);
+
+                            // Add the variant
+                            if (variant != null)
+                            {
+                                variants.Add(variant.Sku, variant);
+                            }
+                        }
+
+                        // Update Quantities
+                        foreach (var currentLineItem in merchInvoice.Items)
+                        {
+                            if (variants.ContainsKey(currentLineItem.Sku))
+                            {
+                                // We have a match! Increase this line item quantity by 1
+                                currentLineItem.Quantity++;
+                            }
+                        }
+
+                        // Now add new products
+                        var currentLineItems = merchInvoice.Items.ToDictionary(x => x.Sku, x => x);
+                        foreach (var variant in variants)
+                        {
+                            if (!currentLineItems.ContainsKey(variant.Value.Sku))
+                            {
+                                merchInvoice.Items.Add(variant.Value.ToInvoiceLineItem());
+                            }
+                        }
+
+                        // Now update invoice and save
+                        ((InvoiceService)_invoiceService).ReSyncInvoiceTotal(merchInvoice);
+                    }
+
+                    response = Request.CreateResponse(HttpStatusCode.NotFound, "Invoice not found");
+                }
+            }
+            catch (Exception ex)
+            {
+                MultiLogHelper.Error<InvoiceApiController>("Failed to adjust invoice", ex);
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, string.Format("{0}", ex.Message));
+            }
 
             return response;
         }

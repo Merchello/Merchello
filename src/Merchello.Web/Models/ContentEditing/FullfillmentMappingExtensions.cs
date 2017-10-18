@@ -312,7 +312,7 @@ namespace Merchello.Web.Models.ContentEditing
 
 		internal static IInvoiceStatus ToInvoiceStatus(this InvoiceStatusDisplay invoiceStatusDisplay)
 		{
-			return new InvoiceStatus()
+			return new InvoiceStatus
 			{
 				Key = invoiceStatusDisplay.Key,
 				Alias = invoiceStatusDisplay.Alias,

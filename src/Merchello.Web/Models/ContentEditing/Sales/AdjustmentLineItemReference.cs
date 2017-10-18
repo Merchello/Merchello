@@ -43,6 +43,11 @@
         ///     Gets or sets the email the email address of the person who applied the adjustment.
         /// </summary>
         public string Email { get; set; }
+
+        /// <summary>
+        /// Extended Data
+        /// </summary>
+        public ExtendedDataCollection ExtendedData { get; set; }
     }
 
     /// <summary>
@@ -78,6 +83,16 @@
 
             // Create invoicelineitem object
             var item = new InvoiceLineItem(lineItemType, adj.Name, sku, 1, adj.Price);
+
+            // See if this adjustment has extended data
+            if (adj.ExtendedData != null)
+            {
+                // If so, add them to the InvoiceLineItem
+                foreach (var ed in adj.ExtendedData)
+                {
+                    item.ExtendedData.SetValue(ed.Key, ed.Value);
+                }
+            }
 
             if (adj.Key.Equals(Guid.Empty))
             {

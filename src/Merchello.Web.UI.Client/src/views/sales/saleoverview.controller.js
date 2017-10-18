@@ -55,6 +55,8 @@
             $scope.saveNotes = saveNotes;
             $scope.deleteNote = deleteNote;
 
+            $scope.openProductSelection = openProductSelectionDialog;
+
             // localize the sales history message
             $scope.localizeMessage = localizeMessage;
 
@@ -84,6 +86,23 @@
 
             function localizeMessage(msg) {
                 return msg.localize(localizationService);
+            }
+
+
+            function openProductSelectionDialog() {
+                var dialogData = {};
+                dialogData.addItems = [];
+
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/customer.productselectionfilter.html',
+                    show: true,
+                    callback: processProductSelection,
+                    dialogData: dialogData
+                });
+            }
+
+            function processProductSelection(dialogData) {
+                var test = dialogData;
             }
 
             /**

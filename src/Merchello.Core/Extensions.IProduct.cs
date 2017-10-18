@@ -212,6 +212,29 @@ namespace Merchello.Core
             return optionChoices.CartesianProduct();
         }
 
+        #region LineItems
+
+        /// <summary>
+        /// Turns a product variant into an InvoiceLineItem
+        /// </summary>
+        /// <param name="productVariant"></param>
+        /// <param name="qty"></param>
+        /// <returns></returns>
+        internal static InvoiceLineItem ToInvoiceLineItem(this IProductVariant productVariant, int qty = 1)
+        {
+            var extendedData = new ExtendedDataCollection();
+            extendedData.AddProductVariantValues(productVariant);
+
+            // See if this variant is on sale
+            var price = productVariant.OnSale && productVariant.SalePrice != null ? productVariant.SalePrice.Value : productVariant.Price;
+
+            // TODO - Can we remove this extra step to turn into a line item
+            var itemCacheLineItem = new ItemCacheLineItem(LineItemType.Product, productVariant.Name, productVariant.Sku, qty, price, extendedData);
+            return itemCacheLineItem.AsLineItemOf<InvoiceLineItem>();
+        }
+
+        #endregion
+
         #region Static Product Collections
 
         /// <summary>
@@ -311,8 +334,6 @@ namespace Merchello.Core
 
 
         #endregion
-
-
 
         #region ProductAttributeCollection
 
