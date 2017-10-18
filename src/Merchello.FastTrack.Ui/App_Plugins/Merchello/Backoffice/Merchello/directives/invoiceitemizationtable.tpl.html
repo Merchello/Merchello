@@ -37,6 +37,24 @@
         <td class="text-right">{{customItem.quantity * customItem.price | currency : currencySymbol}}</td>
         <td></td>
     </tr>
+    <tr data-ng-show="itemization.adjustments.length > 0">
+        <td colspan="6"><strong><localize key="merchelloSales_adjustments"></localize></strong></td>
+    </tr>
+    <tr data-ng-show="itemization.adjustments.length > 0" data-ng-repeat="adjustmentItem in itemization.adjustments">
+        <td class="adjustment-name">
+            {{adjustmentItem.name}}            
+        </td>
+        <td colspan="3">
+            <small data-ng-show="adjustmentItem.extendedData.items[0].value !== ''">
+                <localize key="merchelloSales_adjustmentAssignedBy"></localize>: {{ adjustmentItem.extendedData.getValue('userName')}}
+            </small> 
+        </td>
+        <td class="text-right">
+            <span data-ng-show="adjustmentItem.price < 0">({{adjustmentItem.absPrice() | currency : currencySymbol}})</span>
+            <span data-ng-show="adjustmentItem.price >= 0">{{adjustmentItem.absPrice() | currency : currencySymbol}}</span>
+        </td>
+        <td></td>
+    </tr>
     <tr data-ng-show="itemization.discounts.length > 0" data-ng-repeat="discountItem in itemization.discounts">
         <td>{{discountItem.name}}</td>
         <td class="break-all">{{discountItem.sku}}</td>
@@ -55,22 +73,7 @@
         <td class="text-right">{{itemization.taxTotal | currency : currencySymbol}}</td>
         <td></td>
     </tr>
-    <tr data-ng-show="itemization.adjustments.length > 0">
-        <td colspan="6"><strong><localize key="merchelloSales_adjustments"></localize></strong></td>
-    </tr>
-    <tr data-ng-show="itemization.adjustments.length > 0" data-ng-repeat="adjustmentItem in itemization.adjustments">
-        <td colspan="4" class="adjustment-name">
-            {{adjustmentItem.name}}
-            <span data-ng-show="adjustmentItem.extendedData.items[0].value !== ''">
-                <localize key="merchelloSales_adjustmentAssignedBy"></localize>: {{ adjustmentItem.extendedData.getValue('userName')}}
-            </span>             
-        </td>
-        <td class="text-right">
-            <span data-ng-show="adjustmentItem.price < 0">({{adjustmentItem.absPrice() | currency : currencySymbol}})</span>
-            <span data-ng-show="adjustmentItem.price >= 0">{{adjustmentItem.absPrice() | currency : currencySymbol}}</span>
-        </td>
-        <td></td>
-    </tr>
+
     <tr>
         <td colspan="4" class="text-right"><localize key="merchelloGeneral_total" /></td>
         <td class="text-right">{{itemization.invoiceTotal | currency : currencySymbol}}</td>

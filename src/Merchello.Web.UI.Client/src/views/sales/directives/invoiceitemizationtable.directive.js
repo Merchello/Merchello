@@ -71,7 +71,8 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                         var dialogData = {
                             quantity: lineItem.quantity,
                             lineItem: lineItem,
-                            deleteLineItem: false
+                            deleteLineItem: false,
+                            canDelete: scope.invoice.items.length > 1
                         };
 
                         dialogService.open({

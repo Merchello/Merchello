@@ -192,7 +192,7 @@
             {
                 area = Area,
                 key = "paymentAuthorize",
-                invoiceTotal = invoice.Total,
+                invoiceTotal = amount,
                 currencyCode = invoice.Items.First().ExtendedData.GetValue(Constants.ExtendedDataKeys.CurrencyCode)
             };
 

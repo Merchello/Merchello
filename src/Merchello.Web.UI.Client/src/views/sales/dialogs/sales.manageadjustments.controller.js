@@ -19,7 +19,7 @@ angular.module('merchello').controller('Merchello.Sales.Dialogs.ManageAdjustment
 
         function init() {
             // Setup the Adjustment types
-            $scope.lineItemTypes = ["Adjustment", "Product", "Shipping", "Tax"];
+            $scope.lineItemTypes = ["Adjustment", "Shipping", "Tax"];
 
             // Set the default type
             $scope.lineItemType = $scope.lineItemTypes[0];

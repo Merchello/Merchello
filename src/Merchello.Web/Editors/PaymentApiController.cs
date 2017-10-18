@@ -256,6 +256,7 @@
             }
             else
             {
+
                 capture.Payment.Result.AuditPaymentCaptured(request.Amount);
             }
            
