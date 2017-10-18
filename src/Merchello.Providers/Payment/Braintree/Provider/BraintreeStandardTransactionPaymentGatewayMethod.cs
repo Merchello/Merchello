@@ -74,6 +74,12 @@
         /// </returns>
         protected override IPaymentResult PerformAuthorizePayment(IInvoice invoice, ProcessorArgumentCollection args)
         {
+            var authorizeAmount = invoice.Total;
+            if (args.ContainsKey("authorizePaymentAmount"))
+            {
+                authorizeAmount = Convert.ToDecimal(args["authorizePaymentAmount"]);
+            }
+
             var paymentMethodNonce = args.GetPaymentMethodNonce();
 
             if (string.IsNullOrEmpty(paymentMethodNonce))
@@ -83,7 +89,7 @@
                 return new PaymentResult(Attempt<IPayment>.Fail(error), invoice, false);
             }
             
-            var attempt = this.ProcessPayment(invoice, TransactionOption.Authorize, invoice.Total, paymentMethodNonce);
+            var attempt = this.ProcessPayment(invoice, TransactionOption.Authorize, authorizeAmount, paymentMethodNonce);
 
             var payment = attempt.Payment.Result;
 
@@ -134,7 +140,7 @@
             var email = string.Empty;
             if (args.ContainsKey("customerEmail")) email = args["customerEmail"];
 
-            var attempt = this.ProcessPayment(invoice, TransactionOption.SubmitForSettlement, invoice.Total, paymentMethodNonce, email);
+            var attempt = this.ProcessPayment(invoice, TransactionOption.SubmitForSettlement, amount, paymentMethodNonce, email);
 
             var payment = attempt.Payment.Result;
 
@@ -186,7 +192,7 @@
             payment.PaymentMethodName = this.BackOfficePaymentMethodName;
             payment.ExtendedData.SetValue(Constants.Braintree.ProcessorArguments.PaymentMethodNonce, token);
 
-            var result = this.BraintreeApiService.Transaction.Sale(invoice, token, option: option, email: email);
+            var result = this.BraintreeApiService.Transaction.Sale(invoice, amount, token, option: option, email: email);
 
             if (result.IsSuccess())
             {

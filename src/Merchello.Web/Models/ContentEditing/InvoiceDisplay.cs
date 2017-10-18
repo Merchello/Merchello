@@ -145,6 +145,11 @@
         /// Gets or sets the currency.
         /// </summary>
         public CurrencyDisplay Currency { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether to sync lineitems when updating the invoice
+        /// </summary>
+        public bool SyncLineItems { get; set; }
     }
 
     /// <summary>

@@ -36,7 +36,8 @@
             $scope.debugAllowDelete = false;
             $scope.newPaymentOpen = false;
             $scope.entityType = 'Invoice';
-            
+
+            $scope.remainingBalance = 0;
 
             // exposed methods
             //  dialogs
@@ -155,7 +156,6 @@
 
                    $scope.tabs.appendCustomerTab($scope.invoice.customerKey);
 
-
                 }, function (reason) {
                     notificationsService.error("Invoice Load Failed", reason.message);
                 });
@@ -200,9 +200,14 @@
                 var paymentsPromise = paymentResource.getPaymentsByInvoice(key);
                 paymentsPromise.then(function(payments) {
                     $scope.allPayments = paymentDisplayBuilder.transform(payments);
-                    $scope.payments = _.filter($scope.allPayments, function(p) { return !p.voided && !p.collected && p.authorized; });
+                    $scope.payments = _.filter($scope.allPayments, function (p) { return !p.voided && !p.collected && p.authorized; });
+
                     loadPaymentMethods();
                     $scope.preValuesLoaded = true;
+
+                    // Set the remaining balance after the payments have loaded
+                    $scope.remainingBalance = invoiceHelper.round($scope.invoice.remainingBalance($scope.allPayments), 2);
+
                 }, function(reason) {
                     notificationsService.error('Failed to load payments for invoice', reason.message);
                 });
@@ -275,7 +280,7 @@
             function capturePayment() {
                 var dialogData = dialogDataFactory.createCapturePaymentDialogData();
                 dialogData.setPaymentData($scope.payments[0]);
-                dialogData.setInvoiceData($scope.payments, $scope.invoice, $scope.currencySymbol);
+                dialogData.setInvoiceData($scope.allPayments, $scope.invoice, $scope.currencySymbol, invoiceHelper);
                 if (!dialogData.isValid()) {
                     return false;
                 }
@@ -313,10 +318,10 @@
                 var promiseSave = paymentResource.capturePayment(paymentRequest);
                 promiseSave.then(function (payment) {
                     // added a timeout here to give the examine index
-                    $timeout(function() {
-                        notificationsService.success("Payment Captured");
+                    $timeout(function () {
                         loadInvoice(paymentRequest.invoiceKey);
-                    }, 800);
+                        notificationsService.success("Payment Captured");
+                    }, 1500);
                 }, function (reason) {
                     notificationsService.error("Payment Capture Failed", reason.message);
                 });
@@ -418,10 +423,10 @@
                     var promiseNewShipment = shipmentResource.newShipment(data.shipmentRequest);
                     promiseNewShipment.then(function (shipment) {
                         $timeout(function() {
-                            notificationsService.success('Shipment #' + shipment.shipmentNumber + ' created');
                             //console.info(shipment);
                             loadInvoice(data.invoiceKey);
-                        }, 800);
+                            notificationsService.success('Shipment #' + shipment.shipmentNumber + ' created');
+                        }, 1500);
 
                     }, function (reason) {
                         notificationsService.error("New Shipment Failed", reason.message);
@@ -528,10 +533,10 @@
                     $scope.preValuesLoaded = false;
                     var billingPromise = invoiceResource.saveInvoice($scope.invoice);
                     billingPromise.then(function () {
-                        notificationsService.success('Billing address successfully updated.');
                         $timeout(function () {
                             loadInvoice($scope.invoice.key);
-                        }, 400);
+                            notificationsService.success('Billing address successfully updated.');
+                        }, 1500);
                     }, function (reason) {
                         notificationsService.error("Failed to update billing address", reason.message);
                     });
@@ -543,10 +548,10 @@
                     };
                     var shippingPromise = invoiceResource.saveInvoiceShippingAddress(adrData);
                     shippingPromise.then(function () {
-                        notificationsService.success('Shipping address successfully updated.');
                         $timeout(function () {
                             loadInvoice($scope.invoice.key);
-                        }, 400);
+                            notificationsService.success('Shipping address successfully updated.');
+                        }, 1500);
                     }, function (reason) {
                         notificationsService.error("Failed to update shippingaddress", reason.message);
                     });
@@ -574,7 +579,7 @@
             function refresh() {
                 $timeout(function () {
                     loadInvoice($scope.invoice.key);
-                }, 400);
+                }, 1500);
             }
 
             // initialize the controller
