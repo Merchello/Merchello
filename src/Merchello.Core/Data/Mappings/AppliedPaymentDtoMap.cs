@@ -52,7 +52,6 @@
                             .OnDelete(DeleteBehavior.Restrict)
                             .HasConstraintName("FK_merchAppliedPayment_merchPayment");
                     });
-
         }
     }
 }

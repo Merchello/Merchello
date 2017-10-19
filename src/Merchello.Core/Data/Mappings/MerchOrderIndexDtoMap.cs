@@ -5,16 +5,16 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata;
 
-    internal class CustomerIndexDtoMap : IEntityMap
+    internal class MerchOrderIndexDtoMap : IEntityMap
     {
         public void Configure(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<CustomerIndexDto>(entity =>
+            modelBuilder.Entity<MerchOrderIndex>(entity =>
                 {
-                    entity.ToTable("merchCustomerIndex");
+                    entity.ToTable("merchOrderIndex");
 
-                    entity.HasIndex(e => e.CustomerKey)
-                        .HasName("IX_merchCustomerIndex")
+                    entity.HasIndex(e => e.OrderKey)
+                        .HasName("IX_merchOrderIndex")
                         .IsUnique();
 
                     entity.Property(e => e.Id).HasColumnName("id");
@@ -24,18 +24,18 @@
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("getdate()");
 
-                    entity.Property(e => e.CustomerKey).HasColumnName("customerKey");
+                    entity.Property(e => e.OrderKey).HasColumnName("orderKey");
 
                     entity.Property(e => e.UpdateDate)
                         .HasColumnName("updateDate")
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("getdate()");
 
-                    //entity.HasOne(d => d.CustomerDtoKeyNavigation)
-                    //    .WithOne(p => p.CustomerIndexDto)
-                    //    .HasForeignKey<CustomerIndexDto>(d => d.CustomerKey)
+                    //entity.HasOne(d => d.OrderKeyNavigation)
+                    //    .WithOne(p => p.MerchOrderIndex)
+                    //    .HasForeignKey<MerchOrderIndex>(d => d.OrderKey)
                     //    .OnDelete(DeleteBehavior.Restrict)
-                    //    .HasConstraintName("FK_merchCustomerIndex_merchCustomer");
+                    //    .HasConstraintName("FK_merchOrderIndex_merchOrder");
                 });
         }
     }

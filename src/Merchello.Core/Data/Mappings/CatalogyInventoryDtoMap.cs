@@ -11,10 +11,10 @@
         {
             modelBuilder.Entity<CatalogInventoryDto>(entity =>
                 {
+                    entity.ToTable("merchCatalogInventory");
+
                     entity.HasKey(e => new { e.CatalogKey, e.ProductVariantKey })
                         .HasName("PK_merchCatalogInventory");
-
-                    entity.ToTable("merchCatalogInventory");
 
                     entity.HasIndex(e => e.Location)
                         .HasName("IX_merchCatalogInventoryLocation");

@@ -26,7 +26,6 @@
         {
             foreach (var entityMap in this.entityRegister.GetInstantiations())
             {
-                if (typeof(AppliedPaymentDtoMap) == entityMap.GetType())
                 entityMap.Configure(modelBuilder);
             }
         }

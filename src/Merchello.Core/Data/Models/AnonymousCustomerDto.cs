@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.Data.Models
 {
     using System;
+    using System.ComponentModel.DataAnnotations;
 
     internal partial class AnonymousCustomerDto
     {

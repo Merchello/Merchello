@@ -35,31 +35,36 @@
         public void DbEntityRegisterResolvesTypesOnInit()
         {
             // Arrange
-            // handled in the IClassFixture instantiation
+            const int expected = 50;
 
             // Act
             var types = this.register.InstanceTypes.ToArray();
 
             // Assert
-            types.Any().Should().BeTrue();
-            Output.WriteLine(types.Length.ToString());
+            types.Should().NotBeEmpty();
+            types.Count().Should().Be(expected);
+            
+            foreach (var t in types)
+            {
+                Output.WriteLine(t.Name);
+            }
         }
 
-        //[Fact]
-        //public void DbEntityRegisterCanInstantiateAllTypes()
-        //{
-        //    // Arrange
-        //    // handled in the IClassFixture instantiation
+        [Fact]
+        public void DbEntityRegisterCanInstantiateAllTypes()
+        {
+            // Arrange
+            // handled in the IClassFixture instantiation
 
-        //    // Act
-        //    var instances = this.register.GetInstantiations().ToArray();
+            // Act
+            var instances = this.register.GetInstantiations().ToArray();
 
-        //    // Assert
-        //    instances.Any().Should().BeTrue();
-        //    instances.Any(i => i == null).Should().BeFalse();
-        //    Output.WriteLine(instances.Length.ToString());
+            // Assert
+            instances.Any().Should().BeTrue();
+            instances.Any(i => i == null).Should().BeFalse();
+            Output.WriteLine(instances.Length.ToString());
 
-        //    dbContext.MerchAnonymousCustomer.Any().Should().BeFalse();
-        //}
+           dbContext.MerchAnonymousCustomer.Any().Should().BeFalse();
+        }
     }
 }
