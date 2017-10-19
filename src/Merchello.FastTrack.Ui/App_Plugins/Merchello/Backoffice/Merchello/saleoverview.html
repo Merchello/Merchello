@@ -42,17 +42,17 @@
                     <div class="control-group umb-control-group">
                         
                         <div class="button-bar">
-                            <button type="button" class="btn btn-info btn-action" data-ng-hide="invoice.isPaid() || payments.length === 0" data-ng-click="capturePayment()"><localize key="merchelloOrderView_captureFunds" /></button>
-                            <button type="button" class="btn btn-info btn-action" data-ng-click="toggleNewPaymentOpen()" data-ng-show="!invoice.isPaid() && payments.length === 0 && paymentMethodsLoaded"><localize key="merchelloOrderView_newPayment" /></button>
-                            <button type="button" class="btn btn-info btn-action" data-ng-show="showFulfill && invoice.hasOrder()" data-ng-click="openFulfillShipmentDialog()"><localize key="merchelloGeneral_fulfill" /></button>
+                            <button type="button" class="btn btn-info btn-action" ng-hide="invoice.isPaid() || payments.length === 0" data-ng-click="capturePayment()"><localize key="merchelloOrderView_captureFunds" /></button>
+                            <button type="button" class="btn btn-info btn-action" ng-click="toggleNewPaymentOpen()" data-ng-show="!invoice.isPaid() && payments.length === 0 && paymentMethodsLoaded"><localize key="merchelloOrderView_newPayment" /></button>
+                            <button type="button" class="btn btn-info btn-action" ng-show="showFulfill && invoice.hasOrder()" data-ng-click="openFulfillShipmentDialog()"><localize key="merchelloGeneral_fulfill" /></button>
                             <manage-invoice-adjustments invoice="invoice" payment-methods="paymentMethods" pre-values-loaded="preValuesLoaded" all-payments="allPayments" payments="payments" currency-symbol="currencySymbol" reload="reload()"></manage-invoice-adjustments>
-                            <div class="pull-right">
+                            <div class="pull-right" ng-show="canAddLineItems">
                                 <merchello-add-icon do-add="openProductSelection()"></merchello-add-icon>
                             </div>
                         </div>
 
                         <add-payment-table is-open="newPaymentOpen" payments="allPayments" toggle-open="toggleNewPaymentOpen()" reload="reload()" currency-symbol="currencySymbol" invoice="invoice" show-spinner="setNotPreValuesLoaded()" payment-methods="paymentMethods"></add-payment-table>
-                        <invoice-itemization-table invoice="invoice" payment-methods="paymentMethods" pre-values-loaded="preValuesLoaded" all-payments="allPayments" payments="payments" currency-symbol="currencySymbol" reload="reload()"></invoice-itemization-table>
+                        <invoice-itemization-table invoice="invoice" payment-methods="paymentMethods" pre-values-loaded="preValuesLoaded" all-payments="allPayments" payments="payments" currency-symbol="currencySymbol" reload="reload()" can-edit-line-items="canAddLineItems"></invoice-itemization-table>
 
                     </div>
 

@@ -37,6 +37,8 @@
             $scope.newPaymentOpen = false;
             $scope.entityType = 'Invoice';
 
+            $scope.canAddLineItems = true;
+
             $scope.remainingBalance = 0;
 
             // exposed methods
@@ -102,7 +104,24 @@
             }
 
             function processProductSelection(dialogData) {
-                var test = dialogData;
+
+                // Post the model back to the controller
+                var invoiceAddItems = {
+                    InvoiceKey: $scope.invoice.key,
+                    Items: dialogData.addItems
+                }
+
+                // Put the new items
+                var invoiceSavePromise = invoiceResource.putInvoiceNewProducts(invoiceAddItems);
+                invoiceSavePromise.then(function () {
+                    $timeout(function () {
+                        refresh();
+                        notificationsService.success('Invoice Updated.');
+                    }, 1500);
+                }, function (reason) {
+                    notificationsService.error("Failed to update invoice", reason.message);
+                });
+
             }
 
             /**
@@ -375,8 +394,25 @@
                 var promiseStatuses = shipmentResource.getAllShipmentStatuses();
                 promiseStatuses.then(function(statuses) {
                     var data = dialogDataFactory.createCreateShipmentDialogData();
-                    data.order = $scope.invoice.orders[0];
-                    data.order.items = data.order.getUnShippedItems();
+
+                    // Loop orders until I find one without getUnShippedItems()!!
+
+                    var keepFindingOrder = true;
+                    angular.forEach($scope.invoice.orders, function (order) {
+                        if (keepFindingOrder) {
+                            // Get unshipped items from this order
+                            var unshippedItems = order.getUnShippedItems();
+
+                            // If there are any, return them
+                            if (unshippedItems.length > 0) {
+                                data.order = order;
+                                data.order.items = unshippedItems;
+                                keepFindingOrder = false;
+                            }
+                        }
+                    });
+
+                    data.totalOrders = $scope.invoice.orders;
                     data.shipmentStatuses = statuses;
                     data.currencySymbol = $scope.currencySymbol;
 
@@ -466,6 +502,8 @@
             function hasUnPackagedLineItems() {
                 var fulfilled = $scope.invoice.getFulfillmentStatus() === 'Fulfilled';
                 if (fulfilled) {
+                    // If this invoice is fullfilled, then they can't add or edit it
+                    $scope.canAddLineItems = false;
                     return false;
                 }
                 var i = 0; // order count

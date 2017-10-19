@@ -11,6 +11,7 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                     paymentMethods: '=',
                     preValuesLoaded: '=',
                     currencySymbol: '=',
+                    canEditLineItems:'=',
                     save: '&',
                     reload:'&'
                 },

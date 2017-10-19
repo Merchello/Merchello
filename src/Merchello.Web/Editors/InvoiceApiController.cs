@@ -55,7 +55,10 @@
         /// </summary>
         private readonly MerchelloHelper _merchello;
 
-        
+        /// <summary>
+        /// The <see cref="IOrderService"/>
+        /// </summary>
+        private readonly IOrderService _orderService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InvoiceApiController"/> class.
@@ -78,6 +81,7 @@
             _invoiceService = merchelloContext.Services.InvoiceService;
             _productService = merchelloContext.Services.ProductService;
             _noteService = merchelloContext.Services.NoteService;
+            _orderService = merchelloContext.Services.OrderService;
             _merchello = new MerchelloHelper(merchelloContext, false);
         }
 
@@ -176,7 +180,7 @@
                         MultiLogHelper.Warn<InvoiceApiController>(string.Format("Was unable to parse startDate: {0}", invoiceDateStart.Value));
                         startDate = DateTime.MinValue;
                     }
-                    
+
                 }
                 else if (!DateTime.TryParseExact(invoiceDateStart.Value, dateFormat.Value, CultureInfo.InvariantCulture, DateTimeStyles.None, out startDate))
                 {
@@ -190,7 +194,7 @@
                     ? endDate
                     : DateTime.MaxValue;
             }
-            
+
 
             if (isTermSearch && isDateSearch)
             {
@@ -203,7 +207,7 @@
                     query.SortBy,
                     query.SortDirection);
             }
-            
+
             if (isTermSearch)
             {
                 return this._merchello.Query.Invoice.Search(
@@ -213,7 +217,7 @@
                     query.SortBy,
                     query.SortDirection);
             }
-            
+
             if (isDateSearch)
             {
                 return this._merchello.Query.Invoice.Search(
@@ -224,13 +228,13 @@
                     query.SortBy,
                     query.SortDirection);
             }
-            
+
             return this._merchello.Query.Invoice.Search(
                 query.CurrentPage + 1,
                 query.ItemsPerPage,
                 query.SortBy,
                 query.SortDirection);
-        }    
+        }
 
         /// <summary>
         /// Gets a collection of invoices associated with a customer.
@@ -247,11 +251,11 @@
         public QueryResultDisplay SearchByCustomer(QueryDisplay query)
         {
             Guid key;
-           
+
             var customerKey = query.Parameters.FirstOrDefault(x => x.FieldName == "customerKey");
             Mandate.ParameterNotNull(customerKey, "customerKey was null");
             Mandate.ParameterCondition(Guid.TryParse(customerKey.Value, out key), "customerKey was not a valid GUID");
-           
+
             return _merchello.Query.Invoice.SearchByCustomer(
                 key,
                 query.CurrentPage + 1,
@@ -305,7 +309,7 @@
                     query.SortBy,
                     query.SortDirection);
         }
-                
+
 
         /// <summary>
         /// Updates an existing invoice
@@ -324,7 +328,7 @@
             var response = Request.CreateResponse(HttpStatusCode.OK);
 
             try
-            {                
+            {
                 var merchInvoice = _invoiceService.GetByKey(invoice.Key);
 
                 merchInvoice = invoice.ToInvoice(merchInvoice);
@@ -337,7 +341,7 @@
                 else
                 {
                     _invoiceService.Save(merchInvoice);
-                }               
+                }
             }
             catch (Exception ex)
             {
@@ -384,13 +388,16 @@
                 MultiLogHelper.Error<InvoiceApiController>("Failed to adjust invoice", ex);
                 response = Request.CreateResponse(HttpStatusCode.InternalServerError, string.Format("{0}", ex.Message));
             }
-            
+
 
             return response;
         }
 
         /// <summary>
         /// Puts new products on an invoice
+        /// // TODO - This is a bit chunky but it's because it's an after hack really
+        /// // TODO - Also, it's a bit screwy as it seems back office is only ever setup for an invoice
+        /// // TODO - to have a single order, BUT system is capable of multiple orders :/
         /// </summary>
         /// <param name="invoiceAddItems"></param>
         /// <returns></returns>
@@ -403,56 +410,94 @@
 
             try
             {
-                if(invoiceAddItems.Items != null)
+                if (invoiceAddItems.Items != null)
                 {
                     // Get the invoice
                     var merchInvoice = _invoiceService.GetByKey(invoiceAddItems.InvoiceKey);
 
                     if (merchInvoice != null)
                     {
-                        // Loop through and get the variants
-                        var variants = new Dictionary<string, IProductVariant>();
+                        // Get the current items in a dictionary so we can quickly check the SKU
+                        var currentLineItemsDict = merchInvoice.Items.ToDictionary(x => x.Sku, x => x);
+
+                        // Has orders
+                        var hasOrders = _orderService.GetOrdersByInvoiceKey(merchInvoice.Key).Any();
+
+                        // Store the orderlineitems
+                        var orderLineItemsToAdd = new List<OrderLineItem>();
 
                         // Loop and add the new products as InvoiceLineItemDisplay to the InvoiceDisplay
                         foreach (var invoiceAddItem in invoiceAddItems.Items)
                         {
-                            // Get the variant
-                            var variant = !invoiceAddItem.IsProductVariant
-                                ? _productService.GetByKey(invoiceAddItem.Key).ProductVariants.FirstOrDefault()
-                                : _productService.GetProductVariantByKey(invoiceAddItem.Key);
+                            // containers for the product or variant
+                            IProductVariant productVariant = null;
+                            IProduct product = null;
 
-                            // Add the variant
-                            if (variant != null)
+                            // Get the variant or the product
+                            if (invoiceAddItem.IsProductVariant)
                             {
-                                variants.Add(variant.Sku, variant);
+                                productVariant = _productService.GetProductVariantByKey(invoiceAddItem.Key);
+                            }
+                            else
+                            {
+                                product = _productService.GetByKey(invoiceAddItem.Key);
+                            }
+
+                            // If both null, just skip below
+                            if (productVariant == null && product == null) continue;
+
+                            // Get the sku to check
+                            var sku = product == null ? productVariant.Sku : product.Sku;
+
+                            // Create the lineitem
+                            var invoiceLineItem = product == null ? productVariant.ToInvoiceLineItem() : product.ToInvoiceLineItem();
+
+                            // Update Quantities
+                            foreach (var currentLineItem in merchInvoice.Items)
+                            {
+                                if (currentLineItem.Sku == sku)
+                                {
+                                    // We have a match! Increase this line item quantity by 1
+                                    currentLineItem.Quantity++;
+
+                                    if (hasOrders && currentLineItem.IsShippable())
+                                    {
+                                        // Add to Order   
+                                        orderLineItemsToAdd.Add(invoiceLineItem.AsLineItemOf<OrderLineItem>());
+
+                                        break;
+                                    }
+                                }
+                            }
+
+                            // See if the current line items have this product/variant
+                            if (!currentLineItemsDict.ContainsKey(sku))
+                            {
+                                merchInvoice.Items.Add(invoiceLineItem);
+
+                                if (hasOrders && invoiceLineItem.IsShippable())
+                                {
+                                    // Add to Order   
+                                    orderLineItemsToAdd.Add(invoiceLineItem.AsLineItemOf<OrderLineItem>());
+                                }
                             }
                         }
 
-                        // Update Quantities
-                        foreach (var currentLineItem in merchInvoice.Items)
+                        // Need to add the order
+                        if (hasOrders)
                         {
-                            if (variants.ContainsKey(currentLineItem.Sku))
-                            {
-                                // We have a match! Increase this line item quantity by 1
-                                currentLineItem.Quantity++;
-                            }
-                        }
-
-                        // Now add new products
-                        var currentLineItems = merchInvoice.Items.ToDictionary(x => x.Sku, x => x);
-                        foreach (var variant in variants)
-                        {
-                            if (!currentLineItems.ContainsKey(variant.Value.Sku))
-                            {
-                                merchInvoice.Items.Add(variant.Value.ToInvoiceLineItem());
-                            }
+                            // Add to order or create a new one
+                            _orderService.AddOrderLineItemsToEditedInvoice(orderLineItemsToAdd, merchInvoice);
                         }
 
                         // Now update invoice and save
                         ((InvoiceService)_invoiceService).ReSyncInvoiceTotal(merchInvoice);
                     }
+                    else
+                    {
+                        response = Request.CreateResponse(HttpStatusCode.NotFound, "Invoice not found");
+                    }
 
-                    response = Request.CreateResponse(HttpStatusCode.NotFound, "Invoice not found");
                 }
             }
             catch (Exception ex)

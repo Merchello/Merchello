@@ -4897,6 +4897,7 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                     paymentMethods: '=',
                     preValuesLoaded: '=',
                     currencySymbol: '=',
+                    canEditLineItems:'=',
                     save: '&',
                     reload:'&'
                 },
@@ -4979,7 +4980,7 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
 
                             var indexLocation = 0;
 
-                            // See if the quantity has changed and then                            
+                            // Loop through items                           
                             angular.forEach(scope.invoice.items, function (item) {
                                 if (keepFindingProduct) {
                                     if (lineItemDialogData.lineItem.sku === item.sku) {
