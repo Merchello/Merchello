@@ -31,11 +31,11 @@
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("getdate()");
 
-                    entity.HasOne(d => d.CustomerDtoKeyNavigation)
-                        .WithOne(p => p.CustomerIndexDto)
-                        .HasForeignKey<CustomerIndexDto>(d => d.CustomerKey)
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .HasConstraintName("FK_merchCustomerIndex_merchCustomer");
+                    //entity.HasOne(d => d.CustomerDtoKeyNavigation)
+                    //    .WithOne(p => p.CustomerIndexDto)
+                    //    .HasForeignKey<CustomerIndexDto>(d => d.CustomerKey)
+                    //    .OnDelete(DeleteBehavior.Restrict)
+                    //    .HasConstraintName("FK_merchCustomerIndex_merchCustomer");
                 });
         }
     }

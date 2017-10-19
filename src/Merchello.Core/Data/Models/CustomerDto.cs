@@ -10,7 +10,7 @@
             this.MerchCustomer2EntityCollection = new HashSet<Customer2EntityCollectionDto>();
             this.MerchCustomerAddress = new HashSet<CustomerAddressDto>();
             this.MerchInvoice = new HashSet<InvoiceDto>();
-            this.MerchPayment = new HashSet<MerchPayment>();
+            this.MerchPayment = new HashSet<PaymentDto>();
         }
 
         public Guid Pk { get; set; }
@@ -43,6 +43,6 @@
 
         public ICollection<InvoiceDto> MerchInvoice { get; set; }
 
-        public ICollection<MerchPayment> MerchPayment { get; set; }
+        public ICollection<PaymentDto> MerchPayment { get; set; }
     }
 }

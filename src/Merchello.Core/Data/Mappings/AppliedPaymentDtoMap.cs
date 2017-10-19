@@ -46,13 +46,12 @@
                             .OnDelete(DeleteBehavior.Restrict)
                             .HasConstraintName("FK_merchAppliedPayment_merchInvoice");
 
-                        entity.HasOne(d => d.PaymentKeyNavigation)
+                        entity.HasOne(d => d.PaymentDtoKeyNavigation)
                             .WithMany(p => p.MerchAppliedPayment)
                             .HasForeignKey(d => d.PaymentKey)
                             .OnDelete(DeleteBehavior.Restrict)
                             .HasConstraintName("FK_merchAppliedPayment_merchPayment");
                     });
-
         }
     }
 }

@@ -11,10 +11,10 @@
         {
             modelBuilder.Entity<CatalogInventoryDto>(entity =>
                 {
+                    entity.ToTable("merchCatalogInventory");
+
                     entity.HasKey(e => new { e.CatalogKey, e.ProductVariantKey })
                         .HasName("PK_merchCatalogInventory");
-
-                    entity.ToTable("merchCatalogInventory");
 
                     entity.HasIndex(e => e.Location)
                         .HasName("IX_merchCatalogInventoryLocation");
@@ -41,13 +41,13 @@
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("getdate()");
 
-                    entity.HasOne(d => d.CatalogKeyNavigation)
+                    entity.HasOne(d => d.CatalogDtoKeyNavigation)
                         .WithMany(p => p.MerchCatalogInventory)
                         .HasForeignKey(d => d.CatalogKey)
                         .OnDelete(DeleteBehavior.Restrict)
                         .HasConstraintName("FK_merchCatalogInventory_merchWarehouseCatalog");
 
-                    entity.HasOne(d => d.ProductVariantKeyNavigation)
+                    entity.HasOne(d => d.ProductVariantDtoKeyNavigation)
                         .WithMany(p => p.MerchCatalogInventory)
                         .HasForeignKey(d => d.ProductVariantKey)
                         .OnDelete(DeleteBehavior.Restrict)

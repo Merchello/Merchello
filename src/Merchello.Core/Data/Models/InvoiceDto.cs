@@ -9,9 +9,9 @@
         {
             this.MerchAppliedPayment = new HashSet<AppliedPaymentDto>();
             this.MerchInvoice2EntityCollection = new HashSet<Invoice2EntityCollectionDto>();
-            this.MerchInvoiceItem = new HashSet<MerchInvoiceItem>();
-            this.MerchOfferRedeemed = new HashSet<MerchOfferRedeemed>();
-            this.MerchOrder = new HashSet<MerchOrder>();
+            this.MerchInvoiceItem = new HashSet<InvoiceItemDto>();
+            this.MerchOfferRedeemed = new HashSet<OfferRedeemedDto>();
+            this.MerchOrder = new HashSet<OrderDto>();
         }
 
         public Guid Pk { get; set; }
@@ -66,16 +66,16 @@
 
         public ICollection<Invoice2EntityCollectionDto> MerchInvoice2EntityCollection { get; set; }
 
-        public MerchInvoiceIndex MerchInvoiceIndex { get; set; }
+        public InvoiceIndexDto InvoiceIndexDto { get; set; }
 
-        public ICollection<MerchInvoiceItem> MerchInvoiceItem { get; set; }
+        public ICollection<InvoiceItemDto> MerchInvoiceItem { get; set; }
 
-        public ICollection<MerchOfferRedeemed> MerchOfferRedeemed { get; set; }
+        public ICollection<OfferRedeemedDto> MerchOfferRedeemed { get; set; }
 
-        public ICollection<MerchOrder> MerchOrder { get; set; }
+        public ICollection<OrderDto> MerchOrder { get; set; }
 
         public CustomerDto CustomerDtoKeyNavigation { get; set; }
 
-        public MerchInvoiceStatus InvoiceStatusKeyNavigation { get; set; }
+        public InvoiceStatusDto InvoiceStatusDtoKeyNavigation { get; set; }
     }
 }

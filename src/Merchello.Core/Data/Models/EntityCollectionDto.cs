@@ -9,7 +9,7 @@
         {
             this.MerchCustomer2EntityCollection = new HashSet<Customer2EntityCollectionDto>();
             this.MerchInvoice2EntityCollection = new HashSet<Invoice2EntityCollectionDto>();
-            this.MerchProduct2EntityCollection = new HashSet<MerchProduct2EntityCollection>();
+            this.MerchProduct2EntityCollection = new HashSet<Product2EntityCollectionDto>();
         }
 
         public Guid Pk { get; set; }
@@ -36,7 +36,7 @@
 
         public ICollection<Invoice2EntityCollectionDto> MerchInvoice2EntityCollection { get; set; }
 
-        public ICollection<MerchProduct2EntityCollection> MerchProduct2EntityCollection { get; set; }
+        public ICollection<Product2EntityCollectionDto> MerchProduct2EntityCollection { get; set; }
 
         public EntityCollectionDto ParentKeyNavigation { get; set; }
 
