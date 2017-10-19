@@ -4,9 +4,9 @@
 
     using FluentAssertions;
 
+    using Merchello.Core.Data.Contexts;
     using Merchello.Core.Data.Mappings;
     using Merchello.TestBase;
-    using Merchello.UnitTests.Data.Mappings;
 
     using Microsoft.EntityFrameworkCore;
 
@@ -17,17 +17,17 @@
     {
         private readonly IDbEntityRegister register;
 
-        private readonly TestDbContext dbContext;
+        private readonly MerchelloDbContext dbContext;
 
         public DbEntityRegisterTests(ITestOutputHelper output, DbEntityRegisterFixture fixture)
             : base(output)
         {
             this.register = fixture.DbEntityRegister;
 
-            var builder = new DbContextOptionsBuilder<TestDbContext>();
+            var builder = new DbContextOptionsBuilder<MerchelloDbContext>();
             builder.UseInMemoryDatabase();
 
-            this.dbContext = new TestDbContext(builder.Options, this.register);
+            this.dbContext = new MerchelloDbContext(builder.Options, this.register);
 
         }
 

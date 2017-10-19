@@ -9,7 +9,8 @@
     {
         private readonly IDbEntityRegister entityRegister;
 
-        public MerchelloDbContext(IDbEntityRegister entityRegister)
+        public MerchelloDbContext(DbContextOptions options, IDbEntityRegister entityRegister)
+            : base(options)
         {
             this.entityRegister = entityRegister;
         }
