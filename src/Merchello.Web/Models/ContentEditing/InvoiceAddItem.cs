@@ -8,7 +8,7 @@
     public class InvoiceAddItem
     {
         /// <summary>
-        /// Construictor
+        ///     Constructor
         /// </summary>
         public InvoiceAddItem()
         {
@@ -29,5 +29,10 @@
         ///     The quantity to add
         /// </summary>
         public int Quantity { get; set; }
+
+        /// <summary>
+        ///  Optional SKU
+        /// </summary>
+        public string Sku { get; set; }
     }
 }

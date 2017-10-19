@@ -87,37 +87,41 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
 
                     // Update a product line item on the invoice (Edit or Delete)
                     function updateLineItem(lineItemDialogData) {
-                        var updateInvoice = false;
+
                         var keepFindingProduct = true;
 
                         if (lineItemDialogData.deleteLineItem) {
 
-                            var indexLocation = 0;
+                            // TODO - Needs new api method
+                            //var indexLocation = 0;
 
-                            // Loop through items                           
-                            angular.forEach(scope.invoice.items, function (item) {
-                                if (keepFindingProduct) {
-                                    if (lineItemDialogData.lineItem.sku === item.sku) {
-                                        // Stop finding and break (As no break in angular loop, this is best way)
-                                        keepFindingProduct = false;
-                                    } else {
-                                        // Update the index location as no match
-                                        indexLocation++;
-                                    }
-                                }
-                            });
+                            //// Loop through items                           
+                            //angular.forEach(scope.invoice.items, function (item) {
+                            //    if (keepFindingProduct) {
+                            //        if (lineItemDialogData.lineItem.sku === item.sku) {
+                            //            // Stop finding and break (As no break in angular loop, this is best way)
+                            //            keepFindingProduct = false;
+                            //        } else {
+                            //            // Update the index location as no match
+                            //            indexLocation++;
+                            //        }
+                            //    }
+                            //});
 
-                            // We know we found the lineitem if this is set to false
-                            if (keepFindingProduct === false) {
+                            //// We know we found the lineitem if this is set to false
+                            //if (keepFindingProduct === false) {
 
-                                // Delete the line item from the invoice display and put the invoice
-                                scope.invoice.items.splice(indexLocation, 1);
+                            //    // Delete the line item from the invoice display and put the invoice
+                            //    scope.invoice.items.splice(indexLocation, 1);
 
-                                // Set the invoice to be updated
-                                updateInvoice = true;   
-                            }
+                            //    // Set the invoice to be updated
+                            //    updateInvoice = true;   
+                            //}
 
                         } else {
+
+                            // Post the model back to the controller
+                            var invoiceAddItems = {};
 
                             // See if the quantity has changed and then        
                             angular.forEach(scope.invoice.items, function (item) {
@@ -125,49 +129,24 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                                     if (lineItemDialogData.lineItem.sku === item.sku
                                         && lineItemDialogData.quantity !== item.quantity) {
 
-                                        // Update the quantity to what the user set
-                                        item.quantity = lineItemDialogData.quantity;
+                                        // Make an invoice AddItemsModel
+                                        invoiceAddItems = {
+                                            InvoiceKey: scope.invoice.key,
+                                            Items: [
+                                                {
+                                                    Sku: item.sku,
+                                                    Quantity: lineItemDialogData.quantity - item.quantity
+                                                }
+                                            ]
+                                        }
 
-                                        // Stop finding (As no break in angular loop, this is best way)
                                         keepFindingProduct = false;
-
-                                        // Set product to be updated
-                                        updateInvoice = true;
                                     }   
                                 }
                             });
-
-                            // 
-
-                            // Post the model back to the controller
-                            var invoiceAddItems = {
-                                InvoiceKey: scope.invoice.key,
-                                Items: [
-                                    {
-                                        Key: 
-                                    }
-                                ]
-                            }
-
+                            
                             // Put the new items
                             var invoiceSavePromise = invoiceResource.putInvoiceNewProducts(invoiceAddItems);
-                            invoiceSavePromise.then(function () {
-                                $timeout(function () {
-                                    refresh();
-                                    notificationsService.success('Invoice Updated.');
-                                }, 1500);
-                            }, function (reason) {
-                                notificationsService.error("Failed to update invoice", reason.message);
-                            });
-                        }
-
-                        // See if we need to update the invoice
-                        if (updateInvoice) {
-                            // Force the put invoice to sync the line items too
-                            scope.invoice.SyncLineItems = true;
-
-                            // Put the invoice 
-                            var invoiceSavePromise = invoiceResource.saveInvoice(scope.invoice);
                             invoiceSavePromise.then(function () {
                                 $timeout(function () {
                                     scope.reload();
@@ -177,6 +156,8 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                                 notificationsService.error("Failed to update invoice line items", reason.message);
                             });
                         }
+
+
                     };
 
                     function loadInvoice() {

@@ -449,6 +449,21 @@
                     // Get the invoice
                     var merchInvoice = _invoiceService.GetByKey(invoiceAddItems.InvoiceKey);
 
+                    // Check to see if we just have a SKU
+                    foreach (var invoiceAddItem in invoiceAddItems.Items)
+                    {
+                        if (!string.IsNullOrEmpty(invoiceAddItem.Sku))
+                        {
+                            // Get the product/variant
+                            var productBySku = _productService.GetBySku(invoiceAddItem.Sku);
+                            var productVariantBySku = _productService.GetProductVariantBySku(invoiceAddItem.Sku);
+
+                            // Update the data needed
+                            invoiceAddItem.Key = productBySku != null ? productBySku.Key : productVariantBySku.Key;
+                            invoiceAddItem.IsProductVariant = productBySku == null;
+                        }
+                    }
+
                     if (merchInvoice != null)
                     {
                         // Add the products
@@ -542,8 +557,8 @@
                 {
                     if (currentLineItem.Sku == sku)
                     {
-                        // We have a match! Increase this line item quantity by 1
-                        currentLineItem.Quantity++;
+                        // We have a match!
+                        currentLineItem.Quantity = (currentLineItem.Quantity + invoiceAddItem.Quantity);
 
                         if (hasOrders && currentLineItem.IsShippable())
                         {
