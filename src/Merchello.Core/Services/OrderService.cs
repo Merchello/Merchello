@@ -213,8 +213,11 @@ namespace Merchello.Core.Services
         }
 
 
-        /// <inheritdoc />
-        public IOrder EditableOrderOnInvoice(IInvoice invoice)
+        /// <summary>
+        /// Returns an order if there is one that can be edited on an order
+        /// </summary>
+        /// <returns>The <see cref="IOrder"/></returns>
+        internal IOrder EditableOrderOnInvoice(IInvoice invoice)
         {
             // All orders
             var allOrders = GetOrdersByInvoiceKey(invoice.Key).ToArray();
@@ -251,8 +254,12 @@ namespace Merchello.Core.Services
             return null;
         }
 
-        /// <inheritdoc />
-        public void AddOrderLineItemsToEditedInvoice(List<OrderLineItem> orderLineItemsToAdd, IInvoice invoice)
+        /// <summary>
+        /// Either adds new orderlineitems to an existing order on the invoice or creates a new one
+        /// </summary>
+        /// <param name="orderLineItemsToAdd"></param>
+        /// <param name="invoice"></param>
+        internal void AddOrderLineItemsToEditedInvoice(List<OrderLineItem> orderLineItemsToAdd, IInvoice invoice)
         {
             // Need to add the order
             if (orderLineItemsToAdd.Any())

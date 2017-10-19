@@ -86,21 +86,6 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="InvoiceApiController"/> class.
-        /// </summary>
-        /// <param name="merchelloContext">
-        /// The merchello context.
-        /// </param>
-        /// <param name="umbracoContext">
-        /// The umbraco context.
-        /// </param>
-        internal InvoiceApiController(IMerchelloContext merchelloContext, UmbracoContext umbracoContext)
-            : base(merchelloContext, umbracoContext)
-        {
-            _invoiceService = merchelloContext.Services.InvoiceService;
-        }
-
-        /// <summary>
         /// Returns an Invoice by id (key)
         /// 
         /// GET /umbraco/Merchello/InvoiceApi/GetInvoice/{guid}
@@ -333,15 +318,8 @@
 
                 merchInvoice = invoice.ToInvoice(merchInvoice);
 
-                // Do we need to do a syncronise and not just a save
-                if (invoice.SyncLineItems)
-                {
-                    ((InvoiceService)_invoiceService).ReSyncInvoiceTotal(merchInvoice);
-                }
-                else
-                {
-                    _invoiceService.Save(merchInvoice);
-                }
+                _invoiceService.Save(merchInvoice);
+            
             }
             catch (Exception ex)
             {
@@ -393,11 +371,67 @@
             return response;
         }
 
+        ///// <summary>
+        ///// Removes a product from an Invoice
+        ///// </summary>
+        ///// <param name="invoiceAddItems"></param>
+        ///// <returns></returns>
+        //[HttpPost]
+        //public HttpResponseMessage PutInvoiceRemoveProducts(InvoiceAddItems invoiceAddItems)
+        //{
+        //        	if (invoiceDisplay.SyncLineItems)
+        //		    {
+        //		        // See if any have been removed
+        //                // Grab the current line items in a dictionary key'd by the SKU
+        //		        var currentLineItems = destination.Items.ToDictionary(x => x.Sku, x => x);
+
+        //              // Grab the proposed lines items
+        //              var proposedLineItems = invoiceDisplay.Items.ToDictionary(x => x.Sku, x => x);
+
+        //                // Loop the current line items and find the removed ones
+        //		        foreach (var lineItem in currentLineItems)
+        //		        {
+        //		            if (!proposedLineItems.ContainsKey(lineItem.Value.Sku))
+        //		            {
+        //                        // This has been removed, so remove it from the destination items
+        //		                  destination.Items.RemoveItem(lineItem.Value.Sku);
+        //		            }
+        //              }
+
+        //                // Update quantities
+        //		        foreach (var destinationItem in destination.Items)
+        //		        {
+        //		            if (proposedLineItems.ContainsKey(destinationItem.Sku))
+        //		            {
+        //		                var matching = proposedLineItems[destinationItem.Sku];
+        //                      destinationItem.Quantity = matching.Quantity;
+        //		            }
+        //		        }
+
+        //                // Update the currentlineitems dictionary now some have been removed
+        //		          currentLineItems = destination.Items.ToDictionary(x => x.Sku, x => x);
+
+        //                // Loops the proposed ones and find new ones to add and also update any quantities
+        //                var lineItemsToAdd = new List<ILineItem>();
+        //                foreach (var lineItemDisplay in proposedLineItems)
+        //		        {
+        //		            if (!currentLineItems.ContainsKey(lineItemDisplay.Value.Sku))
+        //		            {
+        //		                var lineItem = lineItemDisplay.Value;
+        //                      lineItemsToAdd.Add(new InvoiceLineItem(lineItem.LineItemType, lineItem.Name, lineItem.Sku, lineItem.Quantity, lineItem.Price));
+        //                    }
+        //		        }
+
+        //                // Add new line items if there are any
+        //		        if (lineItemsToAdd.Any())
+        //		        {
+        //		            destination.Items.Add(lineItemsToAdd);
+        //		        }
+        //		    }
+        //}
+
         /// <summary>
         /// Puts new products on an invoice
-        /// // TODO - This is a bit chunky but it's because it's an after hack really
-        /// // TODO - Also, it's a bit screwy as it seems back office is only ever setup for an invoice
-        /// // TODO - to have a single order, BUT system is capable of multiple orders :/
         /// </summary>
         /// <param name="invoiceAddItems"></param>
         /// <returns></returns>
@@ -417,81 +451,8 @@
 
                     if (merchInvoice != null)
                     {
-                        // Get the current items in a dictionary so we can quickly check the SKU
-                        var currentLineItemsDict = merchInvoice.Items.ToDictionary(x => x.Sku, x => x);
-
-                        // Has orders
-                        var hasOrders = _orderService.GetOrdersByInvoiceKey(merchInvoice.Key).Any();
-
-                        // Store the orderlineitems
-                        var orderLineItemsToAdd = new List<OrderLineItem>();
-
-                        // Loop and add the new products as InvoiceLineItemDisplay to the InvoiceDisplay
-                        foreach (var invoiceAddItem in invoiceAddItems.Items)
-                        {
-                            // containers for the product or variant
-                            IProductVariant productVariant = null;
-                            IProduct product = null;
-
-                            // Get the variant or the product
-                            if (invoiceAddItem.IsProductVariant)
-                            {
-                                productVariant = _productService.GetProductVariantByKey(invoiceAddItem.Key);
-                            }
-                            else
-                            {
-                                product = _productService.GetByKey(invoiceAddItem.Key);
-                            }
-
-                            // If both null, just skip below
-                            if (productVariant == null && product == null) continue;
-
-                            // Get the sku to check
-                            var sku = product == null ? productVariant.Sku : product.Sku;
-
-                            // Create the lineitem
-                            var invoiceLineItem = product == null ? productVariant.ToInvoiceLineItem() : product.ToInvoiceLineItem();
-
-                            // Update Quantities
-                            foreach (var currentLineItem in merchInvoice.Items)
-                            {
-                                if (currentLineItem.Sku == sku)
-                                {
-                                    // We have a match! Increase this line item quantity by 1
-                                    currentLineItem.Quantity++;
-
-                                    if (hasOrders && currentLineItem.IsShippable())
-                                    {
-                                        // Add to Order   
-                                        orderLineItemsToAdd.Add(invoiceLineItem.AsLineItemOf<OrderLineItem>());
-
-                                        break;
-                                    }
-                                }
-                            }
-
-                            // See if the current line items have this product/variant
-                            if (!currentLineItemsDict.ContainsKey(sku))
-                            {
-                                merchInvoice.Items.Add(invoiceLineItem);
-
-                                if (hasOrders && invoiceLineItem.IsShippable())
-                                {
-                                    // Add to Order   
-                                    orderLineItemsToAdd.Add(invoiceLineItem.AsLineItemOf<OrderLineItem>());
-                                }
-                            }
-                        }
-
-                        // Need to add the order
-                        if (hasOrders)
-                        {
-                            // Add to order or create a new one
-                            _orderService.AddOrderLineItemsToEditedInvoice(orderLineItemsToAdd, merchInvoice);
-                        }
-
-                        // Now update invoice and save
-                        ((InvoiceService)_invoiceService).ReSyncInvoiceTotal(merchInvoice);
+                        // Add the products
+                        AddNewProductsToInvoice(merchInvoice, invoiceAddItems);
                     }
                     else
                     {
@@ -507,6 +468,115 @@
             }
 
             return response;
+        }
+
+        /// <summary>
+        /// Create a InvoiceAddItem model
+        /// </summary>
+        /// <param name="merchInvoice"></param>
+        /// <param name="product"></param>
+        /// <param name="qty"></param>
+        internal InvoiceAddItem ToInvoiceAddItem(IInvoice merchInvoice, IProduct product, int qty)
+        {
+            return new InvoiceAddItem { Key = product.Key, IsProductVariant = false, Quantity = qty };
+        }
+
+        /// <summary>
+        /// Create a InvoiceAddItem model
+        /// </summary>
+        /// <param name="merchInvoice"></param>
+        /// <param name="productVariant"></param>
+        /// <param name="qty"></param>
+        internal InvoiceAddItem ToInvoiceAddItem(IInvoice merchInvoice, IProductVariant productVariant, int qty)
+        {
+            return new InvoiceAddItem { Key = productVariant.Key, IsProductVariant = true, Quantity = qty };
+        }
+
+        /// <summary>
+        /// Internal method to add products and orders to existing invoice
+        /// // TODO - This is a bit chunky but it's because it's an after hack really
+        /// // TODO - Also, it's a bit screwy as it seems back office is only ever setup for an invoice
+        /// // TODO - to have a single order, BUT system is capable of multiple orders :/
+        /// </summary>
+        /// <param name="merchInvoice"></param>
+        /// <param name="invoiceAddItems"></param>
+        internal void AddNewProductsToInvoice(IInvoice merchInvoice, InvoiceAddItems invoiceAddItems)
+        {
+            // Get the current items in a dictionary so we can quickly check the SKU
+            var currentLineItemsDict = merchInvoice.Items.ToDictionary(x => x.Sku, x => x);
+
+            // Has orders
+            var hasOrders = _orderService.GetOrdersByInvoiceKey(merchInvoice.Key).Any();
+
+            // Store the orderlineitems
+            var orderLineItemsToAdd = new List<OrderLineItem>();
+
+            // Loop and add the new products as InvoiceLineItemDisplay to the InvoiceDisplay
+            foreach (var invoiceAddItem in invoiceAddItems.Items)
+            {
+                // containers for the product or variant
+                IProductVariant productVariant = null;
+                IProduct product = null;
+
+                // Get the variant or the product
+                if (invoiceAddItem.IsProductVariant)
+                {
+                    productVariant = _productService.GetProductVariantByKey(invoiceAddItem.Key);
+                }
+                else
+                {
+                    product = _productService.GetByKey(invoiceAddItem.Key);
+                }
+
+                // If both null, just skip below
+                if (productVariant == null && product == null) continue;
+
+                // Get the sku to check
+                var sku = product == null ? productVariant.Sku : product.Sku;
+
+                // Create the lineitem
+                var invoiceLineItem = product == null ? productVariant.ToInvoiceLineItem(invoiceAddItem.Quantity) : product.ToInvoiceLineItem(invoiceAddItem.Quantity);
+
+                // Update Quantities
+                foreach (var currentLineItem in merchInvoice.Items)
+                {
+                    if (currentLineItem.Sku == sku)
+                    {
+                        // We have a match! Increase this line item quantity by 1
+                        currentLineItem.Quantity++;
+
+                        if (hasOrders && currentLineItem.IsShippable())
+                        {
+                            // Add to Order   
+                            orderLineItemsToAdd.Add(invoiceLineItem.AsLineItemOf<OrderLineItem>());
+
+                            break;
+                        }
+                    }
+                }
+
+                // See if the current line items have this product/variant
+                if (!currentLineItemsDict.ContainsKey(sku))
+                {
+                    merchInvoice.Items.Add(invoiceLineItem);
+
+                    if (hasOrders && invoiceLineItem.IsShippable())
+                    {
+                        // Add to Order   
+                        orderLineItemsToAdd.Add(invoiceLineItem.AsLineItemOf<OrderLineItem>());
+                    }
+                }
+            }
+
+            // Need to add the order
+            if (hasOrders)
+            {
+                // Add to order or create a new one
+                ((OrderService)_orderService).AddOrderLineItemsToEditedInvoice(orderLineItemsToAdd, merchInvoice);
+            }
+
+            // Now update invoice and save
+            ((InvoiceService)_invoiceService).ReSyncInvoiceTotal(merchInvoice);
         }
 
         /// <summary>

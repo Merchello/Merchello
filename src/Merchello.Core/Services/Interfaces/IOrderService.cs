@@ -59,19 +59,6 @@
         void Save(IOrder order, bool raiseEvents = true);
 
         /// <summary>
-        /// Returns an order if there is one that can be edited on an order
-        /// </summary>
-        /// <returns>The <see cref="IOrder"/></returns>
-        IOrder EditableOrderOnInvoice(IInvoice invoice);
-
-        /// <summary>
-        /// Either adds new orderlineitems to an existing order on the invoice or creates a new one
-        /// </summary>
-        /// <param name="orderLineItemsToAdd"></param>
-        /// <param name="invoice"></param>
-        void AddOrderLineItemsToEditedInvoice(List<OrderLineItem> orderLineItemsToAdd, IInvoice invoice);
-
-        /// <summary>
         /// Saves a collection of <see cref="IOrder"/>
         /// </summary>
         /// <param name="orders">The collection of <see cref="IOrder"/></param>

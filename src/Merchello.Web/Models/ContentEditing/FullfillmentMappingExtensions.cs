@@ -257,56 +257,6 @@ namespace Merchello.Web.Models.ContentEditing
 
 		    destination.Notes = notes.Where(x => removeKeys.All(y => y != x.Key));
 
-		    if (invoiceDisplay.SyncLineItems)
-		    {
-		        // See if any have been removed
-                // Grab the current line items in a dictionary key'd by the SKU
-		        var currentLineItems = destination.Items.ToDictionary(x => x.Sku, x => x);
-
-                // Grab the proposed lines items
-		        var proposedLineItems = invoiceDisplay.Items.ToDictionary(x => x.Sku, x => x);
-
-                // Loop the current line items and find the removed ones
-		        foreach (var lineItem in currentLineItems)
-		        {
-		            if (!proposedLineItems.ContainsKey(lineItem.Value.Sku))
-		            {
-                        // This has been removed, so remove it from the destination items
-		                destination.Items.RemoveItem(lineItem.Value.Sku);
-		            }
-		        }
-
-                // Update quantities
-		        foreach (var destinationItem in destination.Items)
-		        {
-		            if (proposedLineItems.ContainsKey(destinationItem.Sku))
-		            {
-		                var matching = proposedLineItems[destinationItem.Sku];
-		                destinationItem.Quantity = matching.Quantity;
-		            }
-		        }
-
-                // Update the currentlineitems dictionary now some have been removed
-		        currentLineItems = destination.Items.ToDictionary(x => x.Sku, x => x);
-
-                // Loops the proposed ones and find new ones to add and also update any quantities
-                var lineItemsToAdd = new List<ILineItem>();
-                foreach (var lineItemDisplay in proposedLineItems)
-		        {
-		            if (!currentLineItems.ContainsKey(lineItemDisplay.Value.Sku))
-		            {
-		                var lineItem = lineItemDisplay.Value;
-                        lineItemsToAdd.Add(new InvoiceLineItem(lineItem.LineItemType, lineItem.Name, lineItem.Sku, lineItem.Quantity, lineItem.Price));
-                    }
-		        }
-
-                // Add new line items if there are any
-		        if (lineItemsToAdd.Any())
-		        {
-		            destination.Items.Add(lineItemsToAdd);
-		        }
-		    }
-
             return destination;
 		}
 

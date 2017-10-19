@@ -136,6 +136,29 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                                     }   
                                 }
                             });
+
+                            // 
+
+                            // Post the model back to the controller
+                            var invoiceAddItems = {
+                                InvoiceKey: scope.invoice.key,
+                                Items: [
+                                    {
+                                        Key: 
+                                    }
+                                ]
+                            }
+
+                            // Put the new items
+                            var invoiceSavePromise = invoiceResource.putInvoiceNewProducts(invoiceAddItems);
+                            invoiceSavePromise.then(function () {
+                                $timeout(function () {
+                                    refresh();
+                                    notificationsService.success('Invoice Updated.');
+                                }, 1500);
+                            }, function (reason) {
+                                notificationsService.error("Failed to update invoice", reason.message);
+                            });
                         }
 
                         // See if we need to update the invoice
