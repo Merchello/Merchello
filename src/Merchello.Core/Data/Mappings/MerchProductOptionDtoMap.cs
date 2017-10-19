@@ -8,7 +8,7 @@
     {
         public void Configure(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MerchProductOption>(entity =>
+            modelBuilder.Entity<ProductOptionDto>(entity =>
                 {
                     entity.HasKey(e => e.Pk)
                         .HasName("PK_merchProductOption");

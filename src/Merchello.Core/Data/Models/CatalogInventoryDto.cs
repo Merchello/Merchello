@@ -18,8 +18,8 @@
 
         public DateTime CreateDate { get; set; }
 
-        public virtual MerchWarehouseCatalog CatalogKeyNavigation { get; set; }
+        public virtual WarehouseCatalogDto CatalogDtoKeyNavigation { get; set; }
 
-        public virtual MerchProductVariant ProductVariantKeyNavigation { get; set; }
+        public virtual ProductVariantDto ProductVariantDtoKeyNavigation { get; set; }
     }
 }

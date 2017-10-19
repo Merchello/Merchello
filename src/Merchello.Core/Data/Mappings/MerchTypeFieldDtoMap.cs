@@ -8,7 +8,7 @@
     {
         public void Configure(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MerchTypeField>(
+            modelBuilder.Entity<TypeFieldDto>(
                 entity =>
                     {
                         entity.HasKey(e => e.Pk).HasName("PK_merchTypeField");

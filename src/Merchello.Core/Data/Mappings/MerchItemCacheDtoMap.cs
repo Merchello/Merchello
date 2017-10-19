@@ -8,7 +8,7 @@
     {
         public void Configure(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MerchItemCache>(entity =>
+            modelBuilder.Entity<ItemCacheDto>(entity =>
                 {
                     entity.HasKey(e => e.Pk)
                         .HasName("PK_merchItemCache");

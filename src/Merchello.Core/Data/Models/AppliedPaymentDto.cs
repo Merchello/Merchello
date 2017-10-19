@@ -24,6 +24,6 @@
 
         public virtual InvoiceDto InvoiceDtoKeyNavigation { get; set; }
 
-        public virtual MerchPayment PaymentKeyNavigation { get; set; }
+        public virtual PaymentDto PaymentDtoKeyNavigation { get; set; }
     }
 }

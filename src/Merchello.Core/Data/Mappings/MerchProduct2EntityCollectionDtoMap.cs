@@ -9,7 +9,7 @@
     {
         public void Configure(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MerchProduct2EntityCollection>(entity =>
+            modelBuilder.Entity<Product2EntityCollectionDto>(entity =>
                 {
                     entity.HasKey(e => new { e.ProductKey, e.EntityCollectionKey })
                         .HasName("PK_merchProduct2EntityCollection");
@@ -36,7 +36,7 @@
                         .OnDelete(DeleteBehavior.Restrict)
                         .HasConstraintName("FK_merchProduct2EntityCollection_merchEntityCollection");
 
-                    entity.HasOne(d => d.ProductKeyNavigation)
+                    entity.HasOne(d => d.ProductDtoKeyNavigation)
                         .WithMany(p => p.MerchProduct2EntityCollection)
                         .HasForeignKey(d => d.ProductKey)
                         .OnDelete(DeleteBehavior.Restrict)

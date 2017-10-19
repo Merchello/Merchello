@@ -9,7 +9,7 @@
     {
         public void Configure(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MerchProductVariantIndex>(
+            modelBuilder.Entity<ProductVariantIndexDto>(
                 entity =>
                     {
                         entity.ToTable("merchProductVariantIndex");

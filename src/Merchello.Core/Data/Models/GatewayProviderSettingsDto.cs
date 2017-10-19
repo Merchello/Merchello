@@ -7,10 +7,10 @@
     {
         public GatewayProviderSettingsDto()
         {
-            this.MerchNotificationMethod = new HashSet<MerchNotificationMethod>();
-            this.MerchPaymentMethod = new HashSet<MerchPaymentMethod>();
-            this.MerchShipMethod = new HashSet<MerchShipMethod>();
-            this.MerchTaxMethod = new HashSet<MerchTaxMethod>();
+            this.MerchNotificationMethod = new HashSet<NotificationMethodDto>();
+            this.MerchPaymentMethod = new HashSet<PaymentMethodDto>();
+            this.MerchShipMethod = new HashSet<ShipMethodDto>();
+            this.MerchTaxMethod = new HashSet<TaxMethodDto>();
         }
 
         public Guid Pk { get; set; }
@@ -29,12 +29,12 @@
 
         public DateTime CreateDate { get; set; }
 
-        public ICollection<MerchNotificationMethod> MerchNotificationMethod { get; set; }
+        public ICollection<NotificationMethodDto> MerchNotificationMethod { get; set; }
 
-        public ICollection<MerchPaymentMethod> MerchPaymentMethod { get; set; }
+        public ICollection<PaymentMethodDto> MerchPaymentMethod { get; set; }
 
-        public ICollection<MerchShipMethod> MerchShipMethod { get; set; }
+        public ICollection<ShipMethodDto> MerchShipMethod { get; set; }
 
-        public ICollection<MerchTaxMethod> MerchTaxMethod { get; set; }
+        public ICollection<TaxMethodDto> MerchTaxMethod { get; set; }
     }
 }

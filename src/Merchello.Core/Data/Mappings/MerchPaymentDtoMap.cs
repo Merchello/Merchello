@@ -8,7 +8,7 @@
     {
         public void Configure(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MerchPayment>(
+            modelBuilder.Entity<PaymentDto>(
                 entity =>
                     {
                         entity.HasKey(e => e.Pk).HasName("PK_merchPayment");
@@ -56,7 +56,7 @@
                             .HasForeignKey(d => d.CustomerKey)
                             .HasConstraintName("FK_merchPayment_merchCustomer");
 
-                        entity.HasOne(d => d.PaymentMethodKeyNavigation)
+                        entity.HasOne(d => d.PaymentMethodDtoKeyNavigation)
                             .WithMany(p => p.MerchPayment)
                             .HasForeignKey(d => d.PaymentMethodKey)
                             .HasConstraintName("FK_merchPayment_merchPaymentMethod");

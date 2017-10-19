@@ -9,7 +9,7 @@
     {
         public void Configure(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MerchNotificationMethod>(entity =>
+            modelBuilder.Entity<NotificationMethodDto>(entity =>
                 {
                     entity.HasKey(e => e.Pk)
                         .HasName("PK_merchNotificationMethod");

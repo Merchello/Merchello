@@ -9,7 +9,7 @@
     {
         public void Configure(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MerchNotificationMessage>(entity =>
+            modelBuilder.Entity<NotificationMessageDto>(entity =>
                 {
                     entity.HasKey(e => e.Pk)
                         .HasName("PK_merchNotificationMessage");
@@ -68,7 +68,7 @@
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("getdate()");
 
-                    entity.HasOne(d => d.MethodKeyNavigation)
+                    entity.HasOne(d => d.MethodDtoKeyNavigation)
                         .WithMany(p => p.MerchNotificationMessage)
                         .HasForeignKey(d => d.MethodKey)
                         .OnDelete(DeleteBehavior.Restrict)

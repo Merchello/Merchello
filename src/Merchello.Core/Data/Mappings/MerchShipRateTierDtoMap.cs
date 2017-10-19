@@ -9,7 +9,7 @@
     {
         public void Configure(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MerchShipRateTier>(entity =>
+            modelBuilder.Entity<ShipRateTierDto>(entity =>
                 {
                     entity.HasKey(e => e.Pk)
                         .HasName("PK_merchShipRateTier");
@@ -44,7 +44,7 @@
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("getdate()");
 
-                    entity.HasOne(d => d.ShipMethodKeyNavigation)
+                    entity.HasOne(d => d.ShipMethodDtoKeyNavigation)
                         .WithMany(p => p.MerchShipRateTier)
                         .HasForeignKey(d => d.ShipMethodKey)
                         .OnDelete(DeleteBehavior.Restrict)

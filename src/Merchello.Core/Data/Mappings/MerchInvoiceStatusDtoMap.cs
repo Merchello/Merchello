@@ -8,7 +8,7 @@
     {
         public void Configure(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MerchInvoiceStatus>(entity =>
+            modelBuilder.Entity<InvoiceStatusDto>(entity =>
                 {
                     entity.HasKey(e => e.Pk)
                         .HasName("PK_merchInvoiceStatus");

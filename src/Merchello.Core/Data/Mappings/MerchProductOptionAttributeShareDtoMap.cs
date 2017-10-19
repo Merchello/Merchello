@@ -9,7 +9,7 @@
     {
         public void Configure(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MerchProductOptionAttributeShare>(
+            modelBuilder.Entity<ProductOptionAttributeShareDto>(
                 entity =>
                     {
                         entity.HasKey(e => new { e.ProductKey, e.OptionKey, e.AttributeKey })
@@ -35,19 +35,19 @@
                             .HasColumnType("datetime")
                             .HasDefaultValueSql("getdate()");
 
-                        entity.HasOne(d => d.AttributeKeyNavigation)
+                        entity.HasOne(d => d.AttributeDtoKeyNavigation)
                             .WithMany(p => p.MerchProductOptionAttributeShare)
                             .HasForeignKey(d => d.AttributeKey)
                             .OnDelete(DeleteBehavior.Restrict)
                             .HasConstraintName("FK_merchProductOptionAttributeShare_merchProductAttribute");
 
-                        entity.HasOne(d => d.OptionKeyNavigation)
+                        entity.HasOne(d => d.OptionDtoKeyNavigation)
                             .WithMany(p => p.MerchProductOptionAttributeShare)
                             .HasForeignKey(d => d.OptionKey)
                             .OnDelete(DeleteBehavior.Restrict)
                             .HasConstraintName("FK_merchProductOptionAttributeShare_merchProductOption");
 
-                        entity.HasOne(d => d.ProductKeyNavigation)
+                        entity.HasOne(d => d.ProductDtoKeyNavigation)
                             .WithMany(p => p.MerchProductOptionAttributeShare)
                             .HasForeignKey(d => d.ProductKey)
                             .OnDelete(DeleteBehavior.Restrict)

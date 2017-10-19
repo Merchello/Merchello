@@ -9,7 +9,7 @@
     {
         public void Configure(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MerchProductAttribute>(entity =>
+            modelBuilder.Entity<ProductAttributeDto>(entity =>
                 {
                     entity.HasKey(e => e.Pk)
                         .HasName("PK_merchProductAttribute");
@@ -52,7 +52,7 @@
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("getdate()");
 
-                    entity.HasOne(d => d.OptionKeyNavigation)
+                    entity.HasOne(d => d.OptionDtoKeyNavigation)
                         .WithMany(p => p.MerchProductAttribute)
                         .HasForeignKey(d => d.OptionKey)
                         .OnDelete(DeleteBehavior.Restrict)

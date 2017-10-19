@@ -7,8 +7,8 @@
     {
         public DetachedContentTypeDto()
         {
-            this.MerchProductOption = new HashSet<MerchProductOption>();
-            this.MerchProductVariantDetachedContent = new HashSet<MerchProductVariantDetachedContent>();
+            this.MerchProductOption = new HashSet<ProductOptionDto>();
+            this.MerchProductVariantDetachedContent = new HashSet<ProductVariantDetachedContentDto>();
         }
 
         public Guid Pk { get; set; }
@@ -25,8 +25,8 @@
 
         public DateTime CreateDate { get; set; }
 
-        public ICollection<MerchProductOption> MerchProductOption { get; set; }
+        public ICollection<ProductOptionDto> MerchProductOption { get; set; }
 
-        public ICollection<MerchProductVariantDetachedContent> MerchProductVariantDetachedContent { get; set; }
+        public ICollection<ProductVariantDetachedContentDto> MerchProductVariantDetachedContent { get; set; }
     }
 }

@@ -9,7 +9,7 @@
     {
         public void Configure(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MerchTaxMethod>(
+            modelBuilder.Entity<TaxMethodDto>(
                 entity =>
                     {
                         entity.HasKey(e => e.Pk).HasName("PK_merchTaxMethod");

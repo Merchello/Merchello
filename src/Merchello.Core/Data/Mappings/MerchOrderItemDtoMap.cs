@@ -9,7 +9,7 @@
     {
         public void Configure(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MerchOrderItem>(entity =>
+            modelBuilder.Entity<OrderItemDto>(entity =>
                 {
                     entity.HasKey(e => e.Pk)
                         .HasName("PK_merchOrderItem");
@@ -63,13 +63,13 @@
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("getdate()");
 
-                    entity.HasOne(d => d.OrderKeyNavigation)
+                    entity.HasOne(d => d.OrderDtoKeyNavigation)
                         .WithMany(p => p.MerchOrderItem)
                         .HasForeignKey(d => d.OrderKey)
                         .OnDelete(DeleteBehavior.Restrict)
                         .HasConstraintName("FK_merchOrderItem_merchOrder");
 
-                    entity.HasOne(d => d.ShipmentKeyNavigation)
+                    entity.HasOne(d => d.ShipmentDtoKeyNavigation)
                         .WithMany(p => p.MerchOrderItem)
                         .HasForeignKey(d => d.ShipmentKey)
                         .HasConstraintName("FK_merchOrderItem_merchShipment");

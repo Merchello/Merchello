@@ -9,7 +9,7 @@
     {
         public void Configure(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MerchWarehouseCatalog>(
+            modelBuilder.Entity<WarehouseCatalogDto>(
                 entity =>
                     {
                         entity.HasKey(e => e.Pk).HasName("PK_merchWarehouseCatalog");
@@ -34,7 +34,7 @@
 
                         entity.Property(e => e.WarehouseKey).HasColumnName("warehouseKey");
 
-                        entity.HasOne(d => d.WarehouseKeyNavigation)
+                        entity.HasOne(d => d.WarehouseDtoKeyNavigation)
                             .WithMany(p => p.MerchWarehouseCatalog)
                             .HasForeignKey(d => d.WarehouseKey)
                             .OnDelete(DeleteBehavior.Restrict)

@@ -9,7 +9,7 @@
     {
         public void Configure(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MerchPaymentMethod>(entity =>
+            modelBuilder.Entity<PaymentMethodDto>(entity =>
                 {
                     entity.HasKey(e => e.Pk)
                         .HasName("PK_merchPaymentMethod");

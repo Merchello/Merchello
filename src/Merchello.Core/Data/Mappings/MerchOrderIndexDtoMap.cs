@@ -9,7 +9,7 @@
     {
         public void Configure(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MerchOrderIndex>(entity =>
+            modelBuilder.Entity<OrderIndexDto>(entity =>
                 {
                     entity.ToTable("merchOrderIndex");
 

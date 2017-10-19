@@ -120,7 +120,7 @@
                         .HasForeignKey(d => d.CustomerKey)
                         .HasConstraintName("FK_merchInvoice_merchCustomer");
 
-                    entity.HasOne(d => d.InvoiceStatusKeyNavigation)
+                    entity.HasOne(d => d.InvoiceStatusDtoKeyNavigation)
                         .WithMany(p => p.MerchInvoice)
                         .HasForeignKey(d => d.InvoiceStatusKey)
                         .OnDelete(DeleteBehavior.Restrict)

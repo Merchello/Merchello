@@ -10,7 +10,7 @@
     {
         public void Configure(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MerchProductVariant2ProductAttribute>(entity =>
+            modelBuilder.Entity<ProductVariant2ProductAttributeDto>(entity =>
                 {
                     entity.HasKey(e => new { e.ProductVariantKey, e.OptionKey })
                         .HasName("PK_merchProductVariant2ProductAttribute");
@@ -33,19 +33,19 @@
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("getdate()");
 
-                    entity.HasOne(d => d.OptionKeyNavigation)
+                    entity.HasOne(d => d.OptionDtoKeyNavigation)
                         .WithMany(p => p.MerchProductVariant2ProductAttribute)
                         .HasForeignKey(d => d.OptionKey)
                         .OnDelete(DeleteBehavior.Restrict)
                         .HasConstraintName("FK_merchProductVariant2ProductAttribute_merchProductOption");
 
-                    entity.HasOne(d => d.ProductAttributeKeyNavigation)
+                    entity.HasOne(d => d.ProductAttributeDtoKeyNavigation)
                         .WithMany(p => p.MerchProductVariant2ProductAttribute)
                         .HasForeignKey(d => d.ProductAttributeKey)
                         .OnDelete(DeleteBehavior.Restrict)
                         .HasConstraintName("FK_merchProductVariant2ProductAttribute_merchProductAttribute");
 
-                    entity.HasOne(d => d.ProductVariantKeyNavigation)
+                    entity.HasOne(d => d.ProductVariantDtoKeyNavigation)
                         .WithMany(p => p.MerchProductVariant2ProductAttribute)
                         .HasForeignKey(d => d.ProductVariantKey)
                         .OnDelete(DeleteBehavior.Restrict)

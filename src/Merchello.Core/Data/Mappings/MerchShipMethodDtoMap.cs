@@ -9,7 +9,7 @@
     {
         public void Configure(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MerchShipMethod>(
+            modelBuilder.Entity<ShipMethodDto>(
                 entity =>
                     {
                         entity.HasKey(e => e.Pk).HasName("PK_merchShipMethod");
@@ -51,7 +51,7 @@
                             .OnDelete(DeleteBehavior.Restrict)
                             .HasConstraintName("FK_merchShipMethod_merchGatewayProviderSettings");
 
-                        entity.HasOne(d => d.ShipCountryKeyNavigation)
+                        entity.HasOne(d => d.ShipCountryDtoKeyNavigation)
                             .WithMany(p => p.MerchShipMethod)
                             .HasForeignKey(d => d.ShipCountryKey)
                             .OnDelete(DeleteBehavior.Restrict)

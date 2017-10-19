@@ -9,7 +9,7 @@
     {
         public void Configure(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MerchOfferRedeemed>(entity =>
+            modelBuilder.Entity<OfferRedeemedDto>(entity =>
                 {
                     entity.HasKey(e => e.Pk)
                         .HasName("PK_merchOfferRedeemed");
@@ -57,7 +57,7 @@
                         .OnDelete(DeleteBehavior.Restrict)
                         .HasConstraintName("FK_merchOfferRedeemed_merchInvoice");
 
-                    entity.HasOne(d => d.OfferSettingsKeyNavigation)
+                    entity.HasOne(d => d.OfferSettingsDtoKeyNavigation)
                         .WithMany(p => p.MerchOfferRedeemed)
                         .HasForeignKey(d => d.OfferSettingsKey)
                         .HasConstraintName("FK_merchOfferRedeemed_merchOfferSettings");

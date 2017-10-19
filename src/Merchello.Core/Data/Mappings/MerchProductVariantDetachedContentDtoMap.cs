@@ -9,7 +9,7 @@
     {
         public void Configure(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MerchProductVariantDetachedContent>(entity =>
+            modelBuilder.Entity<ProductVariantDetachedContentDto>(entity =>
                 {
                     entity.HasKey(e => new { e.ProductVariantKey, e.CultureName })
                         .HasName("PK_merchProductVariantDetachedContent");
@@ -63,7 +63,7 @@
                         .OnDelete(DeleteBehavior.Restrict)
                         .HasConstraintName("FK_merchProductVariantDetachedContent_merchDetachedContentTypeKey");
 
-                    entity.HasOne(d => d.ProductVariantKeyNavigation)
+                    entity.HasOne(d => d.ProductVariantDtoKeyNavigation)
                         .WithMany(p => p.MerchProductVariantDetachedContent)
                         .HasForeignKey(d => d.ProductVariantKey)
                         .OnDelete(DeleteBehavior.Restrict)

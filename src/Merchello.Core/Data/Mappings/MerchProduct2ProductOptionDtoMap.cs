@@ -9,7 +9,7 @@
     {
         public void Configure(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MerchProduct2ProductOption>(entity =>
+            modelBuilder.Entity<Product2ProductOptionDto>(entity =>
                 {
                     entity.HasKey(e => new { e.ProductKey, e.OptionKey })
                         .HasName("PK_merchProduct2Option");
@@ -36,13 +36,13 @@
                         .HasColumnName("useName")
                         .HasMaxLength(255);
 
-                    entity.HasOne(d => d.OptionKeyNavigation)
+                    entity.HasOne(d => d.OptionDtoKeyNavigation)
                         .WithMany(p => p.MerchProduct2ProductOption)
                         .HasForeignKey(d => d.OptionKey)
                         .OnDelete(DeleteBehavior.Restrict)
                         .HasConstraintName("FK_merchProduct2Option_merchOption");
 
-                    entity.HasOne(d => d.ProductKeyNavigation)
+                    entity.HasOne(d => d.ProductDtoKeyNavigation)
                         .WithMany(p => p.MerchProduct2ProductOption)
                         .HasForeignKey(d => d.ProductKey)
                         .OnDelete(DeleteBehavior.Restrict)

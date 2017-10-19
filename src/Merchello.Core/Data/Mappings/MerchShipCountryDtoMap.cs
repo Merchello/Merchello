@@ -9,7 +9,7 @@
     {
         public void Configure(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MerchShipCountry>(
+            modelBuilder.Entity<ShipCountryDto>(
                 entity =>
                     {
                         entity.HasKey(e => e.Pk).HasName("PK_merchShipCountry");
@@ -34,7 +34,7 @@
                             .HasColumnType("datetime")
                             .HasDefaultValueSql("getdate()");
 
-                        entity.HasOne(d => d.CatalogKeyNavigation)
+                        entity.HasOne(d => d.CatalogDtoKeyNavigation)
                             .WithMany(p => p.MerchShipCountry)
                             .HasForeignKey(d => d.CatalogKey)
                             .OnDelete(DeleteBehavior.Restrict)

@@ -9,7 +9,7 @@
     {
         public void Configure(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MerchProductVariant>(entity =>
+            modelBuilder.Entity<ProductVariantDto>(entity =>
                 {
                     entity.HasKey(e => e.Pk)
                         .HasName("PK_merchProductVariant");
@@ -133,7 +133,7 @@
                         .HasColumnName("width")
                         .HasColumnType("numeric");
 
-                    entity.HasOne(d => d.ProductKeyNavigation)
+                    entity.HasOne(d => d.ProductDtoKeyNavigation)
                         .WithMany(p => p.MerchProductVariant)
                         .HasForeignKey(d => d.ProductKey)
                         .OnDelete(DeleteBehavior.Restrict)

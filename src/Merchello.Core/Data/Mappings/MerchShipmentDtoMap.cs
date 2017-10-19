@@ -9,7 +9,7 @@
     {
         public void Configure(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MerchShipment>(
+            modelBuilder.Entity<ShipmentDto>(
                 entity =>
                     {
                         entity.HasKey(e => e.Pk).HasName("PK_merchShipment");
@@ -90,12 +90,12 @@
 
                         entity.Property(e => e.VersionKey).HasColumnName("versionKey").HasDefaultValueSql("'newid()'");
 
-                        entity.HasOne(d => d.ShipMethodKeyNavigation)
+                        entity.HasOne(d => d.ShipMethodDtoKeyNavigation)
                             .WithMany(p => p.MerchShipment)
                             .HasForeignKey(d => d.ShipMethodKey)
                             .HasConstraintName("FK_merchShipment_merchShipMethod");
 
-                        entity.HasOne(d => d.ShipmentStatusKeyNavigation)
+                        entity.HasOne(d => d.ShipmentStatusDtoKeyNavigation)
                             .WithMany(p => p.MerchShipment)
                             .HasForeignKey(d => d.ShipmentStatusKey)
                             .OnDelete(DeleteBehavior.Restrict)

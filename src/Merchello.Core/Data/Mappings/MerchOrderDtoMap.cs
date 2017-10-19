@@ -9,7 +9,7 @@
     {
         public void Configure(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MerchOrder>(entity =>
+            modelBuilder.Entity<OrderDto>(entity =>
                 {
                     entity.HasKey(e => e.Pk)
                         .HasName("PK_merchOrder");
@@ -62,7 +62,7 @@
                         .HasForeignKey(d => d.InvoiceKey)
                         .HasConstraintName("FK_merchOrder_merchInvoice");
 
-                    entity.HasOne(d => d.OrderStatusKeyNavigation)
+                    entity.HasOne(d => d.OrderStatusDtoKeyNavigation)
                         .WithMany(p => p.MerchOrder)
                         .HasForeignKey(d => d.OrderStatusKey)
                         .OnDelete(DeleteBehavior.Restrict)

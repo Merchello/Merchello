@@ -9,7 +9,7 @@
     {
         public void Configure(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MerchItemCacheItem>(entity =>
+            modelBuilder.Entity<ItemCacheItemDto>(entity =>
                 {
                     entity.HasKey(e => e.Pk)
                         .HasName("PK_merchItemCacheItem");
@@ -56,7 +56,7 @@
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("getdate()");
 
-                    entity.HasOne(d => d.ItemCacheKeyNavigation)
+                    entity.HasOne(d => d.ItemCacheDtoKeyNavigation)
                         .WithMany(p => p.MerchItemCacheItem)
                         .HasForeignKey(d => d.ItemCacheKey)
                         .OnDelete(DeleteBehavior.Restrict)
