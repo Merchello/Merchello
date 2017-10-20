@@ -1695,7 +1695,8 @@
             var discounts = invoice.Items.Where(x => x.LineItemType == LineItemType.Discount).Sum(x => x.TotalPrice);
 
             // Calculate a new total
-            invoice.Total = Math.Round(decimal.TryParse((charges - discounts).ToString(CultureInfo.InvariantCulture), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture.NumberFormat, out var converted) ? converted : 0, 2);
+            decimal converted;            
+            invoice.Total = Math.Round(decimal.TryParse((charges - discounts).ToString(CultureInfo.InvariantCulture), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture.NumberFormat, out converted) ? converted : 0, 2);
 
             // Save the invoice
             Save(invoice);
