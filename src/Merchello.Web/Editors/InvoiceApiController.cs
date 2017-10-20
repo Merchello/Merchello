@@ -319,7 +319,7 @@
                 merchInvoice = invoice.ToInvoice(merchInvoice);
 
                 _invoiceService.Save(merchInvoice);
-            
+
             }
             catch (Exception ex)
             {
@@ -371,65 +371,6 @@
             return response;
         }
 
-        ///// <summary>
-        ///// Removes a product from an Invoice
-        ///// </summary>
-        ///// <param name="invoiceAddItems"></param>
-        ///// <returns></returns>
-        //[HttpPost]
-        //public HttpResponseMessage PutInvoiceRemoveProducts(InvoiceAddItems invoiceAddItems)
-        //{
-        //        	if (invoiceDisplay.SyncLineItems)
-        //		    {
-        //		        // See if any have been removed
-        //                // Grab the current line items in a dictionary key'd by the SKU
-        //		        var currentLineItems = destination.Items.ToDictionary(x => x.Sku, x => x);
-
-        //              // Grab the proposed lines items
-        //              var proposedLineItems = invoiceDisplay.Items.ToDictionary(x => x.Sku, x => x);
-
-        //                // Loop the current line items and find the removed ones
-        //		        foreach (var lineItem in currentLineItems)
-        //		        {
-        //		            if (!proposedLineItems.ContainsKey(lineItem.Value.Sku))
-        //		            {
-        //                        // This has been removed, so remove it from the destination items
-        //		                  destination.Items.RemoveItem(lineItem.Value.Sku);
-        //		            }
-        //              }
-
-        //                // Update quantities
-        //		        foreach (var destinationItem in destination.Items)
-        //		        {
-        //		            if (proposedLineItems.ContainsKey(destinationItem.Sku))
-        //		            {
-        //		                var matching = proposedLineItems[destinationItem.Sku];
-        //                      destinationItem.Quantity = matching.Quantity;
-        //		            }
-        //		        }
-
-        //                // Update the currentlineitems dictionary now some have been removed
-        //		          currentLineItems = destination.Items.ToDictionary(x => x.Sku, x => x);
-
-        //                // Loops the proposed ones and find new ones to add and also update any quantities
-        //                var lineItemsToAdd = new List<ILineItem>();
-        //                foreach (var lineItemDisplay in proposedLineItems)
-        //		        {
-        //		            if (!currentLineItems.ContainsKey(lineItemDisplay.Value.Sku))
-        //		            {
-        //		                var lineItem = lineItemDisplay.Value;
-        //                      lineItemsToAdd.Add(new InvoiceLineItem(lineItem.LineItemType, lineItem.Name, lineItem.Sku, lineItem.Quantity, lineItem.Price));
-        //                    }
-        //		        }
-
-        //                // Add new line items if there are any
-        //		        if (lineItemsToAdd.Any())
-        //		        {
-        //		            destination.Items.Add(lineItemsToAdd);
-        //		        }
-        //		    }
-        //}
-
         /// <summary>
         /// Puts new products on an invoice
         /// </summary>
@@ -449,7 +390,7 @@
                     // Get the invoice
                     var merchInvoice = _invoiceService.GetByKey(invoiceAddItems.InvoiceKey);
 
-                    // Check to see if we just have a SKU
+                    // Check to see if we just have just a SKU and update
                     foreach (var invoiceAddItem in invoiceAddItems.Items)
                     {
                         if (!string.IsNullOrEmpty(invoiceAddItem.Sku))
@@ -464,16 +405,24 @@
                         }
                     }
 
-                    if (merchInvoice != null)
+                    // Check to see if this is a delete
+                    if (invoiceAddItems.Items.Any(x => x.Quantity <= 0))
                     {
-                        // Add the products
-                        AddNewProductsToInvoice(merchInvoice, invoiceAddItems);
+                        // Delete all the ones with 0 qty
+                        response = DeleteProductsFromInvoice(merchInvoice, invoiceAddItems.Items, response);
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.NotFound, "Invoice not found");
+                        if (merchInvoice != null)
+                        {
+                            // Add the products
+                            AddNewProductsToInvoice(merchInvoice, invoiceAddItems.Items);
+                        }
+                        else
+                        {
+                            response = Request.CreateResponse(HttpStatusCode.NotFound, "Invoice not found");
+                        }
                     }
-
                 }
             }
             catch (Exception ex)
@@ -486,36 +435,140 @@
         }
 
         /// <summary>
-        /// Create a InvoiceAddItem model
+        /// Delete products from an existing invoice
         /// </summary>
         /// <param name="merchInvoice"></param>
-        /// <param name="product"></param>
-        /// <param name="qty"></param>
-        internal InvoiceAddItem ToInvoiceAddItem(IInvoice merchInvoice, IProduct product, int qty)
+        /// <param name="invoiceAddItems"></param>
+        /// <param name="response"></param>
+        internal HttpResponseMessage DeleteProductsFromInvoice(IInvoice merchInvoice, IEnumerable<InvoiceAddItem> invoiceAddItems, HttpResponseMessage response)
         {
-            return new InvoiceAddItem { Key = product.Key, IsProductVariant = false, Quantity = qty };
-        }
+            // Get the current items in a dictionary so we can quickly check the SKU
+            var currentLineItemsDict = merchInvoice.Items.ToDictionary(x => x.Sku, x => x);
 
-        /// <summary>
-        /// Create a InvoiceAddItem model
-        /// </summary>
-        /// <param name="merchInvoice"></param>
-        /// <param name="productVariant"></param>
-        /// <param name="qty"></param>
-        internal InvoiceAddItem ToInvoiceAddItem(IInvoice merchInvoice, IProductVariant productVariant, int qty)
-        {
-            return new InvoiceAddItem { Key = productVariant.Key, IsProductVariant = true, Quantity = qty };
+            // Get the items to be deleted in a dictionary by SKU too
+            var toBeDeleted = invoiceAddItems.Where(x => x.Quantity <= 0).ToDictionary(x => x.Sku, x => x);
+
+            // Invoice orders
+            var invoiceOrders = _orderService.GetOrdersByInvoiceKey(merchInvoice.Key).ToArray();
+
+            // Can we delete
+            var canDelete = true;
+
+            // Check if we have an order
+            if (invoiceOrders.Any())
+            {
+                // Order needs saving
+                var saveOrder = false;
+
+                foreach (var invoiceAddItem in toBeDeleted)
+                {
+                    // We have orders, so we need to see if we can delete this product or it's too late
+                    // Loop through the orders and see if this sku exists
+                    // TODO - Bit shit, but we have to fish deep into this
+                    foreach (var order in invoiceOrders)
+                    {
+                        var orderItems = order.Items;
+
+                        // Loop items on the order
+                        foreach (var orderItem in orderItems)
+                        {
+                            // See if one matches the product to be delete
+                            if (orderItem.Sku == invoiceAddItem.Value.Sku)
+                            {
+                                // This order item has the product in
+
+                                // Can we remove the order line item
+                                var shipmentContainsSku = false;
+
+                                // We have a match, see if this order has shipments   
+                                var shipments = order.Shipments().ToArray();
+                                if (shipments.Any())
+                                {
+                                    foreach (var shipment in shipments)
+                                    {
+                                        shipmentContainsSku = shipment.Items.Any(x => x.Sku == orderItem.Sku);
+                                        if (shipmentContainsSku)
+                                        {
+                                            // Found so break
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                // Did we find a shipment with the Sku
+                                if (shipmentContainsSku)
+                                {
+                                    // Cannot delete as found a shipment with the same sku
+                                    canDelete = false;
+                                }
+                                else
+                                {
+                                    // Remove this orderline item
+                                    order.Items.RemoveItem(orderItem.Sku);
+
+                                    // Save the order
+                                    saveOrder = true;
+
+                                    // Get out of the loop and save
+                                    break;
+                                }
+                            }
+
+                            // Found a product so break
+                            if (!canDelete)
+                            {
+                                break;
+                            }
+                        }
+
+                        // Finally Save the order?
+                        if (saveOrder)
+                        {
+                            _orderService.Save(order);
+                            saveOrder = false;
+                        }
+                    }
+
+                    // Found a product so break
+                    if (!canDelete)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            // If we can delete then do it.
+            if (canDelete)
+            {
+                // No existing orders, remove from the invoice
+                foreach (var merchInvoiceItem in currentLineItemsDict)
+                {
+                    if (toBeDeleted.ContainsKey(merchInvoiceItem.Value.Sku))
+                    {
+                        merchInvoice.Items.RemoveItem(merchInvoiceItem.Value.Sku);
+                    }
+                }
+
+                // Now update invoice and save
+                ((InvoiceService) _invoiceService).ReSyncInvoiceTotal(merchInvoice);
+            }
+            else
+            {
+                const string message = "Unable to delete product because there is already an order that has a shipment with one of the products to be deleted. Either delete the shipment or use adjustments to reduce invoice.";
+                MultiLogHelper.Warn<InvoiceApiController>(message);
+                return Request.CreateResponse(HttpStatusCode.Forbidden, message);
+            }
+
+            return response;
         }
 
         /// <summary>
         /// Internal method to add products and orders to existing invoice
-        /// // TODO - This is a bit chunky but it's because it's an after hack really
-        /// // TODO - Also, it's a bit screwy as it seems back office is only ever setup for an invoice
-        /// // TODO - to have a single order, BUT system is capable of multiple orders :/
+        /// // TODO - This is a bit chunky but it's because it's an after hack IMO
         /// </summary>
         /// <param name="merchInvoice"></param>
         /// <param name="invoiceAddItems"></param>
-        internal void AddNewProductsToInvoice(IInvoice merchInvoice, InvoiceAddItems invoiceAddItems)
+        internal void AddNewProductsToInvoice(IInvoice merchInvoice, IEnumerable<InvoiceAddItem> invoiceAddItems)
         {
             // Get the current items in a dictionary so we can quickly check the SKU
             var currentLineItemsDict = merchInvoice.Items.ToDictionary(x => x.Sku, x => x);
@@ -527,7 +580,7 @@
             var orderLineItemsToAdd = new List<OrderLineItem>();
 
             // Loop and add the new products as InvoiceLineItemDisplay to the InvoiceDisplay
-            foreach (var invoiceAddItem in invoiceAddItems.Items)
+            foreach (var invoiceAddItem in invoiceAddItems)
             {
                 // containers for the product or variant
                 IProductVariant productVariant = null;

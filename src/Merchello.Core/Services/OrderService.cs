@@ -212,6 +212,7 @@ namespace Merchello.Core.Services
             return CreateOrder(orderStatusKey, invoiceKey, 0, raiseEvents);
         }
 
+        
 
         /// <summary>
         /// Returns an order if there is one that can be edited on an order
