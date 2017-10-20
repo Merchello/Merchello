@@ -1149,10 +1149,10 @@ angular.module('merchello.models').constant('AddEditEntityStaticCollectionDialog
         }
 
         //// helper method to set required associated invoice info
-        function setInvoiceData(payments, invoice, currencySymbol) {
+        function setInvoiceData(payments, invoice, currencySymbol, invoiceHelper) {
             if (invoice !== undefined) {
                 this.invoiceKey = invoice.key;
-                this.invoiceBalance = invoice.remainingBalance(payments);
+                this.invoiceBalance = invoiceHelper.round(invoice.remainingBalance(payments), 2);
             }
             if (currencySymbol !== undefined) {
                 this.currencySymbol = currencySymbol;
@@ -3286,7 +3286,11 @@ angular.module('merchello.models').constant('SalesOverTimeResult', SalesOverTime
         }
 
         function getAdjustmentLineItems() {
-            return ensureArray(_.filter(this.items, function(item) {
+            return ensureArray(_.filter(this.items, function (item) {
+                var adjustmentExtendedData = item.extendedData.getValue('merchAdjustment');
+                if (adjustmentExtendedData !== "") {
+                    return true;
+                }
                return item.lineItemTypeField.alias === 'Adjustment';
             }));
         }

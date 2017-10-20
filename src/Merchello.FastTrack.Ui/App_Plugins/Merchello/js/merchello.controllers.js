@@ -10209,6 +10209,18 @@ angular.module('merchello')
 
     }]);
 
+angular.module('merchello').controller('Merchello.Sales.Dialogs.EditLineItem',
+    ['$scope',
+        function ($scope) {
+
+            function init() {
+
+                $scope.loaded = true;
+            }
+
+            init();
+        }]);
+
 'use strict';
 /**
  * @ngdoc controller
@@ -10263,9 +10275,19 @@ angular.module('merchello').controller('Merchello.Sales.Dialogs.ManageAdjustment
         $scope.invoiceNumber = '';
         $scope.adjustments = [];
         $scope.amount = 0.0;
+        $scope.sku = 'adj';
+        $scope.lineItemType = '';
+        $scope.lineItemTypes = [];
+        $scope.amount = 0.0;
         $scope.name = '';
 
         function init() {
+            // Setup the Adjustment types
+            $scope.lineItemTypes = ["Adjustment", "Shipping", "Tax"];
+
+            // Set the default type
+            $scope.lineItemType = $scope.lineItemTypes[0];
+
             $scope.invoiceNumber = $scope.dialogData.invoice.prefixedInvoiceNumber();
             var adjustments = $scope.dialogData.invoice.getAdjustmentLineItems();
             if (adjustments !== undefined && adjustments !== null) {
@@ -10291,15 +10313,19 @@ angular.module('merchello').controller('Merchello.Sales.Dialogs.ManageAdjustment
                 lineItem.quantity = 1;
                 lineItem.name = $scope.name;
                 lineItem.containerKey = $scope.dialogData.invoice.key;
-                lineItem.lineItemType = 'Adjustment';
+                lineItem.lineItemType = $scope.lineItemType;
                 var amount = Math.abs($scope.amount);
                 lineItem.price = $scope.operator === '+' ? amount : -1 * amount;
-                lineItem.sku = 'adj';
+                lineItem.sku = $scope.sku;
                 lineItem.isNew = true;
+                $scope.adjustments.push(lineItem);
+
+                // Reset
                 $scope.name = '';
                 $scope.amount = 0;
                 $scope.operator = '-';
-                $scope.adjustments.push(lineItem);
+                $scope.sku = 'adj';
+                $scope.lineItemType = $scope.lineItemTypes[0];
             }
         }
 
@@ -10307,7 +10333,7 @@ angular.module('merchello').controller('Merchello.Sales.Dialogs.ManageAdjustment
             
             var items = [];
             _.each($scope.adjustments, function(adj) {
-               items.push({ key: adj.key, name: adj.name, price: adj.price });
+                items.push({ key: adj.key, name: adj.name, price: adj.price, sku: adj.sku, lineItemType: adj.lineItemType });
             });
 
             var invoiceAdjustmentDisplay = {
@@ -10931,7 +10957,10 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             $scope.debugAllowDelete = false;
             $scope.newPaymentOpen = false;
             $scope.entityType = 'Invoice';
-            
+
+            $scope.canAddLineItems = true;
+
+            $scope.remainingBalance = 0;
 
             // exposed methods
             //  dialogs
@@ -10948,6 +10977,8 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             $scope.setNotPreValuesLoaded = setNotPreValuesLoaded;
             $scope.saveNotes = saveNotes;
             $scope.deleteNote = deleteNote;
+
+            $scope.openProductSelection = openProductSelectionDialog;
 
             // localize the sales history message
             $scope.localizeMessage = localizeMessage;
@@ -10978,6 +11009,40 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
 
             function localizeMessage(msg) {
                 return msg.localize(localizationService);
+            }
+
+
+            function openProductSelectionDialog() {
+                var dialogData = {};
+                dialogData.addItems = [];
+
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/customer.productselectionfilter.html',
+                    show: true,
+                    callback: processProductSelection,
+                    dialogData: dialogData
+                });
+            }
+
+            function processProductSelection(dialogData) {
+
+                // Post the model back to the controller
+                var invoiceAddItems = {
+                    InvoiceKey: $scope.invoice.key,
+                    Items: dialogData.addItems
+                }
+
+                // Put the new items
+                var invoiceSavePromise = invoiceResource.putInvoiceNewProducts(invoiceAddItems);
+                invoiceSavePromise.then(function () {
+                    $timeout(function () {
+                        refresh();
+                        notificationsService.success('Invoice Updated.');
+                    }, 1500);
+                }, function (reason) {
+                    notificationsService.error("Failed to update invoice", reason.message);
+                });
+
             }
 
             /**
@@ -11050,7 +11115,6 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
 
                    $scope.tabs.appendCustomerTab($scope.invoice.customerKey);
 
-
                 }, function (reason) {
                     notificationsService.error("Invoice Load Failed", reason.message);
                 });
@@ -11095,9 +11159,14 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 var paymentsPromise = paymentResource.getPaymentsByInvoice(key);
                 paymentsPromise.then(function(payments) {
                     $scope.allPayments = paymentDisplayBuilder.transform(payments);
-                    $scope.payments = _.filter($scope.allPayments, function(p) { return !p.voided && !p.collected && p.authorized; });
+                    $scope.payments = _.filter($scope.allPayments, function (p) { return !p.voided && !p.collected && p.authorized; });
+
                     loadPaymentMethods();
                     $scope.preValuesLoaded = true;
+
+                    // Set the remaining balance after the payments have loaded
+                    $scope.remainingBalance = invoiceHelper.round($scope.invoice.remainingBalance($scope.allPayments), 2);
+
                 }, function(reason) {
                     notificationsService.error('Failed to load payments for invoice', reason.message);
                 });
@@ -11170,7 +11239,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             function capturePayment() {
                 var dialogData = dialogDataFactory.createCapturePaymentDialogData();
                 dialogData.setPaymentData($scope.payments[0]);
-                dialogData.setInvoiceData($scope.payments, $scope.invoice, $scope.currencySymbol);
+                dialogData.setInvoiceData($scope.allPayments, $scope.invoice, $scope.currencySymbol, invoiceHelper);
                 if (!dialogData.isValid()) {
                     return false;
                 }
@@ -11208,10 +11277,10 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 var promiseSave = paymentResource.capturePayment(paymentRequest);
                 promiseSave.then(function (payment) {
                     // added a timeout here to give the examine index
-                    $timeout(function() {
-                        notificationsService.success("Payment Captured");
+                    $timeout(function () {
                         loadInvoice(paymentRequest.invoiceKey);
-                    }, 800);
+                        notificationsService.success("Payment Captured");
+                    }, 1500);
                 }, function (reason) {
                     notificationsService.error("Payment Capture Failed", reason.message);
                 });
@@ -11246,8 +11315,25 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 var promiseStatuses = shipmentResource.getAllShipmentStatuses();
                 promiseStatuses.then(function(statuses) {
                     var data = dialogDataFactory.createCreateShipmentDialogData();
-                    data.order = $scope.invoice.orders[0];
-                    data.order.items = data.order.getUnShippedItems();
+
+                    // Loop orders until I find one without getUnShippedItems()!!
+
+                    var keepFindingOrder = true;
+                    angular.forEach($scope.invoice.orders, function (order) {
+                        if (keepFindingOrder) {
+                            // Get unshipped items from this order
+                            var unshippedItems = order.getUnShippedItems();
+
+                            // If there are any, return them
+                            if (unshippedItems.length > 0) {
+                                data.order = order;
+                                data.order.items = unshippedItems;
+                                keepFindingOrder = false;
+                            }
+                        }
+                    });
+
+                    data.totalOrders = $scope.invoice.orders;
                     data.shipmentStatuses = statuses;
                     data.currencySymbol = $scope.currencySymbol;
 
@@ -11313,10 +11399,10 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     var promiseNewShipment = shipmentResource.newShipment(data.shipmentRequest);
                     promiseNewShipment.then(function (shipment) {
                         $timeout(function() {
-                            notificationsService.success('Shipment #' + shipment.shipmentNumber + ' created');
                             //console.info(shipment);
                             loadInvoice(data.invoiceKey);
-                        }, 800);
+                            notificationsService.success('Shipment #' + shipment.shipmentNumber + ' created');
+                        }, 1500);
 
                     }, function (reason) {
                         notificationsService.error("New Shipment Failed", reason.message);
@@ -11337,6 +11423,8 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             function hasUnPackagedLineItems() {
                 var fulfilled = $scope.invoice.getFulfillmentStatus() === 'Fulfilled';
                 if (fulfilled) {
+                    // If this invoice is fullfilled, then they can't add or edit it
+                    $scope.canAddLineItems = false;
                     return false;
                 }
                 var i = 0; // order count
@@ -11423,10 +11511,10 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     $scope.preValuesLoaded = false;
                     var billingPromise = invoiceResource.saveInvoice($scope.invoice);
                     billingPromise.then(function () {
-                        notificationsService.success('Billing address successfully updated.');
                         $timeout(function () {
                             loadInvoice($scope.invoice.key);
-                        }, 400);
+                            notificationsService.success('Billing address successfully updated.');
+                        }, 1500);
                     }, function (reason) {
                         notificationsService.error("Failed to update billing address", reason.message);
                     });
@@ -11438,10 +11526,10 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     };
                     var shippingPromise = invoiceResource.saveInvoiceShippingAddress(adrData);
                     shippingPromise.then(function () {
-                        notificationsService.success('Shipping address successfully updated.');
                         $timeout(function () {
                             loadInvoice($scope.invoice.key);
-                        }, 400);
+                            notificationsService.success('Shipping address successfully updated.');
+                        }, 1500);
                     }, function (reason) {
                         notificationsService.error("Failed to update shippingaddress", reason.message);
                     });
@@ -11469,7 +11557,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             function refresh() {
                 $timeout(function () {
                     loadInvoice($scope.invoice.key);
-                }, 400);
+                }, 1500);
             }
 
             // initialize the controller

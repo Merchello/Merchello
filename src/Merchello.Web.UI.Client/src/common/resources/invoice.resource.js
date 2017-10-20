@@ -128,6 +128,20 @@
                             'Failed to save invoice');
                     },
 
+                    /**
+                     * @ngdoc method
+                     * @name saveInvoice
+                     * @description
+                     **/
+                    putInvoiceNewProducts: function (invoiceAddItems) {
+                        var url = baseUrl + 'PutInvoiceNewProducts';
+                        return umbRequestHelper.resourcePromise(
+                            $http.post(url,
+                                invoiceAddItems
+                            ),
+                            'Failed to save invoice');
+                    },
+
                     saveInvoiceAdjustments: function(adjustments) {
                         var url = baseUrl + 'PutInvoiceAdjustments';
                         return umbRequestHelper.resourcePromise(

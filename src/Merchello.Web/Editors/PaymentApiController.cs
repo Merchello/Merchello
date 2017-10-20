@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
@@ -186,10 +187,17 @@
         [HttpPost]
         public PaymentResultDisplay AuthorizePayment(PaymentRequestDisplay request)
         {
+            // Add the amount to the args, this is for the Authorize from the backoffice new payments
+            // for some reason Authorize does not take in the amount and only uses the full invoice amount
+            // which is incorrect when adding adjustments via the back office.
+            var requestArgs = request.ProcessorArgs.ToList();
+            requestArgs.Add(new KeyValuePair<string, string>("authorizePaymentAmount", request.Amount.ToString(CultureInfo.InvariantCulture)));
+            request.ProcessorArgs = requestArgs;
+
             var processor = new PaymentProcessor(MerchelloContext, request);
             var authorize = processor.Authorize();
 
-            var result = new PaymentResultDisplay()
+            var result = new PaymentResultDisplay
             {
                 Success = authorize.Payment.Success,
                 Invoice = authorize.Invoice.ToInvoiceDisplay(),
@@ -203,7 +211,14 @@
             }
             else
             {
-                authorize.Payment.Result.AuditPaymentAuthorize(authorize.Invoice);    
+                if (request.Amount > 0)
+                {
+                    authorize.Payment.Result.AuditPaymentAuthorize(authorize.Invoice, request.Amount);
+                }
+                else
+                {
+                    authorize.Payment.Result.AuditPaymentAuthorize(authorize.Invoice);
+                }                
             }
                        
             return result;
@@ -241,6 +256,7 @@
             }
             else
             {
+
                 capture.Payment.Result.AuditPaymentCaptured(request.Amount);
             }
            
@@ -280,7 +296,7 @@
             }
             else
             {
-                authorizeCapture.Payment.Result.AuditPaymentAuthorize(authorizeCapture.Invoice);
+                authorizeCapture.Payment.Result.AuditPaymentAuthorize(authorizeCapture.Invoice, request.Amount);
                 authorizeCapture.Payment.Result.AuditPaymentCaptured(request.Amount);
             }
             

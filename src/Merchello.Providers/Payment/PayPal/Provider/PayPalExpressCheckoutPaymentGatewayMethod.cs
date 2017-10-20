@@ -75,7 +75,13 @@
         /// </remarks>
         protected override IPaymentResult PerformAuthorizePayment(IInvoice invoice, ProcessorArgumentCollection args)
         {
-            var payment = GatewayProviderService.CreatePayment(PaymentMethodType.Redirect, invoice.Total, PaymentMethod.Key);
+            var authorizeAmount = invoice.Total;
+            if (args.ContainsKey("authorizePaymentAmount"))
+            {
+                authorizeAmount = Convert.ToDecimal(args["authorizePaymentAmount"]);
+            }
+
+            var payment = GatewayProviderService.CreatePayment(PaymentMethodType.Redirect, authorizeAmount, PaymentMethod.Key);
             payment.CustomerKey = invoice.CustomerKey;
             payment.PaymentMethodName = PaymentMethod.Name;
             payment.ReferenceNumber = PaymentMethod.PaymentCode + "-" + invoice.PrefixedInvoiceNumber();

@@ -39,6 +39,9 @@
                     <label>Shipment Status</label>
                     <select name="status" class="form-control umb-editor" data-ng-model="dialogData.shipmentStatus" data-ng-options="option.name for option in dialogData.shipmentStatuses"></select>
                 </div>
+                <div ng-show="dialogData.totalOrders.length > 1" class="alert alert-info">
+                   <strong>Multiple Orders</strong>: Next order will show once the previous orders have been fulfilled.
+                </div>
                 <div class="merchello-list-view umb-listview clearfix">
                     <div class="umb-table">
                         <div class="umb-table-head">

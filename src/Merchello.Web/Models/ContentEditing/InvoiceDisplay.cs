@@ -212,5 +212,7 @@
                 ? invoice.InvoiceNumber.ToString(CultureInfo.InvariantCulture)
                 : string.Format("{0}-{1}", invoice.InvoiceNumberPrefix, invoice.InvoiceNumber);
         }
+
+
     }
 }

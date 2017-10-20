@@ -13,13 +13,16 @@
                     <p><img src="/umbraco/assets/img/loader.gif" /></p>
                 </div>
                 <div class="braintree" data-ng-show="loaded">
-
-                    <label class="hosted-fields--label" for="amount">Amount</label>
-                    <div class="input-prepend">
-                        <span class="add-on">{{dialogData.currencySymbol}}</span>
-                        <input class="col-xs-4 span4" type="text" id="amount" name="amount" data-ng-model="dialogData.amount">
+                    <div class="control-group">
+                        <div class="form-group">
+                            <label class="hosted-fields--label" for="amount">Amount</label>
+                            <div class="input-prepend">
+                                <span class="add-on">{{dialogData.currencySymbol}}</span>
+                                <input class="col-xs-4 span4" type="text" id="amount" name="amount" data-ng-model="dialogData.amount">
+                            </div>
+                            <div class="error" data-ng-show="cardForm.amount.$invalid && wasFormSubmitted">Amount between {{0 | currency: dialogData.currencySymbol }} & {{ dialogData.invoiceBalance | currency: dialogData.currencySymbol }}.</div>
+                        </div>                        
                     </div>
-                    <div class="error" data-ng-show="cardForm.amount.$invalid && wasFormSubmitted">Amount between {{0 | currency: dialogData.currencySymbol }} & {{ dialogData.invoiceBalance | currency: dialogData.currencySymbol }}.</div>
 
                     <label class="hosted-fields--label" for="card-number">Card Number</label>
                     <div id="card-number" class="hosted-field"></div>

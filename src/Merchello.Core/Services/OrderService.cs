@@ -212,6 +212,97 @@ namespace Merchello.Core.Services
             return CreateOrder(orderStatusKey, invoiceKey, 0, raiseEvents);
         }
 
+        
+
+        /// <summary>
+        /// Returns an order if there is one that can be edited on an order
+        /// </summary>
+        /// <returns>The <see cref="IOrder"/></returns>
+        internal IOrder EditableOrderOnInvoice(IInvoice invoice)
+        {
+            // All orders
+            var allOrders = GetOrdersByInvoiceKey(invoice.Key).ToArray();
+
+            // Set the default status for existing orders
+            if (allOrders.Any())
+            {
+                // First go through open orders as we would want to add to those first
+                var openOrders = allOrders.Where(x => x.OrderStatusKey == Core.Constants.OrderStatus.Open);
+                foreach (var openOrder in openOrders)
+                {
+                    if (!openOrder.Shipments().Any())
+                    {
+                        // Found an open order with no shipments
+                        // Add to that one
+                        return openOrder;
+                    }
+                }
+
+                // Next notfullfilled orders
+                var noFullfilledOrders = allOrders.Where(x => x.OrderStatusKey == Core.Constants.OrderStatus.NotFulfilled);
+                foreach (var nffOrder in noFullfilledOrders)
+                {
+                    if (!nffOrder.Shipments().Any())
+                    {
+                        // Found an open order with no shipments
+                        // Add to that one
+                        return nffOrder;
+                    }
+                }
+             
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Either adds new orderlineitems to an existing order on the invoice or creates a new one
+        /// </summary>
+        /// <param name="orderLineItemsToAdd"></param>
+        /// <param name="invoice"></param>
+        internal void AddOrderLineItemsToEditedInvoice(List<OrderLineItem> orderLineItemsToAdd, IInvoice invoice)
+        {
+            // Need to add the order
+            if (orderLineItemsToAdd.Any())
+            {
+                // The list of orders we will update
+                var ordersToUpdate = new List<IOrder>();
+
+                // Order Key - Use this for adding products to existing orders
+                var orderToAddTo = EditableOrderOnInvoice(invoice);
+
+                // If null we create a new order
+                if (orderToAddTo != null)
+                {
+                    // Add the orderlineitems
+                    foreach (var oli in orderLineItemsToAdd)
+                    {
+                        orderToAddTo.Items.Add(oli);
+                    }
+
+                    ordersToUpdate.Add(orderToAddTo);
+                }
+                else
+                {
+                    // We don't have an open order. So need to create a new one
+                    var order = CreateOrder(Core.Constants.OrderStatus.NotFulfilled, invoice.Key);
+                    order.OrderNumberPrefix = invoice.InvoiceNumberPrefix;
+
+                    // Add the orderlineitems
+                    foreach (var oli in orderLineItemsToAdd)
+                    {
+                        order.Items.Add(oli);
+                    }
+
+                    // Add the new order to the invoice
+                    ordersToUpdate.Add(order);
+                }
+
+                // Finally Save the orders
+                Save(ordersToUpdate);
+            }
+        }
+
         /// <summary>
         /// Creates a <see cref="IOrder"/> without saving it to the database
         /// </summary>

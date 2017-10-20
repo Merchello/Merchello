@@ -33,10 +33,10 @@
         }
 
         //// helper method to set required associated invoice info
-        function setInvoiceData(payments, invoice, currencySymbol) {
+        function setInvoiceData(payments, invoice, currencySymbol, invoiceHelper) {
             if (invoice !== undefined) {
                 this.invoiceKey = invoice.key;
-                this.invoiceBalance = invoice.remainingBalance(payments);
+                this.invoiceBalance = invoiceHelper.round(invoice.remainingBalance(payments), 2);
             }
             if (currencySymbol !== undefined) {
                 this.currencySymbol = currencySymbol;

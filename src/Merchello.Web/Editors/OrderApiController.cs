@@ -173,7 +173,8 @@
                 throw new KeyNotFoundException("Invoice with id passed not found");
             }
 
-            var shipmentLineItem = invoice.Items.FirstOrDefault(x => x.LineItemType == LineItemType.Shipping);
+            // Get the shipment, making sure it's not an adjustment
+            var shipmentLineItem = invoice.Items.FirstOrDefault(x => x.LineItemType == LineItemType.Shipping && x.ExtendedData != null && !x.ExtendedData.ContainsKey(Constants.ExtendedDataKeys.Adjustment));
 
             if (shipmentLineItem == null)
             {

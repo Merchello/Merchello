@@ -52,10 +52,16 @@
         /// </returns>
         protected override IPaymentResult PerformAuthorizePayment(IInvoice invoice, ProcessorArgumentCollection args)
         {
+            var authorizeAmount = invoice.Total;
+            if (args.ContainsKey("authorizePaymentAmount"))
+            {
+                authorizeAmount = Convert.ToDecimal(args["authorizePaymentAmount"]);
+            }
+
             // The Provider settings 
             if (this.BraintreeApiService.BraintreeProviderSettings.DefaultTransactionOption == TransactionOption.SubmitForSettlement)
             {
-                return this.PerformAuthorizeCapturePayment(invoice, invoice.Total, args);
+                return this.PerformAuthorizeCapturePayment(invoice, authorizeAmount, args);
             }
 
             var paymentMethodToken = args.GetPaymentMethodToken();
@@ -67,7 +73,7 @@
                 return new PaymentResult(Attempt<IPayment>.Fail(error), invoice, false);
             }
 
-            var attempt = this.ProcessPayment(invoice, TransactionOption.Authorize, invoice.Total, paymentMethodToken);
+            var attempt = this.ProcessPayment(invoice, TransactionOption.Authorize, authorizeAmount, paymentMethodToken);
 
             var payment = attempt.Payment.Result;
 
@@ -111,7 +117,7 @@
                 return new PaymentResult(Attempt<IPayment>.Fail(error), invoice, false);
             }
 
-            var attempt = this.ProcessPayment(invoice, TransactionOption.SubmitForSettlement, invoice.Total, paymentMethodToken);
+            var attempt = this.ProcessPayment(invoice, TransactionOption.SubmitForSettlement, amount, paymentMethodToken);
 
             var payment = attempt.Payment.Result;
 
@@ -175,7 +181,7 @@
             payment.PaymentMethodName = this.BackOfficePaymentMethodName;
             payment.ExtendedData.SetValue(Constants.Braintree.ProcessorArguments.PaymentMethodNonce, token);
 
-            var result = this.BraintreeApiService.Transaction.VaultSale(invoice, token, option);
+            var result = this.BraintreeApiService.Transaction.VaultSale(invoice, amount, token, option);
 
             if (result.IsSuccess())
             {
