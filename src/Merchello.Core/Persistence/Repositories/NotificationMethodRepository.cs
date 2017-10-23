@@ -197,6 +197,7 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<INotificationMethod>(entity.Key));
         }
     }
 }

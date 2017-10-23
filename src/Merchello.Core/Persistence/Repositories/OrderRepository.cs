@@ -211,7 +211,13 @@
 
             entity.ResetDirtyProperties();
 
+            foreach (var entityItem in entity.Items)
+            {
+                RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<ILineItem>(entityItem.Key));
+            }
+
             RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IInvoice>(entity.InvoiceKey));
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IOrder>(entity.Key));
         }
 
         /// <summary>
@@ -234,13 +240,20 @@
             entity.ResetDirtyProperties();
 
             RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IInvoice>(entity.InvoiceKey));
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IOrder>(entity.Key));
         }
 
         protected override void PersistDeletedItem(IOrder entity)
         {
             base.PersistDeletedItem(entity);
 
+            foreach (var entityItem in entity.Items)
+            {
+                RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<ILineItem>(entityItem.Key));
+            }
+
             RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IInvoice>(entity.InvoiceKey));
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IOrder>(entity.Key));
         }
 
         private LineItemCollection GetLineItemCollection(Guid orderKey)

@@ -241,6 +241,8 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
+
+            RuntimeCache.ClearCacheItem(Core.Cache.CacheKeys.GetEntityCacheKey<IShipCountry>(entity.Key));
         }       
     }
 }

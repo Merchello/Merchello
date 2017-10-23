@@ -222,6 +222,16 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
+
+            foreach (var order in entity.Orders())
+            {
+                RuntimeCache.ClearCacheItem(Core.Cache.CacheKeys.GetEntityCacheKey<IOrder>(order.Key));
+            }
+            foreach (var invoice in entity.Invoices())
+            {
+                RuntimeCache.ClearCacheItem(Core.Cache.CacheKeys.GetEntityCacheKey<IInvoice>(invoice.Key));
+            }
+            RuntimeCache.ClearCacheItem(Core.Cache.CacheKeys.GetEntityCacheKey<IShipment>(entity.Key));
         }
 
         /// <summary>
@@ -237,6 +247,15 @@
             {
                 Database.Execute(delete, new { Key = entity.Key });
             }
+            foreach (var order in entity.Orders())
+            {
+                RuntimeCache.ClearCacheItem(Core.Cache.CacheKeys.GetEntityCacheKey<IOrder>(order.Key));
+            }
+            foreach (var invoice in entity.Invoices())
+            {
+                RuntimeCache.ClearCacheItem(Core.Cache.CacheKeys.GetEntityCacheKey<IInvoice>(invoice.Key));
+            }
+            RuntimeCache.ClearCacheItem(Core.Cache.CacheKeys.GetEntityCacheKey<IShipment>(entity.Key));
         }
 
         /// <summary>

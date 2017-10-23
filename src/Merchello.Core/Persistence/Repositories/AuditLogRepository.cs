@@ -224,6 +224,7 @@
             entity.Key = dto.Key;
 
             entity.ResetDirtyProperties();
+
         }
 
         /// <summary>
@@ -241,6 +242,8 @@
             Database.Update(dto);
             
             entity.ResetDirtyProperties();
+
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IAuditLog>(entity.Key));
         }
 
     }

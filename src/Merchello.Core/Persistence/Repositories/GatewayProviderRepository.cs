@@ -221,6 +221,8 @@
             Database.Update(dto);
             
             entity.ResetDirtyProperties();
+
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IGatewayProviderSettings>(entity.Key));
         }
     }
 }

@@ -179,6 +179,9 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
+
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.CustomerCacheKey(entity.Key));
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IAnonymousCustomer>(entity.Key));
         }
 
         /// <summary>
@@ -194,6 +197,9 @@
             {
                 Database.Execute(delete, new { Key = entity.Key });
             }
+
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.CustomerCacheKey(entity.Key));
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IAnonymousCustomer>(entity.Key));
         }
 
         /// <summary>

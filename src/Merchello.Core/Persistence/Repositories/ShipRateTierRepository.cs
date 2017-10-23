@@ -200,6 +200,8 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
+
+            RuntimeCache.ClearCacheItem(Core.Cache.CacheKeys.GetEntityCacheKey<IShipRateTier>(entity.Key));
         }
     }
 }

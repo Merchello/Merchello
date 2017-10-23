@@ -369,9 +369,9 @@ angular.module('merchello.models').constant('EntityUseCount', EntityUseCount);
         }
 
 
-        /// appends a customer tab to the current collection
+        // appends a customer tab to the current collection
         function appendCustomerTab(customerKey) {
-            if(customerKey !== '00000000-0000-0000-0000-000000000000') {
+            if (customerKey !== '00000000-0000-0000-0000-000000000000' && customerKey !== null && customerKey !== undefined) {
                 addTab.call(this, 'customer', 'merchelloTabs_customer', '#/merchello/merchello/customeroverview/' + customerKey);
             }
         }
