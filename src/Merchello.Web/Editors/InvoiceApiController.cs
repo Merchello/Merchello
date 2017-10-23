@@ -104,7 +104,35 @@
 
             // Get the invoice fresh to see if it solves back office problems
             // It's not returning orders so wondering if there is underlying cache issue here
-            return _invoiceService.GetByKey(id).ToInvoiceDisplay();
+            var invoice = _invoiceService.GetByKey(id);
+            if(invoice != null)
+            {
+                // Check to see if we have any
+                var orders = _orderService.GetOrdersByInvoiceKey(id).ToArray();
+
+                // This is a cache hack, as I can't seem to find a way to clear the cache after capturing payment
+                // and creating the order on the invoice.
+                var matchingOrders = orders.Length == invoice.Orders.Count;
+
+                if (!invoice.Orders.Any() || !matchingOrders)
+                {
+                    if (!matchingOrders)
+                    {
+                        // They should match
+                        invoice.Orders = new OrderCollection();
+                    }
+
+                    // Add the orders
+                    foreach (var order in orders)
+                    {
+                        invoice.Orders.Add(order);
+                    }
+                }
+
+                return invoice.ToInvoiceDisplay();
+            }
+            
+            return null;
         }
 
         /// <summary>

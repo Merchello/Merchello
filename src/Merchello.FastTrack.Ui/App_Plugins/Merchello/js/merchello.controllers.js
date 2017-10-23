@@ -10745,11 +10745,12 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             function updateShippingAddressLineItem(shipment) {
                 var promise = shipmentResource.updateShippingAddressLineItem(shipment);
                 promise.then(function() {
-                    loadInvoice($scope.invoice.key);
-                    notificationsService.success('Successfully updated sales shipping address.')
-                }, function(reason) {
-                    notificationsService.error('Failed to update shipping addresses on invoice', reason.message);
-                })
+                        loadInvoice($scope.invoice.key);
+                        notificationsService.success('Successfully updated sales shipping address.');
+                    },
+                    function(reason) {
+                        notificationsService.error('Failed to update shipping addresses on invoice', reason.message);
+                    });
             }
 
 
@@ -10895,8 +10896,9 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 var promise = shipmentResource.deleteShipment(dialogData.shipment);
                 promise.then(function() {
                     loadInvoice($scope.invoice.key);
+                    notificationsService.success('Shipment deleted');
                 }, function(reason) {
-                  notificationsService.error('Failed to delete the invoice.', reason.message)
+                    notificationsService.error('Failed to delete the invoice.', reason.message);
                 });
             }
 
@@ -10912,6 +10914,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 var promise = shipmentResource.saveShipment(shipment);
                 promise.then(function(shipment) {
                     loadInvoice($scope.invoice.key);
+                    notificationsService.success('Shipment saved');
                 });
             }
 

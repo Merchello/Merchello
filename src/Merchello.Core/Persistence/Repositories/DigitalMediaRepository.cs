@@ -192,6 +192,8 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
+
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IDigitalMedia>(entity.Key));
         }
     }
 }

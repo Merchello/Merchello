@@ -197,6 +197,8 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
+
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IPaymentMethod>(entity.Key));
         }
 
         /// <summary>
@@ -214,6 +216,7 @@
             foreach (var delete in deletes)
             {
                 Database.Execute(delete, new {entity.Key });
+                RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IPaymentMethod>(entity.Key));
             }
         }
     }

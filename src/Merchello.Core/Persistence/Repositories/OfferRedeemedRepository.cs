@@ -231,6 +231,10 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
+
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IOfferRedeemed>(entity.Key));
+
+
         }
 
         /// <summary>

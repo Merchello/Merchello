@@ -241,6 +241,11 @@
             Database.Update(dto);
             
             entity.ResetDirtyProperties();
+
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<INote>(entity.Key));
+
+            // Bit of a guess that this is related to an invoice here
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IInvoice>(entity.EntityKey));
         }
 
     }

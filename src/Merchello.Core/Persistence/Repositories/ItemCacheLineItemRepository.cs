@@ -210,6 +210,9 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
+
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IItemCacheLineItem>(entity.Key));
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<ILineItem>(entity.Key));
         }
     }
 }

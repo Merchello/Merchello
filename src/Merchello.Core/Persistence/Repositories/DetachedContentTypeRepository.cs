@@ -200,6 +200,8 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
+
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IDetachedContentType>(entity.Key));
         }
     }
 }
