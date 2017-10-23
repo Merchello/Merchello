@@ -5032,6 +5032,7 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                         invoiceSavePromise.then(function () {
                             $timeout(function () {
                                 scope.reload();
+                                loadInvoice();
                                 notificationsService.success('Invoice updated.');
                             }, 1500);
                         }, function (reason) {

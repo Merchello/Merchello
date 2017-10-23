@@ -92,6 +92,7 @@
                 {
                     var destinationCatalogInventory = catInv;
 
+                    // TODO - RSS - Why is this set and never used?
                     destinationCatalogInventory = catalogInventory.ToCatalogInventory(destinationCatalogInventory);
                 }
                 else

@@ -107,7 +107,10 @@
         [HttpGet]
         public OrderDisplay GetOrder(Guid id)
         {
-            return _merchello.Query.Order.GetByKey(id);
+            //return _merchello.Query.Order.GetByKey(id);
+
+            var entity = _orderService.GetByKey(id);
+            return AutoMapper.Mapper.Map<OrderDisplay>(entity);
         }
 
         /// <summary>

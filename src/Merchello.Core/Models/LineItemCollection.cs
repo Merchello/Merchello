@@ -127,7 +127,10 @@
         /// </param>
         public void Add(IEnumerable<ILineItem> items)
         {
-            items.ForEach(this.Add);
+            foreach (var lineItem in items)
+            {
+                this.Add(lineItem);
+            }
         }
 
         /// <summary>

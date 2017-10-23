@@ -7,7 +7,8 @@
     using System.Net;
     using System.Net.Http;
     using System.Web.Http;
-
+    using Core.Models.Rdbms;
+    using Core.Persistence.Factories;
     using Merchello.Core;
     using Merchello.Core.Logging;
     using Merchello.Core.Models;
@@ -78,7 +79,7 @@
             : base(merchelloContext)
         {
             _storeSettingService = MerchelloContext.Services.StoreSettingService as StoreSettingService;
-            _invoiceService = merchelloContext.Services.InvoiceService;
+            _invoiceService = merchelloContext.Services.InvoiceService;            
             _productService = merchelloContext.Services.ProductService;
             _noteService = merchelloContext.Services.NoteService;
             _orderService = merchelloContext.Services.OrderService;
@@ -99,12 +100,11 @@
         /// TODO rename to GetByKey
         public InvoiceDisplay GetInvoice(Guid id)
         {
-            return _merchello.Query.Invoice.GetByKey(id);
+            //return _merchello.Query.Invoice.GetByKey(id);
 
             // Get the invoice fresh to see if it solves back office problems
-            //var invoice = _invoiceService.GetByKey(id);
-            //var invoiceDisplay = AutoMapper.Mapper.Map<InvoiceDisplay>(invoice);
-            //return invoiceDisplay;
+            // It's not returning orders so wondering if there is underlying cache issue here
+            return _invoiceService.GetByKey(id).ToInvoiceDisplay();
         }
 
         /// <summary>

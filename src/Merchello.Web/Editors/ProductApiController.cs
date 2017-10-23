@@ -119,7 +119,8 @@
         [HttpGet]
         public ProductDisplay GetProduct(Guid id)
         {            
-            var product = _merchello.Query.Product.GetByKey(id);
+            //var product = _merchello.Query.Product.GetByKey(id);
+            var product = _productService.GetByKey(id).ToProductDisplay(DetachedValuesConversionType.Editor);
             return product;
         }
 
@@ -137,8 +138,8 @@
         [HttpGet]
         public ProductDisplay GetProductBySku(string sku)
         {
-            var product = _merchello.Query.Product.GetBySku(sku);
-            return product;
+            //var product = _merchello.Query.Product.GetBySku(sku);
+            return _productService.GetBySku(sku).ToProductDisplay(DetachedValuesConversionType.Editor);
         }
 
         /// <summary>
@@ -155,7 +156,8 @@
         [HttpGet]
         public ProductVariantDisplay GetProductVariant(Guid id)
         {
-            var variant = _merchello.Query.Product.GetProductVariantByKey(id);
+            //var variant = _merchello.Query.Product.GetProductVariantByKey(id);
+            var variant = _productVariantService.GetByKey(id).ToProductVariantDisplay(DetachedValuesConversionType.Editor);
             return variant;
         }
 
@@ -173,7 +175,7 @@
         [HttpGet]
         public ProductVariantDisplay GetProductVariantBySku(string sku)
         {
-            var variant = _merchello.Query.Product.GetProductVariantBySku(sku);
+            var variant = _productVariantService.GetBySku(sku);
 
             // See if we have a variant
             // TODO - should document this properly (edge case)            
@@ -191,11 +193,11 @@
                     sku = sku.Substring(0, sku.LastIndexOf("|"));
 
                     // try and get it with new sku
-                    variant = _merchello.Query.Product.GetProductVariantBySku(sku);
+                    variant = _productVariantService.GetBySku(sku);
                 }
             }
 
-            return variant;
+            return variant.ToProductVariantDisplay(DetachedValuesConversionType.Editor);
         }
 
         /// <summary>
@@ -212,7 +214,9 @@
         [HttpGet]
         public ProductDisplay GetProductFromService(Guid id)
         {
-            return _productService.GetByKey(id).ToProductDisplay(DetachedValuesConversionType.Editor);
+            var product = _productService.GetByKey(id)
+                    .ToProductDisplay(DetachedValuesConversionType.Editor);
+            return product;
         }
 
         /// <summary>
@@ -242,7 +246,8 @@
         [HttpPost]
         public IEnumerable<ProductDisplay> GetByKeys(IEnumerable<Guid> keys)
         {
-            return _productService.GetByKeys(keys).Select(x => x.ToProductDisplay(DetachedValuesConversionType.Editor));
+            var products = _productService.GetByKeys(keys).Select(x => x.ToProductDisplay(DetachedValuesConversionType.Editor));
+            return products;
         }
 
             /// <summary>
@@ -451,7 +456,8 @@
 
             _productService.Save(merchProduct);
 
-            return merchProduct.ToProductDisplay(DetachedValuesConversionType.Editor);
+            var displayProduct = merchProduct.ToProductDisplay(DetachedValuesConversionType.Editor);
+            return displayProduct;
         }
 
         /// <summary>

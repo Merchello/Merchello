@@ -152,7 +152,9 @@
         [HttpGet]
         public CustomerDisplay GetCustomer(Guid id)
         {
-            return _merchello.Query.Customer.GetByKey(id);        
+            //return _merchello.Query.Customer.GetByKey(id);        
+            var customer = _customerService.GetByKey(id);
+            return AutoMapper.Mapper.Map<CustomerDisplay>(customer);
         }
 
         /// <summary>

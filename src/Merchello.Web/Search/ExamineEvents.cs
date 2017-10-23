@@ -214,7 +214,10 @@
             
             var customers = MerchelloContext.Current.Services.CustomerService.GetByKeys(keys);
 
-            customers.ForEach(IndexCustomer);
+            foreach (var customer in customers)
+            {
+                IndexCustomer(customer);
+            }
         }
 
         #region Customers
@@ -230,7 +233,10 @@
         /// </param>
         public void CustomerServiceDeleted(ICustomerService sender, DeleteEventArgs<ICustomer> args)
         {
-            args.DeletedEntities.ForEach(DeleteCustomerFromIndex);
+            foreach (var argsDeletedEntity in args.DeletedEntities)
+            {
+                DeleteCustomerFromIndex(argsDeletedEntity);
+            }
         }
 
         /// <summary>
@@ -244,7 +250,10 @@
         /// </param>
         public void CustomerServiceSaved(ICustomerService sender, SaveEventArgs<ICustomer> args)
         {
-            args.SavedEntities.ForEach(IndexCustomer);
+            foreach (var argsSavedEntity in args.SavedEntities)
+            {
+                IndexCustomer(argsSavedEntity);
+            }
         }
 
         /// <summary>
@@ -298,7 +307,10 @@
         /// </param>
         public static void InvoiceServiceSaved(IInvoiceService sender, SaveEventArgs<IInvoice> e)
         {
-            e.SavedEntities.ForEach(IndexInvoice);
+            foreach (var eSavedEntity in e.SavedEntities)
+            {
+                IndexInvoice(eSavedEntity);
+            }
         }
 
         /// <summary>
@@ -312,7 +324,10 @@
         /// </param>
         public static void InvoiceServiceDeleted(IInvoiceService sender, DeleteEventArgs<IInvoice> e)
         {
-            e.DeletedEntities.ForEach(DeleteInvoiceFromIndex);
+            foreach (var eDeletedEntity in e.DeletedEntities)
+            {
+                DeleteInvoiceFromIndex(eDeletedEntity);
+            }
         }
 
         /// <summary>
@@ -351,7 +366,10 @@
         /// </param>
         private void ShipmentServiceOnUpdatedOrder(IShipmentService sender, SaveEventArgs<IOrder> e)
         {
-            e.SavedEntities.ForEach(IndexOrder);
+            foreach (var eSavedEntity in e.SavedEntities)
+            {
+                IndexOrder(eSavedEntity);
+            }
         }
 
         /// <summary>
@@ -365,7 +383,10 @@
         /// </param>
         public static void OrderServiceSaved(IOrderService sender, SaveEventArgs<IOrder> e)
         {
-            e.SavedEntities.ForEach(IndexOrder);
+            foreach (var eSavedEntity in e.SavedEntities)
+            {
+                IndexOrder(eSavedEntity);
+            }
         }
 
         /// <summary>
@@ -379,7 +400,10 @@
         /// </param>
         public static void OrderServiceDeleted(IOrderService sender, DeleteEventArgs<IOrder> e)
         {
-            e.DeletedEntities.ForEach(DeleteOrderFromIndex);
+            foreach (var eDeletedEntity in e.DeletedEntities)
+            {
+                DeleteOrderFromIndex(eDeletedEntity);
+            }
         }
 
         /// <summary>
@@ -423,7 +447,10 @@
         {
             var cache = new VirtualProductContentCache();
             cache.ClearVirtualCache(e);
-            e.SavedEntities.ForEach(IndexProduct);
+            foreach (var eSavedEntity in e.SavedEntities)
+            {
+                IndexProduct(eSavedEntity);
+            }
         }
 
         /// <summary>
@@ -433,7 +460,10 @@
         {
             var cache = new VirtualProductContentCache();
             cache.ClearVirtualCache(e);
-            e.DeletedEntities.ForEach(DeleteProductFromIndex);
+            foreach (var eDeletedEntity in e.DeletedEntities)
+            {
+                DeleteProductFromIndex(eDeletedEntity);
+            }
         }
 
         /// <summary>
@@ -449,7 +479,10 @@
         /// </summary>
         static void ProductVariantServiceSaved(IProductVariantService sender, SaveEventArgs<IProductVariant> e)
         {
-            e.SavedEntities.ForEach(IndexProductVariant);
+            foreach (var productVariant in e.SavedEntities)
+            {
+                IndexProductVariant(productVariant);
+            }            
         }
 
         /// <summary>
@@ -457,7 +490,10 @@
         /// </summary>
         static void ProductVariantServiceDeleted(IProductVariantService sender, DeleteEventArgs<IProductVariant> e)
         {
-            e.DeletedEntities.ForEach(DeleteProductVariantFromIndex);
+            foreach (var productVariant in e.DeletedEntities)
+            {
+                DeleteProductVariantFromIndex(productVariant);
+            }
         }
 
 
