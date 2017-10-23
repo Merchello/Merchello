@@ -7493,7 +7493,6 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                     canBeRenderedLabel = data[6];
 
                     loadProduct(loadArgs);
-
                 }, function(reason) {
                     notificationsService.error('Failed to load ' + reason);
                 });
@@ -7640,6 +7639,8 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                     $scope.preValuesLoaded = false;
 
                     loadProduct(loadArgs);
+
+                    notificationsService.success('Product Saved');
                 });
             }
 

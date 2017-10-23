@@ -1174,8 +1174,13 @@
                 // Loop through the group to get the attributes
                 foreach (var productVariant2ProductAttributeDto in dto)
                 {
-                    var attribute = (IProductAttribute)RuntimeCache.GetCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProductAttribute>(dto.Key),
-                        () => productAttributeFactory.BuildEntity(productVariant2ProductAttributeDto.ProductAttributeDto));
+                    var attribute = productAttributeFactory.BuildEntity(productVariant2ProductAttributeDto.ProductAttributeDto);
+
+                    // TODO LM - Don't get this line?? It's got the attribute above? Should I not be checking for wh
+                    RuntimeCache.GetCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProductAttribute>(attribute.Key), () => attribute);
+
+                    //var attribute = (IProductAttribute)RuntimeCache.GetCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProductAttribute>(dto.Key),
+                    //    () => productAttributeFactory.BuildEntity(productVariant2ProductAttributeDto.ProductAttributeDto));
 
                     productAttributeCollection.Add(attribute);
                 }
