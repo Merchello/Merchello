@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Web.Models.ContentEditing
 {
     using System;
+    using Core.Models;
 
     /// <summary>
     ///     Item for adding a product or variant
@@ -31,8 +32,23 @@
         public int Quantity { get; set; }
 
         /// <summary>
-        ///  Optional SKU
+        ///     The original qty if there is one
+        /// </summary>
+        public int OriginalQuantity { get; set; }
+
+        /// <summary>
+        ///     Optional SKU
         /// </summary>
         public string Sku { get; set; }
+
+        /// <summary>
+        ///  The product 
+        /// </summary>
+        public IProduct Product { get; set; }
+
+        /// <summary>
+        ///  The product 
+        /// </summary>
+        public IProductVariant ProductVariant { get; set; }
     }
 }

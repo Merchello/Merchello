@@ -5,8 +5,11 @@ namespace Merchello.Core.Services
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net;
+    using System.Net.Http;
     using System.Threading;
     using Events;
+    using Logging;
     using Models;
     using Persistence.Querying;
     using Persistence.UnitOfWork;
@@ -218,11 +221,8 @@ namespace Merchello.Core.Services
         /// Returns an order if there is one that can be edited on an order
         /// </summary>
         /// <returns>The <see cref="IOrder"/></returns>
-        internal IOrder EditableOrderOnInvoice(IInvoice invoice)
+        internal IOrder EditableOrderOnInvoice(IInvoice invoice, IOrder[] allOrders)
         {
-            // All orders
-            var allOrders = GetOrdersByInvoiceKey(invoice.Key).ToArray();
-
             // Set the default status for existing orders
             if (allOrders.Any())
             {
@@ -255,31 +255,119 @@ namespace Merchello.Core.Services
             return null;
         }
 
+
+        internal InvoiceAdjustmentResult UpdateOrderLineItemsOnInvoice(IInvoice merchInvoice, IEnumerable<InvoiceAddItem> invoiceAddItems, InvoiceAdjustmentResult invoiceAdjustmentResult)
+        {
+            if (orderLineItemToUpdate != null)
+            {
+                // Are we able to update
+                var wasSuccessful = true;
+
+                // Order line item to update
+                var oli = orderLineItemToUpdate.Value;
+
+                // Loop the orders and find the one with this item to update
+                // Can only loop in open or not fulfilled orders
+                foreach (var order in allOrders)
+                {
+                    // Get the shipments for this order
+                    var shipments = order.Shipments().ToArray();
+
+                    // Loop each line item in this order to try and find the qty to be reduced.
+                    foreach (var orderLinItem in order.Items)
+                    {
+                        // Do we get a match
+                        if (oli.Key == orderLinItem.Sku)
+                        {
+                            // Check the status of this order
+                            if (order.OrderStatusKey != Core.Constants.OrderStatus.Open &&
+                                order.OrderStatusKey != Core.Constants.OrderStatus.NotFulfilled)
+                            {
+
+                            }
+
+
+                            // Before we reduce the qty, check to see if this is part of a shipment
+                            if (shipments.Any())
+                            {
+                                foreach (var shipment in shipments)
+                                {
+
+                                }
+                            }
+
+                            if (wasSuccessful)
+                            {
+                                var newQty = orderLinItem.Quantity - oli.Value;
+                                if (newQty > 0)
+                                {
+                                    orderLinItem.Quantity = newQty;
+                                    ableToUpdate = true;
+                                }
+                            }
+
+                            break;
+                        }
+                    }
+                }
+
+
+                //// TODO - See if this has been shipped (GetShippmetns and loop)
+                //foreach (var shipment in allOrders.SelectMany(x => x.Shipments()))
+                //{
+                //    if (shipment.ShipmentStatusKey != Core.Constants.ShipmentStatus.Delivered && 
+                //        shipment.ShipmentStatusKey != Core.Constants.ShipmentStatus.Shipped && 
+                //        shipment.Items.Any(x => x.Sku == oli.Key))
+                //    {
+                //        // Found...So cannot update
+                //        ableToUpdate = false;
+                //    }
+                //}
+
+                //// If we are still able to update
+                //if (ableToUpdate)
+                //{
+                //    // Switch it back
+                //    ableToUpdate = false;
+
+
+                //}
+
+                //if (!ableToUpdate)
+                //{
+                //    // PROBLEM!
+                //    MultiLogHelper.Warn<OrderService>("Unable to reduce qty on invoice as the product is part of a shipment, or there was a problem updating the qty on the order");
+                //    response.StatusCode = HttpStatusCode.Forbidden;
+                //    return response;
+                //}
+            }
+        }
+
         /// <summary>
         /// Either adds new orderlineitems to an existing order on the invoice or creates a new one
         /// </summary>
-        /// <param name="orderLineItemsToAdd"></param>
+        /// <param name="orderLineItem"></param>
         /// <param name="invoice"></param>
-        internal void AddOrderLineItemsToEditedInvoice(List<OrderLineItem> orderLineItemsToAdd, IInvoice invoice)
+        /// <param name="invoiceAdjustmentResult"></param>
+        internal InvoiceAdjustmentResult AddOrderLineItemsToInvoice(OrderLineItem orderLineItem, IInvoice invoice, InvoiceAdjustmentResult invoiceAdjustmentResult)
         {
+            // All orders
+            var allOrders = GetOrdersByInvoiceKey(invoice.Key).ToArray();
+
+            // Order Key - Use this for adding products to existing orders
+            var orderToAddTo = EditableOrderOnInvoice(invoice, allOrders);
+
             // Need to add the order
-            if (orderLineItemsToAdd.Any())
+            if (orderLineItem != null)
             {
                 // The list of orders we will update
                 var ordersToUpdate = new List<IOrder>();
 
-                // Order Key - Use this for adding products to existing orders
-                var orderToAddTo = EditableOrderOnInvoice(invoice);
-
                 // If null we create a new order
                 if (orderToAddTo != null)
                 {
-                    // Add the orderlineitems
-                    foreach (var oli in orderLineItemsToAdd)
-                    {
-                        orderToAddTo.Items.Add(oli);
-                    }
-
+                    // Add the orderlineitems    
+                    orderToAddTo.Items.Add(orderLineItem);
                     ordersToUpdate.Add(orderToAddTo);
                 }
                 else
@@ -288,11 +376,7 @@ namespace Merchello.Core.Services
                     var order = CreateOrder(Core.Constants.OrderStatus.NotFulfilled, invoice.Key);
                     order.OrderNumberPrefix = invoice.InvoiceNumberPrefix;
 
-                    // Add the orderlineitems
-                    foreach (var oli in orderLineItemsToAdd)
-                    {
-                        order.Items.Add(oli);
-                    }
+                    order.Items.Add(orderLineItem);
 
                     // Add the new order to the invoice
                     ordersToUpdate.Add(order);
@@ -301,6 +385,10 @@ namespace Merchello.Core.Services
                 // Finally Save the orders
                 Save(ordersToUpdate);
             }
+
+            invoiceAdjustmentResult.Success = true;
+
+            return invoiceAdjustmentResult;
         }
 
         /// <summary>

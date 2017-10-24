@@ -130,7 +130,8 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                                             Items: [
                                                 {
                                                     Sku: item.sku,
-                                                    Quantity: lineItemDialogData.quantity - item.quantity
+                                                    Quantity: lineItemDialogData.quantity,
+                                                    OriginalQuantity: item.quantity
                                                 }
                                             ]
                                         }
