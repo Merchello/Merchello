@@ -35,9 +35,9 @@
         }
 
         /// <inheritdoc />
-        public Result<Transaction> Sale(IInvoice invoice, decimal amount, string paymentMethodNonce = "", ICustomer customer = null, TransactionOption option = TransactionOption.SubmitForSettlement, string email = "")
+        public Result<Transaction> Sale(IInvoice invoice, decimal amount, string paymentMethodNonce = "", ICustomer customer = null, TransactionOption option = TransactionOption.SubmitForSettlement, string email = "", string merchantAccountId = "")
         {
-            var request = this.RequestFactory.CreateTransactionRequest(invoice, amount, paymentMethodNonce, customer, option);
+            var request = this.RequestFactory.CreateTransactionRequest(invoice, amount, paymentMethodNonce, customer, option, merchantAccountId);
             if (customer == null && !string.IsNullOrEmpty(email))
             {
                 request.Customer = new CustomerRequest() { Email = email };
@@ -50,15 +50,15 @@
         }
 
         /// <inheritdoc />
-        public Result<Transaction> Sale(IInvoice invoice, decimal amount, string paymentMethodNonce, ICustomer customer, IAddress billingAddress, TransactionOption option = TransactionOption.SubmitForSettlement)
+        public Result<Transaction> Sale(IInvoice invoice, decimal amount, string paymentMethodNonce, ICustomer customer, IAddress billingAddress, TransactionOption option = TransactionOption.SubmitForSettlement, string merchantAccountId = "")
         {
-            return this.Sale(invoice, amount, paymentMethodNonce, customer, billingAddress, null, option);
+            return this.Sale(invoice, amount, paymentMethodNonce, customer, billingAddress, null, option, merchantAccountId);
         }
 
         /// <inheritdoc />
-        public Result<Transaction> Sale(IInvoice invoice, decimal amount, string paymentMethodNonce, ICustomer customer, IAddress billingAddress, IAddress shippingAddress, TransactionOption option = TransactionOption.SubmitForSettlement)
+        public Result<Transaction> Sale(IInvoice invoice, decimal amount, string paymentMethodNonce, ICustomer customer, IAddress billingAddress, IAddress shippingAddress, TransactionOption option = TransactionOption.SubmitForSettlement, string merchantAccountId = "")
         {
-            var request = this.RequestFactory.CreateTransactionRequest(invoice, amount, paymentMethodNonce, customer, option);
+            var request = this.RequestFactory.CreateTransactionRequest(invoice, amount, paymentMethodNonce, customer, option, merchantAccountId);
 
             if (billingAddress != null) request.BillingAddress = this.RequestFactory.CreateAddressRequest(billingAddress);
             if (shippingAddress != null) request.ShippingAddress = this.RequestFactory.CreateAddressRequest(shippingAddress);
@@ -73,9 +73,9 @@
         public Result<Transaction> VaultSale(
             IInvoice invoice, decimal amount,
             string paymentMethodToken,
-            TransactionOption option = TransactionOption.SubmitForSettlement)
+            TransactionOption option = TransactionOption.SubmitForSettlement, string merchantAccountId = "")
         {
-            var request = this.RequestFactory.CreateVaultTransactionRequest(invoice, amount, paymentMethodToken, option);
+            var request = this.RequestFactory.CreateVaultTransactionRequest(invoice, amount, paymentMethodToken, option, merchantAccountId);
 
             LogHelper.Info<BraintreeTransactionApiService>(string.Format("Braintree Vault Transaction attempt ({0}) for Invoice {1}", option.ToString(), invoice.PrefixedInvoiceNumber()));
             var attempt = this.TryGetApiResult(() => this.BraintreeGateway.Transaction.Sale(request));
