@@ -303,7 +303,7 @@
                                   PaymentMethodNonce = paymentMethodNonce
                               };
             if (isDefault)
-            request.Options = new PaymentMethodOptionsRequest()
+            request.Options = new PaymentMethodOptionsRequest
                                   {
                                       MakeDefault = true
                                   };
@@ -331,7 +331,7 @@
 
             return new PaymentMethodRequest
                     {
-                        BillingAddress = addressRequest                    
+                        BillingAddress = addressRequest
                     };
         }
 
@@ -376,19 +376,25 @@
         /// <param name="price">
         /// An optional price used to override the plan price.
         /// </param>
+        /// <param name="merchantAccountId"></param>
         /// <returns>
         /// The <see cref="SubscriptionRequest"/>.
         /// </returns>
-        public SubscriptionRequest CreateSubscriptionRequest(string paymentMethodToken, string planId, decimal? price = null)
+        public SubscriptionRequest CreateSubscriptionRequest(string paymentMethodToken, string planId, decimal? price = null, string merchantAccountId = "")
         {
             Mandate.ParameterNotNullOrEmpty(paymentMethodToken, "paymentMethodToken");
             Mandate.ParameterNotNullOrEmpty(planId, "planId");
 
-            var request = new SubscriptionRequest()
+            var request = new SubscriptionRequest
                        {
                            PaymentMethodToken = paymentMethodToken, 
-                           PlanId = planId,
+                           PlanId = planId
                        };
+
+            if (!string.IsNullOrEmpty(merchantAccountId))
+            {
+                request.MerchantAccountId = merchantAccountId;
+            }
 
             // TODO figure out the descriptor for nicer Credit Card statements
             // TODO https://www.braintreepayments.com/docs/dotnet/transactions/dynamic_descriptors
@@ -420,14 +426,15 @@
         /// <param name="addTrialPeriod">
         /// Adds a trial period to a plan that normally does not have one.
         /// </param>
+        /// <param name="merchantAccountId"></param>
         /// <returns>
         /// The <see cref="SubscriptionRequest"/>.
         /// </returns>
-        public SubscriptionRequest CreateSubscriptionRequest(string paymentMethodToken, string planId, int trialDuration, SubscriptionDurationUnit trialDurationUnit, bool addTrialPeriod = false)
+        public SubscriptionRequest CreateSubscriptionRequest(string paymentMethodToken, string planId, int trialDuration, SubscriptionDurationUnit trialDurationUnit, bool addTrialPeriod = false, string merchantAccountId = "")
         {
             if (trialDurationUnit == null) trialDurationUnit = SubscriptionDurationUnit.MONTH;
 
-            var request = this.CreateSubscriptionRequest(paymentMethodToken, planId);
+            var request = this.CreateSubscriptionRequest(paymentMethodToken, planId, null, merchantAccountId);
 
             if (request.TrialDuration > 0) request.TrialDuration = trialDuration;
 
@@ -509,10 +516,13 @@
         /// <param name="transactionOption">
         /// The transaction Option.
         /// </param>
+        /// <param name="merchantAccountId">
+        /// Optional Merchant Id
+        /// </param>
         /// <returns>
         /// The <see cref="TransactionRequest"/>.
         /// </returns>
-        public TransactionRequest CreateTransactionRequest(IInvoice invoice, decimal amount, string paymentMethodNonce, ICustomer customer = null, TransactionOption transactionOption = TransactionOption.Authorize)
+        public TransactionRequest CreateTransactionRequest(IInvoice invoice, decimal amount, string paymentMethodNonce, ICustomer customer = null, TransactionOption transactionOption = TransactionOption.Authorize, string merchantAccountId = "")
         {
             var request = new TransactionRequest
                        {
@@ -520,8 +530,14 @@
                            OrderId = invoice.PrefixedInvoiceNumber(),
                            PaymentMethodNonce = paymentMethodNonce,
                            BillingAddress = this.CreateAddressRequest(invoice.GetBillingAddress()),
-                           Channel = Constants.Braintree.TransactionChannel,                         
+                           Channel = Constants.Braintree.TransactionChannel
                        };
+
+            // Optional merchantAccountId
+            if (!string.IsNullOrEmpty(merchantAccountId))
+            {
+                request.MerchantAccountId = merchantAccountId;
+            }
 
             if (customer != null) request.Customer = this.CreateCustomerRequest(customer);
             
@@ -548,10 +564,11 @@
         /// <param name="transactionOption">
         /// The transaction option.
         /// </param>
+        /// <param name="merchantAccountId"></param>
         /// <returns>
         /// The <see cref="TransactionRequest"/>.
         /// </returns>
-        public TransactionRequest CreateVaultTransactionRequest(IInvoice invoice, decimal amount, string paymentMethodToken, TransactionOption transactionOption = TransactionOption.SubmitForSettlement)
+        public TransactionRequest CreateVaultTransactionRequest(IInvoice invoice, decimal amount, string paymentMethodToken, TransactionOption transactionOption = TransactionOption.SubmitForSettlement, string merchantAccountId = "")
         {
             var request = new TransactionRequest
             {
@@ -561,6 +578,12 @@
                 BillingAddress = this.CreateAddressRequest(invoice.GetBillingAddress()),
                 Channel = Constants.Braintree.TransactionChannel
             };
+
+            // Optional merchantAccountId
+            if (!string.IsNullOrEmpty(merchantAccountId))
+            {
+                request.MerchantAccountId = merchantAccountId;
+            }
 
             if (transactionOption == TransactionOption.SubmitForSettlement)
             {
