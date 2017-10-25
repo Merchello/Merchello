@@ -3244,12 +3244,24 @@ angular.module('merchello.models').constant('SalesOverTimeResult', SalesOverTime
             return this.invoiceStatus.name;
         }
 
-        function getFulfillmentStatus () {
+        function getFulfillmentStatus() {
+            var keepFindingOrder = true;
+            var statusToReturn = 'Fulfilled';
+
             if (!_.isEmpty(this.orders)) {
-                return this.orders[0].orderStatus.name;
+                angular.forEach(this.orders, function (order) {
+                    if (keepFindingOrder) {
+                        if (order.orderStatus.name !== statusToReturn) {
+
+                            statusToReturn = order.orderStatus.name;
+
+                            keepFindingOrder = false;
+                        }
+                    }
+                });  
             }
-            // TODO this should be localized
-            return 'Not Fulfilled';
+
+            return statusToReturn;
         }
 
         // gets the currency code for the invoice

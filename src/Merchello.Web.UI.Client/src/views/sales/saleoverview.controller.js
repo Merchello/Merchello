@@ -109,6 +109,7 @@
                 var invoiceAddItems = {
                     InvoiceKey: $scope.invoice.key,
                     Items: dialogData.addItems,
+                    LineItemType: 'Product',
                     IsAddProduct: true
                 }
 
@@ -193,7 +194,9 @@
                         $scope.shipmentLineItems.push(shipmentLineItem);
                     }
 
-                   $scope.tabs.appendCustomerTab($scope.invoice.customerKey);
+                    $scope.tabs.appendCustomerTab($scope.invoice.customerKey);
+
+                    $scope.canAddLineItems = $scope.invoice.enableInvoiceEditQty;
 
                 }, function (reason) {
                     notificationsService.error("Invoice Load Failed", reason.message);

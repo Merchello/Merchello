@@ -221,11 +221,12 @@ namespace Merchello.Core.Services
         /// Returns an order if there is one that can be edited on an order
         /// </summary>
         /// <returns>The <see cref="IOrder"/></returns>
-        internal IOrder FirstEditableOrderOnInvoice(IInvoice invoice, IOrder[] allOrders)
+        internal IOrder FirstEditableOrderOnInvoice(IOrder[] allOrders)
         {
             // Set the default status for existing orders
             if (allOrders.Any())
             {
+                // TODO - Think this will always never return anything. As Open orders have shipments
                 // First go through open orders as we would want to add to those first
                 var openOrders = allOrders.Where(x => x.OrderStatusKey == Core.Constants.OrderStatus.Open);
                 foreach (var openOrder in openOrders)
@@ -294,7 +295,7 @@ namespace Merchello.Core.Services
                 var allOrders = GetOrdersByInvoiceKey(invoice.Key).ToArray();
 
                 // Order Key - Use this for adding products to existing orders
-                var orderToAddTo = FirstEditableOrderOnInvoice(invoice, allOrders);
+                var orderToAddTo = FirstEditableOrderOnInvoice(allOrders);
 
                 // Need to add the order
                 if (orderLineItem != null)

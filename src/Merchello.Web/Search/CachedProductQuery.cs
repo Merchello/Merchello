@@ -916,9 +916,13 @@
 
             var variant = _productService.GetProductVariantByKey(key);
 
-            if (variant != null) this.ReindexEntity(variant);
+            if (variant != null)
+            {
+                this.ReindexEntity(variant);
 
-            return this.ModifyData(variant.ToProductVariantDisplay(this._conversionType));
+                return this.ModifyData(variant.ToProductVariantDisplay(this._conversionType));
+            }
+            return null;
         }
 
         /// <summary>
