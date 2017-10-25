@@ -417,33 +417,19 @@
                         //var currentUser = Umbraco.UmbracoContext.Security.CurrentUser;
                         var invoiceAdjustmentResult = new InvoiceAdjustmentResult();
 
-                        // Check to see if we just have just a SKU and update with all the data we'll need
+                        // Check to see if we don't have a SKU
                         foreach (var invoiceAddItem in invoiceAddItems.Items)
                         {
-                            if (!string.IsNullOrEmpty(invoiceAddItem.Sku))
+                            if (string.IsNullOrEmpty(invoiceAddItem.Sku))
                             {
                                 // Get the product/variant
-                                invoiceAddItem.Product = _productService.GetBySku(invoiceAddItem.Sku);
-                                invoiceAddItem.ProductVariant = _productService.GetProductVariantBySku(invoiceAddItem.Sku);
-
-                                // Update the data needed
-                                invoiceAddItem.Key = invoiceAddItem.Product != null ? invoiceAddItem.Product.Key
-                                                                                        : invoiceAddItem.ProductVariant.Key;
-                                invoiceAddItem.IsProductVariant = invoiceAddItem.Product == null;
-                            }
-                            else
-                            {
-                                // Get the product/variant
-                                if (invoiceAddItem.IsProductVariant)
-                                {
-                                    invoiceAddItem.ProductVariant = _productService.GetProductVariantByKey(invoiceAddItem.Key);
-                                }
-                                else
-                                {
-                                    invoiceAddItem.Product = _productService.GetByKey(invoiceAddItem.Key);
-                                }
+                                invoiceAddItem.ProductVariant = _productService.GetProductVariantByKey(invoiceAddItem.Key);
+                                invoiceAddItem.Product = _productService.GetByKey(invoiceAddItem.Key);
+                       
                                 invoiceAddItem.Sku = invoiceAddItem.Product != null ? invoiceAddItem.Product.Sku
                                                         : invoiceAddItem.ProductVariant.Sku;
+                                invoiceAddItem.IsProductVariant = invoiceAddItem.Product == null;
+
                             }
                         }
 
@@ -472,7 +458,7 @@
                         switch (invoiceAdjustmentResult.InvoiceAdjustmentType)
                         {
                             case InvoiceAdjustmentType.AddProducts:
-                                invoiceAdjustmentResult = AddNewProductsToInvoice(merchInvoice, invoiceAddItems.Items, invoiceAdjustmentResult);
+                                invoiceAdjustmentResult = AddNewLineItemsToInvoice(merchInvoice, invoiceAddItems.Items, invoiceAdjustmentResult);
                                 break;
                             case InvoiceAdjustmentType.DecreaseProductQuantity:
                                 invoiceAdjustmentResult = DecreaseLineItemQty(merchInvoice, invoiceAddItems.Items, invoiceAdjustmentResult);
@@ -481,7 +467,7 @@
                                 invoiceAdjustmentResult = IncreaseLineItemQty(merchInvoice, invoiceAddItems.Items, invoiceAdjustmentResult);
                                 break;
                             case InvoiceAdjustmentType.DeleteProduct:
-                                invoiceAdjustmentResult = DeleteProductsFromInvoice(merchInvoice, invoiceAddItems.Items, invoiceAdjustmentResult);
+                                invoiceAdjustmentResult = DeleteLineItemsFromInvoice(merchInvoice, invoiceAddItems.Items, invoiceAdjustmentResult);
                                 break;
                         }
 
@@ -512,7 +498,7 @@
         /// <param name="merchInvoice"></param>
         /// <param name="invoiceAddItems"></param>
         /// <param name="invoiceAdjustmentResult"></param>
-        internal InvoiceAdjustmentResult DeleteProductsFromInvoice(IInvoice merchInvoice, IEnumerable<InvoiceAddItem> invoiceAddItems, InvoiceAdjustmentResult invoiceAdjustmentResult)
+        internal InvoiceAdjustmentResult DeleteLineItemsFromInvoice(IInvoice merchInvoice, IEnumerable<InvoiceAddItem> invoiceAddItems, InvoiceAdjustmentResult invoiceAdjustmentResult)
         {
             // Get the current items in a dictionary so we can quickly check the SKU
             var currentLineItemsDict = merchInvoice.Items.ToDictionary(x => x.Sku, x => x);
@@ -644,7 +630,7 @@
         /// <param name="merchInvoice"></param>
         /// <param name="invoiceAddItems"></param>
         /// <param name="invoiceAdjustmentResult"></param>
-        internal InvoiceAdjustmentResult AddNewProductsToInvoice(IInvoice merchInvoice, IEnumerable<InvoiceAddItem> invoiceAddItems, InvoiceAdjustmentResult invoiceAdjustmentResult)
+        internal InvoiceAdjustmentResult AddNewLineItemsToInvoice(IInvoice merchInvoice, IEnumerable<InvoiceAddItem> invoiceAddItems, InvoiceAdjustmentResult invoiceAdjustmentResult)
         {
             var allOrders = _orderService.GetOrdersByInvoiceKey(merchInvoice.Key).ToArray();
 
@@ -740,16 +726,10 @@
             // TODO - This does not deal with multiple invoiceAddItems
             foreach (var invoiceAddItem in invoiceAddItems)
             {
-                // If both null, just skip below
-                if (invoiceAddItem.ProductVariant == null && invoiceAddItem.Product == null) continue;
-
-                // Get the sku to check
-                var sku = invoiceAddItem.Product == null ? invoiceAddItem.ProductVariant.Sku : invoiceAddItem.Product.Sku;
-
                 // Update Quantities
                 foreach (var currentLineItem in merchInvoice.Items)
                 {
-                    if (currentLineItem.Sku == sku)
+                    if (currentLineItem.Sku == invoiceAddItem.Sku)
                     {
                         // Amount to increase orders (New Qty - Old qty) .. (7 - 5 = increase order by 2)
                         var orderAmountIncrease = invoiceAddItem.Quantity - currentLineItem.Quantity;
@@ -792,6 +772,13 @@
             return invoiceAdjustmentResult;
         }
 
+        /// <summary>
+        /// Decreases the line item qty of a product line item and assocaited line items
+        /// </summary>
+        /// <param name="merchInvoice"></param>
+        /// <param name="invoiceAddItems"></param>
+        /// <param name="invoiceAdjustmentResult"></param>
+        /// <returns></returns>
         internal InvoiceAdjustmentResult DecreaseLineItemQty(IInvoice merchInvoice, IEnumerable<InvoiceAddItem> invoiceAddItems, InvoiceAdjustmentResult invoiceAdjustmentResult)
         {
             // Change to array to stop multiple enumeration warning
@@ -915,20 +902,16 @@
             // Shipments done. ORders done. Now go through and update productlineitem on order
             // Loop and add the new products as InvoiceLineItemDisplay to the InvoiceDisplay
             foreach (var invoiceAddItem in invoiceAddItems)
-            {
-                // If both null, just skip below
-                if (invoiceAddItem.ProductVariant == null && invoiceAddItem.Product == null) continue;
-
-                // Get the sku to check
-                var sku = invoiceAddItem.Product == null ? invoiceAddItem.ProductVariant.Sku : invoiceAddItem.Product.Sku;
-
+            {                
                 // Update Quantities
                 foreach (var currentLineItem in merchInvoice.Items)
                 {
-                    if (currentLineItem.Sku == sku)
+                    if (currentLineItem.Sku == invoiceAddItem.Sku)
                     {
                         // Update qty on invoice to the new quantity
                         currentLineItem.Quantity = invoiceAddItem.Quantity;
+
+                        break;
                     }
                 }
             }
