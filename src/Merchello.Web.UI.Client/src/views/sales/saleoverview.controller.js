@@ -108,7 +108,8 @@
                 // Post the model back to the controller
                 var invoiceAddItems = {
                     InvoiceKey: $scope.invoice.key,
-                    Items: dialogData.addItems
+                    Items: dialogData.addItems,
+                    IsAddProduct: true
                 }
 
                 // Put the new items

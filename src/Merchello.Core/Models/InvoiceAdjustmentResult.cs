@@ -16,16 +16,6 @@
         public string Message { get; set; }
 
         /// <summary>
-        ///     Was a order adjusted in the process
-        /// </summary>
-        public int AmountOrdersAdjusted { get; set; }
-
-        /// <summary>
-        ///     Was a shipment adjusted in the process
-        /// </summary>
-        public bool AmountShipmentsAdjusted { get; set; }
-
-        /// <summary>
         ///     The type of adjustment
         /// </summary>
         public InvoiceAdjustmentType InvoiceAdjustmentType { get; set; }
