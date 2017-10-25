@@ -5,8 +5,11 @@ namespace Merchello.Core.Services
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net;
+    using System.Net.Http;
     using System.Threading;
     using Events;
+    using Logging;
     using Models;
     using Persistence.Querying;
     using Persistence.UnitOfWork;
@@ -218,11 +221,8 @@ namespace Merchello.Core.Services
         /// Returns an order if there is one that can be edited on an order
         /// </summary>
         /// <returns>The <see cref="IOrder"/></returns>
-        internal IOrder EditableOrderOnInvoice(IInvoice invoice)
+        internal IOrder FirstEditableOrderOnInvoice(IInvoice invoice, IOrder[] allOrders)
         {
-            // All orders
-            var allOrders = GetOrdersByInvoiceKey(invoice.Key).ToArray();
-
             // Set the default status for existing orders
             if (allOrders.Any())
             {
@@ -258,49 +258,83 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Either adds new orderlineitems to an existing order on the invoice or creates a new one
         /// </summary>
-        /// <param name="orderLineItemsToAdd"></param>
+        /// <param name="orderLineItems"></param>
         /// <param name="invoice"></param>
-        internal void AddOrderLineItemsToEditedInvoice(List<OrderLineItem> orderLineItemsToAdd, IInvoice invoice)
+        /// <param name="invoiceAdjustmentResult"></param>
+        /// <returns></returns>
+        internal InvoiceAdjustmentResult AddOrderLineItemsToInvoice(List<OrderLineItem> orderLineItems, IInvoice invoice,
+            InvoiceAdjustmentResult invoiceAdjustmentResult)
         {
-            // Need to add the order
-            if (orderLineItemsToAdd.Any())
+            foreach (var orderLineItem in orderLineItems)
             {
-                // The list of orders we will update
-                var ordersToUpdate = new List<IOrder>();
+                invoiceAdjustmentResult = AddOrderLineItemsToInvoice(orderLineItem, invoice, invoiceAdjustmentResult);
+                if (!invoiceAdjustmentResult.Success)
+                {
+                    return invoiceAdjustmentResult;
+                }
+            }
+
+            invoiceAdjustmentResult.Success = true;
+            return invoiceAdjustmentResult;
+        }
+
+        /// <summary>
+        /// Either adds new orderlineitems to an existing order on the invoice or creates a new one
+        /// </summary>
+        /// <param name="orderLineItem"></param>
+        /// <param name="invoice"></param>
+        /// <param name="invoiceAdjustmentResult"></param>
+        internal InvoiceAdjustmentResult AddOrderLineItemsToInvoice(OrderLineItem orderLineItem, IInvoice invoice, 
+            InvoiceAdjustmentResult invoiceAdjustmentResult)
+        {
+            try
+            {
+                // We get this fresh, in case there have been orders added in the above method and then we want to add to existing
+                // not create lots of individual orders
+                var allOrders = GetOrdersByInvoiceKey(invoice.Key).ToArray();
 
                 // Order Key - Use this for adding products to existing orders
-                var orderToAddTo = EditableOrderOnInvoice(invoice);
+                var orderToAddTo = FirstEditableOrderOnInvoice(invoice, allOrders);
 
-                // If null we create a new order
-                if (orderToAddTo != null)
+                // Need to add the order
+                if (orderLineItem != null)
                 {
-                    // Add the orderlineitems
-                    foreach (var oli in orderLineItemsToAdd)
+                    // The list of orders we will update
+                    var ordersToUpdate = new List<IOrder>();
+
+                    // If null we create a new order
+                    if (orderToAddTo != null)
                     {
-                        orderToAddTo.Items.Add(oli);
+                        // Add the orderlineitems    
+                        orderToAddTo.Items.Add(orderLineItem);
+                        ordersToUpdate.Add(orderToAddTo);
+                    }
+                    else
+                    {
+                        // We don't have an open order. So need to create a new one
+                        var order = CreateOrder(Core.Constants.OrderStatus.NotFulfilled, invoice.Key);
+                        order.OrderNumberPrefix = invoice.InvoiceNumberPrefix;
+
+                        order.Items.Add(orderLineItem);
+
+                        // Add the new order to the invoice
+                        ordersToUpdate.Add(order);
                     }
 
-                    ordersToUpdate.Add(orderToAddTo);
-                }
-                else
-                {
-                    // We don't have an open order. So need to create a new one
-                    var order = CreateOrder(Core.Constants.OrderStatus.NotFulfilled, invoice.Key);
-                    order.OrderNumberPrefix = invoice.InvoiceNumberPrefix;
-
-                    // Add the orderlineitems
-                    foreach (var oli in orderLineItemsToAdd)
-                    {
-                        order.Items.Add(oli);
-                    }
-
-                    // Add the new order to the invoice
-                    ordersToUpdate.Add(order);
+                    // Finally Save the orders
+                    Save(ordersToUpdate);
                 }
 
-                // Finally Save the orders
-                Save(ordersToUpdate);
+                invoiceAdjustmentResult.Success = true;                
             }
+            catch (Exception ex)
+            {
+                MultiLogHelper.Error<OrderService>("Failed to adjust invoice", ex);
+                invoiceAdjustmentResult.Success = false;
+                invoiceAdjustmentResult.Message = ex.Message;
+            }
+
+            return invoiceAdjustmentResult;
         }
 
         /// <summary>

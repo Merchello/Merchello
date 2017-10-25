@@ -14,6 +14,11 @@
         public Guid InvoiceKey { get; set; }
 
         /// <summary>
+        /// Is this adding new pro
+        /// </summary>
+        public bool IsAddProduct { get; set; }
+
+        /// <summary>
         /// Gets or sets the items.
         /// </summary>
         public IEnumerable<InvoiceAddItem> Items { get; set; }

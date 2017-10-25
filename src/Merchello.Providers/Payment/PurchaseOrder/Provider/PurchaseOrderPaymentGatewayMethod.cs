@@ -17,7 +17,7 @@
         "",
         "",
         "~/App_Plugins/MerchelloProviders/views/dialogs/voidpayment.confirm.html",
-        "")]
+        "~/App_Plugins/MerchelloProviders/views/dialogs/refundpayment.confirm.html")]
     public class PurchaseOrderPaymentGatewayMethod : PaymentGatewayMethodBase, IPurchaseOrderPaymentGatewayMethod
     {
         /// <summary>

@@ -1685,9 +1685,46 @@
         /// <summary>
         /// Resyncs invoice total after line item changes
         /// </summary>
+        /// <param name="applyTaxationMethod">
+        /// If set to true, this will rework out the tax for the invoice and update the tax items
+        /// </param>
         /// <param name="invoice"></param>
-        internal void ReSyncInvoiceTotal(IInvoice invoice)
+        internal void ReSyncInvoiceTotal(IInvoice invoice, bool applyTaxationMethod = false)
         {
+            // TODO - Work out Tax!!
+            if (applyTaxationMethod)
+            {
+                // clear any current tax lines
+                var removers = new List<ILineItem>();
+                removers.AddRange(invoice.Items.Where(x => x.LineItemType == LineItemType.Tax));
+                foreach (var remove in removers)
+                {
+                    invoice.Items.Remove(remove);
+                }
+
+                IAddress taxAddress = null;
+                var shippingItems = invoice.ShippingLineItems().ToArray();
+                if (shippingItems.Any())
+                {
+                    var shipment = shippingItems.First().ExtendedData.GetShipment<OrderLineItem>();
+                    taxAddress = shipment.GetDestinationAddress();
+                }
+
+                taxAddress = taxAddress ?? invoice.GetBillingAddress();
+
+                this.SetTaxableSetting(invoice);
+                var taxes = invoice.CalculateTaxes(MerchelloContext.Current, taxAddress);
+                this.SetTaxableSetting(invoice, true);
+
+                var taxLineItem = taxes.AsLineItemOf<InvoiceLineItem>();
+
+                var currencyCode = _storeSettingService.GetByKey(Core.Constants.StoreSetting.CurrencyCodeKey).Value;
+
+                taxLineItem.ExtendedData.SetValue(Core.Constants.ExtendedDataKeys.CurrencyCode, currencyCode);
+
+                invoice.Items.Add(taxLineItem);
+            }
+
             // Work out the charges
             var charges = invoice.Items.Where(x => x.LineItemType != LineItemType.Discount).Sum(x => x.TotalPrice);
 
@@ -1703,6 +1740,30 @@
 
             // Ensure status
             invoice.EnsureInvoiceStatus();
+        }
+
+        /// <summary>
+        /// Sets or resets the tax setting.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="taxable">
+        /// The taxable.
+        /// </param>
+        /// <remarks>
+        /// In cases where a product already includes the tax and we still need to calculate taxes for shipping
+        /// and custom line items on the invoice we set the taxable setting on the products to false and then set them back
+        /// to true after the tax calculation has been completed.
+        /// </remarks>
+        private void SetTaxableSetting(IInvoice invoice, bool taxable = false)
+        {
+            if (!MerchelloContext.Current.Gateways.Taxation.ProductPricingEnabled) return;
+
+            foreach (var item in invoice.Items.Where(x => x.ExtendedData.TaxIncludedInProductPrice()))
+            {
+                item.ExtendedData.SetValue(Core.Constants.ExtendedDataKeys.Taxable, taxable.ToString());
+            }
         }
 
         /// <summary>
