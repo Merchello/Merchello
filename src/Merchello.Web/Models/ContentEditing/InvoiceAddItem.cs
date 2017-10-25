@@ -1,7 +1,6 @@
 ﻿namespace Merchello.Web.Models.ContentEditing
 {
     using System;
-    using Core.Models;
 
     /// <summary>
     ///     Item for adding a product or variant
@@ -44,11 +43,11 @@
         /// <summary>
         ///  The product 
         /// </summary>
-        public IProduct Product { get; set; }
+        public ProductDisplay Product { get; set; }
 
         /// <summary>
         ///  The product 
         /// </summary>
-        public IProductVariant ProductVariant { get; set; }
+        public ProductVariantDisplay ProductVariant { get; set; }
     }
 }

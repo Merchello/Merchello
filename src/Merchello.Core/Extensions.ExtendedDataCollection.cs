@@ -336,6 +336,7 @@ namespace Merchello.Core
             AddBaseProductValues(extendedData, product);
         }
 
+
         /// <summary>
         /// Adds product base values
         /// </summary>

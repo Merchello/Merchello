@@ -67,13 +67,14 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
 
 
                     // The dialog that deals with lineitem quantity changes and deletions
-                    scope.editLineItem = function (lineItem) {
+                    scope.editLineItem = function (lineItem, lineItemType) {
 
                         var dialogData = {
                             quantity: lineItem.quantity,
                             lineItem: lineItem,
                             deleteLineItem: false,
-                            canDelete: scope.invoice.items.length > 1
+                            canDelete: scope.invoice.items.length > 1,
+                            lineItemType: lineItemType
                         };
 
                         dialogService.open({
@@ -102,6 +103,7 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                                         // Make an invoice AddItemsModel
                                         invoiceAddItems = {
                                             InvoiceKey: scope.invoice.key,
+                                            LineItemType: lineItemDialogData.lineItemType,
                                             Items: [
                                                 {
                                                     Sku: item.sku,
@@ -127,6 +129,7 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                                         // Make an invoice AddItemsModel
                                         invoiceAddItems = {
                                             InvoiceKey: scope.invoice.key,
+                                            LineItemType: lineItemDialogData.lineItemType,
                                             Items: [
                                                 {
                                                     Sku: item.sku,

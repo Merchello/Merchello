@@ -19,6 +19,11 @@
         public bool IsAddProduct { get; set; }
 
         /// <summary>
+        /// The line item type
+        /// </summary>
+        public string LineItemType { get; set; }
+
+        /// <summary>
         /// Gets or sets the items.
         /// </summary>
         public IEnumerable<InvoiceAddItem> Items { get; set; }

@@ -25,7 +25,7 @@
         <td class="text-right">{{lineItem.quantity * lineItem.price | currency : currencySymbol}}</td>
         <td>
             <span class="merchello-icons" ng-show="lineItem.extendedData.getValue('merchAdjustment') == '' && canEditLineItems">
-                <a class="merchello-icon merchello-icon-edit" ng-click="editLineItem(lineItem)" title="Edit" prevent-default><i class="icon icon-edit"></i></a>
+                <a class="merchello-icon merchello-icon-edit" ng-click="editLineItem(lineItem, 'Product')" title="Edit" prevent-default><i class="icon icon-edit"></i></a>
             </span>
         </td>
     </tr>
@@ -37,7 +37,7 @@
         <td class="text-right">{{customItem.quantity * customItem.price | currency : currencySymbol}}</td>
         <td>
             <span class="merchello-icons" ng-show="canEditLineItems">
-                <a class="merchello-icon merchello-icon-edit" ng-click="editLineItem(customItem)" title="Edit" prevent-default><i class="icon icon-edit"></i></a>
+                <a class="merchello-icon merchello-icon-edit" ng-click="editLineItem(customItem, 'Custom')" title="Edit" prevent-default><i class="icon icon-edit"></i></a>
             </span>
         </td>
     </tr>

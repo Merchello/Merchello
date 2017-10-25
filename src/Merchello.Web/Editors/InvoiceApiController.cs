@@ -7,8 +7,10 @@
     using System.Net;
     using System.Net.Http;
     using System.Web.Http;
+    using Core.Configuration;
     using Core.Models.Rdbms;
     using Core.Persistence.Factories;
+    using DataModifiers.Product;
     using Merchello.Core;
     using Merchello.Core.Logging;
     using Merchello.Core.Models;
@@ -121,11 +123,22 @@
 
                 // Add the orders
                 foreach (var order in orders)
-                {                   
+                {
                     invoice.Orders.Add(order);
                 }
 
-                return invoice.ToInvoiceDisplay();
+                var invoiceDisplay = invoice.ToInvoiceDisplay();
+
+                // TODO - Don't like this here. Need to speak to Rusty
+                // Lastly, see if they have enabled 
+                var canEnableInvoiceEdit = MerchelloConfiguration.Current.GetSetting("EnableInvoiceLineItemAddAndEditQty");
+                if (!string.IsNullOrEmpty(canEnableInvoiceEdit) && Convert.ToBoolean(canEnableInvoiceEdit))
+                {
+                    // Enable edit
+                    invoiceDisplay.EnableInvoiceEditQty = true;
+                }
+
+                return invoiceDisplay;
             }
 
             return null;
@@ -412,10 +425,16 @@
                     // Get the invoice
                     var merchInvoice = _invoiceService.GetByKey(invoiceAddItems.InvoiceKey);
 
+                    //// Use the merchello helper to get the prdoucts, so the data modifiers are triggered.
+                    var merchelloHelper = new MerchelloHelper();
+
+                    // Get the product service
+                    var productService = merchelloHelper.Query.Product;
+
                     if (merchInvoice != null)
                     {
                         //var currentUser = Umbraco.UmbracoContext.Security.CurrentUser;
-                        var invoiceAdjustmentResult = new InvoiceAdjustmentResult();
+                        var invoiceAdjustmentResult = new InvoiceAdjustmentResult(invoiceAddItems.LineItemType);
 
                         // Check to see if we don't have a SKU
                         foreach (var invoiceAddItem in invoiceAddItems.Items)
@@ -423,13 +442,16 @@
                             if (string.IsNullOrEmpty(invoiceAddItem.Sku))
                             {
                                 // Get the product/variant
-                                invoiceAddItem.ProductVariant = _productService.GetProductVariantByKey(invoiceAddItem.Key);
-                                invoiceAddItem.Product = _productService.GetByKey(invoiceAddItem.Key);
-                       
-                                invoiceAddItem.Sku = invoiceAddItem.Product != null ? invoiceAddItem.Product.Sku
-                                                        : invoiceAddItem.ProductVariant.Sku;
+                                invoiceAddItem.ProductVariant = productService.GetProductVariantByKey(invoiceAddItem.Key);
+                                invoiceAddItem.Product = productService.GetByKey(invoiceAddItem.Key);
+                                invoiceAddItem.Sku = invoiceAddItem.Product != null ? invoiceAddItem.Product.Sku : invoiceAddItem.ProductVariant.Sku;
                                 invoiceAddItem.IsProductVariant = invoiceAddItem.Product == null;
-
+                            }
+                            else
+                            {
+                                invoiceAddItem.ProductVariant = productService.GetProductVariantBySku(invoiceAddItem.Sku);
+                                invoiceAddItem.Product = productService.GetBySku(invoiceAddItem.Sku);
+                                invoiceAddItem.IsProductVariant = invoiceAddItem.Product == null;
                             }
                         }
 
@@ -513,7 +535,7 @@
             var canDelete = true;
 
             // Check if we have an order
-            if (invoiceOrders.Any())
+            if (invoiceOrders.Any() && invoiceAdjustmentResult.InvoiceLineItemType == InvoiceLineItemType.Product)
             {
                 // Order needs saving
                 var saveOrder = false;
@@ -632,78 +654,98 @@
         /// <param name="invoiceAdjustmentResult"></param>
         internal InvoiceAdjustmentResult AddNewLineItemsToInvoice(IInvoice merchInvoice, IEnumerable<InvoiceAddItem> invoiceAddItems, InvoiceAdjustmentResult invoiceAdjustmentResult)
         {
-            var allOrders = _orderService.GetOrdersByInvoiceKey(merchInvoice.Key).ToArray();
-
-            // Get the current items in a dictionary so we can quickly check the SKU
-            var currentLineItemsDict = merchInvoice.Items.ToDictionary(x => x.Sku, x => x);
-
-            // Has orders
-            var hasOrders = allOrders.Any();
-
-            // Store the orderlineitems
-            var orderLineItems = new List<OrderLineItem>();
-
-            // Loop and add the new products as InvoiceLineItemDisplay to the InvoiceDisplay
-            foreach (var invoiceAddItem in invoiceAddItems)
+            if (invoiceAdjustmentResult.InvoiceLineItemType == InvoiceLineItemType.Product)
             {
-                // If both null, just skip below
-                if (invoiceAddItem.ProductVariant == null && invoiceAddItem.Product == null) continue;
+                //var taxationContext = MerchelloContext.Gateways.Taxation;
 
-                // Get the sku to check
-                var sku = invoiceAddItem.Product == null ? invoiceAddItem.ProductVariant.Sku : invoiceAddItem.Product.Sku;
+                var allOrders = _orderService.GetOrdersByInvoiceKey(merchInvoice.Key).ToArray();
 
-                // Create the lineitem
-                var invoiceLineItem = invoiceAddItem.Product == null ? invoiceAddItem.ProductVariant.ToInvoiceLineItem(invoiceAddItem.Quantity) : invoiceAddItem.Product.ToInvoiceLineItem(invoiceAddItem.Quantity);
+                // Get the current items in a dictionary so we can quickly check the SKU
+                var currentLineItemsDict = merchInvoice.Items.ToDictionary(x => x.Sku, x => x);
 
-                // See if the current line items have this product/variant
-                if (!currentLineItemsDict.ContainsKey(sku))
+                // Has orders
+                var hasOrders = allOrders.Any();
+
+                // Store the orderlineitems
+                var orderLineItems = new List<OrderLineItem>();
+
+                // Loop and add the new products as InvoiceLineItemDisplay to the InvoiceDisplay
+                foreach (var invoiceAddItem in invoiceAddItems)
                 {
-                    merchInvoice.Items.Add(invoiceLineItem);
-                }
-                else
-                {
-                    // Already exists, just update qty
-                    // Update Quantities
-                    foreach (var currentLineItem in merchInvoice.Items)
+                    // If both null, just skip below
+                    if (invoiceAddItem.ProductVariant == null && invoiceAddItem.Product == null) continue;
+
+
+
+                    // Get the sku to check
+                    var sku = invoiceAddItem.Product == null
+                        ? invoiceAddItem.ProductVariant.Sku
+                        : invoiceAddItem.Product.Sku;
+
+                    // Product Pricing Enabled
+                    var productPricingEnabled = MerchelloContext.Gateways.Taxation.ProductPricingEnabled;
+
+                    // Create the lineitem
+                    var invoiceLineItem = invoiceAddItem.Product == null
+                        ? invoiceAddItem.ProductVariant.ToInvoiceLineItem(invoiceAddItem.Quantity, productPricingEnabled)
+                        : invoiceAddItem.Product.ToInvoiceLineItem(invoiceAddItem.Quantity, productPricingEnabled);
+
+                    // See if the current line items have this product/variant
+                    if (!currentLineItemsDict.ContainsKey(sku))
                     {
-                        if (currentLineItem.Sku == sku)
+                        merchInvoice.Items.Add(invoiceLineItem);
+                    }
+                    else
+                    {
+                        // Already exists, just update qty
+                        // Update Quantities
+                        foreach (var currentLineItem in merchInvoice.Items)
                         {
-                            // Update qty by one, as when adding they can only add one product at a time
-                            currentLineItem.Quantity++;
+                            if (currentLineItem.Sku == sku)
+                            {
+                                // Update qty by one, as when adding they can only add one product at a time
+                                currentLineItem.Quantity++;
 
-                            // Break out of loop
-                            break;
+                                // Break out of loop
+                                break;
+                            }
                         }
+                    }
+
+                    if (hasOrders && invoiceLineItem.IsShippable())
+                    {
+                        // Add to Order   
+                        orderLineItems.Add(invoiceLineItem.AsLineItemOf<OrderLineItem>());
                     }
                 }
 
-                if (hasOrders && invoiceLineItem.IsShippable())
+                // Need to add the order
+                if (hasOrders)
                 {
-                    // Add to Order   
-                    orderLineItems.Add(invoiceLineItem.AsLineItemOf<OrderLineItem>());
+                    // Add to order or create a new one
+                    invoiceAdjustmentResult = ((OrderService)_orderService).AddOrderLineItemsToInvoice(orderLineItems, merchInvoice, invoiceAdjustmentResult);
+                    if (!invoiceAdjustmentResult.Success)
+                    {
+                        // Just return if there is an error, don't save anything
+                        return invoiceAdjustmentResult;
+                    }
                 }
-            }
 
-            // Need to add the order
-            if (hasOrders)
+                // Now update invoice and save
+                ((InvoiceService)_invoiceService).ReSyncInvoiceTotal(merchInvoice, true);
+
+                invoiceAdjustmentResult.Success = true;
+            }
+            else
             {
-                // Add to order or create a new one
-                invoiceAdjustmentResult = ((OrderService)_orderService).AddOrderLineItemsToInvoice(orderLineItems, merchInvoice, invoiceAdjustmentResult);
-                if (!invoiceAdjustmentResult.Success)
-                {
-                    // Just return if there is an error, don't save anything
-                    return invoiceAdjustmentResult;
-                }
+                invoiceAdjustmentResult.Success = false;
+                invoiceAdjustmentResult.Message = "Only products can be added";
             }
-
-            // Now update invoice and save
-            ((InvoiceService)_invoiceService).ReSyncInvoiceTotal(merchInvoice, true);
-
-            invoiceAdjustmentResult.Success = true;
 
             return invoiceAdjustmentResult;
         }
 
+        // TODO - Needs to be broken down. Too chunky
         /// <summary>
         /// Increases the line item qty of a product line item
         /// </summary>
@@ -713,17 +755,191 @@
         /// <returns></returns>
         internal InvoiceAdjustmentResult IncreaseLineItemQty(IInvoice merchInvoice, IEnumerable<InvoiceAddItem> invoiceAddItems, InvoiceAdjustmentResult invoiceAdjustmentResult)
         {
-            // Get all the orders
+            // Change to array to stop multiple enumeration warning
+            invoiceAddItems = invoiceAddItems.ToArray();
+
+            // We are increasing the qty, so need to do a lot of checks.
+            // Problems will be if there are shipments on the orders, and if any of those shipments have been 
+            // shipped or more. We have to be sensible and just not allow it, if it is too complicated.
+            // We start with lowest level, shipment, and abandon from there. As not point updating invoice if those
+
+            // As we're check this way, we'll store everything that needs updating until we have checked from the bottom (shipments) 
+            // to top (invoicelineitems) that everything is ok to continute
+            var shipmentsToSave = new List<IShipment>();
+            var ordersToSave = new List<IOrder>();
+
+            // Get the orders for this invoice
             var allOrders = _orderService.GetOrdersByInvoiceKey(merchInvoice.Key).ToArray();
+            if (allOrders.Any() && invoiceAdjustmentResult.InvoiceLineItemType == InvoiceLineItemType.Product)
+            {
+                // We should do some pre-checks
+                var allShipments = allOrders.SelectMany(x => x.Shipments()).ToArray();
 
-            // Has orders
-            var hasOrders = allOrders.Any();
+                // Can we update a shipment, if not we need to create a new order
+                var updatedShipment = false;
 
-            // Store the orderlineitems
-            OrderLineItem orderLineItemToAdd = null;
+                // Check each one passed, although it 'should' be only one
+                foreach (var invoiceAddItem in invoiceAddItems)
+                {
+                    if (allShipments.Any())
+                    {
+                        // We have shipments. Loop through and see if we can match the items
+                        foreach (var shipment in allShipments)
+                        {
+                            foreach (var shipmentItem in shipment.Items)
+                            {
+                                if (shipmentItem.Sku == invoiceAddItem.Sku)
+                                {
+                                    // Ooof. Found the item in a shipment.
+                                    // Need to check if this shipment... Has well... Left the building.
+                                    if (shipment.ShipmentStatusKey != Constants.ShipmentStatus.Shipped &&
+                                        shipment.ShipmentStatusKey != Constants.ShipmentStatus.Delivered)
+                                    {
+                                        // Ooof. Again. Update qty and then save shipment
+                                        updatedShipment = true;
+                                        shipmentItem.Quantity = invoiceAddItem.Quantity;
+                                        break;
+                                    }
+                                }
+                            }
 
+                            // Break shipment loop
+                            if (updatedShipment)
+                            {
+                                // If we found it, add it to be saved
+                                shipmentsToSave.Add(shipment);
+
+                                break;
+                            }
+                        }
+                    }
+
+                    // Set this to true, as we'll create a new order unless we find one
+                    var createNewOrder = true;
+
+
+                    // If we didnt update a shipment, that means we either add it to an existing  order
+                    // if there is one or we'll need to create a new one.
+                    if (!updatedShipment)
+                    {
+                        // orders to check
+                        var ordersToCheck = allOrders.Where(x => x.OrderStatusKey == Constants.OrderStatus.NotFulfilled).ToArray();
+
+                        // Look through the nofulfilled orders (Ones that have no shipments)
+                        if (ordersToCheck.Any())
+                        {
+                            // See if this item already exists and update quantity
+                            foreach (var order in ordersToCheck)
+                            {
+                                // Find the order item with the same SKU
+                                foreach (var orderLineItem in order.Items)
+                                {
+                                    // Found a match
+                                    if (orderLineItem.Sku == invoiceAddItem.Sku)
+                                    {
+                                        // Update qty and then save the order
+                                        createNewOrder = false;
+                                        orderLineItem.Quantity = invoiceAddItem.Quantity;
+                                        break;
+                                    }
+                                }
+
+                                // Break shipment loop
+                                if (!createNewOrder)
+                                {
+                                    // If we found it, add it to be saved
+                                    ordersToSave.Add(order);
+
+                                    break;
+                                }
+                            }
+
+                            if (createNewOrder)
+                            {
+                                // Set flag to false as we are adding item to an order
+                                createNewOrder = false;
+
+                                // We have an order with no shipments, but this item isn't there
+                                var lineItem = merchInvoice.Items.FirstOrDefault(x => x.Sku == invoiceAddItem.Sku);
+
+                                // Should never be if we got here!!
+                                if (lineItem != null)
+                                {
+                                    // Add the line item
+                                    lineItem.Quantity = invoiceAddItem.Quantity;
+                                    var order = ordersToCheck.FirstOrDefault();
+                                    order.Items.Add(lineItem.AsLineItemOf<OrderLineItem>());
+                                    ordersToSave.Add(order);
+                                }
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        var orderFound = false;
+
+                        // We have updated the shipment, so we can update the order items
+                        // Loop all orders and just find the one that matches the SKU no matter what the order status is
+                        foreach (var order in allOrders)
+                        {
+                            // Find the order item with the same SKU
+                            foreach (var orderLineItem in order.Items)
+                            {
+                                // Found a match
+                                if (orderLineItem.Sku == invoiceAddItem.Sku)
+                                {
+                                    // Update qty and then save the order
+                                    orderFound = true;
+                                    createNewOrder = false;
+                                    orderLineItem.Quantity = invoiceAddItem.Quantity;
+                                    break;
+                                }
+                            }
+
+                            // Break shipment loop
+                            if (orderFound)
+                            {
+                                // If we found it, add it to be saved
+                                ordersToSave.Add(order);
+
+                                break;
+                            }
+                        }
+                    }
+
+                    if (createNewOrder)
+                    {
+                        // If we get here it means there is either a shipment that's not active 
+                        // or we could not find an order to add the lineitem too.
+                        // We don't have an open order. So need to create a new one
+                        var order = _orderService.CreateOrder(Constants.OrderStatus.NotFulfilled, merchInvoice.Key);
+                        order.OrderNumberPrefix = merchInvoice.InvoiceNumberPrefix;
+
+                        // find the line item with the same sku
+                        var lineItem = merchInvoice.Items.FirstOrDefault(x => x.Sku == invoiceAddItem.Sku);
+
+                        // Should never be if we got here!!
+                        if (lineItem != null)
+                        {
+                            lineItem.Quantity = invoiceAddItem.Quantity;
+                            order.Items.Add(lineItem.AsLineItemOf<OrderLineItem>());
+                        }
+
+                        // Add the new order to the invoice
+                        ordersToSave.Add(order);
+                    }
+                }
+
+                // Save shipments
+                _shipmentService.Save(shipmentsToSave);
+
+                // Save orders
+                _orderService.Save(ordersToSave);
+            }
+
+            // Shipments done. ORders done. Now go through and update productlineitem on order
             // Loop and add the new products as InvoiceLineItemDisplay to the InvoiceDisplay
-            // TODO - This does not deal with multiple invoiceAddItems
             foreach (var invoiceAddItem in invoiceAddItems)
             {
                 // Update Quantities
@@ -731,47 +947,24 @@
                 {
                     if (currentLineItem.Sku == invoiceAddItem.Sku)
                     {
-                        // Amount to increase orders (New Qty - Old qty) .. (7 - 5 = increase order by 2)
-                        var orderAmountIncrease = invoiceAddItem.Quantity - currentLineItem.Quantity;
-
-                        // Update qty on invoice
+                        // Update qty on invoice to the new quantity
                         currentLineItem.Quantity = invoiceAddItem.Quantity;
 
-                        // Now see if we need to add a new order
-                        if (hasOrders && currentLineItem.IsShippable())
-                        {
-                            // Create the lineitem
-                            var invoiceLineItem = invoiceAddItem.Product == null ? invoiceAddItem.ProductVariant.ToInvoiceLineItem(orderAmountIncrease) : invoiceAddItem.Product.ToInvoiceLineItem(orderAmountIncrease);
-
-                            // Add to Order   
-                            orderLineItemToAdd = invoiceLineItem.AsLineItemOf<OrderLineItem>();
-
-                            break;
-                        }
+                        break;
                     }
                 }
             }
 
-            // Need to add the order
-            if (hasOrders)
-            {
-                // Add to order or create a new one
-                invoiceAdjustmentResult = ((OrderService)_orderService).AddOrderLineItemsToInvoice(orderLineItemToAdd, merchInvoice, invoiceAdjustmentResult);
-                if (!invoiceAdjustmentResult.Success)
-                {
-                    // Just return if there is an error, don't save anything
-                    return invoiceAdjustmentResult;
-                }
-            }
-
-            // Now update invoice and save
+            // Now update invoice and save inc re-adjusting tax
             ((InvoiceService)_invoiceService).ReSyncInvoiceTotal(merchInvoice, true);
 
+            // Return
             invoiceAdjustmentResult.Success = true;
 
             return invoiceAdjustmentResult;
         }
 
+        // TODO - Needs to be broken down. Too chunky
         /// <summary>
         /// Decreases the line item qty of a product line item and assocaited line items
         /// </summary>
@@ -902,7 +1095,7 @@
             // Shipments done. ORders done. Now go through and update productlineitem on order
             // Loop and add the new products as InvoiceLineItemDisplay to the InvoiceDisplay
             foreach (var invoiceAddItem in invoiceAddItems)
-            {                
+            {
                 // Update Quantities
                 foreach (var currentLineItem in merchInvoice.Items)
                 {

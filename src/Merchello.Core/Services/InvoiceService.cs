@@ -6,7 +6,7 @@
     using System.Linq;
     using System.Threading;
     using System.Web.UI;
-
+    using Gateways.Taxation;
     using Merchello.Core.Events;
     using Merchello.Core.Models;
     using Merchello.Core.Models.Interfaces;
@@ -1692,6 +1692,7 @@
         internal void ReSyncInvoiceTotal(IInvoice invoice, bool applyTaxationMethod = false)
         {
             // TODO - Work out Tax!!
+            //&& MerchelloContext.Current.Gateways.Taxation.TaxationApplication == TaxationApplication.Invoice
             if (applyTaxationMethod)
             {
                 // clear any current tax lines

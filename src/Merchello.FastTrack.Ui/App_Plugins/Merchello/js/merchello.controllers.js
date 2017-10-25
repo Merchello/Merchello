@@ -11034,6 +11034,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 var invoiceAddItems = {
                     InvoiceKey: $scope.invoice.key,
                     Items: dialogData.addItems,
+                    LineItemType: 'Product',
                     IsAddProduct: true
                 }
 
@@ -11118,7 +11119,9 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                         $scope.shipmentLineItems.push(shipmentLineItem);
                     }
 
-                   $scope.tabs.appendCustomerTab($scope.invoice.customerKey);
+                    $scope.tabs.appendCustomerTab($scope.invoice.customerKey);
+
+                    $scope.canAddLineItems = $scope.invoice.enableInvoiceEditQty;
 
                 }, function (reason) {
                     notificationsService.error("Invoice Load Failed", reason.message);
