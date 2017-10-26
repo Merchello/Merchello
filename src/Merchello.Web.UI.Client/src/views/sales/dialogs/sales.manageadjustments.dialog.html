@@ -77,11 +77,10 @@
                         
                         <div class="control-group">
                             <div class="row-fluid">
-                                <div class="span6">
-                                    <div class="form-group">
-                                        <label>Line Item Type</label>
-                                        <select ng-model="lineItemType" ng-options="o as o for o in lineItemTypes"></select>
-                                    </div>
+                                <div class="span6 adjustment-radio">
+                                    <label>
+                                        <input type="checkbox" ng-model="isTaxable"> Taxable?
+                                    </label>
                                 </div>
                                 <div class="span6">
                                     <div class="pull-right">

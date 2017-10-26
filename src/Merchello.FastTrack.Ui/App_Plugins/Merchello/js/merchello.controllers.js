@@ -10278,16 +10278,17 @@ angular.module('merchello').controller('Merchello.Sales.Dialogs.ManageAdjustment
         $scope.amount = 0.0;
         $scope.sku = 'adj';
         $scope.lineItemType = '';
-        $scope.lineItemTypes = [];
+        $scope.isTaxable = false;
+        //$scope.lineItemTypes = [];
         $scope.amount = 0.0;
         $scope.name = '';
 
         function init() {
             // Setup the Adjustment types
-            $scope.lineItemTypes = ["Adjustment", "Shipping", "Tax"];
+            //$scope.lineItemTypes = ["Adjustment", "Shipping", "Tax"];
 
             // Set the default type
-            $scope.lineItemType = $scope.lineItemTypes[0];
+            $scope.lineItemType = "Adjustment";
 
             $scope.invoiceNumber = $scope.dialogData.invoice.prefixedInvoiceNumber();
             var adjustments = $scope.dialogData.invoice.getAdjustmentLineItems();
@@ -10312,6 +10313,7 @@ angular.module('merchello').controller('Merchello.Sales.Dialogs.ManageAdjustment
             if ($scope.name !== '') {
                 var lineItem = invoiceLineItemDisplayBuilder.createDefault();
                 lineItem.quantity = 1;
+                lineItem.isTaxable = $scope.isTaxable;
                 lineItem.name = $scope.name;
                 lineItem.containerKey = $scope.dialogData.invoice.key;
                 lineItem.lineItemType = $scope.lineItemType;
@@ -10334,7 +10336,7 @@ angular.module('merchello').controller('Merchello.Sales.Dialogs.ManageAdjustment
             
             var items = [];
             _.each($scope.adjustments, function(adj) {
-                items.push({ key: adj.key, name: adj.name, price: adj.price, sku: adj.sku, lineItemType: adj.lineItemType });
+                items.push({ key: adj.key, name: adj.name, price: adj.price, sku: adj.sku, lineItemType: adj.lineItemType, isTaxable: adj.isTaxable });
             });
 
             var invoiceAdjustmentDisplay = {

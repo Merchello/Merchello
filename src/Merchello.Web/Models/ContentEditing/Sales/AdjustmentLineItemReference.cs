@@ -45,6 +45,11 @@
         public string Email { get; set; }
 
         /// <summary>
+        ///  Is this adjustment taxable?
+        /// </summary>
+        public bool IsTaxable { get; set; }
+
+        /// <summary>
         /// Extended Data
         /// </summary>
         public ExtendedDataCollection ExtendedData { get; set; }
@@ -94,11 +99,17 @@
                 }
             }
 
+            if (adj.IsTaxable)
+            {
+                item.ExtendedData.SetValue(Constants.ExtendedDataKeys.Taxable, true.ToString());
+            }            
+
+            item.ExtendedData.SetValue(Constants.ExtendedDataKeys.Adjustment, adj.LineItemType);
+
             if (adj.Key.Equals(Guid.Empty))
             {
                 item.ExtendedData.SetValue("userName", adj.UserName);
                 item.ExtendedData.SetValue("email", adj.Email);
-                item.ExtendedData.SetValue(Constants.ExtendedDataKeys.Adjustment, adj.LineItemType);
             }
             else
             {

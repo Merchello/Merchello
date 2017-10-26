@@ -1673,7 +1673,7 @@
                 }
 
                 // Resync
-                ReSyncInvoiceTotal(invoice);
+                ReSyncInvoiceTotal(invoice, true);
 
                 return true;
             }
