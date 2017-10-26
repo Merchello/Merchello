@@ -36,9 +36,6 @@
         <td class="text-right">{{customItem.price | currency : currencySymbol}}</td>
         <td class="text-right">{{customItem.quantity * customItem.price | currency : currencySymbol}}</td>
         <td>
-            <span class="merchello-icons" ng-show="canEditLineItems">
-                <a class="merchello-icon merchello-icon-edit" ng-click="editLineItem(customItem, 'Custom')" title="Edit" prevent-default><i class="icon icon-edit"></i></a>
-            </span>
         </td>
     </tr>
     <tr data-ng-show="itemization.adjustments.length > 0">
