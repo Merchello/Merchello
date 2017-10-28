@@ -10328,7 +10328,7 @@ angular.module('merchello').controller('Merchello.Sales.Dialogs.ManageAdjustment
                 $scope.amount = 0;
                 $scope.operator = '-';
                 $scope.sku = 'adj';
-                $scope.lineItemType = $scope.lineItemTypes[0];
+                //$scope.lineItemType = $scope.lineItemType;
             }
         }
 

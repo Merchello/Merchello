@@ -76,14 +76,14 @@
         /// The <see cref="string"/>.
         /// </returns>
         [HttpGet]
-        public string GetClientRequestToken(Guid customerKey)
+        public string GetClientRequestToken(Guid? customerKey)
         {
-            if (customerKey == Guid.Empty)
+            if (customerKey == null || customerKey == Guid.Empty)
             {
                 return this._braintreeApiService.Customer.GenerateClientRequestToken();
             } 
 
-            var customer = this._customerService.GetAnyByKey(customerKey);
+            var customer = this._customerService.GetAnyByKey(customerKey.Value);
 
             return customer.IsAnonymous
                        ? this._braintreeApiService.Customer.GenerateClientRequestToken()
