@@ -76,18 +76,31 @@
         /// The <see cref="string"/>.
         /// </returns>
         [HttpGet]
-        public string GetClientRequestToken(Guid? customerKey)
+        public string GetClientRequestToken(Guid customerKey)
         {
-            if (customerKey == null || customerKey == Guid.Empty)
+            if (customerKey == Guid.Empty)
             {
                 return this._braintreeApiService.Customer.GenerateClientRequestToken();
             } 
 
-            var customer = this._customerService.GetAnyByKey(customerKey.Value);
+            var customer = this._customerService.GetAnyByKey(customerKey);
 
             return customer.IsAnonymous
                        ? this._braintreeApiService.Customer.GenerateClientRequestToken()
                        : this._braintreeApiService.Customer.GenerateClientRequestToken((ICustomer)customer);
         }
+
+        /// <summary>
+        /// Gets a client request token used in HTML form.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        [HttpGet]
+        public string GetClientRequestToken()
+        {
+            return this._braintreeApiService.Customer.GenerateClientRequestToken();
+        }
+
     }
 }
