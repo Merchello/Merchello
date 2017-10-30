@@ -1,72 +1,93 @@
 <div class="umb-panel merchello-side-panel" ng-controller="Merchello.Sales.Dialogs.CreateShipmentController" data-ng-show="loaded">
-    <div class="umb-modalcolumn-header">
-        <h4><localize key="actions_create" /> <localize key="merchelloGeneral_shipment" /></h4>
-    </div>
-    <div class="umb-panel-body with-header with-footer">
-        <!--<h3><localize key="actions_create" /> <localize key="merchelloGeneral_shipment" /></h3>-->
-        <div class="control-group row-fluid">
-            <div class="form-group">
-                <label for="carrier"><localize key="merchelloShipping_carrier"/></label>
-                <input name="carrier" data-ng-model="dialogData.carrier" type="text" class="col-xs-6 span6"/>
-            </div>
-            <div class="form-group">
-                <label for="trackingNo"><localize key="merchelloGeneral_trackingNumber"/></label>
-                <input name="trackingNo" data-ng-model="dialogData.trackingNumber" type="text" class="col-xs-6 span6"/>
-            </div>
-            <div class="form-group">
-                <label for="trackingUrl"><localize key="merchelloGeneral_trackingUrl"/></label>
-                <input name="trackingNo" data-ng-model="dialogData.trackingUrl" type="text" class="col-xs-6 span6"/>
-            </div>
-            <div class="form-group" data-ng-show="shipmentSelection.show">
-                <label for="shipment"><localize key="merchelloShipping_selectShipment" /></label>
-                <select name="shipment" data-ng-model="shipmentSelection.selected" class="col-xs-6 span6" data-ng-options="option.name for option in shipmentSelection.shipments" data-ng-change="updateViewSelectedForShipment()">
 
-                </select>
+    <div class="umb-overlay umb-overlay-right">
+        <div class="umb-overlay__form">
+
+            <div class="umb-overlay-header">
+                <h4 class="umb-overlay__title"><localize key="actions_create" /> <localize key="merchelloGeneral_shipment" /></h4>
             </div>
-            <div class="form-group">
-                <label for="provider"><localize key="merchelloGeneral_via"/></label>
-                <select name="shipmentStatus" class="col-xs-6 span6" data-ng-model="dialogData.shipMethods.selected" data-ng-options="option.name for option in dialogData.shipMethods.alternatives"></select>
-            </div>
-            <!--<div class="form-group">-->
+
+            <div class="umb-overlay-container form-horizontal merchello-panel-body">
+
+                <div class="form-group control-group">
+                    <label for="carrier"><localize key="merchelloShipping_carrier" /></label>
+                    <input name="carrier" data-ng-model="dialogData.carrier" type="text" class="form-control umb-editor" />
+                </div>
+                <div class="form-group control-group">
+                    <label for="trackingNo"><localize key="merchelloGeneral_trackingNumber" /></label>
+                    <input name="trackingNo" data-ng-model="dialogData.trackingNumber" type="text" class="form-control umb-editor" />
+                </div>
+                <div class="form-group control-group">
+                    <label for="trackingUrl"><localize key="merchelloGeneral_trackingUrl" /></label>
+                    <input name="trackingNo" data-ng-model="dialogData.trackingUrl" type="text" class="form-control umb-editor" />
+                </div>
+                <div class="form-group control-group" data-ng-show="shipmentSelection.show">
+                    <label for="shipment"><localize key="merchelloShipping_selectShipment" /></label>
+                    <select name="shipment" data-ng-model="shipmentSelection.selected" class="form-control umb-editor" data-ng-options="option.name for option in shipmentSelection.shipments" data-ng-change="updateViewSelectedForShipment()"></select>
+                </div>
+                <div class="form-group control-group">
+                    <label for="provider"><localize key="merchelloGeneral_via" /></label>
+                    <select name="shipmentStatus" class="form-control umb-editor" data-ng-model="dialogData.shipMethods.selected" data-ng-options="option.name for option in dialogData.shipMethods.alternatives"></select>
+                </div>
+
+                <!--<div class="form-group">-->
                 <!--<label><input type="checkbox" checked="checked"/> Email shipment notification to the customer</label>-->
                 <!--<select name="provider" disabled="disabled" class="col-xs-6 span6"><option>{{shipMethod}}</option></select>-->
-            <!--</div>-->
-            <div class="form-group">
-                <label>Shipment Status</label>
-                <select name="status" class="col-xs-6 span6" data-ng-model="dialogData.shipmentStatus" data-ng-options="option.name for option in dialogData.shipmentStatuses"></select>
+                <!--</div>-->
+
+                <div class="form-group control-group">
+                    <label>Shipment Status</label>
+                    <select name="status" class="form-control umb-editor" data-ng-model="dialogData.shipmentStatus" data-ng-options="option.name for option in dialogData.shipmentStatuses"></select>
+                </div>
+                <div ng-show="dialogData.totalOrders.length > 1" class="alert alert-info">
+                   <strong>Multiple Orders</strong>: Next order will show once the previous orders have been fulfilled.
+                </div>
+                <div class="merchello-list-view umb-listview clearfix">
+                    <div class="umb-table">
+                        <div class="umb-table-head">
+                            <div class="umb-table-row">
+                                <div class="umb-table-cell"><localize key="general_add" /></div>
+                                <div class="umb-table-cell umb-table__name umb-table__name__large"><localize key="merchelloVariant_product" /></div>
+                                <div class="umb-table-cell"><localize key="merchelloGeneral_quantity" /></div>
+                                <div class="umb-table-cell"><localize key="merchelloGeneral_total" /></div>
+                            </div>
+                            <div class="umb-table-body">
+                                <div class="umb-table-row" data-ng-repeat="lineitem in shipmentSelection.selected.items">
+                                    <!-- dialogData.order.items -->
+                                    <div class="umb-table-cell"><input type="checkbox" data-ng-disabled="lineitem.backOrder" data-ng-model="lineitem.selected" /></div>
+                                    <div class="umb-table-cell umb-table__name umb-table__name__large">
+                                        <div class="unflexed">
+                                            {{lineitem.name}}
+                                            <small><localize key="merchelloGeneral_sku" />: {{lineitem.sku}}</small>
+                                        </div>
+                                    </div>
+                                    <div class="umb-table-cell">{{lineitem.quantity}} x <strong>{{lineitem.price | currency : currencySymbol}}</strong></div>
+                                    <div class="umb-table-cell">{{lineitem.quantity * lineitem.price | currency : currencySymbol}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <table class="table table-striped merchello-striped-table order-items">
-            <tbody>
-            <tr>
-                <th><localize key="general_add" /></th>
-                <th><localize key="merchelloVariant_product" /></th>
-                <th><localize key="merchelloGeneral_quantity" /></th>
-                <th><localize key="merchelloGeneral_total" /></th>
-            </tr>
-            <tr data-ng-repeat="lineitem in shipmentSelection.selected.items"> <!-- dialogData.order.items -->
-                <td><input type="checkbox" data-ng-disabled="lineitem.backOrder" data-ng-model="lineitem.selected" /></td>
-                <td>
-                    <h4>{{lineitem.name}}</h4>
-                    <span><localize key="merchelloGeneral_sku" />: {{lineitem.sku}}</span>
-                </td>
-                <td class="text-right">{{lineitem.quantity}} x <strong>{{lineitem.price | currency : currencySymbol}}</strong></td>
-                <td class="text-right">{{lineitem.quantity * lineitem.price | currency : currencySymbol}}</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="umb-panel-footer" >
-        <div class="umb-el-wrap umb-panel-buttons">
-            <div class="btn-toolbar umb-btn-toolbar pull-right">
-                <!-- ACTION: Cancel -->
-                <a href data-ng-click="close()" class="btn btn-link"><localize key="general_cancel">Cancel</localize></a>
-                <!-- ACTION: Save Button -->
-                <button class="btn btn-primary" data-ng-click="save()">
-                    <localize key="merchelloGeneral_fulfill" /> <localize key="merchelloGeneral_shipment" />
-                </button>
+
+            <div class="umb-overlay-drawer">
+                <div class="umb-overlay-drawer__align-right">
+
+                    <div class="umb-button">
+                        <a href data-ng-click="close()" class="btn btn-link">
+                            <localize key="general_cancel"></localize>
+                        </a>
+                    </div>
+
+                    <div class="umb-button">
+                        <button class="btn btn-success" data-ng-click="save()">
+                            <localize key="merchelloGeneral_fulfill" /> <localize key="merchelloGeneral_shipment" />
+                        </button>
+                    </div>
+
+                </div>
             </div>
+
         </div>
     </div>
 </div>
-

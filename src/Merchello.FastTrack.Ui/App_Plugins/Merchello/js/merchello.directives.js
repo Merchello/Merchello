@@ -1203,7 +1203,7 @@ angular.module('merchello.directives').directive('customerItemCacheTable',
                         scope.title = data[0];
                         scope.settings = data[1];
                         scope.items = data[2].items;
-                        setCheckoutLink()
+                        setCheckoutLink();
                     });
                 }
 
@@ -1329,10 +1329,10 @@ angular.module('merchello.directives').directive('detachedContentTypeSelect',
                 showSave: '=?',
                 save: '&'
             },
-            template:         '<div class="detached-content-select">' +
+            template: '<div class="detached-content-select">' +
             '<div data-ng-show="detachedContentTypes.length > 0">' +
             '<label><localize key="merchelloDetachedContent_productContentTypes" /></label>' +
-            '<select data-ng-model="selectedContentType" data-ng-options="ct.name for ct in detachedContentTypes track by ct.key" data-ng-show="loaded">' +
+            '<select data-ng-model="selectedContentType" data-ng-options="ct.name for ct in detachedContentTypes track by ct.key" data-ng-show="loaded" class="form-control umb-editor">' +
             '<option value="">{{ noSelection }}</option>' +
             '</select>' +
             ' <merchello-save-icon show-save="showSave" do-save="save()"></merchello-save-icon>' +
@@ -1602,6 +1602,23 @@ angular.module('merchello.directives').directive('contentTypeDropDown',
 
     /**
      * @ngdoc directive
+     * @name merchello-drawer
+     * @function
+     *
+     * @description
+     * Directive to wrap the main function buttons in the footer of a page
+     */
+     angular.module('merchello.directives').directive('merchelloDrawer', function() {
+         return {
+             restrict: 'E',
+             replace: true,
+             transclude: 'true',
+             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/html/merchellodrawer.tpl.html'
+         };
+     });
+
+    /**
+     * @ngdoc directive
      * @name merchello-panel
      * @function
      *
@@ -1638,10 +1655,9 @@ angular.module('merchello.directives').directive('contentTypeDropDown',
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/html/merchelloslidepanelopen.tpl.html',
             link: function ($scope, $element, attrs) {
 
-                if ($scope.classes == undefined) {
-                    $scope.classes = 'control-group umb-control-group';
-                }
-
+                //if ($scope.classes == undefined) {
+                //    $scope.classes = 'control-group umb-control-group';
+                //}
 
             }
         };
@@ -4869,8 +4885,8 @@ angular.module('merchello.directives').directive('invoiceHeader',
 }])
 
 angular.module('merchello.directives').directive('invoiceItemizationTable',
-    ['$q', 'localizationService', 'invoiceResource', 'invoiceHelper', 'dialogService', 'productResource',
-        function ($q, localizationService, invoiceResource, invoiceHelper, dialogService, productResource) {
+    ['$q', '$timeout', 'localizationService', 'invoiceResource', 'invoiceHelper', 'dialogService', 'productResource', 'notificationsService',
+        function ($q, $timeout, localizationService, invoiceResource, invoiceHelper, dialogService, productResource, notificationsService) {
             return {
                 restrict: 'E',
                 replace: true,
@@ -4881,7 +4897,9 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                     paymentMethods: '=',
                     preValuesLoaded: '=',
                     currencySymbol: '=',
-                    save: '&'
+                    canEditLineItems:'=',
+                    save: '&',
+                    reload:'&'
                 },
                 templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/invoiceitemizationtable.tpl.html',
                 link: function (scope, elm, attr) {
@@ -4909,7 +4927,7 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
 
 
                     // Previews a line item on invoice in a dialog
-                    scope.lineItemPreview = function (sku) {
+                    scope.lineItemPreview = function(sku) {
 
                         // Setup the dialog data
                         var dialogData = {
@@ -4919,7 +4937,7 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
 
                         // Get the product if it exists! We call the vairant service as this seems
                         // to return the base product too
-                        productResource.getVariantBySku(sku).then(function (result) {
+                        productResource.getVariantBySku(sku).then(function(result) {
                             // If we get something back then add it to the diaglogData
                             if (result) {
                                 dialogData.product = result;
@@ -4931,8 +4949,102 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                             show: true,
                             dialogData: dialogData
                         });
-                    }
+                    };
 
+
+                    // The dialog that deals with lineitem quantity changes and deletions
+                    scope.editLineItem = function (lineItem, lineItemType) {
+
+                        var dialogData = {
+                            quantity: lineItem.quantity,
+                            lineItem: lineItem,
+                            deleteLineItem: false,
+                            canDelete: scope.invoice.items.length > 1,
+                            lineItemType: lineItemType
+                        };
+
+                        dialogService.open({
+                            template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/sales.edit.lineitem.html',
+                            show: true,
+                            dialogData: dialogData,
+                            callback: updateLineItem
+                        });
+
+                    };
+
+                    // Update a product line item on the invoice (Edit or Delete)
+                    function updateLineItem(lineItemDialogData) {
+
+                        var keepFindingProduct = true;
+                        // Post the model back to the controller
+                        var invoiceAddItems = {};
+
+                        if (lineItemDialogData.deleteLineItem) {
+
+                            // Loop through items                           
+                            angular.forEach(scope.invoice.items, function (item) {
+                                if (keepFindingProduct) {
+                                    if (lineItemDialogData.lineItem.sku === item.sku) {
+
+                                        // Make an invoice AddItemsModel
+                                        invoiceAddItems = {
+                                            InvoiceKey: scope.invoice.key,
+                                            LineItemType: lineItemDialogData.lineItemType,
+                                            Items: [
+                                                {
+                                                    Sku: item.sku,
+                                                    Quantity: 0
+                                                }
+                                            ]
+                                        }
+
+                                        // Stop finding and break (As no break in angular loop, this is best way)
+                                        keepFindingProduct = false;
+                                    }
+                                }
+                            });
+
+                        } else {
+
+                            // See if the quantity has changed and then        
+                            angular.forEach(scope.invoice.items, function (item) {
+                                if (keepFindingProduct) {
+                                    if (lineItemDialogData.lineItem.sku === item.sku
+                                        && lineItemDialogData.quantity !== item.quantity) {
+
+                                        // Make an invoice AddItemsModel
+                                        invoiceAddItems = {
+                                            InvoiceKey: scope.invoice.key,
+                                            LineItemType: lineItemDialogData.lineItemType,
+                                            Items: [
+                                                {
+                                                    Sku: item.sku,
+                                                    Quantity: lineItemDialogData.quantity,
+                                                    OriginalQuantity: item.quantity
+                                                }
+                                            ]
+                                        }
+
+                                        keepFindingProduct = false;
+                                    }   
+                                }
+                            });                           
+                        }
+
+                        // Put the new items
+                        var invoiceSavePromise = invoiceResource.putInvoiceNewProducts(invoiceAddItems);
+                        invoiceSavePromise.then(function () {
+                            $timeout(function () {
+                                scope.reload();
+                                loadInvoice();
+                                notificationsService.success('Invoice updated.');
+                            }, 1500);
+                        }, function (reason) {
+                            notificationsService.error("Failed to update invoice", reason.message);
+                        });
+
+
+                    };
 
                     function loadInvoice() {
                         var taxLineItem = scope.invoice.getTaxLineItem();
@@ -4948,8 +5060,7 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                             item.email = item.extendedData.getValue("email");
                         });
 
-                        scope.remainingBalance =
-                            invoiceHelper.round(scope.invoice.remainingBalance(scope.allPayments), 2);
+                        scope.remainingBalance = invoiceHelper.round(scope.invoice.remainingBalance(scope.allPayments), 2);
 
                         var label  = scope.remainingBalance == '0' ? 'merchelloOrderView_captured' : 'merchelloOrderView_authorized';
 

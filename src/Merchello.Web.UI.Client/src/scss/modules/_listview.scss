@@ -1,100 +1,48 @@
 .merchello-list-view {
-    clear: both;
+    .umb-table-body {
+        .umb-table-cell {
+            line-height: 15px;
+            min-height: 37px;
+            align-items: center;
 
-    .merchello-list-view-config {
-        padding:0 0 0 0;
-
-        h4 {
-            margin: 0;
-            padding: 4px 0;
-        }
-
-        form {
-            margin: 0 0 0 10px;
-            padding: 0;
-
-            select {
-                margin:0;
-                padding:0 0 0 0;
+            .merchello-icon {
+                .icon {
+                    align-items: initial;
+                }
             }
         }
+    }
 
-        .merchello-list-view-search, .merchello-list-view-pp {
-            padding:0 0 8px 0;
+    .umb-table-cell {
+
+        &:first-of-type:not(.not-fixed) {
+            padding: 6px 2px;
+            flex: 0 0 34px
+        }
+
+        > * {
+            overflow: hidden;
+            white-space: normal;
+            text-overflow: ellipsis;
+            word-wrap: normal;
+        }
+
+        > div.unflexed {
+            width: 100%;
+            flex: none;
+
+            small {
+                display: block;
+                color: #817f85;
+            }
         }
     }
 
-    a, a:visited {
-        color: #000;
-    }
-
-    thead {
-        a.gear, a.gear:visited {
-            cursor: pointer;
-        }
-    }
-
-    tbody tr:hover {
-        i.icon {
-            display: inline-block;
-        }
-    }
-
-    tbody td a {
-        display: block;
-    }
-
-    select {
-        width: 75px;
-        background: 0;
-        border: 1px solid #d9d9d9;
-    }
-
-    .label {
-        font-size: 1em;
-        line-height: 20px;
-        text-shadow: none;
-        padding: .25em 1em .25em .5em;
-
-        i {
-            color: #000;
-        }
-    }
-
-    .label-success {
-        background: lighten($green, 40%);
-        border-color: $green;
-    }
-
-    .label-warning {
-        background: lighten($orange, 40%);
-        border-color: $orange;
-    }
-
-    .label-info {
-        background: desaturate(lighten($blue, 50%), 25%);
-        border-color: $blue;
-    }
-
-    .label-default {
-        color: #000;
-    }
-
-    .icon-loading:before {
-        font-size: 1.15em;
-        vertical-align: top;
-        padding-top: 1px;
-    }
-
-    .checkout-dialog-btn {
-        float: right;
-        padding-top: 1px;
-        padding-bottom: 1px;
-    }
-}
-
-.listview-filteroptions {
-    label {
-        display: block;
+    .umb-table__name__large{
+        max-width:35%;
+    } 
+    
+    .umb-table-row {
+        cursor: default;
     }
 }

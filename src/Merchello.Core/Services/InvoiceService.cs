@@ -6,7 +6,7 @@
     using System.Linq;
     using System.Threading;
     using System.Web.UI;
-
+    using Gateways.Taxation;
     using Merchello.Core.Events;
     using Merchello.Core.Models;
     using Merchello.Core.Models.Interfaces;
@@ -20,6 +20,7 @@
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
     using Umbraco.Core.Persistence.SqlSyntax;
+    using Constants = Core.Constants;
 
     /// <summary>
     /// Represents the InvoiceService
@@ -1651,13 +1652,14 @@
         {
             if (invoice != null)
             {
-                var existing = invoice.Items.Where(x => x.LineItemType == LineItemType.Adjustment).ToArray();
+                var existing = invoice.Items.Where(x => x.LineItemType == LineItemType.Adjustment || x.ExtendedData != null && x.ExtendedData.ContainsKey(Constants.ExtendedDataKeys.Adjustment)).ToArray();
 
                 var invoiceLineItems = adjustments as IInvoiceLineItem[] ?? adjustments.ToArray();
                 var goodKeys = invoiceLineItems.Where(z => z.Key != Guid.Empty).Select(y => y.Key);
 
                 // remove existing adjustments not found
                 var removers = existing.Any() && !invoiceLineItems.Any() ? existing : existing.Where(x => goodKeys.All(y => y != x.Key));
+
                 foreach (var remove in removers)
                 {
                     invoice.Items.Remove(remove.Sku);
@@ -1669,19 +1671,100 @@
                 {
                     invoice.Items.Add(add);
                 }
-                
-                var charges = invoice.Items.Where(x => x.LineItemType != LineItemType.Discount).Sum(x => x.TotalPrice);
-                var discounts = invoice.Items.Where(x => x.LineItemType == LineItemType.Discount).Sum(x => x.TotalPrice);
-                decimal converted;
-                invoice.Total = Math.Round(decimal.TryParse((charges - discounts).ToString(CultureInfo.InvariantCulture), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture.NumberFormat, out converted) ? converted : 0, 2);
-                Save(invoice);
 
-                invoice.EnsureInvoiceStatus();
+                // Resync
+                ReSyncInvoiceTotal(invoice, true);
 
                 return true;
             }
 
             return false;
+        }
+
+
+        /// <summary>
+        /// Resyncs invoice total after line item changes
+        /// </summary>
+        /// <param name="applyTaxationMethod">
+        /// If set to true, this will rework out the tax for the invoice and update the tax items
+        /// </param>
+        /// <param name="invoice"></param>
+        internal void ReSyncInvoiceTotal(IInvoice invoice, bool applyTaxationMethod = false)
+        {
+            // TODO - Work out Tax!!
+            //&& MerchelloContext.Current.Gateways.Taxation.TaxationApplication == TaxationApplication.Invoice
+            if (applyTaxationMethod)
+            {
+                // clear any current tax lines
+                var removers = new List<ILineItem>();
+                removers.AddRange(invoice.Items.Where(x => x.LineItemType == LineItemType.Tax));
+                foreach (var remove in removers)
+                {
+                    invoice.Items.Remove(remove);
+                }
+
+                IAddress taxAddress = null;
+                var shippingItems = invoice.ShippingLineItems().ToArray();
+                if (shippingItems.Any())
+                {
+                    var shipment = shippingItems.First().ExtendedData.GetShipment<OrderLineItem>();
+                    taxAddress = shipment.GetDestinationAddress();
+                }
+
+                taxAddress = taxAddress ?? invoice.GetBillingAddress();
+
+                this.SetTaxableSetting(invoice);
+                var taxes = invoice.CalculateTaxes(MerchelloContext.Current, taxAddress);
+                this.SetTaxableSetting(invoice, true);
+
+                var taxLineItem = taxes.AsLineItemOf<InvoiceLineItem>();
+
+                var currencyCode = _storeSettingService.GetByKey(Core.Constants.StoreSetting.CurrencyCodeKey).Value;
+
+                taxLineItem.ExtendedData.SetValue(Core.Constants.ExtendedDataKeys.CurrencyCode, currencyCode);
+
+                invoice.Items.Add(taxLineItem);
+            }
+
+            // Work out the charges
+            var charges = invoice.Items.Where(x => x.LineItemType != LineItemType.Discount).Sum(x => x.TotalPrice);
+
+            // Work out the discounts
+            var discounts = invoice.Items.Where(x => x.LineItemType == LineItemType.Discount).Sum(x => x.TotalPrice);
+
+            // Calculate a new total
+            decimal converted;            
+            invoice.Total = Math.Round(decimal.TryParse((charges - discounts).ToString(CultureInfo.InvariantCulture), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture.NumberFormat, out converted) ? converted : 0, 2);
+
+            // Save the invoice
+            Save(invoice);
+
+            // Ensure status
+            invoice.EnsureInvoiceStatus();
+        }
+
+        /// <summary>
+        /// Sets or resets the tax setting.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="taxable">
+        /// The taxable.
+        /// </param>
+        /// <remarks>
+        /// In cases where a product already includes the tax and we still need to calculate taxes for shipping
+        /// and custom line items on the invoice we set the taxable setting on the products to false and then set them back
+        /// to true after the tax calculation has been completed.
+        /// </remarks>
+        private void SetTaxableSetting(IInvoice invoice, bool taxable = false)
+        {
+            if (!MerchelloContext.Current.Gateways.Taxation.ProductPricingEnabled) return;
+
+            foreach (var item in invoice.Items.Where(x => x.ExtendedData.TaxIncludedInProductPrice()))
+            {
+                item.ExtendedData.SetValue(Core.Constants.ExtendedDataKeys.Taxable, taxable.ToString());
+            }
         }
 
         /// <summary>

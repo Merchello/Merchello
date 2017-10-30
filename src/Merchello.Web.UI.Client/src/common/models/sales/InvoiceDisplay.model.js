@@ -94,12 +94,24 @@
             return this.invoiceStatus.name;
         }
 
-        function getFulfillmentStatus () {
+        function getFulfillmentStatus() {
+            var keepFindingOrder = true;
+            var statusToReturn = 'Fulfilled';
+
             if (!_.isEmpty(this.orders)) {
-                return this.orders[0].orderStatus.name;
+                angular.forEach(this.orders, function (order) {
+                    if (keepFindingOrder) {
+                        if (order.orderStatus.name !== statusToReturn) {
+
+                            statusToReturn = order.orderStatus.name;
+
+                            keepFindingOrder = false;
+                        }
+                    }
+                });  
             }
-            // TODO this should be localized
-            return 'Not Fulfilled';
+
+            return statusToReturn;
         }
 
         // gets the currency code for the invoice
@@ -136,7 +148,11 @@
         }
 
         function getAdjustmentLineItems() {
-            return ensureArray(_.filter(this.items, function(item) {
+            return ensureArray(_.filter(this.items, function (item) {
+                var adjustmentExtendedData = item.extendedData.getValue('merchAdjustment');
+                if (adjustmentExtendedData !== "") {
+                    return true;
+                }
                return item.lineItemTypeField.alias === 'Adjustment';
             }));
         }

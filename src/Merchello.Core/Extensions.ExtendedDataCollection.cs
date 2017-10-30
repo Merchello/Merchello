@@ -317,24 +317,55 @@ namespace Merchello.Core
         {
             extendedData.SetValue(Constants.ExtendedDataKeys.ProductKey, productVariant.ProductKey.ToString());
             extendedData.SetValue(Constants.ExtendedDataKeys.ProductVariantKey, productVariant.Key.ToString());
-            extendedData.SetValue(Constants.ExtendedDataKeys.CostOfGoods, productVariant.CostOfGoods == null ? 0.ToString(CultureInfo.InvariantCulture) : ((decimal)productVariant.CostOfGoods).ToString(CultureInfo.InvariantCulture));
-            extendedData.SetValue(Constants.ExtendedDataKeys.Weight, productVariant.Weight == null ? 0.ToString(CultureInfo.InvariantCulture) : ((decimal)productVariant.Weight).ToString(CultureInfo.InvariantCulture));
-            extendedData.SetValue(Constants.ExtendedDataKeys.Width, productVariant.Width == null ? 0.ToString(CultureInfo.InvariantCulture) : ((decimal)productVariant.Width).ToString(CultureInfo.InvariantCulture));
-            extendedData.SetValue(Constants.ExtendedDataKeys.Height, productVariant.Height == null ? 0.ToString(CultureInfo.InvariantCulture) : ((decimal)productVariant.Height).ToString(CultureInfo.InvariantCulture));
-            extendedData.SetValue(Constants.ExtendedDataKeys.Length, productVariant.Length == null ? 0.ToString(CultureInfo.InvariantCulture) : ((decimal)productVariant.Length).ToString(CultureInfo.InvariantCulture));
-            extendedData.SetValue(Constants.ExtendedDataKeys.Barcode, productVariant.Barcode);
-            extendedData.SetValue(Constants.ExtendedDataKeys.Price, productVariant.Price.ToString(CultureInfo.InvariantCulture));
-            extendedData.SetValue(Constants.ExtendedDataKeys.OnSale, productVariant.OnSale.ToString());
-            extendedData.SetValue(Constants.ExtendedDataKeys.Manufacturer, productVariant.Manufacturer);
-            extendedData.SetValue(Constants.ExtendedDataKeys.ManufacturerModelNumber, productVariant.ManufacturerModelNumber);
-            extendedData.SetValue(Constants.ExtendedDataKeys.SalePrice, productVariant.SalePrice == null ? 0.ToString(CultureInfo.InvariantCulture) : ((decimal)productVariant.SalePrice).ToString(CultureInfo.InvariantCulture));
-            extendedData.SetValue(Constants.ExtendedDataKeys.TrackInventory, productVariant.TrackInventory.ToString());
-            extendedData.SetValue(Constants.ExtendedDataKeys.OutOfStockPurchase, productVariant.OutOfStockPurchase.ToString());
-            extendedData.SetValue(Constants.ExtendedDataKeys.Taxable, productVariant.Taxable.ToString());
-            extendedData.SetValue(Constants.ExtendedDataKeys.Shippable, productVariant.Shippable.ToString());
-            extendedData.SetValue(Constants.ExtendedDataKeys.Download, productVariant.Download.ToString());
-            extendedData.SetValue(Constants.ExtendedDataKeys.DownloadMediaId, productVariant.DownloadMediaId.ToString());
-            extendedData.SetValue(Constants.ExtendedDataKeys.VersionKey, productVariant.VersionKey.ToString());
+            AddBaseProductValues(extendedData, productVariant);
+        }
+
+        /// <summary>
+        /// Adds product values
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data
+        /// </param>
+        /// <param name="product">
+        /// The product variant
+        /// </param>
+        public static void AddProductValues(this ExtendedDataCollection extendedData, IProduct product)
+        {
+            extendedData.SetValue(Constants.ExtendedDataKeys.ProductKey, product.Key.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.ProductVariantKey, product.ProductVariantKey.ToString());
+            AddBaseProductValues(extendedData, product);
+        }
+
+
+        /// <summary>
+        /// Adds product base values
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data
+        /// </param>
+        /// <param name="productBase">
+        /// The base product
+        /// </param>
+        private static void AddBaseProductValues(ExtendedDataCollection extendedData, IProductBase productBase)
+        {
+            extendedData.SetValue(Constants.ExtendedDataKeys.CostOfGoods, productBase.CostOfGoods == null ? 0.ToString(CultureInfo.InvariantCulture) : ((decimal)productBase.CostOfGoods).ToString(CultureInfo.InvariantCulture));
+            extendedData.SetValue(Constants.ExtendedDataKeys.Weight, productBase.Weight == null ? 0.ToString(CultureInfo.InvariantCulture) : ((decimal)productBase.Weight).ToString(CultureInfo.InvariantCulture));
+            extendedData.SetValue(Constants.ExtendedDataKeys.Width, productBase.Width == null ? 0.ToString(CultureInfo.InvariantCulture) : ((decimal)productBase.Width).ToString(CultureInfo.InvariantCulture));
+            extendedData.SetValue(Constants.ExtendedDataKeys.Height, productBase.Height == null ? 0.ToString(CultureInfo.InvariantCulture) : ((decimal)productBase.Height).ToString(CultureInfo.InvariantCulture));
+            extendedData.SetValue(Constants.ExtendedDataKeys.Length, productBase.Length == null ? 0.ToString(CultureInfo.InvariantCulture) : ((decimal)productBase.Length).ToString(CultureInfo.InvariantCulture));
+            extendedData.SetValue(Constants.ExtendedDataKeys.Barcode, productBase.Barcode);
+            extendedData.SetValue(Constants.ExtendedDataKeys.Price, productBase.Price.ToString(CultureInfo.InvariantCulture));
+            extendedData.SetValue(Constants.ExtendedDataKeys.OnSale, productBase.OnSale.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.Manufacturer, productBase.Manufacturer);
+            extendedData.SetValue(Constants.ExtendedDataKeys.ManufacturerModelNumber, productBase.ManufacturerModelNumber);
+            extendedData.SetValue(Constants.ExtendedDataKeys.SalePrice, productBase.SalePrice == null ? 0.ToString(CultureInfo.InvariantCulture) : ((decimal)productBase.SalePrice).ToString(CultureInfo.InvariantCulture));
+            extendedData.SetValue(Constants.ExtendedDataKeys.TrackInventory, productBase.TrackInventory.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.OutOfStockPurchase, productBase.OutOfStockPurchase.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.Taxable, productBase.Taxable.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.Shippable, productBase.Shippable.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.Download, productBase.Download.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.DownloadMediaId, productBase.DownloadMediaId.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.VersionKey, productBase.VersionKey.ToString());
         }
 
         /// <summary>

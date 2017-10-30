@@ -30,18 +30,18 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
             $scope.showVoid = showVoid;
             $scope.showRefund = showRefund;
 
-            // Helper to check for AvsCvvData
-            $scope.hasAvsCvvData = function(items) {
-                var hasAvsCvv = false;
+            // Helper to check for ED keys
+            $scope.hasExtendedDataKey = function(items, keyToFind) {
+                var hasKey = false;
                 if (items != null) {
                     for (var i = 0; i < items.length; i++) {
-                        if (items[i].key === "merchAvsCvvData") {
-                            hasAvsCvv = true;
+                        if (items[i].key === keyToFind) {
+                            hasKey = true;
                             break;
                         }
                     }
                 }
-                return hasAvsCvv;
+                return hasKey;
             };
 
             // Helper to show the data

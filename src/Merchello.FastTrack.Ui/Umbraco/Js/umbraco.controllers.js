@@ -16770,7 +16770,7 @@
             //note on the below, we dont assign a view unless it's the right route since if we did that it will load in that controller
             //for the view which is unecessary and will cause extra overhead/requests to occur
             vm.page = {};
-            vm.page.name = 'User Management';
+            vm.page.name = localizationService.localize('user_userManagement');
             vm.page.navigation = [
                 {
                     'name': localizationService.localize('sections_users'),
@@ -16805,7 +16805,7 @@
     }());
     (function () {
         'use strict';
-        function UserEditController($scope, $timeout, $location, $routeParams, formHelper, usersResource, contentEditingHelper, localizationService, notificationsService, mediaHelper, Upload, umbRequestHelper, usersHelper, authResource, dateHelper) {
+        function UserEditController($scope, $timeout, $location, $routeParams, formHelper, usersResource, userService, contentEditingHelper, localizationService, notificationsService, mediaHelper, Upload, umbRequestHelper, usersHelper, authResource, dateHelper) {
             var vm = this;
             vm.page = {};
             vm.page.rootIcon = 'icon-folder';
@@ -16877,7 +16877,7 @@
                     });
                 });
             }
-            function getLocalDate(date, format) {
+            function getLocalDate(date, culture, format) {
                 if (date) {
                     var dateVal;
                     var serverOffset = Umbraco.Sys.ServerVariables.application.serverTimeOffset;
@@ -16888,7 +16888,7 @@
                     } else {
                         dateVal = moment(date, 'YYYY-MM-DD HH:mm:ss');
                     }
-                    return dateVal.format(format);
+                    return dateVal.locale(culture).format(format);
                 }
             }
             function toggleChangePassword() {
@@ -17138,11 +17138,14 @@
                 vm.user.userDisplayState = usersHelper.getUserStateFromValue(vm.user.userState);
             }
             function formatDatesToLocal(user) {
-                user.formattedLastLogin = getLocalDate(user.lastLoginDate, 'MMMM Do YYYY, HH:mm');
-                user.formattedLastLockoutDate = getLocalDate(user.lastLockoutDate, 'MMMM Do YYYY, HH:mm');
-                user.formattedCreateDate = getLocalDate(user.createDate, 'MMMM Do YYYY, HH:mm');
-                user.formattedUpdateDate = getLocalDate(user.updateDate, 'MMMM Do YYYY, HH:mm');
-                user.formattedLastPasswordChangeDate = getLocalDate(user.lastPasswordChangeDate, 'MMMM Do YYYY, HH:mm');
+                // get current backoffice user and format dates
+                userService.getCurrentUser().then(function (currentUser) {
+                    user.formattedLastLogin = getLocalDate(user.lastLoginDate, currentUser.locale, 'LLL');
+                    user.formattedLastLockoutDate = getLocalDate(user.lastLockoutDate, currentUser.locale, 'LLL');
+                    user.formattedCreateDate = getLocalDate(user.createDate, currentUser.locale, 'LLL');
+                    user.formattedUpdateDate = getLocalDate(user.updateDate, currentUser.locale, 'LLL');
+                    user.formattedLastPasswordChangeDate = getLocalDate(user.lastPasswordChangeDate, currentUser.locale, 'LLL');
+                });
             }
             init();
         }
@@ -17248,7 +17251,7 @@
     }());
     (function () {
         'use strict';
-        function UsersController($scope, $timeout, $location, usersResource, userGroupsResource, localizationService, contentEditingHelper, usersHelper, formHelper, notificationsService, dateHelper) {
+        function UsersController($scope, $timeout, $location, usersResource, userGroupsResource, userService, localizationService, contentEditingHelper, usersHelper, formHelper, notificationsService, dateHelper) {
             var vm = this;
             var localizeSaving = localizationService.localize('general_saving');
             vm.page = {};
@@ -17285,6 +17288,17 @@
                     direction: 'Descending'
                 }
             ];
+            angular.forEach(vm.userSortData, function (userSortData) {
+                var key = 'user_sort' + userSortData.key + userSortData.direction;
+                localizationService.localize(key).then(function (value) {
+                    var reg = /^\[[\S\s]*]$/g;
+                    var result = reg.test(value);
+                    if (result === false) {
+                        // Only translate if key exists
+                        userSortData.label = value;
+                    }
+                });
+            });
             vm.userStatesFilter = [];
             vm.newUser.userGroups = [];
             vm.usersViewState = 'overview';
@@ -17512,10 +17526,10 @@
                 var firstSelectedUser = getUserFromArrayById(vm.selection[0], vm.users);
                 vm.selectedBulkUserGroups = _.clone(firstSelectedUser.userGroups);
                 vm.userGroupPicker = {
-                    title: 'Select user groups',
+                    title: localizationService.localize('user_selectUserGroups'),
                     view: 'usergrouppicker',
                     selection: vm.selectedBulkUserGroups,
-                    closeButtonLabel: 'Cancel',
+                    closeButtonLabel: localizationService.localize('general_cancel'),
                     show: true,
                     submit: function (model) {
                         usersResource.setUserGroupsOnUsers(model.selection, vm.selection).then(function (data) {
@@ -17546,10 +17560,10 @@
             }
             function openUserGroupPicker(event) {
                 vm.userGroupPicker = {
-                    title: 'Select user groups',
+                    title: localizationService.localize('user_selectUserGroups'),
                     view: 'usergrouppicker',
                     selection: vm.newUser.userGroups,
-                    closeButtonLabel: 'Cancel',
+                    closeButtonLabel: localizationService.localize('general_cancel'),
                     show: true,
                     submit: function (model) {
                         // apply changes
@@ -17774,7 +17788,10 @@
                         } else {
                             dateVal = moment(user.lastLoginDate, 'YYYY-MM-DD HH:mm:ss');
                         }
-                        user.formattedLastLogin = dateVal.format('MMMM Do YYYY, HH:mm');
+                        // get current backoffice user and format date
+                        userService.getCurrentUser().then(function (currentUser) {
+                            user.formattedLastLogin = dateVal.locale(currentUser.locale).format('LLL');
+                        });
                     }
                 });
             }

@@ -180,6 +180,7 @@
             entity.ResetDirtyProperties();
 
             //RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<INotificationMethod>(entity.MethodKey));
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<INotificationMethod>(entity.Key));
         }
 
         /// <summary>
@@ -198,7 +199,8 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
-           // RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<INotificationMethod>(entity.MethodKey));
+
+           RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<INotificationMethod>(entity.Key));
         }
     }
 }

@@ -294,6 +294,8 @@
             _itemCacheLineItemRepository.SaveLineItem(entity.Items, entity.Key);
 
             entity.ResetDirtyProperties();
+
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IItemCache>(entity.Key));
         }
 
         /// <summary>
@@ -308,6 +310,7 @@
             foreach (var delete in deletes)
             {
                 Database.Execute(delete, new { Key = entity.Key });
+                RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IItemCache>(entity.Key));
             }
         }
 

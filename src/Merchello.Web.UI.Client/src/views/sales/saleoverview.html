@@ -1,102 +1,120 @@
-<form novalidate name="orderForm" data-ng-controller="Merchello.Backoffice.SalesOverviewController" data-ng-show="loaded">
-    <umb-panel val-show-validation>
-        <umb-header>
-            <div class="span7">
-                <div class="umb-headline-editor-wrapper">
-                    <h1><localize key="merchelloOrder_sales" /> / <localize key="merchelloOrderView_invoiceNumber" />{{invoiceNumber }}</h1>
-                </div>
-            </div>
-            <div class="span5">
+<form novalidate name="orderForm" data-ng-controller="Merchello.Backoffice.SalesOverviewController"
+      data-ng-show="loaded" class="merchello">
+    
+    <div class="umb-panel umb-editor-wrapper" val-show-validation>
 
-                <div class="btn-toolbar pull-right umb-btn-toolbar">
-                    <div class="btn-group">
-                        <a href="#" class="btn dropdown-toggle" data-toggle="dropdown"><localize key="general_actions" /> <i class="icon-navigation-down"></i></a>
-                        <ul class="dropdown-menu merchello-action-menu">
-                            <li data-ng-hide="invoice.getFulfillmentStatus()==='Fulfilled' && !debugAllowDelete"><a data-ng-click="openDeleteInvoiceDialog()"><localize key="general_delete" /></a></li>
-                        </ul>
+        <div class="umb-editor-header umb-panel-header">
+            <div class="umb-panel-header-content-wrapper">
+
+                <div class="umb-panel-header-content">
+                    <div class="umb-panel-header-left-side -top-position">
+                        <div class="umb-panel-header-title-wrapper">
+                            <div class="umb-panel-header-name">
+                                <localize key="merchelloOrder_sales"/> / <localize key="merchelloOrderView_invoiceNumber"/>{{invoiceNumber }}
+                            </div>
+                        </div>
+                        <div class="umb-editor-header__actions-menu">
+                            
+                            <div class="pull-right" style="position: relative;">
+                                <a class="btn btn-info" href="#" data-toggle="dropdown">
+                                    <localize key="general_actions" class="ng-isolate-scopee">Actions</localize>
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu umb-actions" role="menu" aria-labelledby="dLabel">
+                                    <li data-ng-hide="invoice.getFulfillmentStatus()==='Fulfilled' && !debugAllowDelete"><a data-ng-click="openDeleteInvoiceDialog()"><localize key="general_delete" /></a></li>
+                                </ul>
+                            </div>
+     
+                        </div>
                     </div>
                 </div>
+
+                <merchello-tabs invoice="invoice" tabs="tabs"></merchello-tabs>
             </div>
-            <merchello-tabs invoice="invoice" tabs="tabs"></merchello-tabs>
-        </umb-header>
-        <merchello-panel class="row-fluid">
-            <!-- Main content area -->
-            <div class="merchello-pane primary span9">
-                <!-- Order Information -->
-                <div class="control-group umb-control-group">
+        </div>
 
-                        <h5><localize key="merchelloOrderView_invoiced" />: {{invoice.invoiceDateString() | date : settings.dateFormat }}</h5>
+        <merchello-panel>
+            
+            <div class="row-fluid">
+                <!-- Main content area -->
+                <div class="span9 panel-right-padding">
+                    <!-- Order Information -->
+                    <div class="control-group umb-control-group">
+                        
                         <div class="button-bar">
-                            <!-- ACTION: Cancel Sale -->
-                            <!-- ACTION: Capture Payment -->
-                            <button type="button" class="btn btn-default btn-action" data-ng-hide="invoice.isPaid() || payments.length === 0" data-ng-click="capturePayment()"><localize key="merchelloOrderView_captureFunds" /></button>
-
-                            <button type="button" class="btn btn-default btn-action" data-ng-click="toggleNewPaymentOpen()" data-ng-show="!invoice.isPaid() && payments.length === 0 && paymentMethodsLoaded"><localize key="merchelloOrderView_newPayment" /></button>
-                            <!-- ACTION: Fulfill Shipment -->
-                            <button type="button" class="btn btn-default btn-action" data-ng-show="showFulfill && invoice.hasOrder()" data-ng-click="openFulfillShipmentDialog()"><localize key="merchelloGeneral_fulfill" /></button>
-
+                            <button type="button" class="btn btn-info btn-action" ng-hide="invoice.isPaid() || payments.length === 0" data-ng-click="capturePayment()"><localize key="merchelloOrderView_captureFunds" /></button>
+                            <button type="button" class="btn btn-info btn-action" ng-click="toggleNewPaymentOpen()" data-ng-show="!invoice.isPaid() && payments.length === 0 && paymentMethodsLoaded"><localize key="merchelloOrderView_newPayment" /></button>
+                            <button type="button" class="btn btn-info btn-action" ng-show="showFulfill && invoice.hasOrder()" data-ng-click="openFulfillShipmentDialog()"><localize key="merchelloGeneral_fulfill" /></button>
                             <manage-invoice-adjustments invoice="invoice" payment-methods="paymentMethods" pre-values-loaded="preValuesLoaded" all-payments="allPayments" payments="payments" currency-symbol="currencySymbol" reload="reload()"></manage-invoice-adjustments>
+                            <div class="pull-right" ng-show="canAddLineItems">
+                                <merchello-add-icon do-add="openProductSelection()"></merchello-add-icon>
+                            </div>
                         </div>
 
                         <add-payment-table is-open="newPaymentOpen" payments="allPayments" toggle-open="toggleNewPaymentOpen()" reload="reload()" currency-symbol="currencySymbol" invoice="invoice" show-spinner="setNotPreValuesLoaded()" payment-methods="paymentMethods"></add-payment-table>
-                        <invoice-itemization-table invoice="invoice" payment-methods="paymentMethods" pre-values-loaded="preValuesLoaded" all-payments="allPayments" payments="payments" currency-symbol="currencySymbol"></invoice-itemization-table>
+                        <invoice-itemization-table invoice="invoice" payment-methods="paymentMethods" pre-values-loaded="preValuesLoaded" all-payments="allPayments" payments="payments" currency-symbol="currencySymbol" reload="reload()" can-edit-line-items="canAddLineItems"></invoice-itemization-table>
 
-                  
-                </div>
-
-                <div class="control-group umb-control-group">
-                    <merchello-notes-table entity-type="entityType" notes="invoice.notes" save="saveNotes()" delete="deleteNote"></merchello-notes-table>
-                </div>
-
-
-                <!-- Sale History -->
-                <div class="control-group umb-control-group" data-ng-hide="!historyLoaded">
-                    <div class="merchello-section-label">
-                        <localize key="merchelloOrderView_saleHistory" />
-                        <small><localize key="merchelloOrderView_saleHistoryHelper" /></small>
                     </div>
-                    <div class="merchello-controls">
-                        <div class="row-fluid" data-ng-repeat="item in salesHistory">
-                            <table class="table">
-                                <tbody>
-                                <thead>
+
+                    <div class="control-group umb-control-group">
+                        <merchello-notes-table entity-type="entityType" notes="invoice.notes" save="saveNotes()" delete="deleteNote"></merchello-notes-table>
+                    </div>
+
+
+                    <!-- Sale History -->
+                    <div class="control-group umb-control-group" data-ng-hide="!historyLoaded">
+                        <div class="merchello-section-label">
+                            <localize key="merchelloOrderView_saleHistory" />
+                            <small><localize key="merchelloOrderView_saleHistoryHelper" /></small>
+                        </div>
+                        <div class="merchello-controls">
+                            <div class="row-fluid" data-ng-repeat="item in salesHistory">
+                                <table class="table">
+                                    <tbody>
+                                    <thead>
                                     <tr>
                                         <th colspan="2">{{item.toDateString() | date : settings.dateFormat }}</th>
                                     </tr>
-                                </thead>
-                                <tr data-ng-repeat="log in item.logs track by $index">
-                                    <td>{{ log.message.formattedMessage }}</td>
-                                    <td class="text-right">{{log.toTimeString() | date : setting.timeFormat }}</td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                    <tr data-ng-repeat="log in item.logs track by $index">
+                                        <td>{{ log.message.formattedMessage }}</td>
+                                        <td class="text-right">{{log.toTimeString() | date : setting.timeFormat }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
+
+                    <entity-static-collections pre-values-loaded="preValuesLoaded" entity-type="entityType" entity="invoice" />
+
                 </div>
 
-                <entity-static-collections pre-values-loaded="preValuesLoaded" entity-type="entityType" entity="invoice" />
-
-            </div>
-            <!-- Sidebar -->
-            <div class="merchello-pane secondary span3">
-                <invoice-header invoice="invoice" refresh="refresh()"></invoice-header>
-                <!-- Invoice & Order Status -->
-                <div class="well invoice-order-info">
-                    <div class="pull-right" data-ng-show="invoice.getFulfillmentStatus() !== 'Fulfilled'">
-                        <merchello-edit-icon do-edit="openAddressAddEditDialog(billingAddress)"></merchello-edit-icon>
+                <!-- Sidebar -->
+                <div class="span3">
+                    <h5><localize key="merchelloOrderView_invoiced" />: {{invoice.invoiceDateString() | date : settings.dateFormat }}</h5>
+                    <invoice-header invoice="invoice" refresh="refresh()"></invoice-header>
+                   
+                    <div class="well invoice-order-info">
+                        <div class="pull-right" data-ng-show="invoice.getFulfillmentStatus() !== 'Fulfilled'">
+                            <merchello-edit-icon do-edit="openAddressAddEditDialog(billingAddress)"></merchello-edit-icon>
+                        </div>
+                        <h4><localize key="merchelloSales_billingAddress"/></h4>
+                        <merchello-address address="billingAddress"></merchello-address>
                     </div>
-                    <h4><localize key="merchelloSales_billingAddress" /></h4>
-                    <merchello-address address="billingAddress"></merchello-address>
-                </div>
-                <div class="well invoice-order-info" ng-hide="shippingLineItems.length > 0">
-                    <div class="pull-right" data-ng-show="invoice.getFulfillmentStatus() !== 'Fulfilled'">
-                        <merchello-edit-icon do-edit="openAddressAddEditDialog(shippingAddress)"></merchello-edit-icon>
-                    </div>
-                    <h4><localize key="merchelloSales_shippingAddress" /></h4>
-                    <merchello-address address="shippingAddress"></merchello-address>
 
+                    <div class="well invoice-order-info" ng-hide="shippingLineItems.length > 0">
+                        <div class="pull-right" data-ng-show="invoice.getFulfillmentStatus() !== 'Fulfilled'">
+                            <merchello-edit-icon do-edit="openAddressAddEditDialog(shippingAddress)"></merchello-edit-icon>
+                        </div>
+                        <h4><localize key="merchelloSales_shippingAddress"/></h4>
+                        <merchello-address address="shippingAddress"></merchello-address>
+
+                    </div>
                 </div>
             </div>
+
         </merchello-panel>
-    </umb-panel>
+    </div>
 </form>

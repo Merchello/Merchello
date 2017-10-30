@@ -92,6 +92,7 @@
                 {
                     var destinationCatalogInventory = catInv;
 
+                    // TODO - RSS - Why is this set and never used?
                     destinationCatalogInventory = catalogInventory.ToCatalogInventory(destinationCatalogInventory);
                 }
                 else
@@ -225,8 +226,61 @@
             var productDisplay = AutoMapper.Mapper.Map<ProductDisplay>(product);
             productDisplay.EnsureValueConversion(conversionType);
             return productDisplay;
-        }        
-               
+        }
+
+
+        /// <summary>
+        /// Turns a product variant into an InvoiceLineItem
+        /// </summary>
+        /// <param name="productVariant"></param>
+        /// <param name="qty"></param>
+        /// <param name="taxIncludedInProductPrice"></param>
+        /// <returns></returns>
+        internal static InvoiceLineItem ToInvoiceLineItem(this ProductVariantDisplay productVariant, int qty = 1, bool taxIncludedInProductPrice = false)
+        {
+            var extendedData = new ExtendedDataCollection();
+            extendedData.AddProductVariantValues(productVariant);
+
+            if (taxIncludedInProductPrice)
+            {
+                extendedData.TryAdd(Constants.ExtendedDataKeys.TaxIncludedInProductPrice, true.ToString());
+            }
+
+            // See if this variant is on sale
+            var price = productVariant.OnSale ? productVariant.SalePrice : productVariant.Price;
+
+            // TODO - Can we remove this extra step to turn into a line item
+            var itemCacheLineItem = new ItemCacheLineItem(LineItemType.Product, productVariant.Name, productVariant.Sku, qty, price, extendedData);
+            return itemCacheLineItem.AsLineItemOf<InvoiceLineItem>();
+        }
+
+
+        /// <summary>
+        /// Turns a product into an InvoiceLineItem
+        /// </summary>
+        /// <param name="product"></param>
+        /// <param name="qty"></param>
+        /// <param name="taxIncludedInProductPrice"></param>
+        /// <returns></returns>
+        internal static InvoiceLineItem ToInvoiceLineItem(this ProductDisplay product, int qty = 1, bool taxIncludedInProductPrice = false)
+        {
+            var extendedData = new ExtendedDataCollection();
+            extendedData.AddProductValues(product);
+
+            if (taxIncludedInProductPrice)
+            {
+                extendedData.TryAdd(Constants.ExtendedDataKeys.TaxIncludedInProductPrice, true.ToString());
+            }
+
+            // See if this variant is on sale
+            var price = product.OnSale ? product.SalePrice : product.Price;
+
+            // TODO - Can we remove this extra step to turn into a line item
+            var itemCacheLineItem = new ItemCacheLineItem(LineItemType.Product, product.Name, product.Sku, qty, price, extendedData);
+            return itemCacheLineItem.AsLineItemOf<InvoiceLineItem>();
+        }
+
+
         #endregion
 
 

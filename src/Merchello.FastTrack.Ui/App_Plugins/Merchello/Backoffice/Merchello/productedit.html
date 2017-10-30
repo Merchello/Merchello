@@ -1,73 +1,106 @@
-<form novalidate name="productVariantForm" data-ng-controller="Merchello.Backoffice.ProductEditController"
-      data-ng-show="loaded" data-ng-submit="save()">
-    <umb-panel val-show-validation>
-        <umb-header>
-            <div class="span7">
-                <umb-content-name ng-model="productVariant.name" localize="placeholder" placeholder="@merchelloPlaceholders_enterProduct">
-                </umb-content-name>
-            </div>
-            <div class="span5">
-                <div class="btn-toolbar pull-right umb-btn-toolbar">
-                    <div class="btn-group">
-                        <button data-ng-disabled="productVariantForm.$invalid" data-ng-click="save(productVariantForm)" class="btn btn-success"><localize key="buttons_save" /></button>
-                        <button class="btn dropdown-toggle btn-success" data-toggle="dropdown" data-ng-show="context !== 'createproduct'">
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu merchello-action-menu" role="menu"  data-ng-show="context !== 'createproduct'">
-                            <li><a data-ng-click="openCopyProductDialog()"><localize key="merchelloProducts_copyProduct" /></a></li>
-                            <li><a data-ng-click="deleteProductDialog()"><localize key="merchelloVariant_deleteProduct" /></a></li>
-                        </ul>
+<form novalidate name="productVariantForm" data-ng-controller="Merchello.Backoffice.ProductEditController" 
+      data-ng-show="loaded" data-ng-submit="save()" class="merchello">
+    
+    <div class="umb-panel umb-editor-wrapper">
+        
+        <div class="umb-editor-header umb-panel-header">
+            <div class="umb-panel-header-content-wrapper">
+
+                <div class="umb-panel-header-content">
+                    <div class="umb-panel-header-left-side -top-position">
+                        <div class="umb-panel-header-title-wrapper">
+                        
+                          <input
+                            type="text"
+                            class="umb-panel-header-name-input"
+                            localize="placeholder"
+                            placeholder="@merchelloPlaceholders_enterProduct"
+                            name="headerName"
+                            ng-model="productVariant.name"
+                            umb-auto-focus
+                            val-server-field="Name"
+                            required />
+                        
+                        </div>
+                        <div class="umb-editor-header__actions-menu" data-ng-show="context !== 'createproduct'">
+                            <div class="pull-right" style="position: relative;">
+                                <!-- options button -->
+                                <a class="btn btn-info" href="#" data-toggle="dropdown">
+                                    <localize key="general_actions">Actions</localize>
+                                    <span class="caret"></span>
+                                </a>
+                                <!-- actions -->
+                                <ul class="dropdown-menu umb-actions" role="menu" aria-labelledby="dLabel">
+                                    <li><a data-ng-click="openCopyProductDialog()"><localize key="merchelloProducts_copyProduct"/></a></li>
+                                    <li><a data-ng-click="deleteProductDialog()"><localize key="merchelloVariant_deleteProduct"/></a></li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                    <!--div class="btn-group">
-                        <a data-ng-click="deleteProductDialog()" data-ng-show="context !== 'varianteditor' && context !== 'createproduct'" class="btn btn-danger"><localize key="merchelloVariant_deleteProduct" /></a>
-                        <a data-ng-disabled="productVariantForm.$invalid" data-ng-click="save(productVariantForm)" class="btn btn-success"><localize key="buttons_save" /></a>
-                    </div-->
                 </div>
+
+                <merchello-tabs tabs="tabs"></merchello-tabs>
             </div>
-            <merchello-tabs tabs="tabs"></merchello-tabs>
-        </umb-header>
+        </div>
 
         <merchello-panel>
-            <div class="form-horizontal tab-content row-fluid" data-ng-show="preValuesLoaded">
-                <div class="merchello-pane">
 
-                    <!-- Property classes from Umbraco styles -->
-                    <div class="control-group umb-control-group">
-                        <label class="merchello-control-label">
+            <div class="umb-property">
+                <div class="control-group umb-control-group">
+                    <div class="umb-el-wrap">
+
+                        <label class="control-label">
                             <localize key="merchelloVariant_variantInfo"/>
-                            <small><localize key="merchelloVariant_configVariant" /></small>
+                            <small><localize key="merchelloVariant_configVariant"/></small>
                         </label>
-                        <div class="merchello-controls">
+
+                        <div class="controls">
                             <!-- Form for checkboxes that manage below sections, key fields like SKU, Price, etc -->
                             <product-variant-main-properties product="product" product-variant="productVariant" context="context" settings="settings"></product-variant-main-properties>
 
                         </div>
                     </div>
+                </div>
+            </div>
 
-                    <!-- Digital Downloads Picker -->
-                    <merchello-slide-open-panel is-open="productVariant.download" classes="'control-group umb-control-group'" hide-close="hideClose">
-                        <product-variant-digital-download product-variant="productVariant" pre-values-loaded="preValuesLoaded"></product-variant-digital-download>
-                    </merchello-slide-open-panel>
+            <!-- Digital Downloads Picker -->
+            <div class="umb-property">
+                <merchello-slide-open-panel is-open="productVariant.download" classes="'control-group umb-control-group'" hide-close="hideClose">
+                    <product-variant-digital-download product-variant="productVariant" pre-values-loaded="preValuesLoaded"></product-variant-digital-download>
+                </merchello-slide-open-panel>
+            </div>
 
+            <!-- Filter groups and collections -->
+            <div class="umb-property">
+                <merchello-slide-open-panel is-open="context === 'productedit'" hide-close="hideClose">
+                    <entity-static-collections entity-type="entityType" entity="product" pre-values-loaded="preValuesLoaded"></entity-static-collections>
+                    <entity-filter-groups entity-type="entityType" pre-values-loaded="preValuesLoaded" entity="product"></entity-filter-groups>
+                </merchello-slide-open-panel>
+            </div>
 
+            <!-- Shipping settings for a product. -->
+            <div class="umb-property">
+                <merchello-slide-open-panel is-open="productVariant.shippable || productVariant.trackInventory" classes="'control-group umb-control-group'" hide-close="hideClose">
+                    <product-variant-shipping product="product" product-variant="productVariant" settings="settings" context="{{context}}"></product-variant-shipping>
+                </merchello-slide-open-panel>
+            </div>
 
-                    <merchello-slide-open-panel is-open="context === 'productedit'" classes="'control-group umb-control-group'" hide-close="hideClose">
-
-                        <entity-static-collections entity-type="entityType" entity="product" pre-values-loaded="preValuesLoaded"></entity-static-collections>
-
-                        <entity-filter-groups entity-type="entityType" pre-values-loaded="preValuesLoaded" entity="product"></entity-filter-groups>
-
-                    </merchello-slide-open-panel>
-
-
-                    <!-- Shipping settings for a product. -->
-                    <merchello-slide-open-panel is-open="productVariant.shippable || productVariant.trackInventory" classes="'control-group umb-control-group'" hide-close="hideClose">
-                        <product-variant-shipping product="product" product-variant="productVariant" settings="settings" context="{{context}}"></product-variant-shipping>
-                    </merchello-slide-open-panel>
+        </merchello-panel>
+        
+        <merchello-drawer>
+            
+            <div class="umb-editor-drawer-content__right-side">
+                <div class="btn-group umb-button-group">
+                    <div class="umb-button">
+                        <button data-ng-disabled="productVariantForm.$invalid" type="button" data-ng-click="save(productVariantForm)" hotkey="ctrl+s" hotkey-when-hidden="true" class="btn btn-success"><localize key="buttons_save"/></button>
+                    </div> 
 
                 </div>
-                <!-- /merchello-pane -->
             </div>
-        </merchello-panel>
-    </umb-panel>
+
+
+        </merchello-drawer>
+
+    </div>
+
 </form>

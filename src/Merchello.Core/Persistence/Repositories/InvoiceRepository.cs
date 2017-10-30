@@ -1567,6 +1567,24 @@
             _invoiceLineItemRepository.SaveLineItem(entity.Items, entity.Key);
 
             entity.ResetDirtyProperties();
+
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IInvoice>(entity.Key));
+
+            foreach (var entityOrder in entity.Orders)
+            {
+                foreach (var shipment in entityOrder.Shipments())
+                {
+                    foreach (var shipmentItem in shipment.Items)
+                    {
+                        RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IOrderLineItem>(shipmentItem.Key));
+                    }
+
+                    RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IShipment>(shipment.Key));
+                }
+
+                RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IOrder>(entityOrder.Key));
+            }
+
         }
 
         /// <summary>

@@ -195,6 +195,8 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
+
+            RuntimeCache.ClearCacheItem(Core.Cache.CacheKeys.GetEntityCacheKey<IWarehouse>(entity.Key));
         }
 
         /// <summary>
@@ -210,6 +212,8 @@
             {
                 Database.Execute(delete, new { Key = entity.Key });
             }
+
+            RuntimeCache.ClearCacheItem(Core.Cache.CacheKeys.GetEntityCacheKey<IWarehouse>(entity.Key));
         }
 
         /// <summary>

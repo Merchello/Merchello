@@ -1,34 +1,48 @@
 <div class="umb-panel merchello-side-panel" ng-controller="Merchello.Marketing.Dialogs.OfferRewardCouponDiscountPriceController" data-ng-show="loaded">
-    <div class="umb-modalcolumn-header">
-        <h4>REWARD: Discount the price</h4>
-    </div>
-    <form name="priceAdjustForm" id="priceAdjustForm">
-        <div class="umb-panel-body with-header with-footer">
+    <div class="umb-overlay umb-overlay-right">
+        <form class="umb-overlay__form" name="priceAdjustForm" id="priceAdjustForm">
 
-            <div class="form-group row-fluid input-prepend input-append">
+            <div class="umb-overlay-header">
+                <h4 class="umb-overlay__title">REWARD: Discount the price</h4>
+            </div>
+
+            <div class="umb-overlay-container form-horizontal merchello-panel-body">
                 <label for="discount">Apply discount in the amount<small>Values should be entered as positive numbers.</small></label>
-                <span class="add-on" data-ng-show="adjustmentType === 'flat'">{{currencySymbol}}</span>
-                <input data-ng-model="amount" class="col-xs-5 span5" data-ng-required="true" type="number" />
-                <span class="add-on" data-ng-show="adjustmentType === 'percent'">%</span>
-            </div>
-            <div class="form-group row-fluid adjustment-type">
-                <label><input type="radio" data-ng-model="adjustmentType" value="flat" />Amount</label>
-                <label><input type="radio" data-ng-model="adjustmentType" value="percent" />Percent</label>
-            </div>
-        </div>
-
-        <div class="umb-panel-footer" >
-            <div class="umb-el-wrap umb-panel-buttons">
-                <div class="btn-toolbar umb-btn-toolbar pull-right">
-                    <!-- ACTION: Cancel -->
-                    <a href data-ng-click="close()" class="btn btn-link"><localize key="general_cancel">Cancel</localize></a>
-
-                    <button class="btn btn-primary"
-                            data-ng-click="save()">
-                        <localize key="buttons_save">Save</localize>
-                    </button>
+                <div class="form-group row-fluid input-prepend input-append">
+                    <span class="add-on" data-ng-show="adjustmentType === 'flat'">{{currencySymbol}}</span>
+                    <input data-ng-model="amount" class="col-xs-5 span5" data-ng-required="true" type="number"/>
+                    <span class="add-on" data-ng-show="adjustmentType === 'percent'">%</span>
+                </div>
+                <div class="form-group row-fluid adjustment-type">
+                    <label class="label-checkbox">
+                        <input type="radio" data-ng-model="adjustmentType" value="flat"/>
+                        <span>Amount</span>
+                    </label>
+                    <label class="label-checkbox">
+                        <input type="radio" data-ng-model="adjustmentType" value="percent"/>
+                        <span>Percent</span>
+                    </label>
                 </div>
             </div>
-        </div>
-    </form>
+
+            <div class="umb-overlay-drawer">
+                <div class="umb-overlay-drawer__align-right">
+                    
+                    <div class="umb-button">
+                        <a href data-ng-click="close()" class="btn btn-link">
+                            <localize key="general_cancel"></localize>
+                        </a>
+                    </div>
+
+                    <div class="umb-button">
+                        <button class="btn btn-success" data-ng-click="save()">
+                            <localize key="buttons_save"></localize>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+        </form>
+    </div>
 </div>

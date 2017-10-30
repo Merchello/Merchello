@@ -1,34 +1,36 @@
-<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Product.Dialogs.AddProductContentTypeController" data-ng-show="loaded">
-    <form name="productContentTypeForm" id="productContentTypeForm">
-        <div class="form-group row-fluid" style="padding: 1em">
-            <div class="control-group">
-                <label for="name"><localize key="general_name" /></label>
-                <input name="name" type="text" class="span11" data-ng-model="name" required />
-                <div class="error" data-ng-show="productContentTypeForm.name.$invalid && wasFormSubmitted"><localize key="merchelloValidation_nameFieldRequired" /></div>
-            </div>
-            <div class="control-group">
-                <label for="description"><localize key="editcontenttype_description" /></label>
-                <textarea name="description" type="text" class="span11" data-ng-model="description" rows="3"></textarea>
-            </div>
-            <div class="control-group">
-                <label for="associateType"><localize key="merchelloGeneral_associateWith">Associate with</localize></label>
-                <select name="associateType" data-ng-model="associateType">
-                    <option value="Product">Product</option>
-                    <option value="ProductOption">Product Option</option>
-                </select>
+<div ng-controller="Merchello.Product.Dialogs.AddProductContentTypeController" data-ng-show="loaded">
+    <div class="umb-dialog-body with-footer">
+        <div class="umb-pane">
+            <form name="productContentTypeForm" id="productContentTypeForm" class="row-fluid">
+ 
+                <div class="form-group control-group">
+                    <label for="name"><localize key="general_name" /></label>
+                    <input name="name" type="text" class="form-control span11 col-md-11" data-ng-model="name" required />
+                    <div class="error" data-ng-show="productContentTypeForm.name.$invalid && wasFormSubmitted"><localize key="merchelloValidation_nameFieldRequired" /></div>
+                </div>
+                <div class="form-group control-group">
+                    <label for="description"><localize key="editcontenttype_description" /></label>
+                    <textarea name="description" type="text" class="form-control span11 col-md-11" data-ng-model="description" rows="3"></textarea>
+                </div>
+                <div class="form-group control-group">
+                    <label for="associateType"><localize key="merchelloGeneral_associateWith">Associate with</localize></label>
+                    <select name="associateType" data-ng-model="associateType" class="form-control span11 col-md-11">
+                        <option value="Product">Product</option>
+                        <option value="ProductOption">Product Option</option>
+                    </select>
 
-            </div>
-            <content-type-drop-down selected-content-type="contentType" />
-
-        </div>
-    </form>
-    <div class="umb-el-wrap umb-panel-buttons">
-        <div class="btn-toolbar umb-btn-toolbar pull-right">
-            <!-- ACTION: Cancel -->
-            <a href data-ng-click="nav.hideNavigation()" class="btn btn-link"><localize key="general_cancel"></localize></a>
-            <!-- ACTION: Submit DialogData -->
-            <button class="btn btn-primary" data-ng-click="save()"><localize key="buttons_save" /></button>
-
+                </div>
+                <content-type-drop-down selected-content-type="contentType" />
+           
+            </form>
         </div>
     </div>
+
+    <div class="umb-dialog-footer btn-toolbar umb-btn-toolbar"> 
+        <!-- ACTION: Cancel -->
+        <a href data-ng-click="nav.hideNavigation()" class="btn btn-link"><localize key="general_cancel"></localize></a>
+        <!-- ACTION: Submit DialogData -->
+        <button class="btn btn-success" data-ng-click="save()"><localize key="buttons_save" /></button>    
+    </div>
+
 </div>

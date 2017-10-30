@@ -8,18 +8,3 @@
         width: inherit;
     }
 }
-
-// The UI for selecting a content type
-.detached-content-select {
-    display: inline-block;
-    text-align: left;
-
-    label {
-        font-weight: bold;
-        margin-right:6px;
-    }
-
-    .merchello-icons {
-        margin:-2px 0;
-    }
-}

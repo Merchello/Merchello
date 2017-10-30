@@ -369,9 +369,9 @@ angular.module('merchello.models').constant('EntityUseCount', EntityUseCount);
         }
 
 
-        /// appends a customer tab to the current collection
+        // appends a customer tab to the current collection
         function appendCustomerTab(customerKey) {
-            if(customerKey !== '00000000-0000-0000-0000-000000000000') {
+            if (customerKey !== '00000000-0000-0000-0000-000000000000' && customerKey !== null && customerKey !== undefined) {
                 addTab.call(this, 'customer', 'merchelloTabs_customer', '#/merchello/merchello/customeroverview/' + customerKey);
             }
         }
@@ -635,6 +635,7 @@ angular.module('merchello.models').constant('EntityCollectionProviderDisplay', E
         self.company = '';
         self.countryCode = '';
         self.phone = '';
+        self.email = '';
         self.isDefault = false;
     };
 
@@ -1148,10 +1149,10 @@ angular.module('merchello.models').constant('AddEditEntityStaticCollectionDialog
         }
 
         //// helper method to set required associated invoice info
-        function setInvoiceData(payments, invoice, currencySymbol) {
+        function setInvoiceData(payments, invoice, currencySymbol, invoiceHelper) {
             if (invoice !== undefined) {
                 this.invoiceKey = invoice.key;
-                this.invoiceBalance = invoice.remainingBalance(payments);
+                this.invoiceBalance = invoiceHelper.round(invoice.remainingBalance(payments), 2);
             }
             if (currencySymbol !== undefined) {
                 this.currencySymbol = currencySymbol;
@@ -1760,8 +1761,12 @@ OfferComponentDefinitionDisplay.prototype = (function() {
         }
         // hack catch for save call where there's a context switch on this to window
         // happens when saving the offer settings
-        if (this.extendedData.items !== undefined) {
-            return !this.extendedData.isEmpty();
+        if (this.extendedData) {
+            if (this.extendedData.items !== undefined && this.extendedData.items !== null) {
+                return !this.extendedData.isEmpty();
+            } else {
+                return true;
+            }
         } else {
             return true;
         }
@@ -3239,12 +3244,24 @@ angular.module('merchello.models').constant('SalesOverTimeResult', SalesOverTime
             return this.invoiceStatus.name;
         }
 
-        function getFulfillmentStatus () {
+        function getFulfillmentStatus() {
+            var keepFindingOrder = true;
+            var statusToReturn = 'Fulfilled';
+
             if (!_.isEmpty(this.orders)) {
-                return this.orders[0].orderStatus.name;
+                angular.forEach(this.orders, function (order) {
+                    if (keepFindingOrder) {
+                        if (order.orderStatus.name !== statusToReturn) {
+
+                            statusToReturn = order.orderStatus.name;
+
+                            keepFindingOrder = false;
+                        }
+                    }
+                });  
             }
-            // TODO this should be localized
-            return 'Not Fulfilled';
+
+            return statusToReturn;
         }
 
         // gets the currency code for the invoice
@@ -3281,7 +3298,11 @@ angular.module('merchello.models').constant('SalesOverTimeResult', SalesOverTime
         }
 
         function getAdjustmentLineItems() {
-            return ensureArray(_.filter(this.items, function(item) {
+            return ensureArray(_.filter(this.items, function (item) {
+                var adjustmentExtendedData = item.extendedData.getValue('merchAdjustment');
+                if (adjustmentExtendedData !== "") {
+                    return true;
+                }
                return item.lineItemTypeField.alias === 'Adjustment';
             }));
         }

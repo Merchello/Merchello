@@ -1,30 +1,37 @@
 <div class="umb-panel merchello-side-panel">
-    <div class="umb-modalcolumn-header">
-        <h4><localize key="merchelloOrder_voidPayment" /></h4>
-    </div>
-    <div class="umb-panel-body with-header with-footer">
 
-        <div class="control-group row-fluid">
-            <h4><localize key="merchelloOrder_voidPaymentConfirmMessage" /></h4>
-            <p class="text-warning"><localize key="merchelloProviders_paymentVoidWarning" /></p>
-        </div>
+    <div class="umb-overlay umb-overlay-right">
+        <div class="umb-overlay__form">
 
-    </div>
+            <div class="umb-overlay-header">
+                <h4 class="umb-overlay__title"><localize key="merchelloOrder_voidPayment" /></h4>
+            </div>
 
-    <div class="umb-panel-footer" >
-        <div class="umb-el-wrap umb-panel-buttons">
-            <div class="btn-toolbar umb-btn-toolbar pull-right">
+            <div class="umb-overlay-container form-horizontal merchello-panel-body">
+                <div class="control-group row-fluid">
+                    <h4><localize key="merchelloOrder_voidPaymentConfirmMessage" /></h4>
+                    <p class="text-warning">
+                        <localize key="merchelloProviders_paymentVoidWarning" />
+                    </p>
+                </div>
+            </div>
 
-                <a href data-ng-click="close()" class="btn btn-link">
-                    <localize key="general_cancel">Cancel</localize>
-                </a>
+            <div class="umb-overlay-drawer">
+                <div class="umb-overlay-drawer__align-right">
+                    
+                    <div class="umb-button">
+                        <a href data-ng-click="close()" class="btn btn-link">
+                            <localize key="general_cancel"></localize>
+                        </a>
+                    </div>
 
-                <button
-                        class="btn btn-primary"
-                        data-ng-click="submit(dialogData)">
-                    <localize key="merchelloOrder_voidPayment" />
-                </button>
+                    <div class="umb-button">
+                        <button class="btn btn-success" data-ng-click="submit(dialogData)">
+                            <localize key="merchelloOrder_voidPayment"></localize>
+                        </button>
+                    </div>
 
+                </div>
             </div>
         </div>
     </div>

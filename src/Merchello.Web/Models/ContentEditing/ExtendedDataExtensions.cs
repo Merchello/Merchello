@@ -41,6 +41,53 @@
             extendedData.SetValue(Constants.ExtendedDataKeys.VersionKey, productVariant.VersionKey.ToString());
         }
 
+        /// <summary>
+        /// Adds product values
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data
+        /// </param>
+        /// <param name="product">
+        /// The product variant
+        /// </param>
+        public static void AddProductValues(this ExtendedDataCollection extendedData, ProductDisplay product)
+        {
+            extendedData.SetValue(Constants.ExtendedDataKeys.ProductKey, product.Key.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.ProductVariantKey, product.ProductVariantKey.ToString());
+            AddBaseProductValues(extendedData, product);
+        }
+
+        /// <summary>
+        /// Adds product base values
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data
+        /// </param>
+        /// <param name="productBase">
+        /// The base product
+        /// </param>
+        private static void AddBaseProductValues(ExtendedDataCollection extendedData, ProductDisplayBase productBase)
+        {
+            extendedData.SetValue(Constants.ExtendedDataKeys.CostOfGoods, productBase.CostOfGoods.ToString(CultureInfo.InvariantCulture));
+            extendedData.SetValue(Constants.ExtendedDataKeys.Weight, productBase.Weight.ToString(CultureInfo.InvariantCulture));
+            extendedData.SetValue(Constants.ExtendedDataKeys.Width, productBase.Width.ToString(CultureInfo.InvariantCulture));
+            extendedData.SetValue(Constants.ExtendedDataKeys.Height, productBase.Height.ToString(CultureInfo.InvariantCulture));
+            extendedData.SetValue(Constants.ExtendedDataKeys.Length, productBase.Length.ToString(CultureInfo.InvariantCulture));
+            extendedData.SetValue(Constants.ExtendedDataKeys.Barcode, productBase.Barcode);
+            extendedData.SetValue(Constants.ExtendedDataKeys.Price, productBase.Price.ToString(CultureInfo.InvariantCulture));
+            extendedData.SetValue(Constants.ExtendedDataKeys.OnSale, productBase.OnSale.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.Manufacturer, productBase.Manufacturer);
+            extendedData.SetValue(Constants.ExtendedDataKeys.ManufacturerModelNumber, productBase.ManufacturerModelNumber);
+            extendedData.SetValue(Constants.ExtendedDataKeys.SalePrice, productBase.SalePrice.ToString(CultureInfo.InvariantCulture));
+            extendedData.SetValue(Constants.ExtendedDataKeys.TrackInventory, productBase.TrackInventory.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.OutOfStockPurchase, productBase.OutOfStockPurchase.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.Taxable, productBase.Taxable.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.Shippable, productBase.Shippable.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.Download, productBase.Download.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.DownloadMediaId, productBase.DownloadMediaId.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.VersionKey, productBase.VersionKey.ToString());
+        }
+
         #region INote
 
         /// <summary>

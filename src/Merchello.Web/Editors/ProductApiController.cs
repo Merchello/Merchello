@@ -119,7 +119,8 @@
         [HttpGet]
         public ProductDisplay GetProduct(Guid id)
         {            
-            var product = _merchello.Query.Product.GetByKey(id);
+            //var product = _merchello.Query.Product.GetByKey(id);
+            var product = _productService.GetByKey(id).ToProductDisplay(DetachedValuesConversionType.Editor);
             return product;
         }
 
@@ -137,8 +138,8 @@
         [HttpGet]
         public ProductDisplay GetProductBySku(string sku)
         {
-            var product = _merchello.Query.Product.GetBySku(sku);
-            return product;
+            //var product = _merchello.Query.Product.GetBySku(sku);
+            return _productService.GetBySku(sku).ToProductDisplay(DetachedValuesConversionType.Editor);
         }
 
         /// <summary>
@@ -155,7 +156,8 @@
         [HttpGet]
         public ProductVariantDisplay GetProductVariant(Guid id)
         {
-            var variant = _merchello.Query.Product.GetProductVariantByKey(id);
+            //var variant = _merchello.Query.Product.GetProductVariantByKey(id);
+            var variant = _productVariantService.GetByKey(id).ToProductVariantDisplay(DetachedValuesConversionType.Editor);
             return variant;
         }
 
@@ -173,8 +175,29 @@
         [HttpGet]
         public ProductVariantDisplay GetProductVariantBySku(string sku)
         {
-            var variant = _merchello.Query.Product.GetProductVariantBySku(sku);
-            return variant;
+            var variant = _productVariantService.GetBySku(sku);
+
+            // See if we have a variant
+            // TODO - should document this properly (edge case)            
+            if (variant == null)
+            {
+                // See if the sku contains a pipe. This is a special charactor to split a SKU up
+                // so we can seperate out the same product within the sales list. But return data from a base SKU
+                // i.e. may-product-sku may be a product, and you have the same product that you have added some custom items to
+                //      so generate a new sku.. may-product-sku|some-key ..using a pipe to delimit the extra key and force the product
+                //      to appear on another line item. However, the preview won't work as SKU is not recognised. So we need to strip out
+                //      the pipe onwards on the sku and try that.
+                if (sku.Contains("|"))
+                {
+                    // Remove end of sku
+                    sku = sku.Substring(0, sku.LastIndexOf("|"));
+
+                    // try and get it with new sku
+                    variant = _productVariantService.GetBySku(sku);
+                }
+            }
+
+            return variant.ToProductVariantDisplay(DetachedValuesConversionType.Editor);
         }
 
         /// <summary>
@@ -191,7 +214,9 @@
         [HttpGet]
         public ProductDisplay GetProductFromService(Guid id)
         {
-            return _productService.GetByKey(id).ToProductDisplay(DetachedValuesConversionType.Editor);
+            var product = _productService.GetByKey(id)
+                    .ToProductDisplay(DetachedValuesConversionType.Editor);
+            return product;
         }
 
         /// <summary>
@@ -221,7 +246,8 @@
         [HttpPost]
         public IEnumerable<ProductDisplay> GetByKeys(IEnumerable<Guid> keys)
         {
-            return _productService.GetByKeys(keys).Select(x => x.ToProductDisplay(DetachedValuesConversionType.Editor));
+            var products = _productService.GetByKeys(keys).Select(x => x.ToProductDisplay(DetachedValuesConversionType.Editor));
+            return products;
         }
 
             /// <summary>
@@ -430,7 +456,8 @@
 
             _productService.Save(merchProduct);
 
-            return merchProduct.ToProductDisplay(DetachedValuesConversionType.Editor);
+            var displayProduct = merchProduct.ToProductDisplay(DetachedValuesConversionType.Editor);
+            return displayProduct;
         }
 
         /// <summary>

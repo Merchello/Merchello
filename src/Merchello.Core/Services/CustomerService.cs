@@ -444,7 +444,10 @@
 
             if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<ICustomer>(customerArray), this);
 
-            customerArray.ForEach(DeleteInvoicesAndPayments);
+            foreach (var customer in customerArray)
+            {
+                DeleteInvoicesAndPayments(customer);
+            }
 
             using (new WriteLock(Locker))
             {

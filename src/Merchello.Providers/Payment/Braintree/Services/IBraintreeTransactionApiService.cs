@@ -20,6 +20,9 @@
         /// <param name="invoice">
         /// The invoice.
         /// </param>
+        /// <param name="amount">
+        /// The amount
+        /// </param>
         /// <param name="paymentMethodNonce">
         /// The payment method nonce.
         /// </param>
@@ -29,16 +32,21 @@
         /// <param name="option">
         /// The transaction option.
         /// </param>
+        /// <param name="email"></param>
+        /// <param name="merchantAccountId"></param>
         /// <returns>
         /// The <see cref="IPaymentResult"/>.
         /// </returns>
-        Result<Transaction> Sale(IInvoice invoice, string paymentMethodNonce, ICustomer customer = null, TransactionOption option = TransactionOption.SubmitForSettlement, string email = "");
+        Result<Transaction> Sale(IInvoice invoice, decimal amount, string paymentMethodNonce, ICustomer customer = null, TransactionOption option = TransactionOption.SubmitForSettlement, string email = "", string merchantAccountId = "");
 
         /// <summary>
         /// The sale.
         /// </summary>
         /// <param name="invoice">
         /// The invoice.
+        /// </param>
+        /// <param name="amount">
+        /// The amount
         /// </param>
         /// <param name="paymentMethodNonce">
         /// The payment method nonce.
@@ -52,16 +60,20 @@
         /// <param name="option">
         /// The transaction option.
         /// </param>
+        /// <param name="merchantAccountId"></param>
         /// <returns>
         /// The <see cref="IPaymentResult"/>.
         /// </returns>
-        Result<Transaction> Sale(IInvoice invoice, string paymentMethodNonce, ICustomer customer, IAddress billingAddress, TransactionOption option = TransactionOption.SubmitForSettlement);
+        Result<Transaction> Sale(IInvoice invoice, decimal amount, string paymentMethodNonce, ICustomer customer, IAddress billingAddress, TransactionOption option = TransactionOption.SubmitForSettlement, string merchantAccountId = "");
 
         /// <summary>
         /// Performs a Braintree sales transaction
         /// </summary>
         /// <param name="invoice">
         /// The invoice.
+        /// </param>
+        /// <param name="amount">
+        /// The amount
         /// </param>
         /// <param name="paymentMethodNonce">
         /// The payment method nonce.
@@ -78,10 +90,11 @@
         /// <param name="option">
         /// The transaction option.
         /// </param>
+        /// <param name="merchantAccountId"></param>
         /// <returns>
         /// The <see cref="IPaymentResult"/>.
         /// </returns>
-        Result<Transaction> Sale(IInvoice invoice, string paymentMethodNonce, ICustomer customer, IAddress billingAddress, IAddress shippingAddress, TransactionOption option = TransactionOption.SubmitForSettlement);
+        Result<Transaction> Sale(IInvoice invoice, decimal amount, string paymentMethodNonce, ICustomer customer, IAddress billingAddress, IAddress shippingAddress, TransactionOption option = TransactionOption.SubmitForSettlement, string merchantAccountId = "");
 
         /// <summary>
         /// Performs a Braintree Transaction using a vaulted credit card.
@@ -89,16 +102,20 @@
         /// <param name="invoice">
         /// The invoice.
         /// </param>
+        /// <param name="amount">
+        /// The amount
+        /// </param>
         /// <param name="paymentMethodToken">
         /// The payment method token.
         /// </param>
         /// <param name="option">
         /// The option.
         /// </param>
+        /// <param name="merchantAccountId"></param>
         /// <returns>
         /// The <see cref="Result{Transaction}"/>.
         /// </returns>
-        Result<Transaction> VaultSale(IInvoice invoice, string paymentMethodToken, TransactionOption option = TransactionOption.SubmitForSettlement);
+        Result<Transaction> VaultSale(IInvoice invoice, decimal amount, string paymentMethodToken, TransactionOption option = TransactionOption.SubmitForSettlement, string merchantAccountId = "");
 
         /// <summary>
         /// Performs a Braintree submit for settlement transaction

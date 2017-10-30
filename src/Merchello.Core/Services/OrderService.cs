@@ -5,8 +5,11 @@ namespace Merchello.Core.Services
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net;
+    using System.Net.Http;
     using System.Threading;
     using Events;
+    using Logging;
     using Models;
     using Persistence.Querying;
     using Persistence.UnitOfWork;
@@ -210,6 +213,129 @@ namespace Merchello.Core.Services
         public IOrder CreateOrder(Guid orderStatusKey, Guid invoiceKey, bool raiseEvents = true)
         {
             return CreateOrder(orderStatusKey, invoiceKey, 0, raiseEvents);
+        }
+
+        
+
+        /// <summary>
+        /// Returns an order if there is one that can be edited on an order
+        /// </summary>
+        /// <returns>The <see cref="IOrder"/></returns>
+        internal IOrder FirstEditableOrderOnInvoice(IOrder[] allOrders)
+        {
+            // Set the default status for existing orders
+            if (allOrders.Any())
+            {
+                // TODO - Think this will always never return anything. As Open orders have shipments
+                // First go through open orders as we would want to add to those first
+                var openOrders = allOrders.Where(x => x.OrderStatusKey == Core.Constants.OrderStatus.Open);
+                foreach (var openOrder in openOrders)
+                {
+                    if (!openOrder.Shipments().Any())
+                    {
+                        // Found an open order with no shipments
+                        // Add to that one
+                        return openOrder;
+                    }
+                }
+
+                // Next notfullfilled orders
+                var noFullfilledOrders = allOrders.Where(x => x.OrderStatusKey == Core.Constants.OrderStatus.NotFulfilled);
+                foreach (var nffOrder in noFullfilledOrders)
+                {
+                    if (!nffOrder.Shipments().Any())
+                    {
+                        // Found an open order with no shipments
+                        // Add to that one
+                        return nffOrder;
+                    }
+                }
+             
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Either adds new orderlineitems to an existing order on the invoice or creates a new one
+        /// </summary>
+        /// <param name="orderLineItems"></param>
+        /// <param name="invoice"></param>
+        /// <param name="invoiceAdjustmentResult"></param>
+        /// <returns></returns>
+        internal InvoiceAdjustmentResult AddOrderLineItemsToInvoice(List<OrderLineItem> orderLineItems, IInvoice invoice,
+            InvoiceAdjustmentResult invoiceAdjustmentResult)
+        {
+            foreach (var orderLineItem in orderLineItems)
+            {
+                invoiceAdjustmentResult = AddOrderLineItemsToInvoice(orderLineItem, invoice, invoiceAdjustmentResult);
+                if (!invoiceAdjustmentResult.Success)
+                {
+                    return invoiceAdjustmentResult;
+                }
+            }
+
+            invoiceAdjustmentResult.Success = true;
+            return invoiceAdjustmentResult;
+        }
+
+        /// <summary>
+        /// Either adds new orderlineitems to an existing order on the invoice or creates a new one
+        /// </summary>
+        /// <param name="orderLineItem"></param>
+        /// <param name="invoice"></param>
+        /// <param name="invoiceAdjustmentResult"></param>
+        internal InvoiceAdjustmentResult AddOrderLineItemsToInvoice(OrderLineItem orderLineItem, IInvoice invoice, 
+            InvoiceAdjustmentResult invoiceAdjustmentResult)
+        {
+            try
+            {
+                // We get this fresh, in case there have been orders added in the above method and then we want to add to existing
+                // not create lots of individual orders
+                var allOrders = GetOrdersByInvoiceKey(invoice.Key).ToArray();
+
+                // Order Key - Use this for adding products to existing orders
+                var orderToAddTo = FirstEditableOrderOnInvoice(allOrders);
+
+                // Need to add the order
+                if (orderLineItem != null)
+                {
+                    // The list of orders we will update
+                    var ordersToUpdate = new List<IOrder>();
+
+                    // If null we create a new order
+                    if (orderToAddTo != null)
+                    {
+                        // Add the orderlineitems    
+                        orderToAddTo.Items.Add(orderLineItem);
+                        ordersToUpdate.Add(orderToAddTo);
+                    }
+                    else
+                    {
+                        // We don't have an open order. So need to create a new one
+                        var order = CreateOrder(Core.Constants.OrderStatus.NotFulfilled, invoice.Key);
+                        order.OrderNumberPrefix = invoice.InvoiceNumberPrefix;
+
+                        order.Items.Add(orderLineItem);
+
+                        // Add the new order to the invoice
+                        ordersToUpdate.Add(order);
+                    }
+
+                    // Finally Save the orders
+                    Save(ordersToUpdate);
+                }
+
+                invoiceAdjustmentResult.Success = true;                
+            }
+            catch (Exception ex)
+            {
+                MultiLogHelper.Error<OrderService>("Failed to adjust invoice", ex);
+                invoiceAdjustmentResult.Success = false;
+                invoiceAdjustmentResult.Message = ex.Message;
+            }
+
+            return invoiceAdjustmentResult;
         }
 
         /// <summary>

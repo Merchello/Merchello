@@ -50,7 +50,6 @@
         /// </remarks>
         bool Exported { get; set; }
 
-
         /// <summary>
         /// Gets line item type
         /// </summary>

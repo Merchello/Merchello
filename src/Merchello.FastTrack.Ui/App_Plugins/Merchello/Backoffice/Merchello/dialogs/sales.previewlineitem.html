@@ -1,70 +1,75 @@
 ﻿<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Sales.Dialogs.PreviewLineItemController" data-ng-show="loaded">
-    <div class="umb-modalcolumn-header">
-        <h4><localize key="merchelloSales_lineItemPreview" /></h4>
-    </div>
+    <div class="umb-overlay umb-overlay-right">
+        <div class="umb-overlay__form">
 
-    <div class="umb-panel-body with-header with-footer">
-        
-        <div class="control-group row-fluid">
-            <div ng-if="!equals({}, dialogData.product)">                
-                <p ng-show="dialogData.product.available != ''">
-                    <localize key="merchelloVariant_isAvailable"/>: <strong>{{ dialogData.product.available }}</strong>
-                </p>
-                <p ng-show="dialogData.product.sku != ''">
-                    <localize key="merchelloVariant_baseSku"/>: <strong>{{ dialogData.product.sku }}</strong>
-                </p>         
-                <p ng-show="dialogData.product.barcode != ''">
-                    <localize key="merchelloVariant_barcode"/>: <strong>{{ dialogData.product.barcode }}</strong>
-                </p> 
-                <p ng-show="dialogData.product.price != ''">
-                    <localize key="merchelloGeneral_price"/>: <strong>{{ dialogData.product.price }}</strong>
-                </p> 
-                <p ng-show="dialogData.product.onSale != ''">
-                    <localize key="merchelloVariant_isOnSale"/>: <strong>{{ dialogData.product.onSale }}</strong>
-                </p> 
-                <p ng-show="dialogData.product.salePrice != ''">
-                    <localize key="merchelloGeneral_salePrice"/>: <strong>{{ dialogData.product.salePrice }}</strong>
-                </p> 
-                <p ng-show="dialogData.product.costOfGoods != ''">
-                    <localize key="merchelloVariant_costOfGoods"/>: <strong>{{ dialogData.product.costOfGoods }}</strong>
-                </p> 
-                <p ng-show="dialogData.product.manufacturer != ''">
-                    <localize key="merchelloVariant_manufacturer"/>: <strong>{{ dialogData.product.manufacturer }}</strong>
-                </p> 
-                <p ng-show="dialogData.product.manufacturerModelNumber != ''">
-                    <localize key="merchelloVariant_manufacturerModel"/>: <strong>{{ dialogData.product.manufacturerModelNumber }}</strong>
-                </p> 
-                <p ng-show="dialogData.product.taxable != ''">
-                    <localize key="merchelloVariant_isTaxable"/>: <strong>{{ dialogData.product.taxable }}</strong>
-                </p> 
-                <p ng-show="dialogData.product.shippable != ''">
-                    <localize key="merchelloVariant_isShippable"/>: <strong>{{ dialogData.product.shippable }}</strong>
-                </p> 
-                <p ng-show="dialogData.product.trackInventory != ''">
-                    <localize key="merchelloVariant_trackInventory"/>: <strong>{{ dialogData.product.trackInventory }}</strong>
-                </p> 
-                <p ng-show="dialogData.product.outOfStockPurchase != ''">
-                    <localize key="merchelloVariant_allowOutOfStockPurchase"/>: <strong>{{ dialogData.product.outOfStockPurchase }}</strong>
-                </p> 
-                <p ng-show="dialogData.product.download != ''">
-                    <localize key="merchelloVariant_hasDigitalDownload"/>: <strong>{{ dialogData.product.download }}</strong>
-                </p> 
+            <div class="umb-overlay-header">
+                <h4 class="umb-overlay__title"><localize key="merchelloSales_lineItemPreview" /></h4>
             </div>
-            <h3 ng-if="equals({}, dialogData.product)">
-                <localize key="merchelloSales_noLineItemPreview">Unable to preview line item</localize>
-            </h3>
-        </div>
 
-    </div>
+            <div class="umb-overlay-container form-horizontal merchello-panel-body">
 
-    <div class="umb-panel-footer" >
-        <div class="umb-el-wrap umb-panel-buttons">
-            <div class="btn-toolbar umb-btn-toolbar pull-right">
+                <div class="control-group row-fluid">
+                    <div ng-if="!equals({}, dialogData.product)">
+                        <p ng-show="dialogData.product.available != ''">
+                            <localize key="merchelloVariant_isAvailable" />: <strong>{{ dialogData.product.available }}</strong>
+                        </p>
+                        <p ng-show="dialogData.product.sku != ''">
+                            <localize key="merchelloVariant_baseSku" />: <strong>{{ dialogData.product.sku }}</strong>
+                        </p>
+                        <p ng-show="dialogData.product.barcode != ''">
+                            <localize key="merchelloVariant_barcode" />: <strong>{{ dialogData.product.barcode }}</strong>
+                        </p>
+                        <p ng-show="dialogData.product.price != ''">
+                            <localize key="merchelloGeneral_price" />: <strong>{{ dialogData.product.price }}</strong>
+                        </p>
+                        <p ng-show="dialogData.product.onSale != ''">
+                            <localize key="merchelloVariant_isOnSale" />: <strong>{{ dialogData.product.onSale }}</strong>
+                        </p>
+                        <p ng-show="dialogData.product.salePrice != ''">
+                            <localize key="merchelloGeneral_salePrice" />: <strong>{{ dialogData.product.salePrice }}</strong>
+                        </p>
+                        <p ng-show="dialogData.product.costOfGoods != ''">
+                            <localize key="merchelloVariant_costOfGoods" />: <strong>{{ dialogData.product.costOfGoods }}</strong>
+                        </p>
+                        <p ng-show="dialogData.product.manufacturer != ''">
+                            <localize key="merchelloVariant_manufacturer" />: <strong>{{ dialogData.product.manufacturer }}</strong>
+                        </p>
+                        <p ng-show="dialogData.product.manufacturerModelNumber != ''">
+                            <localize key="merchelloVariant_manufacturerModel" />: <strong>{{ dialogData.product.manufacturerModelNumber }}</strong>
+                        </p>
+                        <p ng-show="dialogData.product.taxable != ''">
+                            <localize key="merchelloVariant_isTaxable" />: <strong>{{ dialogData.product.taxable }}</strong>
+                        </p>
+                        <p ng-show="dialogData.product.shippable != ''">
+                            <localize key="merchelloVariant_isShippable" />: <strong>{{ dialogData.product.shippable }}</strong>
+                        </p>
+                        <p ng-show="dialogData.product.trackInventory != ''">
+                            <localize key="merchelloVariant_trackInventory" />: <strong>{{ dialogData.product.trackInventory }}</strong>
+                        </p>
+                        <p ng-show="dialogData.product.outOfStockPurchase != ''">
+                            <localize key="merchelloVariant_allowOutOfStockPurchase" />: <strong>{{ dialogData.product.outOfStockPurchase }}</strong>
+                        </p>
+                        <p ng-show="dialogData.product.download != ''">
+                            <localize key="merchelloVariant_hasDigitalDownload" />: <strong>{{ dialogData.product.download }}</strong>
+                        </p>
+                    </div>
+                    <h3 ng-if="equals({}, dialogData.product)">
+                        <localize key="merchelloSales_noLineItemPreview">Unable to preview line item</localize>
+                    </h3>
+                </div>
 
-                <a href data-ng-click="close()" class="btn btn-link">
-                    <localize key="general_cancel">Cancel</localize>
-                </a>
+            </div>
 
+            <div class="umb-overlay-drawer">
+                <div class="umb-overlay-drawer__align-right">
+
+                    <div class="umb-button">
+                        <a href data-ng-click="close()" class="btn btn-link">
+                            <localize key="general_cancel"></localize>
+                        </a>
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>

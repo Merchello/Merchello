@@ -329,7 +329,10 @@
             }
 
             // verify that all variants of these products still have attributes - or delete them
-            productArray.ForEach(EnsureProductVariantsHaveAttributes);
+            foreach (var product in productArray)
+            {
+                EnsureProductVariantsHaveAttributes(product);
+            }
 
             if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IProduct>(productArray), this);
         }
@@ -1875,7 +1878,10 @@
         /// </param>
         private void EnsureVariants(IEnumerable<IProduct> products)
         {
-            products.ForEach(this.EnsureVariants);
+            foreach (var product in products)
+            {
+                this.EnsureVariants(product);
+            }
         }
 
         /// <summary>
@@ -1932,7 +1938,7 @@
 
             if (newVariants.Any())
             {
-               // _productVariantService.Save(newVariants);
+                //_productVariantService.Save(newVariants);
                 foreach (var v in newVariants)
                 {
                     product.ProductVariants.Add(v);

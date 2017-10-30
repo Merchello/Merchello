@@ -1,14 +1,10 @@
 ﻿namespace Merchello.Core.Gateways.Payment.Cash
 {
+    using System;
     using System.Linq;
-
-    using Merchello.Core.Models.TypeFields;
-
     using Models;
     using Services;
     using Umbraco.Core;
-
-    using Constants = Merchello.Core.Constants;
 
     /// <summary>
     /// Represents a CashPaymentMethod
@@ -45,7 +41,13 @@
         /// <returns>The <see cref="IPaymentResult"/></returns>
         protected override IPaymentResult PerformAuthorizePayment(IInvoice invoice, ProcessorArgumentCollection args)
         {
-            var payment = GatewayProviderService.CreatePayment(PaymentMethodType.Cash, invoice.Total, PaymentMethod.Key);
+            var authorizeAmount = invoice.Total;
+            if (args.ContainsKey("authorizePaymentAmount"))
+            {
+                authorizeAmount = Convert.ToDecimal(args["authorizePaymentAmount"]);
+            }
+
+            var payment = GatewayProviderService.CreatePayment(PaymentMethodType.Cash, authorizeAmount, PaymentMethod.Key);
             payment.CustomerKey = invoice.CustomerKey;
             payment.PaymentMethodName = PaymentMethod.Name;
             payment.ReferenceNumber = PaymentMethod.PaymentCode + "-" + invoice.PrefixedInvoiceNumber();
@@ -111,7 +113,16 @@
             var appliedPayments = GatewayProviderService.GetAppliedPaymentsByPaymentKey(payment.Key);
             var applied = appliedPayments.Sum(x => x.Amount);
 
-            payment.Collected = (amount + applied) == payment.Amount;
+            var newTotalPaymentAmount = amount + applied;
+
+            // There could be an adjustment, and the capture amount could be more than the payment amount
+            if (newTotalPaymentAmount > payment.Amount)
+            {
+                // We are capturing more money so update payment total
+                payment.Amount = newTotalPaymentAmount;
+            }
+
+            payment.Collected = newTotalPaymentAmount == payment.Amount;
             payment.Authorized = true;
 
             GatewayProviderService.Save(payment);
@@ -131,7 +142,8 @@
         /// <returns>A <see cref="IPaymentResult"/></returns>
         protected override IPaymentResult PerformRefundPayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args)
         {
-            foreach (var applied in payment.AppliedPayments())
+            var appliedPayments = payment.AppliedPayments();
+            foreach (var applied in appliedPayments)
             {
                 applied.TransactionType = AppliedPaymentType.Refund;
                 applied.Amount = 0;
