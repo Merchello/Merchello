@@ -170,7 +170,6 @@
             }
 
             var weekStarting = weekEnding.StartOfWeek();
-            weekStarting = weekStarting.AddDays(-56);
             weekEnding = weekStarting.AddDays(6);
 
 
