@@ -170,6 +170,7 @@
             }
 
             var weekStarting = weekEnding.StartOfWeek();
+            weekStarting = weekStarting.AddDays(-56);
             weekEnding = weekStarting.AddDays(6);
 
 
@@ -178,9 +179,7 @@
             var currentDate = weekStarting;
             while (currentDate <= weekEnding)
             {
-                // special case where the end date is today - so add a day to make sure that the BETWEEN query reflects
-                // the intended report result.
-                var endDate = currentDate < DateTime.Today ? currentDate : currentDate.AddDays(1);
+                var endDate = currentDate.AddDays(1).AddMilliseconds(-1);
 
                 count++;
                 results.Add(GetResults(currentDate, endDate));
@@ -225,13 +224,13 @@
             }
 
             return new QueryResultDisplay()
-                       {
-                           Items = results,
-                           CurrentPage = 1,
-                           ItemsPerPage = count,
-                           TotalItems = count,
-                           TotalPages = 1
-                       };
+            {
+                Items = results,
+                CurrentPage = 1,
+                ItemsPerPage = count,
+                TotalItems = count,
+                TotalPages = 1
+            };
         }
 
         /// <summary>
@@ -253,20 +252,20 @@
             var count = _invoiceService.CountInvoices(startDate, endDate);
 
             var totals = this.ActiveCurrencies.Select(c => new ResultCurrencyValue()
-                            {
-                                Currency = c.ToCurrencyDisplay(),
-                                Value = startDate > DateTime.Today ? 0M : this._invoiceService.SumInvoiceTotals(startDate, endDate, c.CurrencyCode)
-                            }).ToList();
+            {
+                Currency = c.ToCurrencyDisplay(),
+                Value = startDate > DateTime.Today ? 0M : this._invoiceService.SumInvoiceTotals(startDate, endDate, c.CurrencyCode)
+            }).ToList();
 
             return new SalesOverTimeResult()
-                       {
-                            StartDate = startDate,
-                            EndDate = endDate,
-                            Month = monthName,
-                            Year = startDate.Year.ToString(),
-                            SalesCount = count,
-                            Totals = totals
-                       };
+            {
+                StartDate = startDate,
+                EndDate = endDate,
+                Month = monthName,
+                Year = startDate.Year.ToString(),
+                SalesCount = count,
+                Totals = totals
+            };
         }
     }
 }
