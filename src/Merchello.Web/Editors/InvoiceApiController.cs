@@ -69,6 +69,11 @@
         private readonly IShipmentService _shipmentService;
 
         /// <summary>
+        /// The <see cref="IAuditLogService"/>
+        /// </summary>
+        private readonly IAuditLogService _auditLogService;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="InvoiceApiController"/> class.
         /// </summary>
         public InvoiceApiController()
@@ -91,6 +96,7 @@
             _noteService = merchelloContext.Services.NoteService;
             _orderService = merchelloContext.Services.OrderService;
             _shipmentService = merchelloContext.Services.ShipmentService;
+            _auditLogService = merchelloContext.Services.AuditLogService;
             _merchello = new MerchelloHelper(merchelloContext, false);
         }
 
@@ -409,10 +415,75 @@
         }
 
         /// <summary>
+        /// Cancels an invoice and the associated orders
+        /// </summary>
+        /// <param name="id">Invoice Id</param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
+        [HttpPost, HttpDelete, HttpGet]
+        public HttpResponseMessage CancelInvoice(Guid id)
+        {
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+
+            try
+            {
+                // Get the invoice
+                var invoice = _invoiceService.GetByKey(id);
+
+                // Cancel all orders
+                var orders = _orderService.GetOrdersByInvoiceKey(id);
+
+                // TODO - This is a bit of a hack, must be a better way to create the order and invoice status??
+
+                // Create a cancelled order status
+                var cancelledOrderStatus = new OrderStatus
+                {
+                    Key = Constants.OrderStatus.Cancelled,
+                    Alias = "cancelled",
+                    Name = "Cancelled",
+                    Active = true,
+                    Reportable = false,
+                    SortOrder = 1,
+                    CreateDate = DateTime.Now,
+                    UpdateDate = DateTime.Now
+                };
+
+                // Cancel each one
+                foreach (var order in orders)
+                {
+                    // Set the order status
+                    order.OrderStatus = cancelledOrderStatus;
+
+                    // Save the order
+                    _orderService.Save(order);
+                }
+
+                // Save the invoice
+                _invoiceService.Save(invoice);
+
+                // Get the user who 
+                var user = UmbracoContext.Current.Security.CurrentUser;
+
+                // Set an audit log
+                _auditLogService.CreateAuditLogWithKey(string.Format("Order cancelled by {0}", user.Name));
+            }
+            catch (Exception ex)
+            {
+                MultiLogHelper.Error<InvoiceApiController>("Failed to cancel invoice", ex);
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, $"{ex.Message}");
+            }
+
+            return response;
+        }
+
+        /// <summary>
         /// Puts new products on an invoice
         /// </summary>
         /// <param name="invoiceAddItems"></param>
-        /// <returns></returns>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
         [HttpPost]
         public HttpResponseMessage PutInvoiceNewProducts(InvoiceAddItems invoiceAddItems)
         {

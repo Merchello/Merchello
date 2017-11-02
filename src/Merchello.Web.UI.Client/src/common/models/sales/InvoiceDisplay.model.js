@@ -99,16 +99,19 @@
             var statusToReturn = 'Fulfilled';
 
             if (!_.isEmpty(this.orders)) {
-                angular.forEach(this.orders, function (order) {
-                    if (keepFindingOrder) {
-                        if (order.orderStatus.name !== statusToReturn) {
+                angular.forEach(this.orders,
+                    function(order) {
+                        if (keepFindingOrder) {
+                            if (order.orderStatus.name !== statusToReturn) {
 
-                            statusToReturn = order.orderStatus.name;
+                                statusToReturn = order.orderStatus.name;
 
-                            keepFindingOrder = false;
+                                keepFindingOrder = false;
+                            }
                         }
-                    }
-                });  
+                    });
+            } else {
+                statusToReturn = 'Not Fulfilled';
             }
 
             return statusToReturn;

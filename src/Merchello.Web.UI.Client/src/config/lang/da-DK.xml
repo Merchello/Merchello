@@ -139,6 +139,7 @@
     <key alias="partialPaidInvoiceCollection">Delvist betalte fakturaer</key>
     <key alias="paidInvoiceCollection">Betalte fakturaer</key>
     <key alias="notFulfilledOrderCollection">Uafsluttede ordrer</key>
+    <key alias="cancelledOrderCollection">Annullerede ordrer</key>
     <key alias="openOrderCollection">Åbne ordrer</key>
     <key alias="fulfilledOrderCollection">Afsluttede ordrer</key>
     <key alias="addProvider">Tilføj udbyder</key>
@@ -351,6 +352,7 @@
     <key alias="paid">Betalt</key>
     <key alias="unpaid">Ubetalt</key>
     <key alias="partial">Delvist</key>
+    <key alias="cancelled">Abgebrochen</key>
     <key alias="balanceDue">Resterende</key>
     <key alias="manageAdjustments">Redigér justeringer</key>
     <key alias="addAdjustment">Tilføj justering</key>

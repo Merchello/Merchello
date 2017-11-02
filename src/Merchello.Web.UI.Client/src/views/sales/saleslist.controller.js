@@ -37,6 +37,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
             var unfulfilled = '';
             var fulfilled = '';
             var open = '';
+            var cancelled = '';
 
 
             const label = '<i class="%0"></i> %1';
@@ -54,7 +55,8 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                     localizationService.localize('merchelloOrder_fulfilled'),
                     localizationService.localize('merchelloOrder_unfulfilled'),
                     localizationService.localize('merchelloOrder_open'),
-                    settingsResource.getAllCombined()
+                    settingsResource.getAllCombined(),
+                    localizationService.localize('merchelloSales_cancelled')
                 ];
 
                 $q.all(promises).then(function(local) {
@@ -64,6 +66,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                     fulfilled = local[3];
                     unfulfilled = local[4];
                     open = local[5];
+                    cancelled = local[7];
 
                     $scope.settings = local[6].settings;
                     allCurrencies = local[6].currencies;
@@ -139,6 +142,11 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                         //cssClass = 'label-default';
                         icon = 'icon-loading';
                         text = open;
+                        break;
+                    case 'Cancelled':
+                        //cssClass = 'label-default';
+                        icon = 'icon-wrong';
+                        text = cancelled;
                         break;
                     default:
                         //cssClass = 'label-info';

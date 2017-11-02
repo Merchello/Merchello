@@ -174,7 +174,22 @@
                                 params: { id: invoiceKey }
                             }),
                             'Failed to delete invoice');
-                    }
+                    },
 
+                    /**
+                     * @ngdoc method
+                     * @name cancelInvoice
+                     * @description
+                     **/
+                    cancelInvoice: function (invoiceKey) {
+                        var url = baseUrl + 'CancelInvoice';
+                        return umbRequestHelper.resourcePromise(
+                            $http({
+                                url: url,
+                                method: "GET",
+                                params: { id: invoiceKey }
+                            }),
+                            'Failed to cancel invoice');
+                    }
                 };
             }]);

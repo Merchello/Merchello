@@ -136,6 +136,7 @@
     <key alias="partialPaidInvoiceCollection">Częściowo zapłacone faktury</key>
     <key alias="paidInvoiceCollection">Zapłacone faktury</key>
     <key alias="notFulfilledOrderCollection">Niewypełnione zamówienia</key>
+    <key alias="cancelledOrderCollection">Anulowane zamówienia</key>
     <key alias="openOrderCollection">Otwarte zakówienia</key>
     <key alias="fulfilledOrderCollection">Wypełnione zamówienia</key>
     <key alias="addProvider">Operator reklamy</key>
@@ -335,6 +336,7 @@
     <key alias="unpaid">Niezapłacone</key>
     <key alias="cancelled">Anulowana</key>	
     <key alias="partial">Częściowo</key>
+    <key alias="cancelled">Odwołany</key>
     <key alias="balanceDue">Saldo należne</key>
     <key alias="manageAdjustments">Zarządzaj poprawkami</key>
     <key alias="addAdjustment">Dodaj poprawkę</key>
