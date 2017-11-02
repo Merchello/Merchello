@@ -421,6 +421,7 @@
     <Compile Include="CurrencyContext.cs" />
     <Compile Include="CurrencyHelper.cs" />
     <Compile Include="EntityCollections\IEntityCollectionProviderMeta.cs" />
+    <Compile Include="EntityCollections\Providers\DynamicCancelledOrderCollectionProvider.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Extensions.DateTime.cs">
       <DependentUpon>Extensions.cs</DependentUpon>

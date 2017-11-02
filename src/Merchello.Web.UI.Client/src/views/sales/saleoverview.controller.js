@@ -46,6 +46,7 @@
             $scope.capturePayment = capturePayment;
             $scope.showFulfill = true;
             $scope.openDeleteInvoiceDialog = openDeleteInvoiceDialog;
+            $scope.cancelInvoice = cancelInvoice;
             $scope.processDeleteInvoiceDialog = processDeleteInvoiceDialog,
             $scope.openFulfillShipmentDialog = openFulfillShipmentDialog;
             $scope.processFulfillShipmentDialog = processFulfillShipmentDialog;
@@ -384,6 +385,16 @@
                     show: true,
                     callback: processDeleteInvoiceDialog,
                     dialogData: dialogData
+                });
+            }
+
+            function cancelInvoice() {
+                var promiseCancelInvoice = invoiceResource.cancelInvoice($scope.invoice.key);
+                promiseCancelInvoice.then(function (response) {
+                    notificationsService.success('Invoice Cancelled');
+                    $location.url("/merchello/merchello/saleslist/manage", true);
+                }, function (reason) {
+                    notificationsService.error('Failed to cancel Invoice', reason.message);
                 });
             }
 

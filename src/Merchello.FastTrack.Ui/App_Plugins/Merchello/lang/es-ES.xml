@@ -139,6 +139,7 @@
     <key alias="partialPaidInvoiceCollection">Pedidos pagados parcialmente</key>
     <key alias="paidInvoiceCollection">Pedidos pagados</key>
     <key alias="notFulfilledOrderCollection">Pedidos pendientes de envío</key>
+    <key alias="cancelledOrderCollection">Órdenes canceladas</key>
     <key alias="openOrderCollection">Pedidos sin terminar</key>
     <key alias="fulfilledOrderCollection">Pedidos enviados</key>
     <key alias="addProvider">Add provider</key>
@@ -351,6 +352,7 @@
     <key alias="paid">Paid</key>
     <key alias="unpaid">Unpaid</key>
     <key alias="partial">Partial</key>
+    <key alias="cancelled">Cancelled</key>
     <key alias="balanceDue">Balance due</key>
     <key alias="manageAdjustments">Manage adjustments</key>
     <key alias="addAdjustment">Add adjustment</key>
