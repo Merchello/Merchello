@@ -471,7 +471,7 @@
             catch (Exception ex)
             {
                 MultiLogHelper.Error<InvoiceApiController>("Failed to cancel invoice", ex);
-                response = Request.CreateResponse(HttpStatusCode.InternalServerError, $"{ex.Message}");
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
             return response;
