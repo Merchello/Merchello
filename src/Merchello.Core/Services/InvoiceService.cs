@@ -1832,7 +1832,7 @@
         /// <remarks>
         /// This is used by large back office collections usually backed by Examine (Lucene) backed cache
         /// </remarks>
-        internal override Page<Guid> GetPagedKeys(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
+        public override Page<Guid> GetPagedKeys(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
         {
             return GetPagedKeys(
                 RepositoryFactory.CreateInvoiceRepository(UowProvider.GetUnitOfWork()),
@@ -1867,7 +1867,7 @@
         /// <remarks>
         /// The search is prefabricated in the repository
         /// </remarks>
-        internal Page<Guid> GetPagedKeys(
+        public Page<Guid> GetPagedKeys(
             string searchTerm,
             long page,
             long itemsPerPage,
@@ -1910,7 +1910,7 @@
         /// <remarks>
         /// The search is prefabricated in the repository
         /// </remarks>
-        internal Page<Guid> GetPagedKeys(
+        public Page<Guid> GetPagedKeys(
             string searchTerm,
             DateTime startDate,
             DateTime endDate,
@@ -1946,7 +1946,7 @@
         /// <returns>
         /// The <see cref="Page"/>.
         /// </returns>
-        internal Page<Guid> GetPagedKeys(
+        public Page<Guid> GetPagedKeys(
             IQuery<IInvoice> query,
             long page,
             long itemsPerPage,
