@@ -12,7 +12,7 @@
     using Merchello.Core.Persistence.Factories;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
-
+    using Models;
     using umbraco;
 
     using Umbraco.Core;
@@ -267,6 +267,7 @@
             entity.ResetDirtyProperties();
 
             RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IOfferSettings>(entity.Key));
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IItemCache>(entity.Key));
         }
 
         /// <summary>
