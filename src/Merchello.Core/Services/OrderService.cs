@@ -751,7 +751,7 @@ namespace Merchello.Core.Services
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>        
-        internal override Page<Guid> GetPagedKeys(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
+        public override Page<Guid> GetPagedKeys(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
         {
             using (var repository = (OrderRepository)RepositoryFactory.CreateOrderRepository(UowProvider.GetUnitOfWork()))
             {

@@ -108,7 +108,7 @@
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        internal abstract Page<Guid> GetPagedKeys(
+        public abstract Page<Guid> GetPagedKeys(
             long page,
             long itemsPerPage,
             string sortBy = "",

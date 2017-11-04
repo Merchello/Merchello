@@ -11,7 +11,7 @@
     using Merchello.Core.Persistence.Migrations.Initial;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
-
+    using Models;
     using Umbraco.Core;
     using Umbraco.Core.Cache;
     using Umbraco.Core.Logging;
@@ -233,8 +233,7 @@
             entity.ResetDirtyProperties();
 
             RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IOfferRedeemed>(entity.Key));
-
-
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IItemCache>(entity.Key));
         }
 
         /// <summary>
