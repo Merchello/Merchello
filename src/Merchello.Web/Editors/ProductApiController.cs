@@ -328,7 +328,7 @@
                 query.SortBy,
                 query.SortDirection);
 
-            return results.ToQueryResultDisplay<IProduct, ProductDisplay>(MapToProductDisplay);
+            return results.ToQueryResultDisplay<IProduct, ProductDisplay>(MapToProductListingDisplay);
         }
 
         /// <summary>
@@ -653,6 +653,23 @@
         private static ProductDisplay MapToProductDisplay(IProduct product)
         {
             return product.ToProductDisplay(DetachedValuesConversionType.Editor);
+        }
+
+        /// <summary>
+        /// Maps <see cref="IProduct"/> to <see cref="ProductDisplay"/>.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
+        /// <remarks>
+        /// Delegated to mapping function
+        /// </remarks>
+        private static ProductDisplay MapToProductListingDisplay(IProduct product)
+        {
+            return product.ToProductListingDisplay(DetachedValuesConversionType.Editor);
         }
 
         /// <summary>
