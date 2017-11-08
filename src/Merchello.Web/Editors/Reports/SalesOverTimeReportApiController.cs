@@ -216,10 +216,10 @@
 
             while (currentDate <= endDate)
             {
-                currentDate = startDate.AddMonths(1);
+                var monthEnd = currentDate.AddMonths(1).AddMilliseconds(-1);
                 count++;
-                results.Add(this.GetResults(startDate, currentDate));
-                startDate = currentDate;
+                results.Add(this.GetResults(currentDate, monthEnd));
+                currentDate = currentDate.AddMonths(1);
             }
 
             return new QueryResultDisplay()
