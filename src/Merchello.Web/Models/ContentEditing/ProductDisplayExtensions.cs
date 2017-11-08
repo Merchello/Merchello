@@ -244,12 +244,57 @@
         {
             var productDisplay = AutoMapper.Mapper.Map<ProductDisplay>(product);
 
-            if (productDisplay.ProductVariants.Count() > 1)
+            if (productDisplay.ProductVariants.Any())
             {
-                var lowPriceVar = productDisplay.ProductVariants.OrderBy(x => x.Price).ThenBy(x => x.Key).First();
-                var highPriceVar = productDisplay.ProductVariants.OrderBy(x => x.Price).ThenBy(x => x.Key).First();
-                var list = new List<ProductVariantDisplay> {lowPriceVar, highPriceVar};
-                productDisplay.ProductVariants = list;
+                // List of variants to assign
+                var variants = new List<ProductVariantDisplay>();
+
+                // Get all productVariants ordered by price
+                var priceList = productDisplay.ProductVariants.OrderBy(x => x.Price).ToArray(); // Lowest to highest
+
+                // Get all product variants ordered by sale price
+                var salePriceList = productDisplay.ProductVariants.Where(x => x.OnSale).OrderBy(x => x.SalePrice).ToArray(); // Lowest to highest
+
+                // Get the standard pricing first price
+                var firstPrice = priceList.First();
+                variants.Add(firstPrice);
+
+                // Get the last price
+                var lastPrice = priceList.Last();
+
+                // (Haven't already got this variant)
+                if (lastPrice.Key != firstPrice.Key)
+                {
+                    variants.Add(lastPrice);
+                }
+
+                // Check for sale pricing
+                if (salePriceList.Any())
+                {
+                    // Get the sale pricing
+                    var lowSalePriceVar = salePriceList.First();
+
+                    // Abandon if null
+                    if (lowSalePriceVar != null)
+                    {
+                        // Sanity checks (Haven't already got this variant)
+                        if (firstPrice.Key != lowSalePriceVar.Key && lastPrice.Key != lowSalePriceVar.Key)
+                        {
+                            variants.Add(lowSalePriceVar);
+                        }
+
+                        // Check we are not adding the same one
+                        var highSalePriceVar = salePriceList.Last();
+
+                        if (lowSalePriceVar.Key != highSalePriceVar.Key && firstPrice.Key != highSalePriceVar.Key && lastPrice.Key != highSalePriceVar.Key)
+                        {
+                            variants.Add(highSalePriceVar);
+                        }
+                    }
+                }
+
+                // Assign new variants
+                productDisplay.ProductVariants = variants;
             }
             
             productDisplay.EnsureValueConversion(conversionType);
