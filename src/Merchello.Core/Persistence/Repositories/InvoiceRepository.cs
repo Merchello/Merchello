@@ -854,7 +854,7 @@
             const string SQL =
                 @"SELECT SUM([merchInvoice].total) FROM merchInvoice WHERE [merchInvoice].invoiceDate BETWEEN @starts and @ends AND [merchInvoice].currencyCode = @cc";
 
-            return Database.ExecuteScalar<decimal>(SQL, new { @starts = startDate, @ends = endDate, @cc = currencyCode });
+            return Database.ExecuteScalar<decimal>(SQL, new { @starts = startDate.ToIsoString(), @ends = endDate.ToIsoString(), @cc = currencyCode });
         }
 
         /// <summary>
