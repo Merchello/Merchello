@@ -228,6 +228,35 @@
             return productDisplay;
         }
 
+        /// <summary>
+        /// Maps a <see cref="IProduct"/> to <see cref="ProductDisplay"/>.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <param name="conversionType">
+        /// The detached value conversion type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
+        public static ProductDisplay ToProductListingDisplay(this IProduct product, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
+        {
+            var productDisplay = AutoMapper.Mapper.Map<ProductDisplay>(product);
+
+            if (productDisplay.ProductVariants.Count() > 1)
+            {
+                var lowPriceVar = productDisplay.ProductVariants.OrderBy(x => x.Price).ThenBy(x => x.Key).First();
+                var highPriceVar = productDisplay.ProductVariants.OrderBy(x => x.Price).ThenBy(x => x.Key).First();
+                var list = new List<ProductVariantDisplay> {lowPriceVar, highPriceVar};
+                productDisplay.ProductVariants = list;
+            }
+            
+            productDisplay.EnsureValueConversion(conversionType);
+            
+            return productDisplay;
+        }
+
 
         /// <summary>
         /// Turns a product variant into an InvoiceLineItem
