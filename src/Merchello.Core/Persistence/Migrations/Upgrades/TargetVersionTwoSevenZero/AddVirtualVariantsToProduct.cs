@@ -11,7 +11,7 @@ using Umbraco.Core.Persistence.SqlSyntax;
 namespace Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionTwoSevenZero
 {
     /// <summary>
-    /// Alters the merchInvoice table to add a currency code column.
+    /// Alters the product table to add a virtual variants column
     /// </summary>
     [Migration("2.7.0", 0, MerchelloConfiguration.MerchelloMigrationName)]
     internal class AddVirtualVariantsToProduct : MerchelloMigrationBase, IMerchelloMigration
@@ -26,9 +26,9 @@ namespace Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionTwoSevenZe
         /// </summary>
         private readonly ISqlSyntaxProvider _sqlSyntax;
 
-        
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="AddInvoiceCurrencyCodeColumn"/> class.
+        /// Initializes a new instance of the <see cref="AddVirtualVariantsToProduct"/> class.
         /// </summary>
         public AddVirtualVariantsToProduct()
             : base(
@@ -55,7 +55,7 @@ namespace Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionTwoSevenZe
             {
                 Logger.Info(typeof(AddInvoiceCurrencyCodeColumn), "Adding virtualVariants column to merchProduct table.");
 
-                //// Add the new currency code column
+                //// Add the new virtual variants column
                 Create.Column("virtualVariants").OnTable("merchProduct").AsBoolean().WithDefaultValue(false);
                 
             }
