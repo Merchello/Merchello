@@ -1,4 +1,6 @@
-﻿namespace Merchello.Web.Models.ContentEditing
+﻿using Merchello.Core.Services;
+
+namespace Merchello.Web.Models.ContentEditing
 {
     using System;
     using System.Collections.Generic;
@@ -185,6 +187,22 @@
         /// </returns>        
         public static ProductVariantDisplay GetProductVariantDisplayWithAttributes(this ProductDisplay product, Guid[] optionChoices)
         {
+            if (product.VirtualVariants)
+            {
+
+                var productVariantService = MerchelloContext.Current.Services.ProductVariantService;
+
+                var productoptionService = MerchelloContext.Current.Services.ProductOptionService;
+                var productService = MerchelloContext.Current.Services.ProductService;
+
+                var choices = optionChoices.Select(x => productoptionService.GetProductAttributeByKey(x)).ToProductAttributeCollection();
+                
+                var pv = ((ProductVariantService)productVariantService).CreateProductVariant(productService.GetBySku(product.Sku), new List<IProductVariant>(), choices);
+
+                return pv.ToProductVariantDisplay();
+
+            }
+
             return
                 product.ProductVariants.FirstOrDefault(
                     x =>

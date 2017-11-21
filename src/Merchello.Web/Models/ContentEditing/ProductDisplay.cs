@@ -61,7 +61,12 @@
         /// Gets or sets the product variant key of the master variant.
         /// </summary>
         public Guid ProductVariantKey { get; set; }
-        
+
+        /// <summary>
+        /// Gets or sets the virtual variants property
+        /// </summary>
+        public bool VirtualVariants{ get; set; }
+
         /// <summary>
         /// Gets or sets the product options.
         /// </summary>

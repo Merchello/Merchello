@@ -84,6 +84,14 @@ namespace Merchello.Core
         /// </returns>
         public static IProductVariant GetProductVariantForPurchase(this IProduct product, IEnumerable<IProductAttribute> selectedChoices)
         {
+            if (product.VirtualVariants)
+            {
+                
+                var productVariantService = MerchelloContext.Current.Services.ProductVariantService;
+                
+                return ((ProductVariantService)productVariantService).CreateProductVariant(product, new List<IProductVariant>(), selectedChoices.ToProductAttributeCollection());
+                
+            }
             return
                 product.ProductVariants.FirstOrDefault(
                     variant =>
@@ -109,6 +117,20 @@ namespace Merchello.Core
         /// </returns>
         public static IProductVariant GetProductVariantForPurchase(this IProduct product, Guid[] selectedChoiceKeys)
         {
+            if (product.VirtualVariants)
+            {
+                
+                var productVariantService= MerchelloContext.Current.Services.ProductVariantService;
+
+                var productoptionService = MerchelloContext.Current.Services.ProductOptionService;
+
+
+                var choices = selectedChoiceKeys.Select(x => productoptionService.GetProductAttributeByKey(x)).ToProductAttributeCollection();
+
+                return ((ProductVariantService) productVariantService).CreateProductVariant(product, new List<IProductVariant>(), choices);
+                
+            }
+
             return
                 product.ProductVariants.FirstOrDefault(
                     variant => variant.Attributes.Count() == selectedChoiceKeys.Length &&
