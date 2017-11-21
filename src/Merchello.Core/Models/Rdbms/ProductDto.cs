@@ -28,9 +28,10 @@
         public DateTime UpdateDate { get; set; }
 
         /// <summary>
-        /// Gets or sets the update date.
+        /// Gets or sets if a product has virtual variants
         /// </summary>
         [Column("virtualVariants")]
+        [Constraint(Default = false)]
         public bool VirtualVariants { get; set; }
 
         /// <summary>
