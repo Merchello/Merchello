@@ -15,6 +15,11 @@
         Guid ProductVariantKey { get; }
 
         /// <summary>
+        /// If the product is has virtual variants rather than
+        /// </summary>
+        bool VirtualVariants { get; set;}
+
+        /// <summary>
         /// Gets a value indicating whether or not this product group defines product options.
         /// e.g. The product has no required options
         /// </summary>
