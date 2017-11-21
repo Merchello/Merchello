@@ -1892,6 +1892,13 @@
         /// </param>
         private void EnsureVariants(IProduct product)
         {
+
+            // if the product has virtual variants we don't generate them here
+            if (product.VirtualVariants)
+            {
+                return;
+            }
+            
             var attributeLists = product.GetPossibleProductAttributeCombinations().ToArray();
 
             // delete any variants that don't have the correct number of attributes
