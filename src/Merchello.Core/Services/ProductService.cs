@@ -1892,10 +1892,14 @@
         /// </param>
         private void EnsureVariants(IProduct product)
         {
-
-            // if the product has virtual variants we don't generate them here
+            // if the product has virtual variants we just need to remove any existing variants and then return.
             if (product.VirtualVariants)
             {
+                if (product.ProductVariants.Any())
+                {
+
+                    _productVariantService.Delete(product.ProductVariants.ToList());
+                }
                 return;
             }
             
