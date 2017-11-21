@@ -28,6 +28,12 @@
         public DateTime UpdateDate { get; set; }
 
         /// <summary>
+        /// Gets or sets the update date.
+        /// </summary>
+        [Column("virtualVariants")]
+        public bool VirtualVariants { get; set; }
+
+        /// <summary>
         /// Gets or sets the create date.
         /// </summary>
         [Column("createDate")]
