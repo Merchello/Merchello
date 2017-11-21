@@ -198,7 +198,6 @@
             {
                 return _productKey;
             }
-
             set
             {
                 SetPropertyValueAndDetectChanges(value, ref _productKey, _ps.Value.ProductKeySelector);

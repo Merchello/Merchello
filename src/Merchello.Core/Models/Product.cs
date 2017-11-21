@@ -27,6 +27,19 @@
         /// </summary>
         private readonly IProductVariant _variant;
 
+        private bool _virtualVariants;
+        /// <summary>
+        /// If the product is has virtual variants rather than
+        /// </summary>
+        [DataMember]
+        public bool VirtualVariants {
+            get { return _virtualVariants;}
+            set
+            {
+                SetPropertyValueAndDetectChanges(value, ref _virtualVariants, _ps.Value.VirtualVariantsSelector);
+            }
+        }
+
         /// <summary>
         /// A collection of product options associated with the product.
         /// </summary>
@@ -543,6 +556,11 @@
             /// The product variants changed selector.
             /// </summary>
             public readonly PropertyInfo ProductVariantsChangedSelector = ExpressionHelper.GetPropertyInfo<Product, ProductVariantCollection>(x => x.ProductVariants);
+
+            /// <summary>
+            /// The virtual variants selector
+            /// </summary>
+            public readonly PropertyInfo VirtualVariantsSelector = ExpressionHelper.GetPropertyInfo<Product, bool>(x => x.VirtualVariants);
         }
     }
 }
