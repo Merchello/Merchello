@@ -54,6 +54,7 @@ namespace Merchello.Web.Models.ContentEditing
             productDisplay.CatalogInventories = productDisplay.CatalogInventories ?? Enumerable.Empty<CatalogInventoryDisplay>();
             productDisplay.ProductOptions = productDisplay.ProductOptions ?? Enumerable.Empty<ProductOptionDisplay>();
 
+            destination.VirtualVariants = productDisplay.VirtualVariants;
             destination.Name = productDisplay.Name;
             destination.Sku = productDisplay.Sku;
             destination.Price = productDisplay.Price;
