@@ -84,6 +84,28 @@
                     <product-variant-shipping product="product" product-variant="productVariant" settings="settings" context="{{context}}"></product-variant-shipping>
                 </merchello-slide-open-panel>
             </div>
+            <div class="umb-property">
+                <div class="control-group umb-control-group">
+                    <div class="umb-el-wrap">
+
+                        <label class="control-label">
+                            <localize key="merchelloProductEdit_virtualVariantsConfig" />
+                        </label>
+
+                        <div class="controls">
+                            <!-- Form for Vuirtual variants checkbox -->
+                            <div class="control-group">
+                                <div class="row-fluid">
+                                    <div class="form-group col-xs-6 span6">
+                                        <label class="label-checkbox"><input name="virtualVariants" type="checkbox" data-ng-model="product.virtualVariants"> <span><localize key="merchelloProductEdit_virtualVariants" /></span></label>
+                                        <small><localize key="merchelloProductEdit_virtualVariantConfigHelper" /></small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </merchello-panel>
         
