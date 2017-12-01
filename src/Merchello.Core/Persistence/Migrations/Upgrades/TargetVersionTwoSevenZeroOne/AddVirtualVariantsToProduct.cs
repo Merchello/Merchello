@@ -8,12 +8,12 @@ using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.Migrations;
 using Umbraco.Core.Persistence.SqlSyntax;
 
-namespace Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionTwoSevenZero
+namespace Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionTwoSevenZeroOne
 {
     /// <summary>
     /// Alters the product table to add a virtual variants column
     /// </summary>
-    [Migration("2.7.0", 0, MerchelloConfiguration.MerchelloMigrationName)]
+    [Migration("2.7.0.1", 0, MerchelloConfiguration.MerchelloMigrationName)]
     internal class AddVirtualVariantsToProduct : MerchelloMigrationBase, IMerchelloMigration
     {
         /// <summary>
@@ -48,16 +48,16 @@ namespace Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionTwoSevenZe
             //// Don't exeucte if the column is already there
             /// 
             var columns = _sqlSyntax.GetColumnsInSchema(_database).ToArray();
-            if (
-                columns.Any(
-                    x => x.TableName.InvariantEquals("merchProduct") && x.ColumnName.InvariantEquals("virtualVariants"))
-                == false)
+
+            bool alreadyExists = columns.Where(x => x.TableName == "merchProduct")
+                .Any(x => x.ColumnName == "virtualVariants");
+
+            if (!alreadyExists)
             {
                 Logger.Info(typeof(AddInvoiceCurrencyCodeColumn), "Adding virtualVariants column to merchProduct table.");
 
                 //// Add the new virtual variants column
                 Create.Column("virtualVariants").OnTable("merchProduct").AsBoolean().WithDefaultValue(false);
-                
             }
         }
 
@@ -66,7 +66,9 @@ namespace Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionTwoSevenZe
         /// </summary>
         public override void Down()
         {
-            throw new DataLossException("Cannot downgrade from a version 2.7.0 database to a prior version, the database schema has already been modified");
+            throw new DataLossException("Cannot downgrade from a version 2.7.0.1 database to a prior version, the database schema has already been modified");
+
+            Delete.Column("virtualVariants").FromTable("merchProduct");
         }
         
     }
