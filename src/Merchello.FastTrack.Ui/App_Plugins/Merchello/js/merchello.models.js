@@ -5732,7 +5732,9 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                         }
                     } else {
                         results = genericModelBuilder.transform(jsonResult, Constructor);
-                        results.detachedDataValues = extendedDataDisplayBuilder.transform(jsonResult.detachedDataValues);
+                        if (jsonResult) {
+                            results.detachedDataValues = extendedDataDisplayBuilder.transform(jsonResult.detachedDataValues);
+                        }
                     }
                     return results;
                 }
