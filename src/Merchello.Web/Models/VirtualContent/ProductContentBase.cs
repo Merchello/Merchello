@@ -33,11 +33,15 @@
         private ProductVariantDetachedContentDisplay _detachedContentDisplay;
 
         /// <summary>
+        /// If this product uses virtual variants
+        /// </summary>
+        private readonly bool _virtualVariants;
+        
+        /// <summary>
         /// The properties.
         /// </summary>
         private Lazy<Dictionary<string, IEnumerable<IPublishedProperty>>> _properties;
-
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductContentBase"/> class.
         /// </summary>
@@ -61,6 +65,7 @@
             _contentType = contentType;
             this.OptionContentTypes = optionContentTypes;
             this.Initialize();
+            this._virtualVariants = productBase.VirtualVariants;
         }
 
         /// <summary>
@@ -297,6 +302,18 @@
             get
             {
                 return _productBase.CatalogInventories;
+            }
+        }
+
+        /// <summary>
+        /// Gets the product variants.
+        /// </summary>
+        public bool VirtualVariants
+        {
+            get
+            {
+                //return _variantContent.Value;
+                return _virtualVariants;
             }
         }
 

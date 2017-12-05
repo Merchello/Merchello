@@ -102,5 +102,11 @@
         /// Gets or sets the update date.
         /// </summary>
         public DateTime UpdateDate { get; set; }
+
+        /// <summary>
+        /// Does this product use virtual variants
+        /// </summary>
+        public bool VirtualVariants { get; set; }
+
     }
 }

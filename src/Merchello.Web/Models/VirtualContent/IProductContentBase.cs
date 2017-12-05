@@ -109,5 +109,10 @@ namespace Merchello.Web.Models.VirtualContent
         /// Gets the total inventory count.
         /// </summary>
         int TotalInventoryCount { get; }
+
+        /// <summary>
+        /// If this product uses the virtual variants option
+        /// </summary>
+        bool VirtualVariants { get; }
     }
 }
