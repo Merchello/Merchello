@@ -128,7 +128,9 @@
                 new StaticField("slugs", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("createDate", FieldIndexTypes.NOT_ANALYZED, true, "DATETIME"),
                 new StaticField("updateDate", FieldIndexTypes.NOT_ANALYZED, true, "DATETIME"),
-                new StaticField("allDocs", FieldIndexTypes.ANALYZED, false, string.Empty)
+                new StaticField("allDocs", FieldIndexTypes.ANALYZED, false, string.Empty),
+                new StaticField("virtualVariants", FieldIndexTypes.ANALYZED, true, string.Empty),
+
             };
 
         /// <summary>

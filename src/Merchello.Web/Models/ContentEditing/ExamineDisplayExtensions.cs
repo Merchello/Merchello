@@ -89,7 +89,8 @@
                 UpdateDate = FieldAsDateTime(result, "updateDate"),
                 Attributes = RawJsonFieldAsCollection<ProductAttributeDisplay>(result, "attributes"),
                 CatalogInventories = RawJsonFieldAsCollection<CatalogInventoryDisplay>(result, "catalogInventories"),
-                DetachedContents = GetProductVariantDetachedContentDisplayCollection(result, "detachedContents")
+                DetachedContents = GetProductVariantDetachedContentDisplayCollection(result, "detachedContents"),
+                VirtualVariants = FieldAsBoolean(result.Fields["virtualVariants"])
             };
             return pvd;
         }

@@ -384,6 +384,7 @@ namespace Merchello.Core
                     writer.WriteStartDocument();
                     writer.WriteStartElement("product");
                     writer.WriteAttributeString("key", product.Key.ToString());
+                    writer.WriteAttributeString("virtualVariants", product.VirtualVariants  ? "1" : "0");
                     writer.WriteEndElement(); // product
                     writer.WriteEndDocument();
                     xml = sw.ToString();
@@ -393,7 +394,8 @@ namespace Merchello.Core
             var doc = XDocument.Parse(xml);
             if (doc.Root == null) return XDocument.Parse("<product />");
 
-            doc.Root.Add(((Product)product).MasterVariant.SerializeToXml(product.ProductOptions, product.GetCollectionsContaining().Select(x => x.Key)).Root);
+            doc.Root.Add(((Product)product).MasterVariant.SerializeToXml(product.ProductOptions, product.VirtualVariants, product.GetCollectionsContaining().Select(x => x.Key)).Root);
+
 
             // Need to filter out the Master variant so that it does not get overwritten in the cases where
             // a product defines options.
@@ -411,6 +413,7 @@ namespace Merchello.Core
         /// <param name="productVariant">
         /// The product variant.
         /// </param>
+        /// <param name="virtualVariants"> if the products variants are virtual </param>
         /// <param name="productOptionCollection">
         /// The product option collection.
         /// </param>
@@ -420,7 +423,7 @@ namespace Merchello.Core
         /// <returns>
         /// The <see cref="XDocument"/>.
         /// </returns>
-        internal static XDocument SerializeToXml(this IProductVariant productVariant, ProductOptionCollection productOptionCollection = null, IEnumerable<Guid> collections = null)
+        internal static XDocument SerializeToXml(this IProductVariant productVariant, ProductOptionCollection productOptionCollection = null, bool virtualVariants = false, IEnumerable<Guid> collections = null)
         {
             string xml;
             using (var sw = new StringWriter())
@@ -460,6 +463,7 @@ namespace Merchello.Core
                     writer.WriteAttributeString("slugs", string.Join(" ", productVariant.DetachedContents.Select(x => x.Slug)));
                     writer.WriteAttributeString("detachedContents", GetDetachedContentsJson(((ProductVariant)productVariant).DetachedContents));
                     writer.WriteAttributeString("versionKey", productVariant.VersionKey.ToString());
+                    writer.WriteAttributeString("virtualVariants", virtualVariants.ToString());
 
                     // 1.11.0 - static collections
                     if (collections != null)
