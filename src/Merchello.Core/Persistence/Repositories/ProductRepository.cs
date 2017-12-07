@@ -64,6 +64,8 @@
             _productOptionRepository = productOptionRepository;
         }
 
+
+
         /// <summary>
         /// The get page.
         /// </summary>
@@ -843,6 +845,29 @@
                           };
 
             Database.Insert(dto);
+        }
+
+        /// <summary>
+        /// Bulk inserts products to a collection
+        /// </summary>
+        /// <param name="entityAndCollectionKeys"></param>
+        public void AddToCollections(Dictionary<Guid, Guid> entityAndCollectionKeys)
+        {
+            var dtos = new List<Product2EntityCollectionDto>();
+
+            foreach (var entityAndCollectionKey in entityAndCollectionKeys)
+            {
+                //Guid entityKey, Guid collectionKey
+                dtos.Add(new Product2EntityCollectionDto()
+                {
+                    ProductKey = entityAndCollectionKey.Key,
+                    EntityCollectionKey = entityAndCollectionKey.Value,
+                    CreateDate = DateTime.Now,
+                    UpdateDate = DateTime.Now
+                });                
+            }
+
+            Database.BulkInsertRecords(dtos);
         }
 
         /// <summary>
