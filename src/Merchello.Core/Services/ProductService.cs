@@ -1,4 +1,6 @@
-﻿namespace Merchello.Core.Services
+﻿using Merchello.Core.Persistence.Repositories;
+
+namespace Merchello.Core.Services
 {
     using System;
     using System.Collections.Generic;
@@ -641,6 +643,22 @@
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 repository.AddToCollection(productKey, collectionKey);
+            }
+
+            if (AddedToCollection != null) AddedToCollection.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// Bulks adds products to collections
+        /// </summary>
+        /// <param name="entityAndCollectionKeys"></param>
+        public void AddToCollections(Dictionary<Guid, Guid> entityAndCollectionKeys)
+        {
+            if (AddingToCollection != null) AddingToCollection.Invoke(this, new EventArgs());
+
+            using (var repository = (ProductRepository)RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
+            {
+                repository.AddToCollections(entityAndCollectionKeys);
             }
 
             if (AddedToCollection != null) AddedToCollection.Invoke(this, new EventArgs());
