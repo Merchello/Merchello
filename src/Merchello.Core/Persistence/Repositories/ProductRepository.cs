@@ -859,12 +859,12 @@
 
             foreach (var entityAndCollectionKey in entityAndCollectionKeys)
             {
-                var key = string.Concat(entityAndCollectionKey.Value, "|", entityAndCollectionKey.Key);
+                var key = string.Concat(entityAndCollectionKey.Key, "|", entityAndCollectionKey.Value);
 
                 if (!allMerchProduct2EntityCollections.ContainsKey(key))
                 {
                     //Guid entityKey, Guid collectionKey
-                    dtos.Add(new Product2EntityCollectionDto()
+                    dtos.Add(new Product2EntityCollectionDto
                     {
                         ProductKey = entityAndCollectionKey.Key,
                         EntityCollectionKey = entityAndCollectionKey.Value,
@@ -893,7 +893,7 @@
 
             foreach (var mpec in competitions)
             {
-                var key = string.Concat(mpec.EntityCollectionKey, "|", mpec.ProductKey);
+                var key = string.Concat(mpec.ProductKey, "|", mpec.EntityCollectionKey);
                 product2EntityCollectionDict.Add(key, mpec);
             }
 
