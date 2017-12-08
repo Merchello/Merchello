@@ -3186,7 +3186,7 @@ angular.module('merchello').controller('Merchello.Customer.Dialogs.CustomerCheck
         $scope.formatQuote = function(quote) {
             return quote.shipMethod.name + ' (' + $filter('currency')(quote.rate, $scope.dialogData.currencySymbol) + ')';
         }
-                
+        
         init();
 
     }]);
@@ -11709,6 +11709,11 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                         //cssClass = 'label-default';
                         icon = 'icon-handprint';
                         text = partial;
+                        break;
+                    case 'Cancelled':
+                        //cssClass = 'label-default';
+                        icon = 'icon-wrong';
+                        text = cancelled;
                         break;
                     default:
                         //cssClass = 'label-info';
