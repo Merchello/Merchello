@@ -855,19 +855,70 @@
         {
             var dtos = new List<Product2EntityCollectionDto>();
 
+            var allMerchProduct2EntityCollections = GetAllMerchProduct2EntityCollections();
+
             foreach (var entityAndCollectionKey in entityAndCollectionKeys)
             {
-                //Guid entityKey, Guid collectionKey
-                dtos.Add(new Product2EntityCollectionDto()
+                var key = string.Concat(entityAndCollectionKey.Value, "|", entityAndCollectionKey.Key);
+
+                if (!allMerchProduct2EntityCollections.ContainsKey(key))
                 {
-                    ProductKey = entityAndCollectionKey.Key,
-                    EntityCollectionKey = entityAndCollectionKey.Value,
-                    CreateDate = DateTime.Now,
-                    UpdateDate = DateTime.Now
-                });                
+                    //Guid entityKey, Guid collectionKey
+                    dtos.Add(new Product2EntityCollectionDto()
+                    {
+                        ProductKey = entityAndCollectionKey.Key,
+                        EntityCollectionKey = entityAndCollectionKey.Value,
+                        CreateDate = DateTime.Now,
+                        UpdateDate = DateTime.Now
+                    });
+                }               
             }
 
             Database.BulkInsertRecords(dtos);
+        }
+
+        /// <summary>
+        /// Creates a dictionary we can look up to check existing MerchProduct2EntityCollection
+        /// </summary>
+        /// <returns></returns>
+        private Dictionary<string, Product2EntityCollectionDto> GetAllMerchProduct2EntityCollections()
+        {
+            var sql = new Sql()
+                .Select("*")
+                .From("merchProduct2EntityCollection");
+
+            var competitions = Database.Query<Product2EntityCollectionDto>(sql);
+
+            var product2EntityCollectionDict = new Dictionary<string, Product2EntityCollectionDto>();
+
+            foreach (var mpec in competitions)
+            {
+                var key = string.Concat(mpec.EntityCollectionKey, "|", mpec.ProductKey);
+                product2EntityCollectionDict.Add(key, mpec);
+            }
+
+            return product2EntityCollectionDict;
+        }
+
+        /// <summary>
+        /// Batch removes from collections
+        /// </summary>
+        /// <param name="entityKeycollectionKey">
+        /// Key=ProductKey
+        /// Value=collectionKey
+        /// </param>
+        public void RemoveFromCollections(Dictionary<Guid , Guid> entityKeycollectionKey)
+        {
+            var sql = new Sql();
+
+            foreach (var dict in entityKeycollectionKey)
+            {
+                sql.Append(
+                    "DELETE [merchProduct2EntityCollection] WHERE [merchProduct2EntityCollection].[productKey] = @pkey AND [merchProduct2EntityCollection].[entityCollectionKey] = @eckey",
+                    new {@pkey = dict.Key, @eckey = dict.Value});
+            }
+
+            Database.Execute(sql);
         }
 
         /// <summary>
