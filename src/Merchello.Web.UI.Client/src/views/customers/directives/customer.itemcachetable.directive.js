@@ -116,6 +116,7 @@ angular.module('merchello.directives').directive('customerItemCacheTable',
                     var billingAddress = scope.customer.getDefaultBillingAddress();
                     var shippingAddress = scope.customer.getDefaultShippingAddress();
 
+
                     var checkoutData = {
                         customerKey: dialogData.customer.key,
                         billingAddressKey: billingAddress.key,
