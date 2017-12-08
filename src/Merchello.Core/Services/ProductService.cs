@@ -719,6 +719,22 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
+        /// Batche removes from a collection
+        /// </summary>
+        /// <param name="entityKeycollectionKey"></param>
+        public void RemoveFromCollections(Dictionary<Guid, Guid> entityKeycollectionKey)
+        {
+            if (RemovingFromCollection != null) RemovingFromCollection.Invoke(this, new EventArgs());
+
+            using (var repository = (ProductRepository)RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
+            {
+                repository.RemoveFromCollections(entityKeycollectionKey);
+            }
+
+            if (RemovedFromCollection != null) RemovedFromCollection.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
         /// The remove product from collection.
         /// </summary>
         /// <param name="product">
