@@ -181,6 +181,25 @@ namespace Merchello.Core
             return dt.AddDays(-1 * diff).Date;
         }
 
+        /// <summary>
+        /// Returns a date with time at start of the day
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
+        public static DateTime GetStartOfDay(this DateTime dateTime)
+        {
+            return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, 0, 0, 0, 0);
+        }
+
+        /// <summary>
+        /// Returns a date with the time at the end of the day
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
+        public static DateTime GetEndOfDay(this DateTime dateTime)
+        {
+            return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, 23, 59, 59, 999);
+        }
 
         /// <summary>
         /// Parses the SQL DateTime min value string

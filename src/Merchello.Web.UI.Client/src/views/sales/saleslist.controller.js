@@ -120,6 +120,11 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                         icon = 'icon-handprint';
                         text = partial;
                         break;
+                    case 'Cancelled':
+                        //cssClass = 'label-default';
+                        icon = 'icon-wrong';
+                        text = cancelled;
+                        break;
                     default:
                         //cssClass = 'label-info';
                         icon = 'icon-thumb-down';

@@ -850,11 +850,17 @@
         public decimal SumInvoiceTotals(DateTime startDate, DateTime endDate, string currencyCode)
         {
             //var ends = endDate.AddDays(1);
+            if (startDate != DateTime.MinValue && startDate != DateTime.MaxValue &&
+                endDate != DateTime.MinValue && endDate != DateTime.MaxValue &&
+                endDate > startDate)
+            {
+                const string SQL =
+                    @"SELECT SUM([merchInvoice].total) FROM merchInvoice WHERE [merchInvoice].invoiceDate BETWEEN @starts and @ends AND [merchInvoice].currencyCode = @cc";
 
-            const string SQL =
-                @"SELECT SUM([merchInvoice].total) FROM merchInvoice WHERE [merchInvoice].invoiceDate BETWEEN @starts and @ends AND [merchInvoice].currencyCode = @cc";
+                return Database.ExecuteScalar<decimal>(SQL, new { @starts = startDate.ToIsoString(), @ends = endDate.ToIsoString(), @cc = currencyCode });
+            }
 
-            return Database.ExecuteScalar<decimal>(SQL, new { @starts = startDate.ToIsoString(), @ends = endDate.ToIsoString(), @cc = currencyCode });
+            return -1;
         }
 
         /// <summary>

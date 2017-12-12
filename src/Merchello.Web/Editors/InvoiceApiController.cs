@@ -22,6 +22,8 @@
 
     using Umbraco.Core;
     using Umbraco.Core.Logging;
+    using Umbraco.Core.Models.Membership;
+    using Umbraco.Core.Security;
     using Umbraco.Web;
     using Umbraco.Web.Mvc;
 
@@ -459,14 +461,27 @@
                     _orderService.Save(order);
                 }
 
+                // Not sure if I need to do this??
+                var cancelledInvoiceStatus = new InvoiceStatus
+                {
+                    Key = Constants.InvoiceStatus.Cancelled,
+                    Alias = "cancelled",
+                    Name = "Cancelled",
+                    Active = true,
+                    Reportable = false,
+                    SortOrder = 1,
+                    CreateDate = DateTime.Now,
+                    UpdateDate = DateTime.Now
+                };
+
+                invoice.InvoiceStatus = cancelledInvoiceStatus;
+
                 // Save the invoice
                 _invoiceService.Save(invoice);
 
-                // Get the user who 
-                var user = UmbracoContext.Current.Security.CurrentUser;
-
                 // Set an audit log
-                _auditLogService.CreateAuditLogWithKey(string.Format("Order cancelled by {0}", user.Name));
+                var message = string.Format("Order cancelled by {0}", CurrentUser != null ? CurrentUser.Name : "Unable to get user");
+                _auditLogService.CreateAuditLogWithKey(invoice.Key, EntityType.Invoice, message);
             }
             catch (Exception ex)
             {
