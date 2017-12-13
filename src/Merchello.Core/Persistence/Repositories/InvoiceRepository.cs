@@ -151,7 +151,7 @@
             SortDirection sortDirection = SortDirection.Descending)
         {
             var sql = BuildInvoiceSearchSql(searchTerm);
-            sql.Where("invoiceDate BETWEEN @start AND @end", new { @start = startDate, @end = endDate });
+            sql.Where("invoiceDate BETWEEN @start AND @end", new { @start = startDate.GetDateForSqlStartOfDay(), @end = endDate.GetDateForSqlEndOfDay() });
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
 
@@ -857,7 +857,8 @@
                 const string SQL =
                     @"SELECT SUM([merchInvoice].total) FROM merchInvoice WHERE [merchInvoice].invoiceDate BETWEEN @starts and @ends AND [merchInvoice].currencyCode = @cc";
 
-                return Database.ExecuteScalar<decimal>(SQL, new { @starts = startDate.ToIsoString(), @ends = endDate.ToIsoString(), @cc = currencyCode });
+                return Database.ExecuteScalar<decimal>(SQL, new { @starts = startDate.GetDateForSqlStartOfDay(),
+                    @ends = endDate.GetDateForSqlEndOfDay(), @cc = currencyCode });
             }
 
             return -1;
@@ -892,7 +893,7 @@
 
             return Database.ExecuteScalar<decimal>(
                 SQL,
-                new { @starts = startDate, @ends = endDate, @cc = currencyCode, @sku = sku });
+                new { @starts = startDate.GetDateForSqlStartOfDay(), @ends = endDate.GetDateForSqlEndOfDay(), @cc = currencyCode, @sku = sku });
         }
 
         #region Filter Queries
