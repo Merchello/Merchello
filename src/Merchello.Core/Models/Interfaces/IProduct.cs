@@ -1,4 +1,6 @@
-﻿namespace Merchello.Core.Models
+﻿using System.Runtime.Serialization;
+
+namespace Merchello.Core.Models
 {
     using System;
 
@@ -15,8 +17,9 @@
         Guid ProductVariantKey { get; }
 
         /// <summary>
-        /// If the product is has virtual variants rather than
+        /// If the product is has virtual variants rather than generated ones.
         /// </summary>
+        [DataMember]
         bool VirtualVariants { get; set;}
 
         /// <summary>
