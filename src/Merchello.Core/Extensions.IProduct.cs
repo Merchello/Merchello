@@ -384,7 +384,7 @@ namespace Merchello.Core
                     writer.WriteStartDocument();
                     writer.WriteStartElement("product");
                     writer.WriteAttributeString("key", product.Key.ToString());
-                    writer.WriteAttributeString("virtualVariants", product.VirtualVariants  ? "1" : "0");
+                    writer.WriteAttributeString("virtualVariants", product.VirtualVariants.ToString());
                     writer.WriteEndElement(); // product
                     writer.WriteEndDocument();
                     xml = sw.ToString();
