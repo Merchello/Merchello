@@ -89,7 +89,8 @@
                 ProductOptions = this._getProductOptionCollection.Invoke(dto.Key),
                 ProductVariants = this._getProductVariantCollection.Invoke(dto.Key),
                 UpdateDate = dto.UpdateDate,
-                CreateDate = dto.CreateDate
+                CreateDate = dto.CreateDate,
+                VirtualVariants = dto.VirtualVariants
             };
 
             product.ResetDirtyProperties();
@@ -113,7 +114,9 @@
                 Key = entity.Key,
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate,
-                ProductVariantDto = _productVariantFactory.BuildDto(((Product)entity).MasterVariant)
+                ProductVariantDto = _productVariantFactory.BuildDto(((Product)entity).MasterVariant),
+                VirtualVariants = entity.VirtualVariants
+                
             };
 
             return dto;
