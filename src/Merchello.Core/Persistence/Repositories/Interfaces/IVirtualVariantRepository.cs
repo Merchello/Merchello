@@ -11,5 +11,11 @@
     /// </summary>
     public interface IVirtualVariantRepository : IRepositoryQueryable<Guid, IVirtualVariant>
     {
+        /// <summary>
+        /// Gets a virtual variant by it's SKU.
+        /// </summary>
+        /// <param name="sku"></param>
+        /// <returns></returns>
+        IVirtualVariant GetBySku(string sku);
     }
 }

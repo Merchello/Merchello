@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using Merchello.Core.Models;
+using Merchello.Core.Models.Interfaces;
+using Merchello.Core.Services;
 using Merchello.Web;
 using Merchello.Web.Models.ContentEditing;
 using Merchello.Web.Models.VirtualContent;
@@ -26,6 +30,18 @@ namespace Merchello.FastTrack.Ui.Controllers.Api
 
             return variant;
 
+        }
+
+        [System.Web.Mvc.HttpGet]
+        [System.Web.Http.AcceptVerbs("GET")]
+        public IProductVariant GetBySku()
+        {
+            VirtualVariantService service = new VirtualVariantService();
+
+            string sku = "test-product";
+            string[] options = new[] {"670b0fe6-a7c4-4470-b3b5-105aeb723c40"};
+
+            return service.GetBySku(sku, options);
         }
     }
 }

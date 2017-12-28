@@ -36,7 +36,7 @@ namespace Merchello.Core.Models
         /// <summary>
         /// The product choices.
         /// </summary>
-        private Dictionary<string, string> _choices;
+        private string _choices;
 
         #endregion
 
@@ -73,7 +73,7 @@ namespace Merchello.Core.Models
         
         /// <inheritdoc/>
         [DataMember]
-        public Dictionary<string, string> Choices
+        public string Choices
         {
             get
             {
@@ -104,7 +104,7 @@ namespace Merchello.Core.Models
             /// <summary>
             /// The product choices.
             /// </summary>
-            public readonly PropertyInfo ChoicesSelector = ExpressionHelper.GetPropertyInfo<VirtualVariant, Dictionary<string, string>>(x => x.Choices);
+            public readonly PropertyInfo ChoicesSelector = ExpressionHelper.GetPropertyInfo<VirtualVariant, string>(x => x.Choices);
         }
     }
 }

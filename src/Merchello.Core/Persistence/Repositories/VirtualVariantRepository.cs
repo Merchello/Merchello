@@ -64,6 +64,22 @@
             return virtualVariant;
         }
 
+        public IVirtualVariant GetBySku(string sku)
+        {
+            var sql = GetBaseQuery(false).Where("merchVirtualVariants.sku = @Sku", new { Sku = sku });
+
+            var dto = Database.Fetch<VirtualVariantsDto>(sql).FirstOrDefault();
+
+            if (dto == null)
+                return null;
+
+            var factory = new VirtualVariantFactory();
+
+            var virtualVariant = factory.BuildEntity(dto);
+
+            return virtualVariant;
+        }
+
         /// <summary>
         /// Returns a collection of all virtual variant records.
         /// </summary>

@@ -1,4 +1,6 @@
-﻿namespace Merchello.Core.Services
+﻿using Merchello.Core.Models;
+
+namespace Merchello.Core.Services
 {
     using System;
     using System.Collections.Generic;
@@ -15,8 +17,8 @@
         /// <summary>
         /// Creates a <see cref="IVirtualVariant"/> and saves it to the database.
         /// </summary>
-        /// <param name="name">
-        /// The name.
+        /// <param name="productVariant">
+        /// The product variant.
         /// </param>
         /// <param name="raiseEvents">
         /// Optional boolean indicating whether or not to raise events
@@ -24,7 +26,7 @@
         /// <returns>
         /// The <see cref="IVirtualVariant"/>.
         /// </returns>
-        IVirtualVariant CreateVirtualVariant(string name, bool raiseEvents = true);
+        IVirtualVariant CreateVirtualVariant(IProductVariant productVariant, bool raiseEvents = true);
 
         /// <summary>
         /// Saves a single <see cref="IVirtualVariant"/>

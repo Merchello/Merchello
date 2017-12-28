@@ -1,4 +1,6 @@
-﻿namespace Merchello.Core.Services
+﻿using Newtonsoft.Json;
+
+namespace Merchello.Core.Services
 {
     using System;
     using System.Collections.Generic;
@@ -139,18 +141,19 @@
         /// <param name="name">
         /// Tkey for the item to work
         /// </param>
+        /// <param name="productVariant"></param>
         /// <param name="raiseEvents">
         /// Optional boolean indicating whether or not to raise events
         /// </param>
         /// <returns>
         /// The <see cref="IDigitalMedia"/>.
         /// </returns>
-        public IVirtualVariant CreateVirtualVariant(string name, bool raiseEvents = true)
+        public IVirtualVariant CreateVirtualVariant(IProductVariant productVariant, bool raiseEvents = true)
         {
             var virtualVariant = new VirtualVariant() {
-                Sku = "",
-                ProductKey = Guid.NewGuid(),
-                Choices = new Dictionary<string, string>()
+                Sku = productVariant.Sku,
+                ProductKey = productVariant.ProductKey,
+                Choices = JsonConvert.SerializeObject(productVariant.Attributes.ToDictionary(x => x.OptionKey, x => x.Key))
             };
 
             if (raiseEvents)
@@ -259,6 +262,18 @@
             {
                 return repository.GetAll(keys.ToArray());
             }
+        }
+
+        /// <summary>
+        /// Get a virtual variant by it's sku.
+        /// </summary>
+        /// <param name="sku"></param>
+        /// <param name="optionKeys"></param>
+        /// <returns></returns>
+        public IProductVariant GetBySku(string sku, IEnumerable<string> optionKeys)
+        {
+            IProduct product = MerchelloContext.Current.Services.ProductService.GetBySku(sku);
+            return product.GetProductVariantForPurchase(optionKeys.Select(x => Guid.Parse(x)).ToArray());
         }
     }
 }

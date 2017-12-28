@@ -43,6 +43,6 @@ namespace Merchello.Core.Models.Rdbms
         [Column("choices")]
         [NullSetting(NullSetting = NullSettings.NotNull)]
         [SpecialDbType(SpecialDbTypes.NTEXT)]
-        public Dictionary<string, string> Choices { get; set; }
+        public string Choices { get; set; }
     }
 }

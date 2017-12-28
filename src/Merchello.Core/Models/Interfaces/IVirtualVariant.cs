@@ -28,6 +28,6 @@ namespace Merchello.Core.Models.Interfaces
         /// Gets or sets the first accessed date
         /// </summary>
         [DataMember]
-        Dictionary<string, string> Choices { get; set; }
+        string Choices { get; set; }
     }
 }
