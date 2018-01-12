@@ -293,8 +293,14 @@
             EnsureProductVariantsHaveAttributes(product);
 
             // save any remaining variants changes in the variants collection
-            if (product.ProductVariants.Any())
-            _productVariantService.Save(product.ProductVariants, false);
+            if (product.ProductVariants.Any() && product.VirtualVariants)
+            {
+                _productVariantService.Save(new List<IProductVariant>(), false);
+            }
+            else if(product.ProductVariants.Any())
+            {
+                _productVariantService.Save(product.ProductVariants, false);
+            }
 
             if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IProduct>(product), this);
 

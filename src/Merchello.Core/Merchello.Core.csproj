@@ -518,6 +518,8 @@
     </Compile>
     <Compile Include="Logging\IRemoteLogger.cs" />
     <Compile Include="Models\DetachedContent\DetachedContentValuesSerializationHelper.cs" />
+    <Compile Include="Models\Interfaces\IVirtualVariant.cs" />
+    <Compile Include="Models\VirtualVariant.cs" />
     <Compile Include="Models\EntityBase\IDateStamped.cs" />
     <Compile Include="Models\Interfaces\IDeepCloneable.cs" />
     <Compile Include="Models\Interfaces\IShallowClone.cs" />
@@ -525,15 +527,22 @@
     <Compile Include="Models\Querying\QueryBuilderParameter.cs" />
     <Compile Include="Models\Querying\FieldMatchCondition.cs" />
     <Compile Include="Models\Rdbms\CountDto.cs" />
+    <Compile Include="Models\Rdbms\VirtualVariantsDto.cs" />
     <Compile Include="Models\Rdbms\DigitalMediaDto.cs" />
     <Compile Include="Models\Rdbms\UserGroup2AppDto.cs" />
     <Compile Include="PagedCollection.cs" />
+    <Compile Include="Persistence\Factories\VirtualVariantFactory.cs" />
+    <Compile Include="Persistence\Mappers\VirtualVariantMapper.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoSevenZeroTwo\AddVirtualVariantsTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoSevenZeroOne\AddVirtualVariantsToProduct.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoFiveZero\AddDigitalMediaTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoFiveZero\AddIndexesToInvoice.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoFiveZero\AddIndexesToProductVariant.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoFourZero\AddShipmentTrackingUrlColumns.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoThreeOne\AlterProductAttributeColumnToNtext.cs" />
+    <Compile Include="Persistence\Repositories\VirtualVariantRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IVirtualVariantRepository.cs" />
+    <Compile Include="Persistence\Repositories\VirtualVariantsRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IProductBackOfficeRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IPortForwardProductRepository.cs" />
     <Compile Include="Persistence\Repositories\ProductRepository.BackOffice.cs">
@@ -542,6 +551,8 @@
     <Compile Include="Persistence\Repositories\ProductRepository.PortForward.cs">
       <DependentUpon>ProductRepository.cs</DependentUpon>
     </Compile>
+    <Compile Include="Services\VirtualVariantService.cs" />
+    <Compile Include="Services\Interfaces\IVirtualVariantService.cs" />
     <Compile Include="Services\Interfaces\IProductQueryService.cs" />
     <Compile Include="Services\Interfaces\IProductServicePortForward.cs" />
     <Compile Include="Services\ProductService.PortForward.cs">

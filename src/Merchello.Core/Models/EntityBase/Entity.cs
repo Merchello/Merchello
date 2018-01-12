@@ -241,7 +241,8 @@
         {
             if ((typeof(T) == typeof(string) == false) && TypeHelper.IsTypeAssignableFrom<IEnumerable>(typeof(T)))
             {
-                throw new InvalidOperationException("This method does not support IEnumerable instances. For IEnumerable instances a manual custom equality check will be required");
+                // TODO: Implement IEnumerable equality check
+                //throw new InvalidOperationException("This method does not support IEnumerable instances. For IEnumerable instances a manual custom equality check will be required");
             }
 
             SetPropertyValueAndDetectChanges(newVal, ref origVal, propertySelector, EqualityComparer<T>.Default);

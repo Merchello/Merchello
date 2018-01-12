@@ -242,6 +242,20 @@
         }
 
         /// <summary>
+        /// The create digital media repository.
+        /// </summary>
+        /// <param name="uow">
+        /// The <see cref="IDatabaseUnitOfWork"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IVirtualVariantRepository"/>.
+        /// </returns>
+        internal virtual IVirtualVariantRepository CreateVirtualVariantRepository(IDatabaseUnitOfWork uow)
+        {
+            return new VirtualVariantRepository(uow, _cacheHelper, _logger, _sqlSyntax);
+        }
+
+        /// <summary>
         /// Creates a new instance of the <see cref="DetachedContentTypeRepository"/>.
         /// </summary>
         /// <param name="uow">
