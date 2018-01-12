@@ -1905,6 +1905,13 @@
                 {
 
                     _productVariantService.Delete(product.ProductVariants.ToList());
+
+                    var allVariants = product.ProductVariants.ToArray();
+                    foreach (var productVariant in allVariants)
+                    {
+                        product.ProductVariants.Remove(productVariant);
+                    }
+                   
                 }
                 return;
             }
