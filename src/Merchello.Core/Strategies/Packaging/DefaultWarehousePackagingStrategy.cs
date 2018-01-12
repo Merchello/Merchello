@@ -113,7 +113,7 @@
                 {
                     var product =
                         MerchelloContext.Services.ProductService.GetByKey(
-                            Guid.Parse(lineItem.ExtendedData["merchProductKey"]));
+                            Guid.Parse(lineItem.ExtendedData[Constants.ExtendedDataKeys.ProductKey]));
 
                     if (product == null)
                         throw new InvalidOperationException(
