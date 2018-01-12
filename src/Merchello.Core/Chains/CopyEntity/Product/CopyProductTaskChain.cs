@@ -144,6 +144,7 @@
             clone.OutOfStockPurchase = _original.OutOfStockPurchase;
             clone.Shippable = _original.Shippable;
             clone.Taxable = _original.Taxable;
+            clone.VirtualVariants = _original.VirtualVariants;
 
             var attempt = this.TaskHandlers.Any()
                       ? this.TaskHandlers.First().Execute(clone)
