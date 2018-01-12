@@ -1904,9 +1904,10 @@
                 if (product.ProductVariants.Any())
                 {
 
-                    _productVariantService.Delete(product.ProductVariants.ToList());
-
                     var allVariants = product.ProductVariants.ToArray();
+
+                    _productVariantService.Delete(allVariants);
+                    
                     foreach (var productVariant in allVariants)
                     {
                         product.ProductVariants.Remove(productVariant);

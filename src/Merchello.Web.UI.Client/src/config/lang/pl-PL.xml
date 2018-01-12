@@ -760,6 +760,15 @@
     <key alias="selectYourProduct">Zaznacz swój produkt</key>
     <key alias="removeProduct">Odłącz ten produkt</key>
     <key alias="itemLocation">Lokalizacja przedmiotu</key>
+    <key alias="virtualVariantsConfig">Virtual Product Variants</key>
+    <key alias="virtualVariantConfigHelper">
+      <![CDATA[
+          When using virtual product variants, no variants are available when querying a product.
+          Instead a product variant needs to be obtained by passing the required options to the merchello helper along with the base product.
+          This is useful when a product has a large amount of product options which can cause merchello to slow down or crash.
+    ]]>
+    </key>
+    <key alias="virtualVariants">Use virtual variants for this product?</key>
   </area>
 
   <area alias="merchelloAuditLogs">
