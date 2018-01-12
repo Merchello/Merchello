@@ -108,28 +108,55 @@
             {
                 // We need to know what Warehouse Catalog this product is associated with for shipping and inventory
                 var variant = variants.FirstOrDefault(x => x.Key.Equals(lineItem.ExtendedData.GetProductVariantKey()));
-                if (variant == null) throw new InvalidOperationException("This packaging strategy cannot handle null ProductVariants");
 
-                if (!variant.CatalogInventories.Any())
+                if (variant == null)
                 {
-                    MultiLogHelper.Error<ShippableProductVisitor>(
-                        "ProductVariant marked as shippable was not assoicated with a WarehouseCatalog.  Product was: "
-                        + variant.Key.ToString() + " -  " + variant.Name,
-                        new InvalidDataException());
+                    var product =
+                        MerchelloContext.Services.ProductService.GetByKey(
+                            Guid.Parse(lineItem.ExtendedData["merchProductKey"]));
+
+                    if (product == null)
+                        throw new InvalidOperationException(
+                            "This packaging strategy could not find product for null variant");
+
+                    if (product.VirtualVariants)
+                    {
+                        // if the product has virtual variants we need to set the warehouse details from the base product rather than the variant.
+                        lineItem.ExtendedData.SetValue(
+                            Constants.ExtendedDataKeys.WarehouseCatalogKey,
+                            product.CatalogInventories.First().CatalogKey.ToString());
+
+                        shipment.Items.Add(lineItem);
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException(
+                            "This packaging strategy cannot handle null ProductVariants");
+                    }
                 }
                 else
                 {
-                    if (lineItem.ExtendedData.GetWarehouseCatalogKey().Equals(Guid.Empty)) 
+                    if (!variant.CatalogInventories.Any())
                     {
-                        // TODO this needs to be refactored to look at the entire shipment
-                        // since products could be in multiple catalogs which could have
-                        // opposing shippng rules and we have the destination address.
-                        lineItem.ExtendedData.SetValue(
-                            Constants.ExtendedDataKeys.WarehouseCatalogKey,
-                            variant.CatalogInventories.First().CatalogKey.ToString());
+                        MultiLogHelper.Error<ShippableProductVisitor>(
+                            "ProductVariant marked as shippable was not assoicated with a WarehouseCatalog.  Product was: "
+                            + variant.Key.ToString() + " -  " + variant.Name,
+                            new InvalidDataException());
                     }
+                    else
+                    {
+                        if (lineItem.ExtendedData.GetWarehouseCatalogKey().Equals(Guid.Empty))
+                        {
+                            // TODO this needs to be refactored to look at the entire shipment
+                            // since products could be in multiple catalogs which could have
+                            // opposing shippng rules and we have the destination address.
+                            lineItem.ExtendedData.SetValue(
+                                Constants.ExtendedDataKeys.WarehouseCatalogKey,
+                                variant.CatalogInventories.First().CatalogKey.ToString());
+                        }
 
-                    shipment.Items.Add(lineItem);
+                        shipment.Items.Add(lineItem);
+                    }
                 }
             }
 
