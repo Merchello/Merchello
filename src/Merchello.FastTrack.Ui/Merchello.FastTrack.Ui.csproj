@@ -874,7 +874,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Code\CustomerCxtDataViewer.cs" />
-    <Compile Include="Controllers\Api\VirtualVariantsController.cs" />
     <Compile Include="ExampleUiHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UmbracoEventHandler.cs" />
