@@ -49,8 +49,7 @@
         /// </returns>
         protected override bool PerformExists(IInvoice entity)
         {
-            return !entity.Orders.Any()
-                   || entity.Orders.All(x => x.OrderStatusKey == Constants.OrderStatus.Cancelled);
+            return !entity.Orders.Any() || entity.Orders.All(x => x.OrderStatusKey == Constants.OrderStatus.Cancelled) || entity.InvoiceStatusKey == Constants.InvoiceStatus.Cancelled;
         }
 
         /// <summary>

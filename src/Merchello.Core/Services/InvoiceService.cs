@@ -575,14 +575,15 @@
         /// </returns>
         public IEnumerable<IInvoice> GetInvoicesByDateRange(DateTime startDate, DateTime endDate)
         {
+            // We need to make sure we get entire day
+            var correctStart = startDate.GetStartOfDay();
+            var correctEnd = endDate.GetEndOfDay();
             using (var repository = RepositoryFactory.CreateInvoiceRepository(UowProvider.GetUnitOfWork()))
             {
-                var query = Persistence.Querying.Query<IInvoice>.Builder.Where(x => x.InvoiceDate >= startDate && x.InvoiceDate <= endDate);
-
+                var query = Persistence.Querying.Query<IInvoice>.Builder.Where(x => x.InvoiceDate >= correctStart && x.InvoiceDate <= correctEnd);
                 return repository.GetByQuery(query);
             }
         }
-
 
         /// <summary>
         /// Gets the total count of all <see cref="IInvoice"/>

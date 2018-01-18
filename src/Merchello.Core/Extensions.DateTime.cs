@@ -181,6 +181,61 @@ namespace Merchello.Core
             return dt.AddDays(-1 * diff).Date;
         }
 
+        /// <summary>
+        /// Returns a date with time at start of the day
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
+        public static DateTime GetStartOfDay(this DateTime dateTime)
+        {
+            return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, 0, 0, 0, 0);
+        }
+
+        /// <summary>
+        /// Returns a date with the time at the end of the day
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
+        public static DateTime GetEndOfDay(this DateTime dateTime)
+        {
+            return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, 23, 59, 59, 999);
+        }
+
+        /// <summary>
+        /// Returns a date like '12 January 2017' which sql can work out. Helps for systems where date is in different format
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
+        public static string GetDateForSql(this DateTime dateTime)
+        {
+            // We need to format like so "dd MMMM yyyy HH:mm:ss" which gives us '13 December 2017 06:50:43'
+            // Which SQL can work out into the correct date
+            return dateTime.ToString("dd MMMM yyyy HH:mm:ss");
+        }
+
+        /// <summary>
+        /// Gets the start of a day time, and returns format that SQL can work with
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
+        public static string GetDateForSqlStartOfDay(this DateTime dateTime)
+        {
+            // We need to format like so "dd MMMM yyyy HH:mm:ss" which gives us '13 December 2017 06:50:43'
+            // Which SQL can work out into the correct date
+            return dateTime.GetStartOfDay().ToString("dd MMMM yyyy HH:mm:ss");
+        }
+
+        /// <summary>
+        /// /// Gets the end of a day time, and returns format that SQL can work with
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
+        public static string GetDateForSqlEndOfDay(this DateTime dateTime)
+        {
+            // We need to format like so "dd MMMM yyyy HH:mm:ss" which gives us '13 December 2017 06:50:43'
+            // Which SQL can work out into the correct date
+            return dateTime.GetEndOfDay().ToString("dd MMMM yyyy HH:mm:ss");
+        }
 
         /// <summary>
         /// Parses the SQL DateTime min value string

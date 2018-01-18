@@ -134,7 +134,7 @@
             try
             {
                 PersistNewItem((TEntity)entity);
-                RuntimeCache.GetCacheItem(GetCacheKey(entity.Key), () => entity);
+                RuntimeCache.GetCacheItem(GetCacheKey(entity.Key), () => entity, TimeSpan.FromHours(2), true);
             }
             catch (Exception ex)
             {
@@ -155,7 +155,7 @@
             try
             {
                 PersistUpdatedItem((TEntity)entity);
-                RuntimeCache.GetCacheItem(GetCacheKey(entity.Key), () => entity);
+                RuntimeCache.GetCacheItem(GetCacheKey(entity.Key), () => entity, TimeSpan.FromHours(2), true);
             }
             catch (Exception ex)
             {
@@ -235,7 +235,7 @@
 			var entity = PerformGet(key);
 			if (entity != null)
 			{
-                RuntimeCache.GetCacheItem(GetCacheKey(key), () => entity);
+                RuntimeCache.GetCacheItem(GetCacheKey(key), () => entity, TimeSpan.FromHours(2), true);
 				entity.ResetDirtyProperties();
 			}
 			
@@ -286,7 +286,7 @@
             {
                 if (entity != null)
                 {
-                    RuntimeCache.GetCacheItem(GetCacheKey(entity.Key), () => entity);
+                    RuntimeCache.GetCacheItem(GetCacheKey(entity.Key), () => entity, TimeSpan.FromHours(2), true);
                 }
             }
 

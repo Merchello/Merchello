@@ -55,6 +55,7 @@
         /// </param>
         void AddToCollection(Guid entityKey, Guid collectionKey);
 
+
         /// <summary>
         /// The remove invoice from collection.
         /// </summary>
@@ -65,8 +66,6 @@
         /// The collection key.
         /// </param>
         void RemoveFromCollection(Guid entityKey, Guid collectionKey);
-
-
 
         /// <summary>
         /// Gets entity from collection.

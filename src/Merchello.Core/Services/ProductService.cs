@@ -1,4 +1,6 @@
-﻿namespace Merchello.Core.Services
+﻿using Merchello.Core.Persistence.Repositories;
+
+namespace Merchello.Core.Services
 {
     using System;
     using System.Collections.Generic;
@@ -653,6 +655,22 @@
         }
 
         /// <summary>
+        /// Bulks adds products to collections
+        /// </summary>
+        /// <param name="entityAndCollectionKeys"></param>
+        public void AddToCollections(Dictionary<Guid, Guid> entityAndCollectionKeys)
+        {
+            if (AddingToCollection != null) AddingToCollection.Invoke(this, new EventArgs());
+
+            using (var repository = (ProductRepository)RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
+            {
+                repository.AddToCollections(entityAndCollectionKeys);
+            }
+
+            if (AddedToCollection != null) AddedToCollection.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
         /// The exists in collection.
         /// </summary>
         /// <param name="productKey">
@@ -704,6 +722,22 @@
         public void RemoveFromCollection(IProduct product, IEntityCollection collection)
         {
             this.RemoveFromCollection(product, collection.Key);
+        }
+
+        /// <summary>
+        /// Batche removes from a collection
+        /// </summary>
+        /// <param name="entityKeycollectionKey"></param>
+        public void RemoveFromCollections(Dictionary<Guid, Guid> entityKeycollectionKey)
+        {
+            if (RemovingFromCollection != null) RemovingFromCollection.Invoke(this, new EventArgs());
+
+            using (var repository = (ProductRepository)RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
+            {
+                repository.RemoveFromCollections(entityKeycollectionKey);
+            }
+
+            if (RemovedFromCollection != null) RemovedFromCollection.Invoke(this, new EventArgs());
         }
 
         /// <summary>
