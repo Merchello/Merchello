@@ -309,6 +309,7 @@
             var factory = new ProductAttributeFactory();
             var dto = factory.BuildDto(attribute);
             Database.Update(dto);
+            Purge(attribute);
             Stash(attribute);
             RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProductOption>(attribute.OptionKey));
         }
@@ -1435,7 +1436,9 @@
         /// </returns>
         private IProductAttribute Stash(IProductAttribute attribute)
         {
+                        
             RuntimeCache.GetCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProductAttribute>(attribute.Key), () => attribute);
+
             return attribute;
         }
 
