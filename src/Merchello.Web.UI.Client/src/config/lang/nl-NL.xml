@@ -862,4 +862,9 @@
     <key alias="shipmentCreated">Verzending is aangemaakt met %0% orderregels</key>
     <key alias="shipmentStatusChanged">Verzendstatus is gewijzigd naar %0%</key>
   </area>
+
+  <!-- Merchello Property Editors -->
+  <area alias="merchelloCollectionPicker">
+    <key alias="config">Collectie(s) toewijzen</key>
+  </area>  
 </language>

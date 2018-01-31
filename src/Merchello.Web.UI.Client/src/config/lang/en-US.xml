@@ -858,4 +858,9 @@
     <key alias="shipmentCreated">Shipment was created with %0% line items</key>
     <key alias="shipmentStatusChanged">Shipment status was changed to %0%</key>
   </area>
+
+  <!-- Merchello Property Editors -->
+  <area alias="merchelloCollectionPicker">
+    <key alias="config">Config</key>
+  </area>
 </language>
