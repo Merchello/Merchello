@@ -75,6 +75,7 @@
     <key alias="associateWith">Associate with</key>
     <key alias="shared">Shared</key>
     <key alias="custom">Custom</key>
+    <key alias="history">History</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Products</key>
@@ -205,6 +206,9 @@
     <key alias="sharedCount">Shared Count</key>
     <key alias="filterGroup">Filter Group</key>
     <key alias="filters">Filters</key>
+    <key alias="date">Date</key>
+    <key alias="description">Description</key>
+    <key alias="amount">Amount</key>
   </area>
   <area alias="merchelloNotes">
     <key alias="notes">Notes</key>
