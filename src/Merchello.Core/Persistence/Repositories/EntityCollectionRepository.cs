@@ -324,21 +324,47 @@
         /// </returns>
         protected override IEnumerable<IEntityCollection> PerformGetAll(params Guid[] keys)
         {
+
+            var dtos = new List<EntityCollectionDto>();
+
             if (keys.Any())
             {
-                foreach (var id in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    yield return Get(id);
+                    dtos.AddRange(Database.Fetch<EntityCollectionDto>(GetBaseQuery(false).WhereIn<EntityCollectionDto>(x => x.Key, keyList, SqlSyntax)));
                 }
             }
             else
             {
-                var dtos = Database.Fetch<EntityCollectionDto>(GetBaseQuery(false));
-                foreach (var dto in dtos)
-                {
-                    yield return Get(dto.Key);
-                }
+                dtos = Database.Fetch<EntityCollectionDto>(GetBaseQuery(false));
             }
+
+            var factory = new EntityCollectionFactory();
+            foreach (var dto in dtos)
+            {
+                yield return factory.BuildEntity(dto);
+            }
+
+            //TODO - Keeping original code for now
+            //if (keys.Any())
+            //{
+            //    foreach (var id in keys)
+            //    {
+            //        yield return Get(id);
+            //    }
+            //}
+            //else
+            //{
+            //    var dtos = Database.Fetch<EntityCollectionDto>(GetBaseQuery(false));
+            //    foreach (var dto in dtos)
+            //    {
+            //        yield return Get(dto.Key);
+            //    }
+            //}
         }
 
         /// <summary>

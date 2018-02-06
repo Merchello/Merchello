@@ -760,22 +760,49 @@
         /// </returns>
         protected override IEnumerable<ICustomer> PerformGetAll(params Guid[] keys)
         {
+
+            var dtos = new List<CustomerDto>();
+
             if (keys.Any())
             {
-                foreach (var key in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    yield return Get(key);
+                    dtos.AddRange(Database.Fetch<CustomerDto, CustomerIndexDto>(GetBaseQuery(false).WhereIn<CustomerDto>(x => x.Key, keyList, SqlSyntax)));
                 }
             }
             else
             {
-                var factory = new CustomerFactory();
-                var dtos = Database.Fetch<CustomerDto, CustomerIndexDto>(GetBaseQuery(false));
-                foreach (var dto in dtos)
-                {                    
-                    yield return factory.BuildEntity(dto, _customerAddressRepository.GetByCustomerKey(dto.Key), GetNotes(dto.Key));
-                }
+                dtos = Database.Fetch<CustomerDto, CustomerIndexDto>(GetBaseQuery(false));
             }
+
+            var factory = new CustomerFactory();
+            foreach (var dto in dtos)
+            {
+                yield return factory.BuildEntity(dto, _customerAddressRepository.GetByCustomerKey(dto.Key), GetNotes(dto.Key));
+            }
+
+
+            // TODO - Not sure if the above is correct so keeping original query
+            //if (keys.Any())
+            //{
+            //    foreach (var key in keys)
+            //    {
+            //        yield return Get(key);
+            //    }
+            //}
+            //else
+            //{
+            //    var factory = new CustomerFactory();
+            //    var dtos = Database.Fetch<CustomerDto, CustomerIndexDto>(GetBaseQuery(false));
+            //    foreach (var dto in dtos)
+            //    {                    
+            //        yield return factory.BuildEntity(dto, _customerAddressRepository.GetByCustomerKey(dto.Key), GetNotes(dto.Key));
+            //    }
+            //}
         }
 
         /// <summary>

@@ -98,22 +98,31 @@
         /// </returns>
         protected override IEnumerable<IGatewayProviderSettings> PerformGetAll(params Guid[] keys)
         {
+
+            var dtos = new List<GatewayProviderSettingsDto>();
+
             if (keys.Any())
             {
-                foreach (var key in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    yield return Get(key);
+                    dtos.AddRange(Database.Fetch<GatewayProviderSettingsDto>(GetBaseQuery(false).WhereIn<GatewayProviderSettingsDto>(x => x.Key, keyList, SqlSyntax)));
                 }
             }
             else
             {
-                var factory = new GatewayProviderSettingsFactory();
-                var dtos = Database.Fetch<GatewayProviderSettingsDto>(GetBaseQuery(false));
-                foreach (var dto in dtos)
-                {
-                    yield return factory.BuildEntity(dto);
-                }
+                dtos = Database.Fetch<GatewayProviderSettingsDto>(GetBaseQuery(false));
             }
+
+            var factory = new GatewayProviderSettingsFactory();
+            foreach (var dto in dtos)
+            {
+                yield return factory.BuildEntity(dto);
+            }
+
         }
 
         /// <summary>

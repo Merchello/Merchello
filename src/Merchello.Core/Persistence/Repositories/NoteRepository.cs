@@ -122,22 +122,30 @@
         /// </returns>
         protected override IEnumerable<INote> PerformGetAll(params Guid[] keys)
         {
+            var dtos = new List<NoteDto>();
+
             if (keys.Any())
             {
-                foreach (var id in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    yield return Get(id);
+                    dtos.AddRange(Database.Fetch<NoteDto>(GetBaseQuery(false).WhereIn<NoteDto>(x => x.Key, keyList, SqlSyntax)));
                 }
             }
             else
             {
-                var factory = new NoteFactory();
-                var dtos = Database.Fetch<NoteDto>(GetBaseQuery(false));
-                foreach (var dto in dtos)
-                {
-                    yield return factory.BuildEntity(dto);
-                }
+                dtos = Database.Fetch<NoteDto>(GetBaseQuery(false));
             }
+
+            var factory = new NoteFactory();
+            foreach (var dto in dtos)
+            {
+                yield return factory.BuildEntity(dto);
+            }
+
         }
 
         /// <summary>

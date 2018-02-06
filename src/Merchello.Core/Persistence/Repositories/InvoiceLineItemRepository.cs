@@ -74,21 +74,29 @@
         /// </returns>
         protected override IEnumerable<IInvoiceLineItem> PerformGetAll(params Guid[] keys)
         {
+
+            var dtos = new List<InvoiceItemDto>();
+
             if (keys.Any())
             {
-                foreach (var key in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    yield return Get(key);
+                    dtos.AddRange(Database.Fetch<InvoiceItemDto>(GetBaseQuery(false).WhereIn<InvoiceItemDto>(x => x.Key, keyList, SqlSyntax)));
                 }
             }
             else
             {
-                var factory = new InvoiceLineItemFactory();
-                var dtos = Database.Fetch<InvoiceItemDto>(GetBaseQuery(false));
-                foreach (var dto in dtos)
-                {
-                    yield return factory.BuildEntity(dto);
-                }
+                dtos = Database.Fetch<InvoiceItemDto>(GetBaseQuery(false));
+            }
+
+            var factory = new InvoiceLineItemFactory();
+            foreach (var dto in dtos)
+            {
+                yield return factory.BuildEntity(dto);
             }
         }
 
