@@ -29,11 +29,10 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
-        public DigitalMediaRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
-            : base(work, cache, logger, sqlSyntax)
+        /// <param name="logger"></param>
+        /// <param name="sqlSyntax"></param>
+        public DigitalMediaRepository(IDatabaseUnitOfWork work, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {
         }
 
@@ -193,7 +192,6 @@
 
             entity.ResetDirtyProperties();
 
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IDigitalMedia>(entity.Key));
         }
     }
 }

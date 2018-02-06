@@ -30,17 +30,14 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="logger">
         /// The logger.
         /// </param>
         /// <param name="sqlSyntax">
         /// The SQL Syntax.
         /// </param>
-        public StoreSettingRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
-            : base(work, cache, logger, sqlSyntax)
+        public StoreSettingRepository(IDatabaseUnitOfWork work, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {            
         }
 
@@ -291,8 +288,6 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
-
-            RuntimeCache.ClearCacheItem(Core.Cache.CacheKeys.GetEntityCacheKey<IStoreSetting>(entity.Key));
         }
     }
 }

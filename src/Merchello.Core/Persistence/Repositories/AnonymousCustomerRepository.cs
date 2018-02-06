@@ -29,17 +29,14 @@
         /// <param name="work">
         /// The database unit of work.
         /// </param>
-        /// <param name="cache">
-        /// The <see cref="CacheHelper"/>.
-        /// </param>
         /// <param name="logger">
         /// The logger.
         /// </param>
         /// <param name="sqlSyntax">
         /// The SQL Syntax.
         /// </param>
-        public AnonymousCustomerRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
-            : base(work, cache, logger, sqlSyntax)
+        public AnonymousCustomerRepository(IDatabaseUnitOfWork work, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {
         }
 
@@ -179,9 +176,6 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
-
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.CustomerCacheKey(entity.Key));
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IAnonymousCustomer>(entity.Key));
         }
 
         /// <summary>
@@ -197,9 +191,6 @@
             {
                 Database.Execute(delete, new { Key = entity.Key });
             }
-
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.CustomerCacheKey(entity.Key));
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IAnonymousCustomer>(entity.Key));
         }
 
         /// <summary>

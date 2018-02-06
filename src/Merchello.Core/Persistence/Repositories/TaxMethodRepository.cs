@@ -29,9 +29,6 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="logger">
         /// The logger.
         /// </param>
@@ -40,10 +37,9 @@
         /// </param>
         public TaxMethodRepository(
             IDatabaseUnitOfWork work,
-            CacheHelper cache,
             ILogger logger,
             ISqlSyntaxProvider sqlSyntax)
-            : base(work, cache, logger, sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {            
         }
 
@@ -201,8 +197,6 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
-
-            RuntimeCache.ClearCacheItem(Core.Cache.CacheKeys.GetEntityCacheKey<ITaxMethod>(entity.Key));
         }
     }
 }

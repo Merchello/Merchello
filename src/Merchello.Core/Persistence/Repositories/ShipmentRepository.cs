@@ -33,9 +33,6 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="orderLineItemRepository">
         /// The order Line Item Repository.
         /// </param>
@@ -45,8 +42,8 @@
         /// <param name="sqlSyntax">
         /// The SQL Syntax.
         /// </param>
-        public ShipmentRepository(IDatabaseUnitOfWork work, CacheHelper cache, IOrderLineItemRepository orderLineItemRepository, ILogger logger, ISqlSyntaxProvider sqlSyntax)
-            : base(work, cache, logger, sqlSyntax)
+        public ShipmentRepository(IDatabaseUnitOfWork work, IOrderLineItemRepository orderLineItemRepository, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {
             Mandate.ParameterNotNull(orderLineItemRepository, "orderLineItemRepository");
             _orderLineItemRepository = orderLineItemRepository;
@@ -222,16 +219,6 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
-
-            foreach (var order in entity.Orders())
-            {
-                RuntimeCache.ClearCacheItem(Core.Cache.CacheKeys.GetEntityCacheKey<IOrder>(order.Key));
-            }
-            foreach (var invoice in entity.Invoices())
-            {
-                RuntimeCache.ClearCacheItem(Core.Cache.CacheKeys.GetEntityCacheKey<IInvoice>(invoice.Key));
-            }
-            RuntimeCache.ClearCacheItem(Core.Cache.CacheKeys.GetEntityCacheKey<IShipment>(entity.Key));
         }
 
         /// <summary>
@@ -247,15 +234,6 @@
             {
                 Database.Execute(delete, new { Key = entity.Key });
             }
-            foreach (var order in entity.Orders())
-            {
-                RuntimeCache.ClearCacheItem(Core.Cache.CacheKeys.GetEntityCacheKey<IOrder>(order.Key));
-            }
-            foreach (var invoice in entity.Invoices())
-            {
-                RuntimeCache.ClearCacheItem(Core.Cache.CacheKeys.GetEntityCacheKey<IInvoice>(invoice.Key));
-            }
-            RuntimeCache.ClearCacheItem(Core.Cache.CacheKeys.GetEntityCacheKey<IShipment>(entity.Key));
         }
 
         /// <summary>

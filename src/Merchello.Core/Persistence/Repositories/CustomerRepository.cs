@@ -39,9 +39,6 @@
         /// <param name="work">
         /// The database unit of work
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="customerAddressRepository">
         /// The customer Address Repository.
         /// </param>
@@ -56,12 +53,11 @@
         /// </param>
         public CustomerRepository(
             IDatabaseUnitOfWork work, 
-            CacheHelper cache, 
             ICustomerAddressRepository customerAddressRepository, 
             INoteRepository noteRepository,
             ILogger logger, 
             ISqlSyntaxProvider sqlSyntax) 
-            : base(work, cache, logger, sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {
             Mandate.ParameterNotNull(customerAddressRepository, "customerAddressRepository");
             Mandate.ParameterNotNull(noteRepository, "noteRepository");
@@ -857,9 +853,6 @@
             SaveNotes(entity);
 
             entity.ResetDirtyProperties();
-
-            // customer context cache
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.CustomerCacheKey(entity.Key));
         }
 
         /// <summary>
@@ -880,9 +873,6 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
-
-            // customer context cache
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.CustomerCacheKey(entity.Key));
         }
 
         /// <summary>
@@ -898,9 +888,6 @@
             {
                 Database.Execute(delete, new { Key = entity.Key });
             }
-
-            // customer context cache
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.CustomerCacheKey(entity.Key));
         }
 
         /// <summary>
@@ -987,8 +974,6 @@
                     u.Key = dto.Key;
                 }
 
-                var cacheKey = Cache.CacheKeys.GetEntityCacheKey<INote>(u.Key);
-                RuntimeCache.ClearCacheItem(cacheKey);
             }
 
         }

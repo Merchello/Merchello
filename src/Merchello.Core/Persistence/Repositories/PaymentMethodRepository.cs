@@ -38,8 +38,8 @@
         /// <param name="sqlSyntax">
         /// The SQL syntax.
         /// </param>
-        public PaymentMethodRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
-            : base(work, cache, logger, sqlSyntax)
+        public PaymentMethodRepository(IDatabaseUnitOfWork work, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {
         }
 
@@ -197,8 +197,6 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
-
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IPaymentMethod>(entity.Key));
         }
 
         /// <summary>
@@ -216,7 +214,6 @@
             foreach (var delete in deletes)
             {
                 Database.Execute(delete, new {entity.Key });
-                RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IPaymentMethod>(entity.Key));
             }
         }
     }

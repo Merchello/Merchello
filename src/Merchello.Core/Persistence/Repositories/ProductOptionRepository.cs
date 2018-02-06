@@ -47,19 +47,16 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="logger">
         /// The logger.
         /// </param>
         /// <param name="sqlSyntax">
         /// The SQL syntax.
         /// </param>
-        public ProductOptionRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
-            : base(work, cache, logger, sqlSyntax)
+        public ProductOptionRepository(IDatabaseUnitOfWork work, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {
-            _detachedContentTypeRepository = new DetachedContentTypeRepository(work, cache, logger, sqlSyntax);
+            _detachedContentTypeRepository = new DetachedContentTypeRepository(work, logger, sqlSyntax);
         }
 
         /// <summary>
@@ -67,9 +64,6 @@
         /// </summary>
         /// <param name="work">
         /// The work.
-        /// </param>
-        /// <param name="cache">
-        /// The cache.
         /// </param>
         /// <param name="logger">
         /// The logger.
@@ -80,8 +74,8 @@
         /// <param name="detachedContentTypeRepository">
         /// The detached content type repository.
         /// </param>
-        public ProductOptionRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax, IDetachedContentTypeRepository detachedContentTypeRepository)
-            : base(work, cache, logger, sqlSyntax)
+        public ProductOptionRepository(IDatabaseUnitOfWork work, ILogger logger, ISqlSyntaxProvider sqlSyntax, IDetachedContentTypeRepository detachedContentTypeRepository)
+            : base(work, logger, sqlSyntax)
         {
             Mandate.ParameterNotNull(detachedContentTypeRepository, "detachedContentTypeRepository");
             _detachedContentTypeRepository = detachedContentTypeRepository;
@@ -199,7 +193,7 @@
         /// </returns>
         public IEnumerable<IProductAttribute> GetProductAttributes(Guid[] attributeKeys)
         {
-            return attributeKeys.Select(key => this.GetStashed(key, this.GetAttributeByKey));
+            return attributeKeys.Select(this.GetAttributeByKey);
         }
 
         /// <summary>
@@ -309,8 +303,6 @@
             var factory = new ProductAttributeFactory();
             var dto = factory.BuildDto(attribute);
             Database.Update(dto);
-            Stash(attribute);
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProductOption>(attribute.OptionKey));
         }
 
         /// <summary>
@@ -406,7 +398,6 @@
             foreach (var dto in dtos)
             {
                 var attribute = factory.BuildEntity(dto.ProductAttributeDto);
-                RuntimeCache.GetCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProductAttribute>(attribute.Key), () => attribute);
                 collection.Add(attribute);
             }
 
@@ -701,10 +692,6 @@
 
             // TODO fixme
             var keys = GetProductKeysForCacheRefresh(new[] { entity.Key }).ToArray();
-            foreach (var key in keys)
-            {
-                RuntimeCache.ClearCacheItem(Core.Cache.CacheKeys.GetEntityCacheKey<IProduct>(key));
-            }
             ReIndex.RaiseEvent(new ObjectEventArgs<IEnumerable<Guid>>(keys), this);
         }
 
@@ -719,10 +706,6 @@
 
             // TODO fixme
             var keys = GetProductKeysForCacheRefresh(new[] { entity.Key }).ToArray();
-            foreach (var key in keys)
-            {
-                RuntimeCache.ClearCacheItem(Core.Cache.CacheKeys.GetEntityCacheKey<IProduct>(key));
-            }
             ReIndex.RaiseEvent(new ObjectEventArgs<IEnumerable<Guid>>(keys), this);
         }
 
@@ -828,7 +811,7 @@
 
             foreach (var dto in dtos.OrderBy(x => x.SortOrder))
             {
-                var attribute = Stash(factory.BuildEntity(dto));
+                var attribute = factory.BuildEntity(dto);
                 attributes.Add(attribute);
             }
 
@@ -876,7 +859,6 @@
                 new { Key = productAttribute.Key });
 
             Database.Execute("DELETE FROM merchProductAttribute WHERE pk = @Key", new { Key = productAttribute.Key });
-            Purge(productAttribute);
         }
 
         /// <summary>
@@ -1138,8 +1120,6 @@
                 var dto = factory.BuildDto(att);
                 Database.Update(dto);
             }
-
-            Stash(att);
         }
 
         /// <summary>
@@ -1314,9 +1294,6 @@
             // Remove only option choices for non shared options
             if (optionKeys.Any()) list.Add(new Sql("DELETE FROM merchProductAttribute WHERE optionKey IN (@okeys)", new { @okeys = optionKeys }));
 
-            RuntimeCache.ClearCacheByKeySearch(typeof(IProductAttribute).ToString());
-
-
             return list;
         }
 
@@ -1424,49 +1401,5 @@
             return null;
         }
 
-        /// <summary>
-        /// Caches a <see cref="IProductAttribute"/>.
-        /// </summary>
-        /// <param name="attribute">
-        /// The attribute.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IProductAttribute"/>.
-        /// </returns>
-        private IProductAttribute Stash(IProductAttribute attribute)
-        {
-            RuntimeCache.GetCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProductAttribute>(attribute.Key), () => attribute);
-            return attribute;
-        }
-
-        /// <summary>
-        /// Attempts to get a cached <see cref="IProductAttribute"/> or invokes the getter.
-        /// </summary>
-        /// <param name="key">
-        /// The key.
-        /// </param>
-        /// <param name="_fetch">
-        /// The fetch.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IProductAttribute"/>.
-        /// </returns>
-        private IProductAttribute GetStashed(Guid key, Func<Guid, IProductAttribute> _fetch)
-        {
-            return RuntimeCache.GetCacheItem<IProductAttribute>(
-                Cache.CacheKeys.GetEntityCacheKey<IProductAttribute>(key),
-                () => _fetch.Invoke(key));
-        }
-
-        /// <summary>
-        /// Removes a <see cref="IProductAttribute"/> from Cache.
-        /// </summary>
-        /// <param name="attribute">
-        /// The attribute.
-        /// </param>
-        private void Purge(IProductAttribute attribute)
-        {
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProductAttribute>(attribute.Key));
-        }
     }
 }

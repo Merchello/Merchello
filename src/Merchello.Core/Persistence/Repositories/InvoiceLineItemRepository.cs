@@ -29,17 +29,14 @@
         /// <param name="work">
         /// The <see cref="IDatabaseUnitOfWork"/>.
         /// </param>
-        /// <param name="cache">
-        /// The <see cref="IRuntimeCacheProvider"/>
-        /// </param>
         /// <param name="logger">
         /// The logger.
         /// </param>
         /// <param name="sqlSyntax">
         /// The SQL syntax.
         /// </param>
-        public InvoiceLineItemRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
-            : base(work, cache, logger, sqlSyntax)
+        public InvoiceLineItemRepository(IDatabaseUnitOfWork work, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {            
         }
 
@@ -196,9 +193,6 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
-
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IInvoiceLineItem>(entity.Key));
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<ILineItem>(entity.Key));
         }
     }
 }

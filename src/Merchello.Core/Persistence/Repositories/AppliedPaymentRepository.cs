@@ -29,17 +29,14 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="logger">
         /// The logger.
         /// </param>
         /// <param name="sqlSyntax">
         /// The SQL Syntax.
         /// </param>
-        public AppliedPaymentRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax) 
-            : base(work, cache, logger, sqlSyntax)
+        public AppliedPaymentRepository(IDatabaseUnitOfWork work, ILogger logger, ISqlSyntaxProvider sqlSyntax) 
+            : base(work, logger, sqlSyntax)
         {
         }
 
@@ -197,8 +194,6 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
-
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IAppliedPayment>(entity.Key));
         }
 
         /// <summary>
@@ -214,8 +209,6 @@
             {
                 Database.Execute(delete, new { entity.Key });
             }
-
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IAppliedPayment>(entity.Key));
         }
     }
 }

@@ -55,21 +55,6 @@
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
         {
-            var cacheKey = GetPagedDtoCacheKey(
-                                       "GetKeysFromCollection",
-                                       page,
-                                       itemsPerPage,
-                                       orderExpression,
-                                       sortDirection,
-                                       new Dictionary<string, string>
-                                           {
-                                                { "collectionKeys", string.Join(string.Empty, collectionKeys) },
-                                                { "minmax", string.Join(string.Empty, new object[] { min, max }) }
-                                           });
-
-            var pagedKeys = TryGetCachedPageOfKeys(cacheKey);
-            if (pagedKeys != null) return pagedKeys;
-
             var sql = new Sql();
             sql.Append("SELECT *")
               .Append("FROM [merchProductVariant]")
@@ -86,9 +71,9 @@
               .Append(")")
               .Append("AND [merchProductVariant].[master] = 1");
 
-            pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+            var pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
 
-            return CachePageOfKeys(cacheKey, pagedKeys);
+            return pagedKeys;
         }
 
         /// <inheritdoc/>
@@ -102,21 +87,6 @@
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
         {
-            var cacheKey = GetPagedDtoCacheKey(
-                            "GetKeysThatExistInAllCollections",
-                            page,
-                            itemsPerPage,
-                            orderExpression,
-                            sortDirection,
-                            new Dictionary<string, string>
-                                {
-                                    { "collectionKey", string.Join(string.Empty, collectionKeys) },
-                                    { "term", term },
-                                    { "minmax", string.Join(string.Empty, new object[] { min, max }) }
-                                });
-
-            var pagedKeys = TryGetCachedPageOfKeys(cacheKey);
-            if (pagedKeys != null) return pagedKeys;
 
             var sql = this.BuildProductSearchSql(term);
             sql.Append("AND [merchProductVariant].[productKey] IN (")
@@ -133,9 +103,9 @@
                 .Append("([merchProductVariant].[onSale] = 1 AND [merchProductVariant].[salePrice] BETWEEN @low AND @high)", new { @low = min, @high = max })
                 .Append(")");
 
-            pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+            var pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
 
-            return CachePageOfKeys(cacheKey, pagedKeys);
+            return pagedKeys;
         }
 
         /// <inheritdoc/>
@@ -148,20 +118,6 @@
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
         {
-            var cacheKey = GetPagedDtoCacheKey(
-                                       "GetKeysNotInAnyCollections",
-                                       page,
-                                       itemsPerPage,
-                                       orderExpression,
-                                       sortDirection,
-                                       new Dictionary<string, string>
-                                           {
-                                                { "collectionKeys", string.Join(string.Empty, collectionKeys) },
-                                                { "minmax", string.Join(string.Empty, new object[] { min, max }) }
-                                           });
-
-            var pagedKeys = TryGetCachedPageOfKeys(cacheKey);
-            if (pagedKeys != null) return pagedKeys;
 
             var sql = new Sql();
             sql.Append("SELECT *")
@@ -177,8 +133,8 @@
                .Append(")")
                .Append("AND [merchProductVariant].[master] = 1");
 
-            pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
-            return CachePageOfKeys(cacheKey, pagedKeys);
+            var pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+            return pagedKeys;
         }
 
         /// <inheritdoc/>
@@ -192,23 +148,6 @@
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
         {
-            var cacheKey = GetPagedDtoCacheKey(
-                                      "GetKeysNotInAnyCollections",
-                                      page,
-                                      itemsPerPage,
-                                      orderExpression,
-                                      sortDirection,
-                                      new Dictionary<string, string>
-                                          {
-                                            { "collectionKeys", string.Join(string.Empty, collectionKeys) },
-                                            { "term", term },
-                                            { "minmax", string.Join(string.Empty, new object[] { min, max }) }
-                                          });
-
-            var pagedKeys = TryGetCachedPageOfKeys(cacheKey);
-            if (pagedKeys != null) return pagedKeys;
-
-
             var sql = this.BuildProductSearchSql(term);
             sql.Append("AND [merchProductVariant].[productKey] NOT IN (")
                 .Append("SELECT DISTINCT([productKey])")
@@ -222,8 +161,8 @@
                 .Append("([merchProductVariant].[onSale] = 1 AND [merchProductVariant].[salePrice] BETWEEN @low AND @high)", new { @low = min, @high = max })
                 .Append(")");
 
-            pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
-            return CachePageOfKeys(cacheKey, pagedKeys);
+            var pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+            return pagedKeys;
         }
 
         /// <inheritdoc/>
@@ -236,20 +175,6 @@
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
         {
-            var cacheKey = GetPagedDtoCacheKey(
-                                       "GetKeysThatExistInAnyCollectionss",
-                                       page,
-                                       itemsPerPage,
-                                       orderExpression,
-                                       sortDirection,
-                                       new Dictionary<string, string>
-                                           {
-                                                { "collectionKeys", string.Join(string.Empty, collectionKeys) },
-                                                { "minmax", string.Join(string.Empty, new object[] { min, max }) }
-                                           });
-
-            var pagedKeys = TryGetCachedPageOfKeys(cacheKey);
-            if (pagedKeys != null) return pagedKeys;
 
             var sql = new Sql();
             sql.Append("SELECT *")
@@ -265,8 +190,8 @@
                .Append(")")
                .Append("AND [merchProductVariant].[master] = 1");
 
-            pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
-            return CachePageOfKeys(cacheKey, pagedKeys);
+            var pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+            return pagedKeys;
         }
 
         /// <inheritdoc/>
@@ -280,22 +205,6 @@
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
         {
-            var cacheKey = GetPagedDtoCacheKey(
-                                       "GetKeysThatExistInAnyCollections",
-                                       page,
-                                       itemsPerPage,
-                                       orderExpression,
-                                       sortDirection,
-                                       new Dictionary<string, string>
-                                           {
-                                                { "collectionKeys", string.Join(string.Empty, collectionKeys) },
-                                                { "term", term },
-                                                { "minmax", string.Join(string.Empty, new object[] { min, max }) }
-                                           });
-
-            var pagedKeys = TryGetCachedPageOfKeys(cacheKey);
-            if (pagedKeys != null) return pagedKeys;
-
 
             var sql = this.BuildProductSearchSql(term);
             sql.Append("AND [merchProductVariant].[productKey] IN (")
@@ -310,8 +219,8 @@
                 .Append("([merchProductVariant].[onSale] = 1 AND [merchProductVariant].[salePrice] BETWEEN @low AND @high)", new { @low = min, @high = max })
                 .Append(")");
 
-            pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
-            return CachePageOfKeys(cacheKey, pagedKeys);
+            var pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+            return pagedKeys;
         }
 
         /// <summary>

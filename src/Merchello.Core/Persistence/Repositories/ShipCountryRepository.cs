@@ -36,9 +36,6 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="storeSettingService">
         /// The store setting service.
         /// </param>
@@ -48,8 +45,8 @@
         /// <param name="sqlSyntax">
         /// The SQL syntax.
         /// </param>
-        public ShipCountryRepository(IDatabaseUnitOfWork work, CacheHelper cache, IStoreSettingService storeSettingService, ILogger logger, ISqlSyntaxProvider sqlSyntax) 
-            : base(work, cache, logger, sqlSyntax)
+        public ShipCountryRepository(IDatabaseUnitOfWork work, IStoreSettingService storeSettingService, ILogger logger, ISqlSyntaxProvider sqlSyntax) 
+            : base(work, logger, sqlSyntax)
         {
             Mandate.ParameterNotNull(storeSettingService, "settingsService");
 
@@ -241,8 +238,6 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
-
-            RuntimeCache.ClearCacheItem(Core.Cache.CacheKeys.GetEntityCacheKey<IShipCountry>(entity.Key));
         }       
     }
 }

@@ -44,9 +44,6 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="invoiceLineItemRepository">
         /// The invoice line item repository.
         /// </param>
@@ -64,13 +61,12 @@
         /// </param>
         public InvoiceRepository(
             IDatabaseUnitOfWork work,
-            CacheHelper cache,
             IInvoiceLineItemRepository invoiceLineItemRepository,
             IOrderRepository orderRepository,
             INoteRepository noteRepository,
             ILogger logger,
             ISqlSyntaxProvider sqlSyntax)
-            : base(work, cache, logger, sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {
             Mandate.ParameterNotNull(invoiceLineItemRepository, "lineItemRepository");
             Mandate.ParameterNotNull(orderRepository, "orderRepository");
@@ -1574,24 +1570,6 @@
             _invoiceLineItemRepository.SaveLineItem(entity.Items, entity.Key);
 
             entity.ResetDirtyProperties();
-
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IInvoice>(entity.Key));
-
-            foreach (var entityOrder in entity.Orders)
-            {
-                foreach (var shipment in entityOrder.Shipments())
-                {
-                    foreach (var shipmentItem in shipment.Items)
-                    {
-                        RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IOrderLineItem>(shipmentItem.Key));
-                    }
-
-                    RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IShipment>(shipment.Key));
-                }
-
-                RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IOrder>(entityOrder.Key));
-            }
-
         }
 
         /// <summary>
@@ -1629,9 +1607,6 @@
                     Database.Insert(dto);
                     u.Key = dto.Key;
                 }
-
-                var cacheKey = Cache.CacheKeys.GetEntityCacheKey<INote>(u.Key);
-                RuntimeCache.ClearCacheItem(cacheKey);
             }
 
         }

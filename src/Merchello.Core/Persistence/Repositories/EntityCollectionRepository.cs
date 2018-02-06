@@ -29,17 +29,14 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="logger">
         /// The logger.
         /// </param>
         /// <param name="sqlSyntax">
         /// The SQL Syntax.
         /// </param>
-        public EntityCollectionRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
-            : base(work, cache, logger, sqlSyntax)
+        public EntityCollectionRepository(IDatabaseUnitOfWork work, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {
         }
 
@@ -276,11 +273,6 @@
         /// </remarks>
         public IEntityFilterGroup GetEntityFilterGroup(Guid key)
         {
-            var cacheKey = Cache.CacheKeys.GetEntityCacheKey<IEntityFilterGroup>(key);
-            var cached = (IEntityFilterGroup)RuntimeCache.GetCacheItem(cacheKey);
-
-            if (cached != null) return cached;
-
             var collection = Get(key);
             if (collection == null) return null;
             var query = Querying.Query<IEntityCollection>.Builder.Where(x => x.ParentKey == key);
@@ -292,7 +284,7 @@
                 filterGroup.Filters.Add(child);
             }
 
-            return (IEntityFilterGroup)RuntimeCache.GetCacheItem(cacheKey, () => filterGroup);
+            return filterGroup;
         }
 
         /// <summary>
@@ -426,9 +418,6 @@
         protected override void PersistDeletedItem(IEntityCollection entity)
         {
             base.PersistDeletedItem(entity);
-
-            if (entity.ParentKey != null)
-                RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IEntityFilterGroup>(entity.ParentKey.Value));
         }
 
         /// <summary>
@@ -454,9 +443,6 @@
             Database.Insert(dto);
             entity.Key = dto.Key;
             entity.ResetDirtyProperties();
-
-            if (entity.ParentKey != null)
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IEntityFilterGroup>(entity.ParentKey.Value));
         }
 
         /// <summary>
@@ -475,8 +461,6 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IEntityCollection>(entity.Key));
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IEntityFilterGroup>(entity.Key));
         }
     }
 }

@@ -33,9 +33,6 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="orderLineItemRepository">
         /// The order line item repository.
         /// </param>
@@ -45,8 +42,8 @@
         /// <param name="sqlSyntax">
         /// The SQL syntax.
         /// </param>
-        public OrderRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILineItemRepositoryBase<IOrderLineItem> orderLineItemRepository, ILogger logger, ISqlSyntaxProvider sqlSyntax)
-            : base(work, cache, logger, sqlSyntax)
+        public OrderRepository(IDatabaseUnitOfWork work, ILineItemRepositoryBase<IOrderLineItem> orderLineItemRepository, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {
             Mandate.ParameterNotNull(orderLineItemRepository, "lineItemRepository");
 
@@ -210,14 +207,6 @@
             _orderLineItemRepository.SaveLineItem(entity.Items, entity.Key);
 
             entity.ResetDirtyProperties();
-
-            foreach (var entityItem in entity.Items)
-            {
-                RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<ILineItem>(entityItem.Key));
-            }
-
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IInvoice>(entity.InvoiceKey));
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IOrder>(entity.Key));
         }
 
         /// <summary>
@@ -238,27 +227,11 @@
             _orderLineItemRepository.SaveLineItem(entity.Items, entity.Key);
 
             entity.ResetDirtyProperties();
-
-            foreach (var entityItem in entity.Items)
-            {
-                RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<ILineItem>(entityItem.Key));
-            }
-
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IInvoice>(entity.InvoiceKey));
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IOrder>(entity.Key));
         }
 
         protected override void PersistDeletedItem(IOrder entity)
         {
             base.PersistDeletedItem(entity);
-
-            foreach (var entityItem in entity.Items)
-            {
-                RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<ILineItem>(entityItem.Key));
-            }
-
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IInvoice>(entity.InvoiceKey));
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IOrder>(entity.Key));
         }
 
         private LineItemCollection GetLineItemCollection(Guid orderKey)

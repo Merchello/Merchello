@@ -30,17 +30,14 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="logger">
         /// The logger.
         /// </param>
         /// <param name="sqlSyntax">
         /// The SQL Syntax.
         /// </param>
-        public CustomerAddressRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
-            : base(work, cache, logger, sqlSyntax)
+        public CustomerAddressRepository(IDatabaseUnitOfWork work, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {
         }
 
@@ -193,8 +190,6 @@
             entity.Key = dto.Key;
             entity.ResetDirtyProperties();
 
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.CustomerCacheKey(entity.CustomerKey));
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<ICustomer>(entity.CustomerKey));
         }
 
         /// <summary>
@@ -213,9 +208,6 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
-
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.CustomerCacheKey(entity.CustomerKey));
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<ICustomer>(entity.CustomerKey));
         }
 
         /// <summary>
@@ -232,8 +224,6 @@
                 Database.Execute(delete, new { Key = entity.Key });
             }
 
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.CustomerCacheKey(entity.CustomerKey));
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<ICustomer>(entity.CustomerKey));
         }
 
         /// <summary>

@@ -33,9 +33,6 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="itemCacheLineItemRepository">
         /// The item cache line item repository.
         /// </param>
@@ -45,8 +42,8 @@
         /// <param name="sqlSyntax">
         /// The SQL syntax.
         /// </param>
-        public ItemCacheRepository(IDatabaseUnitOfWork work, CacheHelper cache, IItemCacheLineItemRepository itemCacheLineItemRepository, ILogger logger, ISqlSyntaxProvider sqlSyntax)
-            : base(work, cache, logger, sqlSyntax)
+        public ItemCacheRepository(IDatabaseUnitOfWork work, IItemCacheLineItemRepository itemCacheLineItemRepository, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {
             _itemCacheLineItemRepository = itemCacheLineItemRepository;
         }
@@ -294,8 +291,6 @@
             _itemCacheLineItemRepository.SaveLineItem(entity.Items, entity.Key);
 
             entity.ResetDirtyProperties();
-
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IItemCache>(entity.Key));
         }
 
         /// <summary>
@@ -310,7 +305,6 @@
             foreach (var delete in deletes)
             {
                 Database.Execute(delete, new { Key = entity.Key });
-                RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IItemCache>(entity.Key));
             }
         }
 
