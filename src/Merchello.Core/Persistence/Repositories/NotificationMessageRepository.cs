@@ -29,36 +29,15 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="logger">
         /// The logger.
         /// </param>
         /// <param name="sqlSyntax">
         /// The SQL Syntax.
         /// </param>
-        public NotificationMessageRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
-            : base(work, cache, logger, sqlSyntax)
+        public NotificationMessageRepository(IDatabaseUnitOfWork work, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {            
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether is cached repository.
-        /// </summary>
-        /// <remarks>
-        /// This will be removed when we refactor the NotificationContext.  
-        /// 
-        /// TODO The workflow in Notification Monitors updates cached models (which is by reference).  
-        /// The triggers and monitors should be moved to use business layer models in Merchello.Web rather than Core models directly.
-        /// </remarks>
-        /// <seealso cref="http://issues.merchello.com/youtrack/issue/M-859"/>
-        protected override bool IsCachedRepository
-        {
-            get
-            {
-                return false;
-            }
         }
 
         protected override INotificationMessage PerformGet(Guid key)
@@ -178,9 +157,6 @@
             entity.Key = dto.Key;
 
             entity.ResetDirtyProperties();
-
-            //RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<INotificationMethod>(entity.MethodKey));
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<INotificationMethod>(entity.Key));
         }
 
         /// <summary>
@@ -199,8 +175,6 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
-
-           RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<INotificationMethod>(entity.Key));
         }
     }
 }
