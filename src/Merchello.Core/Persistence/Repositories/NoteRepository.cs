@@ -30,17 +30,14 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="logger">
         /// The logger.
         /// </param>
         /// <param name="sqlSyntax">
         /// The SQL Syntax.
         /// </param>
-        public NoteRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
-            : base(work, cache, logger, sqlSyntax)
+        public NoteRepository(IDatabaseUnitOfWork work, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {
         }
 
@@ -125,22 +122,30 @@
         /// </returns>
         protected override IEnumerable<INote> PerformGetAll(params Guid[] keys)
         {
+            var dtos = new List<NoteDto>();
+
             if (keys.Any())
             {
-                foreach (var id in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    yield return Get(id);
+                    dtos.AddRange(Database.Fetch<NoteDto>(GetBaseQuery(false).WhereIn<NoteDto>(x => x.Key, keyList, SqlSyntax)));
                 }
             }
             else
             {
-                var factory = new NoteFactory();
-                var dtos = Database.Fetch<NoteDto>(GetBaseQuery(false));
-                foreach (var dto in dtos)
-                {
-                    yield return factory.BuildEntity(dto);
-                }
+                dtos = Database.Fetch<NoteDto>(GetBaseQuery(false));
             }
+
+            var factory = new NoteFactory();
+            foreach (var dto in dtos)
+            {
+                yield return factory.BuildEntity(dto);
+            }
+
         }
 
         /// <summary>
@@ -241,11 +246,6 @@
             Database.Update(dto);
             
             entity.ResetDirtyProperties();
-
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<INote>(entity.Key));
-
-            // Bit of a guess that this is related to an invoice here
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IInvoice>(entity.EntityKey));
         }
 
     }

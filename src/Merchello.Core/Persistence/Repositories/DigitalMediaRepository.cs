@@ -29,11 +29,10 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
-        public DigitalMediaRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
-            : base(work, cache, logger, sqlSyntax)
+        /// <param name="logger"></param>
+        /// <param name="sqlSyntax"></param>
+        public DigitalMediaRepository(IDatabaseUnitOfWork work, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {
         }
 
@@ -75,22 +74,31 @@
         /// </returns>
         protected override IEnumerable<IDigitalMedia> PerformGetAll(params Guid[] keys)
         {
+
+            var dtos = new List<DigitalMediaDto>();
+
             if (keys.Any())
             {
-                foreach (var id in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    yield return Get(id);
+                    dtos.AddRange(Database.Fetch<DigitalMediaDto>(GetBaseQuery(false).WhereIn<DigitalMediaDto>(x => x.Key, keyList, SqlSyntax)));
                 }
             }
             else
             {
-                var factory = new DigitalMediaFactory();
-                var dtos = Database.Fetch<DigitalMediaDto>(GetBaseQuery(false));
-                foreach (var dto in dtos)
-                {
-                    yield return factory.BuildEntity(dto);
-                }
+                dtos = Database.Fetch<DigitalMediaDto>(GetBaseQuery(false));
             }
+
+            var factory = new DigitalMediaFactory();
+            foreach (var dto in dtos)
+            {
+                yield return factory.BuildEntity(dto);
+            }
+
         }
 
         /// <summary>
@@ -193,7 +201,6 @@
 
             entity.ResetDirtyProperties();
 
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IDigitalMedia>(entity.Key));
         }
     }
 }

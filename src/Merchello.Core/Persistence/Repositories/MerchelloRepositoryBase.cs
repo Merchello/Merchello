@@ -4,8 +4,8 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using Merchello.Core.Models.EntityBase;
-    using Merchello.Core.Persistence.UnitOfWork;
+    using Models.EntityBase;
+    using UnitOfWork;
 
     using Umbraco.Core;
     using Umbraco.Core.Cache;
@@ -30,36 +30,21 @@
         /// </summary>
         private readonly ILogger _logger;
 
-        ///// <summary>
-        ///// The runtime cache provider.
-        ///// </summary>
-        //private readonly IRuntimeCacheProvider _cache;
-
-        /// <summary>
-        /// The <see cref="CacheHelper"/>.
-        /// </summary>
-        private readonly CacheHelper _cacheHelper;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="MerchelloRepositoryBase{TEntity}"/> class.
         /// </summary>
         /// <param name="work">
         /// The unit of work.
         /// </param>
-        /// <param name="cacheHelper">
-        /// The <see cref="CacheHelper"/>.
-        /// </param>
         /// <param name="logger">
         /// The <see cref="ILogger"/>.
         /// </param>
-        protected MerchelloRepositoryBase(IUnitOfWork work, CacheHelper cacheHelper, ILogger logger)
+        protected MerchelloRepositoryBase(IUnitOfWork work, ILogger logger)
         {
             Mandate.ParameterNotNull(work, "work");
-            Mandate.ParameterNotNull(cacheHelper, "cacheHelper");
             Mandate.ParameterNotNull(logger, "logger");
 
             _work = work;
-            _cacheHelper = cacheHelper;
             _logger = logger;
         }
 
@@ -77,42 +62,6 @@
         protected internal IUnitOfWork UnitOfWork
         {
             get { return _work; }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether is cached repository.
-        /// </summary>
-        /// <remarks>
-        /// This is a fix for certain caching issues where we've introduced a repository
-        /// that returns items cached in other objects.  
-        /// 
-        /// TODO we need to look at this again when we refactor the repositories
-        /// </remarks>
-        protected virtual bool IsCachedRepository
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-        /// <summary>
-        /// Gets the runtime cache.
-        /// </summary>
-        protected IRuntimeCacheProvider RuntimeCache
-        {
-            get { return _cacheHelper.RuntimeCache; }
-        }
-
-        /// <summary>
-        /// Gets the request cache.
-        /// </summary>
-        protected ICacheProvider RequestCache
-        {
-            get
-            {
-                return _cacheHelper.RequestCache;
-            }
         }
 
         /// <summary>
@@ -134,14 +83,12 @@
             try
             {
                 PersistNewItem((TEntity)entity);
-                RuntimeCache.GetCacheItem(GetCacheKey(entity.Key), () => entity, TimeSpan.FromHours(2), true);
             }
             catch (Exception ex)
             {
                 LogHelper.Error(GetType(), "An error occurred trying to add a new entity", ex);
                 ////if an exception is thrown we need to remove the entry from cache, this is ONLY a work around because of the way
                 //// that we cache entities: http://issues.umbraco.org/issue/U4-4259
-                RuntimeCache.ClearCacheItem(GetCacheKey(entity.Key));
                 throw;
             }
         }
@@ -155,7 +102,6 @@
             try
             {
                 PersistUpdatedItem((TEntity)entity);
-                RuntimeCache.GetCacheItem(GetCacheKey(entity.Key), () => entity, TimeSpan.FromHours(2), true);
             }
             catch (Exception ex)
             {
@@ -163,7 +109,6 @@
                 LogHelper.Error(GetType(), "An error occurred trying to update an exiting entity", ex);
                 ////if an exception is thrown we need to remove the entry from cache, this is ONLY a work around because of the way
                 //// that we cache entities: http://issues.umbraco.org/issue/U4-4259
-                RuntimeCache.ClearCacheItem(GetCacheKey(entity.Key));
                 throw;
             }
         }
@@ -175,7 +120,6 @@
         public virtual void PersistDeletedItem(IEntity entity)
         {
             PersistDeletedItem((TEntity)entity);
-            RuntimeCache.ClearCacheItem(GetCacheKey(entity.Key));
         }
 
         #endregion
@@ -223,19 +167,11 @@
 		/// </returns>
 		public TEntity Get(Guid key)
 		{
-		    if (IsCachedRepository)
-		    {
-                var fromCache = TryGetFromCache(key);
-                if (fromCache.Success)
-                {
-                    return fromCache.Result;
-                }  
-		    }
 
+            // TODO - This is hit a lot, we need to find out why and where
 			var entity = PerformGet(key);
 			if (entity != null)
 			{
-                RuntimeCache.GetCacheItem(GetCacheKey(key), () => entity, TimeSpan.FromHours(2), true);
 				entity.ResetDirtyProperties();
 			}
 			
@@ -249,48 +185,7 @@
         /// <returns>A collection of entities</returns>
         public IEnumerable<TEntity> GetAll(params Guid[] keys)
         {
-            if (keys.Any())
-            {
-                var entities = new List<TEntity>();
-                
-                foreach (var key in keys)
-                {
-                    var entity = RuntimeCache.GetCacheItem(GetCacheKey(key));
-                    if (entity != null) entities.Add((TEntity)entity);
-                }
-
-                if (entities.Count().Equals(keys.Count()) && entities.Any(x => x == null) == false)
-                    return entities;
-            }
-            else
-            {
-                // fix http://issues.merchello.com/youtrack/issue/M-159
-                // Since IProduct and IProductVaraint both start with IProduct which was causing the cache conflict
-                var allEntities = RuntimeCache.GetCacheItemsByKeySearch(typeof(TEntity).Name + ".").ToArray(); 
-               
-                ////_cache.GetAllByType(typeof(TEntity));
-
-                if (allEntities.Any())
-                {
-                    var query = Querying.Query<TEntity>.Builder.Where(x => x.Key != Guid.Empty);
-                    var totalCount = PerformCount(query);
-
-                    if (allEntities.Count() == totalCount)
-                        return allEntities.Select(x => (TEntity)x);
-                }
-            }
-
-            var entityCollection = PerformGetAll(keys).ToArray();
-
-            foreach (var entity in entityCollection)
-            {
-                if (entity != null)
-                {
-                    RuntimeCache.GetCacheItem(GetCacheKey(entity.Key), () => entity, TimeSpan.FromHours(2), true);
-                }
-            }
-
-            return entityCollection;
+            return PerformGetAll(keys).ToArray();
         }
 
         /// <summary>
@@ -310,9 +205,7 @@
         /// <returns>A value indicating whether or not the entity exists</returns>
         public bool Exists(Guid key)
         {
-            var fromCache = TryGetFromCache(key);
-
-            return fromCache.Success || this.PerformExists(key);
+            return this.PerformExists(key);
         }
 
         /// <summary>
@@ -349,26 +242,6 @@
         /// The <see cref="TEntity"/>.
         /// </returns>
         protected abstract TEntity PerformGet(Guid key);
-
-        /// <summary>
-        /// The try get from cache.
-        /// </summary>
-        /// <param name="key">
-        /// The key.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Attempt"/>.
-        /// </returns>
-        protected Attempt<TEntity> TryGetFromCache(Guid key)
-		{
-			var cacheKey = GetCacheKey(key);
-
-			var retEntity = RuntimeCache.GetCacheItem(cacheKey); 
-
-			return retEntity != null ? 
-				Attempt<TEntity>.Succeed((TEntity) retEntity) : 
-				Attempt<TEntity>.Fail();
-		}
 
         /// <summary>
         /// The abstract perform get all.
