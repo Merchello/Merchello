@@ -9,7 +9,7 @@ init:
 # Test against this version of Node.js
 environment:
   ruby_version: 22-x64
-  nodejs_version: "0.12"
+  nodejs_version: "4"
 
 cache:
 - C:\Ruby%ruby_version%\lib\ruby\gems -> appveyor.yml
