@@ -16,7 +16,8 @@
   "dependencies": {
     "grunt-contrib-sass": "^1.0.0",
     "grunt-sass": "^2.0.0",
-    "node-sass": "^4.7.2"
+    "node-sass": "^4.7.2",
+    "phantomjs-prebuilt": "^2.1.16"
   },
   "devDependencies": {
     "grunt": "^1.0.1",
