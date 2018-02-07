@@ -90,21 +90,29 @@
         /// </returns>
         protected override IEnumerable<IWarehouse> PerformGetAll(params Guid[] keys)
         {
+
+            var dtos = new List<WarehouseDto>();
+
             if (keys.Any())
             {
-                foreach (var key in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    yield return Get(key);
+                    dtos.AddRange(Database.Fetch<WarehouseDto>(GetBaseQuery(false).WhereIn<WarehouseDto>(x => x.Key, keyList, SqlSyntax)));
                 }
             }
             else
             {
-                var factory = new WarehouseFactory();
-                var dtos = Database.Fetch<WarehouseDto>(GetBaseQuery(false));
-                foreach (var dto in dtos)
-                {
-                    yield return factory.BuildEntity(dto, _warehouseCatalogRepository.GetWarehouseCatalogsByWarehouseKey(dto.Key));
-                }
+                dtos = Database.Fetch<WarehouseDto>(GetBaseQuery(false));
+            }
+
+            var factory = new WarehouseFactory();
+            foreach (var dto in dtos)
+            {
+                yield return factory.BuildEntity(dto, _warehouseCatalogRepository.GetWarehouseCatalogsByWarehouseKey(dto.Key));
             }
         }
 

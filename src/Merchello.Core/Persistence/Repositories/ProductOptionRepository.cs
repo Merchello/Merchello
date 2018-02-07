@@ -555,21 +555,48 @@
         /// </returns>
         protected override IEnumerable<IProductOption> PerformGetAll(params Guid[] keys)
         {
+            var dtos = new List<ProductOptionDto>();
+
             if (keys.Any())
             {
-                foreach (var id in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    yield return Get(id);
+                    dtos.AddRange(Database.Fetch<ProductOptionDto>(GetBaseQuery(false).WhereIn<ProductOptionDto>(x => x.Key, keyList, SqlSyntax)));
                 }
             }
             else
             {
-                var dtos = Database.Fetch<ProductOptionDto>(GetBaseQuery(false));
-                foreach (var dto in dtos)
-                {
-                    yield return Get(dto.Key);
-                }
+                dtos = Database.Fetch<ProductOptionDto>(GetBaseQuery(false));
             }
+
+            var factory = new ProductOptionFactory();
+            foreach (var dto in dtos)
+            {
+                var option = factory.BuildEntity(dto);
+                option.Choices = GetProductAttributeCollection(option.Key);
+                yield return option;
+            }
+
+
+            //if (keys.Any())
+            //{
+            //    foreach (var id in keys)
+            //    {
+            //        yield return Get(id);
+            //    }
+            //}
+            //else
+            //{
+            //    var dtos = Database.Fetch<ProductOptionDto>(GetBaseQuery(false));
+            //    foreach (var dto in dtos)
+            //    {
+            //        yield return Get(dto.Key);
+            //    }
+            //}
         }
 
         /// <summary>

@@ -77,22 +77,30 @@
         /// </returns>
         protected override IEnumerable<IShipRateTier> PerformGetAll(params Guid[] keys)
         {
+            var dtos = new List<ShipRateTierDto>();
+
             if (keys.Any())
             {
-                foreach (var key in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    yield return Get(key);
+                    dtos.AddRange(Database.Fetch<ShipRateTierDto>(GetBaseQuery(false).WhereIn<ShipRateTierDto>(x => x.Key, keyList, SqlSyntax)));
                 }
             }
             else
             {
-                var factory = new ShipRateTierFactory();
-                var dtos = Database.Fetch<ShipRateTierDto>(GetBaseQuery(false));
-                foreach (var dto in dtos)
-                {
-                    yield return factory.BuildEntity(dto);
-                }
+                dtos = Database.Fetch<ShipRateTierDto>(GetBaseQuery(false));
             }
+
+            var factory = new ShipRateTierFactory();
+            foreach (var dto in dtos)
+            {
+                yield return factory.BuildEntity(dto);
+            }
+
         }
 
         /// <summary>

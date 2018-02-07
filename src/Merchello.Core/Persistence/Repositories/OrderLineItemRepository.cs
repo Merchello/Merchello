@@ -74,21 +74,28 @@
         /// </returns>
         protected override IEnumerable<IOrderLineItem> PerformGetAll(params Guid[] keys)
         {
+            var dtos = new List<OrderItemDto>();
+
             if (keys.Any())
             {
-                foreach (var key in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    yield return Get(key);
+                    dtos.AddRange(Database.Fetch<OrderItemDto>(GetBaseQuery(false).WhereIn<OrderItemDto>(x => x.Key, keyList, SqlSyntax)));
                 }
             }
             else
             {
-                var factory = new OrderLineItemFactory();
-                var dtos = Database.Fetch<OrderItemDto>(GetBaseQuery(false));
-                foreach (var dto in dtos)
-                {
-                    yield return factory.BuildEntity(dto);
-                }
+                dtos = Database.Fetch<OrderItemDto>(GetBaseQuery(false));
+            }
+
+            var factory = new OrderLineItemFactory();
+            foreach (var dto in dtos)
+            {
+                yield return factory.BuildEntity(dto);
             }
         }
 

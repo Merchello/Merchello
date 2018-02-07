@@ -927,22 +927,43 @@
         /// </returns>
         protected override IEnumerable<IProductVariant> PerformGetAll(params Guid[] keys)
         {
+            var dtos = new List<ProductDto>();
+
             if (keys.Any())
             {
-                var productVariants = new List<IProductVariant>();
-                // TODO - This is really innefficient, even though it's adding everything to caching
-                foreach (var key in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    productVariants.Add(Get(key));
+                    dtos.AddRange(Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(GetBaseQuery(false).WhereIn<ProductDto>(x => x.Key, keyList, SqlSyntax)));
                 }
-                return productVariants;
             }
             else
             {
-                var variantDtos = Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(GetBaseQuery(false));
-
-                return GetVariantsBulk(variantDtos);
+                dtos = Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(GetBaseQuery(false));
             }
+
+            return GetVariantsBulk(dtos);
+
+
+            //if (keys.Any())
+            //{
+            //    var productVariants = new List<IProductVariant>();
+            //    // TODO - This is really innefficient, even though it's adding everything to caching
+            //    foreach (var key in keys)
+            //    {
+            //        productVariants.Add(Get(key));
+            //    }
+            //    return productVariants;
+            //}
+            //else
+            //{
+            //    var variantDtos = Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(GetBaseQuery(false));
+
+            //    return GetVariantsBulk(variantDtos);
+            //}
         }
 
         /// <summary>

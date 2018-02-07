@@ -96,21 +96,48 @@
         /// </returns>
         protected override IEnumerable<IOrder> PerformGetAll(params Guid[] keys)
         {
+            var dtos = new List<OrderDto>();
+
             if (keys.Any())
             {
-                foreach (var key in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    yield return Get(key);
+                    dtos.AddRange(Database.Fetch<OrderDto, OrderIndexDto, OrderStatusDto>(GetBaseQuery(false).WhereIn<OrderDto>(x => x.Key, keyList, SqlSyntax)));
                 }
             }
             else
-            {                
-                var dtos = Database.Fetch<OrderDto, OrderIndexDto, OrderStatusDto>(GetBaseQuery(false));
-                foreach (var dto in dtos)
-                {
-                    yield return Get(dto.Key);
-                }
+            {
+                dtos = Database.Fetch<OrderDto, OrderIndexDto, OrderStatusDto>(GetBaseQuery(false));
             }
+
+
+            foreach (var dto in dtos)
+            {
+                var lineItems = GetLineItemCollection(dto.Key);
+                var factory = new OrderFactory(lineItems);
+                yield return factory.BuildEntity(dto);
+            }
+
+
+            //if (keys.Any())
+            //{
+            //    foreach (var key in keys)
+            //    {
+            //        yield return Get(key);
+            //    }
+            //}
+            //else
+            //{                
+            //    var dtos = Database.Fetch<OrderDto, OrderIndexDto, OrderStatusDto>(GetBaseQuery(false));
+            //    foreach (var dto in dtos)
+            //    {
+            //        yield return Get(dto.Key);
+            //    }
+            //}
         }
 
         /// <summary>

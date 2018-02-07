@@ -56,21 +56,28 @@
 
         protected override IEnumerable<INotificationMessage> PerformGetAll(params Guid[] keys)
         {
+            var dtos = new List<NotificationMessageDto>();
+
             if (keys.Any())
             {
-                foreach (var key in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    yield return Get(key);
+                    dtos.AddRange(Database.Fetch<NotificationMessageDto>(GetBaseQuery(false).WhereIn<NotificationMessageDto>(x => x.Key, keyList, SqlSyntax)));
                 }
             }
             else
             {
-                var factory = new NotificationMessageFactory();
-                var dtos = Database.Fetch<NotificationMessageDto>(GetBaseQuery(false));
-                foreach (var dto in dtos)
-                {
-                    yield return factory.BuildEntity(dto);
-                }
+                dtos = Database.Fetch<NotificationMessageDto>(GetBaseQuery(false));
+            }
+
+            var factory = new NotificationMessageFactory();
+            foreach (var dto in dtos)
+            {
+                yield return factory.BuildEntity(dto);
             }
         }
 

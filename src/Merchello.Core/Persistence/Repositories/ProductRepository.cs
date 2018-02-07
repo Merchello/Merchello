@@ -1643,21 +1643,59 @@
         /// </returns>
         protected override IEnumerable<IProduct> PerformGetAll(params Guid[] keys)
         {
+
+            var dtos = new List<ProductDto>();
+
             if (keys.Any())
             {
-                foreach (var id in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    yield return Get(id);
+                    dtos.AddRange(Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(GetBaseQuery(false).WhereIn<ProductDto>(x => x.Key, keyList, SqlSyntax)));
                 }
             }
             else
             {
-                var dtos = Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(GetBaseQuery(false));
-                foreach (var dto in dtos)
-                {
-                    yield return Get(dto.Key);
-                }
+                dtos = Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(GetBaseQuery(false));
             }
+
+            foreach (var dto in dtos)
+            {
+                // TODO - Performance tune
+                var factory = new ProductFactory(
+                    _productOptionRepository.GetProductAttributeCollectionForVariant(dto.ProductVariantDto.Key),
+                    _productVariantRepository.GetCategoryInventoryCollection(dto.ProductVariantDto.Key),
+                    _productOptionRepository.GetProductOptionCollection,
+                    _productVariantRepository.GetProductVariantCollection,
+                    _productVariantRepository.GetDetachedContentCollection(dto.ProductVariantDto.Key));
+
+                var product = factory.BuildEntity(dto);
+
+                product.ResetDirtyProperties();
+
+                yield return product;
+            }
+
+
+
+            //if (keys.Any())
+            //{
+            //    foreach (var id in keys)
+            //    {
+            //        yield return Get(id);
+            //    }
+            //}
+            //else
+            //{
+            //    var dtos = Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(GetBaseQuery(false));
+            //    foreach (var dto in dtos)
+            //    {
+            //        yield return Get(dto.Key);
+            //    }
+            //}
         }
 
 
