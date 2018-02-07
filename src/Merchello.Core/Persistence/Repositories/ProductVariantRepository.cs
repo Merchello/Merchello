@@ -937,7 +937,7 @@
                 // Loop the split keys and get them
                 foreach (var keyList in keyLists)
                 {
-                    dtos.AddRange(Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(GetBaseQuery(false).WhereIn<ProductDto>(x => x.Key, keyList, SqlSyntax)));
+                    dtos.AddRange(Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(GetBaseQuery(false).WhereIn<ProductVariantDto>(x => x.Key, keyList, SqlSyntax)));
                 }
             }
             else
