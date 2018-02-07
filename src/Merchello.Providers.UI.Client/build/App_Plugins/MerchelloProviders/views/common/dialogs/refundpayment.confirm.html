@@ -1,0 +1,50 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Providers.Dialogs.RefundPaymentController">
+    <div class="umb-overlay umb-overlay-right">
+        <form class="umb-overlay__form" name="refundForm" id="refundForm">
+
+            <div class="umb-overlay-header">
+                <h4 class="umb-overlay__title"><localize key="merchelloOrder_refundPayment" /></h4>
+            </div>
+
+            <div class="umb-overlay-container form-horizontal merchello-panel-body">
+
+                <div class="row-fluid">
+                    
+                    <p>
+                        <localize key="merchelloOrder_refundMethod"/> <strong>{{dialogData.paymentMethodName}}</strong>
+                    </p>
+
+                    <div class="form-group control-group">
+                        <label for="amount">*Amount</label>
+                        <div class="input-prepend col-xs-12 span12">
+                            <span class="add-on">{{dialogData.currencySymbol}}</span>
+                            <input name="amount" class="col-xs-4 span4" type="text" data-ng-model="dialogData.amount">
+                        </div>
+                        <div class="error" data-ng-show="refundForm.amount.$invalid && wasFormSubmitted">Amount between {{0 | currency: currencySymbol }} & {{ dialogData.appliedAmount | currency: currencySymbol }}.</div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="umb-overlay-drawer">
+                <div class="umb-overlay-drawer__align-right">
+                    
+                    <div class="umb-button">
+                        <a href data-ng-click="close()" class="btn btn-link">
+                            <localize key="general_cancel"></localize>
+                        </a>
+                    </div>
+
+                    <div class="umb-button">
+                        <button class="btn btn-success" data-ng-click="save()" prevent-default>
+                            <localize key="merchelloOrder_refundPayment"></localize>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
