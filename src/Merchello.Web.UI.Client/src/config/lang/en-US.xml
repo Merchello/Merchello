@@ -484,6 +484,7 @@
     <key alias="lineItemNameInfo">
       <![CDATA[Line item name<small>This is the text that will appear on the invoice when the reward is awarded.</small>]]>
     </key>
+    <key alias="offerProvider">Offer Provider</key>
   </area>
   <area alias="merchelloVariant">
     <!-- things -->
