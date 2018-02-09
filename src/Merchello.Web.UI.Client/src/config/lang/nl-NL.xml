@@ -655,6 +655,7 @@
     </key>
     <key alias="warehouse">Magazijn</key>
     <key alias="selectShipment">Selecteer verzending</key>
+    <key alias="shipmentStatus">Verzendstatus</key>
   </area>
   <area alias="merchelloInventory">
     <!-- things -->
