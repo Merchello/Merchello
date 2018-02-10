@@ -453,6 +453,8 @@
     <key alias="emailRequired">E-mail is een verplicht veld</key>
   </area>
   <area alias="merchelloMarketing">
+    <key alias="availableRewards">Beschikbare beloningen</key>
+    <key alias="availableConstraints">Beschikbare voorwaarden</key>    
     <key alias="currentOffers">Huidige aanbiedingen</key>
     <key alias="offerCode">Aanbiedingscode</key>
     <key alias="offerCodeInUse">Reeds in gebruik</key>

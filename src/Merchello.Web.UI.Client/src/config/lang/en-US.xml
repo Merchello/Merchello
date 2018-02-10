@@ -450,6 +450,8 @@
     <key alias="emailRequired">Email is a required field</key>
   </area>
   <area alias="merchelloMarketing">
+    <key alias="availableRewards">Available Rewards</key>
+    <key alias="availableConstraints">Available Constraints</key>
     <key alias="currentOffers">Current Offers</key>
     <key alias="offerCode">Offer Code</key>
     <key alias="offerCodeInUse">Already in use</key>
