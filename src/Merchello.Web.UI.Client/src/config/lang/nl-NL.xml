@@ -692,10 +692,11 @@
     <key alias="globalShippingIsTaxable">Verzendkosten zijn belastbaar</key>
     <key alias="globalTaxationApplication">BTW toepassen op</key>
     <key alias="defaultCultureName">Voorkeurstaal</key>
-    <key alias="listViewSettingsTitle">List settings</key>
-    <key alias="stickyListView">Enable sticky list settings for general list.</key>
-    <key alias="stickyCollectionView">Enable sticky list setting for collection lists.</key>
-    <key alias="stickListingTab"><![CDATA[Enable sticking <b>%0% Listing</b> tab.]]></key>
+    <key alias="listViewSettingsTitle">Lijst instellingen</key>
+    <key alias="listViewSettingsDescription">Als je tussen schermen wisselt, dan onthoud het systeem waar je mee bezig was. Ook zoek-acties van jou wordt onthouden.</key>
+    <key alias="stickyListView">Onthouden in algemene lijst toestaan.</key>
+    <key alias="stickyCollectionView">Onthouden in Collectie lijsten toestaan.</key>
+    <key alias="stickListingTab"><![CDATA[Onthouden toestaan voor <b>%0% Lijst</b> tabje.]]></key>
   </area>
 
   <area alias="merchelloShippingCountry">

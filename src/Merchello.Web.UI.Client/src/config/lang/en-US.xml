@@ -689,6 +689,7 @@
     <key alias="globalTaxationApplication">Set how taxes are applied</key>
     <key alias="defaultCultureName">Set the default extended content culture</key>
     <key alias="listViewSettingsTitle">List settings</key>
+    <key alias="listViewSettingsDescription">Enabling sticky options in lists, means it will remember the last page you were on or search term when you go back and forth between products and collections/lists making it much easier to manage products.</key>
     <key alias="stickyListView">Enable sticky list settings for general list.</key>
     <key alias="stickyCollectionView">Enable sticky list setting for collection lists.</key>
     <key alias="stickListingTab"><![CDATA[Enable sticking <b>%0% Listing</b> tab.]]></key>
