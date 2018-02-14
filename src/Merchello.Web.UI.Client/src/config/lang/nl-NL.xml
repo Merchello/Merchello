@@ -697,6 +697,8 @@
     <key alias="stickyListView">Onthouden in algemene lijst toestaan.</key>
     <key alias="stickyCollectionView">Onthouden in Collectie lijsten toestaan.</key>
     <key alias="stickListingTab"><![CDATA[Onthouden toestaan voor <b>%0% Lijst</b> tabje.]]></key>
+    <key alias="listViewSearchOptionsTitle">Zoekopties</key>
+    <key alias="listViewSearchOptionsSubTitle">Velden voor in de filter</key>
   </area>
 
   <area alias="merchelloShippingCountry">

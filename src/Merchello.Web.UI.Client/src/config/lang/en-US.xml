@@ -497,6 +497,7 @@
     <key alias="baseSku">Base Sku</key>
     <key alias="barcode">Barcode</key>
     <key alias="manufacturer">Manufacturer</key>
+    <key alias="allManufacturers">All Manufacturers</key>
     <key alias="manufacturerModel">Manufacturer's Model No.</key>
     <key alias="variantInfo">Variant Information</key>
     <key alias="variantOptions">Variant Options</key>
@@ -693,6 +694,8 @@
     <key alias="stickyListView">Enable sticky list settings for general list.</key>
     <key alias="stickyCollectionView">Enable sticky list setting for collection lists.</key>
     <key alias="stickListingTab"><![CDATA[Enable sticking <b>%0% Listing</b> tab.]]></key>
+    <key alias="listViewSearchOptionsTitle">List Search Options</key>
+    <key alias="listViewSearchOptionsSubTitle">Fields include in filter</key>
   </area>
 
   <area alias="merchelloShippingCountry">
