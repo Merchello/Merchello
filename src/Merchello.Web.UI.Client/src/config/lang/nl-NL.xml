@@ -490,6 +490,9 @@
       <![CDATA[Orderregel naam<small>Dit is de tekst die getoond wordt op de factuur als de beloning is toegekend.</small>]]>
     </key>
     <key alias="offerProvider">Kies een aanbieding</key>
+    <key alias="couponMaxRedemptionsTitle">Limiteer gebruik van de coupon</key>
+    <key alias="couponMaxRedemptionsInputTitle">Stel in hoe vaak de coupon maximaal gebruikt mag worden</key>
+    <key alias="couponMaxRedemptionsInputHelp">Positieve getallen als waarde invoeren</key>  
   </area>
   <area alias="merchelloVariant">
     <!-- things -->

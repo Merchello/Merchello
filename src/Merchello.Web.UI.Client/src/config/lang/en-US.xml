@@ -487,6 +487,9 @@
       <![CDATA[Line item name<small>This is the text that will appear on the invoice when the reward is awarded.</small>]]>
     </key>
     <key alias="offerProvider">Offer Provider</key>
+    <key alias="couponMaxRedemptionsTitle">Set a maximum number of allowable redemptions</key>
+    <key alias="couponMaxRedemptionsInputTitle">Set the maximum number of redemptions</key>
+    <key alias="couponMaxRedemptionsInputHelp">Values should be entered as positive numbers.</key>
   </area>
   <area alias="merchelloVariant">
     <!-- things -->
@@ -875,4 +878,10 @@
   <area alias="merchelloCollectionPicker">
     <key alias="config">Config</key>
   </area>
+
+  <!-- NotificationService Messages -->
+  <area alias="merchelloNotification">
+    <key alias="successCouponSave">Successfully saved the coupon.</key>
+    <key alias="failCouponSave">Failed to save coupon.</key>
+  </area>  
 </language>
