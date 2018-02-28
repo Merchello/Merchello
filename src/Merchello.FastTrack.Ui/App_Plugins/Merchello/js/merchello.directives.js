@@ -6,190 +6,6 @@
 
 (function() { 
 
-/**
- * @ngdoc directive
- * @name offerComponents
- *
- * @description
- * Common form elements for Merchello's OfferComponents
- */
-angular.module('merchello.directives').directive('offerComponents', function() {
-
-    return {
-        restrict: 'E',
-        replace: true,
-        scope: {
-            offerSettings: '=',
-            components: '=',
-            preValuesLoaded: '=',
-            settings: '=',
-            saveOfferSettings: '&',
-            componentType: '@'
-        },
-        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/offer.components.tpl.html',
-        controller:  'Merchello.Directives.OfferComponentsDirectiveController'
-    }
-})
-
-
-/**
- * @ngdoc directive
- * @name offerMainProperties
- *
- * @description
- * Common form elements for Merchello's OfferSettings
- */
-angular.module('merchello.directives').directive('offerMainProperties', function(dialogService, localizationService, eventsService) {
-
-    return {
-        restrict: 'E',
-        replace: true,
-        scope: {
-            offer: '=',
-            context: '=',
-            settings: '=',
-            toggleOfferExpires: '&'
-        },
-        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/offer.mainproperties.tpl.html',
-        link: function (scope, elm, attr) {
-
-            scope.dateBtnText = '';
-            scope.ready = false;
-            var allDates = '';
-            var eventOfferExpiresOpen = 'merchello.offercouponexpires.open';
-
-            scope.openDateRangeDialog = function() {
-                var dialogData = {
-                    startDate: scope.offer.offerStartsDate,
-                    endDate: scope.offer.offerEndsDate
-                };
-
-                dialogService.open({
-                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/daterange.selection.html',
-                    show: true,
-                    callback: processDateRange,
-                    dialogData: dialogData
-                });
-            }
-
-            scope.clearDates = function() {
-                scope.toggleOfferExpires();
-            }
-
-            function init() {
-
-                eventsService.on(eventOfferExpiresOpen, scope.openDateRangeDialog);
-
-                scope.$watch('offer', function(nv, ov) {
-
-                    if (nv) {
-                        if (nv.key !== undefined) {
-                            localizationService.localize('merchelloGeneral_allDates').then(function(value) {
-                                allDates = value;
-                                scope.ready = true;
-                            });
-                        }
-                    }
-
-                });
-
-            }
-
-            function processDateRange(dialogData) {
-                scope.offer.offerStartsDate = dialogData.startDate;
-                scope.offer.offerEndsDate = dialogData.endDate;
-            }
-
-            init();
-        }
-    };
-})
-
-angular.module('merchello.directives').directive('uniqueOfferCode', function() {
-    return {
-        restrict: 'E',
-        replace: true,
-        scope: {
-            offer: '=',
-            offerCode: '=',
-            offerForm: '='
-        },
-        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/offer.uniqueoffercode.tpl.html',
-        controller: function($scope, eventsService, marketingResource) {
-
-            $scope.loaded = false;
-            $scope.checking = false;
-            $scope.isUnique = true;
-
-            var eventOfferSavingName = 'merchello.offercoupon.saving';
-            var input = angular.element( document.querySelector( '#offerCode' ) );
-            var container = angular.element( document.querySelector("#unique-offer-check") );
-
-            var currentCode = '';
-
-            function init() {
-                container.hide();
-                eventsService.on(eventOfferSavingName, onOfferSaving);
-                input.bind("keyup keypress", function (event) {
-                    var code = event.which;
-                    // alpha , numbers, ! and backspace
-
-                    if ((code >47 && code <58) || (code >64 && code <91) || (code >96 && code <123) || code === 33 || code == 8) {
-                        $scope.$apply(function () {
-                            if ($scope.offerCode !== '') {
-                                checkUniqueOfferCode($scope.offerCode);
-                                currentCode = $scope.offerCode;
-                            }
-                        });
-                    } else {
-                        $scope.checking = true;
-                        event.preventDefault();
-                    }
-                });
-                $scope.$watch('offerCode', function(oc) {
-                    if($scope.offerCode !== undefined) {
-                        if (!$scope.loaded) {
-                            $scope.loaded = true;
-                            currentCode = $scope.offer.offerCode;
-                            checkUniqueOfferCode($scope.offer.offerCode);
-                        }
-                    }
-                });
-            }
-            function checkUniqueOfferCode(offerCode) {
-                $scope.checking = true;
-                if (offerCode === '') {
-                    $scope.checking = false;
-                } else {
-                    container.show();
-                    if (offerCode === currentCode) {
-                        $scope.checking = false;
-                        return true;
-                    }
-                    var checkPromise = marketingResource.checkOfferCodeIsUnique(offerCode);
-                    checkPromise.then(function(result) {
-                        $scope.checking = false;
-                        $scope.isUnique = result;
-                    });
-                }
-            }
-
-            function onOfferSaving(e, frm) {
-                var valid = $scope.offer.offerCode !== '';
-                if (valid) {
-                    checkUniqueOfferCode($scope.offer.offerCode);
-                    valid = $scope.isUnique;
-                    $scope.offerCode = $scope.offer.offerCode
-                }
-                frm.offerCode.$setValidity('offerCode', valid);
-            }
-            
-            // Initialize
-            init();
-        }
-    };
-});
-
 angular.module('merchello.directives').directive('entityCollectionTitleBar', function($compile, localizationService, entityCollectionResource, entityCollectionDisplayBuilder, entityCollectionProviderDisplayBuilder) {
   return {
     restrict: 'E',
@@ -1701,20 +1517,6 @@ angular.module('merchello.directives').directive('merchelloTabs', [function() {
     };
 }]);
 
-angular.module('merchello.directives').directive('merchEnter', function() {
-    return function (scope, element, attrs) {
-        element.bind("keydown keypress", function (event) {
-            if(event.which === 13) {
-                scope.$apply(function (){
-                    scope.$eval(attrs.merchEnter);
-                });
-
-                event.preventDefault();
-            }
-        });
-    };
-});
-
 angular.module('merchello.directives').directive('merchelloDateRangeButton',
     function($filter, settingsResource, dialogService, merchDateHelper) {
 
@@ -2567,6 +2369,20 @@ angular.module('merchello.directives').directive('merchelloViewEditor',
         }
     }]);
 
+angular.module('merchello.directives').directive('merchEnter', function() {
+    return function (scope, element, attrs) {
+        element.bind("keydown keypress", function (event) {
+            if(event.which === 13) {
+                scope.$apply(function (){
+                    scope.$eval(attrs.merchEnter);
+                });
+
+                event.preventDefault();
+            }
+        });
+    };
+});
+
     /**
      * @ngdoc directive
      * @name resetListfilters
@@ -2845,6 +2661,190 @@ angular.module('merchello.directives').directive('shipCountryGatewayProviders', 
         controller: 'Merchello.Directives.ShipCountryGatewaysProviderDirectiveController'
     };
 });
+/**
+ * @ngdoc directive
+ * @name offerComponents
+ *
+ * @description
+ * Common form elements for Merchello's OfferComponents
+ */
+angular.module('merchello.directives').directive('offerComponents', function() {
+
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            offerSettings: '=',
+            components: '=',
+            preValuesLoaded: '=',
+            settings: '=',
+            saveOfferSettings: '&',
+            componentType: '@'
+        },
+        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/offer.components.tpl.html',
+        controller:  'Merchello.Directives.OfferComponentsDirectiveController'
+    }
+})
+
+
+/**
+ * @ngdoc directive
+ * @name offerMainProperties
+ *
+ * @description
+ * Common form elements for Merchello's OfferSettings
+ */
+angular.module('merchello.directives').directive('offerMainProperties', function(dialogService, localizationService, eventsService) {
+
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            offer: '=',
+            context: '=',
+            settings: '=',
+            toggleOfferExpires: '&'
+        },
+        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/offer.mainproperties.tpl.html',
+        link: function (scope, elm, attr) {
+
+            scope.dateBtnText = '';
+            scope.ready = false;
+            var allDates = '';
+            var eventOfferExpiresOpen = 'merchello.offercouponexpires.open';
+
+            scope.openDateRangeDialog = function() {
+                var dialogData = {
+                    startDate: scope.offer.offerStartsDate,
+                    endDate: scope.offer.offerEndsDate
+                };
+
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/daterange.selection.html',
+                    show: true,
+                    callback: processDateRange,
+                    dialogData: dialogData
+                });
+            }
+
+            scope.clearDates = function() {
+                scope.toggleOfferExpires();
+            }
+
+            function init() {
+
+                eventsService.on(eventOfferExpiresOpen, scope.openDateRangeDialog);
+
+                scope.$watch('offer', function(nv, ov) {
+
+                    if (nv) {
+                        if (nv.key !== undefined) {
+                            localizationService.localize('merchelloGeneral_allDates').then(function(value) {
+                                allDates = value;
+                                scope.ready = true;
+                            });
+                        }
+                    }
+
+                });
+
+            }
+
+            function processDateRange(dialogData) {
+                scope.offer.offerStartsDate = dialogData.startDate;
+                scope.offer.offerEndsDate = dialogData.endDate;
+            }
+
+            init();
+        }
+    };
+})
+
+angular.module('merchello.directives').directive('uniqueOfferCode', function() {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            offer: '=',
+            offerCode: '=',
+            offerForm: '='
+        },
+        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/offer.uniqueoffercode.tpl.html',
+        controller: function($scope, eventsService, marketingResource) {
+
+            $scope.loaded = false;
+            $scope.checking = false;
+            $scope.isUnique = true;
+
+            var eventOfferSavingName = 'merchello.offercoupon.saving';
+            var input = angular.element( document.querySelector( '#offerCode' ) );
+            var container = angular.element( document.querySelector("#unique-offer-check") );
+
+            var currentCode = '';
+
+            function init() {
+                container.hide();
+                eventsService.on(eventOfferSavingName, onOfferSaving);
+                input.bind("keyup keypress", function (event) {
+                    var code = event.which;
+                    // alpha , numbers, ! and backspace
+
+                    if ((code >47 && code <58) || (code >64 && code <91) || (code >96 && code <123) || code === 33 || code == 8) {
+                        $scope.$apply(function () {
+                            if ($scope.offerCode !== '') {
+                                checkUniqueOfferCode($scope.offerCode);
+                                currentCode = $scope.offerCode;
+                            }
+                        });
+                    } else {
+                        $scope.checking = true;
+                        event.preventDefault();
+                    }
+                });
+                $scope.$watch('offerCode', function(oc) {
+                    if($scope.offerCode !== undefined) {
+                        if (!$scope.loaded) {
+                            $scope.loaded = true;
+                            currentCode = $scope.offer.offerCode;
+                            checkUniqueOfferCode($scope.offer.offerCode);
+                        }
+                    }
+                });
+            }
+            function checkUniqueOfferCode(offerCode) {
+                $scope.checking = true;
+                if (offerCode === '') {
+                    $scope.checking = false;
+                } else {
+                    container.show();
+                    if (offerCode === currentCode) {
+                        $scope.checking = false;
+                        return true;
+                    }
+                    var checkPromise = marketingResource.checkOfferCodeIsUnique(offerCode);
+                    checkPromise.then(function(result) {
+                        $scope.checking = false;
+                        $scope.isUnique = result;
+                    });
+                }
+            }
+
+            function onOfferSaving(e, frm) {
+                var valid = $scope.offer.offerCode !== '';
+                if (valid) {
+                    checkUniqueOfferCode($scope.offer.offerCode);
+                    valid = $scope.isUnique;
+                    $scope.offerCode = $scope.offer.offerCode
+                }
+                frm.offerCode.$setValidity('offerCode', valid);
+            }
+            
+            // Initialize
+            init();
+        }
+    };
+});
+
 angular.module('merchello.directives').directive("productOptionsAddEdit",
     ['$timeout', '$q', 'eventsService', 'dialogService', 'productOptionResource', 'productAttributeDisplayBuilder',
     function($timeout, $q, eventsService, dialogService, productOptionResource, productAttributeDisplayBuilder) {

@@ -28,17 +28,14 @@
         /// <param name="work">
         /// The <see cref="IDatabaseUnitOfWork"/>.
         /// </param>
-        /// <param name="cache">
-        /// The <see cref="IRuntimeCacheProvider"/>.
-        /// </param>
         /// <param name="logger">
         /// The logger.
         /// </param>
         /// <param name="sqlSyntax">
         /// The SQL Syntax.
         /// </param>
-        public ShipmentStatusRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax) 
-            : base(work, cache, logger, sqlSyntax)
+        public ShipmentStatusRepository(IDatabaseUnitOfWork work, ILogger logger, ISqlSyntaxProvider sqlSyntax) 
+            : base(work, logger, sqlSyntax)
         {
         }
 
@@ -78,23 +75,31 @@
         /// The collection of <see cref="IShipmentStatus"/>.
         /// </returns>
         protected override IEnumerable<IShipmentStatus> PerformGetAll(params Guid[] keys)
-        {                    
+        {
+            var dtos = new List<ShipmentStatusDto>();
+
             if (keys.Any())
             {
-                foreach (var id in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    yield return Get(id);
+                    dtos.AddRange(Database.Fetch<ShipmentStatusDto>(GetBaseQuery(false).WhereIn<ShipmentStatusDto>(x => x.Key, keyList, SqlSyntax)));
                 }
             }
             else
             {
-                var factory = new ShipmentStatusFactory();
-                var dtos = Database.Fetch<ShipmentStatusDto>(GetBaseQuery(false));
-                foreach (var dto in dtos)
-                {
-                    yield return factory.BuildEntity(dto);
-                }
+                dtos = Database.Fetch<ShipmentStatusDto>(GetBaseQuery(false));
             }
+
+            var factory = new ShipmentStatusFactory();
+            foreach (var dto in dtos)
+            {
+                yield return factory.BuildEntity(dto);
+            }
+
         }
 
         /// <summary>
@@ -196,8 +201,6 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
-
-            RuntimeCache.ClearCacheItem(Core.Cache.CacheKeys.GetEntityCacheKey<IShipmentStatus>(entity.Key));
         }
     }
 }

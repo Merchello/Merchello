@@ -44,9 +44,6 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="invoiceLineItemRepository">
         /// The invoice line item repository.
         /// </param>
@@ -64,13 +61,12 @@
         /// </param>
         public InvoiceRepository(
             IDatabaseUnitOfWork work,
-            CacheHelper cache,
             IInvoiceLineItemRepository invoiceLineItemRepository,
             IOrderRepository orderRepository,
             INoteRepository noteRepository,
             ILogger logger,
             ISqlSyntaxProvider sqlSyntax)
-            : base(work, cache, logger, sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {
             Mandate.ParameterNotNull(invoiceLineItemRepository, "lineItemRepository");
             Mandate.ParameterNotNull(orderRepository, "orderRepository");
@@ -1435,21 +1431,49 @@
         /// </returns>
         protected override IEnumerable<IInvoice> PerformGetAll(params Guid[] keys)
         {
+            var dtos = new List<InvoiceDto>();
+
             if (keys.Any())
             {
-                foreach (var key in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    yield return Get(key);
+                    dtos.AddRange(Database.Fetch<InvoiceDto, InvoiceIndexDto, InvoiceStatusDto>(GetBaseQuery(false).WhereIn<InvoiceDto>(x => x.Key, keyList, SqlSyntax)));
                 }
             }
             else
             {
-                var dtos = Database.Fetch<InvoiceDto, InvoiceIndexDto, InvoiceStatusDto>(GetBaseQuery(false));
-                foreach (var dto in dtos)
-                {
-                    yield return Get(dto.Key);
-                }
+                dtos = Database.Fetch<InvoiceDto, InvoiceIndexDto, InvoiceStatusDto>(GetBaseQuery(false));
             }
+
+            foreach (var dto in dtos)
+            {
+                var lineItems = GetLineItemCollection(dto.Key);
+                var orders = GetOrderCollection(dto.Key);
+                var notes = GetNotes(dto.Key);
+                var factory = new InvoiceFactory(lineItems, orders, notes);
+                yield return factory.BuildEntity(dto);
+            }
+
+            // TODO - Keeping original code
+            //if (keys.Any())
+            //{
+            //    foreach (var key in keys)
+            //    {
+            //        yield return Get(key);
+            //    }
+            //}
+            //else
+            //{
+            //    var dtos = Database.Fetch<InvoiceDto, InvoiceIndexDto, InvoiceStatusDto>(GetBaseQuery(false));
+            //    foreach (var dto in dtos)
+            //    {
+            //        yield return Get(dto.Key);
+            //    }
+            //}
         }
 
         /// <summary>
@@ -1574,24 +1598,6 @@
             _invoiceLineItemRepository.SaveLineItem(entity.Items, entity.Key);
 
             entity.ResetDirtyProperties();
-
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IInvoice>(entity.Key));
-
-            foreach (var entityOrder in entity.Orders)
-            {
-                foreach (var shipment in entityOrder.Shipments())
-                {
-                    foreach (var shipmentItem in shipment.Items)
-                    {
-                        RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IOrderLineItem>(shipmentItem.Key));
-                    }
-
-                    RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IShipment>(shipment.Key));
-                }
-
-                RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IOrder>(entityOrder.Key));
-            }
-
         }
 
         /// <summary>
@@ -1629,9 +1635,6 @@
                     Database.Insert(dto);
                     u.Key = dto.Key;
                 }
-
-                var cacheKey = Cache.CacheKeys.GetEntityCacheKey<INote>(u.Key);
-                RuntimeCache.ClearCacheItem(cacheKey);
             }
 
         }
