@@ -118,7 +118,7 @@
             var translator = new SqlTranslator<IPaymentMethod>(sqlClause, query);
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<PaymentMethodDto>(sql);
+            var dtos = Database.Fetch<PaymentMethodDto>(sql).ToList();
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
         }
