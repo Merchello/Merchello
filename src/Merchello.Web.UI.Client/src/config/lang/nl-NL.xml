@@ -228,7 +228,10 @@
     <key alias="available">Beschikbaar</key>
     <key alias="copyProduct">Kopieer Product</key>
     <key alias="newProductName">Nieuw productnaam</key>
+    <key alias="nameIsRequired">Productnaam is een verplicht veld</key>
     <key alias="newProductSku">Nieuw Product SKU</key>
+    <key alias="skuIsNotUnique">Ingevoerd SKU is niet uniek</key>
+    <key alias="skuIsRequired">SKU is een verplicht veld</key>
     <key alias="newPrice">Nieuwe prijs</key>
     <key alias="newCostOfGoods">Nieuwe kostprijs</key>
     <key alias="newSalePrice">Nieuwe verkoopsprijs</key>

@@ -227,7 +227,10 @@
     <key alias="available">Available</key>
     <key alias="copyProduct">Copy Product</key>
     <key alias="newProductName">New Product Name</key>
+    <key alias="nameIsRequired">Name is a required field.</key>
     <key alias="newProductSku">New Product SKU</key>
+    <key alias="skuIsNotUnique">SKU is not unique</key>
+    <key alias="skuIsRequired">SKU is a required field.</key>    
     <key alias="newPrice">New Price</key>
     <key alias="newCostOfGoods">New Cost Of Goods</key>
     <key alias="newSalePrice">New Sale Price</key>
