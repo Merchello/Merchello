@@ -4,9 +4,12 @@
         <div class="form-group col-xs-5 span5">
           <table class="table table-striped offer-components-table">
               <thead>
-              <tr>
-                <th colspan="2">Available {{componentType}}s</th>
-              </tr>
+                  <tr>
+                      <th colspan="2" class="span12">
+                          <localize data-ng-if="componentType==='Constraint'" key="merchelloMarketing_availableConstraints"></localize>
+                          <localize data-ng-if="componentType!=='Constraint'" key="merchelloMarketing_availableRewards"></localize>
+                      </th>
+                  </tr>
               </thead>
               <tr data-ng-repeat="component in availableComponents" data-ng-show="availableComponents.length > 0">
                   <td><strong><em>{{component.name}}</em></strong><small data-ng-show="component.description !== ''">{{component.description}}</small></td>

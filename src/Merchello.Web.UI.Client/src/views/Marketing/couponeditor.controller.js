@@ -191,7 +191,9 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
                     offerPromise = marketingResource.saveOfferSettings(os);
                 }
                 offerPromise.then(function (settings) {
-                    notificationsService.success("Successfully saved the coupon.");
+                    localizationService.localize("merchelloNotification_successCouponSave").then(function (value) {
+                        notificationsService.success(value);
+                    });
                     if (isNew) {
                         $location.url($scope.offerProvider.editorUrl(settings.key), true);
                     } else {
@@ -199,7 +201,9 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
                         loadOffer(settings.key);
                     }
                 }, function (reason) {
-                    notificationsService.error("Failed to save coupon", reason.message);
+                    localizationService.localize("merchelloNotification_failCouponSave").then(function (value) {
+                        notificationsService.error(value, reason.message);
+                    });
                 });
             }
         }

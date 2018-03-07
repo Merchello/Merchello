@@ -6,7 +6,7 @@
 
                 <div class="form-control control-group">
                     <label for="name"><localize key="merchelloProducts_newProductName" /></label>
-                    <div class="error" data-ng-show="addProductForm.name.$invalid && wasFormSubmitted">Name is a required field.</div>
+                    <div class="error" data-ng-show="addProductForm.name.$invalid && wasFormSubmitted"><localize key="merchelloProducts_nameIsRequired">Name is a required field.</localize></div>
                     <input name="name" id="name" data-ng-model="product.name" class="form-control umb-editor" type="text" data-ng-required="true" />
                 </div>
                 <div class="form-control control-group">
@@ -15,8 +15,8 @@
                             <i class="icon-check"></i>
                         </span>
                     </label>
-                    <div class="error" data-ng-show="addProductForm.sku.$invalid && wasFormSubmitted">SKU is a required field. </div>
-                    <div class="error" data-ng-show="!isUnique">SKU is not unique</div>
+                    <div class="error" data-ng-show="addProductForm.sku.$invalid && wasFormSubmitted"><localize key="merchelloProducts_skuIsRequired">SKU is a required field.</localize> </div>
+                    <div class="error" data-ng-show="!isUnique"><localize key="merchelloProducts_skuIsNotUnique">SKU is not unique</localize></div>
                     <input name="sku" id="sku" data-ng-model="product.sku" class="form-control umb-editor" data-ng-blur="checkUniqueSku(productVariant.sku)" type="text" data-ng-required="true" />
                 </div>
                 <div class="form-control control-group">

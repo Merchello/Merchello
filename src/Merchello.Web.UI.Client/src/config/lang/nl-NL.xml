@@ -76,6 +76,7 @@
     <key alias="associateWith">Associeer met</key>
     <key alias="shared">Gedeeld</key>
     <key alias="custom">Custom</key>
+    <key alias="history">Historie</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Producten</key>
@@ -206,6 +207,9 @@
     <key alias="sharedCount">Aantal gedeeld</key>
     <key alias="filterGroup">Filter Groep</key>
     <key alias="filters">Filters</key>
+    <key alias="date">Datum</key>
+    <key alias="description">Omschrijving</key>
+    <key alias="amount">Bedrag</key>
   </area>
   <area alias="merchelloNotes">
     <key alias="notes">Notities</key>
@@ -224,7 +228,10 @@
     <key alias="available">Beschikbaar</key>
     <key alias="copyProduct">Kopieer Product</key>
     <key alias="newProductName">Nieuw productnaam</key>
+    <key alias="nameIsRequired">Productnaam is een verplicht veld</key>
     <key alias="newProductSku">Nieuw Product SKU</key>
+    <key alias="skuIsNotUnique">Ingevoerd SKU is niet uniek</key>
+    <key alias="skuIsRequired">SKU is een verplicht veld</key>
     <key alias="newPrice">Nieuwe prijs</key>
     <key alias="newCostOfGoods">Nieuwe kostprijs</key>
     <key alias="newSalePrice">Nieuwe verkoopsprijs</key>
@@ -449,6 +456,8 @@
     <key alias="emailRequired">E-mail is een verplicht veld</key>
   </area>
   <area alias="merchelloMarketing">
+    <key alias="availableRewards">Beschikbare beloningen</key>
+    <key alias="availableConstraints">Beschikbare voorwaarden</key>    
     <key alias="currentOffers">Huidige aanbiedingen</key>
     <key alias="offerCode">Aanbiedingscode</key>
     <key alias="offerCodeInUse">Reeds in gebruik</key>
@@ -483,6 +492,10 @@
     <key alias="lineItemNameInfo">
       <![CDATA[Orderregel naam<small>Dit is de tekst die getoond wordt op de factuur als de beloning is toegekend.</small>]]>
     </key>
+    <key alias="offerProvider">Kies een aanbieding</key>
+    <key alias="couponMaxRedemptionsTitle">Limiteer gebruik van de coupon</key>
+    <key alias="couponMaxRedemptionsInputTitle">Stel in hoe vaak de coupon maximaal gebruikt mag worden</key>
+    <key alias="couponMaxRedemptionsInputHelp">Positieve getallen als waarde invoeren</key>  
   </area>
   <area alias="merchelloVariant">
     <!-- things -->
@@ -650,6 +663,7 @@
     </key>
     <key alias="warehouse">Magazijn</key>
     <key alias="selectShipment">Selecteer verzending</key>
+    <key alias="shipmentStatus">Verzendstatus</key>
   </area>
   <area alias="merchelloInventory">
     <!-- things -->
@@ -684,10 +698,13 @@
     <key alias="globalShippingIsTaxable">Verzendkosten zijn belastbaar</key>
     <key alias="globalTaxationApplication">BTW toepassen op</key>
     <key alias="defaultCultureName">Voorkeurstaal</key>
-    <key alias="listViewSettingsTitle">List settings</key>
-    <key alias="stickyListView">Enable sticky list settings for general list.</key>
-    <key alias="stickyCollectionView">Enable sticky list setting for collection lists.</key>
-    <key alias="stickListingTab"><![CDATA[Enable sticking <b>%0% Listing</b> tab.]]></key>
+    <key alias="listViewSettingsTitle">Lijst instellingen</key>
+    <key alias="listViewSettingsDescription">Als je tussen schermen wisselt, dan onthoud het systeem waar je mee bezig was. Ook zoek-acties van jou wordt onthouden.</key>
+    <key alias="stickyListView">Onthouden in algemene lijst toestaan.</key>
+    <key alias="stickyCollectionView">Onthouden in Collectie lijsten toestaan.</key>
+    <key alias="stickListingTab"><![CDATA[Onthouden toestaan voor <b>%0% Lijst</b> tabje.]]></key>
+    <key alias="listViewSearchOptionsTitle">Zoekopties</key>
+    <key alias="listViewSearchOptionsSubTitle">Velden voor in de filter</key>
   </area>
 
   <area alias="merchelloShippingCountry">
@@ -862,4 +879,9 @@
     <key alias="shipmentCreated">Verzending is aangemaakt met %0% orderregels</key>
     <key alias="shipmentStatusChanged">Verzendstatus is gewijzigd naar %0%</key>
   </area>
+
+  <!-- Merchello Property Editors -->
+  <area alias="merchelloCollectionPicker">
+    <key alias="config">Collectie(s) toewijzen</key>
+  </area>  
 </language>
