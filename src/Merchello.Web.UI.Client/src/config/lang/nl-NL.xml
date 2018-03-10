@@ -883,5 +883,9 @@
   <!-- Merchello Property Editors -->
   <area alias="merchelloCollectionPicker">
     <key alias="config">Collectie(s) toewijzen</key>
+  </area>
+  
+  <area alias="merchelloMultiProductPicker">
+    <key alias="alreadySelected">Reeds geselecteerde Producten:</key>
   </area>  
 </language>

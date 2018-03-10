@@ -882,6 +882,10 @@
     <key alias="config">Config</key>
   </area>
 
+  <area alias="merchelloMultiProductPicker">
+    <key alias="alreadySelected">Already selected</key>
+  </area>
+
   <!-- NotificationService Messages -->
   <area alias="merchelloNotification">
     <key alias="successCouponSave">Successfully saved the coupon.</key>
