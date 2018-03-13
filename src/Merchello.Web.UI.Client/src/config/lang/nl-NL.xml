@@ -830,8 +830,9 @@
     <key alias="deleteConfirmation">Weet je zeker dat je deze methode wilt verwijderen?</key>
   </area>
   <area alias="merchelloDelete">
-    <key alias="deleteConfirmation">Verwijder Bevestiging</key>
+    <key alias="deleteConfirmation">Bevestig verwijderen</key>
     <key alias="deleteConfirmMessage">Weet je zeker dat je dit item wilt verwijderen? </key>
+	<key alias="actionNotReversible">Deze actie kan niet ongedaan gemaakt worden</key>
   </area>
   <area alias="merchelloProductEdit">
     <key alias="enterProductName">Voer een productnaam in</key>
@@ -883,9 +884,5 @@
   <!-- Merchello Property Editors -->
   <area alias="merchelloCollectionPicker">
     <key alias="config">Collectie(s) toewijzen</key>
-  </area>
-  
-  <area alias="merchelloMultiProductPicker">
-    <key alias="alreadySelected">Reeds geselecteerde Producten:</key>
   </area>  
 </language>

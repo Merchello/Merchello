@@ -829,6 +829,7 @@
   <area alias="merchelloDelete">
     <key alias="deleteConfirmation">Delete Confirmation</key>
     <key alias="deleteConfirmMessage">Are you sure you want to remove the item </key>
+	<key alias="actionNotReversible">This action cannot be reversed.</key>
   </area>
   <area alias="merchelloProductEdit">
     <key alias="enterProductName">Enter a product name</key>
@@ -880,10 +881,6 @@
   <!-- Merchello Property Editors -->
   <area alias="merchelloCollectionPicker">
     <key alias="config">Config</key>
-  </area>
-
-  <area alias="merchelloMultiProductPicker">
-    <key alias="alreadySelected">Already selected</key>
   </area>
 
   <!-- NotificationService Messages -->
