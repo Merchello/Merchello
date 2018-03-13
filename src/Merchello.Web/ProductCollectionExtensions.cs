@@ -313,6 +313,9 @@ namespace Merchello.Web
                 case "price":
                     order = ProductSortField.Price;
                     break;
+                case "saleprice":
+                    order = ProductSortField.SalePrice;
+                    break;
                 case "sku":
                     order = ProductSortField.Sku;
                     break;
