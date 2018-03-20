@@ -4,8 +4,12 @@
   }
 }
 
-#addProductForm, #copyProductForm  {
-  .error { display: block; }
+#addProductForm, #copyProductForm {
+    .error {
+        display: block;
+        color: $error;
+        font-weight: bold;
+    }
 }
 
 .manufacturer {
