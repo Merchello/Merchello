@@ -30,14 +30,14 @@
             <table class="table" data-ng-hide="shipments.length === 0">
                 <thead>
                 <tr>
-                    <th>Shipment #</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                    <th>Origin</th>
-                    <th>Destination</th>
-                    <th>Items</th>
-                    <th>Tracking #</th>
-                    <th>Actions</th>
+                    <th><localize key="merchelloGeneral_shipmentNumber">Shipment #</localize></th>
+                    <th><localize key="general_date">Date</localize></th>
+                    <th><localize key="merchelloGeneral_status">Status</localize></th>
+                    <th><localize key="merchelloFulfillShipment_origin">Origin</localize></th>
+                    <th><localize key="merchelloFulfillShipment_destination">Destination</th>
+                    <th><localize key="merchelloFulfillShipment_items">Items</localize></th>
+                    <th><localize key="merchelloGeneral_trackingNumber">Tracking #</localize></th>
+                    <th><localize key="general_actions">Actions</localize></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -56,11 +56,11 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu umb-actions" role="menu" aria-labelledby="dLabel">
-                            <li><a data-ng-click="openShipmentDialog(shipment)">Edit Shipment</a></li>
-                            <li data-ng-hide="!isEditableAddress(shipment.shipmentStatus)"><a data-ng-click="openAddressDialog(shipment, 'origin')">Edit Origin</a></li>
-                            <li data-ng-hide="!isEditableAddress(shipment.shipmentStatus)"><a data-ng-click="openAddressDialog(shipment, 'destination')">Edit Destination</a></li>
-                            <li><a data-ng-click="updateShippingAddressLineItem(shipment)">Set Sale Destination</a></li>
-                            <li data-ng-hide="!isEditableAddress(shipment.shipmentStatus)"><a data-ng-click="openDeleteShipmentDialog(shipment)">Delete Shipment</a></li>
+                            <li><a data-ng-click="openShipmentDialog(shipment)"><localize key="merchelloFulfillShipment_editShipment">Edit Shipment</localize></a></li>
+                            <li data-ng-hide="!isEditableAddress(shipment.shipmentStatus)"><a data-ng-click="openAddressDialog(shipment, 'origin')"><localize key="merchelloFulfillShipment_editOrigin">Edit Origin</localize></a></li>
+                            <li data-ng-hide="!isEditableAddress(shipment.shipmentStatus)"><a data-ng-click="openAddressDialog(shipment, 'destination')"><localize key="merchelloFulfillShipment_editDestination">Edit Destination</localize></a></li>
+                            <li><a data-ng-click="updateShippingAddressLineItem(shipment)"><localize key="merchelloFulfillShipment_setSaleDestination">Set Sale Destination</localize></a></li>
+                            <li data-ng-hide="!isEditableAddress(shipment.shipmentStatus)"><a data-ng-click="openDeleteShipmentDialog(shipment)"><localize key="merchelloFulfillShipment_deleteShipment">Delete Shipment</localize></a></li>
                         </ul>
                         </div>
                     </td>
@@ -69,7 +69,7 @@
             </table>
 
             <div class="well" style="margin-top: 1em" data-ng-hide="shipments.length > 0">
-              There are no shipments.
+                <localize key="merchelloFulfillShipment_noShipments">There are no shipments.</localize>
             </div>
 
       

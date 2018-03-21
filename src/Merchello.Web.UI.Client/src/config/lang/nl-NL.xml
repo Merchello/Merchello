@@ -19,6 +19,7 @@
     <key alias="trackingNumber">Tracking # </key>
     <key alias="trackingUrl">Tracking URL</key>
     <key alias="shipment">Verzending</key>
+    <key alias="shipmentNumber">Verzend #</key>
     <key alias="sku">SKU</key>
     <key alias="name">Naam</key>
     <key alias="quantity">Aantal</key>
@@ -625,6 +626,14 @@
     <!-- phrases -->
     <key alias="fulfillManually">Handmatig verwerken</key>
     <key alias="createShipment">Aanmaken verzending</key>
+    <key alias="items">Stuks</key>
+    <key alias="origin">Herkomst</key>
+    <key alias="destination">Bestemming</key>
+    <key alias="editShipment">Wijzig verzending</key>
+    <key alias="editOrigin">Wijzig herkomst adres</key>
+    <key alias="editDestination">Wijzig bestemmings adres</key>    
+    <key alias="deleteShipment">Verwijder verzending</key>
+    <key alias="setSaleDestination">Bijwerken bestemmingsadres</key>
   </area>
   <area alias="merchelloWarehouse">
     <!-- things -->

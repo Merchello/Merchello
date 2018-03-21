@@ -19,6 +19,7 @@
     <key alias="trackingNumber">Tracking # </key>
     <key alias="trackingUrl">Tracking URL</key>
     <key alias="shipment">Shipment</key>
+    <key alias="shipmentNumber">Shipment #</key>
     <key alias="sku">SKU</key>
     <key alias="name">Name</key>
     <key alias="quantity">Qty</key>
@@ -623,6 +624,15 @@
     <!-- phrases -->
     <key alias="fulfillManually">Fulfill Manually</key>
     <key alias="createShipment">Create Shipment</key>
+    <key alias="noShipments">There are no shipments.</key>
+    <key alias="items">Items</key>
+    <key alias="origin">Origin</key>
+    <key alias="destination">Destination</key>
+    <key alias="editShipment">Edit Shipment</key>
+    <key alias="editOrigin">Edit Origin</key>
+    <key alias="editDestination">Edit Destination</key>
+    <key alias="deleteShipment">Delete Shipment</key>
+    <key alias="setSaleDestination">Set Sale Destination</key>
   </area>
   <area alias="merchelloWarehouse">
     <!-- things -->
