@@ -626,6 +626,7 @@
     <!-- phrases -->
     <key alias="fulfillManually">Handmatig verwerken</key>
     <key alias="createShipment">Aanmaken verzending</key>
+    <key alias="noShipments">Er zijn nog geen verzendingen.</key>
     <key alias="items">Stuks</key>
     <key alias="origin">Herkomst</key>
     <key alias="destination">Bestemming</key>
