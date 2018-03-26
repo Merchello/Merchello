@@ -851,9 +851,9 @@
     <key alias="dragAndReorderHelper">Als je de opties en varianten herschikt, dan zal het de volgorde wijzigen zoals deze te zien is aan de voorkant. Sleep de opties (bijv. maat, stijl verticaal en de varianten (bijv. vrouwen, klein) horizontaal.</key>
     <key alias="changePrices">Wijzig prijzen</key>
     <key alias="updateInventory">Bijwerken voorraad</key>
-    <key alias="toggleTracksInventory">Wel/Niet voorraad bijhouden</key>
-    <key alias="toggleAvailable">Toggle Available</key>
-    <key alias="toggleOnSale">Toggle On Sale</key>
+    <key alias="toggleTracksInventory">Wissel voorraadbeheersing</key>
+    <key alias="toggleAvailable">Wissel beschikbaarheid</key>
+    <key alias="toggleOnSale">Wissel Uitverkoop</key>
     <key alias="duplicateVariant"> Dubbele Variant</key>
     <key alias="inAnother">In een andere</key>
     <key alias="editOptions">Wijzig opties</key>
