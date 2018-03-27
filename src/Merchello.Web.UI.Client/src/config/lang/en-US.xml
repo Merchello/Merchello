@@ -685,6 +685,7 @@
     <key alias="enterOrder">Start typing an order number or name...</key>to
     <key alias="addStyle">Add a style...</key>
     <key alias="enterOffer">Enter a name for the offer</key>
+    <key alias="offerCodeExample">eg. 10OFF</key>
   </area>
 
   <area alias="merchelloSettings">

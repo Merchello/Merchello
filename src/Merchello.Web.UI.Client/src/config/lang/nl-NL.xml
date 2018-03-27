@@ -688,6 +688,7 @@
     <key alias="enterOrder">Typ een ordernummer of naam...</key>
     <key alias="addStyle">Voeg een stijl toe...</key>
     <key alias="enterOffer">Voer een naam in voor de aanbieding</key>
+    <key alias="offerCodeExample">Bijv. 10KORTING</key>
   </area>
 
   <area alias="merchelloSettings">
