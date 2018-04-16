@@ -4959,10 +4959,14 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
 
                         var dialogData = {
                             quantity: lineItem.quantity,
+                            sku: lineItem.sku,
+                            name: lineItem.name,
+                            price: lineItem.price,
                             lineItem: lineItem,
                             deleteLineItem: false,
                             canDelete: scope.invoice.items.length > 1,
-                            lineItemType: lineItemType
+                            lineItemType: lineItemType,
+                            editAllowed: lineItem.extendedData.getValue('merchCustomProduct') !== ''
                         };
 
                         dialogService.open({
@@ -4989,12 +4993,13 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                                     if (lineItemDialogData.lineItem.sku === item.sku) {
 
                                         // Make an invoice AddItemsModel
+                                        //TODO - Need to update to use OriginalSku
                                         invoiceAddItems = {
                                             InvoiceKey: scope.invoice.key,
                                             LineItemType: lineItemDialogData.lineItemType,
                                             Items: [
                                                 {
-                                                    Sku: item.sku,
+                                                    OriginalSku: item.sku,
                                                     Quantity: 0
                                                 }
                                             ]
@@ -5008,28 +5013,28 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
 
                         } else {
 
-                            // See if the quantity has changed and then        
+                            // Just send everything up and we'll deal with it on the server      
+                            // TODO - Need to manage all these on the server, check for product key
                             angular.forEach(scope.invoice.items, function (item) {
-                                if (keepFindingProduct) {
-                                    if (lineItemDialogData.lineItem.sku === item.sku
-                                        && lineItemDialogData.quantity !== item.quantity) {
-
+              
                                         // Make an invoice AddItemsModel
                                         invoiceAddItems = {
                                             InvoiceKey: scope.invoice.key,
                                             LineItemType: lineItemDialogData.lineItemType,
                                             Items: [
                                                 {
-                                                    Sku: item.sku,
                                                     Quantity: lineItemDialogData.quantity,
-                                                    OriginalQuantity: item.quantity
+                                                    OriginalQuantity: item.quantity,
+                                                    Sku: lineItemDialogData.sku,
+                                                    OriginalSku: item.sku,
+                                                    Name: lineItemDialogData.name,
+                                                    OriginalName: item.name,
+                                                    Price: lineItemDialogData.price,
+                                                    OriginalPrice: item.price,
+                                                    Key: item.key
                                                 }
                                             ]
                                         }
-
-                                        keepFindingProduct = false;
-                                    }   
-                                }
                             });                           
                         }
 

@@ -99,6 +99,11 @@
         DeleteProduct,
 
         /// <summary>
+        /// Used for custom products, where the name, qty, sku or price has been adjusted
+        /// </summary>
+        UpdateProductDetails,
+
+        /// <summary>
         ///     General Adjustment
         /// </summary>
         General

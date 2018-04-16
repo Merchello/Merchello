@@ -23,7 +23,32 @@
         /// <summary>
         ///     Whether or not it's a product variant key
         /// </summary>
-        public bool IsProductVariant { get; set; }
+        public bool IsProductVariant => Product == null;
+
+        /// <summary>
+        /// Whether or not this is a custom product so allows editing
+        /// </summary>
+        public bool NeedsUpdating
+        {
+            get
+            {
+                // Check both are null
+                if (Product == null && ProductVariant == null)
+                {
+                    // Now check data
+                    if (Quantity != OriginalQuantity ||
+                        Sku != OriginalSku ||
+                        Price != OriginalPrice || 
+                        Name != OriginalName)
+                    {
+                        // If we are here, something has changed
+                        return true;
+                    }
+                }
+
+                return false;
+            }            
+        }
 
         /// <summary>
         ///     The quantity to add
@@ -36,9 +61,34 @@
         public int OriginalQuantity { get; set; }
 
         /// <summary>
-        ///     Optional SKU
+        ///     The submitted SKU
         /// </summary>
         public string Sku { get; set; }
+
+        /// <summary>
+        ///     The submitted SKU
+        /// </summary>
+        public string OriginalSku { get; set; }
+
+        /// <summary>
+        /// Submitted Price
+        /// </summary>
+        public decimal Price { get; set; }
+
+        /// <summary>
+        /// Original Price
+        /// </summary>
+        public decimal OriginalPrice { get; set; }
+
+        /// <summary>
+        ///     The submitted Name
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        ///     The submitted Name
+        /// </summary>
+        public string OriginalName { get; set; }
 
         /// <summary>
         ///  The product 
