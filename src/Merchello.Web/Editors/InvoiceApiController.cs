@@ -636,7 +636,7 @@
             {
                 if (iosLineItem.HasShipment)
                 {
-                    invoiceAdjustmentResult.Message = $"Unable to update, as {iosLineItem.Name} is in a shipment.";
+                    invoiceAdjustmentResult.Message = string.Format("Unable to update, as {0} is in a shipment.", iosLineItem.Name);
                     invoiceAdjustmentResult.Success = false;
                     return invoiceAdjustmentResult;
                 }
