@@ -35,7 +35,10 @@ namespace Merchello.Core.Models
         /// <summary>
         /// Does this invoice have an order
         /// </summary>
-        public bool HasOrders => Orders.Any();
+        public bool HasOrders
+        {
+            get { return Orders.Any(); }
+        }
 
         /// <summary>
         /// Line items
@@ -71,12 +74,18 @@ namespace Merchello.Core.Models
         /// <summary>
         /// Has a shipment been created
         /// </summary>
-        public bool HasShipment => ShipmentId != null;
+        public bool HasShipment
+        {
+            get { return ShipmentId != null; }
+        }
 
         /// <summary>
         /// Is there an associated order line item
         /// </summary>
-        public bool HasAssociatedOrderLineItem => OrderLineItemId != null;
+        public bool HasAssociatedOrderLineItem
+        {
+            get { return OrderLineItemId != null; }
+        }
 
         /// <summary>
         /// Can this line item be updated
