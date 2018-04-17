@@ -724,7 +724,7 @@
                 invOrderShip.Orders = orders;
            
                 // Add the invoice items
-                foreach (var invLineItem in invoice.Items)
+                foreach (var invLineItem in invoice.Items.Where(x => x.LineItemType == LineItemType.Product))
                 {
                     invOrderShip.LineItems.Add(new InvoiceOrderShipmentLineItem
                     {

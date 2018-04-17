@@ -32,22 +32,18 @@
         {
             get
             {
-                // Check both are null
-                if (Product == null && ProductVariant == null)
+                // Now check data
+                if (Quantity != OriginalQuantity ||
+                    Sku != OriginalSku ||
+                    Price != OriginalPrice ||
+                    Name != OriginalName)
                 {
-                    // Now check data
-                    if (Quantity != OriginalQuantity ||
-                        Sku != OriginalSku ||
-                        Price != OriginalPrice || 
-                        Name != OriginalName)
-                    {
-                        // If we are here, something has changed
-                        return true;
-                    }
+                    // If we are here, something has changed
+                    return true;
                 }
 
                 return false;
-            }            
+            }
         }
 
         /// <summary>
