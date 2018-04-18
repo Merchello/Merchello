@@ -23,7 +23,10 @@
         /// <summary>
         ///     Whether or not it's a product variant key
         /// </summary>
-        public bool IsProductVariant => Product == null;
+        public bool IsProductVariant
+        {
+            get { return Product == null; }
+        }
 
         /// <summary>
         /// Whether or not this is a custom product so allows editing
