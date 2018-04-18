@@ -1677,7 +1677,7 @@
             if (numbers.Any() && terms.Any())
             {
                 sql.Where(
-                    "billToName LIKE @term OR billToEmail LIKE @email OR billToAddress1 LIKE @adr1 OR billToLocality LIKE @loc OR invoiceNumber IN (@invNo) OR billToPostalCode IN (@postal)",
+                    "billToName LIKE @term OR billToEmail LIKE @email OR poNumber LIKE @ponumber OR billToAddress1 LIKE @adr1 OR billToLocality LIKE @loc OR invoiceNumber IN (@invNo) OR billToPostalCode IN (@postal)",
                     new
                         {
                             @term = string.Format("%{0}%", string.Join("% ", terms)).Trim(),
@@ -1685,7 +1685,8 @@
                             @adr1 = string.Format("%{0}%", string.Join("%", terms)).Trim(),
                             @loc = string.Format("%{0}%", string.Join("%", terms)).Trim(),
                             @invNo = numbers.ToArray(),
-                            @postal = string.Format("%{0}%", string.Join("%", terms)).Trim()
+                            @postal = string.Format("%{0}%", string.Join("%", terms)).Trim(),
+                            @ponumber = string.Format("%{0}%", string.Join("% ", terms)).Trim()
                     });
             }
             else if (numbers.Any())

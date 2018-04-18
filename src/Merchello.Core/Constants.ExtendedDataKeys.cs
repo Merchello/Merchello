@@ -625,6 +625,18 @@
                 }
             }
 
+            /// <summary>
+            /// Gets the key for flagging a product lineitem as custom
+            /// This will enable editing of the line item in a dialog
+            /// </summary>
+            public static string ProductIsCustom
+            {
+                get
+                {
+                    return "merchCustomProduct";
+                }
+            }
+
         }
     }
 }

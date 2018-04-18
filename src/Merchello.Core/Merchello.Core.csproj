@@ -522,6 +522,7 @@
     <Compile Include="Models\Interfaces\IDeepCloneable.cs" />
     <Compile Include="Models\Interfaces\IShallowClone.cs" />
     <Compile Include="Models\InvoiceAdjustmentResult.cs" />
+    <Compile Include="Models\InvoiceOrderShipment.cs" />
     <Compile Include="Models\Querying\QueryBuilderParameter.cs" />
     <Compile Include="Models\Querying\FieldMatchCondition.cs" />
     <Compile Include="Models\Rdbms\CountDto.cs" />

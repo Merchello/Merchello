@@ -84,19 +84,14 @@
         AddProducts,
 
         /// <summary>
-        ///     Increasing the quantity of an existing product line item
-        /// </summary>
-        IncreaseProductQuantity,
-
-        /// <summary>
-        ///     Decreasing the quantity of an existing product line item
-        /// </summary>
-        DecreaseProductQuantity,
-
-        /// <summary>
         ///     Deleting a product line item
         /// </summary>
         DeleteProduct,
+
+        /// <summary>
+        /// Used for custom products, where the name, qty, sku or price has been adjusted
+        /// </summary>
+        UpdateProductDetails,
 
         /// <summary>
         ///     General Adjustment

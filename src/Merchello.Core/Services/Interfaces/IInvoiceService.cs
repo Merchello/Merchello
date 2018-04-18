@@ -203,6 +203,13 @@
         /// </returns>
         IEnumerable<string> GetDistinctCurrencyCodes();
 
+        /// <summary>
+        /// Gets a InvoiceOrderShipment structure
+        /// </summary>
+        /// <param name="invoiceId"></param>
+        /// <returns></returns>
+        InvoiceOrderShipment GetInvoiceOrderShipment(Guid invoiceId);
+
         ///// <summary>
         ///// Gets a <see cref="Page{IInvoice}"/>
         ///// </summary>
