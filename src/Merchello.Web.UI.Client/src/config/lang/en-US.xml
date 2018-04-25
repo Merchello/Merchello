@@ -904,5 +904,7 @@
     <key alias="productDeleteSuccess">Product Deleted</key>
     <key alias="productDeleteError">Product Deletion Failed</key>
     <key alias="customerSaveSuccess">Customer Saved</key>
+    <key alias="customerSaveError">Customer Save Failed</key>
+    <key alias="customerSaveInProgress">Saving Customer...</key>
   </area>
 </language>

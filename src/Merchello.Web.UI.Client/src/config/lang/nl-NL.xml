@@ -900,12 +900,14 @@
   <!-- NotificationService Messages -->
   <area alias="merchelloStatusNotifications">
     <key alias="couponSaveSuccess">Coupon is goed opgeslagen</key>
-    <key alias="couponSaveError">Coupon opslaan is niet gelukt</key>
+    <key alias="couponSaveError">Coupon opslaan is mislukt</key>
     <key alias="productSaveSuccess">Product opgeslagen</key>
     <key alias="productSaveInProgress">Bezig met opslaan product...</key>
-    <key alias="productSaveError">Product opslaan niet gelukt</key>
+    <key alias="productSaveError">Product opslaan is mislukt</key>
     <key alias="productDeleteSuccess">Product is verwijderd</key>
-    <key alias="productDeleteError">Product verwijderen is niet gelukt</key>
-    <key alias="customerSaveSuccess">Klantgegevens zijn opgeslagen</key>
+    <key alias="productDeleteError">Product verwijderen is mislukt</key>
+    <key alias="customerSaveSuccess">Klant is opgeslagen</key>
+    <key alias="customerSaveError">Klant opslaan is mislukt</key>
+    <key alias="customerSaveInProgress">Bezig met opslaan van klant...</key>
   </area>
 </language>

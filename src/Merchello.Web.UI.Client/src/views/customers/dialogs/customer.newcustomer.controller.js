@@ -37,7 +37,7 @@ angular.module('merchello').controller('Merchello.Customer.Dialogs.CustomerNewCu
                         navigationService.hideNavigation();
                         $location.url("/merchello/merchello/customeroverview/" + customerResponse.key, true);
                     }, function (reason) {
-                        notificationsService.error("Customer Save Failed", reason.message);
+                        notificationsService.error(localizationService.localize("merchelloStatusNotifications_customerSaveError"), reason.message);
                     });
                 }
             }

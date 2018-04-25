@@ -509,7 +509,7 @@
              */
             function saveCustomer() {
                 $scope.preValuesLoaded = false;
-                notificationsService.info("Saving...", "");
+                notificationsService.info(localizationService.localize("merchelloStatusNotifications_customerSaveSuccess"), "");
                 var promiseSaveCustomer = customerResource.SaveCustomer($scope.customer);
                 promiseSaveCustomer.then(function(customerResponse) {
                     $timeout(function() {
@@ -518,7 +518,7 @@
                     }, 400);
 
                 }, function(reason) {
-                    notificationsService.error("Customer  Failed", reason.message);
+                    notificationsService.error(localizationService.localize("merchelloStatusNotifications_customerSaveError"), reason.message);
                 });
             }
 
