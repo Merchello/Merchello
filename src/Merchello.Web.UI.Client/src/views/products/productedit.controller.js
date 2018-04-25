@@ -204,7 +204,7 @@
             function createProduct() {
                 var promise = productResource.add($scope.product);
                 promise.then(function (product) {
-                    notificationsService.success("Product Saved", "");
+                    notificationsService.success(localizationService.localize("merchelloStatusNotifications_productSaveSuccess"), "");
                     $scope.product = productDisplayBuilder.transform(product);
                     // short pause to make sure examine index has a chance to update
                     $timeout(function() {
@@ -216,7 +216,7 @@
                     }, 400);
                     $scope.preValuesLoaded = true;
                 }, function (reason) {
-                    notificationsService.error("Product Save Failed", reason.message);
+                    notificationsService.error(localizationService.localize("merchelloStatusNotifications_productSaveError"), reason.message);
                 });
             }
 
@@ -231,7 +231,7 @@
             function saveProduct() {
                 var promise = productResource.save($scope.product);
                 promise.then(function (product) {
-                    notificationsService.success("Product Saved", "");
+                    notificationsService.success(localizationService.localize("merchelloStatusNotifications_productSaveSuccess"), "");
                     $scope.product = productDisplayBuilder.transform(product);
                     $scope.productVariant = $scope.product.getMasterVariant();
 
@@ -246,7 +246,7 @@
 
                     $scope.preValuesLoaded = true;
                 }, function (reason) {
-                    notificationsService.error("Product Save Failed", reason.message);
+                    notificationsService.error(localizationService.localize("merchelloStatusNotifications_productSaveError"), reason.message);
                 });
             }
 

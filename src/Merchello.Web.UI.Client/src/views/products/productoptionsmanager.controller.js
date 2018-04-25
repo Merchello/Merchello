@@ -116,7 +116,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductOptionsManag
                 return;
             }
             if (thisForm.$valid) {
-                notificationsService.info("Saving Product...", "");
+                notificationsService.info(localizationService.localize("merchelloStatusNotifications_productSaveInProgress"), "");
 
                 $scope.product.productOptions = _.sortBy($scope.product.productOptions, function (po) {
                     return po.sortOrder;
@@ -124,11 +124,11 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductOptionsManag
 
                 $scope.preValuesLoaded = false;
                 productResource.save($scope.product).then(function (product) {
-                    notificationsService.success("Product Saved", "");
+                    notificationsService.success(localizationService.localize("merchelloStatusNotifications_productSaveSuccess"), "");
                     $scope.product = productDisplayBuilder.transform(product);
                     setTabs();
                 }, function (reason) {
-                    notificationsService.error("Product Save Failed", reason.message);
+                    notificationsService.error(localizationService.localize("merchelloStatusNotifications_productSaveError"), reason.message);
                 });
             }
         }

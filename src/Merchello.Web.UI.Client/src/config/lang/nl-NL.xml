@@ -895,5 +895,14 @@
   <!-- Merchello Property Editors -->
   <area alias="merchelloCollectionPicker">
     <key alias="config">Collectie(s) toewijzen</key>
-  </area>  
+  </area>
+
+  <!-- NotificationService Messages -->
+  <area alias="merchelloStatusNotifications">
+    <key alias="couponSaveSuccess">Coupon is goed opgeslagen</key>
+    <key alias="couponSaveError">Coupon opslaan is niet gelukt</key>
+    <key alias="productSaveSuccess">Product opgeslagen</key>
+    <key alias="productSaveInProgress">Bezig met opslaan product...</key>
+    <key alias="productSaveError">Product opslaan niet gelukt</key>
+  </area>
 </language>

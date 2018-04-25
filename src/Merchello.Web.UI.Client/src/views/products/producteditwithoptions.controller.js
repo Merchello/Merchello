@@ -85,13 +85,13 @@
             function save(thisForm) {
                 if (thisForm) {
                     if (thisForm.$valid) {
-                        notificationsService.info("Saving Product...", "");
+                        notificationsService.info(localizationService.localize("merchelloStatusNotifications_productSaveInProgress"), "");
                         var promise = productResource.save($scope.product);
                         promise.then(function (product) {
-                            notificationsService.success("Product Saved", "");
+                            notificationsService.success(localizationService.localize("merchelloStatusNotifications_productSaveSuccess"), "");
                             $scope.product = productDisplayBuilder.transform(product);
                         }, function (reason) {
-                            notificationsService.error("Product Save Failed", reason.message);
+                            notificationsService.error(localizationService.localize("merchelloStatusNotifications_productSaveError"), reason.message);
                         });
                     }
                 }

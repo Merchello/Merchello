@@ -895,8 +895,11 @@
   </area>
 
   <!-- NotificationService Messages -->
-  <area alias="merchelloNotification">
-    <key alias="successCouponSave">Successfully saved the coupon.</key>
-    <key alias="failCouponSave">Failed to save coupon.</key>
-  </area>  
+  <area alias="merchelloStatusNotifications">
+    <key alias="couponSaveSuccess">Coupon Saved</key>
+    <key alias="couponSaveError">Coupon Save Failed</key>
+    <key alias="productSaveSuccess">Product Saved</key>
+    <key alias="productSaveInProgress">Saving Product...</key>
+    <key alias="productSaveError">Product Save Failed</key>
+  </area>
 </language>
