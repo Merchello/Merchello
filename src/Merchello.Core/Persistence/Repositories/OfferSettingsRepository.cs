@@ -33,17 +33,14 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="logger">
         /// The logger.
         /// </param>
         /// <param name="sqlSyntax">
         /// The SQL Syntax.
         /// </param>
-        public OfferSettingsRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
-            : base(work, cache, logger, sqlSyntax)
+        public OfferSettingsRepository(IDatabaseUnitOfWork work, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {
         }
 
@@ -147,22 +144,31 @@
         /// </returns>
         protected override IEnumerable<IOfferSettings> PerformGetAll(params Guid[] keys)
         {
+
+            var dtos = new List<OfferSettingsDto>();
+
             if (keys.Any())
             {
-                foreach (var key in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    yield return Get(key);
+                    dtos.AddRange(Database.Fetch<OfferSettingsDto>(GetBaseQuery(false).WhereIn<OfferSettingsDto>(x => x.Key, keyList, SqlSyntax)));
                 }
             }
             else
             {
-                var factory = new OfferSettingsFactory();
-                var dtos = Database.Fetch<OfferSettingsDto>(GetBaseQuery(false));
-                foreach (var dto in dtos)
-                {
-                    yield return factory.BuildEntity(dto);
-                }
+                dtos = Database.Fetch<OfferSettingsDto>(GetBaseQuery(false));
             }
+
+            var factory = new OfferSettingsFactory();
+            foreach (var dto in dtos)
+            {
+                yield return factory.BuildEntity(dto);
+            }
+
         }
 
         /// <summary>
@@ -265,9 +271,6 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
-
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IOfferSettings>(entity.Key));
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IItemCache>(entity.Key));
         }
 
         /// <summary>

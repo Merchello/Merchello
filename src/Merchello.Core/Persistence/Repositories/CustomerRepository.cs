@@ -39,9 +39,6 @@
         /// <param name="work">
         /// The database unit of work
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="customerAddressRepository">
         /// The customer Address Repository.
         /// </param>
@@ -56,12 +53,11 @@
         /// </param>
         public CustomerRepository(
             IDatabaseUnitOfWork work, 
-            CacheHelper cache, 
             ICustomerAddressRepository customerAddressRepository, 
             INoteRepository noteRepository,
             ILogger logger, 
             ISqlSyntaxProvider sqlSyntax) 
-            : base(work, cache, logger, sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {
             Mandate.ParameterNotNull(customerAddressRepository, "customerAddressRepository");
             Mandate.ParameterNotNull(noteRepository, "noteRepository");
@@ -764,22 +760,49 @@
         /// </returns>
         protected override IEnumerable<ICustomer> PerformGetAll(params Guid[] keys)
         {
+
+            var dtos = new List<CustomerDto>();
+
             if (keys.Any())
             {
-                foreach (var key in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    yield return Get(key);
+                    dtos.AddRange(Database.Fetch<CustomerDto, CustomerIndexDto>(GetBaseQuery(false).WhereIn<CustomerDto>(x => x.Key, keyList, SqlSyntax)));
                 }
             }
             else
             {
-                var factory = new CustomerFactory();
-                var dtos = Database.Fetch<CustomerDto, CustomerIndexDto>(GetBaseQuery(false));
-                foreach (var dto in dtos)
-                {                    
-                    yield return factory.BuildEntity(dto, _customerAddressRepository.GetByCustomerKey(dto.Key), GetNotes(dto.Key));
-                }
+                dtos = Database.Fetch<CustomerDto, CustomerIndexDto>(GetBaseQuery(false));
             }
+
+            var factory = new CustomerFactory();
+            foreach (var dto in dtos)
+            {
+                yield return factory.BuildEntity(dto, _customerAddressRepository.GetByCustomerKey(dto.Key), GetNotes(dto.Key));
+            }
+
+
+            // TODO - Not sure if the above is correct so keeping original query
+            //if (keys.Any())
+            //{
+            //    foreach (var key in keys)
+            //    {
+            //        yield return Get(key);
+            //    }
+            //}
+            //else
+            //{
+            //    var factory = new CustomerFactory();
+            //    var dtos = Database.Fetch<CustomerDto, CustomerIndexDto>(GetBaseQuery(false));
+            //    foreach (var dto in dtos)
+            //    {                    
+            //        yield return factory.BuildEntity(dto, _customerAddressRepository.GetByCustomerKey(dto.Key), GetNotes(dto.Key));
+            //    }
+            //}
         }
 
         /// <summary>
@@ -857,9 +880,6 @@
             SaveNotes(entity);
 
             entity.ResetDirtyProperties();
-
-            // customer context cache
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.CustomerCacheKey(entity.Key));
         }
 
         /// <summary>
@@ -880,9 +900,6 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
-
-            // customer context cache
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.CustomerCacheKey(entity.Key));
         }
 
         /// <summary>
@@ -898,9 +915,6 @@
             {
                 Database.Execute(delete, new { Key = entity.Key });
             }
-
-            // customer context cache
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.CustomerCacheKey(entity.Key));
         }
 
         /// <summary>
@@ -987,8 +1001,6 @@
                     u.Key = dto.Key;
                 }
 
-                var cacheKey = Cache.CacheKeys.GetEntityCacheKey<INote>(u.Key);
-                RuntimeCache.ClearCacheItem(cacheKey);
             }
 
         }

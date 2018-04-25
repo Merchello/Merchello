@@ -25,7 +25,28 @@
                     <div class="control-group" ng-show="!dialogData.deleteLineItem">
                         <div class="form-group">
                             <label>Qty</label>
-                            <input type="number" class="form-control" min="1" ng-model="dialogData.quantity" />
+                            <input type="number" class="umb-editor umb-textstring textstring" min="1" ng-model="dialogData.quantity" />
+                        </div>
+                    </div>
+                    
+                    <div class="control-group" ng-show="!dialogData.deleteLineItem && dialogData.editAllowed">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <textarea class="umb-editor umb-textstring textstring" ng-model="dialogData.name"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group" ng-show="!dialogData.deleteLineItem && dialogData.editAllowed">
+                        <div class="form-group">
+                            <label>Sku</label>
+                            <input type="text" class="umb-editor umb-textstring textstring" ng-model="dialogData.sku" />
+                        </div>
+                    </div>
+                    
+                    <div class="control-group" ng-show="!dialogData.deleteLineItem && dialogData.editAllowed">
+                        <div class="form-group">
+                            <label>Price</label>
+                            <input type="number" class="umb-editor umb-textstring textstring" ng-model="dialogData.price" />
                         </div>
                     </div>
                 

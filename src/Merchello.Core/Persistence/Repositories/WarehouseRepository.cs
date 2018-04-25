@@ -35,9 +35,6 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="warehouseCatalogRepository">
         /// The warehouse Catalog Repository.
         /// </param>
@@ -47,8 +44,8 @@
         /// <param name="sqlSyntax">
         /// The SQL Syntax.
         /// </param>
-        public WarehouseRepository(IDatabaseUnitOfWork work, CacheHelper cache, IWarehouseCatalogRepository warehouseCatalogRepository, ILogger logger, ISqlSyntaxProvider sqlSyntax)
-            : base(work, cache, logger, sqlSyntax)
+        public WarehouseRepository(IDatabaseUnitOfWork work, IWarehouseCatalogRepository warehouseCatalogRepository, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {
             Mandate.ParameterNotNull(warehouseCatalogRepository, "warehouseCatalogRepository");
 
@@ -93,21 +90,29 @@
         /// </returns>
         protected override IEnumerable<IWarehouse> PerformGetAll(params Guid[] keys)
         {
+
+            var dtos = new List<WarehouseDto>();
+
             if (keys.Any())
             {
-                foreach (var key in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    yield return Get(key);
+                    dtos.AddRange(Database.Fetch<WarehouseDto>(GetBaseQuery(false).WhereIn<WarehouseDto>(x => x.Key, keyList, SqlSyntax)));
                 }
             }
             else
             {
-                var factory = new WarehouseFactory();
-                var dtos = Database.Fetch<WarehouseDto>(GetBaseQuery(false));
-                foreach (var dto in dtos)
-                {
-                    yield return factory.BuildEntity(dto, _warehouseCatalogRepository.GetWarehouseCatalogsByWarehouseKey(dto.Key));
-                }
+                dtos = Database.Fetch<WarehouseDto>(GetBaseQuery(false));
+            }
+
+            var factory = new WarehouseFactory();
+            foreach (var dto in dtos)
+            {
+                yield return factory.BuildEntity(dto, _warehouseCatalogRepository.GetWarehouseCatalogsByWarehouseKey(dto.Key));
             }
         }
 
@@ -195,8 +200,6 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
-
-            RuntimeCache.ClearCacheItem(Core.Cache.CacheKeys.GetEntityCacheKey<IWarehouse>(entity.Key));
         }
 
         /// <summary>
@@ -212,8 +215,6 @@
             {
                 Database.Execute(delete, new { Key = entity.Key });
             }
-
-            RuntimeCache.ClearCacheItem(Core.Cache.CacheKeys.GetEntityCacheKey<IWarehouse>(entity.Key));
         }
 
         /// <summary>

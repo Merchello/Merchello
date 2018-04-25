@@ -30,17 +30,14 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="logger">
         /// The logger.
         /// </param>
         /// <param name="sqlSyntax">
         /// The SQL syntax.
         /// </param>
-        public PaymentRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
-            : base(work, cache, logger, sqlSyntax)
+        public PaymentRepository(IDatabaseUnitOfWork work, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {
         }
 
@@ -83,21 +80,29 @@
         /// </returns>
         protected override IEnumerable<IPayment> PerformGetAll(params Guid[] keys)
         {
+
+            var dtos = new List<PaymentDto>();
+
             if (keys.Any())
             {
-                foreach (var id in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    yield return Get(id);
+                    dtos.AddRange(Database.Fetch<PaymentDto>(GetBaseQuery(false).WhereIn<PaymentDto>(x => x.Key, keyList, SqlSyntax)));
                 }
             }
             else
             {
-                var factory = new PaymentFactory();
-                var dtos = Database.Fetch<PaymentDto>(GetBaseQuery(false));
-                foreach (var dto in dtos)
-                {
-                    yield return factory.BuildEntity(dto);
-                }
+                dtos = Database.Fetch<PaymentDto>(GetBaseQuery(false));
+            }
+
+            var factory = new PaymentFactory();
+            foreach (var dto in dtos)
+            {
+                yield return factory.BuildEntity(dto);
             }
         }
 
@@ -185,8 +190,6 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
-
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IPayment>(entity.Key));
         }
 
         /// <summary>
@@ -201,7 +204,6 @@
             foreach (var delete in deletes)
             {
                 Database.Execute(delete, new { entity.Key });
-                RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IPayment>(entity.Key));
             }
         }
 

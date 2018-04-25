@@ -33,9 +33,6 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="itemCacheLineItemRepository">
         /// The item cache line item repository.
         /// </param>
@@ -45,8 +42,8 @@
         /// <param name="sqlSyntax">
         /// The SQL syntax.
         /// </param>
-        public ItemCacheRepository(IDatabaseUnitOfWork work, CacheHelper cache, IItemCacheLineItemRepository itemCacheLineItemRepository, ILogger logger, ISqlSyntaxProvider sqlSyntax)
-            : base(work, cache, logger, sqlSyntax)
+        public ItemCacheRepository(IDatabaseUnitOfWork work, IItemCacheLineItemRepository itemCacheLineItemRepository, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {
             _itemCacheLineItemRepository = itemCacheLineItemRepository;
         }
@@ -189,21 +186,53 @@
         /// </returns>
         protected override IEnumerable<IItemCache> PerformGetAll(params Guid[] keys)
         {
+            var dtos = new List<ItemCacheDto>();
+
             if (keys.Any())
             {
-                foreach (var key in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    yield return Get(key);
+                    dtos.AddRange(Database.Fetch<ItemCacheDto>(GetBaseQuery(false).WhereIn<ItemCacheDto>(x => x.Key, keyList, SqlSyntax)));
                 }
             }
             else
-            {                
-                var dtos = Database.Fetch<ItemCacheDto>(GetBaseQuery(false));
-                foreach (var dto in dtos)
-                {
-                    yield return Get(dto.Key);
-                }
+            {
+                dtos = Database.Fetch<ItemCacheDto>(GetBaseQuery(false));
             }
+
+            var factory = new ItemCacheFactory();
+            foreach (var dto in dtos)
+            {
+                var itemCache = factory.BuildEntity(dto);
+
+                ((ItemCache)itemCache).Items = GetLineItemCollection(itemCache.Key);
+
+                itemCache.ResetDirtyProperties();
+
+                yield return itemCache;
+            }
+
+
+            // TODO - Original Code
+            //if (keys.Any())
+            //{
+            //    foreach (var key in keys)
+            //    {
+            //        yield return Get(key);
+            //    }
+            //}
+            //else
+            //{                
+            //    var dtos = Database.Fetch<ItemCacheDto>(GetBaseQuery(false));
+            //    foreach (var dto in dtos)
+            //    {
+            //        yield return Get(dto.Key);
+            //    }
+            //}
         }
 
         #endregion
@@ -294,8 +323,6 @@
             _itemCacheLineItemRepository.SaveLineItem(entity.Items, entity.Key);
 
             entity.ResetDirtyProperties();
-
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IItemCache>(entity.Key));
         }
 
         /// <summary>
@@ -310,7 +337,6 @@
             foreach (var delete in deletes)
             {
                 Database.Execute(delete, new { Key = entity.Key });
-                RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IItemCache>(entity.Key));
             }
         }
 

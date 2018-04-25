@@ -705,6 +705,63 @@
             }
         }
 
+        /// <inheritdoc />
+        public InvoiceOrderShipment GetInvoiceOrderShipment(Guid invoiceId)
+        {
+            // Get the invoice by key
+            var invoice = GetByKey(invoiceId);
+
+            // Create the model
+            var invOrderShip = new InvoiceOrderShipment();
+
+            if (invoice != null)
+            {
+                // Now get the order associated with the invoice
+                var orders = invoice.Orders;
+
+                // Create the model
+                invOrderShip.Invoice = invoice;
+                invOrderShip.Orders = orders;
+           
+                // Add the invoice items
+                foreach (var invLineItem in invoice.Items.Where(x => x.LineItemType == LineItemType.Product))
+                {
+                    invOrderShip.LineItems.Add(new InvoiceOrderShipmentLineItem
+                    {
+                        Sku = invLineItem.Sku,
+                        Name = invLineItem.Name,
+                        Price = invLineItem.Price,
+                        InvoiceLineItemId = invLineItem.Key,
+                        ItemId = invLineItem.LineItemTfKey,
+                        Qty = invLineItem.Quantity
+                    });
+                }
+
+                // Sort the orders and the shipments
+                if (orders.Any())
+                {
+                    foreach (var order in orders)
+                    {
+                        foreach (var orderItem in order.Items)
+                        {
+                            foreach (var invoiceOrderShipmentLineItem in invOrderShip.LineItems)
+                            {
+                                if (invoiceOrderShipmentLineItem.Sku == orderItem.Sku)
+                                {
+                                    invoiceOrderShipmentLineItem.OrderId = order.Key;
+                                    invoiceOrderShipmentLineItem.OrderLineItemId = orderItem.Key;
+                                    invoiceOrderShipmentLineItem.ShipmentId = ((IOrderLineItem)orderItem).ShipmentKey;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return invOrderShip;
+        }
+
         /// <summary>
         /// Gets an <see cref="IInvoiceStatus"/> by it's key
         /// </summary>

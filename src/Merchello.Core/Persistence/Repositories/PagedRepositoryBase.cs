@@ -3,15 +3,9 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
-    using Merchello.Core.Logging;
-
     using Models.EntityBase;
     using Models.Rdbms;
     using Querying;
-
-    using Umbraco.Core;
-    using Umbraco.Core.Cache;
     using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
@@ -38,17 +32,14 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="logger">
         /// The logger.
         /// </param>
         /// <param name="sqlSyntax">
         /// The SQL Syntax.
         /// </param>
-        protected PagedRepositoryBase(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax) 
-            : base(work, cache, logger, sqlSyntax)
+        protected PagedRepositoryBase(IDatabaseUnitOfWork work, ILogger logger, ISqlSyntaxProvider sqlSyntax) 
+            : base(work, logger, sqlSyntax)
         {
         }
 
@@ -265,15 +256,5 @@
             };
         }
 
-        protected Page<Guid> TryGetCachedPageOfKeys(string cacheKey)
-        {
-          
-            return (Page<Guid>)RequestCache.GetCacheItem(cacheKey);
-        }
-
-        protected Page<Guid> CachePageOfKeys(string cacheKey, Page<Guid> result)
-        {
-            return (Page<Guid>)RequestCache.GetCacheItem(cacheKey, () => result);
-        }
     }
 }

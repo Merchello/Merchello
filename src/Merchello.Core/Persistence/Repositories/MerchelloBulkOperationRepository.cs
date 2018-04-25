@@ -42,9 +42,6 @@
         /// <param name="work">
         /// The database unit of work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="logger">
         /// The logger.
         /// </param>
@@ -54,8 +51,8 @@
         /// <param name="factory">
         /// The factory.
         /// </param>
-        protected MerchelloBulkOperationRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax, Func<IEntityFactory<TEntity, TDto>> factory)
-            : base(work, cache, logger, sqlSyntax)
+        protected MerchelloBulkOperationRepository(IDatabaseUnitOfWork work, ILogger logger, ISqlSyntaxProvider sqlSyntax, Func<IEntityFactory<TEntity, TDto>> factory)
+            : base(work, logger, sqlSyntax)
         {
             _factory = factory;
         }

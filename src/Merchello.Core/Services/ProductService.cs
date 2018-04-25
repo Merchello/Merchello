@@ -35,7 +35,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// The valid sort fields.
         /// </summary>
-        private static readonly string[] ValidSortFields = { "sku", "name", "price" };
+        private static readonly string[] ValidSortFields = { "sku", "name", "price", "saleprice" };
 
         /// <summary>
         /// The product variant service.

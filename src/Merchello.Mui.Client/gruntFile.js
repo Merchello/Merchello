@@ -28,7 +28,7 @@
             '/*! <%= pkg.title || pkg.name %>\n' +
             '<%= pkg.homepage ? " * " + pkg.homepage + "\\n" : "" %>' +
             ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>.\n' +
-            ' * Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %>\n */\n',
+            ' * Licensed <%= _.map(pkg.licenses, "type").join(", ") %>\n */\n',
         
         // file locations
         src: {

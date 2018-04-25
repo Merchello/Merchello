@@ -154,7 +154,7 @@
         /// </returns>
         internal virtual IAppliedPaymentRepository CreateAppliedPaymentRepository(IDatabaseUnitOfWork uow)
         {
-            return new AppliedPaymentRepository(uow, _cacheHelper, _logger, _sqlSyntax);
+            return new AppliedPaymentRepository(uow, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -168,7 +168,7 @@
         /// </returns>
         internal virtual IAuditLogRepository CreateAuditLogRepository(IDatabaseUnitOfWork uow)
         {
-            return new AuditLogRepository(uow, _cacheHelper, _logger, _sqlSyntax);
+            return new AuditLogRepository(uow, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -182,7 +182,7 @@
         /// </returns>
         internal virtual INoteRepository CreateNoteRepository(IDatabaseUnitOfWork uow)
         {
-            return new NoteRepository(uow, _cacheHelper, _logger, _sqlSyntax);
+            return new NoteRepository(uow, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -196,7 +196,7 @@
         /// </returns>
         internal virtual ICustomerRepository CreateCustomerRepository(IDatabaseUnitOfWork uow)
         {
-            return new CustomerRepository(uow, _cacheHelper, CreateCustomerAddressRepository(uow), CreateNoteRepository(uow), _logger, _sqlSyntax);
+            return new CustomerRepository(uow, CreateCustomerAddressRepository(uow), CreateNoteRepository(uow), _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -210,7 +210,7 @@
         /// </returns>
         internal virtual IAnonymousCustomerRepository CreateAnonymousCustomerRepository(IDatabaseUnitOfWork uow)
         {
-            return new AnonymousCustomerRepository(uow, _cacheHelper, _logger, _sqlSyntax);                
+            return new AnonymousCustomerRepository(uow, _logger, _sqlSyntax);                
         }
 
         /// <summary>
@@ -224,7 +224,7 @@
         /// </returns>
         internal virtual ICustomerAddressRepository CreateCustomerAddressRepository(IDatabaseUnitOfWork uow)
         {
-            return new CustomerAddressRepository(uow, _cacheHelper, _logger, _sqlSyntax);
+            return new CustomerAddressRepository(uow, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -238,7 +238,7 @@
         /// </returns>
         internal virtual IDigitalMediaRepository CreateDigitalMediaRepository(IDatabaseUnitOfWork uow)
         {
-            return new DigitalMediaRepository(uow, _cacheHelper, _logger, _sqlSyntax);
+            return new DigitalMediaRepository(uow, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -252,7 +252,7 @@
         /// </returns>
         internal virtual IDetachedContentTypeRepository CreateDetachedContentTypeRepository(IDatabaseUnitOfWork uow)
         {
-            return new DetachedContentTypeRepository(uow, _cacheHelper, _logger, _sqlSyntax);
+            return new DetachedContentTypeRepository(uow, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -266,7 +266,7 @@
         /// </returns>
         internal virtual IEntityCollectionRepository CreateEntityCollectionRepository(IDatabaseUnitOfWork uow)
         {
-            return new EntityCollectionRepository(uow, _cacheHelper, _logger, _sqlSyntax);
+            return new EntityCollectionRepository(uow, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -276,7 +276,7 @@
         /// <returns>The <see cref="IItemCacheRepository"/></returns>        
         internal virtual IItemCacheRepository CreateItemCacheRepository(IDatabaseUnitOfWork uow)
         {
-            return new ItemCacheRepository(uow, _cacheHelper, CreateCacheLineItemRespository(uow), _logger, _sqlSyntax);
+            return new ItemCacheRepository(uow, CreateCacheLineItemRespository(uow), _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -290,7 +290,7 @@
         /// </returns>
         internal virtual IItemCacheLineItemRepository CreateCacheLineItemRespository(IDatabaseUnitOfWork uow)
         {
-            return new ItemCacheLineItemRepository(uow, _cacheHelper, _logger, _sqlSyntax);
+            return new ItemCacheLineItemRepository(uow, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -306,7 +306,6 @@
         {
             return new InvoiceRepository(
                 uow,
-                _cacheHelper,
                 CreateInvoiceLineItemRepository(uow),
                 CreateOrderRepository(uow),
                 CreateNoteRepository(uow), 
@@ -325,7 +324,7 @@
         /// </returns>
         internal virtual IInvoiceLineItemRepository CreateInvoiceLineItemRepository(IDatabaseUnitOfWork uow)
         {
-            return new InvoiceLineItemRepository(uow, _cacheHelper, _logger, _sqlSyntax);
+            return new InvoiceLineItemRepository(uow, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -339,7 +338,7 @@
         /// </returns>
         internal virtual IInvoiceStatusRepository CreateInvoiceStatusRepository(IDatabaseUnitOfWork uow)
         {
-            return new InvoiceStatusRepository(uow, _cacheHelper, _logger, _sqlSyntax);
+            return new InvoiceStatusRepository(uow, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -353,7 +352,7 @@
         /// </returns>
         internal virtual IGatewayProviderRepository CreateGatewayProviderRepository(IDatabaseUnitOfWork uow)
         {
-            return new GatewayProviderRepository(uow, _cacheHelper, _logger, _sqlSyntax);
+            return new GatewayProviderRepository(uow, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -367,7 +366,7 @@
         /// </returns>
         internal virtual INotificationMessageRepository CreateNotificationMessageRepository(IDatabaseUnitOfWork uow)
         {
-            return new NotificationMessageRepository(uow, _cacheHelper, _logger, _sqlSyntax);
+            return new NotificationMessageRepository(uow, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -381,7 +380,7 @@
         /// </returns>
         internal virtual INotificationMethodRepository CreateNotificationMethodRepository(IDatabaseUnitOfWork uow)
         {
-            return new NotificationMethodRepository(uow, _cacheHelper, _logger, _sqlSyntax);
+            return new NotificationMethodRepository(uow, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -395,7 +394,7 @@
         /// </returns>
         internal virtual IOfferRedeemedRepository CreateOfferRedeemedRepository(IDatabaseUnitOfWork uow)
         {
-            return new OfferRedeemedRepository(uow, _cacheHelper, _logger, _sqlSyntax);
+            return new OfferRedeemedRepository(uow, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -409,7 +408,7 @@
         /// </returns>
         internal virtual IOfferSettingsRepository CreateOfferSettingsRepository(IDatabaseUnitOfWork uow)
         {
-            return new OfferSettingsRepository(uow, _cacheHelper, _logger, _sqlSyntax);
+            return new OfferSettingsRepository(uow, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -423,7 +422,7 @@
         /// </returns>
         internal virtual IOrderRepository CreateOrderRepository(IDatabaseUnitOfWork uow)
         {
-            return new OrderRepository(uow, _cacheHelper, CreateOrderLineItemRepository(uow), _logger, _sqlSyntax);
+            return new OrderRepository(uow, CreateOrderLineItemRepository(uow), _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -437,7 +436,7 @@
         /// </returns>
         internal virtual IOrderLineItemRepository CreateOrderLineItemRepository(IDatabaseUnitOfWork uow)
         {
-            return new OrderLineItemRepository(uow, _cacheHelper, _logger, _sqlSyntax);
+            return new OrderLineItemRepository(uow, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -451,7 +450,7 @@
         /// </returns>
         internal virtual IOrderStatusRepository CreateOrderStatusRepository(IDatabaseUnitOfWork uow)
         {
-            return new OrderStatusRepository(uow, _cacheHelper, _logger, _sqlSyntax);
+            return new OrderStatusRepository(uow, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -465,7 +464,7 @@
         /// </returns>
         internal virtual IPaymentRepository CreatePaymentRepository(IDatabaseUnitOfWork uow)
         {
-            return new PaymentRepository(uow, _cacheHelper, _logger, _sqlSyntax);
+            return new PaymentRepository(uow, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -479,7 +478,7 @@
         /// </returns>
         internal virtual IPaymentMethodRepository CreatePaymentMethodRepository(IDatabaseUnitOfWork uow)
         {
-            return new PaymentMethodRepository(uow, _cacheHelper, _logger, _sqlSyntax);
+            return new PaymentMethodRepository(uow, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -493,7 +492,7 @@
         /// </returns>
         internal virtual IProductRepository CreateProductRepository(IDatabaseUnitOfWork uow)
         {
-            return new ProductRepository(uow, _cacheHelper, _logger, _sqlSyntax, CreateProductVariantRepository(uow), CreateProductOptionRepository(uow));
+            return new ProductRepository(uow, _logger, _sqlSyntax, CreateProductVariantRepository(uow), CreateProductOptionRepository(uow));
         }
 
         /// <summary>
@@ -507,7 +506,7 @@
         /// </returns>
         internal virtual IProductOptionRepository CreateProductOptionRepository(IDatabaseUnitOfWork uow)
         {
-            return new ProductOptionRepository(uow, _cacheHelper, _logger, _sqlSyntax);
+            return new ProductOptionRepository(uow, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -521,7 +520,7 @@
         /// </returns>
         internal virtual IProductVariantRepository CreateProductVariantRepository(IDatabaseUnitOfWork uow)
         {
-            return new ProductVariantRepository(uow, _cacheHelper, _logger, _sqlSyntax, CreateProductOptionRepository(uow));
+            return new ProductVariantRepository(uow, _logger, _sqlSyntax, CreateProductOptionRepository(uow));
         }
 
         /// <summary>
@@ -538,7 +537,7 @@
         /// </returns>
         internal virtual IShipCountryRepository CreateShipCountryRepository(IDatabaseUnitOfWork uow, IStoreSettingService storeSettingService)
         {
-            return new ShipCountryRepository(uow, _cacheHelper, storeSettingService, _logger, _sqlSyntax);
+            return new ShipCountryRepository(uow, storeSettingService, _logger, _sqlSyntax);
         }
 
 
@@ -553,7 +552,7 @@
         /// </returns>
         internal virtual IShipMethodRepository CreateShipMethodRepository(IDatabaseUnitOfWork uow)
         {
-            return new ShipMethodRepository(uow, _cacheHelper, _logger, _sqlSyntax);
+            return new ShipMethodRepository(uow, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -567,7 +566,7 @@
         /// </returns>
         internal virtual IShipRateTierRepository CreateShipRateTierRepository(IDatabaseUnitOfWork uow)
         {
-            return new ShipRateTierRepository(uow, _cacheHelper, _logger, _sqlSyntax);       
+            return new ShipRateTierRepository(uow, _logger, _sqlSyntax);       
         }
 
         /// <summary>
@@ -581,7 +580,7 @@
         /// </returns>
         internal virtual IShipmentRepository CreateShipmentRepository(IDatabaseUnitOfWork uow)
         {
-            return new ShipmentRepository(uow, _cacheHelper, CreateOrderLineItemRepository(uow), _logger, _sqlSyntax);
+            return new ShipmentRepository(uow, CreateOrderLineItemRepository(uow), _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -595,7 +594,7 @@
         /// </returns>
         internal virtual IShipmentStatusRepository CreateShipmentStatusRepository(IDatabaseUnitOfWork uow)
         {
-            return new ShipmentStatusRepository(uow, _cacheHelper, _logger, _sqlSyntax);
+            return new ShipmentStatusRepository(uow, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -609,7 +608,7 @@
         /// </returns>
         internal virtual IStoreSettingRepository CreateStoreSettingRepository(IDatabaseUnitOfWork uow)
         {
-            return new StoreSettingRepository(uow, _cacheHelper, _logger, _sqlSyntax);
+            return new StoreSettingRepository(uow, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -623,7 +622,7 @@
         /// </returns>
         internal virtual ITaxMethodRepository CreateTaxMethodRepository(IDatabaseUnitOfWork uow)
         {
-            return new TaxMethodRepository(uow, _cacheHelper, _logger, _sqlSyntax);
+            return new TaxMethodRepository(uow, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -637,7 +636,7 @@
         /// </returns>
         internal virtual IWarehouseRepository CreateWarehouseRepository(IDatabaseUnitOfWork uow)
         {
-            return new WarehouseRepository(uow, _cacheHelper, this.CreateWarehouseCatalogRepository(uow), _logger, _sqlSyntax);
+            return new WarehouseRepository(uow, this.CreateWarehouseCatalogRepository(uow), _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -651,7 +650,7 @@
         /// </returns>
         internal virtual IWarehouseCatalogRepository CreateWarehouseCatalogRepository(IDatabaseUnitOfWork uow)
         {
-            return new WarehouseCatalogRepository(uow, _cacheHelper, _logger, _sqlSyntax);
+            return new WarehouseCatalogRepository(uow, _logger, _sqlSyntax);
         }
     }
 }

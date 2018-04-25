@@ -29,17 +29,14 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="logger">
         /// The logger.
         /// </param>
         /// <param name="sqlSyntax">
         /// The SQL Syntax.
         /// </param>
-        public InvoiceStatusRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
-            : base(work, cache, logger, sqlSyntax)
+        public InvoiceStatusRepository(IDatabaseUnitOfWork work, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {
         }
 
@@ -80,21 +77,28 @@
         /// </returns>
         protected override IEnumerable<IInvoiceStatus> PerformGetAll(params Guid[] keys)
         {
+            var dtos = new List<InvoiceStatusDto>();
+
             if (keys.Any())
             {
-                foreach (var id in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    yield return Get(id);
+                    dtos.AddRange(Database.Fetch<InvoiceStatusDto>(GetBaseQuery(false).WhereIn<InvoiceStatusDto>(x => x.Key, keyList, SqlSyntax)));
                 }
             }
             else
             {
-                var factory = new InvoiceStatusFactory();
-                var dtos = Database.Fetch<InvoiceStatusDto>(GetBaseQuery(false));
-                foreach (var dto in dtos)
-                {
-                    yield return factory.BuildEntity(dto);
-                }
+                dtos = Database.Fetch<InvoiceStatusDto>(GetBaseQuery(false));
+            }
+
+            var factory = new InvoiceStatusFactory();
+            foreach (var dto in dtos)
+            {
+                yield return factory.BuildEntity(dto);
             }
         }
 
@@ -197,8 +201,6 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
-
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IInvoiceStatus>(entity.Key));
         }
     }
 }
