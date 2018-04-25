@@ -133,7 +133,7 @@
                     notificationsService.success(localizationService.localize("merchelloStatusNotifications_productDeleteSuccess"), "");
                     $location.url("/merchello/merchello/productlist/manage", true);
                 }, function (reason) {
-                    notificationsService.error("Product Deletion Failed", reason.message);
+                    notificationsService.error(localizationService.localize("merchelloStatusNotifications_productDeleteError"), reason.message);
                 });
             }
 
