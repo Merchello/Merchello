@@ -130,7 +130,7 @@
             function deleteProductDialogConfirmation() {
                 var promiseDel = productResource.deleteProduct($scope.product);
                 promiseDel.then(function () {
-                    notificationsService.success("Product Deleted", "");
+                    notificationsService.success(localizationService.localize("merchelloStatusNotifications_productDeleteSuccess"), "");
                     $location.url("/merchello/merchello/productlist/manage", true);
                 }, function (reason) {
                     notificationsService.error("Product Deletion Failed", reason.message);

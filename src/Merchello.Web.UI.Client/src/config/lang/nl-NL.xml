@@ -904,5 +904,6 @@
     <key alias="productSaveSuccess">Product opgeslagen</key>
     <key alias="productSaveInProgress">Bezig met opslaan product...</key>
     <key alias="productSaveError">Product opslaan niet gelukt</key>
+    <key alias="productDeleteSuccess">Product is verwijderd</key>
   </area>
 </language>
