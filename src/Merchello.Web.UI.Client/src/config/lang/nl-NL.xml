@@ -906,5 +906,6 @@
     <key alias="productSaveError">Product opslaan niet gelukt</key>
     <key alias="productDeleteSuccess">Product is verwijderd</key>
     <key alias="productDeleteError">Product verwijderen is niet gelukt</key>
+    <key alias="customerSaveSuccess">Klantgegevens zijn opgeslagen</key>
   </area>
 </language>

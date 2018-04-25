@@ -85,7 +85,7 @@
                 var promiseSaveCustomer = customerResource.SaveCustomer($scope.customer);
                 promiseSaveCustomer.then(function(customer) {
                     $timeout(function() {
-                        notificationsService.success("Customer Saved", "");
+                        notificationsService.success(localizationService.localize("merchelloStatusNotifications_customerSaveSuccess"), "");
                         init();
                     }, 400);
 
