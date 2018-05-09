@@ -558,6 +558,11 @@
     <key alias="bulkChangePriceTitle">Prijs wijzigen voor alle geselecteerde varianten</key>
     <key alias="bulkChangePriceUpdateCostOfGoods">Bijwerken van de kostprijs</key>
     <key alias="bulkChangePriceUpdateSalePrice">Bijwerken van de verkoopprijs</key>
+    <key alias="bulkChangeInventoryTitle">Voorraad bijwerken voor alle geselecteerde varianten</key>
+    <key alias="bulkChangeInventoryNewQuantity">Nieuw aantal</key>
+    <key alias="bulkChangeInventoryUpdateLowCount">Bijwerken minimaal aantal</key>
+    <key alias="bulkChangeInventoryUpdateNewLowCount">Nieuw minimaal aantal</key>
+    <key alias="bulkChangeInventoryNote">Opmerking: De voorraad van alle geselecteerde varianten worden bijgewerkt. Ook in alle magazijnen.</key>
   </area>
   <area alias="merchelloOrder">
     <!-- moved to sales -->

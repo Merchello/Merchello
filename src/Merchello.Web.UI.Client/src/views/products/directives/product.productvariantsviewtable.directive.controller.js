@@ -7,8 +7,8 @@
  * The controller for the product variant view table view directive
  */
 angular.module('merchello').controller('Merchello.Directives.ProductVariantsViewTableDirectiveController',
-    ['$scope', '$q', '$timeout', '$location', 'notificationsService', 'dialogService', 'dialogDataFactory', 'productResource', 'productDisplayBuilder', 'productVariantDisplayBuilder',
-    function($scope, $q, $timeout, $location, notificationsService, dialogService, dialogDataFactory, productResource, productDisplayBuilder, productVariantDisplayBuilder) {
+    ['$scope', '$q', '$timeout', '$location', 'notificationsService', 'dialogService', 'localizationService', 'dialogDataFactory', 'productResource', 'productDisplayBuilder', 'productVariantDisplayBuilder',
+    function($scope, $q, $timeout, $location, notificationsService, dialogService, localizationService, dialogDataFactory, productResource, productDisplayBuilder, productVariantDisplayBuilder) {
 
         $scope.sortProperty = "sku";
         $scope.sortOrder = "asc";
@@ -289,7 +289,7 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
          */
         function updateInventory() {
             var dialogData = dialogDataFactory.createBulkEditInventoryCountsDialogData();
-            dialogData.warning = 'Note: This will update the inventory for all warehouses on all selected variants';
+            dialogData.warning = localizationService.localize('merchelloVariant_bulkChangeInventoryNote');
             dialogService.open({
                 template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/productvariant.bulk.updateinventory.html',
                 show: true,
