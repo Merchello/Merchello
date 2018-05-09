@@ -553,6 +553,9 @@
     <key alias="startingInventoryWarning"><![CDATA[(Will set starting inventory for <strong>all variants</strong> and <strong>all warehouses</strong>)]]></key>
     <key alias="productOnSale">On sale</key>
     <key alias="allowOutOfStockPurchase">Allow out of stock purchase</key>
+    <key alias="bulkChangePriceTitle">Change Prices For All Selected Items</key>
+    <key alias="bulkChangePriceUpdateCostOfGoods">Update cost of goods price.</key>
+    <key alias="bulkChangePriceUpdateSalePrice">Update sale price.</key>
   </area>
   <area alias="merchelloOrder">
     <!-- moved to sales -->

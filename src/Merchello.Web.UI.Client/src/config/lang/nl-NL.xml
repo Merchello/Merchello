@@ -555,6 +555,9 @@
     <key alias="startingInventoryWarning"><![CDATA[(Beginnen met voorraad voor <strong>alle varianten</strong> en <strong>alle magazijnen</strong>)]]></key>
     <key alias="productOnSale">In de uitverkoop</key>
     <key alias="allowOutOfStockPurchase">Sta verkopen toe bij producten die niet voorradig zijn</key>
+    <key alias="bulkChangePriceTitle">Prijs wijzigen voor alle geselecteerde varianten</key>
+    <key alias="bulkChangePriceUpdateCostOfGoods">Bijwerken van de kostprijs</key>
+    <key alias="bulkChangePriceUpdateSalePrice">Bijwerken van de verkoopprijs</key>
   </area>
   <area alias="merchelloOrder">
     <!-- moved to sales -->
