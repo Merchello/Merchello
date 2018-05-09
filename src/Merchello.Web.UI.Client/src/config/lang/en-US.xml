@@ -15,6 +15,7 @@
     <key alias="multipleOptions">Multiple Options</key>
     <key alias="optional">(optional)</key>
     <key alias="percentSymbol">%</key>
+    <key alias="percent">Percent</key>
     <key alias="moneySymbol">$</key>
     <key alias="trackingNumber">Tracking # </key>
     <key alias="trackingUrl">Tracking URL</key>
@@ -494,6 +495,9 @@
     <key alias="couponMaxRedemptionsTitle">Set a maximum number of allowable redemptions</key>
     <key alias="couponMaxRedemptionsInputTitle">Set the maximum number of redemptions</key>
     <key alias="couponMaxRedemptionsInputHelp">Values should be entered as positive numbers.</key>
+    <key alias="discountPriceDialogTitle">REWARD: Discount the price</key>
+    <key alias="discountPriceDialogApplyDiscount">Apply discount in the amount</key>
+    <key alias="discountPriceDialogApplyDiscountDescription">Values should be entered as positive numbers.</key>
   </area>
   <area alias="merchelloVariant">
     <!-- things -->

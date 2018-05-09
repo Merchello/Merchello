@@ -14,7 +14,8 @@
     <key alias="chooseMedia">Kies Media</key>
     <key alias="multipleOptions">Meerdere Opties</key>
     <key alias="optional">(optioneel)</key>
-    <key alias="percentSymbol" >%</key>
+    <key alias="percentSymbol">%</key>
+    <key alias="percent">Procent</key>
     <key alias="moneySymbol">€</key>
     <key alias="trackingNumber">Tracking # </key>
     <key alias="trackingUrl">Tracking URL</key>
@@ -496,7 +497,10 @@
     <key alias="offerProvider">Kies een aanbieding</key>
     <key alias="couponMaxRedemptionsTitle">Limiteer gebruik van de coupon</key>
     <key alias="couponMaxRedemptionsInputTitle">Stel in hoe vaak de coupon maximaal gebruikt mag worden</key>
-    <key alias="couponMaxRedemptionsInputHelp">Positieve getallen als waarde invoeren</key>  
+    <key alias="couponMaxRedemptionsInputHelp">Positieve getallen als waarde invoeren</key>
+    <key alias="discountPriceDialogTitle">Beloning: Korting op de prijs</key>
+    <key alias="discountPriceDialogApplyDiscount">Voer korting in</key>
+    <key alias="discountPriceDialogApplyDiscountDescription">Alleen positieve getallen zijn geldig</key>
   </area>
   <area alias="merchelloVariant">
     <!-- things -->
