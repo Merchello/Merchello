@@ -1726,7 +1726,7 @@
             else
             {
                 sql.Where(
-                    "billToName LIKE @term OR billToEmail LIKE @term OR billToAddress1 LIKE @adr1 OR billToLocality LIKE @loc OR billToPostalCode IN (@postal)",
+                    "billToName LIKE @term OR billToEmail LIKE @term OR poNumber LIKE @term OR billToAddress1 LIKE @adr1 OR billToLocality LIKE @loc OR billToPostalCode IN (@postal)",
                     new
                         {
                             @term = string.Format("%{0}%", string.Join("% ", terms)).Trim(),
