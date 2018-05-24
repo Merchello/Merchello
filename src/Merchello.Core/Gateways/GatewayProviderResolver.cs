@@ -75,8 +75,14 @@
         {
             get
             {
-                if (_activatedGatewayProviderCache.Count == InstanceTypes.Count())
-                    return _activatedGatewayProviderCache.Values;
+                //TODO - Something is wrong with the caching here. It causes a data reader error quite a lot 
+                //TODO - and it kills the back end of Merchello until you recycle the App Pool.
+                //TODO - Happens alot in PaymentContext Line 56 on this line of code
+                //TODO - provider.PaymentMethods.ToList(); The .PaymentMethods is a Property which calls a base method
+                //TODO - This is the same error I get http://issues.umbraco.org/issue/U4-8264 
+                //TODO - So I've left the below commented out and it seems to solve the issue
+                //if (_activatedGatewayProviderCache.Count == InstanceTypes.Count())
+                //    return _activatedGatewayProviderCache.Values;
 
                 var allResolved = new List<GatewayProviderBase>();
 
