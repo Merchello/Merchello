@@ -141,22 +141,24 @@ namespace Merchello.Core
 
             var shippableItems = items.Where(x => x.IsShippable() && x.ShipmentKey == null).ToArray();
 
-            var inventoryItems = shippableItems.Where(x => x.ExtendedData.GetTrackInventoryValue()).ToArray();
+            // TODO refactor back ordering.
 
-            // get the variants to check the inventory
-            var variants = merchelloContext.Services.ProductVariantService.GetByKeys(inventoryItems.Select(x => x.ExtendedData.GetProductVariantKey())).ToArray();
+            // var inventoryItems = shippableItems.Where(x => x.ExtendedData.GetTrackInventoryValue()).ToArray();
 
-            foreach (var item in inventoryItems)
-            {
-                var variant = variants.FirstOrDefault(x => x.Key == item.ExtendedData.GetProductVariantKey());
-                if (variant == null) continue;
+            //// get the variants to check the inventory
+            //var variants = merchelloContext.Services.ProductVariantService.GetByKeys(inventoryItems.Select(x => x.ExtendedData.GetProductVariantKey())).ToArray();
 
-                // TODO refactor back ordering.
-                //// check inventory
-                //var inventory = variant.CatalogInventories.FirstOrDefault(x => x.CatalogKey == item.ExtendedData.GetWarehouseCatalogKey());
-                //if (inventory != null)
-                //    item.BackOrder = inventory.Count < item.Quantity;
-            }
+            //foreach (var item in inventoryItems)
+            //{
+            //    var variant = variants.FirstOrDefault(x => x.Key == item.ExtendedData.GetProductVariantKey());
+            //    if (variant == null) continue;
+
+
+            //    // check inventory
+            //    var inventory = variant.CatalogInventories.FirstOrDefault(x => x.CatalogKey == item.ExtendedData.GetWarehouseCatalogKey());
+            //    if (inventory != null)
+            //        item.BackOrder = inventory.Count < item.Quantity;
+            //}
 
             return shippableItems;
         }
