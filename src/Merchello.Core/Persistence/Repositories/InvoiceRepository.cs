@@ -840,21 +840,32 @@
         /// <param name="currencyCode">
         /// The currency code.
         /// </param>
+        /// <param name="excludeCancelledAndFraud"></param>
         /// <returns>
         /// The sum of the invoice totals.
         /// </returns>
-        public decimal SumInvoiceTotals(DateTime startDate, DateTime endDate, string currencyCode)
+        public decimal SumInvoiceTotals(DateTime startDate, DateTime endDate, string currencyCode, bool excludeCancelledAndFraud = true)
         {
             //var ends = endDate.AddDays(1);
             if (startDate != DateTime.MinValue && startDate != DateTime.MaxValue &&
                 endDate != DateTime.MinValue && endDate != DateTime.MaxValue &&
                 endDate > startDate)
             {
-                const string SQL =
-                    @"SELECT SUM([merchInvoice].total) FROM merchInvoice WHERE [merchInvoice].invoiceDate BETWEEN @starts and @ends AND [merchInvoice].currencyCode = @cc";
+                var sql = new Sql();
 
-                return Database.ExecuteScalar<decimal>(SQL, new { @starts = startDate.GetDateForSqlStartOfDay(),
-                    @ends = endDate.GetDateForSqlEndOfDay(), @cc = currencyCode });
+                sql.Append("SELECT SUM([merchInvoice].total) FROM merchInvoice WHERE [merchInvoice].invoiceDate BETWEEN @starts and @ends AND [merchInvoice].currencyCode = @cc", new
+                {
+                    @starts = startDate.GetDateForSqlStartOfDay(),
+                    @ends = endDate.GetDateForSqlEndOfDay(),
+                    @cc = currencyCode
+                });
+
+                if (excludeCancelledAndFraud)
+                {
+                    sql.Append("AND [merchInvoice].invoiceStatusKey != '53077EFD-6BF0-460D-9565-0E00567B5176' AND [merchInvoice].invoiceStatusKey != '75E1E5EB-33E8-4904-A8E5-4B64A37D6087'");
+                }
+
+                return Database.ExecuteScalar<decimal>(sql);
             }
 
             return -1;
