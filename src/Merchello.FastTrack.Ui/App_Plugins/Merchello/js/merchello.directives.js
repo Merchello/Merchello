@@ -4353,7 +4353,8 @@ angular.module('merchello.directives').directive('reportWidgeThisWeekVsLast',
                     }
 
                     function loadReportData() {
-                        var today = dateHelper.getGmt0EquivalentDate(new Date());
+                        //var today = dateHelper.getGmt0EquivalentDate(new Date());
+                        var today = new Date();
                         var last = today;
                         var thisWeekEnd = $filter('date')(today, scope.settings.dateFormat);
                         var lastWeekEnd = $filter('date')(last.setDate(last.getDate() - 7), scope.settings.dateFormat);
@@ -4384,7 +4385,8 @@ angular.module('merchello.directives').directive('reportWidgeThisWeekVsLast',
 
                             _.each(scope.resultData[0], function(days) {
 
-                                var dt = dateHelper.getGmt0EquivalentDate(new Date(days.startDate));
+                                //var dt = dateHelper.getGmt0EquivalentDate(new Date(days.startDate));
+                                var dt = new Date(days.startDate);
                                 var dd = dt.getDay();
 
                                 scope.labels.push(scope.weekdays[dd]);
