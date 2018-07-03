@@ -40,9 +40,6 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="logger">
         /// The logger.
         /// </param>
@@ -52,23 +49,12 @@
         /// <param name="productOptionRepository">
         /// The <see cref="IProductOptionRepository"/>.
         /// </param>
-        public ProductVariantRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax, IProductOptionRepository productOptionRepository)
-            : base(work, cache, logger, sqlSyntax, () => new ProductVariantFactory())
+        public ProductVariantRepository(IDatabaseUnitOfWork work, ILogger logger, ISqlSyntaxProvider sqlSyntax, IProductOptionRepository productOptionRepository)
+            : base(work, logger, sqlSyntax, () => new ProductVariantFactory())
         {
             Mandate.ParameterNotNull(productOptionRepository, "productOptionRepository");
 
             _productOptionRepository = productOptionRepository;
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether is cached repository.
-        /// </summary>
-        protected override bool IsCachedRepository
-        {
-            get
-            {
-                return false;
-            }
         }
 
         /// <summary>
@@ -264,7 +250,6 @@
             foreach (var entity in productVariants)
             {
                 entity.ResetDirtyProperties();
-                RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProduct>(entity.ProductKey));
             }
         }
 
@@ -290,7 +275,6 @@
             foreach (var entity in productVariants)
             {
                 entity.ResetDirtyProperties();
-                RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProduct>(entity.ProductKey));
             }
         }
 
@@ -880,15 +864,6 @@
                 return null;
             }
 
-            if (IsCachedRepository)
-            {
-                var fromCache = TryGetFromCache(dto.ProductVariantDto.Key);
-                if (fromCache.Success)
-                {
-                    return fromCache.Result;
-                }
-            }
-
             // Get needed collections
             var productAttributeCollection = _productOptionRepository.GetProductAttributeCollectionForVariant(dto.ProductVariantDto.Key);
             var catalogInventoryCollection = GetCategoryInventoryCollection(dto.ProductVariantDto.Key);
@@ -929,21 +904,11 @@
                 return null;
             }
 
-            if (IsCachedRepository)
-            {
-                var fromCache = TryGetFromCache(dto.ProductVariantDto.Key);
-                if (fromCache.Success)
-                {
-                    return fromCache.Result;
-                }
-            }
-
             var factory = new ProductVariantFactory(productAttributeCollection, catalogInventoryCollection, detachedContentCollection);
             var variant = factory.BuildEntity(dto.ProductVariantDto);
 
             if (variant != null)
             {
-                RuntimeCache.GetCacheItem(GetCacheKey(dto.ProductVariantDto.Key), () => variant);
                 variant.ResetDirtyProperties();
             }
 
@@ -962,22 +927,43 @@
         /// </returns>
         protected override IEnumerable<IProductVariant> PerformGetAll(params Guid[] keys)
         {
+            var dtos = new List<ProductDto>();
+
             if (keys.Any())
             {
-                var productVariants = new List<IProductVariant>();
-                // TODO - This is really innefficient, even though it's adding everything to caching
-                foreach (var key in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    productVariants.Add(Get(key));
+                    dtos.AddRange(Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(GetBaseQuery(false).WhereIn<ProductVariantDto>(x => x.Key, keyList, SqlSyntax)));
                 }
-                return productVariants;
             }
             else
             {
-                var variantDtos = Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(GetBaseQuery(false));
-
-                return GetVariantsBulk(variantDtos);
+                dtos = Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(GetBaseQuery(false));
             }
+
+            return GetVariantsBulk(dtos);
+
+
+            //if (keys.Any())
+            //{
+            //    var productVariants = new List<IProductVariant>();
+            //    // TODO - This is really innefficient, even though it's adding everything to caching
+            //    foreach (var key in keys)
+            //    {
+            //        productVariants.Add(Get(key));
+            //    }
+            //    return productVariants;
+            //}
+            //else
+            //{
+            //    var variantDtos = Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(GetBaseQuery(false));
+
+            //    return GetVariantsBulk(variantDtos);
+            //}
         }
 
         /// <summary>
@@ -1176,12 +1162,6 @@
                 {
                     var attribute = productAttributeFactory.BuildEntity(productVariant2ProductAttributeDto.ProductAttributeDto);
 
-                    // TODO LM - Don't get this line?? It's got the attribute above? Should I not be checking for wh
-                    RuntimeCache.GetCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProductAttribute>(attribute.Key), () => attribute);
-
-                    //var attribute = (IProductAttribute)RuntimeCache.GetCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProductAttribute>(dto.Key),
-                    //    () => productAttributeFactory.BuildEntity(productVariant2ProductAttributeDto.ProductAttributeDto));
-
                     productAttributeCollection.Add(attribute);
                 }
                 productAttributeCollectionDictionary.Add(variantKey, productAttributeCollection);
@@ -1270,8 +1250,6 @@
             SaveDetachedContents(entity);
 
             entity.ResetDirtyProperties();
-
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProduct>(entity.ProductKey));
         }
 
         /// <summary>
@@ -1301,8 +1279,6 @@
             SaveDetachedContents(entity);
 
             entity.ResetDirtyProperties();
-
-            RemoveProductsFromRuntimeCache(new[] { entity.ProductKey });
         }
 
         /// <summary>
@@ -1313,17 +1289,12 @@
         /// </param>
         protected override void PersistDeletedItem(IProductVariant entity)
         {
-            var productKeys = _productOptionRepository.DeleteAllProductVariantAttributes(entity).ToArray();
-            RemoveProductsFromRuntimeCache(productKeys);
-
+            _productOptionRepository.DeleteAllProductVariantAttributes(entity);
             var deletes = GetDeleteClauses();
             foreach (var delete in deletes)
             {
                 Database.Execute(delete, new { entity.Key });
             }
-
-            if (!productKeys.Contains(entity.ProductKey))
-                RemoveProductsFromRuntimeCache(new[] { entity.ProductKey });
         }
 
         /// <summary>
@@ -1528,20 +1499,5 @@
             return modSlug;
         }
 
-
-        /// <summary>
-        /// Removes products from cache.
-        /// </summary>
-        /// <param name="productKeys">
-        /// The product keys of products that need to be removed from cache.
-        /// </param>
-        private void RemoveProductsFromRuntimeCache(IEnumerable<Guid> productKeys)
-        {
-            // clear the cache for other products affected
-            foreach (var key in productKeys)
-            {
-                RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProduct>(key));
-            }
-        }
     }
 }

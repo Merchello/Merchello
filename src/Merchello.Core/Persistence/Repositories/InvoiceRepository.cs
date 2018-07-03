@@ -44,9 +44,6 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="invoiceLineItemRepository">
         /// The invoice line item repository.
         /// </param>
@@ -64,13 +61,12 @@
         /// </param>
         public InvoiceRepository(
             IDatabaseUnitOfWork work,
-            CacheHelper cache,
             IInvoiceLineItemRepository invoiceLineItemRepository,
             IOrderRepository orderRepository,
             INoteRepository noteRepository,
             ILogger logger,
             ISqlSyntaxProvider sqlSyntax)
-            : base(work, cache, logger, sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {
             Mandate.ParameterNotNull(invoiceLineItemRepository, "lineItemRepository");
             Mandate.ParameterNotNull(orderRepository, "orderRepository");
@@ -151,7 +147,7 @@
             SortDirection sortDirection = SortDirection.Descending)
         {
             var sql = BuildInvoiceSearchSql(searchTerm);
-            sql.Where("invoiceDate BETWEEN @start AND @end", new { @start = startDate, @end = endDate });
+            sql.Where("invoiceDate BETWEEN @start AND @end", new { @start = startDate.GetDateForSqlStartOfDay(), @end = endDate.GetDateForSqlEndOfDay() });
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
 
@@ -844,20 +840,32 @@
         /// <param name="currencyCode">
         /// The currency code.
         /// </param>
+        /// <param name="excludeCancelledAndFraud"></param>
         /// <returns>
         /// The sum of the invoice totals.
         /// </returns>
-        public decimal SumInvoiceTotals(DateTime startDate, DateTime endDate, string currencyCode)
+        public decimal SumInvoiceTotals(DateTime startDate, DateTime endDate, string currencyCode, bool excludeCancelledAndFraud = true)
         {
             //var ends = endDate.AddDays(1);
             if (startDate != DateTime.MinValue && startDate != DateTime.MaxValue &&
                 endDate != DateTime.MinValue && endDate != DateTime.MaxValue &&
                 endDate > startDate)
             {
-                const string SQL =
-                    @"SELECT SUM([merchInvoice].total) FROM merchInvoice WHERE [merchInvoice].invoiceDate BETWEEN @starts and @ends AND [merchInvoice].currencyCode = @cc";
+                var sql = new Sql();
 
-                return Database.ExecuteScalar<decimal>(SQL, new { @starts = startDate.ToIsoString(), @ends = endDate.ToIsoString(), @cc = currencyCode });
+                sql.Append("SELECT SUM([merchInvoice].total) FROM merchInvoice WHERE [merchInvoice].invoiceDate BETWEEN @starts and @ends AND [merchInvoice].currencyCode = @cc", new
+                {
+                    @starts = startDate.GetDateForSqlStartOfDay(),
+                    @ends = endDate.GetDateForSqlEndOfDay(),
+                    @cc = currencyCode
+                });
+
+                if (excludeCancelledAndFraud)
+                {
+                    sql.Append("AND [merchInvoice].invoiceStatusKey != '53077EFD-6BF0-460D-9565-0E00567B5176' AND [merchInvoice].invoiceStatusKey != '75E1E5EB-33E8-4904-A8E5-4B64A37D6087'");
+                }
+
+                return Database.ExecuteScalar<decimal>(sql);
             }
 
             return -1;
@@ -892,7 +900,7 @@
 
             return Database.ExecuteScalar<decimal>(
                 SQL,
-                new { @starts = startDate, @ends = endDate, @cc = currencyCode, @sku = sku });
+                new { @starts = startDate.GetDateForSqlStartOfDay(), @ends = endDate.GetDateForSqlEndOfDay(), @cc = currencyCode, @sku = sku });
         }
 
         #region Filter Queries
@@ -1434,21 +1442,49 @@
         /// </returns>
         protected override IEnumerable<IInvoice> PerformGetAll(params Guid[] keys)
         {
+            var dtos = new List<InvoiceDto>();
+
             if (keys.Any())
             {
-                foreach (var key in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    yield return Get(key);
+                    dtos.AddRange(Database.Fetch<InvoiceDto, InvoiceIndexDto, InvoiceStatusDto>(GetBaseQuery(false).WhereIn<InvoiceDto>(x => x.Key, keyList, SqlSyntax)));
                 }
             }
             else
             {
-                var dtos = Database.Fetch<InvoiceDto, InvoiceIndexDto, InvoiceStatusDto>(GetBaseQuery(false));
-                foreach (var dto in dtos)
-                {
-                    yield return Get(dto.Key);
-                }
+                dtos = Database.Fetch<InvoiceDto, InvoiceIndexDto, InvoiceStatusDto>(GetBaseQuery(false));
             }
+
+            foreach (var dto in dtos)
+            {
+                var lineItems = GetLineItemCollection(dto.Key);
+                var orders = GetOrderCollection(dto.Key);
+                var notes = GetNotes(dto.Key);
+                var factory = new InvoiceFactory(lineItems, orders, notes);
+                yield return factory.BuildEntity(dto);
+            }
+
+            // TODO - Keeping original code
+            //if (keys.Any())
+            //{
+            //    foreach (var key in keys)
+            //    {
+            //        yield return Get(key);
+            //    }
+            //}
+            //else
+            //{
+            //    var dtos = Database.Fetch<InvoiceDto, InvoiceIndexDto, InvoiceStatusDto>(GetBaseQuery(false));
+            //    foreach (var dto in dtos)
+            //    {
+            //        yield return Get(dto.Key);
+            //    }
+            //}
         }
 
         /// <summary>
@@ -1573,24 +1609,6 @@
             _invoiceLineItemRepository.SaveLineItem(entity.Items, entity.Key);
 
             entity.ResetDirtyProperties();
-
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IInvoice>(entity.Key));
-
-            foreach (var entityOrder in entity.Orders)
-            {
-                foreach (var shipment in entityOrder.Shipments())
-                {
-                    foreach (var shipmentItem in shipment.Items)
-                    {
-                        RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IOrderLineItem>(shipmentItem.Key));
-                    }
-
-                    RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IShipment>(shipment.Key));
-                }
-
-                RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IOrder>(entityOrder.Key));
-            }
-
         }
 
         /// <summary>
@@ -1628,9 +1646,6 @@
                     Database.Insert(dto);
                     u.Key = dto.Key;
                 }
-
-                var cacheKey = Cache.CacheKeys.GetEntityCacheKey<INote>(u.Key);
-                RuntimeCache.ClearCacheItem(cacheKey);
             }
 
         }
@@ -1673,7 +1688,7 @@
             if (numbers.Any() && terms.Any())
             {
                 sql.Where(
-                    "billToName LIKE @term OR billToEmail LIKE @email OR billToAddress1 LIKE @adr1 OR billToLocality LIKE @loc OR invoiceNumber IN (@invNo) OR billToPostalCode IN (@postal)",
+                    "billToName LIKE @term OR billToEmail LIKE @email OR poNumber LIKE @ponumber OR billToAddress1 LIKE @adr1 OR billToLocality LIKE @loc OR invoiceNumber IN (@invNo) OR billToPostalCode IN (@postal)",
                     new
                         {
                             @term = string.Format("%{0}%", string.Join("% ", terms)).Trim(),
@@ -1681,7 +1696,8 @@
                             @adr1 = string.Format("%{0}%", string.Join("%", terms)).Trim(),
                             @loc = string.Format("%{0}%", string.Join("%", terms)).Trim(),
                             @invNo = numbers.ToArray(),
-                            @postal = string.Format("%{0}%", string.Join("%", terms)).Trim()
+                            @postal = string.Format("%{0}%", string.Join("%", terms)).Trim(),
+                            @ponumber = string.Format("%{0}%", string.Join("% ", terms)).Trim()
                     });
             }
             else if (numbers.Any())
@@ -1721,7 +1737,7 @@
             else
             {
                 sql.Where(
-                    "billToName LIKE @term OR billToEmail LIKE @term OR billToAddress1 LIKE @adr1 OR billToLocality LIKE @loc OR billToPostalCode IN (@postal)",
+                    "billToName LIKE @term OR billToEmail LIKE @term OR poNumber LIKE @term OR billToAddress1 LIKE @adr1 OR billToLocality LIKE @loc OR billToPostalCode IN (@postal)",
                     new
                         {
                             @term = string.Format("%{0}%", string.Join("% ", terms)).Trim(),

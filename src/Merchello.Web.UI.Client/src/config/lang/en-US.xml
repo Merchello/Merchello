@@ -75,6 +75,7 @@
     <key alias="associateWith">Associate with</key>
     <key alias="shared">Shared</key>
     <key alias="custom">Custom</key>
+    <key alias="history">History</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Products</key>
@@ -205,6 +206,9 @@
     <key alias="sharedCount">Shared Count</key>
     <key alias="filterGroup">Filter Group</key>
     <key alias="filters">Filters</key>
+    <key alias="date">Date</key>
+    <key alias="description">Description</key>
+    <key alias="amount">Amount</key>
   </area>
   <area alias="merchelloNotes">
     <key alias="notes">Notes</key>
@@ -223,7 +227,10 @@
     <key alias="available">Available</key>
     <key alias="copyProduct">Copy Product</key>
     <key alias="newProductName">New Product Name</key>
+    <key alias="nameIsRequired">Name is a required field.</key>
     <key alias="newProductSku">New Product SKU</key>
+    <key alias="skuIsNotUnique">SKU is not unique</key>
+    <key alias="skuIsRequired">SKU is a required field.</key>    
     <key alias="newPrice">New Price</key>
     <key alias="newCostOfGoods">New Cost Of Goods</key>
     <key alias="newSalePrice">New Sale Price</key>
@@ -446,6 +453,8 @@
     <key alias="emailRequired">Email is a required field</key>
   </area>
   <area alias="merchelloMarketing">
+    <key alias="availableRewards">Available Rewards</key>
+    <key alias="availableConstraints">Available Constraints</key>
     <key alias="currentOffers">Current Offers</key>
     <key alias="offerCode">Offer Code</key>
     <key alias="offerCodeInUse">Already in use</key>
@@ -480,6 +489,10 @@
     <key alias="lineItemNameInfo">
       <![CDATA[Line item name<small>This is the text that will appear on the invoice when the reward is awarded.</small>]]>
     </key>
+    <key alias="offerProvider">Offer Provider</key>
+    <key alias="couponMaxRedemptionsTitle">Set a maximum number of allowable redemptions</key>
+    <key alias="couponMaxRedemptionsInputTitle">Set the maximum number of redemptions</key>
+    <key alias="couponMaxRedemptionsInputHelp">Values should be entered as positive numbers.</key>
   </area>
   <area alias="merchelloVariant">
     <!-- things -->
@@ -490,6 +503,7 @@
     <key alias="baseSku">Base Sku</key>
     <key alias="barcode">Barcode</key>
     <key alias="manufacturer">Manufacturer</key>
+    <key alias="allManufacturers">All Manufacturers</key>
     <key alias="manufacturerModel">Manufacturer's Model No.</key>
     <key alias="variantInfo">Variant Information</key>
     <key alias="variantOptions">Variant Options</key>
@@ -646,6 +660,7 @@
     </key>
     <key alias="warehouse">Warehouse</key>
     <key alias="selectShipment">Select Shipment</key>
+    <key alias="shipmentStatus">Shipment Status</key>
   </area>
   <area alias="merchelloInventory">
     <!-- things -->
@@ -681,9 +696,12 @@
     <key alias="globalTaxationApplication">Set how taxes are applied</key>
     <key alias="defaultCultureName">Set the default extended content culture</key>
     <key alias="listViewSettingsTitle">List settings</key>
+    <key alias="listViewSettingsDescription">Enabling sticky options in lists, means it will remember the last page you were on or search term when you go back and forth between products and collections/lists making it much easier to manage products.</key>
     <key alias="stickyListView">Enable sticky list settings for general list.</key>
     <key alias="stickyCollectionView">Enable sticky list setting for collection lists.</key>
     <key alias="stickListingTab"><![CDATA[Enable sticking <b>%0% Listing</b> tab.]]></key>
+    <key alias="listViewSearchOptionsTitle">List Search Options</key>
+    <key alias="listViewSearchOptionsSubTitle">Fields include in filter</key>
   </area>
 
   <area alias="merchelloShippingCountry">
@@ -858,4 +876,15 @@
     <key alias="shipmentCreated">Shipment was created with %0% line items</key>
     <key alias="shipmentStatusChanged">Shipment status was changed to %0%</key>
   </area>
+
+  <!-- Merchello Property Editors -->
+  <area alias="merchelloCollectionPicker">
+    <key alias="config">Config</key>
+  </area>
+
+  <!-- NotificationService Messages -->
+  <area alias="merchelloNotification">
+    <key alias="successCouponSave">Successfully saved the coupon.</key>
+    <key alias="failCouponSave">Failed to save coupon.</key>
+  </area>  
 </language>

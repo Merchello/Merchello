@@ -1,6 +1,6 @@
 /*! Merchello
  * https://github.com/meritage/Merchello
- * Copyright (c) 2017 Across the Pond, LLC.
+ * Copyright (c) 2018 Across the Pond, LLC.
  * Licensed MIT
  */
 
@@ -5751,9 +5751,7 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                         }
                     } else {
                         results = genericModelBuilder.transform(jsonResult, Constructor);
-                        if (jsonResult) {
-                            results.detachedDataValues = extendedDataDisplayBuilder.transform(jsonResult.detachedDataValues);
-                        }
+                        results.detachedDataValues = extendedDataDisplayBuilder.transform(jsonResult.detachedDataValues);
                     }
                     return results;
                 }
