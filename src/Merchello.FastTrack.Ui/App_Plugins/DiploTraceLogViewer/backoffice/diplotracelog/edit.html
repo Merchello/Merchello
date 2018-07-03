@@ -1,162 +1,252 @@
 ﻿<div ng-controller="DiploTraceLogEditController">
 
-    <div class="umb-panel" id="traceLog-panel">
+    <!-- Log File Data Table -->
+    <div ng-show="isValid">
 
-        <!-- Header -->
-        <div class="umb-panel-header">
-            <div class="row-fluid">
-                <div class="span4">
-                    <h1>
-                        <span class="umb-panel-header-name">Trace Log Viewer</span>
-                        <span class="log-name">{{id}}</span>
-                    </h1>
-                </div>
+        <div class="umb-panel" id="traceLog-panel">
 
-                <div class="span3">
-                    <div class="btn-toolbar pull-left umb-btn-toolbar form-inline">
-                        <label title="When checked all filter values are persisted between log reloads">
-                            <input type="checkbox" ng-model="persist" ng-value="true" ng-change="changePersist(persist)" /> Persist filters across reloads
-                        </label>
+            <!-- Header -->
+            <div class="umb-panel-header">
+                <div class="row-fluid">
+                    <div class="span4">
+                        <h1>
+                            <span class="umb-panel-header-name">Trace Log Viewer</span>
+                            <span class="log-name">{{id}}</span>
+                            <span class="log-date" title="{{logFileDate}}">{{logFileDate | date : "EEEE, dd MMMM yyyy"}}</span>
+                        </h1>
                     </div>
-                </div>
 
-                <div class="span3">
-                    <div class="btn-toolbar pull-right umb-btn-toolbar" ng-show="isCurrentLog">
-                        <div class="btn-group">
-                            <a class="btn" ng-click="togglePolling()" ng-class="{'text-success': polling.enabled}"><i class="icon-timer"></i> {{polling.buttonText}}</a>
-                            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a ng-click="setPollInterval(2)">Every 2 Seconds</a>
-                                </li>
-                                <li>
-                                    <a ng-click="setPollInterval(5)">Every 5 Seconds</a>
-                                </li>
-                                <li>
-                                    <a ng-click="setPollInterval(10)">Every 10 Seconds</a>
-                                </li>
-                                <li>
-                                    <a ng-click="setPollInterval(20)">Every 20 Seconds</a>
-                                </li>
-                                <li>
-                                    <a ng-click="setPollInterval(30)">Every 30 Seconds</a>
-                                </li>
-                            </ul>
+                    <div class="span3">
+                        <div class="btn-toolbar pull-left umb-btn-toolbar form-inline">
+                            <label title="When checked all filter values are persisted between log reloads">
+                                <input type="checkbox" ng-model="persist" ng-value="true" ng-change="changePersist(persist)" /> Persist filters across reloads
+                            </label>
                         </div>
                     </div>
-                    <div class="polling">{{ polling.indicator }}</div>
-                </div>
 
-                <div class="span2">
-                    <div class="btn-toolbar pull-right umb-btn-toolbar">
-                        <div class="btn-group">
-                            <a class="btn" ng-click="reload()"><i class="icon-refresh"></i> Reload</a>
-                            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a ng-click="reload(true)"><i class="icon-re-post"></i> Reload and Clear Filters</a>
-                                </li>
-                            </ul>
+                    <div class="span3">
+                        <div class="btn-toolbar pull-right umb-btn-toolbar" ng-show="isCurrentLog">
+                            <div class="btn-group">
+                                <a class="btn" ng-click="togglePolling()" ng-class="{'text-success': polling.enabled}"><i class="icon-timer"></i> {{polling.buttonText}}</a>
+                                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a ng-click="setPollInterval(2)">Every 2 Seconds</a>
+                                    </li>
+                                    <li>
+                                        <a ng-click="setPollInterval(5)">Every 5 Seconds</a>
+                                    </li>
+                                    <li>
+                                        <a ng-click="setPollInterval(10)">Every 10 Seconds</a>
+                                    </li>
+                                    <li>
+                                        <a ng-click="setPollInterval(20)">Every 20 Seconds</a>
+                                    </li>
+                                    <li>
+                                        <a ng-click="setPollInterval(30)">Every 30 Seconds</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="polling">{{ polling.indicator }}</div>
+                    </div>
+
+                    <div class="span2">
+                        <div class="btn-toolbar pull-right umb-btn-toolbar">
+                            <div class="btn-group">
+                                <a class="btn" ng-click="reload()"><i class="icon-refresh"></i> Reload</a>
+                                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a ng-click="reload(true)"><i class="icon-re-post"></i> Reload and Clear Filters</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Panel Body -->
-    <div class="umb-panel-body umb-scrollable row-fluid" id="traceLog-body">
+        <!-- Panel Body -->
+        <div class="umb-panel-body umb-scrollable row-fluid" id="traceLog-body">
 
-        <div class="umb-pane">
+            <div class="umb-pane">
 
-            <umb-load-indicator ng-show="isLoading"></umb-load-indicator>
+                <umb-load-indicator ng-show="isLoading"></umb-load-indicator>
 
-            <!-- Main Table -->
-            <table id="traceLog" class="table table-bordered table-condensed table-striped" st-table="displayedCollection" st-safe-src="rowCollection" st-persist="diploTraceLogTable">
-                <thead>
-                    <tr>
-                        <th st-sort="Date">Time</th>
-                        <th st-sort="Level">Level</th>
-                        <th st-sort="Logger">Logger</th>
-                        <th st-sort="Message">Message</th>
-                    </tr>
-                    <tr class="filters">
-                        <td>
-                            <div class="inner-addon right-addon">
-                                <diplo-clearable></diplo-clearable>
-                                <input st-search="Date" placeholder="search..." type="search" />
-                            </div>
-                        </td>
-                        <td>
-                            <select st-search="Level" ng-options="item as item.label for item in levelOptions track by item.value" ng-model="levelOption">
-                                <option value="">- Any -</option>
-                            </select>
-                        </td>
-                        <td>
-                            <div class="inner-addon right-addon">
-                                <diplo-clearable></diplo-clearable>
-                                <input st-search="Logger" placeholder="search..." type="search" />
-                            </div>
-                        </td>
-                        <td>
-                            <div class="inner-addon right-addon">
-                                <diplo-clearable></diplo-clearable>
-                                <input st-search="Message" placeholder="search..." type="search" />
-                            </div>
-                        </td>
-                    </tr>
-                </thead>
-               
-                 <colgroup>
-                    <col style="width:9%">
-                    <col style="width:7%">
-                    <col style="width:15%">
-                    <col style="width:69%">
-                </colgroup>
+                <!-- Main Log Data Table -->
+                <table id="traceLog" class="table table-bordered table-condensed table-striped" st-table="displayedCollection" st-safe-src="rowCollection" st-persist="diploTraceLogTable">
+                    <thead>
+                        <tr>
+                            <th st-sort="Date">Time</th>
+                            <th st-sort="Level">Level</th>
+                            <th st-sort="Logger">Logger</th>
+                            <th st-sort="Message">Message</th>
+                        </tr>
+                        <tr class="filters">
+                            <td>
+                                <div class="inner-addon right-addon">
+                                    <diplo-clearable></diplo-clearable>
+                                    <input st-search="Date" placeholder="search..." type="search" />
+                                </div>
+                            </td>
+                            <td>
+                                <select st-search="Level" ng-options="item as item.label for item in levelOptions track by item.value" ng-model="levelOption">
+                                    <option value="">- Any -</option>
+                                </select>
+                            </td>
+                            <td>
+                                <div class="inner-addon right-addon">
+                                    <diplo-clearable></diplo-clearable>
+                                    <input st-search="Logger" placeholder="search..." type="search" />
+                                </div>
+                            </td>
+                            <td>
+                                <div class="inner-addon right-addon">
+                                    <diplo-clearable></diplo-clearable>
+                                    <input st-search="Message" placeholder="search..." type="search" />
+                                </div>
+                            </td>
+                        </tr>
+                    </thead>
 
-                <tbody>
-                    <tr ng-repeat="item in displayedCollection" ng-class="{tlError: item.Level == 'ERROR', tlWarn: item.Level == 'WARN'}">
-                        <td class="date" title="{{ item.Date }}">
-                            {{ item.Date | date:'HH:mm:ss' }}<small>{{ item.Date | date:'.sss' }}</small>
-                        </td>
-                        <td class="level">
-                            {{ item.Level }}
-                        </td>
-                        <td class="logger">
-                            <div class="logger-inner" ng-bind-html="item.Logger | diploLastWordHighlight"></div>
-                        </td>
-                        <td ng-click="openDetail(item, displayedCollection)">
-                            <div class="message">{{ item.Message | limitTo:200 }}</div>
-                        </td>
-                    </tr>
-                    <tr ng-show="displayedCollection.length === 0">
-                        <td colspan="4"><div class="text-center info-message">No log items matched your criteria. <a st-reset-search>Clear all filters?</a></div></td>
-                    </tr>
-                </tbody>
+                    <colgroup>
+                        <col style="width:9%">
+                        <col style="width:7%">
+                        <col style="width:15%">
+                        <col style="width:69%">
+                    </colgroup>
 
-                <tfoot>
-                    <tr>
-                        <td colspan="4">
-                            <div class="row-fluid">
-                                <div class="span8 text-center offset2">
-                                    <div st-pagination="" st-items-by-page="pageSize" st-displayed-pages="9" st-template="/App_Plugins/DiploTraceLogViewer/backoffice/diplotracelog/pagination.html">
+                    <tbody>
+                        <tr ng-repeat="item in displayedCollection" ng-class="{tlError: item.Level === 'ERROR', tlWarn: item.Level === 'WARN', tlDebug: item.Level === 'DEBUG'}">
+                            <td class="date" title="{{ item.Date }}">
+                                {{ item.Date | date:'HH:mm:ss' }}<small>{{ item.Date | date:'.sss' }}</small>
+                            </td>
+                            <td class="level">
+                                {{ item.Level }}
+                            </td>
+                            <td class="logger">
+                                <div class="logger-inner" ng-bind-html="item.Logger | diploLastWordHighlight"></div>
+                            </td>
+                            <td ng-click="openDetail(item, displayedCollection)">
+                                <div class="message">{{ item.Message | limitTo:200 }}</div>
+                            </td>
+                        </tr>
+                        <tr ng-show="displayedCollection.length === 0">
+                            <td colspan="4"><div class="text-center info-message">No log items matched your criteria. <a st-reset-search>Clear all filters?</a></div></td>
+                        </tr>
+                    </tbody>
+
+                    <tfoot>
+                        <tr>
+                            <td colspan="4">
+                                <div class="row-fluid">
+                                    <div class="span8 text-center offset2">
+                                        <div st-pagination="" st-items-by-page="pageSize" st-displayed-pages="9" st-template="../App_Plugins/DiploTraceLogViewer/backoffice/diplotracelog/pagination.html">
+                                        </div>
+                                    </div>
+
+                                    <div class="span2 text-right pagination">
+                                        <label>
+                                            Page Size:
+                                            <select ng-model="pageSize" ng-options="item as item for item in itemsPerPage" class="input-small"></select>
+                                        </label>
                                     </div>
                                 </div>
+                            </td>
+                        </tr>
+                    </tfoot>
 
-                                <div class="span2 text-right pagination">
-                                    <label>
-                                        Page Size:
-                                        <select ng-model="pageSize" ng-options="item as item for item in itemsPerPage" class="input-mini"></select>
-                                    </label>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </tfoot>
+                </table>
 
-            </table>
+            </div>
 
         </div>
 
     </div>
+
+    <!-- Log File List Selection -->
+    <div ng-if="!isValid">
+
+        <div class="umb-panel" id="traceLog-panel">
+            <div class="umb-panel-header">
+                <div class="row-fluid">
+                    <div class="span4">
+                        <h1>
+                            <span class="umb-panel-header-name">Trace Log Viewer</span>
+                            <span class="log-name">Please select a log file to view...</span>
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="umb-panel-body umb-scrollable row-fluid" id="traceLog-files">
+
+            <div class="umb-pane">
+
+                <umb-load-indicator ng-show="isLoading"></umb-load-indicator>
+
+                <!-- Log Files -->
+                <table id="traceLog" class="table table-bordered table-condensed table-striped" st-table="displayedFiles" st-safe-src="filesCollection">
+                    <thead>
+                        <tr>
+                            <th st-sort="Date">Date</th>
+                            <th st-sort="Filename">Filename</th>
+                            <th st-sort="MachineName">Machine</th>
+                        </tr>
+                        <tr class="filters">
+                            <td>
+                                <div class="inner-addon right-addon">
+                                    <diplo-clearable></diplo-clearable>
+                                    <input st-search="Date" placeholder="search..." type="search" />
+                                </div>
+                            </td>
+                            <td>
+                                <div class="inner-addon right-addon">
+                                    <diplo-clearable></diplo-clearable>
+                                    <input st-search="Path" placeholder="search..." type="search" />
+                                </div>
+                            </td>
+                            <td>
+                                <div class="inner-addon right-addon">
+                                    <diplo-clearable></diplo-clearable>
+                                    <input st-search="MachineName" placeholder="search..." type="search" />
+                                </div>
+                            </td>
+                        </tr>
+                    </thead>
+
+                    <colgroup>
+                        <col style="width:30%">
+                        <col style="width:50%">
+                        <col style="width:20%">
+                    </colgroup>
+
+                    <tbody>
+                        <tr ng-repeat="item in displayedFiles">
+                            <td class="date" title="{{ item.Date }}">
+                                {{ item.Date | date : "yyyy-MM-dd" }} <small style="float:right">{{ item.Date | date : "EEEE, dd MMMM yyyy" }}</small>
+                            </td>
+                            <td>
+                                <div class="Filename"><a title="{{item.Path}}" href="#/developer/diploTraceLog/edit/{{item.Filename}}">{{ item.Filename }}</a></div>
+                            </td>
+                            <td>
+                                {{item.MachineName}}
+                            </td>
+                        </tr>
+                        <tr ng-show="displayedFiles.length === 0">
+                            <td colspan="4"><div class="text-center info-message">No matching files found.</div></td>
+                        </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>

@@ -7,6 +7,11 @@ angular.module('umbraco.resources').factory('diploTraceLogResources', function (
                 $http.get("Backoffice/TraceLogViewer/TraceLog/GetLogData", { params: { logfileName: file } })
             );
         },
+        getLogFiles: function () {
+            return umbRequestHelper.resourcePromise(
+                $http.get("Backoffice/TraceLogViewer/TraceLog/GetLogFilesList")
+            );
+        },
         getLogDataResponse: function (file) {
             return umbRequestHelper.resourcePromise(
                 $http.get("Backoffice/TraceLogViewer/TraceLog/GetLogDataResponse", { params: { logfileName: file } })

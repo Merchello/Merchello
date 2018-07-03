@@ -74,6 +74,10 @@
         color: #aa6a00;
     }
 
+    #traceLog.table-striped > tbody > tr.tlDebug {
+        color:#66A;
+    }
+
 #traceLog .logger {
     max-width: 200px;
     overflow: hidden;
@@ -94,14 +98,13 @@
 }
 
 #traceLog tfoot {
-    background-color: #e8e8e8;
+    background-color: #f3f3f5;
 }
 
 #traceLog thead {
-    background-color: #e8e8e8;
-    color: #555555;
+    background-color: #f3f3f5;
+    color: #303033;
     font-weight: 600;
-    text-transform: uppercase;
     letter-spacing: 1px;
 }
 
@@ -169,7 +172,14 @@
 
 #traceLog-panel .log-name {
     display: block;
-    color: #666;
+    color: #888;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+#traceLog-panel .log-date {
+    display: block;
+    color: #555;
     font-size: 14px;
     margin-top: 5px;
 }

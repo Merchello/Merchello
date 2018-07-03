@@ -2,7 +2,7 @@
 app.requires.push('smart-table');
 
 angular.module("umbraco").controller("DiploTraceLogEditController",
-    function ($scope, $http, $routeParams, $route, $filter, $q, $templateCache, $timeout, $window, dialogService, notificationsService, navigationService, stConfig, diploTraceLogResources) {
+    function ($scope, $http, $routeParams, $route, $filter, $q, $templateCache, $timeout, $window, dialogService, notificationsService, navigationService, eventsService, stConfig, diploTraceLogResources) {
 
         var timer;
         var lastModified = 0;
@@ -12,6 +12,7 @@ angular.module("umbraco").controller("DiploTraceLogEditController",
         var pollingIndicatorChar = "▪";
 
         $scope.isLoading = true;
+        $scope.isValid = false;
         $scope.pageSize = {};
         $scope.persist = localStorage.getItem(persistKey) === "true" || false;
 
@@ -43,13 +44,37 @@ angular.module("umbraco").controller("DiploTraceLogEditController",
 
         $scope.isCurrentLog = $routeParams.id.endsWith('.txt');
 
-        navigationService.syncTree({ tree: 'diploTraceLog', path: ["-1", $routeParams.id], forceReload: false });
+        // Sync tree
+        var routePath = ($routeParams.id === "Date" || $routeParams.id === "Filename" || $scope.isCurrentLog) ? [$routeParams.id] : ["Date", $routeParams.id];
+
+        navigationService.syncTree({
+            tree: $routeParams.tree,
+            path: routePath,
+            forceReload: false
+        });
 
         // Gets the log data and populates the row collection
         var getLogData = function () {
+
+            if ($routeParams.id == "Date" || $routeParams.id == "Filename") {
+                getLogFiles();
+                return;
+            };
+
+            $scope.isValid = true;
+
             diploTraceLogResources.getLogDataResponse($routeParams.id).then(function (data) {
                 $scope.rowCollection = data.LogDataItems;
                 lastModified = data.LastModifiedTicks;
+                $scope.logFileDate = data.Date;
+                $scope.isLoading = false;
+            });
+        }
+
+        // gets the log file list
+        var getLogFiles = function () {
+            diploTraceLogResources.getLogFiles().then(function (data) {
+                $scope.filesCollection = data;
                 $scope.isLoading = false;
             });
         }

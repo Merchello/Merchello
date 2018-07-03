@@ -219,3 +219,10 @@ src/Merchello.FastTrack.Ui/App_Data/umbraco.config
 src/Merchello.Core/App_Data/NuGetBackup/
 src/Merchello.Web/App_Data/NuGetBackup/
 src/Merchello.FastTrack.Ui/App_Data/TEMP/ClientDependency/*
+src/Merchello.FastTrack.Ui/App_Data/*
+
+vwa-plugins/*
+src/Merchello.FastTrack.Ui/App_Data/Umbraco.sdf
+src/Merchello.FastTrack.Ui/App_Plugins/HapHap/*
+src/Merchello.FastTrack.Ui/App_Plugins/KassenConfigurator_example/*
+src/Merchello.FastTrack.Ui/App_Plugins/VWASpider/*
