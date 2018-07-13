@@ -115,7 +115,14 @@
             // Reset the Product Options Collection so that updated values are ordered and cached correctly
             product.ProductOptions = SaveForProduct(product.ProductOptions.AsEnumerable(), product.Key);
 
-            return product.ProductOptions.Where(x => x.Shared).Select(x => x.Key);
+            if (product.ProductOptions.Any())
+            {
+                return product.ProductOptions.Where(x => x.Shared).Select(x => x.Key);
+            }
+            else
+            {
+                return new List<Guid> { product.ProductVariantKey };
+            }
         }
 
         /// <summary>

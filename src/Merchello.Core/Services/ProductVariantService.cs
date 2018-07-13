@@ -241,6 +241,10 @@
                 }
             }
 
+			// clear caches
+            MerchelloContext.Current.Cache.RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProduct>(productVariant.ProductKey));
+            MerchelloContext.Current.Cache.RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProductVariant>(productVariant.Key));
+			
             if (raiseEvents)
                 Saved.RaiseEvent(new SaveEventArgs<IProductVariant>(productVariant), this);
         }
@@ -271,6 +275,13 @@
                 }
             }
 
+			foreach (var productVariant in productVariants)
+            {
+                // clear caches
+                MerchelloContext.Current.Cache.RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProduct>(productVariant.ProductKey));
+                MerchelloContext.Current.Cache.RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProductVariant>(productVariant.Key));
+            }
+			
             if (raiseEvents)
 
             Saved.RaiseEvent(new SaveEventArgs<IProductVariant>(productVariants), this);
