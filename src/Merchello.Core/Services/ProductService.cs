@@ -294,7 +294,14 @@
 
             // save any remaining variants changes in the variants collection
             if (product.ProductVariants.Any())
-            _productVariantService.Save(product.ProductVariants, false);
+            {
+                _productVariantService.Save(product.ProductVariants, false);
+            }
+            else
+            {
+                // clear cache for product
+                MerchelloContext.Current.Cache.RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProduct>(product.Key));
+            }
 
             if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IProduct>(product), this);
 
@@ -331,6 +338,19 @@
             // verify that all variants of these products still have attributes - or delete them
             productArray.ForEach(EnsureProductVariantsHaveAttributes);
 
+			foreach (var product in productArray)
+            {
+                if (product.ProductVariants.Any())
+                {
+                    _productVariantService.Save(product.ProductVariants, false);
+                }
+                else
+                {
+                    // clear cache for product
+                    MerchelloContext.Current.Cache.RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProduct>(product.Key));
+                }
+            }
+			
             if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IProduct>(productArray), this);
         }
 

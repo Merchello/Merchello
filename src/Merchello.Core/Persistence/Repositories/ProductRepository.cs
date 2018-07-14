@@ -1967,7 +1967,9 @@
             // clear the cache for other products affected
             foreach (var key in productKeys)
             {
-                RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProduct>(key));
+				// clear cache item for both product and variant
+				RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProduct>(key));
+				RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProductVariant>(key));
             }
         }
     }

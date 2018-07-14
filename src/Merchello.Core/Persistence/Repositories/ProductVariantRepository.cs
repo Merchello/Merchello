@@ -245,6 +245,7 @@
             {
                 entity.ResetDirtyProperties();
                 RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProduct>(entity.ProductKey));
+				RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProductVariant>(entity.Key));
             }
         }
 
@@ -272,6 +273,7 @@
             {
                 entity.ResetDirtyProperties();
                 RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProduct>(entity.ProductKey));
+				RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProductVariant>(entity.Key));
             }
         }
 
@@ -898,7 +900,7 @@
 
             entity.ResetDirtyProperties();
 
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProduct>(entity.ProductKey));
+            RemoveProductsFromRuntimeCache(new[] { entity.ProductKey });
         }
 
         /// <summary>
@@ -1172,6 +1174,7 @@
             foreach (var key in productKeys)
             {
                 RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProduct>(key));
+				RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProductVariant>(key));
             }
         }
     }
