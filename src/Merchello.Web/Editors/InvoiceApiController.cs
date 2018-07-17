@@ -501,7 +501,7 @@
         /// The <see cref="HttpResponseMessage"/>.
         /// </returns>
         [HttpPost]
-        public HttpResponseMessage PutInvoiceNewProducts(InvoiceAddItems invoiceAddItems)
+        public virtual HttpResponseMessage PutInvoiceNewProducts(InvoiceAddItems invoiceAddItems)
         {
             var response = Request.CreateResponse(HttpStatusCode.OK);
 
@@ -585,7 +585,13 @@
         }
 
 
-        internal InvoiceAdjustmentType SetInvoiceAdjustmentType(InvoiceAddItems invoiceAddItems, InvoiceOrderShipment invoiceOrderShipment)
+        /// <summary>
+        /// Sets the adjustment type
+        /// </summary>
+        /// <param name="invoiceAddItems"></param>
+        /// <param name="invoiceOrderShipment"></param>
+        /// <returns></returns>
+        public virtual InvoiceAdjustmentType SetInvoiceAdjustmentType(InvoiceAddItems invoiceAddItems, InvoiceOrderShipment invoiceOrderShipment)
         {
             if (invoiceOrderShipment.Invoice != null)
             {
@@ -619,7 +625,7 @@
         /// <param name="invoiceAddItems"></param>
         /// <param name="invoiceAdjustmentResult"></param>
         /// <returns></returns>
-        internal InvoiceAdjustmentResult UpdateCustomProductsOnInvoice(InvoiceOrderShipment invoiceOrderShipment,
+        public virtual InvoiceAdjustmentResult UpdateCustomProductsOnInvoice(InvoiceOrderShipment invoiceOrderShipment,
             IEnumerable<InvoiceAddItem> invoiceAddItems, InvoiceAdjustmentResult invoiceAdjustmentResult)
         {
 
@@ -644,7 +650,6 @@
 
             foreach (var invoiceAddItem in addItems)
             {
-
                 // If we get here we're good to update
                 // Do the order
                 foreach (var order in invoiceOrderShipment.Orders)
@@ -653,10 +658,10 @@
                     {
                         if (orderItem.Sku == invoiceAddItem.OriginalSku)
                         {
-                            orderItem.Sku = invoiceAddItem.Sku;
-                            orderItem.Name = invoiceAddItem.Name;
+                            orderItem.Sku = invoiceAddItem.OriginalSku;
+                            orderItem.Name = invoiceAddItem.OriginalName;
                             orderItem.Quantity = invoiceAddItem.Quantity;
-                            orderItem.Price = invoiceAddItem.Price;
+                            orderItem.Price = invoiceAddItem.OriginalPrice;
 
                             break;
                         }
@@ -668,10 +673,10 @@
                 {
                     if (invoiceItem.Sku == invoiceAddItem.OriginalSku)
                     {
-                        invoiceItem.Sku = invoiceAddItem.Sku;
-                        invoiceItem.Name = invoiceAddItem.Name;
+                        invoiceItem.Sku = invoiceAddItem.OriginalSku;
+                        invoiceItem.Name = invoiceAddItem.OriginalName;
                         invoiceItem.Quantity = invoiceAddItem.Quantity;
-                        invoiceItem.Price = invoiceAddItem.Price;
+                        invoiceItem.Price = invoiceAddItem.OriginalPrice;
 
                         break;
                     }
@@ -700,7 +705,7 @@
         /// <param name="invoiceOrderShipment"></param>
         /// <param name="invoiceAddItems"></param>
         /// <param name="invoiceAdjustmentResult"></param>
-        internal InvoiceAdjustmentResult DeleteLineItemsFromInvoice(InvoiceOrderShipment invoiceOrderShipment, IEnumerable<InvoiceAddItem> invoiceAddItems, InvoiceAdjustmentResult invoiceAdjustmentResult)
+        public virtual InvoiceAdjustmentResult DeleteLineItemsFromInvoice(InvoiceOrderShipment invoiceOrderShipment, IEnumerable<InvoiceAddItem> invoiceAddItems, InvoiceAdjustmentResult invoiceAdjustmentResult)
         {
             // Get the items to be deleted in a dictionary by SKU too
             var skusToBeDeleted = invoiceAddItems.Where(x => x.Quantity <= 0).Select(x => x.OriginalSku);
@@ -788,7 +793,7 @@
         /// <param name="invoiceOrderShipment"></param>
         /// <param name="invoiceAddItems"></param>
         /// <param name="invoiceAdjustmentResult"></param>
-        internal InvoiceAdjustmentResult AddNewLineItemsToInvoice(InvoiceOrderShipment invoiceOrderShipment, IEnumerable<InvoiceAddItem> invoiceAddItems, InvoiceAdjustmentResult invoiceAdjustmentResult)
+        public virtual InvoiceAdjustmentResult AddNewLineItemsToInvoice(InvoiceOrderShipment invoiceOrderShipment, IEnumerable<InvoiceAddItem> invoiceAddItems, InvoiceAdjustmentResult invoiceAdjustmentResult)
         {
             if (invoiceAdjustmentResult.InvoiceLineItemType == InvoiceLineItemType.Product)
             {
