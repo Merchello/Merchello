@@ -163,7 +163,7 @@
 
             // We're using an internal helper here so we can keep all of our report SQL queries in a single location
             // in case we want to refactor to some sort of service at a later date.
-            var sql = ReportSqlHelper.SalesByItem.GetSkuSaleCountSql(startDate, endDate, _productLineItemTfKey);
+            var sql = ReportSqlHelper.SalesByItem.GetSkuSaleCountSql(startDate, endDate, _productLineItemTfKey, 50);
 
             var dtos = database.Query<SkuSaleCountDto>(sql).ToArray();
 
