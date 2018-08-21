@@ -1,0 +1,11 @@
+﻿{   
+    
+    //array of files we want to inject into the application on app_start
+    javascript: [
+        '~/App_Plugins/ETCConnector/backoffice/ETCConnector/ETCConnector.ETCConnector.edit.controller.js'
+    ],
+
+	 css: [
+		'~/App_Plugins/ETCConnector/Css/spider.css'
+	 ]
+}

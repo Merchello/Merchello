@@ -1,0 +1,21 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using Umbraco.Web
+
+@{ 
+    // 1099 is the categorie content node
+    var CategoryNode = Umbraco.TypedContent(1099).Children.Where(x => x.IsVisible()).ToArray();
+    //var selection = CategoryNode.Children.Where(x => x.IsVisible()).ToArray();
+}
+<h3>Categorieën</h3>
+
+@if (CategoryNode.Length > 0)
+{
+    <ul>
+        @foreach (var item in CategoryNode)
+        {
+            <li>
+                <a href="@item.Url">@item.Name</a>
+            </li>
+        }
+    </ul>
+}

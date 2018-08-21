@@ -210,7 +210,7 @@ src/Merchello.Web.UI/bin/
 src/Merchello.FastTrack.Ui/App_Data/TEMP/
 src/Merchello.FastTrack.Ui/App_Data/cache/
 src/Merchello.FastTrack.Ui/App_Data/Models/
-src/Merchello.FastTrack.Ui/bin/Merchello.*
+src/Merchello.FastTrack.Ui/bin/*
 src/Merchello.FastTrack.Ui/media/created-packages/
 src/Merchello.FastTrack.Ui/App_Data/NuGetBackup/
 *project.lock.json
@@ -226,3 +226,12 @@ src/Merchello.FastTrack.Ui/App_Data/Umbraco.sdf
 src/Merchello.FastTrack.Ui/App_Plugins/HapHap/*
 src/Merchello.FastTrack.Ui/App_Plugins/KassenConfigurator_example/*
 src/Merchello.FastTrack.Ui/App_Plugins/VWASpider/*
+/src/Merchello.FastTrack.Ui/content
+/src/Merchello.FastTrack.Ui/media
+src/Merchello.Mui.Client/App_Data/*
+src/Merchello.Mui.Client/Bin/*
+src/Merchello.Providers.UI.Client/App_Data/*
+src/Merchello.Providers.UI.Client/Bin/*
+src/Merchello.Web.UI.Client/App_Data/*
+src/Merchello.Web.UI.Client/Bin/*
+src/Merchello.FastTrack.Ui/Umbraco/lib/*

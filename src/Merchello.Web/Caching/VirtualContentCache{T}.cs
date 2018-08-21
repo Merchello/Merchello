@@ -88,7 +88,12 @@
         /// </returns>
         public TContent GetByKey(Guid key)
         {
-            var cacheKey = GetCacheKey(key, ModifiedVersion);
+			if (ModifiedVersion)
+			{
+				return _fetch != null ?	 _fetch.Invoke(key) : default(TContent);
+			}
+
+			var cacheKey = GetCacheKey(key, ModifiedVersion);
 
             var content = (TContent)_cache.RuntimeCache.GetCacheItem(cacheKey);
             if (content != null) return content;

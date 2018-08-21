@@ -1,0 +1,69 @@
+﻿{
+	// you can define multiple editors
+	"propertyEditors": [
+		{
+			/*this must be a unique alias*/
+			"alias": "ETC.HotspotPicker",
+			/*the name*/
+			"name": "HotspotPicker",
+			/*the icon*/
+			"icon": "icon-wand",
+			/*grouping for "Select editor" dialog*/
+			"group": "Content Picker",
+			/*the HTML file we will load for the editor*/
+			"editor": {
+				"view": "~/App_Plugins/Hotspots/BackOffice/Hotspots/hotspotPicker.html"
+			}
+		}
+	],
+
+
+	"gridEditors": [
+			{
+				"name": "HotspotPicker",
+				"alias": "ETC.HotspotPicker",
+				"view": "~/App_Plugins/Hotspots/GridEditors/hotspotPicker.html",
+				"render": "~/App_Plugins/Hotspots/GridEditors/editor.cshtml",
+				"icon": "icon-wand",
+				"config": {
+					"color": "red",
+					"text-align": "right"
+				}
+			}
+	],
+
+
+
+	// todo: use assertservice:::
+	//https://our.umbraco.com/documentation/Tutorials/creating-a-property-editor/
+
+
+	//array of files we want to inject into the application on app_start
+	"javascript": [
+
+		//"~/App_Plugins/Hotspots/BackOffice/Hotspots/submodules/squares/js/squares-renderer.js",
+		//"~/App_Plugins/Hotspots/BackOffice/Hotspots/submodules/squares/js/squares.js",
+		//"~/App_Plugins/Hotspots/BackOffice/Hotspots/submodules/squares/js/squares-elements-jquery.js",
+		//"~/App_Plugins/Hotspots/BackOffice/Hotspots/submodules/squares/js/squares-controls.js",
+
+		//"~/App_Plugins/Hotspots/BackOffice/Hotspots/submodules/wcp-editor/js/wcp-editor.js",
+		//"~/App_Plugins/Hotspots/BackOffice/Hotspots/submodules/wcp-editor/js/wcp-editor-controls.js",
+		//"~/App_Plugins/Hotspots/BackOffice/Hotspots/submodules/wcp-compress/js/wcp-compress.js",
+		//"~/App_Plugins/Hotspots/BackOffice/Hotspots/submodules/wcp-icons/js/wcp-icons.js",
+
+		//"~/App_Plugins/Hotspots/BackOffice/Hotspots/js/image-map-pro-defaults.js",
+		//"~/App_Plugins/Hotspots/BackOffice/Hotspots/js/image-map-pro-editor.js",
+		//"~/App_Plugins/Hotspots/BackOffice/Hotspots/js/image-map-pro-editor-content.js",
+		//"~/App_Plugins/Hotspots/BackOffice/Hotspots/js/image-map-pro-editor-local-storage.js",
+		//"~/App_Plugins/Hotspots/BackOffice/Hotspots/js/image-map-pro-editor-init-jquery.js",
+		//"~/App_Plugins/Hotspots/BackOffice/Hotspots/js/image-map-pro.js",
+
+		"~/App_Plugins/Hotspots/backoffice/Hotspots/Hotspots.Hotspots.edit.controller.js"
+
+
+	],
+
+	"css": [
+		"~/App_Plugins/Hotspots/backoffice/hotspots.css"
+	]
+}

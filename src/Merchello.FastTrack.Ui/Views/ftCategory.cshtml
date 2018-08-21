@@ -1,13 +1,145 @@
 ﻿@using System.Web.Mvc.Html
 @using Merchello.Web
 @using Merchello.Web.Search
-@inherits Umbraco.Web.Mvc.UmbracoViewPage<FtCategory>
+@using ETC.B2B.WEB
+@using ETC.UmbracoETC.Hotspots.Models
+@using Merchello.Web.Models
+@using Merchello.Web.Models.Ui.Rendering
+@using Merchello.Web.Models.VirtualContent
+
+@inherits Merchello.Web.Mvc.MerchelloViewPage<FtCategory>
+
 @{
+	/**/
+
 	Layout = "FastTrack.cshtml";
+
+
+	// Products is the property of documenttype FtCategory, of datatype Merchello.ProductListView
+	// Name Produts can vary per implementation
+	var ProductsProperty = Model.GetProperty("Products");
+	long total = 0;
+
+	Paging paging = null; // Paging.GetPages(1, 10);
+
+	// products to be listed
+	IEnumerable<Merchello.Web.Models.VirtualContent.IProductContent> products = null;
+
+	//
+	this.Merchello.ProductContentQuery().Reset();
+
+	// stukje uit Merchello.Web.PropertyConverters\ProductListViewValueConverter.cs
+
+	// DataValue is the collection which is choosen in the content node in Umbraco Admin area
+	// Can be string.empty or the selected collection key
+	if (ProductsProperty.DataValue != null)
+	{
+		var collectionKey = ProductsProperty.DataValue.ToString();
+
+		if (collectionKey.IsNullOrWhiteSpace())
+		{
+
+			total = this.Merchello.ProductContentQuery().Execute().TotalItems;
+			var query = this.Merchello.ProductContentQuery().Page(Paging.GetCurrentPage()).ItemsPerPage(10).OrderBy(ProductSortField.Name);
+			products = query.Execute().Items;
+		}
+
+		try
+		{
+			var key = new Guid(collectionKey);
+
+			total = this.Merchello.ProductContentQuery().ConstrainByCollectionKey(key).Execute().TotalItems;
+			var query = this.Merchello.ProductContentQuery().Page(Paging.GetCurrentPage()).ItemsPerPage(10).ConstrainByCollectionKey(key);
+			products = query.Execute().Items;
+		}
+		catch (Exception ex)
+		{
+			// ignore
+		}
+	}
+
+
+	if (products != null)
+	{
+		paging = Paging.GetPages(total, 10);
+		//		products = products.Skip(paging.Skip).Take(paging.Take).ToList();
+	}
+
 }
 
 @Html.Partial("_Headline")
 
 <div class="container-fluid">
-    @Html.Partial("_ProductBoxList", Model.Products)
+
+	<div class="row">
+
+		<div class="col-md-3">
+			@Html.Partial("hkCategories")
+		</div>
+
+		<div class="col-md-9">
+			@Html.Partial("_ProductBoxList", products)
+		</div>
+	</div>
+	<div class="row">
+		@RenderPaging(paging, paging.CurrentPage)
+	</div>
+
+	<div>
+		HotSpots
+	</div>
+	<div>
+		
+		@*Maatwerk HKLiving Hotspots*@
+		@*Call to  Hotspots Controller*@
+		@if (Model.HasProperty("hotspotpicker") && Model.HasValue("hotspotpicker"))
+		{
+			@Html.Action("HotSpotScript", "HotSpotSurface", new { area = "HotSpots", id = Model.GetPropertyValue("hotspotpicker"), clientId = "image-map-pro-container" })
+		}
+	</div>
+
+	@Html.GetGridHtml(Model, "grid")
+
 </div>
+
+
+@helper RenderPaging(Paging paging, long currentId)
+	{
+		/**/
+
+		/**/
+
+		<a class="@(paging.CurrentPage > 1 ? "" : "disabled")" @(paging.CurrentPage > 1 ? "href=?page=" + paging.PreviousPage : "disabled")>< Vorige</a>
+
+		if (paging.StartPageToShow > 1)
+		{
+			<a href="?page=1">1..</a><text>&nbsp;</text>
+		}
+
+		for (var i = paging.StartPageToShow; i <= paging.EndPageToShow; i++)
+		{
+			if (paging.CurrentPage == i)
+			{
+				@i<text>&nbsp;</text>
+			}
+			else
+			{
+				<a href="?page=@i">@i</a><text>&nbsp;</text>
+			}
+		}
+
+
+		if (paging.EndPageToShow < paging.TotalPages)
+		{
+			<a href="?page=@paging.TotalPages">...@paging.TotalPages</a><text>&nbsp;</text>
+		}
+		<a class="@(paging.CurrentPage < paging.TotalPages ? "" : "disabled")" @(paging.CurrentPage < paging.TotalPages ? "href=?page=" + paging.NextPage : "disabled")>Volgende ></a>
+}
+
+
+@section Scripts {
+
+	<link rel="stylesheet" href="/scripts/css/image-map-pro.min.css">
+	<script type="text/javascript" src="/scripts/js/image-map-pro.min.js"></script>
+
+}

@@ -1,0 +1,18 @@
+﻿@model ETC.UmbracoETC.Hotspots.Models.HotspotModel
+@{
+
+	int newID = (int)(Context.Items.Contains("hotspotID") ? Context.Items["hotspotID"] : 0) + 1;
+	Context.Items["hotspotID"] = newID;
+	string clientId = string.Format("image-map-pro-{0}", newID);
+}
+
+<div id="@clientId">
+</div>
+@{
+	if (Model != null && !string.IsNullOrEmpty(Model.Data))
+	{
+		<script type="text/javascript">
+			function loadHotspot() {$('#@clientId').imageMapPro(@Html.Raw(Model.Data));	}if (document.readyState === "loading") {document.addEventListener("DOMContentLoaded", loadHotspot);} else {loadHotspot();}
+		</script>
+	}
+}

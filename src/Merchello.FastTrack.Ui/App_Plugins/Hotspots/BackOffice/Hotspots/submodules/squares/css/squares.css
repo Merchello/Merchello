@@ -1,0 +1,279 @@
+@import url(font-awesome.min.css);
+
+/* Some fixes */
+
+.squares-clear {
+    clear: both;
+}
+.squares-element {
+    float: left;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+.squares-element > * {
+    margin: 0;
+}
+.squares-element img, .squares-element video {
+    max-width: 100%;
+}
+
+.squares-button {
+    text-decoration: none;
+    text-align: center;
+}
+.squares-button:hover {
+    filter: brightness(1.1);
+    -moz-filter: brightness(1.1);
+    -webkit-filter: brightness(1.1);
+}
+.squares-button:active {
+    filter: brightness(0.9);
+    -moz-filter: brightness(0.9);
+    -webkit-filter: brightness(0.9);
+}
+
+/* Contains Bootstrap's grid system, with some features removed. */
+
+@media (max-width: 767px) {
+    .sq-hidden-xs {
+        display: none !important;
+    }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+    .sq-hidden-sm {
+        display: none !important;
+    }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+    .sq-hidden-md {
+        display: none !important;
+    }
+}
+@media (min-width: 1200px) {
+    .sq-hidden-lg {
+        display: none !important;
+    }
+}
+/*.container {
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+@media (min-width: 768px) {
+    .container {
+        width: 750px;
+    }
+}
+@media (min-width: 992px) {
+    .container {
+        width: 970px;
+    }
+}
+@media (min-width: 1200px) {
+    .container {
+        width: 1170px;
+    }
+}
+.container-fluid {
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.row {
+    margin-left: -15px;
+    margin-right: -15px;
+}*/
+.sq-col-xs-1, .sq-col-sm-1, .sq-col-md-1, .sq-col-lg-1, .sq-col-xs-2, .sq-col-sm-2, .sq-col-md-2, .sq-col-lg-2, .sq-col-xs-3, .sq-col-sm-3, .sq-col-md-3, .sq-col-lg-3, .sq-col-xs-4, .sq-col-sm-4, .sq-col-md-4, .sq-col-lg-4, .sq-col-xs-5, .sq-col-sm-5, .sq-col-md-5, .sq-col-lg-5, .sq-col-xs-6, .sq-col-sm-6, .sq-col-md-6, .sq-col-lg-6, .sq-col-xs-7, .sq-col-sm-7, .sq-col-md-7, .sq-col-lg-7, .sq-col-xs-8, .sq-col-sm-8, .sq-col-md-8, .sq-col-lg-8, .sq-col-xs-9, .sq-col-sm-9, .sq-col-md-9, .sq-col-lg-9, .sq-col-xs-10, .sq-col-sm-10, .sq-col-md-10, .sq-col-lg-10, .sq-col-xs-11, .sq-col-sm-11, .sq-col-md-11, .sq-col-lg-11, .sq-col-xs-12, .sq-col-sm-12, .sq-col-md-12, .sq-col-lg-12 {
+    position: relative;
+    min-height: 1px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.sq-col-xs-1, .sq-col-xs-2, .sq-col-xs-3, .sq-col-xs-4, .sq-col-xs-5, .sq-col-xs-6, .sq-col-xs-7, .sq-col-xs-8, .sq-col-xs-9, .sq-col-xs-10, .sq-col-xs-11, .sq-col-xs-12 {
+    float: left;
+}
+.sq-col-xs-12 {
+    width: 100%;
+}
+.sq-col-xs-11 {
+    width: 91.66666667%;
+}
+.sq-col-xs-10 {
+    width: 83.33333333%;
+}
+.sq-col-xs-9 {
+    width: 75%;
+}
+.sq-col-xs-8 {
+    width: 66.66666667%;
+}
+.sq-col-xs-7 {
+    width: 58.33333333%;
+}
+.sq-col-xs-6 {
+    width: 50%;
+}
+.sq-col-xs-5 {
+    width: 41.66666667%;
+}
+.sq-col-xs-4 {
+    width: 33.33333333%;
+}
+.sq-col-xs-3 {
+    width: 25%;
+}
+.sq-col-xs-2 {
+    width: 16.66666667%;
+}
+.sq-col-xs-1 {
+    width: 8.33333333%;
+}
+@media (min-width: 768px) {
+    .sq-col-sm-1, .sq-col-sm-2, .sq-col-sm-3, .sq-col-sm-4, .sq-col-sm-5, .sq-col-sm-6, .sq-col-sm-7, .sq-col-sm-8, .sq-col-sm-9, .sq-col-sm-10, .sq-col-sm-11, .sq-col-sm-12 {
+        float: left;
+    }
+    .sq-col-sm-12 {
+        width: 100%;
+    }
+    .sq-col-sm-11 {
+        width: 91.66666667%;
+    }
+    .sq-col-sm-10 {
+        width: 83.33333333%;
+    }
+    .sq-col-sm-9 {
+        width: 75%;
+    }
+    .sq-col-sm-8 {
+        width: 66.66666667%;
+    }
+    .sq-col-sm-7 {
+        width: 58.33333333%;
+    }
+    .sq-col-sm-6 {
+        width: 50%;
+    }
+    .sq-col-sm-5 {
+        width: 41.66666667%;
+    }
+    .sq-col-sm-4 {
+        width: 33.33333333%;
+    }
+    .sq-col-sm-3 {
+        width: 25%;
+    }
+    .sq-col-sm-2 {
+        width: 16.66666667%;
+    }
+    .sq-col-sm-1 {
+        width: 8.33333333%;
+    }
+}
+@media (min-width: 992px) {
+    .sq-col-md-1, .sq-col-md-2, .sq-col-md-3, .sq-col-md-4, .sq-col-md-5, .sq-col-md-6, .sq-col-md-7, .sq-col-md-8, .sq-col-md-9, .sq-col-md-10, .sq-col-md-11, .sq-col-md-12 {
+        float: left;
+    }
+    .sq-col-md-12 {
+        width: 100%;
+    }
+    .sq-col-md-11 {
+        width: 91.66666667%;
+    }
+    .sq-col-md-10 {
+        width: 83.33333333%;
+    }
+    .sq-col-md-9 {
+        width: 75%;
+    }
+    .sq-col-md-8 {
+        width: 66.66666667%;
+    }
+    .sq-col-md-7 {
+        width: 58.33333333%;
+    }
+    .sq-col-md-6 {
+        width: 50%;
+    }
+    .sq-col-md-5 {
+        width: 41.66666667%;
+    }
+    .sq-col-md-4 {
+        width: 33.33333333%;
+    }
+    .sq-col-md-3 {
+        width: 25%;
+    }
+    .sq-col-md-2 {
+        width: 16.66666667%;
+    }
+    .sq-col-md-1 {
+        width: 8.33333333%;
+    }
+}
+@media (min-width: 1200px) {
+    .sq-col-lg-1, .sq-col-lg-2, .sq-col-lg-3, .sq-col-lg-4, .sq-col-lg-5, .sq-col-lg-6, .sq-col-lg-7, .sq-col-lg-8, .sq-col-lg-9, .sq-col-lg-10, .sq-col-lg-11, .sq-col-lg-12 {
+        float: left;
+    }
+    .sq-col-lg-12 {
+        width: 100%;
+    }
+    .sq-col-lg-11 {
+        width: 91.66666667%;
+    }
+    .sq-col-lg-10 {
+        width: 83.33333333%;
+    }
+    .sq-col-lg-9 {
+        width: 75%;
+    }
+    .sq-col-lg-8 {
+        width: 66.66666667%;
+    }
+    .sq-col-lg-7 {
+        width: 58.33333333%;
+    }
+    .sq-col-lg-6 {
+        width: 50%;
+    }
+    .sq-col-lg-5 {
+        width: 41.66666667%;
+    }
+    .sq-col-lg-4 {
+        width: 33.33333333%;
+    }
+    .sq-col-lg-3 {
+        width: 25%;
+    }
+    .sq-col-lg-2 {
+        width: 16.66666667%;
+    }
+    .sq-col-lg-1 {
+        width: 8.33333333%;
+    }
+}
+/*.clearfix,
+.clearfix:before,
+.clearfix:after,
+.container:before,
+.container:after,
+.container-fluid:before,
+.container-fluid:after,
+.row:before,
+.row:after {
+    content: " ";
+    display: table;
+}
+.clearfix:after,
+.container:after,
+.container-fluid:after,
+.row:after {
+    clear: both;
+}
+.center-block {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}*/

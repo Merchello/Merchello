@@ -165,8 +165,7 @@
             MultiLogHelper.Info<CustomerMembershipController>("Registering a new member", logData);
 
             var member = Members.RegisterMember(registerModel, out status, model.PersistLogin);
-
-
+			
             var registration = NewMemberModelFactory.Create(model, status);
 
             if (registration.ViewData.Success)

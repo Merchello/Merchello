@@ -1,60 +1,94 @@
-/**
- * plugin.js
- *
- * Released under LGPL License.
- * Copyright (c) 1999-2015 Ephox Corp. All rights reserved
- *
- * License: http://www.tinymce.com/license
- * Contributing: http://www.tinymce.com/contributing
- */
+(function () {
+var code = (function () {
+  'use strict';
 
-/*global tinymce:true */
+  var global = tinymce.util.Tools.resolve('tinymce.PluginManager');
 
-tinymce.PluginManager.add('code', function(editor) {
-	function showDialog() {
-		var win = editor.windowManager.open({
-			title: "Source code",
-			body: {
-				type: 'textbox',
-				name: 'code',
-				multiline: true,
-				minWidth: editor.getParam("code_dialog_width", 600),
-				minHeight: editor.getParam("code_dialog_height", Math.min(tinymce.DOM.getViewPort().h - 200, 500)),
-				spellcheck: false,
-				style: 'direction: ltr; text-align: left'
-			},
-			onSubmit: function(e) {
-				// We get a lovely "Wrong document" error in IE 11 if we
-				// don't move the focus to the editor before creating an undo
-				// transation since it tries to make a bookmark for the current selection
-				editor.focus();
+  var global$1 = tinymce.util.Tools.resolve('tinymce.dom.DOMUtils');
 
-				editor.undoManager.transact(function() {
-					editor.setContent(e.data.code);
-				});
+  var getMinWidth = function (editor) {
+    return editor.getParam('code_dialog_width', 600);
+  };
+  var getMinHeight = function (editor) {
+    return editor.getParam('code_dialog_height', Math.min(global$1.DOM.getViewPort().h - 200, 500));
+  };
+  var $_7a5bps9ojh8lpugv = {
+    getMinWidth: getMinWidth,
+    getMinHeight: getMinHeight
+  };
 
-				editor.selection.setCursorLocation();
-				editor.nodeChanged();
-			}
-		});
+  var setContent = function (editor, html) {
+    editor.focus();
+    editor.undoManager.transact(function () {
+      editor.setContent(html);
+    });
+    editor.selection.setCursorLocation();
+    editor.nodeChanged();
+  };
+  var getContent = function (editor) {
+    return editor.getContent({ source_view: true });
+  };
+  var $_4f0hos9qjh8lpugw = {
+    setContent: setContent,
+    getContent: getContent
+  };
 
-		// Gecko has a major performance issue with textarea
-		// contents so we need to set it when all reflows are done
-		win.find('#code').value(editor.getContent({source_view: true}));
-	}
+  var open = function (editor) {
+    var minWidth = $_7a5bps9ojh8lpugv.getMinWidth(editor);
+    var minHeight = $_7a5bps9ojh8lpugv.getMinHeight(editor);
+    var win = editor.windowManager.open({
+      title: 'Source code',
+      body: {
+        type: 'textbox',
+        name: 'code',
+        multiline: true,
+        minWidth: minWidth,
+        minHeight: minHeight,
+        spellcheck: false,
+        style: 'direction: ltr; text-align: left'
+      },
+      onSubmit: function (e) {
+        $_4f0hos9qjh8lpugw.setContent(editor, e.data.code);
+      }
+    });
+    win.find('#code').value($_4f0hos9qjh8lpugw.getContent(editor));
+  };
+  var $_8t2ji69njh8lpugu = { open: open };
 
-	editor.addCommand("mceCodeEditor", showDialog);
+  var register = function (editor) {
+    editor.addCommand('mceCodeEditor', function () {
+      $_8t2ji69njh8lpugu.open(editor);
+    });
+  };
+  var $_1cb0ek9mjh8lpugt = { register: register };
 
-	editor.addButton('code', {
-		icon: 'code',
-		tooltip: 'Source code',
-		onclick: showDialog
-	});
+  var register$1 = function (editor) {
+    editor.addButton('code', {
+      icon: 'code',
+      tooltip: 'Source code',
+      onclick: function () {
+        $_8t2ji69njh8lpugu.open(editor);
+      }
+    });
+    editor.addMenuItem('code', {
+      icon: 'code',
+      text: 'Source code',
+      onclick: function () {
+        $_8t2ji69njh8lpugu.open(editor);
+      }
+    });
+  };
+  var $_aziuou9rjh8lpugx = { register: register$1 };
 
-	editor.addMenuItem('code', {
-		icon: 'code',
-		text: 'Source code',
-		context: 'tools',
-		onclick: showDialog
-	});
-});
+  global.add('code', function (editor) {
+    $_1cb0ek9mjh8lpugt.register(editor);
+    $_aziuou9rjh8lpugx.register(editor);
+    return {};
+  });
+  function Plugin () {
+  }
+
+  return Plugin;
+
+}());
+})();

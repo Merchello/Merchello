@@ -1,0 +1,47 @@
+﻿<ng-form name="vortoForm">
+    <div id="vorto-{{model.id}}" class="vorto" ng-controller="Our.Umbraco.PropertyEditors.Vorto.vortoEditor">
+  
+        <ul class="vorto-tabs">
+            <li class="vorto-tabs__item"
+                ng-class="currentLanguage.isoCode == realActiveLanguage.isoCode ? 'active' : ''" 
+                ng-click="setActiveLanguage(currentLanguage);">
+                <span ng-hide="model.config.displayNativeNames">{{currentLanguage.name}}</span>
+                <span ng-show="model.config.displayNativeNames">{{currentLanguage.nativeName}}</span>
+                <span class="icon icon-check color-green" ng-show="isFilledIn(currentLanguage)"></span>
+            </li><!--
+                --><li class="vorto-tabs__item vorto-tabs__item--icon" 
+                        ng-class="language.isoCode == realActiveLanguage.isoCode ? 'active' : ''"
+                        ng-repeat="language in pinnedLanguages" 
+                        ng-click="setActiveLanguage(language);">
+                        <span ng-hide="model.config.displayNativeNames">{{language.name}}</span>
+                        <span ng-show="model.config.displayNativeNames">{{language.nativeName}}</span>
+                       <span class="icon icon-check color-green" ng-show="isFilledIn(language)"></span>
+                        <i class="icon icon-wrong vorto-icon" 
+                        ng-click="unpinLanguage(language);$event.stopPropagation();"></i>
+                    </li><!--
+                        --><li class="vorto-tabs__item vorto-tabs__item--menu">
+                            <i class="icon icon-globe"></i>
+                            <ul class="vorto-menu">
+                                <li class="vorto-menu__item vorto-menu__item--icon"
+                                    ng-repeat="language in languages" 
+                                    ng-click="setCurrentLanguage(language);">
+                                    <span ng-hide="model.config.displayNativeNames">{{language.name}}</span>
+                                    <span ng-show="model.config.displayNativeNames">{{language.nativeName}}</span>
+                                    <span class="icon icon-check color-green" ng-show="isFilledIn(language)"></span>
+                                    <i class="icon icon-pushpin vorto-icon" ng-click="pinLanguage(language);$event.stopPropagation();"
+                                        ng-show="isPinnable(language)"></i>
+                                </li>
+                                <li class="vorto-menu__item vorto-menu__item--divide">
+                                    <label><input type="checkbox" ng-model="sync" /> Sync</label>
+                                </li>
+                            </ul> 
+                        </li>
+        
+        </ul>
+
+        <div class="vorto-property {{model.config.rtlBehaviour == 'css' && language.isRightToLeft ? 'rtl' : ''}}" ng-repeat="language in languages" ng-show="realActiveLanguage.isoCode == language.isoCode" dir="{{model.config.rtlBehaviour == 'html' && language.isRightToLeft ? 'rtl' : ''}}">
+            <vorto-property view="property.viewPath" config="property.config" language="language.isoCode" property-alias="model.alias" value="model.value" ng-if="realActiveLanguage.isoCode == language.isoCode"></vorto-property>
+        </div>
+    
+    </div>
+</ng-form>

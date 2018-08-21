@@ -1,5 +1,5 @@
 (function () {
-    function MainController($scope, $rootScope, $location, $routeParams, $timeout, $http, $log, appState, treeService, notificationsService, userService, navigationService, historyService, updateChecker, assetsService, eventsService, umbRequestHelper, tmhDynamicLocale, localStorageService) {
+    function MainController($scope, $rootScope, $location, $routeParams, $timeout, $http, $log, appState, treeService, notificationsService, userService, navigationService, historyService, updateChecker, assetsService, eventsService, umbRequestHelper, tmhDynamicLocale, localStorageService, tourService) {
         //the null is important because we do an explicit bool check on this in the view
         //the avatar is by default the umbraco logo    
         $scope.authenticated = null;
@@ -107,6 +107,35 @@
                 error: error,
                 show: true
             };
+        }));
+        // manage the help dialog by subscribing to the showHelp appState
+        $scope.drawer = {};
+        evts.push(eventsService.on('appState.drawerState.changed', function (e, args) {
+            // set view
+            if (args.key === 'view') {
+                $scope.drawer.view = args.value;
+            }
+            // set custom model
+            if (args.key === 'model') {
+                $scope.drawer.model = args.value;
+            }
+            // show / hide drawer
+            if (args.key === 'showDrawer') {
+                $scope.drawer.show = args.value;
+            }
+        }));
+        evts.push(eventsService.on('appState.tour.start', function (name, args) {
+            $scope.tour = args;
+            $scope.tour.show = true;
+        }));
+        evts.push(eventsService.on('appState.tour.end', function () {
+            $scope.tour = null;
+        }));
+        evts.push(eventsService.on('appState.tour.complete', function () {
+            $scope.tour = null;
+        }));
+        evts.push(eventsService.on('appState.backdrop', function (name, args) {
+            $scope.backdrop = args;
         }));
         //ensure to unregister from all events!
         $scope.$on('$destroy', function () {
@@ -295,19 +324,30 @@
             }
         };
         var group = undefined;
+        var groupNames = [];
         var groupIndex = -1;
         var itemIndex = -1;
         $scope.selectedItem = undefined;
+        $scope.clearSearch = function () {
+            $scope.searchTerm = null;
+        };
         function iterateResults(up) {
             //default group
             if (!group) {
-                group = $scope.groups[0];
+                for (var g in $scope.groups) {
+                    if ($scope.groups.hasOwnProperty(g)) {
+                        groupNames.push(g);
+                    }
+                }
+                //Sorting to match the groups order
+                groupNames.sort();
+                group = $scope.groups[groupNames[0]];
                 groupIndex = 0;
             }
             if (up) {
                 if (itemIndex === 0) {
                     if (groupIndex === 0) {
-                        gotoGroup($scope.groups.length - 1, true);
+                        gotoGroup(Object.keys($scope.groups).length - 1, true);
                     } else {
                         gotoGroup(groupIndex - 1, true);
                     }
@@ -318,7 +358,7 @@
                 if (itemIndex < group.results.length - 1) {
                     gotoItem(itemIndex + 1);
                 } else {
-                    if (groupIndex === $scope.groups.length - 1) {
+                    if (groupIndex === Object.keys($scope.groups).length - 1) {
                         gotoGroup(0);
                     } else {
                         gotoGroup(groupIndex + 1);
@@ -328,7 +368,7 @@
         }
         function gotoGroup(index, up) {
             groupIndex = index;
-            group = $scope.groups[groupIndex];
+            group = $scope.groups[groupNames[groupIndex]];
             if (up) {
                 gotoItem(group.results.length - 1);
             } else {
@@ -346,6 +386,11 @@
                 $scope.hasResults = false;
                 if ($scope.searchTerm) {
                     if (newVal !== null && newVal !== undefined && newVal !== oldVal) {
+                        //Resetting for brand new search
+                        group = undefined;
+                        groupNames = [];
+                        groupIndex = -1;
+                        itemIndex = -1;
                         $scope.isSearching = true;
                         navigationService.showSearch();
                         $scope.selectedItem = undefined;
@@ -435,7 +480,7 @@
     //register it
     angular.module('umbraco').controller('Umbraco.DashboardController', DashboardController);
     angular.module('umbraco').controller('Umbraco.Dialogs.ApprovedColorPickerController', function ($scope, $http, umbPropEditorHelper, assetsService) {
-        assetsService.loadJs('lib/cssparser/cssparser.js').then(function () {
+        assetsService.loadJs('lib/cssparser/cssparser.js', $scope).then(function () {
             var cssPath = $scope.dialogData.cssPath;
             $scope.cssClass = $scope.dialogData.cssClass;
             $scope.classes = [];
@@ -447,8 +492,8 @@
                 $scope.classes = parser.parse(data, false, false).cssRules;
                 $scope.classes.splice(0, 0, 'noclass');
             });
-            assetsService.loadCss('/App_Plugins/Lecoati.uSky.Grid/lib/uSky.Grid.ApprovedColorPicker.css');
-            assetsService.loadCss(cssPath);
+            assetsService.loadCss('/App_Plugins/Lecoati.uSky.Grid/lib/uSky.Grid.ApprovedColorPicker.css', $scope);
+            assetsService.loadCss(cssPath, $scope);
         });
     });
     function ContentEditDialogController($scope, editorState, $routeParams, $q, $timeout, $window, appState, contentResource, entityResource, navigationService, notificationsService, angularHelper, serverValidationManager, contentEditingHelper, treeService, fileManager, formHelper, umbRequestHelper, umbModelMapper, $http) {
@@ -893,6 +938,7 @@
             passwordPolicies: null,
             passwordPolicyText: ''
         };
+        $scope.loginStates = { submitButton: 'init' };
         $scope.avatarFile = {
             filesHolder: null,
             uploadStatus: null,
@@ -900,6 +946,10 @@
             maxFileSize: Umbraco.Sys.ServerVariables.umbracoSettings.maxFileSize + 'KB',
             acceptedFileTypes: mediaHelper.formatFileTypes(Umbraco.Sys.ServerVariables.umbracoSettings.imageFileTypes),
             uploaded: false
+        };
+        $scope.togglePassword = function () {
+            var elem = $('form[name=\'loginForm\'] input[name=\'password\']');
+            elem.attr('type', elem.attr('type') === 'text' ? 'password' : 'text');
         };
         function init() {
             // Check if it is a new user
@@ -1092,7 +1142,7 @@
         };
         $scope.loginSubmit = function (login, password) {
             //TODO: Do validation properly like in the invite password update
-            //if the login and password are not empty we need to automatically 
+            //if the login and password are not empty we need to automatically
             // validate them - this is because if there are validation errors on the server
             // then the user has to change both username & password to resubmit which isn't ideal,
             // so if they're not empty, we'll just make sure to set them to valid.
@@ -1103,7 +1153,9 @@
             if ($scope.loginForm.$invalid) {
                 return;
             }
+            $scope.loginStates.submitButton = 'busy';
             userService.authenticate(login, password).then(function (data) {
+                $scope.loginStates.submitButton = 'success';
                 $scope.submit(true);
             }, function (reason) {
                 //is Two Factor required?
@@ -1111,6 +1163,7 @@
                     $scope.errorMsg = 'Additional authentication required';
                     show2FALoginDialog(reason.data.twoFactorView, $scope.submit);
                 } else {
+                    $scope.loginStates.submitButton = 'error';
                     $scope.errorMsg = reason.errorMsg;
                     //set the form inputs to invalid
                     $scope.loginForm.username.$setValidity('auth', false);
@@ -1118,15 +1171,17 @@
                 }
             });
             //setup a watch for both of the model values changing, if they change
-            // while the form is invalid, then revalidate them so that the form can 
+            // while the form is invalid, then revalidate them so that the form can
             // be submitted again.
             $scope.loginForm.username.$viewChangeListeners.push(function () {
-                if ($scope.loginForm.username.$invalid) {
+                if ($scope.loginForm.$invalid) {
                     $scope.loginForm.username.$setValidity('auth', true);
+                    $scope.loginForm.password.$setValidity('auth', true);
                 }
             });
             $scope.loginForm.password.$viewChangeListeners.push(function () {
-                if ($scope.loginForm.password.$invalid) {
+                if ($scope.loginForm.$invalid) {
+                    $scope.loginForm.username.$setValidity('auth', true);
                     $scope.loginForm.password.$setValidity('auth', true);
                 }
             });
@@ -2004,6 +2059,143 @@
         };
     }
     angular.module('umbraco').controller('Umbraco.Dialogs.YsodController', YsodController);
+    (function () {
+        'use strict';
+        function HelpDrawerController($scope, $routeParams, $timeout, dashboardResource, localizationService, userService, eventsService, helpService, appState, tourService, $filter) {
+            var vm = this;
+            var evts = [];
+            vm.title = localizationService.localize('general_help');
+            vm.subtitle = 'Umbraco version' + ' ' + Umbraco.Sys.ServerVariables.application.version;
+            vm.section = $routeParams.section;
+            vm.tree = $routeParams.tree;
+            vm.sectionName = '';
+            vm.customDashboard = null;
+            vm.tours = [];
+            vm.closeDrawer = closeDrawer;
+            vm.startTour = startTour;
+            vm.getTourGroupCompletedPercentage = getTourGroupCompletedPercentage;
+            vm.showTourButton = showTourButton;
+            function startTour(tour) {
+                tourService.startTour(tour);
+                closeDrawer();
+            }
+            function oninit() {
+                tourService.getGroupedTours().then(function (groupedTours) {
+                    vm.tours = groupedTours;
+                    getTourGroupCompletedPercentage();
+                });
+                // load custom help dashboard
+                dashboardResource.getDashboard('user-help').then(function (dashboard) {
+                    vm.customDashboard = dashboard;
+                });
+                if (!vm.section) {
+                    vm.section = 'content';
+                }
+                setSectionName();
+                userService.getCurrentUser().then(function (user) {
+                    vm.userType = user.userType;
+                    vm.userLang = user.locale;
+                    evts.push(eventsService.on('appState.treeState.changed', function (e, args) {
+                        handleSectionChange();
+                    }));
+                    findHelp(vm.section, vm.tree, vm.usertype, vm.userLang);
+                });
+                // check if a tour is running - if it is open the matching group
+                var currentTour = tourService.getCurrentTour();
+                if (currentTour) {
+                    openTourGroup(currentTour.alias);
+                }
+            }
+            function closeDrawer() {
+                appState.setDrawerState('showDrawer', false);
+            }
+            function handleSectionChange() {
+                $timeout(function () {
+                    if (vm.section !== $routeParams.section || vm.tree !== $routeParams.tree) {
+                        vm.section = $routeParams.section;
+                        vm.tree = $routeParams.tree;
+                        setSectionName();
+                        findHelp(vm.section, vm.tree, vm.usertype, vm.userLang);
+                    }
+                });
+            }
+            function findHelp(section, tree, usertype, userLang) {
+                helpService.getContextHelpForPage(section, tree).then(function (topics) {
+                    vm.topics = topics;
+                });
+                var rq = {};
+                rq.section = vm.section;
+                rq.usertype = usertype;
+                rq.lang = userLang;
+                if ($routeParams.url) {
+                    rq.path = decodeURIComponent($routeParams.url);
+                    if (rq.path.indexOf(Umbraco.Sys.ServerVariables.umbracoSettings.umbracoPath) === 0) {
+                        rq.path = rq.path.substring(Umbraco.Sys.ServerVariables.umbracoSettings.umbracoPath.length);
+                    }
+                    if (rq.path.indexOf('.aspx') > 0) {
+                        rq.path = rq.path.substring(0, rq.path.indexOf('.aspx'));
+                    }
+                } else {
+                    rq.path = rq.section + '/' + $routeParams.tree + '/' + $routeParams.method;
+                }
+                helpService.findVideos(rq).then(function (videos) {
+                    vm.videos = videos;
+                });
+            }
+            function setSectionName() {
+                // Get section name
+                var languageKey = 'sections_' + vm.section;
+                localizationService.localize(languageKey).then(function (value) {
+                    vm.sectionName = value;
+                });
+            }
+            function showTourButton(index, tourGroup) {
+                if (index !== 0) {
+                    var prevTour = tourGroup.tours[index - 1];
+                    if (prevTour.completed) {
+                        return true;
+                    }
+                } else {
+                    return true;
+                }
+            }
+            function openTourGroup(tourAlias) {
+                angular.forEach(vm.tours, function (group) {
+                    angular.forEach(group, function (tour) {
+                        if (tour.alias === tourAlias) {
+                            group.open = true;
+                        }
+                    });
+                });
+            }
+            function getTourGroupCompletedPercentage() {
+                // Finding out, how many tours are completed for the progress circle
+                angular.forEach(vm.tours, function (group) {
+                    var completedTours = 0;
+                    angular.forEach(group.tours, function (tour) {
+                        if (tour.completed) {
+                            completedTours++;
+                        }
+                    });
+                    group.completedPercentage = Math.round(completedTours / group.tours.length * 100);
+                });
+            }
+            evts.push(eventsService.on('appState.tour.complete', function (event, tour) {
+                tourService.getGroupedTours().then(function (groupedTours) {
+                    vm.tours = groupedTours;
+                    openTourGroup(tour.alias);
+                    getTourGroupCompletedPercentage();
+                });
+            }));
+            $scope.$on('$destroy', function () {
+                for (var e in evts) {
+                    eventsService.unsubscribe(evts[e]);
+                }
+            });
+            oninit();
+        }
+        angular.module('umbraco').controller('Umbraco.Drawers.Help', HelpDrawerController);
+    }());
     /**
  * @ngdoc controller
  * @name Umbraco.LegacyController
@@ -2075,13 +2267,18 @@
     });
     (function () {
         'use strict';
-        function CompositionsOverlay($scope) {
+        function CompositionsOverlay($scope, $location) {
             var vm = this;
             vm.isSelected = isSelected;
+            vm.openContentType = openContentType;
             function isSelected(alias) {
                 if ($scope.model.contentType.compositeContentTypes.indexOf(alias) !== -1) {
                     return true;
                 }
+            }
+            function openContentType(contentType, section) {
+                var url = (section === 'documentType' ? '/settings/documenttypes/edit/' : '/settings/mediaTypes/edit/') + contentType.id;
+                $location.path(url);
             }
         }
         angular.module('umbraco').controller('Umbraco.Overlays.CompositionsOverlay', CompositionsOverlay);
@@ -2251,7 +2448,7 @@
  */
     (function () {
         'use strict';
-        function PropertySettingsOverlay($scope, contentTypeResource, dataTypeResource, dataTypeHelper, localizationService) {
+        function PropertySettingsOverlay($scope, contentTypeResource, dataTypeResource, dataTypeHelper, localizationService, userService) {
             var vm = this;
             vm.showValidationPattern = false;
             vm.focusOnPatternField = false;
@@ -2287,6 +2484,9 @@
             vm.changeValidationPattern = changeValidationPattern;
             vm.openEditorPickerOverlay = openEditorPickerOverlay;
             vm.openEditorSettingsOverlay = openEditorSettingsOverlay;
+            userService.getCurrentUser().then(function (user) {
+                vm.showSensitiveData = user.userGroups.indexOf('sensitiveData') != -1;
+            });
             function activate() {
                 matchValidationType();
             }
@@ -2872,6 +3072,7 @@
             results: [],
             selectedSearchResults: []
         };
+        $scope.showTarget = $scope.model.hideTarget !== true;
         if (dialogOptions.currentTarget) {
             $scope.model.target = dialogOptions.currentTarget;
             //if we have a node ID, we fetch the current node to build the form data
@@ -3120,6 +3321,40 @@
         if (dialogOptions.currentTarget) {
             $scope.target = dialogOptions.currentTarget;
         }
+        function onInit() {
+            if ($scope.startNodeId !== -1) {
+                entityResource.getById($scope.startNodeId, 'media').then(function (ent) {
+                    $scope.startNodeId = ent.id;
+                    run();
+                });
+            } else {
+                run();
+            }
+        }
+        function run() {
+            //default root item
+            if (!$scope.target) {
+                if ($scope.lastOpenedNode && $scope.lastOpenedNode !== -1) {
+                    entityResource.getById($scope.lastOpenedNode, 'media').then(ensureWithinStartNode, gotoStartNode);
+                } else {
+                    gotoStartNode();
+                }
+            } else {
+                //if a target is specified, go look it up - generally this target will just contain ids not the actual full
+                //media object so we need to look it up
+                var id = $scope.target.udi ? $scope.target.udi : $scope.target.id;
+                var altText = $scope.target.altText;
+                mediaResource.getById(id).then(function (node) {
+                    $scope.target = node;
+                    if (ensureWithinStartNode(node)) {
+                        selectImage(node);
+                        $scope.target.url = mediaHelper.resolveFile(node);
+                        $scope.target.altText = altText;
+                        $scope.openDetailsDialog();
+                    }
+                }, gotoStartNode);
+            }
+        }
         $scope.upload = function (v) {
             angular.element('.umb-file-dropzone-directive .file-select').click();
         };
@@ -3171,12 +3406,12 @@
                         return f.path.indexOf($scope.startNodeId) !== -1;
                     });
                 });
-                mediaTypeHelper.getAllowedImagetypes(folder.id).then(function (types) {
-                    $scope.acceptedMediatypes = types;
-                });
             } else {
                 $scope.path = [];
             }
+            mediaTypeHelper.getAllowedImagetypes(folder.id).then(function (types) {
+                $scope.acceptedMediatypes = types;
+            });
             $scope.lockedFolder = folder.id === -1 && $scope.model.startNodeIsVirtual;
             $scope.currentFolder = folder;
             localStorageService.set('umbLastOpenedMediaNodeId', folder.id);
@@ -3271,28 +3506,6 @@
                 icon: 'icon-folder'
             });
         }
-        //default root item
-        if (!$scope.target) {
-            if ($scope.lastOpenedNode && $scope.lastOpenedNode !== -1) {
-                entityResource.getById($scope.lastOpenedNode, 'media').then(ensureWithinStartNode, gotoStartNode);
-            } else {
-                gotoStartNode();
-            }
-        } else {
-            //if a target is specified, go look it up - generally this target will just contain ids not the actual full
-            //media object so we need to look it up
-            var id = $scope.target.udi ? $scope.target.udi : $scope.target.id;
-            var altText = $scope.target.altText;
-            mediaResource.getById(id).then(function (node) {
-                $scope.target = node;
-                if (ensureWithinStartNode(node)) {
-                    selectImage(node);
-                    $scope.target.url = mediaHelper.resolveFile(node);
-                    $scope.target.altText = altText;
-                    $scope.openDetailsDialog();
-                }
-            }, gotoStartNode);
-        }
         $scope.openDetailsDialog = function () {
             $scope.mediaPickerDetailsOverlay = {};
             $scope.mediaPickerDetailsOverlay.show = true;
@@ -3342,17 +3555,25 @@
                     mediaItem.thumbnail = mediaHelper.resolveFileFromEntity(mediaItem, true);
                     mediaItem.image = mediaHelper.resolveFileFromEntity(mediaItem, false);
                     // set properties to match a media object
-                    if (mediaItem.metaData && mediaItem.metaData.umbracoWidth && mediaItem.metaData.umbracoHeight) {
-                        mediaItem.properties = [
-                            {
+                    mediaItem.properties = [];
+                    if (mediaItem.metaData) {
+                        if (mediaItem.metaData.umbracoWidth && mediaItem.metaData.umbracoHeight) {
+                            mediaItem.properties.push({
                                 alias: 'umbracoWidth',
                                 value: mediaItem.metaData.umbracoWidth.Value
-                            },
-                            {
+                            });
+                            mediaItem.properties.push({
                                 alias: 'umbracoHeight',
                                 value: mediaItem.metaData.umbracoHeight.Value
-                            }
-                        ];
+                            });
+                        }
+                        if (mediaItem.metaData.umbracoFile) {
+                            mediaItem.properties.push({
+                                alias: 'umbracoFile',
+                                editor: mediaItem.metaData.umbracoFile.PropertyEditorAlias,
+                                value: mediaItem.metaData.umbracoFile.Value
+                            });
+                        }
                     }
                 });
                 // update images
@@ -3396,6 +3617,7 @@
                 }
             }
         }
+        onInit();
     });
     angular.module('umbraco').controller('Umbraco.Overlays.MediaTypePickerController', function ($scope) {
         $scope.select = function (mediatype) {
@@ -4209,7 +4431,7 @@
             $scope.miniListView = node;
         }
     });
-    angular.module('umbraco').controller('Umbraco.Overlays.UserController', function ($scope, $location, $timeout, userService, historyService, eventsService, externalLoginInfo, authResource, currentUserResource, formHelper, localizationService) {
+    angular.module('umbraco').controller('Umbraco.Overlays.UserController', function ($scope, $location, $timeout, dashboardResource, userService, historyService, eventsService, externalLoginInfo, authResource, currentUserResource, formHelper, localizationService) {
         $scope.history = historyService.getCurrent();
         $scope.version = Umbraco.Sys.ServerVariables.application.version + ' assembly: ' + Umbraco.Sys.ServerVariables.application.assemblyVersion;
         $scope.showPasswordFields = false;
@@ -4350,6 +4572,9 @@
             $scope.changePasswordModel.value.newPassword = '';
             $scope.changePasswordModel.value.confirm = '';
         }
+        dashboardResource.getDashboard('user-dialog').then(function (dashboard) {
+            $scope.dashboard = dashboard;
+        });
     });
     (function () {
         'use strict';
@@ -4499,6 +4724,131 @@
             }
         }
     });
+    (function () {
+        'use strict';
+        function NodeNameController($scope) {
+            var vm = this;
+            var element = angular.element($scope.model.currentStep.element);
+            vm.error = false;
+            vm.initNextStep = initNextStep;
+            function initNextStep() {
+                if (element.val().toLowerCase() === 'home') {
+                    $scope.model.nextStep();
+                } else {
+                    vm.error = true;
+                }
+            }
+        }
+        angular.module('umbraco').controller('Umbraco.Tours.UmbIntroCreateContent.NodeNameController', NodeNameController);
+    }());
+    (function () {
+        'use strict';
+        function DocTypeNameController($scope) {
+            var vm = this;
+            var element = angular.element($scope.model.currentStep.element);
+            vm.error = false;
+            vm.initNextStep = initNextStep;
+            function initNextStep() {
+                if (element.val().toLowerCase() === 'home page') {
+                    $scope.model.nextStep();
+                } else {
+                    vm.error = true;
+                }
+            }
+        }
+        angular.module('umbraco').controller('Umbraco.Tours.UmbIntroCreateDocType.DocTypeNameController', DocTypeNameController);
+    }());
+    (function () {
+        'use strict';
+        function PropertyNameController($scope) {
+            var vm = this;
+            var element = angular.element($scope.model.currentStep.element);
+            vm.error = false;
+            vm.initNextStep = initNextStep;
+            function initNextStep() {
+                if (element.val().toLowerCase() === 'welcome text') {
+                    $scope.model.nextStep();
+                } else {
+                    vm.error = true;
+                }
+            }
+        }
+        angular.module('umbraco').controller('Umbraco.Tours.UmbIntroCreateDocType.PropertyNameController', PropertyNameController);
+    }());
+    (function () {
+        'use strict';
+        function TabNameController($scope) {
+            var vm = this;
+            var element = angular.element($scope.model.currentStep.element);
+            vm.error = false;
+            vm.initNextStep = initNextStep;
+            function initNextStep() {
+                if (element.val().toLowerCase() === 'home') {
+                    $scope.model.nextStep();
+                } else {
+                    vm.error = true;
+                }
+            }
+        }
+        angular.module('umbraco').controller('Umbraco.Tours.UmbIntroCreateDocType.TabNameController', TabNameController);
+    }());
+    (function () {
+        'use strict';
+        function FolderNameController($scope) {
+            var vm = this;
+            var element = angular.element($scope.model.currentStep.element);
+            vm.error = false;
+            vm.initNextStep = initNextStep;
+            function initNextStep() {
+                if (element.val().toLowerCase() === 'my images') {
+                    $scope.model.nextStep();
+                } else {
+                    vm.error = true;
+                }
+            }
+        }
+        angular.module('umbraco').controller('Umbraco.Tours.UmbIntroMediaSection.FolderNameController', FolderNameController);
+    }());
+    (function () {
+        'use strict';
+        function UploadImagesController($scope, editorState, mediaResource) {
+            var vm = this;
+            var element = angular.element($scope.model.currentStep.element);
+            vm.error = false;
+            vm.initNextStep = initNextStep;
+            function initNextStep() {
+                vm.error = false;
+                vm.buttonState = 'busy';
+                var currentNode = editorState.getCurrent();
+                // make sure we have uploaded at least one image
+                mediaResource.getChildren(currentNode.id).then(function (data) {
+                    var children = data;
+                    if (children.items && children.items.length > 0) {
+                        $scope.model.nextStep();
+                    } else {
+                        vm.error = true;
+                    }
+                    vm.buttonState = 'init';
+                });
+            }
+        }
+        angular.module('umbraco').controller('Umbraco.Tours.UmbIntroMediaSection.UploadImagesController', UploadImagesController);
+    }());
+    (function () {
+        'use strict';
+        function TemplatesTreeController($scope) {
+            var vm = this;
+            var eventElement = angular.element($scope.model.currentStep.eventElement);
+            function onInit() {
+                // check if tree is already open - if it is - go to next step
+                if (eventElement.hasClass('icon-navigation-down')) {
+                    $scope.model.nextStep();
+                }
+            }
+            onInit();
+        }
+        angular.module('umbraco').controller('Umbraco.Tours.UmbIntroRenderInTemplate.TemplatesTreeController', TemplatesTreeController);
+    }());
     angular.module('umbraco').controller('Umbraco.Editors.Content.CopyController', function ($scope, userService, eventsService, contentResource, navigationService, appState, treeService, localizationService, notificationsService) {
         var dialogOptions = $scope.dialogOptions;
         var searchText = 'Search...';
@@ -5017,6 +5367,14 @@
             } else {
                 contentResource.getById($scope.relation.parentId).then(function (data) {
                     $scope.target = data;
+                    // make sure the target item isn't in the recycle bin
+                    if ($scope.target.path.indexOf('-20') !== -1) {
+                        $scope.error = {
+                            errorMsg: 'Cannot automatically restore this item',
+                            data: { Message: 'The item you want to restore it under (' + $scope.target.name + ') is in the recycle bin. Use the Move menu item to move the item manually.' }
+                        };
+                        $scope.success = false;
+                    }
                 }, function (err) {
                     $scope.success = false;
                     $scope.error = err;
@@ -5324,10 +5682,21 @@
         };
     }
     angular.module('umbraco').controller('Umbraco.Dashboard.StartupVideosController', startUpVideosDashboardController);
-    function startUpDynamicContentController(dashboardResource, assetsService) {
+    function startUpDynamicContentController($timeout, $scope, dashboardResource, assetsService, tourService, eventsService) {
         var vm = this;
+        var evts = [];
         vm.loading = true;
         vm.showDefault = false;
+        vm.startTour = startTour;
+        function onInit() {
+            // load tours
+            tourService.getGroupedTours().then(function (groupedTours) {
+                vm.tours = groupedTours;
+            });
+        }
+        function startTour(tour) {
+            tourService.startTour(tour);
+        }
         // default dashboard content
         vm.defaultDashboard = {
             infoBoxes: [
@@ -5371,8 +5740,19 @@
                 }
             ]
         };
+        evts.push(eventsService.on('appState.tour.complete', function (name, completedTour) {
+            $timeout(function () {
+                angular.forEach(vm.tours, function (tourGroup) {
+                    angular.forEach(tourGroup, function (tour) {
+                        if (tour.alias === completedTour.alias) {
+                            tour.completed = true;
+                        }
+                    });
+                });
+            });
+        }));
         //proxy remote css through the local server
-        assetsService.loadCss(dashboardResource.getRemoteDashboardCssUrl('content'));
+        assetsService.loadCss(dashboardResource.getRemoteDashboardCssUrl('content'), $scope);
         dashboardResource.getRemoteDashboardContent('content').then(function (data) {
             vm.loading = false;
             //test if we have received valid data
@@ -5387,6 +5767,7 @@
             vm.loading = false;
             vm.showDefault = true;
         });
+        onInit();
     }
     angular.module('umbraco').controller('Umbraco.Dashboard.StartUpDynamicContentController', startUpDynamicContentController);
     function FormsController($scope, $route, $cookieStore, packageResource, localizationService) {
@@ -6052,6 +6433,7 @@
         $scope.preValues = [];
         if ($routeParams.create) {
             $scope.page.loading = true;
+            $scope.showIdentifier = false;
             //we are creating so get an empty data type item
             dataTypeResource.getScaffold($routeParams.id).then(function (data) {
                 $scope.preValuesLoaded = true;
@@ -6066,6 +6448,7 @@
         }
         function loadDataType() {
             $scope.page.loading = true;
+            $scope.showIdentifier = true;
             //we are editing so get the content item from the server
             dataTypeResource.getById($routeParams.id).then(function (data) {
                 $scope.preValuesLoaded = true;
@@ -6226,6 +6609,213 @@
             $scope.dialogTreeEventHandler.unbind('treeNodeSelect', nodeSelectHandler);
         });
     });
+    /**
+ * @ngdoc controller
+ * @name Umbraco.Editors.Dictionary.CreateController
+ * @function
+ * 
+ * @description
+ * The controller for creating dictionary items
+ */
+    function DictionaryCreateController($scope, $location, dictionaryResource, navigationService, notificationsService, formHelper, appState) {
+        var vm = this;
+        vm.itemKey = '';
+        function createItem() {
+            var node = $scope.dialogOptions.currentNode;
+            dictionaryResource.create(node.id, vm.itemKey).then(function (data) {
+                navigationService.hideMenu();
+                // set new item as active in tree
+                var currPath = node.path ? node.path : '-1';
+                navigationService.syncTree({
+                    tree: 'dictionary',
+                    path: currPath + ',' + data,
+                    forceReload: true,
+                    activate: true
+                });
+                // reset form state
+                formHelper.resetForm({ scope: $scope });
+                // navigate to edit view
+                var currentSection = appState.getSectionState('currentSection');
+                $location.path('/' + currentSection + '/dictionary/edit/' + data);
+            }, function (err) {
+                if (err.data && err.data.message) {
+                    notificationsService.error(err.data.message);
+                    navigationService.hideMenu();
+                }
+            });
+        }
+        vm.createItem = createItem;
+    }
+    angular.module('umbraco').controller('Umbraco.Editors.Dictionary.CreateController', DictionaryCreateController);
+    /**
+ * @ngdoc controller
+ * @name Umbraco.Editors.Dictionary.DeleteController
+ * @function
+ * 
+ * @description
+ * The controller for deleting dictionary items
+ */
+    function DictionaryDeleteController($scope, $location, dictionaryResource, treeService, navigationService, appState) {
+        var vm = this;
+        function cancel() {
+            navigationService.hideDialog();
+        }
+        function performDelete() {
+            // stop from firing again on double-click
+            if ($scope.busy) {
+                return false;
+            }
+            //mark it for deletion (used in the UI)
+            $scope.currentNode.loading = true;
+            $scope.busy = true;
+            dictionaryResource.deleteById($scope.currentNode.id).then(function () {
+                $scope.currentNode.loading = false;
+                // get the parent id 
+                var parentId = $scope.currentNode.parentId;
+                treeService.removeNode($scope.currentNode);
+                navigationService.hideMenu();
+                var currentSection = appState.getSectionState('currentSection');
+                if (parentId !== '-1') {
+                    // set the view of the parent item
+                    $location.path('/' + currentSection + '/dictionary/edit/' + parentId);
+                } else {
+                    // we have no parent, so redirect to section
+                    $location.path('/' + currentSection + '/');
+                }
+            });
+        }
+        vm.cancel = cancel;
+        vm.performDelete = performDelete;
+    }
+    angular.module('umbraco').controller('Umbraco.Editors.Dictionary.DeleteController', DictionaryDeleteController);
+    /**
+ * @ngdoc controller
+ * @name Umbraco.Editors.Dictionary.EditController
+ * @function
+ * 
+ * @description
+ * The controller for editing dictionary items
+ */
+    function DictionaryEditController($scope, $routeParams, dictionaryResource, treeService, navigationService, appState, editorState, contentEditingHelper, formHelper, notificationsService, localizationService) {
+        var vm = this;
+        //setup scope vars
+        vm.nameDirty = false;
+        vm.page = {};
+        vm.page.loading = false;
+        vm.page.nameLocked = false;
+        vm.page.menu = {};
+        vm.page.menu.currentSection = appState.getSectionState('currentSection');
+        vm.page.menu.currentNode = null;
+        vm.description = '';
+        function loadDictionary() {
+            vm.page.loading = true;
+            //we are editing so get the content item from the server
+            dictionaryResource.getById($routeParams.id).then(function (data) {
+                bindDictionary(data);
+                vm.page.loading = false;
+            });
+        }
+        function createTranslationProperty(translation) {
+            return {
+                alias: translation.isoCode,
+                label: translation.displayName,
+                hideLabel: false
+            };
+        }
+        function bindDictionary(data) {
+            localizationService.localize('dictionaryItem_description').then(function (value) {
+                vm.description = value.replace('%0%', data.name);
+            });
+            // create data for  umb-property displaying
+            for (var i = 0; i < data.translations.length; i++) {
+                data.translations[i].property = createTranslationProperty(data.translations[i]);
+            }
+            contentEditingHelper.handleSuccessfulSave({
+                scope: $scope,
+                savedContent: data
+            });
+            // set content
+            vm.content = data;
+            //share state
+            editorState.set(vm.content);
+            navigationService.syncTree({
+                tree: 'dictionary',
+                path: data.path,
+                forceReload: true
+            }).then(function (syncArgs) {
+                vm.page.menu.currentNode = syncArgs.node;
+            });
+        }
+        function onInit() {
+            loadDictionary();
+        }
+        function saveDictionary() {
+            if (formHelper.submitForm({
+                    scope: $scope,
+                    statusMessage: 'Saving...'
+                })) {
+                vm.page.saveButtonState = 'busy';
+                dictionaryResource.save(vm.content, vm.nameDirty).then(function (data) {
+                    formHelper.resetForm({
+                        scope: $scope,
+                        notifications: data.notifications
+                    });
+                    bindDictionary(data);
+                    vm.page.saveButtonState = 'success';
+                }, function (err) {
+                    contentEditingHelper.handleSaveError({
+                        redirectOnFailure: false,
+                        err: err
+                    });
+                    notificationsService.error(err.data.message);
+                    vm.page.saveButtonState = 'error';
+                });
+            }
+        }
+        vm.save = saveDictionary;
+        $scope.$watch('vm.content.name', function (newVal, oldVal) {
+            //when the value changes, we need to set the name dirty
+            if (newVal && newVal !== oldVal && typeof oldVal !== 'undefined') {
+                vm.nameDirty = true;
+            }
+        });
+        onInit();
+    }
+    angular.module('umbraco').controller('Umbraco.Editors.Dictionary.EditController', DictionaryEditController);
+    /**
+ * @ngdoc controller
+ * @name Umbraco.Editors.Dictionary.ListController
+ * @function
+ * 
+ * @description
+ * The controller for listting dictionary items
+ */
+    function DictionaryListController($scope, $location, dictionaryResource, localizationService, appState) {
+        var vm = this;
+        vm.title = 'Dictionary overview';
+        vm.loading = false;
+        vm.items = [];
+        function loadList() {
+            vm.loading = true;
+            dictionaryResource.getList().then(function (data) {
+                vm.items = data;
+                vm.loading = false;
+            });
+        }
+        function clickItem(id) {
+            var currentSection = appState.getSectionState('currentSection');
+            $location.path('/' + currentSection + '/dictionary/edit/' + id);
+        }
+        vm.clickItem = clickItem;
+        function onInit() {
+            localizationService.localize('dictionaryItem_overviewTitle').then(function (value) {
+                vm.title = value;
+            });
+            loadList();
+        }
+        onInit();
+    }
+    angular.module('umbraco').controller('Umbraco.Editors.Dictionary.ListController', DictionaryListController);
     angular.module('umbraco').controller('Umbraco.Editors.DocumentTypes.CopyController', function ($scope, contentTypeResource, treeService, navigationService, notificationsService, appState, eventsService) {
         var dialogOptions = $scope.dialogOptions;
         $scope.dialogTreeEventHandler = $({});
@@ -6301,6 +6891,8 @@
             folderName: '',
             creatingFolder: false
         };
+        var disableTemplates = Umbraco.Sys.ServerVariables.features.disabledFeatures.disableTemplates;
+        $scope.model.disableTemplates = disableTemplates;
         var node = $scope.dialogOptions.currentNode, localizeCreateFolder = localizationService.localize('defaultdialog_createFolder');
         $scope.showCreateFolder = function () {
             $scope.model.creatingFolder = true;
@@ -6333,12 +6925,15 @@
                 });
             }
         };
-        $scope.createDocType = function () {
-            $location.search('create', null);
-            $location.search('notemplate', null);
-            $location.path('/settings/documenttypes/edit/' + node.id).search('create', 'true');
-            navigationService.hideMenu();
-        };
+        // Disabling logic for creating document type with template if disableTemplates is set to true
+        if (!disableTemplates) {
+            $scope.createDocType = function () {
+                $location.search('create', null);
+                $location.search('notemplate', null);
+                $location.path('/settings/documenttypes/edit/' + node.id).search('create', 'true');
+                navigationService.hideMenu();
+            };
+        }
         $scope.createComponent = function () {
             $location.search('create', null);
             $location.search('notemplate', null);
@@ -6399,35 +6994,42 @@
             var vm = this;
             var localizeSaving = localizationService.localize('general_saving');
             var evts = [];
-            vm.save = save;
-            vm.currentNode = null;
-            vm.contentType = {};
-            vm.page = {};
-            vm.page.loading = false;
-            vm.page.saveButtonState = 'init';
-            vm.page.navigation = [
+            var disableTemplates = Umbraco.Sys.ServerVariables.features.disabledFeatures.disableTemplates;
+            var buttons = [
                 {
                     'name': localizationService.localize('general_design'),
+                    'alias': 'design',
                     'icon': 'icon-document-dashed-line',
                     'view': 'views/documenttypes/views/design/design.html',
                     'active': true
                 },
                 {
                     'name': localizationService.localize('general_listView'),
+                    'alias': 'listView',
                     'icon': 'icon-list',
                     'view': 'views/documenttypes/views/listview/listview.html'
                 },
                 {
                     'name': localizationService.localize('general_rights'),
+                    'alias': 'permissions',
                     'icon': 'icon-keychain',
                     'view': 'views/documenttypes/views/permissions/permissions.html'
                 },
                 {
                     'name': localizationService.localize('treeHeaders_templates'),
+                    'alias': 'templates',
                     'icon': 'icon-layout',
                     'view': 'views/documenttypes/views/templates/templates.html'
                 }
             ];
+            vm.save = save;
+            vm.currentNode = null;
+            vm.contentType = {};
+            vm.page = {};
+            vm.page.loading = false;
+            vm.page.saveButtonState = 'init';
+            vm.page.navigation = [];
+            loadButtons();
             vm.page.keyboardShortcutsOverview = [
                 {
                     'name': localizationService.localize('main_sections'),
@@ -6526,6 +7128,7 @@
                 if (result) {
                     //Models builder mode:
                     vm.page.defaultButton = {
+                        alias: 'save',
                         hotKey: 'ctrl+s',
                         hotKeyWhenHidden: true,
                         labelKey: 'buttons_save',
@@ -6536,6 +7139,7 @@
                         }
                     };
                     vm.page.subButtons = [{
+                            alias: 'saveAndGenerateModels',
                             hotKey: 'ctrl+g',
                             hotKeyWhenHidden: true,
                             labelKey: 'buttons_saveAndGenerateModels',
@@ -6595,6 +7199,14 @@
                     syncTreeNode(vm.contentType, dt.path, true);
                     vm.page.loading = false;
                 });
+            }
+            function loadButtons() {
+                angular.forEach(buttons, function (val, index) {
+                    if (disableTemplates === true && val.alias === 'templates') {
+                        buttons.splice(index, 1);
+                    }
+                });
+                vm.page.navigation = buttons;
             }
             /* ---------- SAVE ---------- */
             function save() {
@@ -6935,10 +7547,14 @@
  * @description
  * The controller for the media creation dialog
  */
-    function mediaCreateController($scope, $routeParams, mediaTypeResource, iconHelper) {
+    function mediaCreateController($scope, $routeParams, $location, mediaTypeResource, iconHelper, navigationService) {
         mediaTypeResource.getAllowedTypes($scope.currentNode.id).then(function (data) {
             $scope.allowedTypes = iconHelper.formatContentTypeIcons(data);
         });
+        $scope.createMediaItem = function (docType) {
+            $location.path('/media/media/edit/' + $scope.currentNode.id).search('doctype', docType.alias).search('create', 'true');
+            navigationService.hideMenu();
+        };
     }
     angular.module('umbraco').controller('Umbraco.Editors.Media.CreateController', mediaCreateController);
     /**
@@ -7048,6 +7664,8 @@
             mediaResource.getScaffold($routeParams.id, $routeParams.doctype).then(function (data) {
                 $scope.content = data;
                 editorState.set($scope.content);
+                // We don't get the info tab from the server from version 7.8 so we need to manually add it
+                contentEditingHelper.addInfoTab($scope.content.tabs);
                 $scope.page.loading = false;
             });
         } else {
@@ -7070,6 +7688,8 @@
                         $scope.ancestors = anc;
                     });
                 }
+                // We don't get the info tab from the server from version 7.8 so we need to manually add it
+                contentEditingHelper.addInfoTab($scope.content.tabs);
                 $scope.page.loading = false;
             });
         }
@@ -7922,6 +8542,7 @@
         $scope.page.nameLocked = false;
         $scope.page.listViewPath = null;
         $scope.page.saveButtonState = 'init';
+        $scope.page.exportButton = 'init';
         $scope.busy = false;
         $scope.page.listViewPath = $routeParams.page && $routeParams.listName ? '/member/member/list/' + $routeParams.listName + '?page=' + $routeParams.page : null;
         //build a path to sync the tree with
@@ -8029,6 +8650,10 @@
             } else {
                 $scope.busy = false;
             }
+        };
+        $scope.export = function () {
+            var memberKey = $scope.content.key;
+            memberResource.exportMemberData(memberKey);
         };
     }
     angular.module('umbraco').controller('Umbraco.Editors.Member.EditController', MemberEditController);
@@ -9197,7 +9822,7 @@
             /* Local functions */
             function init() {
                 //we need to load this somewhere, for now its here.
-                assetsService.loadCss('lib/ace-razor-mode/theme/razor_chrome.css');
+                assetsService.loadCss('lib/ace-razor-mode/theme/razor_chrome.css', $scope);
                 if ($routeParams.create) {
                     var snippet = 'Empty';
                     if ($routeParams.snippet) {
@@ -9568,7 +10193,7 @@
             /* Local functions */
             function init() {
                 //we need to load this somewhere, for now its here.
-                assetsService.loadCss('lib/ace-razor-mode/theme/razor_chrome.css');
+                assetsService.loadCss('lib/ace-razor-mode/theme/razor_chrome.css', $scope);
                 if ($routeParams.create) {
                     var snippet = 'Empty';
                     if ($routeParams.snippet) {
@@ -9710,20 +10335,47 @@
         }
         angular.module('umbraco').controller('Umbraco.Editors.PartialViews.EditController', PartialViewsEditController);
     }());
+    angular.module('umbraco').controller('Umbraco.PrevalueEditors.BooleanController', function ($scope) {
+        function updateToggleValue() {
+            $scope.toggleValue = false;
+            if ($scope.model && $scope.model.value && ($scope.model.value.toString() === '1' || angular.lowercase($scope.model.value) === 'true')) {
+                $scope.toggleValue = true;
+            }
+        }
+        if ($scope.model.value === null) {
+            $scope.model.value = '0';
+        }
+        updateToggleValue();
+        $scope.toggle = function () {
+            if ($scope.model.value === 1 || $scope.model.value === '1') {
+                $scope.model.value = '0';
+                updateToggleValue();
+                return;
+            }
+            $scope.model.value = '1';
+            updateToggleValue();
+        };
+    });
     function imageFilePickerController($scope) {
-        $scope.pick = function () {
-            $scope.mediaPickerDialog = {};
-            $scope.mediaPickerDialog.view = 'mediapicker';
-            $scope.mediaPickerDialog.show = true;
-            $scope.mediaPickerDialog.submit = function (model) {
-                $scope.model.value = model.selectedImages[0].image;
-                $scope.mediaPickerDialog.show = false;
-                $scope.mediaPickerDialog = null;
+        $scope.add = function () {
+            $scope.mediaPickerOverlay = {
+                view: 'mediapicker',
+                disableFolderSelect: true,
+                onlyImages: true,
+                show: true,
+                submit: function (model) {
+                    $scope.model.value = model.selectedImages[0].image;
+                    $scope.mediaPickerOverlay.show = false;
+                    $scope.mediaPickerOverlay = null;
+                },
+                close: function () {
+                    $scope.mediaPickerOverlay.show = false;
+                    $scope.mediaPickerOverlay = null;
+                }
             };
-            $scope.mediaPickerDialog.close = function (oldModel) {
-                $scope.mediaPickerDialog.show = false;
-                $scope.mediaPickerDialog = null;
-            };
+        };
+        $scope.remove = function () {
+            $scope.model.value = null;
         };
     }
     angular.module('umbraco').controller('Umbraco.PrevalueEditors.ImageFilePickerController', imageFilePickerController);
@@ -9834,6 +10486,7 @@
         //NOTE: We need to make each item an object, not just a string because you cannot 2-way bind to a primitive.
         $scope.newItem = '';
         $scope.hasError = false;
+        $scope.focusOnNew = false;
         if (!angular.isArray($scope.model.value)) {
             //make an array from the dictionary
             var items = [];
@@ -9864,6 +10517,7 @@
                     $scope.model.value.push({ value: $scope.newItem });
                     $scope.newItem = '';
                     $scope.hasError = false;
+                    $scope.focusOnNew = true;
                     return;
                 }
             }
@@ -9888,6 +10542,11 @@
                     $scope.model.value.splice(originalIndex, 1);
                     $scope.model.value.splice(newIndex, 0, movedElement);
                 }
+            }
+        };
+        $scope.createNew = function (event) {
+            if (event.keyCode == 13) {
+                $scope.add(event);
             }
         };
         function getElementIndexByPrevalueText(value) {
@@ -10081,13 +10740,23 @@
             }
         }
         setupViewModel();
-        $scope.$watch('renderModel.value', function (newVal) {
-            $scope.model.value = newVal === true ? '1' : '0';
-        });
+        if ($scope.model && !$scope.model.value) {
+            $scope.model.value = $scope.renderModel.value === true ? '1' : '0';
+        }
         //here we declare a special method which will be called whenever the value has changed from the server
         //this is instead of doing a watch on the model.value = faster
         $scope.model.onValueChanged = function (newVal, oldVal) {
             //update the display val again if it has changed from the server
+            setupViewModel();
+        };
+        // Update the value when the toggle is clicked
+        $scope.toggle = function () {
+            if ($scope.renderModel.value) {
+                $scope.model.value = '0';
+                setupViewModel();
+                return;
+            }
+            $scope.model.value = '1';
             setupViewModel();
         };
     }
@@ -10202,36 +10871,124 @@
         };
     });
     function ColorPickerController($scope) {
-        $scope.toggleItem = function (color) {
-            if ($scope.model.value == color) {
-                $scope.model.value = '';
-                //this is required to re-validate
-                $scope.propertyForm.modelValue.$setViewValue($scope.model.value);
-            } else {
-                $scope.model.value = color;
-                //this is required to re-validate
-                $scope.propertyForm.modelValue.$setViewValue($scope.model.value);
+        $scope.isConfigured = $scope.model.config && $scope.model.config.items && _.keys($scope.model.config.items).length > 0;
+        if ($scope.isConfigured) {
+            for (var key in $scope.model.config.items) {
+                if (!$scope.model.config.items[key].hasOwnProperty('value'))
+                    $scope.model.config.items[key] = {
+                        value: $scope.model.config.items[key],
+                        label: $scope.model.config.items[key]
+                    };
             }
+            $scope.model.useLabel = isTrue($scope.model.config.useLabel);
+            initActiveColor();
+        }
+        $scope.toggleItem = function (color) {
+            var currentColor = $scope.model.value && $scope.model.value.hasOwnProperty('value') ? $scope.model.value.value : $scope.model.value;
+            var newColor;
+            if (currentColor === color.value) {
+                // deselect
+                $scope.model.value = $scope.model.useLabel ? {
+                    value: '',
+                    label: ''
+                } : '';
+                newColor = '';
+            } else {
+                // select
+                $scope.model.value = $scope.model.useLabel ? {
+                    value: color.value,
+                    label: color.label
+                } : color.value;
+                newColor = color.value;
+            }
+            // this is required to re-validate
+            $scope.propertyForm.modelValue.$setViewValue(newColor);
         };
         // Method required by the valPropertyValidator directive (returns true if the property editor has at least one color selected)
         $scope.validateMandatory = function () {
+            var isValid = !$scope.model.validation.mandatory || $scope.model.value != null && $scope.model.value != '' && (!$scope.model.value.hasOwnProperty('value') || $scope.model.value.value !== '');
             return {
-                isValid: !$scope.model.validation.mandatory || $scope.model.value != null && $scope.model.value != '',
+                isValid: isValid,
                 errorMsg: 'Value cannot be empty',
                 errorKey: 'required'
             };
         };
         $scope.isConfigured = $scope.model.config && $scope.model.config.items && _.keys($scope.model.config.items).length > 0;
+        // A color is active if it matches the value and label of the model.
+        // If the model doesn't store the label, ignore the label during the comparison.
+        $scope.isActiveColor = function (color) {
+            // no value
+            if (!$scope.model.value)
+                return false;
+            // Complex color (value and label)?
+            if (!$scope.model.value.hasOwnProperty('value'))
+                return $scope.model.value === color.value;
+            return $scope.model.value.value === color.value && $scope.model.value.label === color.label;
+        };
+        // Finds the color best matching the model's color,
+        // and sets the model color to that one. This is useful when
+        // either the value or label was changed on the data type.
+        function initActiveColor() {
+            // no value
+            if (!$scope.model.value)
+                return;
+            // Complex color (value and label)?
+            if (!$scope.model.value.hasOwnProperty('value'))
+                return;
+            var modelColor = $scope.model.value.value;
+            var modelLabel = $scope.model.value.label;
+            // Check for a full match or partial match.
+            var foundItem = null;
+            // Look for a fully matching color.
+            for (var key in $scope.model.config.items) {
+                var item = $scope.model.config.items[key];
+                if (item.value == modelColor && item.label == modelLabel) {
+                    foundItem = item;
+                    break;
+                }
+            }
+            // Look for a color with a matching value.
+            if (!foundItem) {
+                for (var key in $scope.model.config.items) {
+                    var item = $scope.model.config.items[key];
+                    if (item.value == modelColor) {
+                        foundItem = item;
+                        break;
+                    }
+                }
+            }
+            // Look for a color with a matching label.
+            if (!foundItem) {
+                for (var key in $scope.model.config.items) {
+                    var item = $scope.model.config.items[key];
+                    if (item.label == modelLabel) {
+                        foundItem = item;
+                        break;
+                    }
+                }
+            }
+            // If a match was found, set it as the active color.
+            if (foundItem) {
+                $scope.model.value.value = foundItem.value;
+                $scope.model.value.label = foundItem.label;
+            }
+        }
+        // figures out if a value is trueish enough
+        function isTrue(bool) {
+            return !!bool && bool !== '0' && angular.lowercase(bool) !== 'false';
+        }
     }
     angular.module('umbraco').controller('Umbraco.PropertyEditors.ColorPickerController', ColorPickerController);
     angular.module('umbraco').controller('Umbraco.PrevalueEditors.MultiColorPickerController', function ($scope, $timeout, assetsService, angularHelper, $element) {
         //NOTE: We need to make each color an object, not just a string because you cannot 2-way bind to a primitive.
         var defaultColor = '000000';
+        var defaultLabel = null;
         $scope.newColor = defaultColor;
+        $scope.newLavel = defaultLabel;
         $scope.hasError = false;
         assetsService.load([//"lib/spectrum/tinycolor.js",
             'lib/spectrum/spectrum.js'], $scope).then(function () {
-            var elem = $element.find('input');
+            var elem = $element.find('input[name=\'newColor\']');
             elem.spectrum({
                 color: null,
                 showInitial: false,
@@ -10261,32 +11018,50 @@
             //make an array from the dictionary
             var items = [];
             for (var i in $scope.model.value) {
-                items.push({
-                    value: $scope.model.value[i],
-                    id: i
-                });
+                var oldValue = $scope.model.value[i];
+                if (oldValue.hasOwnProperty('value')) {
+                    items.push({
+                        value: oldValue.value,
+                        label: oldValue.label,
+                        id: i
+                    });
+                } else {
+                    items.push({
+                        value: oldValue,
+                        label: oldValue,
+                        id: i
+                    });
+                }
             }
             //now make the editor model the array
             $scope.model.value = items;
         }
+        // ensure labels
+        for (var i = 0; i < $scope.model.value.length; i++) {
+            var item = $scope.model.value[i];
+            item.label = item.hasOwnProperty('label') ? item.label : item.value;
+        }
+        function validLabel(label) {
+            return label !== null && typeof label !== 'undefined' && label !== '' && label.length && label.length > 0;
+        }
         $scope.remove = function (item, evt) {
             evt.preventDefault();
             $scope.model.value = _.reject($scope.model.value, function (x) {
-                return x.value === item.value;
+                return x.value === item.value && x.label === item.label;
             });
         };
         $scope.add = function (evt) {
             evt.preventDefault();
             if ($scope.newColor) {
+                var newLabel = validLabel($scope.newLabel) ? $scope.newLabel : $scope.newColor;
                 var exists = _.find($scope.model.value, function (item) {
-                    return item.value.toUpperCase() == $scope.newColor.toUpperCase();
+                    return item.value.toUpperCase() === $scope.newColor.toUpperCase() || item.label.toUpperCase() === newLabel.toUpperCase();
                 });
                 if (!exists) {
-                    $scope.model.value.push({ value: $scope.newColor });
-                    //$scope.newColor = defaultColor;
-                    // set colorpicker to default color
-                    //var elem = $element.find("input");
-                    //elem.spectrum("set", $scope.newColor);
+                    $scope.model.value.push({
+                        value: $scope.newColor,
+                        label: newLabel
+                    });
                     $scope.hasError = false;
                     return;
                 }
@@ -10295,11 +11070,11 @@
             }
         };
         //load the separate css for the editor to avoid it blocking our js loading
-        assetsService.loadCss('lib/spectrum/spectrum.css');
+        assetsService.loadCss('lib/spectrum/spectrum.css', $scope);
     });
     //this controller simply tells the dialogs service to open a mediaPicker window
     //with a specified callback, this callback will receive an object with a selection on it
-    function contentPickerController($scope, entityResource, editorState, iconHelper, $routeParams, angularHelper, navigationService, $location, miniEditorHelper) {
+    function contentPickerController($scope, entityResource, editorState, iconHelper, $routeParams, angularHelper, navigationService, $location, miniEditorHelper, localizationService) {
         var unsubscribe;
         function subscribe() {
             unsubscribe = $scope.$on('formSubmitting', function (ev, args) {
@@ -10351,6 +11126,8 @@
             showOpenButton: false,
             showEditButton: false,
             showPathOnHover: false,
+            maxNumber: 1,
+            minNumber: 0,
             startNode: {
                 query: '',
                 type: 'content',
@@ -10535,7 +11312,11 @@
                     // update url                
                     angular.forEach($scope.renderModel, function (item) {
                         if (item.id === entity.id) {
-                            item.url = data;
+                            if (entity.trashed) {
+                                item.url = localizationService.dictionary.general_recycleBin;
+                            } else {
+                                item.url = data;
+                            }
                         }
                     });
                 });
@@ -10571,6 +11352,7 @@
                 'icon': item.icon,
                 'path': item.path,
                 'url': item.url,
+                'trashed': item.trashed,
                 'published': item.metaData && item.metaData.IsPublished === false && entityType === 'Document' ? false : true    // only content supports published/unpublished content so we set everything else to published so the UI looks correct 
             });
         }
@@ -10676,11 +11458,8 @@
         }
         //get the current user to see if we can localize this picker
         userService.getCurrentUser().then(function (user) {
-            assetsService.loadCss('lib/datetimepicker/bootstrap-datetimepicker.min.css').then(function () {
-                var filesToLoad = [
-                    'lib/moment/moment-with-locales.js',
-                    'lib/datetimepicker/bootstrap-datetimepicker.js'
-                ];
+            assetsService.loadCss('lib/datetimepicker/bootstrap-datetimepicker.min.css', $scope).then(function () {
+                var filesToLoad = ['lib/datetimepicker/bootstrap-datetimepicker.js'];
                 $scope.model.config.language = user.locale;
                 assetsService.load(filesToLoad, $scope).then(function () {
                     //The Datepicker js and css files are available and all components are ready to use.
@@ -10795,6 +11574,77 @@
             } else {
                 $scope.model.value = '';
             }
+        }
+    });
+    angular.module('umbraco').controller('Umbraco.PropertyEditors.DropdownFlexibleController', function ($scope) {
+        //setup the default config
+        var config = {
+            items: [],
+            multiple: false
+        };
+        //map the user config
+        angular.extend(config, $scope.model.config);
+        //map back to the model
+        $scope.model.config = config;
+        function convertArrayToDictionaryArray(model) {
+            //now we need to format the items in the dictionary because we always want to have an array
+            var newItems = [];
+            for (var i = 0; i < model.length; i++) {
+                newItems.push({
+                    id: model[i],
+                    sortOrder: 0,
+                    value: model[i]
+                });
+            }
+            return newItems;
+        }
+        function convertObjectToDictionaryArray(model) {
+            //now we need to format the items in the dictionary because we always want to have an array
+            var newItems = [];
+            var vals = _.values($scope.model.config.items);
+            var keys = _.keys($scope.model.config.items);
+            for (var i = 0; i < vals.length; i++) {
+                var label = vals[i].value ? vals[i].value : vals[i];
+                newItems.push({
+                    id: keys[i],
+                    sortOrder: vals[i].sortOrder,
+                    value: label
+                });
+            }
+            return newItems;
+        }
+        $scope.updateSingleDropdownValue = function () {
+            $scope.model.value = [$scope.model.singleDropdownValue];
+        };
+        if (angular.isArray($scope.model.config.items)) {
+            //PP: I dont think this will happen, but we have tests that expect it to happen..
+            //if array is simple values, convert to array of objects
+            if (!angular.isObject($scope.model.config.items[0])) {
+                $scope.model.config.items = convertArrayToDictionaryArray($scope.model.config.items);
+            }
+        } else if (angular.isObject($scope.model.config.items)) {
+            $scope.model.config.items = convertObjectToDictionaryArray($scope.model.config.items);
+        } else {
+            throw 'The items property must be either an array or a dictionary';
+        }
+        //sort the values
+        $scope.model.config.items.sort(function (a, b) {
+            return a.sortOrder > b.sortOrder ? 1 : b.sortOrder > a.sortOrder ? -1 : 0;
+        });
+        //now we need to check if the value is null/undefined, if it is we need to set it to "" so that any value that is set
+        // to "" gets selected by default
+        if ($scope.model.value === null || $scope.model.value === undefined) {
+            if ($scope.model.config.multiple) {
+                $scope.model.value = [];
+            } else {
+                $scope.model.value = '';
+            }
+        }
+        // if we run in single mode we'll store the value in a local variable
+        // so we can pass an array as the model as our PropertyValueEditor expects that
+        $scope.model.singleDropdownValue = '';
+        if ($scope.model.config.multiple === '0') {
+            $scope.model.singleDropdownValue = Array.isArray($scope.model.value) ? $scope.model.value[0] : $scope.model.value;
         }
     });
     /** A drop down list or multi value select list based on an entity type, this can be re-used for any entity types */
@@ -10942,6 +11792,8 @@
                 // in the description of this controller, it states that this value isn't actually used for persistence,
                 // but we need to set it so that the editor and the server can detect that it's been changed, and it is used for validation.
                 $scope.model.value = { selectedFiles: newVal.trimEnd(',') };
+                //need to explicity setDirty here as file upload field can't track dirty & we can't use the fileCount (hidden field/model)
+                $scope.propertyForm.$setDirty();
             });
         });
         //listen for when the model value has changed
@@ -10964,22 +11816,20 @@
     ;
     angular.module('umbraco').controller('Umbraco.PropertyEditors.FileUploadController', fileUploadController).run(function (mediaHelper, umbRequestHelper, assetsService) {
         if (mediaHelper && mediaHelper.registerFileResolver) {
-            assetsService.load(['lib/moment/moment-with-locales.js']).then(function () {
-                //NOTE: The 'entity' can be either a normal media entity or an "entity" returned from the entityResource
-                // they contain different data structures so if we need to query against it we need to be aware of this.
-                mediaHelper.registerFileResolver('Umbraco.UploadField', function (property, entity, thumbnail) {
-                    if (thumbnail) {
-                        if (mediaHelper.detectIfImageByExtension(property.value)) {
-                            //get default big thumbnail from image processor
-                            var thumbnailUrl = property.value + '?rnd=' + moment(entity.updateDate).format('YYYYMMDDHHmmss') + '&width=500&animationprocessmode=first';
-                            return thumbnailUrl;
-                        } else {
-                            return null;
-                        }
+            //NOTE: The 'entity' can be either a normal media entity or an "entity" returned from the entityResource
+            // they contain different data structures so if we need to query against it we need to be aware of this.
+            mediaHelper.registerFileResolver('Umbraco.UploadField', function (property, entity, thumbnail) {
+                if (thumbnail) {
+                    if (mediaHelper.detectIfImageByExtension(property.value)) {
+                        //get default big thumbnail from image processor
+                        var thumbnailUrl = property.value + '?rnd=' + moment(entity.updateDate).format('YYYYMMDDHHmmss') + '&width=500&animationprocessmode=first';
+                        return thumbnailUrl;
                     } else {
-                        return property.value;
+                        return null;
                     }
-                });
+                } else {
+                    return property.value;
+                }
             });
         }
     });
@@ -11007,7 +11857,7 @@
         });
     });
     angular.module('umbraco').controller('Umbraco.PropertyEditors.GoogleMapsController', function ($element, $rootScope, $scope, notificationsService, dialogService, assetsService, $log, $timeout) {
-        assetsService.loadJs('https://www.google.com/jsapi').then(function () {
+        assetsService.loadJs('https://www.google.com/jsapi', $scope).then(function () {
             google.load('maps', '3', {
                 callback: initMap,
                 other_params: 'sensor=false'
@@ -11404,7 +12254,7 @@
     }());
     angular.module('umbraco').controller('Umbraco.PropertyEditors.Grid.TextStringController', function ($scope, $rootScope, $timeout, dialogService) {
     });
-    angular.module('umbraco').controller('Umbraco.PropertyEditors.GridController', function ($scope, $http, assetsService, localizationService, $rootScope, dialogService, gridService, mediaResource, imageHelper, $timeout, umbRequestHelper, angularHelper) {
+    angular.module('umbraco').controller('Umbraco.PropertyEditors.GridController', function ($scope, $http, assetsService, localizationService, $rootScope, dialogService, gridService, mediaResource, imageHelper, $timeout, umbRequestHelper, angularHelper, $element, eventsService) {
         // Grid status variables
         var placeHolder = '';
         var currentForm = angularHelper.getCurrentForm($scope);
@@ -11471,6 +12321,7 @@
         };
         var notIncludedRte = [];
         var cancelMove = false;
+        var startingArea;
         $scope.sortableOptionsCell = {
             distance: 10,
             cursor: 'move',
@@ -11498,8 +12349,9 @@
                 }
             },
             over: function (event, ui) {
-                var allowedEditors = $(event.target).scope().area.allowed;
-                if ($.inArray(ui.item.scope().control.editor.alias, allowedEditors) < 0 && allowedEditors) {
+                var area = $(event.target).scope().area;
+                var allowedEditors = area.allowed;
+                if ($.inArray(ui.item.scope().control.editor.alias, allowedEditors) < 0 && allowedEditors || startingArea != area && area.maxItems != '' && area.maxItems > 0 && area.maxItems < area.controls.length + 1) {
                     $scope.$apply(function () {
                         $(event.target).scope().area.dropNotAllowed = true;
                     });
@@ -11544,6 +12396,9 @@
                 currentForm.$setDirty();
             },
             start: function (e, ui) {
+                //Get the starting area for reference
+                var area = $(e.target).scope().area;
+                startingArea = area;
                 // fade out control when sorting
                 ui.item.context.style.display = 'block';
                 ui.item.context.style.opacity = '0.5';
@@ -11615,7 +12470,7 @@
         $scope.openEditorOverlay = function (event, area, index, key) {
             $scope.editorOverlay = {
                 view: 'itempicker',
-                filter: false,
+                filter: area.$allowedEditors.length > 15,
                 title: localizationService.localize('grid_insertControl'),
                 availableItems: area.$allowedEditors,
                 event: event,
@@ -11669,6 +12524,11 @@
             }
             currentForm.$setDirty();
             $scope.showRowConfigurations = false;
+            eventsService.emit('grid.rowAdded', {
+                scope: $scope,
+                element: $element,
+                row: row
+            });
         };
         $scope.removeRow = function (section, $index) {
             if (section.rows.length > 0) {
@@ -11870,6 +12730,12 @@
             //populate control
             $scope.initControl(newControl, index + 1);
             cell.controls.push(newControl);
+            eventsService.emit('grid.itemAdded', {
+                scope: $scope,
+                element: $element,
+                cell: cell,
+                item: newControl
+            });
         };
         $scope.addTinyMce = function (cell) {
             var rte = $scope.getEditor('rte');
@@ -11920,10 +12786,10 @@
             }
             //ensure the grid has a column value set,
             //if nothing is found, set it to 12
-            if ($scope.model.config.items.columns && angular.isString($scope.model.config.items.columns)) {
-                $scope.model.config.items.columns = parseInt($scope.model.config.items.columns);
-            } else {
+            if (!$scope.model.config.items.columns) {
                 $scope.model.config.items.columns = 12;
+            } else if (angular.isString($scope.model.config.items.columns)) {
+                $scope.model.config.items.columns = parseInt($scope.model.config.items.columns);
             }
             if ($scope.model.value && $scope.model.value.sections && $scope.model.value.sections.length > 0 && $scope.model.value.sections[0].rows && $scope.model.value.sections[0].rows.length > 0) {
                 if ($scope.model.value.name && angular.isArray($scope.model.config.items.templates)) {
@@ -12083,11 +12949,26 @@
         };
         gridService.getGridEditors().then(function (response) {
             $scope.availableEditors = response.data;
+            //Localize the grid editor names
+            angular.forEach($scope.availableEditors, function (value, key) {
+                //If no translation is provided, keep using the editor name from the manifest
+                if (localizationService.dictionary.hasOwnProperty('grid_' + value.alias)) {
+                    value.name = localizationService.localize('grid_' + value.alias);
+                }
+            });
             $scope.contentReady = true;
             // *********************************************
             // Init grid
             // *********************************************
+            eventsService.emit('grid.initializing', {
+                scope: $scope,
+                element: $element
+            });
             $scope.initContent();
+            eventsService.emit('grid.initialized', {
+                scope: $scope,
+                element: $element
+            });
         });
         //Clean the grid value before submitting to the server, we don't need
         // all of that grid configuration in the value to be stored!! All of that
@@ -12569,12 +13450,12 @@
         });
         // Return a helper with preserved width of cells
         var fixHelper = function (e, ui) {
-            var h = ui.clone();
-            h.children().each(function () {
+            ui.children().each(function () {
                 $(this).width($(this).width());
             });
-            h.css('background-color', 'lightgray');
-            return h;
+            var row = ui.clone();
+            row.css('background-color', 'lightgray');
+            return row;
         };
         $scope.sortableOptions = {
             helper: fixHelper,
@@ -12585,6 +13466,10 @@
             cursor: 'move',
             items: '> tr',
             tolerance: 'pointer',
+            forcePlaceholderSize: true,
+            start: function (e, ui) {
+                ui.placeholder.height(ui.item.height());
+            },
             update: function (e, ui) {
                 // Get the new and old index for the moved element (using the text as the identifier)
                 var newIndex = ui.item.index();
@@ -12814,6 +13699,7 @@
             vm.dragLeave = dragLeave;
             vm.onFilesQueue = onFilesQueue;
             vm.onUploadComplete = onUploadComplete;
+            markAsSensitive();
             function activate() {
                 if ($scope.entityType === 'media') {
                     mediaTypeHelper.getAllowedImagetypes(vm.nodeId).then(function (types) {
@@ -12856,6 +13742,18 @@
             }
             function onUploadComplete() {
                 $scope.getContent($scope.contentId);
+            }
+            function markAsSensitive() {
+                angular.forEach($scope.options.includeProperties, function (option) {
+                    option.isSensitive = false;
+                    angular.forEach($scope.items, function (item) {
+                        angular.forEach(item.properties, function (property) {
+                            if (option.alias === property.alias) {
+                                option.isSensitive = property.isSensitive;
+                            }
+                        });
+                    });
+                });
             }
             activate();
         }
@@ -13700,6 +14598,7 @@
                 // init the md editor after this digest because the DOM needs to be ready first
                 // so run the init on a timeout
                 $timeout(function () {
+                    $scope.markdownEditorInitComplete = false;
                     var converter2 = new Markdown.Converter();
                     var editor2 = new Markdown.Editor(converter2, '-' + $scope.model.alias);
                     editor2.run();
@@ -13711,20 +14610,25 @@
                     editor2.hooks.set('onPreviewRefresh', function () {
                         // We must manually update the model as there is no way to hook into the markdown editor events without exstensive edits to the library.
                         if ($scope.model.value !== $('textarea', $element).val()) {
-                            angularHelper.getCurrentForm($scope).$setDirty();
+                            if ($scope.markdownEditorInitComplete) {
+                                //only set dirty after init load to avoid "unsaved" dialogue when we don't want it
+                                angularHelper.getCurrentForm($scope).$setDirty();
+                            } else {
+                                $scope.markdownEditorInitComplete = true;
+                            }
                             $scope.model.value = $('textarea', $element).val();
                         }
                     });
                 }, 200);
             });
             //load the seperat css for the editor to avoid it blocking our js loading TEMP HACK
-            assetsService.loadCss('lib/markdown/markdown.css');
+            assetsService.loadCss('lib/markdown/markdown.css', $scope);
         });
     }
     angular.module('umbraco').controller('Umbraco.PropertyEditors.MarkdownEditorController', MarkdownEditorController);
     //this controller simply tells the dialogs service to open a mediaPicker window
     //with a specified callback, this callback will receive an object with a selection on it
-    angular.module('umbraco').controller('Umbraco.PropertyEditors.MediaPickerController', function ($rootScope, $scope, dialogService, entityResource, mediaResource, mediaHelper, $timeout, userService, $location) {
+    angular.module('umbraco').controller('Umbraco.PropertyEditors.MediaPickerController', function ($rootScope, $scope, dialogService, entityResource, mediaResource, mediaHelper, $timeout, userService, $location, localizationService) {
         //check the pre-values for multi-picker
         var multiPicker = $scope.model.config.multiPicker && $scope.model.config.multiPicker !== '0' ? true : false;
         var onlyImages = $scope.model.config.onlyImages && $scope.model.config.onlyImages !== '0' ? true : false;
@@ -13738,27 +14642,54 @@
         function setupViewModel() {
             $scope.images = [];
             $scope.ids = [];
+            $scope.isMultiPicker = multiPicker;
             if ($scope.model.value) {
                 var ids = $scope.model.value.split(',');
                 //NOTE: We need to use the entityResource NOT the mediaResource here because
                 // the mediaResource has server side auth configured for which the user must have
                 // access to the media section, if they don't they'll get auth errors. The entityResource
                 // acts differently in that it allows access if the user has access to any of the apps that
-                // might require it's use. Therefore we need to use the metatData property to get at the thumbnail
+                // might require it's use. Therefore we need to use the metaData property to get at the thumbnail
                 // value.
                 entityResource.getByIds(ids, 'Media').then(function (medias) {
+                    // The service only returns item results for ids that exist (deleted items are silently ignored).
+                    // This results in the picked items value to be set to contain only ids of picked items that could actually be found.
+                    // Since a referenced item could potentially be restored later on, instead of changing the selected values here based
+                    // on whether the items exist during a save event - we should keep "placeholder" items for picked items that currently
+                    // could not be fetched. This will preserve references and ensure that the state of an item does not differ depending
+                    // on whether it is simply resaved or not.
+                    // This is done by remapping the int/guid ids into a new array of items, where we create "Deleted item" placeholders
+                    // when there is no match for a selected id. This will ensure that the values being set on save, are the same as before.
+                    medias = _.map(ids, function (id) {
+                        var found = _.find(medias, function (m) {
+                            // We could use coercion (two ='s) here .. but not sure if this works equally well in all browsers and
+                            // it's prone to someone "fixing" it at some point without knowing the effects. Rather use toString()
+                            // compares and be completely sure it works.
+                            return m.udi.toString() === id.toString() || m.id.toString() === id.toString();
+                        });
+                        if (found) {
+                            return found;
+                        } else {
+                            return {
+                                name: localizationService.dictionary.mediaPicker_deletedItem,
+                                id: $scope.model.config.idType !== 'udi' ? id : null,
+                                udi: $scope.model.config.idType === 'udi' ? id : null,
+                                icon: 'icon-picture',
+                                thumbnail: null,
+                                trashed: true
+                            };
+                        }
+                    });
                     _.each(medias, function (media, i) {
-                        //only show non-trashed items
-                        if (media.parentId >= -1) {
-                            if (!media.thumbnail) {
-                                media.thumbnail = mediaHelper.resolveFileFromEntity(media, true);
-                            }
-                            $scope.images.push(media);
-                            if ($scope.model.config.idType === 'udi') {
-                                $scope.ids.push(media.udi);
-                            } else {
-                                $scope.ids.push(media.id);
-                            }
+                        // if there is no thumbnail, try getting one if the media is not a placeholder item
+                        if (!media.thumbnail && media.id && media.metaData) {
+                            media.thumbnail = mediaHelper.resolveFileFromEntity(media, true);
+                        }
+                        $scope.images.push(media);
+                        if ($scope.model.config.idType === 'udi') {
+                            $scope.ids.push(media.udi);
+                        } else {
+                            $scope.ids.push(media.id);
                         }
                     });
                     $scope.sync();
@@ -13786,7 +14717,8 @@
                 show: true,
                 submit: function (model) {
                     _.each(model.selectedImages, function (media, i) {
-                        if (!media.thumbnail) {
+                        // if there is no thumbnail, try getting one if the media is not a placeholder item
+                        if (!media.thumbnail && media.id && media.metaData) {
                             media.thumbnail = mediaHelper.resolveFileFromEntity(media, true);
                         }
                         $scope.images.push(media);
@@ -13803,10 +14735,13 @@
             };
         };
         $scope.sortableOptions = {
+            disabled: !$scope.isMultiPicker,
+            items: 'li:not(.add-wrapper)',
+            cancel: '.unsortable',
             update: function (e, ui) {
                 var r = [];
-                //TODO: Instead of doing this with a half second delay would be better to use a watch like we do in the
-                // content picker. THen we don't have to worry about setting ids, render models, models, we just set one and let the
+                // TODO: Instead of doing this with a half second delay would be better to use a watch like we do in the
+                // content picker. Then we don't have to worry about setting ids, render models, models, we just set one and let the
                 // watch do all the rest.
                 $timeout(function () {
                     angular.forEach($scope.images, function (value, key) {
@@ -14341,11 +15276,6 @@
                 });
             };
             var notSupported = [
-                'Umbraco.CheckBoxList',
-                'Umbraco.DropDownMultiple',
-                'Umbraco.MacroContainer',
-                'Umbraco.RadioButtonList',
-                'Umbraco.MultipleTextstring',
                 'Umbraco.Tags',
                 'Umbraco.UploadField',
                 'Umbraco.ImageCropper'
@@ -14622,6 +15552,9 @@
             $scope.model.value.splice(idx, 1);
         };
         $scope.add = function ($event) {
+            if (!angular.isArray($scope.model.value)) {
+                $scope.model.value = [];
+            }
             if ($scope.newCaption == '') {
                 $scope.hasError = true;
             } else {
@@ -14888,14 +15821,16 @@
                     extended_valid_elements: extendedValidElements,
                     menubar: false,
                     statusbar: false,
+                    relative_urls: false,
                     height: editorConfig.dimensions.height,
                     width: editorConfig.dimensions.width,
                     maxImageSize: editorConfig.maxImageSize,
                     toolbar: toolbar,
                     content_css: stylesheets,
-                    relative_urls: false,
                     style_formats: styleFormats,
-                    language: language
+                    language: language,
+                    //see http://archive.tinymce.com/wiki.php/Configuration:cache_suffix
+                    cache_suffix: '?umb__rnd=' + Umbraco.Sys.ServerVariables.application.cacheBuster
                 };
                 if (tinyMceConfig.customConfig) {
                     //if there is some custom config, we need to see if the string value of each item might actually be json and if so, we need to
@@ -14916,6 +15851,12 @@
                                     }
                                 } catch (e) {
                                 }
+                            }
+                            if (val === 'true') {
+                                tinyMceConfig.customConfig[i] = true;
+                            }
+                            if (val === 'false') {
+                                tinyMceConfig.customConfig[i] = false;
                             }
                         }
                     }
@@ -14979,7 +15920,7 @@
                         }
                     });
                     editor.on('ObjectResized', function (e) {
-                        var qs = '?width=' + e.width + '&height=' + e.height;
+                        var qs = '?width=' + e.width + '&height=' + e.height + '&mode=max';
                         var srcAttr = $(e.target).attr('src');
                         var path = srcAttr.split('?')[0];
                         $(e.target).attr('data-mce-src', path + qs);
@@ -15057,7 +15998,8 @@
                 //this is instead of doing a watch on the model.value = faster
                 $scope.model.onValueChanged = function (newVal, oldVal) {
                     //update the display val again if it has changed from the server;
-                    tinyMceEditor.setContent(newVal, { format: 'raw' });
+                    //uses an empty string in the editor when the value is null
+                    tinyMceEditor.setContent(newVal || '', { format: 'raw' });
                     //we need to manually fire this event since it is only ever fired based on loading from the DOM, this
                     // is required for our plugins listening to this event to execute
                     tinyMceEditor.fire('LoadContent', null);
@@ -15073,6 +16015,9 @@
                 // element might still be there even after the modal has been hidden.
                 $scope.$on('$destroy', function () {
                     unsubscribe();
+                    if (tinyMceEditor !== undefined && tinyMceEditor != null) {
+                        tinyMceEditor.destroy();
+                    }
                 });
             });
         });
@@ -15144,6 +16089,7 @@
                 icon.isCustom = false;
                 break;
             case 'styleselect':
+            case 'fontsizeselect':
                 icon.name = 'icon-list';
                 icon.isCustom = true;
                 break;
@@ -15178,7 +16124,7 @@
             unsubscribe();
         });
         // load TinyMCE skin which contains css for font-icons
-        assetsService.loadCss('lib/tinymce/skins/umbraco/skin.min.css');
+        assetsService.loadCss('lib/tinymce/skins/umbraco/skin.min.css', $scope);
     });
     function sliderController($scope, $log, $element, assetsService, angularHelper) {
         //configure some defaults
@@ -15255,7 +16201,6 @@
             $scope.model.config.ticksPositions = _.map($scope.model.config.ticksPositions.split(','), function (item) {
                 return parseInt(item.trim());
             });
-            console.log($scope.model.config.ticksPositions);
         }
         if (!$scope.model.config.ticksLabels) {
             $scope.model.config.ticksLabels = [];
@@ -15354,15 +16299,15 @@
             };
         });
         //load the separate css for the editor to avoid it blocking our js loading
-        assetsService.loadCss('lib/slider/bootstrap-slider.css');
-        assetsService.loadCss('lib/slider/bootstrap-slider-custom.css');
+        assetsService.loadCss('lib/slider/bootstrap-slider.css', $scope);
+        assetsService.loadCss('lib/slider/bootstrap-slider-custom.css', $scope);
     }
     angular.module('umbraco').controller('Umbraco.PropertyEditors.SliderController', sliderController);
     angular.module('umbraco').controller('Umbraco.PropertyEditors.TagsController', function ($rootScope, $scope, $log, assetsService, umbRequestHelper, angularHelper, $timeout, $element) {
         var $typeahead;
         $scope.isLoading = true;
         $scope.tagToAdd = '';
-        assetsService.loadJs('lib/typeahead.js/typeahead.bundle.min.js').then(function () {
+        assetsService.loadJs('lib/typeahead.js/typeahead.bundle.min.js', $scope).then(function () {
             $scope.isLoading = false;
             //load current value
             if ($scope.model.value) {
@@ -15574,17 +16519,22 @@
     angular.module('umbraco').controller('Umbraco.PropertyEditors.textAreaController', textAreaController);
     function textboxController($scope) {
         // macro parameter editor doesn't contains a config object,
-        // so we create a new one to hold any properties 
+        // so we create a new one to hold any properties
         if (!$scope.model.config) {
             $scope.model.config = {};
-        }
-        if (!$scope.model.config.maxChars) {
-            $scope.model.config.maxChars = false;
         }
         $scope.model.maxlength = false;
         if ($scope.model.config && $scope.model.config.maxChars) {
             $scope.model.maxlength = true;
-            if ($scope.model.value == undefined) {
+        }
+        if (!$scope.model.config.maxChars) {
+            // 500 is the maximum number that can be stored
+            // in the database, so set it to the max, even
+            // if no max is specified in the config
+            $scope.model.config.maxChars = 500;
+        }
+        if ($scope.model.maxlength) {
+            if ($scope.model.value === undefined) {
                 $scope.model.count = $scope.model.config.maxChars * 1;
             } else {
                 $scope.model.count = $scope.model.config.maxChars * 1 - $scope.model.value.length;
@@ -15592,7 +16542,7 @@
         }
         $scope.model.change = function () {
             if ($scope.model.config && $scope.model.config.maxChars) {
-                if ($scope.model.value == undefined) {
+                if ($scope.model.value === undefined) {
                     $scope.model.count = $scope.model.config.maxChars * 1;
                 } else {
                     $scope.model.count = $scope.model.config.maxChars * 1 - $scope.model.value.length;
@@ -15792,7 +16742,7 @@
             /* Local functions */
             function init() {
                 //we need to load this somewhere, for now its here.
-                assetsService.loadCss('lib/ace-razor-mode/theme/razor_chrome.css');
+                assetsService.loadCss('lib/ace-razor-mode/theme/razor_chrome.css', $scope);
                 if ($routeParams.create) {
                     codefileResource.getScaffold('scripts', $routeParams.id).then(function (script) {
                         ready(script, false);
@@ -15997,7 +16947,7 @@
             };
             vm.init = function () {
                 //we need to load this somewhere, for now its here.
-                assetsService.loadCss('lib/ace-razor-mode/theme/razor_chrome.css');
+                assetsService.loadCss('lib/ace-razor-mode/theme/razor_chrome.css', $scope);
                 //load templates - used in the master template picker
                 templateResource.getAll().then(function (templates) {
                     vm.templates = templates;
@@ -16354,7 +17304,11 @@
                 // filter out the current template and the selected master template
                 angular.forEach(vm.templates, function (template) {
                     if (template.alias !== vm.template.alias && template.alias !== vm.template.masterTemplateAlias) {
-                        availableMasterTemplates.push(template);
+                        var templatePathArray = template.path.split(',');
+                        // filter descendant templates of current template
+                        if (templatePathArray.indexOf(String(vm.template.id)) === -1) {
+                            availableMasterTemplates.push(template);
+                        }
                     }
                 });
                 vm.masterTemplateOverlay = {
@@ -16805,7 +17759,7 @@
     }());
     (function () {
         'use strict';
-        function UserEditController($scope, $timeout, $location, $routeParams, formHelper, usersResource, userService, contentEditingHelper, localizationService, notificationsService, mediaHelper, Upload, umbRequestHelper, usersHelper, authResource, dateHelper) {
+        function UserEditController($scope, eventsService, $q, $timeout, $location, $routeParams, formHelper, usersResource, userService, contentEditingHelper, localizationService, notificationsService, mediaHelper, Upload, umbRequestHelper, usersHelper, authResource, dateHelper) {
             var vm = this;
             vm.page = {};
             vm.page.rootIcon = 'icon-folder';
@@ -16829,6 +17783,7 @@
             vm.disableUser = disableUser;
             vm.enableUser = enableUser;
             vm.unlockUser = unlockUser;
+            vm.changeAvatar = changeAvatar;
             vm.clearAvatar = clearAvatar;
             vm.save = save;
             vm.toggleChangePassword = toggleChangePassword;
@@ -16897,34 +17852,72 @@
                 vm.user.changePassword = null;
             }
             function save() {
-                vm.page.saveButtonState = 'busy';
-                vm.user.resetPasswordValue = null;
-                //anytime a user is changing another user's password, we are in effect resetting it so we need to set that flag here
-                if (vm.user.changePassword) {
-                    vm.user.changePassword.reset = !vm.user.changePassword.oldPassword && !vm.user.isCurrentUser;
-                }
-                contentEditingHelper.contentEditorPerformSave({
-                    statusMessage: vm.labels.saving,
-                    saveMethod: usersResource.saveUser,
-                    scope: $scope,
-                    content: vm.user,
-                    // We do not redirect on failure for users - this is because it is not possible to actually save a user
-                    // when server side validation fails - as opposed to content where we are capable of saving the content
-                    // item if server side validation fails
-                    redirectOnFailure: false,
-                    rebindCallback: function (orignal, saved) {
+                if (formHelper.submitForm({
+                        scope: $scope,
+                        statusMessage: vm.labels.saving
+                    })) {
+                    //anytime a user is changing another user's password, we are in effect resetting it so we need to set that flag here
+                    if (vm.user.changePassword) {
+                        vm.user.changePassword.reset = !vm.user.changePassword.oldPassword && !vm.user.isCurrentUser;
                     }
-                }).then(function (saved) {
-                    vm.user = saved;
-                    setUserDisplayState();
-                    formatDatesToLocal(vm.user);
-                    vm.changePasswordModel.isChanging = false;
-                    vm.page.saveButtonState = 'success';
-                    //the user has a password if they are not states: Invited, NoCredentials
-                    vm.changePasswordModel.config.hasPassword = vm.user.userState !== 3 && vm.user.userState !== 4;
-                }, function (err) {
-                    vm.page.saveButtonState = 'error';
-                });
+                    vm.page.saveButtonState = 'busy';
+                    vm.user.resetPasswordValue = null;
+                    //save current nav to be restored later so that the tabs dont change
+                    var currentNav = vm.user.navigation;
+                    usersResource.saveUser(vm.user).then(function (saved) {
+                        //if the user saved, then try to execute all extended save options
+                        extendedSave(saved).then(function (result) {
+                            //if all is good, then reset the form
+                            formHelper.resetForm({
+                                scope: $scope,
+                                notifications: saved.notifications
+                            });
+                        }, function (err) {
+                            //otherwise show the notifications for the user being saved
+                            formHelper.showNotifications(saved);
+                        });
+                        vm.user = _.omit(saved, 'navigation');
+                        //restore
+                        vm.user.navigation = currentNav;
+                        setUserDisplayState();
+                        formatDatesToLocal(vm.user);
+                        vm.changePasswordModel.isChanging = false;
+                        //the user has a password if they are not states: Invited, NoCredentials
+                        vm.changePasswordModel.config.hasPassword = vm.user.userState !== 3 && vm.user.userState !== 4;
+                        vm.page.saveButtonState = 'success';
+                    }, function (err) {
+                        contentEditingHelper.handleSaveError({
+                            redirectOnFailure: false,
+                            err: err
+                        });
+                        //show any notifications
+                        if (err.data) {
+                            formHelper.showNotifications(err.data);
+                        }
+                        vm.page.saveButtonState = 'error';
+                    });
+                }
+            }
+            /**
+         * Used to emit the save event and await any async operations being performed by editor extensions
+         * @param {any} savedUser
+         */
+            function extendedSave(savedUser) {
+                //used to track any promises added by the event handlers to be awaited
+                var promises = [];
+                var args = {
+                    //getPromise: getPromise,
+                    user: savedUser,
+                    //a promise can be added by the event handler if the handler needs an async operation to be awaited
+                    addPromise: function (p) {
+                        promises.push(p);
+                    }
+                };
+                //emit the event
+                eventsService.emit('editors.user.editController.save', args);
+                //await all promises to complete
+                var resultPromise = $q.all(promises);
+                return resultPromise;
             }
             function goToPage(ancestor) {
                 $location.path(ancestor.path).search('subview', ancestor.subView);
@@ -17075,11 +18068,12 @@
                     vm.user.avatars = data;
                 });
             }
-            $scope.changeAvatar = function (files, event) {
+            function changeAvatar(files, event) {
                 if (files && files.length > 0) {
                     upload(files[0]);
                 }
-            };
+            }
+            ;
             function upload(file) {
                 vm.avatarFile.uploadProgress = 0;
                 Upload.upload({
@@ -17251,7 +18245,7 @@
     }());
     (function () {
         'use strict';
-        function UsersController($scope, $timeout, $location, usersResource, userGroupsResource, userService, localizationService, contentEditingHelper, usersHelper, formHelper, notificationsService, dateHelper) {
+        function UsersController($scope, $timeout, $location, $routeParams, usersResource, userGroupsResource, userService, localizationService, contentEditingHelper, usersHelper, formHelper, notificationsService, dateHelper) {
             var vm = this;
             var localizeSaving = localizationService.localize('general_saving');
             vm.page = {};
@@ -17377,6 +18371,11 @@
             function init() {
                 vm.usersOptions.orderBy = 'Name';
                 vm.usersOptions.orderDirection = 'Ascending';
+                if ($routeParams.create) {
+                    setUsersViewState('createUser');
+                } else if ($routeParams.invite) {
+                    setUsersViewState('inviteUser');
+                }
                 // Get users
                 getUsers();
                 // Get user groups
@@ -17414,6 +18413,14 @@
             function setUsersViewState(state) {
                 if (state === 'createUser') {
                     clearAddUserForm();
+                    $location.search('create', 'true');
+                    $location.search('invite', null);
+                } else if (state === 'inviteUser') {
+                    $location.search('create', null);
+                    $location.search('invite', 'true');
+                } else if (state === 'overview') {
+                    $location.search('create', null);
+                    $location.search('invite', null);
                 }
                 vm.usersViewState = state;
             }

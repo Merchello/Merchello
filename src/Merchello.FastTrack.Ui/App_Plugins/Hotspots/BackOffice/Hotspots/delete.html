@@ -1,0 +1,12 @@
+﻿<div class="umb-dialog umb-pane" ng-controller="ETC.HotspotsController" dialog="true">
+	<div class="umb-dialog-body" auto-scale="90">
+
+		<p class="umb-abstract">
+			Weet je zeker dat je <strong>{{currentNode.name}}</strong> wilt verwijderen ?
+		</p>
+
+		<umb-confirm on-confirm="Delete" on-cancel="Cancel" show-cancel="true">
+		</umb-confirm>
+
+	</div>
+</div>

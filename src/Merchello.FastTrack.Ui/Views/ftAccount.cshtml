@@ -38,3 +38,15 @@
         @Html.Action("CustomerShippingAddress", "CustomerMembership", new { area = "FastTrack" })
     </div>
 </div>
+
+<div class="row">
+	@* Maatwerk HKLiving Invoices *@
+	<h3>invoices</h3>
+	@*Maatwerk HKLiving Invoices*@
+	@*Call to ETCConnector Account Controller*@
+	@Html.Action("Invoices", "Account", new { area = "ETCConnector" })
+	<h3>orders</h3>
+	@*Maatwerk HKLiving Invoices*@
+	@*Call to ETCConnector Account Controller*@
+	@Html.Action("Orders", "Account", new { area = "ETCConnector" })
+</div>

@@ -1,0 +1,320 @@
+/* COMMON */
+
+.sq-form-control {
+    margin-bottom: 12px;
+}
+
+.sq-form-control label {
+    display: block;
+    height: 12px;
+    font-size: 12px;
+    line-height: 12px;
+    margin-bottom: 8px;
+}
+
+.sq-form-control input, .sq-form-control textarea, .sq-form-control select {
+    display: block;
+    width: 100%;
+    height: 32px;
+    margin: 0;
+    padding: 0 10px;
+    line-height: 32px;
+    border: none;
+    box-shadow: none;
+    outline: none;
+    font-size: 14px;
+    border: 1px solid #b8b8b8;
+    border-radius: 3px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+.sq-form-control textarea {
+    height: 96px;
+    line-height: 22px;
+    padding: 10px;
+}
+.sq-form-control input[type="color"] {
+    padding: 0;
+    background-color: white;
+}
+.sq-form-control input:focus, .sq-form-control textarea:focus, .sq-form-control select:focus {
+    border: 1px solid #6c6c6c;
+}
+
+/* Fuck you, wordpress. */
+.sq-form-control input[type="checkbox"] {
+    -webkit-appearance: checkbox !important;
+     -moz-appearance: checkbox !important;
+     -ms-appearance: checkbox !important;
+     -o-appearance: checkbox !important;
+     appearance: checkbox !important;
+
+     box-shadow: none !important;
+}
+.sq-form-control input[type="checkbox"]:before {
+    display: none;
+}
+
+/* BOX MODEL */
+
+.sq-boxmodel-margin {
+    height: 250px;
+    width: 250px;
+    position: relative;
+    width: 100%;
+    border: 1px dashed #303942;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    padding: 52px;
+    background: #f9cc9d;
+}
+.sq-boxmodel-padding {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border: 1px dashed #808080;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    background: #c2cf8a;
+}
+.sq-boxmodel-margin input, .sq-boxmodel-padding input {
+    width: 32px;
+    position: absolute;
+    font-size: 12px;
+    padding: 0 5px;
+    text-align: center;
+    border-color: #808080;
+}
+.sq-boxmodel-margin input:focus, .sq-boxmodel-padding input:focus {
+    border-color: #303942;
+}
+#sq-element-option-boxmodel-margin-top, #sq-element-option-boxmodel-padding-top {
+    top: 10px;
+    left: 50%;
+    margin-left: -16px;
+}
+#sq-element-option-boxmodel-margin-bottom, #sq-element-option-boxmodel-padding-bottom {
+    bottom: 10px;
+    left: 50%;
+    margin-left: -16px;
+}
+#sq-element-option-boxmodel-margin-left, #sq-element-option-boxmodel-padding-left {
+    top: 50%;
+    left: 10px;
+    margin-top: -16px;
+}
+#sq-element-option-boxmodel-margin-right, #sq-element-option-boxmodel-padding-right {
+    top: 50%;
+    right: 10px;
+    margin-top: -16px;
+}
+#sq-boxmodel-label-margin, #sq-boxmodel-label-padding {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    font-size: 12px;
+    color: #303942;
+}
+
+/* SLIDER */
+
+.sq-control-slider {
+    height: 32px;
+    position: relative;
+    margin: 0 5px;
+}
+.sq-control-slider-track {
+    z-index: 0;
+    position: absolute;
+    width: 100%;
+    height: 10px;
+    left: 0;
+    top: 50%;
+    margin-top: -5px;
+    background: white;
+    border: 1px solid #b8b8b8;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.sq-control-slider-ball {
+    width: 1px;
+    height: 32px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+}
+.sq-control-slider-ball:before {
+    display: block;
+    content: '';
+    width: 20px;
+    height: 20px;
+    margin-left: -10px;
+    position: absolute;
+    left: 0;
+    top: 6px;
+    z-index: 1;
+    background: #2196f3;
+    cursor: pointer;
+    border-radius: 20px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+.sq-control-slider-bubble {
+    position: absolute;
+    left: 0;
+    top: -20px;
+    font-size: 14px;
+    border-radius: 5px;
+    padding: 0 10px;
+    line-height: 22px;
+    background: #222;
+    color: white;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* GRID SYSTEM */
+.sq-grid-system-control-res-group {
+    display: flex;
+    margin-bottom: 10px;
+}
+.sq-grid-system-control-res-name, .sq-grid-system-control-res-use, .sq-grid-system-control-colspan, .sq-grid-system-control-visible {
+    float: left;
+}
+.sq-grid-system-control-res-name, .sq-grid-system-control-res-use, .sq-grid-system-control-visible {
+    width: 32px;
+}
+.sq-grid-system-control-res-name, .sq-grid-system-control-visible {
+    line-height: 32px;
+    text-align: center;
+}
+.sq-grid-system-control-visible {
+    cursor: pointer;
+}
+.sq-grid-system-control-visible.sq-control-disabled {
+    cursor: auto;
+    opacity: 0.5;
+}
+.sq-grid-system-control-visible .fa-eye-slash {
+    display: none;
+}
+.sq-grid-system-control-visible-not .fa-eye-slash {
+    display: inline;
+}
+.sq-grid-system-control-visible-not .fa-eye {
+    display: none;
+}
+.sq-grid-system-control-colspan {
+    flex: 1;
+}
+
+/* SWITCH */
+
+.sq-control-switch {
+    float: left;
+    width: 39px;
+    height: 24px;
+    background: #b8b8b8;
+    border-radius: 24px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.2s cubic-bezier(.55,0,.1,1);
+    -moz-transition: background 0.2s cubic-bezier(.55,0,.1,1);
+    -webkit-transition: background 0.2s cubic-bezier(.55,0,.1,1);
+}
+.sq-control-switch-ball {
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 20px;
+    transition: left 0.2s cubic-bezier(.55,0,.1,1);
+    -moz-transition: left 0.2s cubic-bezier(.55,0,.1,1);
+    -webkit-transition: left 0.2s cubic-bezier(.55,0,.1,1);
+}
+.sq-control-switch.active {
+    background: #2196f3;
+}
+.sq-control-switch.active .sq-control-switch-ball {
+    left: 17px;
+    top: 2px;
+}
+.sq-control-switch-label {
+    cursor: pointer;
+    height: 24px;
+    line-height: 24px;
+    float: left;
+    margin-left: 8px;
+}
+
+/* BUTTON GROUP */
+
+.sq-control-button-group {
+    display: flex;
+}
+.sq-control-button-group-button {
+    flex: 1;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    border-top: 1px solid #b8b8b8;
+    border-bottom: 1px solid #b8b8b8;
+    border-right: 1px solid #b8b8b8;
+    cursor: pointer;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+.sq-control-button-group-button:hover {
+    background: #f0f0f0;
+}
+
+.sq-control-button-group-button:first-child {
+    border-left: 1px solid #b8b8b8;
+    border-radius: 3px 0 0 3px;
+}
+.sq-control-button-group-button:last-child {
+    border-right: 1px solid #b8b8b8;
+    border-radius: 0 3px 3px 0;
+}
+.sq-control-button-group-button.active {
+    background: #2196f3;
+    color: white;
+    border-color: #2196f3;
+}
+.sq-control-button-group-button.no-border-right {
+    border-right: none;
+}
+
+/* WP MEDIA UPLOAD */
+.sq-input-with-button {
+    display: flex;
+}
+.sq-input-with-button .sq-control-button {
+    margin-left: 10px;
+}
+
+/* BUTTON */
+.sq-control-button {
+    height: 32px;
+    text-align: center;
+    line-height: 32px;
+    background: #2196f3;
+    border-radius: 3px;
+    cursor: pointer;
+    color: white;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}

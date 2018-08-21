@@ -1,0 +1,128 @@
+﻿<div class="control-group umb-control-group umb-pane">
+	<div class='rule umb-el-wrap row'>
+		<div class="span11">
+
+			<div class="span3 controls controls-row">
+				<label class="control-label">{{SpiderSpec.Rule.RuleName.length ? SpiderSpec.Rule.RuleName : 'Naam'}}</label>
+
+				<div ng-if="SpiderSpec.Fixed">
+					{{SpiderSpec.Rule.RuleName}}
+				</div>
+
+				<div ng-if="!SpiderSpec.Fixed">
+					<input ng-model="SpiderSpec.Rule.RuleName" type="text" style="width:166px" class="form-control name" />
+					<input ng-model="SpiderSpec.Rule.OrderID" type="text" style="width:30px" class="form-control nr" />
+				</div>
+
+			</div>
+			<div class="span3 controls controls-row">
+
+				<label class="control-label">Property type</label>
+
+				<!---->
+				<select ng-if="!SpiderSpec.Fixed" ng-model="SpiderSpec.Rule.SpecID" class="form-control"
+						ng-options="spec.Id as spec.Name for spec in Specs">
+					<!--<option ng-selected="{{spec.Id == SpiderSpec.Rule.SpecID}}" ng-repeat="spec in Specs" value="{{spec.Id}}">{{spec.Name}}</option>-->
+				</select>
+				<div ng-if="SpiderSpec.Fixed">
+					{{SpiderSpec.Rule.RuleName}}
+				</div>
+
+			</div>
+
+			<div class="span3 controls controls-row element">
+				<label class="control-label">Element selectie query</label>
+				<input ng-model="SpiderSpec.Rule.ElementSelector" type="text" class="form-control" />
+			</div>
+
+			<!--<div class="span3 controls controls-row attribute">
+				<label class="control-label">Attribute selectie </label>
+				<input ng-model="SpiderSpec.Rule.AttributeName" type="text" class="form-control" />
+			</div>-->
+
+			<div class="span3 controls controls-row regex">
+				<label class="control-label">Regex</label>
+				<input ng-model="SpiderSpec.Rule.Regex" type="text" class="form-control" />
+			</div>
+
+			<div class="span3 controls controls-row fixed">
+				<label class="control-label">Vaste waarde</label>
+				<input ng-model="SpiderSpec.Rule.FixedValue" type="text" class="form-control" />
+			</div>
+
+			<div class="span3 controls controls-row fixed">
+				<label class="control-label">IsoLangCode</label>
+				<input ng-model="SpiderSpec.Rule.LangIsoCode" type="text" class="form-control" />
+			</div>
+
+			<div class="span3 controls controls-row seperator">
+				<label class="control-label">Scheiding</label>
+				<input ng-model="SpiderSpec.Rule.Seperator" type="text" class="form-control seperator" />
+			</div><div ng-if="!SpiderSpec.Fixed" class="span1 controls controls-row mandatory">
+				<label class="control-label">Verplicht</label>
+				<input type="checkbox" id="chkMandatory" name="chkListView" ng-model="SpiderSpec.Rule.Mandatory" class="form-control" />
+			</div>
+
+			<!--<div class="span1 controls controls-row html">
+				 <label class="control-label">Html</label>
+				 <input type="checkbox" id="chkHtml" name="chkHtml" ng-model="SpiderSpec.Rule.SelectHtml" class="form-control" />
+			 </div>
+			 <div class="span1 controls controls-row list">
+				 <label class="control-label">Lijst</label>
+				 <input type="checkbox" id="chkListView" name="chkListView" ng-model="SpiderSpec.Rule.ListView" class="form-control" />
+			 </div>
+			-->
+		</div>
+
+		<div class="span1">
+			<div ng-if="!SpiderSpec.Fixed" class="span1 controls controls-row mandatory">
+				<label class="control-label">Verwijder</label>
+				<span class="icon-trash" aria-hidden="true" ng-click="Delete(SpiderSpec, $index)"></span>
+			</div>
+
+		</div>
+
+	</div>
+
+	<div class='rule umb-el-wrap row' ng-if="!SpiderSpec.Fixed">
+		<div class="span6">
+			<div class="example" ng-show="SpiderSpec.Examples.length">
+				<b>Voorbeeld waardes uit 3 artikelen:</b>
+
+				<div ng-repeat="Example in SpiderSpec.Examples track by $index">
+					{{Example}}
+				</div>
+			</div>
+
+			<!--<a class="no-link pull-left" ng-click="check(SpiderSpec)">Controleer regel</a>-->
+
+		</div>
+
+		<!--
+
+			TODO:
+			<div class="span6">
+			<table class="mapping well" ng-show="SpiderSpec.Rule.Mapping.length >0">
+				<tr>
+					<th>
+						Waarde
+					</th>
+					<th>
+						Map naar
+					</th>
+				</tr>
+				<tr ng-repeat="mapping in SpiderSpec.Rule.Mapping">
+					<td><input class="form-control" type="text" ng-model="mapping.First" /></td>
+					<td><input class="form-control" type="text" ng-model="mapping.Second" /></td>
+				</tr>
+
+			</table>
+
+
+			<a class="no-link pull-right" ng-click="addMapping(SpiderSpec)">+ mapping toevoegen</a>
+
+		</div>-->
+
+	</div>
+
+</div>

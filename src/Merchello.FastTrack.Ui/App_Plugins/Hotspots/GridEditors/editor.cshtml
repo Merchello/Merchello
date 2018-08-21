@@ -1,0 +1,5 @@
+﻿@using System.Web.Mvc.Html
+@inherits Umbraco.Web.Mvc.UmbracoViewPage<dynamic>
+
+@Html.Action("HotSpotScript", "HotSpotSurface", new { area = "HotSpots", id = Model.value })
+

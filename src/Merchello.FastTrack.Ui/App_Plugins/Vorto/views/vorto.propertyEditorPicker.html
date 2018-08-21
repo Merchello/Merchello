@@ -1,0 +1,9 @@
+﻿<div ng-controller="Our.Umbraco.PreValueEditors.Vorto.propertyEditorPicker">
+
+    <select name="dropDownList"
+            class="umb-editor umb-dropdown"
+            ng-model="model.value"
+            ng-options="i.name for i in model.dataTypes | orderBy:'name' track by i.guid">
+    </select>
+
+</div>

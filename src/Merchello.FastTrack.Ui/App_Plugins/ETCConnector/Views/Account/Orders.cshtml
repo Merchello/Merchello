@@ -1,0 +1,137 @@
+﻿@model List<ETC.Connector.Model.ETC.HKLivingOrder>
+@using ETC.B2B.WEB
+
+@{
+	/**/
+
+	var paging = Paging.GetPages(Model.Count, 10);
+	var sortedList = Model.OrderBy(a => a.Date).Skip((int)paging.Skip).Take(paging.Take).ToList();
+}
+
+
+@if (Model.Count == 0)
+{
+	<div>No orders found</div>
+}
+else
+{
+	<div class="row invoice head">
+		<div class="col-md-6">
+			order number
+		</div>
+		<div class="col-md-2">
+			order date
+		</div>
+		<div class="col-md-2">
+			delivery date
+		</div>
+		<div class="col-md-2">
+			total
+		</div>
+	</div>
+
+	foreach (var order in sortedList)
+	{
+
+	<div class="row invoice">
+		<div class="col-md-6">
+			@order.OrderNr
+		</div>
+		<div class="col-md-2">
+			@order.Date.ToShortDateString()
+		</div>
+		<div class="col-md-2">
+			@order.Delivery.ToShortDateString()
+		</div>
+		<div class="col-md-2">
+			@order.Total.ToString("C")
+		</div>
+	</div>
+		<div class="invoiceitemswrapper">
+			@if (order.HKLivingOrderItems.Count > 0)
+			{
+				<div class="row invoiceitem">
+					<div class="col-md-2">
+						Article number
+					</div>
+					<div class="col-md-4">
+						name
+					</div>
+					<div class="col-md-2">
+						quantity
+					</div>
+					<div class="col-md-2">
+						price
+					</div>
+				</div>
+				foreach (var orderItem in order.HKLivingOrderItems)
+				{
+					<div class="row invoiceitem">
+						<div class="col-md-2">
+							@orderItem.Code
+						</div>
+						<div class="col-md-4">
+							@orderItem.Description
+						</div>
+						<div class="col-md-2">
+							@orderItem.Quantity.ToString("0.##")
+						</div>
+						<div class="col-md-2">
+							@((orderItem.TotalPriceEx + orderItem.TotalPriceVAT).ToString("C"))
+						</div>
+					</div>
+				}
+			}
+			else
+			{
+				<div class="empty">
+					No order line items available
+				</div>
+			}
+		</div>
+	}
+
+	if (paging.TotalPages > 1)
+	{
+		//Paging
+		<div class="row">
+			@RenderPaging(paging, paging.CurrentPage)
+		</div>
+	}
+
+}
+
+
+@helper RenderPaging(Paging paging, long currentId)
+	{
+		/**/
+
+		<a class="@(paging.CurrentPage > 1 ? "" : "disabled")" @(paging.CurrentPage > 1 ? "href=?page=" + paging.PreviousPage : "disabled")>< Vorige</a>
+
+		if (paging.StartPageToShow > 1)
+		{
+			<a href="?page=1">1..</a><text>&nbsp;</text>
+		}
+
+		for (var i = paging.StartPageToShow; i <= paging.EndPageToShow; i++)
+		{
+			if (paging.CurrentPage == i)
+			{
+				@i<text>&nbsp;</text>
+			}
+			else
+			{
+				<a href="?page=@i">@i</a><text>&nbsp;</text>
+			}
+		}
+
+
+		if (paging.EndPageToShow < paging.TotalPages)
+		{
+			<a href="?page=@paging.TotalPages">...@paging.TotalPages</a><text>&nbsp;</text>
+		}
+
+
+		<a class="@(paging.CurrentPage < paging.TotalPages ? "" : "disabled")" @(paging.CurrentPage < paging.TotalPages ? "href=?page=" + paging.NextPage : "disabled")>Volgende ></a>
+
+}

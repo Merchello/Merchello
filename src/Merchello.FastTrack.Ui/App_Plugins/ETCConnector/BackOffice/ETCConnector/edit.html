@@ -1,0 +1,290 @@
+﻿<div id="angRoot" class="umb-panel tabbable umb-editor-wrapper" ng-controller="VWA.SpiderController">
+	<!--Todo :pagina opbouwen als voorbeeld : F:\umbraco\GIT2\Umbraco-CMS\src\Umbraco.Web.UI.Client\build\belle\views\datatypes\edit.html-->
+
+	<umb-load-indicator ng-if="page.loading"></umb-load-indicator>
+	<form name="contentForm"
+		  novalidate
+		  val-form-manager>
+
+
+		<umb-editor-view ng-if="!page.loading" umb-tabs>
+
+			<!--https://our.umbraco.org/apidocs/ui/#/api/umbraco.directives.directive:umbEditorHeader-->
+
+			<umb-editor-header menu="page.menu"
+							   name="Data.Name"
+							   name-locked="page.nameLocked"
+							   tabs="Tabs"
+							   hide-icon="false"
+							   hide-description="false"
+							   hide-alias="false">
+			</umb-editor-header>
+
+			<umb-editor-container>
+				<umb-tabs-content view="true">
+					<umb-tab id="tab0" rel="0">
+						<umb-pane>
+							<umb-editor-sub-header>
+								<umb-editor-sub-header-content-left>
+									<umb-editor-sub-header-section>
+										<ul>
+											<li>
+												<label> Laatst gespidered :</label>{{Data.DTLastSpidered | date}} {{Data.DTLastSpidered | date : "H:mm"}}
+											</li>
+											<li>
+												<label>Aantal objecten :</label> {{Data.CountObjects}}
+											</li>
+											<li ng-if="Data.StartDT != null">
+												Bezig met spideren vanaf : {{Data.StartDT | date : "H:mm"}}
+											</li>
+										</ul>
+									</umb-editor-sub-header-section>
+								</umb-editor-sub-header-content-left>
+								<umb-editor-sub-header-content-right>
+
+									<umb-editor-sub-header-section>
+										<strong ng-show="actionInProgress" ng-bind="bulkStatus"></strong>
+										<div class="umb-loader-wrapper -bottom" ng-show="actionInProgress">
+											<div class="umb-loader"></div>
+										</div>
+									</umb-editor-sub-header-section>
+
+								</umb-editor-sub-header-content-right>
+							</umb-editor-sub-header>
+						</umb-pane>
+
+						<div class="form-horizontal">
+
+							<div class="umb-pane">
+								<ng-form name="propertyForm">
+									<umbraco.multinodetreepicker>
+
+									</umbraco.multinodetreepicker>
+								</ng-form>
+
+
+								<!--<div ng-if="Data.RootNodeProperty != null">
+		Root node
+		<ng-form name="propertyForm">
+			<umb-property-editor model="Data.RootNodeProperty">
+
+
+			</umb-property-editor>
+		</ng-form>
+	</div>
+	-->
+
+								<umb-control-group label="Ingeschakeld" description="Inschakelen om te spideren">
+									<input type="checkbox" name="chkEnabled" ng-checked="!Data.Disabled" ng-true-value="false" ng-false-value="true" ng-model="Data.Disabled" />
+								</umb-control-group>
+
+								<umb-control-group label="Naam" description="Naam van deze data processor">
+									<input id="txtSpdrName" type="text" name="txtSpdrName" ng-model="Data.Name" required class="umb-editor umb-textstring" />
+								</umb-control-group>
+
+								<umb-control-group label="Omschrijving" description="Omschrijving van deze data processor">
+									<textarea spellcheck="false" id="txtSpdrDescription" style="height:120px" name="txtSpdrDescription" class="umb-editor umb-textstring" ng-model="Data.Description"></textarea>
+								</umb-control-group>
+
+								<umb-control-group label="Agenda interval" description="De tijdsperiode waarop de data processor gestart gaat worden">
+									<select ng-model="Data.DatePart">
+										<option value="DD">Dag</option>
+										<option value="HH">Uur</option>
+										<option value="MM">Minuut</option>
+										<option value="WW">Week</option>
+									</select>
+									<input type="number" name="Interval" ng-model="Data.Interval" />
+								</umb-control-group>
+
+								<umb-control-group label="Geagendeerd voor" description="De data processor wordt uitgevoerd op het aangegeven tijdstip">
+									<input type="datetime" name="ExecDT" ng-model="Data.ExecDT" />
+									{{Data.ExecDT | date}} {{Data.ExecDT | date : "H:mm" }}
+								</umb-control-group>
+
+								<umb-control-group label="Object selectie query" ng-if="Data.ProcessorType != 'ETC.Connector.Services.DataBaseProcessor'" description="De jquery / xpath selector waarvan de elementen worden opgeslagen">
+									<input id="txtSelector" type="text" name="txtSelector" ng-model="Data.ListSelector" required class="umb-editor umb-textstring" />
+								</umb-control-group>
+
+								<umb-control-group label="Object selectie filter" ng-if="Data.ProcessorType != 'ETC.Connector.Services.DataBaseProcessor'" description="Het filter zorgt ervoor dat er objecten niet worden gespiderd">
+									<input id="txtExcludeSelector" type="text" name="txtExcludeSelector" ng-model="Data.ListExcludeSelector" class="umb-editor umb-textstring" />
+								</umb-control-group>
+
+								<umb-control-group label="Processor Type" description="Type processor">
+									<select ng-model="Data.ProcessorType">
+										<option value="ETC.Connector.Services.DataBaseProcessor">Database Processor</option>
+										<option value="ETC.Connector.Services.SpiderProcessor">Webspider Processor</option>
+										<option value="ETC.Connector.Services.ETCServices.InvoiceProcessor">InvoiceProcessor</option>
+										<option value="ETC.Connector.Services.ETCServices.AccountProcessor">AccountProcessor</option>
+										<option value="ETC.Connector.Services.ETCServices.ItemImportProcessor">ItemImportProcessor</option>
+										<option value="ETC.Connector.Services.ETCServices.ItemImageProcessor">ItemImageProcessor</option>
+									</select>
+								</umb-control-group>
+
+								<umb-control-group label="Root content node ID" description="De contentnode waar de objecten in worden geplaatst">
+									<input name="rootnodeid" type="number" ng-model="Data.RootContentNodeId" class="umb-editor umb-textstring" />
+								</umb-control-group>
+
+								<umb-control-group label="Template ID" description="Het id van de template">
+									<input name="templateID" type="number" ng-model="Data.TemplateID" class="umb-editor umb-textstring" />
+								</umb-control-group>
+
+								<!--<umb-control-group label="Bron" description="Website (xml) spideren of database uitlezen">
+		<label><input type="radio" ng-model="Data.SpiderDatabase" ng-value="true" />Database</label>
+		<label><input type="radio" ng-model="Data.SpiderDatabase" ng-value="false" />Website</label>
+	</umb-control-group>-->
+
+
+
+
+
+
+								<umb-control-group label="PrivateKey" description="e-TradeConnect Api SecretKey">
+									<input type="text" id="txtPrivateKey" name="txtPrivateKey" ng-model="Data.PrivateKey" class="umb-editor umb-textstring" />
+								</umb-control-group>
+
+								<umb-control-group label="Niet gevonden objecten" description="Welke actie moet uitgevoerd worden op niet gevonden objecten">
+									<select ng-model="Data.NotFoundAction">
+										<option id="" value="0">Geen actie</option>
+										<option id="" value="1">Verplaats naar prullebak</option>
+										<option id="" value="2">Dépubliseer</option>
+									</select>
+								</umb-control-group>
+
+								<umb-control-group label="Sequel" ng-if="Data.ProcessorType == 'ETC.Connector.Services.DataBaseProcessor'" description="Database Sequel">
+									<textarea style="height:150px" id="txtURL" name="txtURL" ng-model="Data.URL" required class="umb-editor umb-textstring" />
+								</umb-control-group>
+
+								<umb-control-group label="URL" ng-if="Data.ProcessorType == 'ETC.Connector.Services.SpiderProcessor'" description="De te spideren url">
+									<input type="text" id="txtURL" name="txtURL" ng-model="Data.URL" required class="umb-editor umb-textstring" />
+								</umb-control-group>
+
+								<umb-control-group label="Document type" description="Alias van de documenttype">
+									<input id="txtSpdrDocType" type="text" name="txtSpdrDocType" ng-model="Data.DocumentTypeName" required class="umb-editor umb-textstring" />
+								</umb-control-group>
+
+								<umb-control-group label="Variant Document type" description="Alias van de variant documenttype">
+									<input id="txtSpdrVariantDocType" type="text" name="txtSpdrVariantDocType" ng-model="Data.VariantDocumentTypeName" required class="umb-editor umb-textstring" />
+								</umb-control-group>
+
+
+
+								<!--
+		todo:
+
+		<umb-control-group label="Label" description="Label propertie wanneer object niet meer is gevonden">
+		<select ng-model="Data.SoldSpecID" class="umb-editor umb-textstring" ng-options="spec.Id as spec.Name for spec in Specs">
+			<option ng-repeat="spec in Specs" value="{{spec.Id}}" ng-selected="{{spec.Id == Data.SoldSpecID}}">{{spec.Name}}</option>
+		</select>
+	</umb-control-group>-->
+
+
+							</div>
+						</div>
+					</umb-tab>
+					<umb-tab id="tab1" rel="1">
+						<!--Vaste mapping-->
+						<div class="form-vertical">
+							<div ng-if="Data.ProcessorType != 'ETC.Connector.Services.SpiderProcessor'">
+								<database-rule spiderspec="Data.IDRuleSpec">
+								</database-rule>
+
+								<database-rule spiderspec="Data.CategoryRuleSpec">
+								</database-rule>
+
+								<database-rule ng-repeat="rule in Data.DetailLinkRuleSpec" spiderspec="rule">
+								</database-rule>
+							</div>
+							<div ng-if="Data.ProcessorType == 'ETC.Connector.Services.SpiderProcessor'">
+								<spider-rule spiderspec="Data.IDRuleSpec">
+								</spider-rule>
+
+								<spider-rule spiderspec="Data.CategoryRuleSpec">
+								</spider-rule>
+
+								<spider-rule spiderspec="Data.PagerRuleSpec">
+								</spider-rule>
+
+								<spider-rule ng-repeat="rule in Data.DetailLinkRuleSpec" spiderspec="rule">
+								</spider-rule>
+							</div>
+							<div class="row spec">
+								<div class="umb-pane">
+									<input type="button" class="btn btn-success enable_button_child" value="Detail link toevoegen" ng-click="AddDetailLink(0)" />
+								</div>
+							</div>
+						</div>
+					</umb-tab>
+					<umb-tab id="tab2" rel="2">
+						<!-- Eigenschap mapping-->
+						<div class="form-vertical">
+							<div ng-if="Data.ProcessorType != 'ETC.Connector.Services.SpiderProcessor'">
+								<database-rule specs="Specs" spiderspec="SpiderSpec" ng-repeat="SpiderSpec in Data.SpiderSpecs | filter: ruleFilter ">
+								</database-rule>
+							</div>
+							<div ng-if="Data.ProcessorType == 'ETC.Connector.Services.SpiderProcessor'">
+								<spider-rule specs="Specs" spiderspec="SpiderSpec" ng-repeat="SpiderSpec in Data.SpiderSpecs | filter: ruleFilter ">
+								</spider-rule>
+							</div>
+							<div ng-if="(Data.SpiderSpecs | filter:ruleFilter).length == 0">
+								Nog geen mapping regels aanwezig
+							</div>
+							<nav class="row navbar-default">
+								<div class="vwa nav navbar-form navbar-left umb-pane">
+									<input type="button" class="btn btn-success enable_button_child" value="Regel toevoegen" ng-click="Add(0)" />
+								</div>
+							</nav>
+						</div>
+
+					</umb-tab>
+
+					<umb-tab id="tab3" rel="3">
+
+						<!--Uitsluit regels-->
+
+						<div class="form-vertical">
+							<div ng-if="Data.ProcessorType != 'ETC.Connector.Services.SpiderProcessor'">
+								<database-rule specs="Specs" spiderspec="SpiderSpec" ng-repeat="SpiderSpec in Data.SpiderSpecs | filter: ruleExcludeFilter ">
+								</database-rule>
+							</div>
+							<div ng-if="Data.ProcessorType == 'ETC.Connector.Services.SpiderProcessor'">
+								<spider-rule specs="Specs" spiderspec="SpiderSpec" ng-repeat="SpiderSpec in Data.SpiderSpecs | filter: ruleExcludeFilter ">
+								</spider-rule>
+							</div>
+							<div ng-if="(Data.SpiderSpecs | filter:ruleExcludeFilter).length == 0">
+								Nog geen uitsluit mapping regels aanwezig
+							</div>
+							<nav class="row navbar-default">
+								<div class="vwa nav navbar-form navbar-left umb-pane">
+									<input type="button" class="btn btn-success enable_button_child" value="Regel toevoegen" ng-click="Add(1)" />
+								</div>
+							</nav>
+						</div>
+
+
+
+					</umb-tab>
+				</umb-tabs-content>
+
+			</umb-editor-container>
+
+
+			<div class="umb-tab-buttons umb-editor-drawer">
+				<div class="umb-editor-drawer-content">
+					<div class="umb-editor-drawer-content__right-side">
+						<div class="btn-group umb-button">
+							<input type="button" id="btnCommit" ng-click="Commit()" class="btn btn-success enable_button_child" value="Opslaan" />
+							<a ng-show="Data.SpiderSiteID>0" id="btnDoSpider" ng-click="DoSpider(false)" class="btn btn-success enable_button_child">Start {{Data.Name}}</a>
+							<a ng-show="Data.SpiderSiteID>0" id="btnDoSpider" ng-click="DoSpider(true)" class="btn btn-success enable_button_child">Start {{Data.Name}} zonder properties</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</umb-editor-view>
+
+
+		<!--<div class="form-horizontal umb-editor-container umb-panel-body umb-scrollable row-fluid">-->
+
+
+	</form>
+</div>
+

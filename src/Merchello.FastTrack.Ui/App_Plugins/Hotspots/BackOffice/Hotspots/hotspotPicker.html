@@ -1,0 +1,13 @@
+﻿<div ng-controller="ETC.HotspotsPickerController">
+
+	<ul class="umb-tree" style="padding:25px;">
+		<li>
+			<label><input type="radio" ng-model="model.value" name="hotspotchoice_{{model.id}}" value="0" /> Geen Hotspot</label>
+		</li>
+
+		<li ng-repeat="hotspot in hotspots">
+			<label><input type="radio" ng-model="model.value" name="hotspotchoice_{{model.id}}" value="{{hotspot.Id}}" /> {{hotspot.Name}} </label>
+		</li>
+	</ul>
+
+</div>
