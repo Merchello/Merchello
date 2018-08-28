@@ -126,8 +126,8 @@
                 new StaticField("versionKey", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("staticCollectionKeys", FieldIndexTypes.ANALYZED, false, string.Empty),
                 new StaticField("slugs", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
-                new StaticField("createDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),
-                new StaticField("updateDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),
+                new StaticField("createDate", FieldIndexTypes.NOT_ANALYZED, true, "DATETIME"),
+                new StaticField("updateDate", FieldIndexTypes.NOT_ANALYZED, true, "DATETIME"),
                 new StaticField("allDocs", FieldIndexTypes.ANALYZED, false, string.Empty)
             };
 

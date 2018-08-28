@@ -140,6 +140,7 @@
     <key alias="partialPaidInvoiceCollection">Gedeeltelijk betaalde facturen</key>
     <key alias="paidInvoiceCollection">Betaalde facturen</key>
     <key alias="notFulfilledOrderCollection">Onafgehandelde bestellingen</key>
+    <key alias="cancelledOrderCollection">Geannuleerde Bestellingen</key>
     <key alias="openOrderCollection">Open bestellingen</key>
     <key alias="fulfilledOrderCollection">Afgehandelde bestellingen</key>
     <key alias="addProvider">Toevoegen provider</key>
@@ -354,6 +355,7 @@
     <key alias="paid">Betaald</key>
     <key alias="unpaid">Onbetaald</key>
     <key alias="partial">Gedeeltelijk</key>
+    <key alias="cancelled">Geannuleerd</key>
     <key alias="balanceDue">Te betalen</key>
     <key alias="manageAdjustments">Beheer aanpassingen</key>
     <key alias="addAdjustment">Voeg aanpassing toe</key>

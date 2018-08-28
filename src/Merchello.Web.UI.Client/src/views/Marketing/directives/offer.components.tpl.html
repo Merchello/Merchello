@@ -2,15 +2,18 @@
     <div class="row-fluid">
 
         <div class="form-group col-xs-5 span5">
-          <table class="table table-striped offer-components-table span12">
+          <table class="table table-striped offer-components-table">
               <thead>
-              <tr>
-                <th colspan="2" class="span12">Available {{componentType}}s</th>
-              </tr>
+                  <tr>
+                      <th colspan="2" class="span12">
+                          <localize data-ng-if="componentType==='Constraint'" key="merchelloMarketing_availableConstraints"></localize>
+                          <localize data-ng-if="componentType!=='Constraint'" key="merchelloMarketing_availableRewards"></localize>
+                      </th>
+                  </tr>
               </thead>
               <tr data-ng-repeat="component in availableComponents" data-ng-show="availableComponents.length > 0">
-                  <td class="span11"><strong><em>{{component.name}}</em></strong><small data-ng-show="component.description !== ''">{{component.description}}</small></td>
-                  <td class="span1 text-right">
+                  <td><strong><em>{{component.name}}</em></strong><small data-ng-show="component.description !== ''">{{component.description}}</small></td>
+                  <td class="text-right" style="width: 35px;">
                       <merchello-add-icon do-add="assignComponent(component)"></merchello-add-icon>
                   </td>
               </tr>
@@ -27,15 +30,15 @@
           </table>
         </div>
         <div class="form-group col-xs-5 span5 offset1">
-            <table class="table table-striped offer-components-table span12 offer-components-table">
+            <table class="table table-striped offer-components-table offer-components-table">
                 <thead>
                 <tr>
-                    <th colspan="3" class="span12">Assigned {{componentType}}s<small data-ng-hide="sortableOptions.disabled || assignedComponents.length <= 1"><em> - Drag to sort.</em></small></th>
+                    <th colspan="2">Assigned {{componentType}}s<small data-ng-hide="sortableOptions.disabled || assignedComponents.length <= 1"><em> - Drag to sort.</em></small></th>
                 </tr>
                 </thead>
                 <tbody data-ng-show="assignedComponents.length > 0" ui-sortable="sortableOptions" data-ng-model="assignedComponents">
                 <tr class="component-definition" data-ng-class="{ sortable: !sortableOptions.disabled }" class="sortable" data-ng-repeat="component in assignedComponents">
-                    <td class="span9">
+                    <td>
                         <strong><span data-ng-show="componentType === 'Constraint'">{{$index + 1}})</span> <em>{{component.name}}</em></strong>
                         <small data-ng-show="component.description !== ''">{{component.description}}</small>
                         <small data-ng-show="component.updated" class="component-not-ready"><localize key="merchelloMarketing_componentAutoSaving"></localize></small>
@@ -43,7 +46,7 @@
                         <small data-ng-show="!component.isConfigured() && !component.updated" class="component-not-ready"><localize key="merchelloGeneral_notConfigured"></localize></small>
                         <small data-ng-show="component.displayConfigurationFormat !== '' && component.isConfigured()"><strong>{{applyDisplayConfigurationFormat(component)}}</strong></small>
                     </td>
-                    <td class="merchello-icon-container span3">
+                    <td class="merchello-icon-container" style="width: 35px;">
                         <div class="pull-right">
                         <merchello-icon-bar show-edit="component.dialogEditorView.editorView !== ''" show-delete="true" do-edit="configureComponentOpen(component)" do-delete="removeComponentOpen(component)"></merchello-icon-bar>
                         </div>

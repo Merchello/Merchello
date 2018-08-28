@@ -94,7 +94,10 @@
         /// </param>
         public void AddOrUpdateReplaceablePattern(IEnumerable<IReplaceablePattern> patterns)
         {
-            patterns.ForEach(AddOrUpdateReplaceablePattern);
+            foreach (var replaceablePattern in patterns)
+            {
+                AddOrUpdateReplaceablePattern(replaceablePattern);
+            }
         }
 
         /// <summary>

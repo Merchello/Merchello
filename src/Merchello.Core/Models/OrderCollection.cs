@@ -39,6 +39,8 @@
             }
         }
 
+
+
         public override int IndexOfKey(Guid key)
         {
             for (var i = 0; i < Count; i++)
@@ -55,7 +57,6 @@
         {
             return Count == compare.Count && compare.All(item => Contains(item.Key));
         }
-
-
     }
+
 }

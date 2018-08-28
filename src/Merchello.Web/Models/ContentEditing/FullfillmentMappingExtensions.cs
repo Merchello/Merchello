@@ -17,8 +17,6 @@ namespace Merchello.Web.Models.ContentEditing
 
     public static class FullfillmentMappingExtensions
 	{
-
-
 		#region AppliedPayment
 
 		internal static AppliedPaymentDisplay ToAppliedPaymentDisplay(this IAppliedPayment appliedPayment)
@@ -48,8 +46,6 @@ namespace Merchello.Web.Models.ContentEditing
 
 		#endregion
 
-
-
 		#region ShipCountryDisplay
 
 		internal static ShipCountryDisplay ToShipCountryDisplay(this IShipCountry shipCountry)
@@ -69,7 +65,6 @@ namespace Merchello.Web.Models.ContentEditing
 		}
 
 		#endregion
-
 
 		#region GatewayResourceDisplay
 
@@ -262,7 +257,7 @@ namespace Merchello.Web.Models.ContentEditing
 
 		internal static IInvoiceStatus ToInvoiceStatus(this InvoiceStatusDisplay invoiceStatusDisplay)
 		{
-			return new InvoiceStatus()
+			return new InvoiceStatus
 			{
 				Key = invoiceStatusDisplay.Key,
 				Alias = invoiceStatusDisplay.Alias,
@@ -425,10 +420,6 @@ namespace Merchello.Web.Models.ContentEditing
 	    }
 
 		#endregion
-
-
-
-	
 
 		#region ShipFixedRateTableDisplay
 

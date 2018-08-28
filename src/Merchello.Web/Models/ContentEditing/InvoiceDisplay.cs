@@ -145,6 +145,12 @@
         /// Gets or sets the currency.
         /// </summary>
         public CurrencyDisplay Currency { get; set; }
+
+        /// <summary>
+        /// Enable the ability to edit invoices
+        /// TODO - This should not be here really!
+        /// </summary>
+        public bool EnableInvoiceEditQty { get; set; }
     }
 
     /// <summary>
@@ -212,5 +218,7 @@
                 ? invoice.InvoiceNumber.ToString(CultureInfo.InvariantCulture)
                 : string.Format("{0}-{1}", invoice.InvoiceNumberPrefix, invoice.InvoiceNumber);
         }
+
+
     }
 }

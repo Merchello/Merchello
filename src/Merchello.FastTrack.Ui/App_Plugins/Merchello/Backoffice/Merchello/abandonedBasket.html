@@ -1,24 +1,24 @@
 <div data-ng-controller="Merchello.Backoffice.Reports.AbandonedBasketController" data-ng-show="loaded">
-    <umb-panel>
+    <div class="umb-panel umb-editor-wrapper">
 
-      <div class="umb-editor-header umb-panel-header">
-        <div class="umb-panel-header-content-wrapper">
+        <div class="umb-editor-header umb-panel-header">
+            <div class="umb-panel-header-content-wrapper">
 
-          <div class="umb-panel-header-content">
-            <div class="umb-panel-header-left-side -top-position">
-              <div class="umb-panel-header-title-wrapper">
-                <div class="umb-panel-header-name">
-                  <localize key="merchelloTree_reports" />
+                <div class="umb-panel-header-content">
+                    <div class="umb-panel-header-left-side -top-position">
+                        <div class="umb-panel-header-title-wrapper">
+                            <div class="umb-panel-header-name">
+                                <localize key="merchelloTree_reports" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
+
+                <merchello-tabs tabs="tabs"></merchello-tabs>
             </div>
-          </div>
-
-          <merchello-tabs tabs="tabs"></merchello-tabs>
         </div>
-      </div>
 
-      <merchello-panel>
+        <merchello-panel>
             <!-- Tabular Order List -->
             <div class="merchello-pane">
 
@@ -26,5 +26,5 @@
                 <report-widget-customer-baskets set-loaded="setBasketsLoaded"></report-widget-customer-baskets>
             </div>
         </merchello-panel>
-    </umb-panel>
+    </div>
 </div>

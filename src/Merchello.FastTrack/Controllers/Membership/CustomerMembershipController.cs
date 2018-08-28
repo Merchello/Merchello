@@ -125,7 +125,7 @@
             }
 
             return model.SuccessRedirectUrl.IsNullOrWhiteSpace() ?
-                Redirect("/") : Redirect(model.SuccessRedirectUrl);
+                Redirect("~/") : Redirect(model.SuccessRedirectUrl);
         }
 
         /// <summary>
@@ -177,17 +177,21 @@
                 {
                     _memberService.AssignRole(membership.Id, "Customers");
                     _memberService.Save(membership);
+
+                    // Log them in 
+                    Members.Login(registerModel.Username, registerModel.Password);
                 }
 
-                return model.SuccessRedirectUrl.IsNullOrWhiteSpace()
-                           ? Redirect("/")
-                           : Redirect(model.SuccessRedirectUrl);
+                var redirectUrl = model.SuccessRedirectUrl.IsNullOrWhiteSpace()
+                    ? Redirect("~/")
+                    : Redirect(model.SuccessRedirectUrl);
+
+                return redirectUrl;
             }
-            else
-            {
-                ViewData["MerchelloViewData"] = model.ViewData;
-                return CurrentUmbracoPage();
-            }
+
+            // Finally
+            ViewData["MerchelloViewData"] = model.ViewData;
+            return CurrentUmbracoPage();
         }
 
         /// <summary>

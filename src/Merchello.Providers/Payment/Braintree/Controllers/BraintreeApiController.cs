@@ -89,5 +89,18 @@
                        ? this._braintreeApiService.Customer.GenerateClientRequestToken()
                        : this._braintreeApiService.Customer.GenerateClientRequestToken((ICustomer)customer);
         }
+
+        /// <summary>
+        /// Gets a client request token used in HTML form.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        [HttpGet]
+        public string GetClientRequestToken()
+        {
+            return this._braintreeApiService.Customer.GenerateClientRequestToken();
+        }
+
     }
 }

@@ -128,6 +128,20 @@
                             'Failed to save invoice');
                     },
 
+                    /**
+                     * @ngdoc method
+                     * @name saveInvoice
+                     * @description
+                     **/
+                    putInvoiceNewProducts: function (invoiceAddItems) {
+                        var url = baseUrl + 'PutInvoiceNewProducts';
+                        return umbRequestHelper.resourcePromise(
+                            $http.post(url,
+                                invoiceAddItems
+                            ),
+                            'Failed to save invoice');
+                    },
+
                     saveInvoiceAdjustments: function(adjustments) {
                         var url = baseUrl + 'PutInvoiceAdjustments';
                         return umbRequestHelper.resourcePromise(
@@ -160,7 +174,22 @@
                                 params: { id: invoiceKey }
                             }),
                             'Failed to delete invoice');
-                    }
+                    },
 
+                    /**
+                     * @ngdoc method
+                     * @name cancelInvoice
+                     * @description
+                     **/
+                    cancelInvoice: function (invoiceKey) {
+                        var url = baseUrl + 'CancelInvoice';
+                        return umbRequestHelper.resourcePromise(
+                            $http({
+                                url: url,
+                                method: "GET",
+                                params: { id: invoiceKey }
+                            }),
+                            'Failed to cancel invoice');
+                    }
                 };
             }]);

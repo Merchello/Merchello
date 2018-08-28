@@ -37,6 +37,11 @@
         Price,
 
         /// <summary>
+        /// The product sale price.
+        /// </summary>
+        SalePrice,
+
+        /// <summary>
         /// The product SKU 
         /// </summary>
         Sku

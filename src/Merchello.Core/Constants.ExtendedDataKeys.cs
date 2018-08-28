@@ -71,7 +71,9 @@
                     "merchProvinceTaxRate",
                     "merchTaxTransactionResults",
                     "merchSmtpProviderSettings",
-                    "merchBasketItemChoices"
+                    "merchBasketItemChoices",
+                    "merchTransactionId",
+                    "merchAdjustment"
                 }; 
             }
         }
@@ -110,6 +112,14 @@
             public static string LineItem
             {
                 get { return "merchLineItem"; }
+            }
+
+            /// <summary>
+            /// Gets the Adjustment
+            /// </summary>
+            public static string Adjustment
+            {
+                get { return "merchAdjustment"; }
             }
 
             /// <summary>
@@ -525,6 +535,15 @@
                 get { return "merchTaxTransactionResults"; }
             }
 
+            /// <summary>
+            /// Gets the transaction id for a payment
+            /// </summary>
+            public static string TransactionId
+            {
+                get { return "merchTransactionId"; }
+            }
+
+
             //// SMTP ---------------------------------------------------------------------------
 
             /// <summary>
@@ -603,6 +622,18 @@
                 get
                 {
                     return "merchBasketItemChoices";
+                }
+            }
+
+            /// <summary>
+            /// Gets the key for flagging a product lineitem as custom
+            /// This will enable editing of the line item in a dialog
+            /// </summary>
+            public static string ProductIsCustom
+            {
+                get
+                {
+                    return "merchCustomProduct";
                 }
             }
 

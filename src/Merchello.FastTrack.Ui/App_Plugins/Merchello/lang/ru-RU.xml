@@ -139,6 +139,7 @@
     <key alias="partialPaidInvoiceCollection">Частично оплаченные счета</key>
     <key alias="paidInvoiceCollection">Оплаченные счета</key>
     <key alias="notFulfilledOrderCollection">Незавершенные заказы</key>
+    <key alias="cancelledOrderCollection">Отмененные заказы</key>
     <key alias="openOrderCollection">Открытые заказы</key>
     <key alias="fulfilledOrderCollection">Завершенные заказы</key>
     <key alias="addProvider">Добавить провайдер</key>
@@ -351,11 +352,14 @@
     <key alias="paid">Оплачен</key>
     <key alias="unpaid">Не оплачен</key>
     <key alias="partial">Частично</key>
+    <key alias="cancelled">отменен</key>
     <key alias="balanceDue">Задолженность</key>
     <key alias="manageAdjustments">Управление корректировками</key>
     <key alias="addAdjustment">Добавить корректировку</key>
     <key alias="adjustments">Корректировки</key>
     <key alias="adjustmentAssignedBy">Кем сделана</key>
+    <key alias="lineItemPreview">Просмотр позиции заказа</key>
+    <key alias="noLineItemPreview">Просмотр позиции заказа невозможен</key>
   </area>
   <area alias="merchelloCustomers">
     <key alias="loginName">Логин</key>

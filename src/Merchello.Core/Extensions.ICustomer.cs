@@ -54,6 +54,39 @@ namespace Merchello.Core
         }
 
         /// <summary>
+        /// Maps a <see cref="ICustomerAddress"/> to a <see cref="IAddress"/>.
+        /// </summary>
+        /// <param name="address">
+        /// The address.
+        /// </param>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="email">
+        /// The email
+        /// </param>
+        /// <returns>
+        /// The <see cref="IAddress"/>.
+        /// </returns>
+        public static IAddress AsAddress(this ICustomerAddress address, string name, string email)
+        {
+            return new Address
+            {
+                Name = name,
+                Email = email,
+                Organization = address.Company,
+                Address1 = address.Address1,
+                Address2 = address.Address2,
+                Locality = address.Locality,
+                Region = address.Region,
+                PostalCode = address.PostalCode,
+                CountryCode = address.CountryCode,
+                Phone = address.Phone,
+                AddressType = address.AddressType
+            };
+        }
+
+        /// <summary>
         /// The default customer address associated with a customer of a given type
         /// </summary>
         /// <param name="customer">

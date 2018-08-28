@@ -13,10 +13,11 @@
     /// Represents an PurchaseOrder Payment Method
     /// </summary>
     [GatewayMethodUi("PurchaseOrder.PurchaseOrder")]
-    [PaymentGatewayMethod("PayPal Express Checkout Method Editors",
+    [PaymentGatewayMethod("Purchase Order Method Editors",
         "",
         "",
-        "~/App_Plugins/MerchelloProviders/views/dialogs/voidpayment.confirm.html",
+        "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.cashpaymentmethod.voidpayment.html",
+        "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.cashpaymentmethod.refundpayment.html",
         "")]
     public class PurchaseOrderPaymentGatewayMethod : PaymentGatewayMethodBase, IPurchaseOrderPaymentGatewayMethod
     {
@@ -42,9 +43,16 @@
         /// <returns>The <see cref="IPaymentResult"/></returns>
         protected override IPaymentResult PerformAuthorizePayment(IInvoice invoice, ProcessorArgumentCollection args)
         {
+            // Check if an amount is passed
+            var authorizeAmount = invoice.Total;
+            if (args.ContainsKey("authorizePaymentAmount"))
+            {
+                authorizeAmount = Convert.ToDecimal(args["authorizePaymentAmount"]);
+            }
+
             var po = args.AsPurchaseOrderFormData();
 
-            var payment = GatewayProviderService.CreatePayment(PaymentMethodType.PurchaseOrder, invoice.Total, PaymentMethod.Key);
+            var payment = GatewayProviderService.CreatePayment(PaymentMethodType.PurchaseOrder, authorizeAmount, PaymentMethod.Key);
             payment.CustomerKey = invoice.CustomerKey;
             payment.PaymentMethodName = PaymentMethod.Name;
             payment.ReferenceNumber = PaymentMethod.PaymentCode + "-" + invoice.PrefixedInvoiceNumber();
@@ -120,7 +128,16 @@
             var appliedPayments = GatewayProviderService.GetAppliedPaymentsByPaymentKey(payment.Key);
             var applied = appliedPayments.Sum(x => x.Amount);
 
-            payment.Collected = (amount + applied) == payment.Amount;
+            var newTotalPaymentAmount = amount + applied;
+
+            // There could be an adjustment, and the capture amount could be more than the payment amount
+            if (newTotalPaymentAmount > payment.Amount)
+            {
+                // We are capturing more money so update payment total
+                payment.Amount = newTotalPaymentAmount;
+            }
+
+            payment.Collected = newTotalPaymentAmount == payment.Amount;
             payment.Authorized = true;
 
             GatewayProviderService.Save(payment);

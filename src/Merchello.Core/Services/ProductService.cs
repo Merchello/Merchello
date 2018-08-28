@@ -1,4 +1,6 @@
-﻿namespace Merchello.Core.Services
+﻿using Merchello.Core.Persistence.Repositories;
+
+namespace Merchello.Core.Services
 {
     using System;
     using System.Collections.Generic;
@@ -33,7 +35,7 @@
         /// <summary>
         /// The valid sort fields.
         /// </summary>
-        private static readonly string[] ValidSortFields = { "sku", "name", "price" };
+        private static readonly string[] ValidSortFields = { "sku", "name", "price", "saleprice" };
 
         /// <summary>
         /// The product variant service.
@@ -329,7 +331,10 @@
             }
 
             // verify that all variants of these products still have attributes - or delete them
-            productArray.ForEach(EnsureProductVariantsHaveAttributes);
+            foreach (var product in productArray)
+            {
+                EnsureProductVariantsHaveAttributes(product);
+            }
 
             if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IProduct>(productArray), this);
         }
@@ -644,6 +649,22 @@
         }
 
         /// <summary>
+        /// Bulks adds products to collections
+        /// </summary>
+        /// <param name="entityAndCollectionKeys"></param>
+        public void AddToCollections(Dictionary<Guid, Guid> entityAndCollectionKeys)
+        {
+            if (AddingToCollection != null) AddingToCollection.Invoke(this, new EventArgs());
+
+            using (var repository = (ProductRepository)RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
+            {
+                repository.AddToCollections(entityAndCollectionKeys);
+            }
+
+            if (AddedToCollection != null) AddedToCollection.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
         /// The exists in collection.
         /// </summary>
         /// <param name="productKey">
@@ -695,6 +716,22 @@
         public void RemoveFromCollection(IProduct product, IEntityCollection collection)
         {
             this.RemoveFromCollection(product, collection.Key);
+        }
+
+        /// <summary>
+        /// Batche removes from a collection
+        /// </summary>
+        /// <param name="entityKeycollectionKey"></param>
+        public void RemoveFromCollections(Dictionary<Guid, Guid> entityKeycollectionKey)
+        {
+            if (RemovingFromCollection != null) RemovingFromCollection.Invoke(this, new EventArgs());
+
+            using (var repository = (ProductRepository)RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
+            {
+                repository.RemoveFromCollections(entityKeycollectionKey);
+            }
+
+            if (RemovedFromCollection != null) RemovedFromCollection.Invoke(this, new EventArgs());
         }
 
         /// <summary>
@@ -1969,7 +2006,7 @@
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        internal override Page<Guid> GetPagedKeys(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
+        public override Page<Guid> GetPagedKeys(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
         {
             return GetPagedKeys(page, itemsPerPage, sortBy, sortDirection, false);
         }
@@ -2021,7 +2058,7 @@
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        internal Page<Guid> GetPagedKeys(string searchTerm, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending, bool includeUnavailable = false)
+        public Page<Guid> GetPagedKeys(string searchTerm, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending, bool includeUnavailable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
@@ -2069,7 +2106,10 @@
         /// </param>
         private void EnsureVariants(IEnumerable<IProduct> products)
         {
-            products.ForEach(this.EnsureVariants);
+            foreach (var product in products)
+            {
+                this.EnsureVariants(product);
+            }
         }
 
         /// <summary>
@@ -2126,7 +2166,7 @@
 
             if (newVariants.Any())
             {
-               // _productVariantService.Save(newVariants);
+                //_productVariantService.Save(newVariants);
                 foreach (var v in newVariants)
                 {
                     product.ProductVariants.Add(v);

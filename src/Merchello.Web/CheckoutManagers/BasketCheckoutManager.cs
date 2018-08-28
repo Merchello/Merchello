@@ -112,11 +112,11 @@
         /// </summary>
         private void Initialize()
         {
-            this._customerManager = new Lazy<ICheckoutCustomerManager>(() => PluggableObjectHelper.GetInstance<BasketCheckoutCustomerManager>("BasketCheckoutCustomerManager", this.Context));
-            this._paymentManager = new Lazy<ICheckoutPaymentManager>(() => PluggableObjectHelper.GetInstance<BasketCheckoutPaymentManager>("BasketCheckoutPaymentManager", this.Context, this.InvoiceBuilder));
-            this._extendedManager = new Lazy<ICheckoutExtendedManager>(() => PluggableObjectHelper.GetInstance<BasketCheckoutExtendedManager>("BasketCheckoutExtendedManager", this.Context));
-            this._offerManager = new Lazy<ICheckoutOfferManager>(() => PluggableObjectHelper.GetInstance<BasketCheckoutOfferManager>("BasketCheckoutOfferManager", this.Context, this._paymentManager.Value));
-            this._shippingManager = new Lazy<ICheckoutShippingManager>(() => PluggableObjectHelper.GetInstance<BasketCheckoutShippingManager>("BasketCheckoutShippingManager", this.Context));            
+            this._customerManager = new Lazy<ICheckoutCustomerManager>(() => PluggableObjectHelper.GetInstance<ICheckoutCustomerManager>("BasketCheckoutCustomerManager", this.Context));
+            this._paymentManager = new Lazy<ICheckoutPaymentManager>(() => PluggableObjectHelper.GetInstance<ICheckoutPaymentManager>("BasketCheckoutPaymentManager", this.Context, this.InvoiceBuilder));
+            this._extendedManager = new Lazy<ICheckoutExtendedManager>(() => PluggableObjectHelper.GetInstance<ICheckoutExtendedManager>("BasketCheckoutExtendedManager", this.Context));
+            this._offerManager = new Lazy<ICheckoutOfferManager>(() => PluggableObjectHelper.GetInstance<ICheckoutOfferManager>("BasketCheckoutOfferManager", this.Context, this._paymentManager.Value));
+            this._shippingManager = new Lazy<ICheckoutShippingManager>(() => PluggableObjectHelper.GetInstance<ICheckoutShippingManager>("BasketCheckoutShippingManager", this.Context));
         }
     }
 }

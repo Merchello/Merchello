@@ -35,7 +35,7 @@
                                 <localize key="merchelloPayment_paymentMethod" />: {{payment.paymentMethodName}}
                             </h4>
 
-                            <div ng-show="hasAvsCvvData(payment.extendedData.items)">
+                            <div ng-show="hasExtendedDataKey(payment.extendedData.items, 'merchAvsCvvData')">
                                 <h5>AVS/CVV</h5>
                                 {{ showAvsCvvData(payment.extendedData.items) }}
                             </div>
@@ -45,22 +45,25 @@
                                 <button class="btn btn-info text-right" data-ng-show="showRefund(payment)" data-ng-click="openRefundPaymentDialog(payment)"><localize key="merchelloButtons_refund" /></button>
                             </div>
 
-                            <h5>History</h5>
+                            <h5><localize key="merchelloGeneral_history">History</localize></h5>
 
                             <div class="merchello-list-view clearfix">
                                 <table class="table">
                                     <thead>
                                     <tr>
-                                        <th>Date</th>
-                                        <th>Description</th>
-                                        <th class="text-right">Amount</th>
+                                        <th><localize key="merchelloTableCaptions_date">Date</localize></th>
+                                        <th><localize key="merchelloTableCaptions_description">Description</localize></th>
+                                        <th class="text-right"><localize key="merchelloTableCaptions_amount">Amount</localize></th>
                                         <th class="text-center"></th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr data-ng-repeat="applied in payment.appliedPayments">
                                         <td>{{applied.createDate | date : settings.dateFormat }}</td>
-                                        <td>{{applied.description}}</td>
+                                        <td>{{applied.description}} 
+                                            <span ng-show="hasExtendedDataKey(payment.extendedData.items, 'merchTransactionId')">
+                                                ({{payment.extendedData.getValue('merchTransactionId')}})
+                                            </span></td>
                                         <td class="text-right">{{applied.amount | currency: currencySymbol }}</td>
                                         <td class="text-center">
                                             <button class="btn btn-default" data-ng-click="voidPayment()" data-ng-hide="true">
@@ -69,7 +72,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2" class="text-right">Balance due:</td>
+                                        <td colspan="2" class="text-right"><localize key="merchelloSales_balanceDue">Balance due</localize>:</td>
                                         <td class="text-right">{{remainingBalance | currency : currencySymbol }}</td>
                                         <td></td>
                                     </tr>

@@ -226,8 +226,12 @@
             var shipmentRateQuotes = approvedShipmentRateQuotes as IShipmentRateQuote[] ?? approvedShipmentRateQuotes.ToArray();
 
             if (!shipmentRateQuotes.Any()) return;
-            
-            shipmentRateQuotes.ForEach(AddShipmentRateQuoteLineItem);
+
+            foreach (var shipmentRateQuote in shipmentRateQuotes)
+            {
+                AddShipmentRateQuoteLineItem(shipmentRateQuote);
+            }
+
             _merchelloContext.Services.ItemCacheService.Save(_itemCache);
 
             _customer.ExtendedData.AddAddress(shipmentRateQuotes.First().Shipment.GetDestinationAddress(), AddressType.Shipping);

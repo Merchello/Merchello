@@ -39,9 +39,6 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="logger">
         /// The logger.
         /// </param>
@@ -54,8 +51,8 @@
         /// <param name="productOptionRepository">
         /// The product option Repository.
         /// </param>
-        public ProductRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax, IProductVariantRepository productVariantRepository, IProductOptionRepository productOptionRepository)
-            : base(work, cache, logger, sqlSyntax)
+        public ProductRepository(IDatabaseUnitOfWork work, ILogger logger, ISqlSyntaxProvider sqlSyntax, IProductVariantRepository productVariantRepository, IProductOptionRepository productOptionRepository)
+            : base(work, logger, sqlSyntax)
         {
             Mandate.ParameterNotNull(productVariantRepository, "productVariantRepository");
             Mandate.ParameterNotNull(productOptionRepository, "productOptionRepository");
@@ -63,6 +60,8 @@
             _productVariantRepository = productVariantRepository;
             _productOptionRepository = productOptionRepository;
         }
+
+
 
         /// <summary>
         /// The get page.
@@ -970,6 +969,80 @@
         }
 
         /// <summary>
+        /// Bulk inserts products to a collection
+        /// </summary>
+        /// <param name="entityAndCollectionKeys"></param>
+        public void AddToCollections(Dictionary<Guid, Guid> entityAndCollectionKeys)
+        {
+            var dtos = new List<Product2EntityCollectionDto>();
+
+            var allMerchProduct2EntityCollections = GetAllMerchProduct2EntityCollections();
+
+            foreach (var entityAndCollectionKey in entityAndCollectionKeys)
+            {
+                var key = string.Concat(entityAndCollectionKey.Key, "|", entityAndCollectionKey.Value);
+
+                if (!allMerchProduct2EntityCollections.ContainsKey(key))
+                {
+                    //Guid entityKey, Guid collectionKey
+                    dtos.Add(new Product2EntityCollectionDto
+                    {
+                        ProductKey = entityAndCollectionKey.Key,
+                        EntityCollectionKey = entityAndCollectionKey.Value,
+                        CreateDate = DateTime.Now,
+                        UpdateDate = DateTime.Now
+                    });
+                }
+            }
+
+            Database.BulkInsertRecords(dtos);
+        }
+
+        /// <summary>
+        /// Creates a dictionary we can look up to check existing MerchProduct2EntityCollection
+        /// </summary>
+        /// <returns></returns>
+        private Dictionary<string, Product2EntityCollectionDto> GetAllMerchProduct2EntityCollections()
+        {
+            var sql = new Sql()
+                .Select("*")
+                .From("merchProduct2EntityCollection");
+
+            var competitions = Database.Query<Product2EntityCollectionDto>(sql);
+
+            var product2EntityCollectionDict = new Dictionary<string, Product2EntityCollectionDto>();
+
+            foreach (var mpec in competitions)
+            {
+                var key = string.Concat(mpec.ProductKey, "|", mpec.EntityCollectionKey);
+                product2EntityCollectionDict.Add(key, mpec);
+            }
+
+            return product2EntityCollectionDict;
+        }
+
+        /// <summary>
+        /// Batch removes from collections
+        /// </summary>
+        /// <param name="entityKeycollectionKey">
+        /// Key=ProductKey
+        /// Value=collectionKey
+        /// </param>
+        public void RemoveFromCollections(Dictionary<Guid , Guid> entityKeycollectionKey)
+        {
+            var sql = new Sql();
+
+            foreach (var dict in entityKeycollectionKey)
+            {
+                sql.Append(
+                    "DELETE [merchProduct2EntityCollection] WHERE [merchProduct2EntityCollection].[productKey] = @pkey AND [merchProduct2EntityCollection].[entityCollectionKey] = @eckey",
+                    new {@pkey = dict.Key, @eckey = dict.Value});
+            }
+
+            Database.Execute(sql);
+        }
+
+        /// <summary>
         /// The remove product from collection.
         /// </summary>
         /// <param name="entityKey">
@@ -1051,20 +1124,6 @@
             SortDirection sortDirection = SortDirection.Descending,
             bool includeUnavailable = false)
         {
-            var cacheKey = GetPagedDtoCacheKey(
-                "GetKeysFromCollection",
-                page,
-                itemsPerPage,
-                orderExpression,
-                sortDirection,
-                new Dictionary<string, string>
-                    {
-                        { "includeAvailable", includeUnavailable.ToString() },
-                        { "collectionKey", collectionKey.ToString() }
-                    });
-
-            var pagedKeys = TryGetCachedPageOfKeys(cacheKey);
-            if (pagedKeys != null) return pagedKeys;
 
             var sql = new Sql();
             sql.Append("SELECT *")
@@ -1083,7 +1142,7 @@
 
             pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
 
-            return CachePageOfKeys(cacheKey, pagedKeys);
+            return pagedKeys;
         }
 
 
@@ -1153,21 +1212,6 @@
             SortDirection sortDirection = SortDirection.Descending,
             bool includeUnavailable = false)
         {
-            var cacheKey = GetPagedDtoCacheKey(
-                            "GetKeysFromCollection",
-                            page,
-                            itemsPerPage,
-                            orderExpression,
-                            sortDirection,
-                            new Dictionary<string, string>
-                                {
-                                    { "includeAvailable", includeUnavailable.ToString() },
-                                    { "collectionKeys", string.Join(string.Empty, collectionKeys) }
-                                });
-
-            var pagedKeys = TryGetCachedPageOfKeys(cacheKey);
-            if (pagedKeys != null) return pagedKeys;
-
             var sql = new Sql();
             sql.Append("SELECT *")
               .Append("FROM [merchProductVariant]")
@@ -1184,10 +1228,9 @@
             {
                 sql.Append("AND [merchProductVariant].[available] = 1");
             }
+            var pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
 
-            pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection, includeUnavailable);
-
-            return CachePageOfKeys(cacheKey, pagedKeys);
+            return pagedKeys;
         }
 
         public int CountKeysThatExistInAllCollections(Guid[] collectionKeys, bool includeUnavailable = false)
@@ -1328,20 +1371,6 @@
             SortDirection sortDirection = SortDirection.Descending,
             bool includeUnavailable = false)
         {
-            var cacheKey = GetPagedDtoCacheKey(
-                "GetKeysFromCollection",
-                page,
-                itemsPerPage,
-                orderExpression,
-                sortDirection,
-                new Dictionary<string, string>
-                    {
-                        { "collectionKey", collectionKey.ToString() },
-                        { "term", term }
-                    });
-
-            var pagedKeys = TryGetCachedPageOfKeys(cacheKey);
-            if (pagedKeys != null) return pagedKeys;
 
             var sql = this.BuildProductSearchSql(term);
             sql.Append("AND [merchProductVariant].[productKey] IN (")
@@ -1359,7 +1388,7 @@
 
             pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
 
-            return CachePageOfKeys(cacheKey, pagedKeys);
+            return pagedKeys;
         }
 
         Page<Guid> IStaticEntityCollectionRepository<IProduct>.GetKeysThatExistInAllCollections(
@@ -1382,21 +1411,6 @@
             SortDirection sortDirection = SortDirection.Descending,
             bool includeUnavailable = false)
         {
-            var cacheKey = GetPagedDtoCacheKey(
-                "GetKeysThatExistInAllCollections",
-                page,
-                itemsPerPage,
-                orderExpression,
-                sortDirection,
-                new Dictionary<string, string>
-                    {
-                        { "collectionKey", string.Join(string.Empty, collectionKeys) },
-                        { "term", term }
-                    });
-
-            var pagedKeys = TryGetCachedPageOfKeys(cacheKey);
-            if (pagedKeys != null) return pagedKeys;
-
             var sql = this.BuildProductSearchSql(term);
             sql.Append("AND [merchProductVariant].[productKey] IN (")
                 .Append("SELECT DISTINCT([productKey])")
@@ -1416,7 +1430,7 @@
 
             pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
 
-            return CachePageOfKeys(cacheKey, pagedKeys);
+            return pagedKeys;
         }
 
         /// <summary>
@@ -1479,19 +1493,6 @@
             SortDirection sortDirection = SortDirection.Descending,
             bool includeUnavailable = false)
         {
-            var cacheKey = GetPagedDtoCacheKey(
-                "GetKeysNotInCollection",
-                page,
-                itemsPerPage,
-                orderExpression,
-                sortDirection,
-                new Dictionary<string, string>
-                    {
-                        { "collectionKey", collectionKey.ToString() }
-                    });
-
-            var pagedKeys = TryGetCachedPageOfKeys(cacheKey);
-            if (pagedKeys != null) return pagedKeys;
 
             var sql = new Sql();
             sql.Append("SELECT *")
@@ -1509,7 +1510,7 @@
             }
 
             pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
-            return CachePageOfKeys(cacheKey, pagedKeys);
+            return pagedKeys;
         }
 
         /// <summary>
@@ -1572,20 +1573,6 @@
             SortDirection sortDirection = SortDirection.Descending,
             bool includeUnavailable = false)
         {
-            var cacheKey = GetPagedDtoCacheKey(
-                           "GetKeysNotInAnyCollections",
-                           page,
-                           itemsPerPage,
-                           orderExpression,
-                           sortDirection,
-                           new Dictionary<string, string>
-                               {
-                                    { "collectionKeys", string.Join(string.Empty, collectionKeys) }
-                               });
-
-            var pagedKeys = TryGetCachedPageOfKeys(cacheKey);
-            if (pagedKeys != null) return pagedKeys;
-
             var sql = new Sql();
             sql.Append("SELECT *")
               .Append("FROM [merchProductVariant]")
@@ -1602,7 +1589,7 @@
             }
 
             pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
-            return CachePageOfKeys(cacheKey, pagedKeys);
+            return pagedKeys;
         }
 
         /// <summary>
@@ -1673,21 +1660,6 @@
             SortDirection sortDirection = SortDirection.Descending,
             bool includeUnavailable = false)
         {
-            var cacheKey = GetPagedDtoCacheKey(
-                "GetKeysNotInCollection",
-                page,
-                itemsPerPage,
-                orderExpression,
-                sortDirection,
-                new Dictionary<string, string>
-                    {
-                        { "collectionKey", collectionKey.ToString() },
-                        { "term", term }
-                    });
-
-            var pagedKeys = TryGetCachedPageOfKeys(cacheKey);
-            if (pagedKeys != null) return pagedKeys;
-
 
             var sql = this.BuildProductSearchSql(term);
             sql.Append("AND [merchProductVariant].[productKey] NOT IN (")
@@ -1698,13 +1670,8 @@
                     new { @eckey = collectionKey })
                 .Append(")");
 
-            if (!includeUnavailable)
-            {
-                sql.Append("AND [merchProductVariant].[available] = 1");
-            }
-
             pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
-            return CachePageOfKeys(cacheKey, pagedKeys);
+            return pagedKeys;
         }
 
         Page<Guid> IStaticEntityCollectionRepository<IProduct>.GetKeysNotInAnyCollections(
@@ -1727,22 +1694,6 @@
             SortDirection sortDirection = SortDirection.Descending,
             bool includeUnavailable = false)
         {
-            var cacheKey = GetPagedDtoCacheKey(
-                           "GetKeysNotInAnyCollections",
-                           page,
-                           itemsPerPage,
-                           orderExpression,
-                           sortDirection,
-                           new Dictionary<string, string>
-                               {
-                                { "collectionKeys", string.Join(string.Empty, collectionKeys) },
-                                { "term", term }
-                               });
-
-            var pagedKeys = TryGetCachedPageOfKeys(cacheKey);
-            if (pagedKeys != null) return pagedKeys;
-
-
             var sql = this.BuildProductSearchSql(term);
             sql.Append("AND [merchProductVariant].[productKey] NOT IN (")
                 .Append("SELECT DISTINCT([productKey])")
@@ -1758,7 +1709,7 @@
             }
 
             pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
-            return CachePageOfKeys(cacheKey, pagedKeys);
+            return pagedKeys;
         }
 
         /// <summary>
@@ -1821,19 +1772,6 @@
             SortDirection sortDirection = SortDirection.Descending,
             bool includeUnavailable = false)
         {
-            var cacheKey = GetPagedDtoCacheKey(
-                           "GetKeysThatExistInAnyCollectionss",
-                           page,
-                           itemsPerPage,
-                           orderExpression,
-                           sortDirection,
-                           new Dictionary<string, string>
-                               {
-                                    { "collectionKeys", string.Join(string.Empty, collectionKeys) }
-                               });
-
-            var pagedKeys = TryGetCachedPageOfKeys(cacheKey);
-            if (pagedKeys != null) return pagedKeys;
 
             var sql = new Sql();
             sql.Append("SELECT *")
@@ -1851,7 +1789,7 @@
             }
 
             pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
-            return CachePageOfKeys(cacheKey, pagedKeys);
+            return pagedKeys;
         }
 
         /// <summary>
@@ -1922,22 +1860,6 @@
             SortDirection sortDirection = SortDirection.Descending,
             bool includeUnavailable = false)
         {
-            var cacheKey = GetPagedDtoCacheKey(
-                           "GetKeysThatExistInAnyCollections",
-                           page,
-                           itemsPerPage,
-                           orderExpression,
-                           sortDirection,
-                           new Dictionary<string, string>
-                               {
-                                { "collectionKeys", string.Join(string.Empty, collectionKeys) },
-                                { "term", term }
-                               });
-
-            var pagedKeys = TryGetCachedPageOfKeys(cacheKey);
-            if (pagedKeys != null) return pagedKeys;
-
-
             var sql = this.BuildProductSearchSql(term);
             sql.Append("AND [merchProductVariant].[productKey] IN (")
                 .Append("SELECT DISTINCT([productKey])")
@@ -1953,7 +1875,7 @@
             }
 
             pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
-            return CachePageOfKeys(cacheKey, pagedKeys);
+            return pagedKeys;
         }
 
         /// <summary>
@@ -2376,21 +2298,59 @@
         /// </returns>
         protected override IEnumerable<IProduct> PerformGetAll(params Guid[] keys)
         {
+
+            var dtos = new List<ProductDto>();
+
             if (keys.Any())
             {
-                foreach (var id in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    yield return Get(id);
+                    dtos.AddRange(Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(GetBaseQuery(false).WhereIn<ProductDto>(x => x.Key, keyList, SqlSyntax)));
                 }
             }
             else
             {
-                var dtos = Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(GetBaseQuery(false));
-                foreach (var dto in dtos)
-                {
-                    yield return Get(dto.Key);
-                }
+                dtos = Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(GetBaseQuery(false));
             }
+
+            foreach (var dto in dtos)
+            {
+                // TODO - Performance tune
+                var factory = new ProductFactory(
+                    _productOptionRepository.GetProductAttributeCollectionForVariant(dto.ProductVariantDto.Key),
+                    _productVariantRepository.GetCategoryInventoryCollection(dto.ProductVariantDto.Key),
+                    _productOptionRepository.GetProductOptionCollection,
+                    _productVariantRepository.GetProductVariantCollection,
+                    _productVariantRepository.GetDetachedContentCollection(dto.ProductVariantDto.Key));
+
+                var product = factory.BuildEntity(dto);
+
+                product.ResetDirtyProperties();
+
+                yield return product;
+            }
+
+
+
+            //if (keys.Any())
+            //{
+            //    foreach (var id in keys)
+            //    {
+            //        yield return Get(id);
+            //    }
+            //}
+            //else
+            //{
+            //    var dtos = Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(GetBaseQuery(false));
+            //    foreach (var dto in dtos)
+            //    {
+            //        yield return Get(dto.Key);
+            //    }
+            //}
         }
 
 
@@ -2507,7 +2467,7 @@
             Database.Update(dto);
             Database.Update(dto.ProductVariantDto);
 
-            RemoveProductsFromRuntimeCache(_productOptionRepository.SaveForProduct(entity));
+            _productOptionRepository.SaveForProduct(entity);
 
             // synchronize the inventory
             _productVariantRepository.SaveCatalogInventory(((Product)entity).MasterVariant);
@@ -2525,7 +2485,7 @@
         /// </param>
         protected override void PersistDeletedItem(IProduct entity)
         {
-           RemoveProductsFromRuntimeCache(_productOptionRepository.DeleteAllProductOptions(entity));
+           _productOptionRepository.DeleteAllProductOptions(entity);
 
             var deletes = GetDeleteClauses();
             foreach (var delete in deletes)
@@ -2623,21 +2583,6 @@
             sql.Where("master = @master", new { @master = true });
 
             return sql;
-        }
-
-        /// <summary>
-        /// Removes products from cache.
-        /// </summary>
-        /// <param name="productKeys">
-        /// The product keys of products that need to be removed from cache.
-        /// </param>
-        private void RemoveProductsFromRuntimeCache(IEnumerable<Guid> productKeys)
-        {
-            // clear the cache for other products affected
-            foreach (var key in productKeys)
-            {
-                RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProduct>(key));
-            }
         }
     }
 }

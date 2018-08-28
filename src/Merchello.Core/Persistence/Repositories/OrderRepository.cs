@@ -33,9 +33,6 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="orderLineItemRepository">
         /// The order line item repository.
         /// </param>
@@ -45,8 +42,8 @@
         /// <param name="sqlSyntax">
         /// The SQL syntax.
         /// </param>
-        public OrderRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILineItemRepositoryBase<IOrderLineItem> orderLineItemRepository, ILogger logger, ISqlSyntaxProvider sqlSyntax)
-            : base(work, cache, logger, sqlSyntax)
+        public OrderRepository(IDatabaseUnitOfWork work, ILineItemRepositoryBase<IOrderLineItem> orderLineItemRepository, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {
             Mandate.ParameterNotNull(orderLineItemRepository, "lineItemRepository");
 
@@ -99,21 +96,48 @@
         /// </returns>
         protected override IEnumerable<IOrder> PerformGetAll(params Guid[] keys)
         {
+            var dtos = new List<OrderDto>();
+
             if (keys.Any())
             {
-                foreach (var key in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    yield return Get(key);
+                    dtos.AddRange(Database.Fetch<OrderDto, OrderIndexDto, OrderStatusDto>(GetBaseQuery(false).WhereIn<OrderDto>(x => x.Key, keyList, SqlSyntax)));
                 }
             }
             else
-            {                
-                var dtos = Database.Fetch<OrderDto, OrderIndexDto, OrderStatusDto>(GetBaseQuery(false));
-                foreach (var dto in dtos)
-                {
-                    yield return Get(dto.Key);
-                }
+            {
+                dtos = Database.Fetch<OrderDto, OrderIndexDto, OrderStatusDto>(GetBaseQuery(false));
             }
+
+
+            foreach (var dto in dtos)
+            {
+                var lineItems = GetLineItemCollection(dto.Key);
+                var factory = new OrderFactory(lineItems);
+                yield return factory.BuildEntity(dto);
+            }
+
+
+            //if (keys.Any())
+            //{
+            //    foreach (var key in keys)
+            //    {
+            //        yield return Get(key);
+            //    }
+            //}
+            //else
+            //{                
+            //    var dtos = Database.Fetch<OrderDto, OrderIndexDto, OrderStatusDto>(GetBaseQuery(false));
+            //    foreach (var dto in dtos)
+            //    {
+            //        yield return Get(dto.Key);
+            //    }
+            //}
         }
 
         /// <summary>
@@ -210,8 +234,6 @@
             _orderLineItemRepository.SaveLineItem(entity.Items, entity.Key);
 
             entity.ResetDirtyProperties();
-
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IInvoice>(entity.InvoiceKey));
         }
 
         /// <summary>
@@ -232,15 +254,11 @@
             _orderLineItemRepository.SaveLineItem(entity.Items, entity.Key);
 
             entity.ResetDirtyProperties();
-
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IInvoice>(entity.InvoiceKey));
         }
 
         protected override void PersistDeletedItem(IOrder entity)
         {
             base.PersistDeletedItem(entity);
-
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IInvoice>(entity.InvoiceKey));
         }
 
         private LineItemCollection GetLineItemCollection(Guid orderKey)

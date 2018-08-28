@@ -33,9 +33,6 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="orderLineItemRepository">
         /// The order Line Item Repository.
         /// </param>
@@ -45,8 +42,8 @@
         /// <param name="sqlSyntax">
         /// The SQL Syntax.
         /// </param>
-        public ShipmentRepository(IDatabaseUnitOfWork work, CacheHelper cache, IOrderLineItemRepository orderLineItemRepository, ILogger logger, ISqlSyntaxProvider sqlSyntax)
-            : base(work, cache, logger, sqlSyntax)
+        public ShipmentRepository(IDatabaseUnitOfWork work, IOrderLineItemRepository orderLineItemRepository, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {
             Mandate.ParameterNotNull(orderLineItemRepository, "orderLineItemRepository");
             _orderLineItemRepository = orderLineItemRepository;
@@ -103,22 +100,49 @@
         /// </returns>
         protected override IEnumerable<IShipment> PerformGetAll(params Guid[] keys)
         {
+
+            var dtos = new List<ShipmentDto>();
+
             if (keys.Any())
             {
-                foreach (var key in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    yield return Get(key);
+                    dtos.AddRange(Database.Fetch<ShipmentDto, ShipmentStatusDto>(GetBaseQuery(false).WhereIn<ShipmentDto>(x => x.Key, keyList, SqlSyntax)));
                 }
             }
             else
             {
-                var factory = new ShipmentFactory();
-                var dtos = Database.Fetch<ShipmentDto, ShipmentStatusDto>(GetBaseQuery(false));
-                foreach (var dto in dtos)
-                {
-                    yield return this.Get(dto.Key);
-                }
+                dtos = Database.Fetch<ShipmentDto, ShipmentStatusDto>(GetBaseQuery(false));
             }
+
+            var factory = new ShipmentFactory();
+            foreach (var dto in dtos)
+            {                
+                var shipment = factory.BuildEntity(dto);
+                ((Shipment)shipment).Items = this.GetLineItems(dto.Key);
+                yield return shipment;
+            }
+
+            //if (keys.Any())
+            //{
+            //    foreach (var key in keys)
+            //    {
+            //        yield return Get(key);
+            //    }
+            //}
+            //else
+            //{
+            //    var factory = new ShipmentFactory();
+            //    var dtos = Database.Fetch<ShipmentDto, ShipmentStatusDto>(GetBaseQuery(false));
+            //    foreach (var dto in dtos)
+            //    {
+            //        yield return this.Get(dto.Key);
+            //    }
+            //}
         }
 
         /// <summary>

@@ -53,7 +53,11 @@
 
             if (!shipmentRateQuotes.Any()) return;
 
-            shipmentRateQuotes.ForEach(this.AddShipmentRateQuoteLineItem);
+            foreach (var shipmentRateQuote in shipmentRateQuotes)
+            {
+                this.AddShipmentRateQuoteLineItem(shipmentRateQuote);
+            }
+
             this.Context.Services.ItemCacheService.Save(this.Context.ItemCache);
 
             this.Context.Customer.ExtendedData.AddAddress(shipmentRateQuotes.First().Shipment.GetDestinationAddress(), AddressType.Shipping);

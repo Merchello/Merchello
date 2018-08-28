@@ -29,36 +29,15 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="logger">
         /// The logger.
         /// </param>
         /// <param name="sqlSyntax">
         /// The SQL Syntax.
         /// </param>
-        public NotificationMessageRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
-            : base(work, cache, logger, sqlSyntax)
+        public NotificationMessageRepository(IDatabaseUnitOfWork work, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {            
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether is cached repository.
-        /// </summary>
-        /// <remarks>
-        /// This will be removed when we refactor the NotificationContext.  
-        /// 
-        /// TODO The workflow in Notification Monitors updates cached models (which is by reference).  
-        /// The triggers and monitors should be moved to use business layer models in Merchello.Web rather than Core models directly.
-        /// </remarks>
-        /// <seealso cref="http://issues.merchello.com/youtrack/issue/M-859"/>
-        protected override bool IsCachedRepository
-        {
-            get
-            {
-                return false;
-            }
         }
 
         protected override INotificationMessage PerformGet(Guid key)
@@ -77,21 +56,28 @@
 
         protected override IEnumerable<INotificationMessage> PerformGetAll(params Guid[] keys)
         {
+            var dtos = new List<NotificationMessageDto>();
+
             if (keys.Any())
             {
-                foreach (var key in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    yield return Get(key);
+                    dtos.AddRange(Database.Fetch<NotificationMessageDto>(GetBaseQuery(false).WhereIn<NotificationMessageDto>(x => x.Key, keyList, SqlSyntax)));
                 }
             }
             else
             {
-                var factory = new NotificationMessageFactory();
-                var dtos = Database.Fetch<NotificationMessageDto>(GetBaseQuery(false));
-                foreach (var dto in dtos)
-                {
-                    yield return factory.BuildEntity(dto);
-                }
+                dtos = Database.Fetch<NotificationMessageDto>(GetBaseQuery(false));
+            }
+
+            var factory = new NotificationMessageFactory();
+            foreach (var dto in dtos)
+            {
+                yield return factory.BuildEntity(dto);
             }
         }
 
@@ -178,8 +164,6 @@
             entity.Key = dto.Key;
 
             entity.ResetDirtyProperties();
-
-            //RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<INotificationMethod>(entity.MethodKey));
         }
 
         /// <summary>
@@ -198,7 +182,6 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
-           // RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<INotificationMethod>(entity.MethodKey));
         }
     }
 }

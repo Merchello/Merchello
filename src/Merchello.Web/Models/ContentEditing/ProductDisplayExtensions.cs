@@ -92,6 +92,7 @@
                 {
                     var destinationCatalogInventory = catInv;
 
+                    // TODO - RSS - Why is this set and never used?
                     destinationCatalogInventory = catalogInventory.ToCatalogInventory(destinationCatalogInventory);
                 }
                 else
@@ -225,8 +226,135 @@
             var productDisplay = AutoMapper.Mapper.Map<ProductDisplay>(product);
             productDisplay.EnsureValueConversion(conversionType);
             return productDisplay;
-        }        
-               
+        }
+
+        /// <summary>
+        /// Maps a <see cref="IProduct"/> to <see cref="ProductDisplay"/>.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <param name="conversionType">
+        /// The detached value conversion type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
+        public static ProductDisplay ToProductListingDisplay(this IProduct product, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
+        {
+            var productDisplay = AutoMapper.Mapper.Map<ProductDisplay>(product);
+
+            if (productDisplay.ProductVariants.Any())
+            {
+                // List of variants to assign
+                var variants = new List<ProductVariantDisplay>();
+
+                // Get all productVariants ordered by price
+                var priceList = productDisplay.ProductVariants.OrderBy(x => x.Price).ToArray(); // Lowest to highest
+
+                // Get all product variants ordered by sale price
+                var salePriceList = productDisplay.ProductVariants.Where(x => x.OnSale).OrderBy(x => x.SalePrice).ToArray(); // Lowest to highest
+
+                // Get the standard pricing first price
+                var firstPrice = priceList.First();
+                variants.Add(firstPrice);
+
+                // Get the last price
+                var lastPrice = priceList.Last();
+
+                // (Haven't already got this variant)
+                if (lastPrice.Key != firstPrice.Key)
+                {
+                    variants.Add(lastPrice);
+                }
+
+                // Check for sale pricing
+                if (salePriceList.Any())
+                {
+                    // Get the sale pricing
+                    var lowSalePriceVar = salePriceList.First();
+
+                    // Abandon if null
+                    if (lowSalePriceVar != null)
+                    {
+                        // Sanity checks (Haven't already got this variant)
+                        if (firstPrice.Key != lowSalePriceVar.Key && lastPrice.Key != lowSalePriceVar.Key)
+                        {
+                            variants.Add(lowSalePriceVar);
+                        }
+
+                        // Check we are not adding the same one
+                        var highSalePriceVar = salePriceList.Last();
+
+                        if (lowSalePriceVar.Key != highSalePriceVar.Key && firstPrice.Key != highSalePriceVar.Key && lastPrice.Key != highSalePriceVar.Key)
+                        {
+                            variants.Add(highSalePriceVar);
+                        }
+                    }
+                }
+
+                // Assign new variants
+                productDisplay.ProductVariants = variants;
+            }
+            
+            productDisplay.EnsureValueConversion(conversionType);
+            
+            return productDisplay;
+        }
+
+
+        /// <summary>
+        /// Turns a product variant into an InvoiceLineItem
+        /// </summary>
+        /// <param name="productVariant"></param>
+        /// <param name="qty"></param>
+        /// <param name="taxIncludedInProductPrice"></param>
+        /// <returns></returns>
+        internal static InvoiceLineItem ToInvoiceLineItem(this ProductVariantDisplay productVariant, int qty = 1, bool taxIncludedInProductPrice = false)
+        {
+            var extendedData = new ExtendedDataCollection();
+            extendedData.AddProductVariantValues(productVariant);
+
+            if (taxIncludedInProductPrice)
+            {
+                extendedData.TryAdd(Constants.ExtendedDataKeys.TaxIncludedInProductPrice, true.ToString());
+            }
+
+            // See if this variant is on sale
+            var price = productVariant.OnSale ? productVariant.SalePrice : productVariant.Price;
+
+            // TODO - Can we remove this extra step to turn into a line item
+            var itemCacheLineItem = new ItemCacheLineItem(LineItemType.Product, productVariant.Name, productVariant.Sku, qty, price, extendedData);
+            return itemCacheLineItem.AsLineItemOf<InvoiceLineItem>();
+        }
+
+
+        /// <summary>
+        /// Turns a product into an InvoiceLineItem
+        /// </summary>
+        /// <param name="product"></param>
+        /// <param name="qty"></param>
+        /// <param name="taxIncludedInProductPrice"></param>
+        /// <returns></returns>
+        internal static InvoiceLineItem ToInvoiceLineItem(this ProductDisplay product, int qty = 1, bool taxIncludedInProductPrice = false)
+        {
+            var extendedData = new ExtendedDataCollection();
+            extendedData.AddProductValues(product);
+
+            if (taxIncludedInProductPrice)
+            {
+                extendedData.TryAdd(Constants.ExtendedDataKeys.TaxIncludedInProductPrice, true.ToString());
+            }
+
+            // See if this variant is on sale
+            var price = product.OnSale ? product.SalePrice : product.Price;
+
+            // TODO - Can we remove this extra step to turn into a line item
+            var itemCacheLineItem = new ItemCacheLineItem(LineItemType.Product, product.Name, product.Sku, qty, price, extendedData);
+            return itemCacheLineItem.AsLineItemOf<InvoiceLineItem>();
+        }
+
+
         #endregion
 
 

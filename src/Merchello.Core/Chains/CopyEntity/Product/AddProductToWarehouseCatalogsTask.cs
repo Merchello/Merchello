@@ -54,7 +54,10 @@
                 if (catalog != null) entity.AddToCatalogInventory(catalog);
             }
 
-            entity.ProductVariants.ForEach(this.AddToCatalog);
+            foreach (var entityProductVariant in entity.ProductVariants)
+            {
+                this.AddToCatalog(entityProductVariant);
+            }
 
             return Attempt<IProduct>.Succeed(entity);
         }

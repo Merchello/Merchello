@@ -30,17 +30,14 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="logger">
         /// The logger.
         /// </param>
         /// <param name="sqlSyntax">
         /// The SQL Syntax.
         /// </param>
-        public CustomerAddressRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
-            : base(work, cache, logger, sqlSyntax)
+        public CustomerAddressRepository(IDatabaseUnitOfWork work, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {
         }
 
@@ -113,22 +110,31 @@
         /// </returns>
         protected override IEnumerable<ICustomerAddress> PerformGetAll(params Guid[] keys)
         {
+
+            var dtos = new List<CustomerAddressDto>();
+
             if (keys.Any())
             {
-                foreach (var key in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    yield return Get(key);
+                    dtos.AddRange(Database.Fetch<CustomerAddressDto>(GetBaseQuery(false).WhereIn<CustomerAddressDto>(x => x.Key, keyList, SqlSyntax)));
                 }
             }
             else
             {
-                var factory = new CustomerAddressFactory();
-                var dtos = Database.Fetch<CustomerAddressDto>(GetBaseQuery(false));
-                foreach (var dto in dtos)
-                {
-                    yield return factory.BuildEntity(dto);
-                }
+                dtos = Database.Fetch<CustomerAddressDto>(GetBaseQuery(false));
             }
+
+            var factory = new CustomerAddressFactory();
+            foreach (var dto in dtos)
+            {
+                yield return factory.BuildEntity(dto);
+            }
+
         }
 
         /// <summary>
@@ -193,8 +199,6 @@
             entity.Key = dto.Key;
             entity.ResetDirtyProperties();
 
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.CustomerCacheKey(entity.CustomerKey));
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<ICustomer>(entity.CustomerKey));
         }
 
         /// <summary>
@@ -213,9 +217,6 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
-
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.CustomerCacheKey(entity.CustomerKey));
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<ICustomer>(entity.CustomerKey));
         }
 
         /// <summary>
@@ -232,8 +233,6 @@
                 Database.Execute(delete, new { Key = entity.Key });
             }
 
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.CustomerCacheKey(entity.CustomerKey));
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<ICustomer>(entity.CustomerKey));
         }
 
         /// <summary>

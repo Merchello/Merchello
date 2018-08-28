@@ -2,14 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
 
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
 
     using Umbraco.Core;
-    using Umbraco.Core.Cache;
     using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
@@ -33,17 +31,14 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cacheHelper">
-        /// The <see cref="CacheHelper"/>.
-        /// </param>
         /// <param name="logger">
         /// The logger.
         /// </param>
         /// <param name="sqlSyntax">
         /// The SQL Syntax.
         /// </param>
-        protected MerchelloPetaPocoRepositoryBase(IDatabaseUnitOfWork work, CacheHelper cacheHelper, ILogger logger, ISqlSyntaxProvider sqlSyntax)
-			: base(work, cacheHelper, logger)
+        protected MerchelloPetaPocoRepositoryBase(IDatabaseUnitOfWork work, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+			: base(work, logger)
         {
             Mandate.ParameterNotNull(sqlSyntax, "sqlSyntax");
 
@@ -172,7 +167,7 @@
 			foreach (var delete in deletes)
 			{
 				Database.Execute(delete, new {Key = entity.Key});
-			}
-		}
+            }		    
+        }
 	}
 }
