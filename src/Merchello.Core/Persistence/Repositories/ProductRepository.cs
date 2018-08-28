@@ -1140,7 +1140,7 @@
                 sql.Append("AND [merchProductVariant].[available] = 1");
             }
 
-            pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+            var pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
 
             return pagedKeys;
         }
@@ -1386,7 +1386,7 @@
                 sql.Append("AND [merchProductVariant].[available] = 1");
             }
 
-            pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+            var pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
 
             return pagedKeys;
         }
@@ -1428,7 +1428,7 @@
             }
 
 
-            pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+            var pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
 
             return pagedKeys;
         }
@@ -1509,7 +1509,7 @@
                 sql.Append("AND [merchProductVariant].[available] = 1");
             }
 
-            pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+            var pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
             return pagedKeys;
         }
 
@@ -1588,7 +1588,7 @@
                 sql.Append("AND [merchProductVariant].[available] = 1");
             }
 
-            pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+            var pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
             return pagedKeys;
         }
 
@@ -1670,7 +1670,7 @@
                     new { @eckey = collectionKey })
                 .Append(")");
 
-            pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+            var pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
             return pagedKeys;
         }
 
@@ -1708,7 +1708,7 @@
                 sql.Append("AND [merchProductVariant].[available] = 1");
             }
 
-            pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+            var pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
             return pagedKeys;
         }
 
@@ -1788,7 +1788,7 @@
                 sql.Append("AND [merchProductVariant].[available] = 1");
             }
 
-            pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+            var pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
             return pagedKeys;
         }
 
@@ -1874,7 +1874,7 @@
                 sql.Append("AND [merchProductVariant].[available] = 1");
             }
 
-            pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+            var pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
             return pagedKeys;
         }
 
