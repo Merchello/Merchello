@@ -31,6 +31,8 @@
         /// </summary>
         private bool _hasPriceRangeFilter = false;
 
+        private bool _includeUnvailable = false;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductContentQueryBuilder"/> class.
         /// </summary>
@@ -65,6 +67,16 @@
             _hasPriceRangeFilter = false;
             _minPrice = 0M;
             _maxPrice = 0M;
+        }
+
+        public void IncludeUnvailable()
+        {
+            _includeUnvailable = true;
+        }
+
+        public void ExcludeUnvailable()
+        {
+            _includeUnvailable = false;
         }
 
         /// <summary>
@@ -109,7 +121,8 @@
                 SortBy = sortBy,
                 SortDirection = SortDirection,
                 CollectionKeys = this.CollectionKeys,
-                CollectionClusivity = this.CollectionClusivity
+                CollectionClusivity = this.CollectionClusivity,
+                IncludeUnavailable = _includeUnvailable
             };
 
             if (!string.IsNullOrWhiteSpace(SearchTerm))

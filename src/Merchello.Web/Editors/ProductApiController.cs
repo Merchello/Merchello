@@ -59,7 +59,7 @@
         private Lazy<ILanguage[]> _allLanguages;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProductApiController"/> class. 
+        /// Initializes a new instance of the <see cref="ProductApiController"/> class.
         /// Constructor
         /// </summary>
         public ProductApiController()
@@ -68,7 +68,7 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProductApiController"/> class. 
+        /// Initializes a new instance of the <see cref="ProductApiController"/> class.
         /// Constructor
         /// </summary>
         /// <param name="merchelloContext">
@@ -87,7 +87,7 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProductApiController"/> class. 
+        /// Initializes a new instance of the <see cref="ProductApiController"/> class.
         /// This is a helper constructor for unit testing
         /// </summary>
         /// <param name="merchelloContext">
@@ -107,7 +107,7 @@
 
         /// <summary>
         /// Returns Product by id (key)
-        /// 
+        ///
         /// GET /umbraco/Merchello/ProductApi/GetProduct/{guid}
         /// </summary>
         /// <param name="id">
@@ -118,14 +118,14 @@
         /// </returns>
         [HttpGet]
         public ProductDisplay GetProduct(Guid id)
-        {            
+        {
             var product = _merchello.Query.Product.GetByKey(id);
             return product;
         }
 
         /// <summary>
         /// Returns Product by sku
-        /// 
+        ///
         /// GET /umbraco/Merchello/ProductApi/GetProduct/{sku}
         /// </summary>
         /// <param name="sku">
@@ -143,7 +143,7 @@
 
         /// <summary>
         /// Returns a Product Variant by id (key)
-        /// 
+        ///
         /// GET /umbraco/Merchello/ProductApi/GetProductVariant/{guid}
         /// </summary>
         /// <param name="id">
@@ -161,7 +161,7 @@
 
         /// <summary>
         /// Returns a Product Variant by sku
-        /// 
+        ///
         /// GET /umbraco/Merchello/ProductApi/GetProductVariant/{sku}
         /// </summary>
         /// <param name="sku">
@@ -179,7 +179,7 @@
 
         /// <summary>
         /// Returns a Product by id (key) directly from the service
-        /// 
+        ///
         /// GET /umbraco/Merchello/ProductApi/GetProduct/{guid}
         /// </summary>
         /// <param name="id">
@@ -234,7 +234,7 @@
         /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
         /// <remarks>
-        /// Valid sortBy parameters  "SKU", "name", "price" 
+        /// Valid sortBy parameters  "SKU", "name", "price"
         /// </remarks>
         [HttpPost]
         public QueryResultDisplay SearchProducts(QueryDisplay query)
@@ -300,7 +300,8 @@
                 currentPage,
                 itemsPerPage,
                 query.SortBy,
-                query.SortDirection);
+                query.SortDirection,
+                includeUnavailable: true);
 
             return results.ToQueryResultDisplay<IProduct, ProductDisplay>(MapToProductDisplay);
         }
@@ -389,7 +390,7 @@
         public ProductDisplay PostCopyProduct(ProductCopySave productCopySave)
         {
             var original = _productService.GetByKey(productCopySave.Product.Key);
-            
+
             if (original == null) throw new NullReferenceException("Product was not found");
 
             var taskChain = new CopyProductTaskChain(original, productCopySave.Name, productCopySave.Sku);
@@ -403,7 +404,7 @@
 
         /// <summary>
         /// Updates an existing product
-        /// 
+        ///
         /// PUT /umbraco/Merchello/ProductApi/PutProduct
         /// </summary>
         /// <param name="product">
@@ -414,7 +415,7 @@
         /// </returns>
         [HttpPost, HttpPut]
         public ProductDisplay PutProduct(ProductDisplay product)
-        {            
+        {
             var merchProduct = _productService.GetByKey(product.Key);
 
             if (product.DetachedContents.Any())
@@ -541,7 +542,7 @@
 
         /// <summary>
         /// Deletes an existing product
-        /// 
+        ///
         /// DELETE /umbraco/Merchello/ProductApi/{guid}
         /// </summary>
         /// <param name="id">
@@ -583,7 +584,7 @@
             {
                 var variant = product.ProductVariants.FirstOrDefault(x => x.Key == productVariant.Key);
                 if (variant != null) variant.DetachedContents.Clear();
-                //// TODO need to walk this through better, we should not need to save the variant and then the product  
+                //// TODO need to walk this through better, we should not need to save the variant and then the product
                 //// as the product save should take care of it, but somewhere in the service the runtime cache is resetting
                 //// the variant's detached content in the productvariant collection.  Probably just need to rearrange some of the
                 //// calls in the service - suspect EnsureProductVariants.
@@ -632,7 +633,7 @@
         /// Initializes the controller
         /// </summary>
         private void Initialize()
-        { 
+        {
             _allLanguages = new Lazy<ILanguage[]>(() => ApplicationContext.Current.Services.LocalizationService.GetAllLanguages().ToArray());
         }
     }
