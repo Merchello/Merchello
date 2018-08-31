@@ -2,7 +2,7 @@
 (function () {
 
 	//register the controller
-	angular.module("umbraco").controller('ETC.HotspotsController', ['$scope', '$http', '$timeout', '$routeParams', '$location', 'appState', 'navigationService', 'notificationsService', 'dialogService', '$attrs', function HotSpotController($scope, $http, $timeout, $routeParams, $location, appState, navigationService, notificationsService, dialogService, $attrs) {
+	angular.module("umbraco").controller('ETC.HotspotsController', ['$scope', '$http', '$timeout', '$routeParams', '$location', 'appState', '$rootScope', 'navigationService', 'notificationsService', 'dialogService', 'contentResource', '$attrs', function HotSpotController($scope, $http, $timeout, $routeParams, $location, appState, $rootScope, navigationService, notificationsService, dialogService, contentResource, $attrs) {
 
 		//setup scope vars
 		$scope.page = {};
@@ -15,21 +15,41 @@
 
 		//set a property on the scope equal to the current route id
 		$scope.id = $routeParams.id;
-		//$scope.model = $scope.model || {};
 
-		$scope.data = {
-			"Id" : $routeParams.id, "Data" : '', Name :''
-		};
-			
+		// only set parent on creation
+		$scope.parentId = $routeParams.parentid || -1;
+
+		$scope.tabId = 0;
+
+		// breakpoint tabs
+		$scope.Tabs = [{ id: 0, label: 'Default', alias: 'Default' }, { id: 1, label: 'Tablet', alias: 'Tablet' }, { id: 2, label: 'Mobile', alias: 'Mobile' }];
+
+		$scope.data = {};
+
+		// tab change, load new data.
+		var deregistration = $rootScope.$on('app.tabChange', function (a, b) {
+			$scope.GetHotspotData(b.id);
+			$scope.tabId = b.id;
+		});
+
+		// tab change, load new data.
+		$scope.$on('$destroy', function (a, b) {
+			deregistration();
+		});
+
 		// Data inlezen vanaf server
-		$scope.GetHotspotData = function () {
+		$scope.GetHotspotData = function(breakpointid) {
 
-			$http.get('backoffice/Hotspots/HotspotBackOffice/GetHotspotData/' + $scope.id, {
+			$http.get('backoffice/Hotspots/HotspotBackOffice/GetHotspotData/' + $scope.id + "/?breakpointid=" + breakpointid, {
 				cache: false
 			}).then(function (response) {
 
 				// todo, jsonspecs, kwam voorheen met de route mee.
 				$scope.data = response.data;
+				
+				navigationService.syncTree({ tree: "Hotspots", path: $scope.id }).then(function (syncArgs) {
+					$scope.page.menu.currentNode = syncArgs.node;
+				});
 
 			}, function (error) {
 				notificationsService.error("Fout bij het laden", error);
@@ -47,14 +67,24 @@
 
 			var data = $.wcpEditorGetExportJSON();
 			
-			$http.post('backoffice/Hotspots/HotSpotBackOffice/SaveHotspotData/', { "Id" : $scope.id, "Data" : data, "Name": $scope.data.Name } ).then(function (res) {
+			$http.post('backoffice/Hotspots/HotSpotBackOffice/SaveHotspotData/', {
+				"Id": $scope.data.Id,
+				"Data": data,
+				"Name": $scope.data.Name,
+				"StartNodeId": $scope.data.StartNodeId,
+				"NodeId": $scope.data.NodeId,
+				"ParentId": $scope.data.ParentId,
+				"BreakPointId": $scope.data.BreakPointId
+			}).then(function (res) {
 							
 				var newId = res.data.Id;
 				notificationsService.success("De wijzigingen zijn succesvol opgelagen");
 
+				$scope.data = res.data;
+
 				$scope.contentForm.$dirty = false;
 
-				if (newId != $scope.id) {
+				if ($scope.id == "0" && newId != $scope.id) {
 					$location.path("/Hotspots/Hotspots/edit/" + newId);
 					return;
 				}
@@ -83,7 +113,7 @@
 
 				$location.path("/Hotspots/Hotspots/edit/" + newId);
 				
-				navigationService.syncTree({ tree: "Hotspots", path: newId.toString(), forceReload: true, activate : true }).then(function (syncArgs) {
+				navigationService.syncTree({ tree: "Hotspots", path:[ "-1", newId.toString()], forceReload: true, activate : true }).then(function (syncArgs) {
 					$scope.page.menu.currentNode = syncArgs.node;
 				});
 				
@@ -97,16 +127,41 @@
 
 		}
 
-		$scope.GetHotspotData();
+		$scope.GetMedia = function() {
 
-		if (!$scope.dialog) {
-			$timeout(function () {
-				navigationService.syncTree({ tree: "Hotspots", path: $scope.id.toString() }).then(function (syncArgs) {
-					$scope.page.menu.currentNode = syncArgs.node;
-				});
-			}, 100);
+			dialogService.mediaPicker({
+				onlyImages: true,
+				startNodeId: $scope.data.StartNodeId || -1,
+				callback: function (e, b) {
+					if (e.isFolder) {
+						return false;
+					}
+					$('#wcp-editor-form-control-image_url input').val(e.image).change();
+					$scope.data.StartNodeId = e.parentId;
+					$scope.data.NodeId = e.id;
+				}
+			});
 
 		}
+
+		$scope.GetLink = function () {
+			dialogService.contentPicker({
+				//startNodeId: $scope.data.LinkNodeId || -1,
+				callback: function (e, b) {
+					contentResource.getById(e.id).then(function (a,b) {
+						$('#wcp-editor-form-control-link input').val(a.urls[0]).change();
+					});										
+				}
+			});
+		}
+
+		//if (!$scope.dialog) {
+		//	$timeout(function () {
+		//		navigationService.syncTree({ tree: "Hotspots", path: $scope.data.path }).then(function (syncArgs) {
+		//			$scope.page.menu.currentNode = syncArgs.node;
+		//		});
+		//	}, 100);
+		//}
 		
 	}]).directive('hotspotEditor', ['$timeout', 'assetsService', function ($timeout, assetsService) {
 
@@ -126,7 +181,24 @@
 
 				var hotspot = undefined;
 				var initDone = false;
-				
+
+				function initMap() {
+					$.image_map_pro_init_editor(hotspot, $.WCPEditorSettings);
+					initEvents();
+
+					initDone = true;
+				}
+
+				function initEvents() {
+					$('#wcp-editor-form-control-image_url .wcp-editor-control-button').click(function () {
+						scope.GetMedia();
+					});
+
+					$('.wcp-editor-form-tabs-content-wrap').on('click', '#wcp-editor-form-control-choose_link_from_library', function () {
+						scope.GetLink();
+					});
+				}
+
 				assetsService
 					.load([
 						"~/App_Plugins/Hotspots/BackOffice/Hotspots/submodules/squares/js/squares-renderer.js",
@@ -159,11 +231,9 @@
 							
 						}
 						if (!initDone) {
-							$.image_map_pro_init_editor(hotspot, $.WCPEditorSettings);
+							initMap();
 						}
-
-						initDone = true;
-
+					
 						scope.$watch("data.Data", function (newValue, oldValue) {
 							if (newValue == oldValue) {
 								return;
@@ -185,12 +255,13 @@
 									$('#wcp-editor-import-error').hide();
 
 									if (!initDone) {
-										$.image_map_pro_init_editor(hotspot, $.WCPEditorSettings);
-										initDone = true;
+										initMap();
 									}
 									else {
 										// Fire event
 										$.wcpEditorEventImportedJSON(hotspot);
+
+										setTimeout(initEvents, 200);
 									}
 
 								}
@@ -202,12 +273,7 @@
 
 					});
 
-
-
-		
-
 			}, controller: ['$scope', function ($scope) {
-
 
 			}]
 		}

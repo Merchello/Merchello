@@ -1,0 +1,22 @@
+@model Umbraco.Forms.Mvc.Models.FieldViewModel       
+@using Umbraco.Forms.Mvc
+     
+@{
+    string val = string.Empty;
+    if (Model.ValueAsObject != null && Model.ValueAsObject != "")
+    {
+        try
+        {
+            DateTime d;
+            d = (DateTime) Model.ValueAsObject;
+            val = d.ToShortDateString();
+        }
+        catch (Exception ex)
+        {
+            val = Model.ValueAsObject.ToString();
+        }
+    }
+}
+
+<input type="hidden" name="@Model.Name" id="@Model.Id" class="datepickerfieldshadow" value="@val" />
+<input type="text" class="@Html.GetFormFieldClass(Model.FieldTypeName) text datepickerfield"  name="@Model.Name" id="@(Model.Id)_1" value="@val" @{if (Model.Mandatory) { <text> data-val="true" data-val-required="@Model.RequiredErrorMessage" </text> }} />

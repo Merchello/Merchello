@@ -55,7 +55,7 @@
                         {
                             <tr>
                                 <td>
-                                    @if (item.LineItemType == LineItemType.Product && item.Product.HasValue("image"))
+                                    @if (item.LineItemType == LineItemType.Product && item.Product !=null && item.Product.HasValue("image"))
                                     {
                                         var mediaId = item.Product.GetPropertyValue<string>("image");
                                         var image = Umbraco.TypedMedia(mediaId);
@@ -63,14 +63,14 @@
                                     }
                                 </td>
                                 <td>@item.Name</td>
-                                <td class="text-right">@item.Amount.AsFormattedCurrency()</td>
+                                <td class="text-right">@item.Amount.AsFormattedCurrency(Model.CurrencyCode)</td>
                                 <td class="text-center">@item.Quantity</td>
-                                <td class="text-right">@item.Total().AsFormattedCurrency()</td>
+                                <td class="text-right">@item.Total().AsFormattedCurrency(Model.CurrencyCode)</td>
                             </tr>
                         }
                         <tr>
                             <td colspan="4" class="text-right"><strong>Sub Total:</strong></td>
-                            <td class="text-right"><strong>@Model.Items.Where(x => x.LineItemType == LineItemType.Product).Sum(x => x.Total()).AsFormattedCurrency()</strong></td>
+                            <td class="text-right"><strong>@Model.Items.Where(x => x.LineItemType == LineItemType.Product).Sum(x => x.Total()).AsFormattedCurrency(Model.CurrencyCode)</strong></td>
                         </tr>
                         @foreach (var item in Model.Items.Where(x => x.LineItemType != LineItemType.Product))
                         {
@@ -91,11 +91,11 @@
                                 <td colspan="3" class="text-right">
                                     @if (item.LineItemType == LineItemType.Discount)
                                     {
-                                        <span>(@item.Total().AsFormattedCurrency())</span>
+                                        <span>(@item.Total().AsFormattedCurrency(Model.CurrencyCode))</span>
                                     }
                                     else
                                     {
-                                        @item.Total().AsFormattedCurrency()
+                                        @item.Total().AsFormattedCurrency(Model.CurrencyCode)
                                     }
                                 </td>
                             </tr>
@@ -103,7 +103,7 @@
                         <tfoot>
                         <tr>
                             <td colspan="4" class="text-right"><strong>Total:</strong></td>
-                            <td class="text-right"><strong>@Model.Total.AsFormattedCurrency()</strong></td>
+                            <td class="text-right"><strong>@Model.Total.AsFormattedCurrency(Model.CurrencyCode)</strong></td>
                         </tr>
                         </tfoot>
                     </table>

@@ -1,0 +1,21 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage<ContentModels.HomePagina>
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+@{	Layout = "Master.cshtml";
+
+}
+
+<div class="container-fluid hk_collections hk_catalog hk_homepage">
+
+    <div class="row">
+        <!-- Grid -->
+        @Html.GetGridHtml(Model.Content, "grid")
+        <!-- /Grid -->
+    </div>
+</div>
+
+@section Scripts {
+
+	<link rel="stylesheet" href="/scripts/css/image-map-pro.min.css">
+	<script type="text/javascript" src="/scripts/js/image-map-pro.js"></script>
+
+}

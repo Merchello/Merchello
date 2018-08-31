@@ -1,18 +1,39 @@
-﻿@model ETC.UmbracoETC.Hotspots.Models.HotspotModel
+﻿@model Dictionary<string, string>
 @{
-
 	int newID = (int)(Context.Items.Contains("hotspotID") ? Context.Items["hotspotID"] : 0) + 1;
 	Context.Items["hotspotID"] = newID;
 	string clientId = string.Format("image-map-pro-{0}", newID);
 }
 
-<div id="@clientId">
+<div id="@clientId" class="hotspot wrapper id-@clientId">
 </div>
+
 @{
-	if (Model != null && !string.IsNullOrEmpty(Model.Data))
+	if (Model != null && Model.Count >0)
 	{
 		<script type="text/javascript">
-			function loadHotspot() {$('#@clientId').imageMapPro(@Html.Raw(Model.Data));	}if (document.readyState === "loading") {document.addEventListener("DOMContentLoaded", loadHotspot);} else {loadHotspot();}
+			(function () {
+				var hotspots = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+				function loadHotspot() {
+					var viewportId = 0;
+					var w = $(document).innerWidth();
+					viewportId = (w < 768) ? 2 : ((w < 992) ? 1 : ((w < 1200) ? 0 : 0));
+					//viewportId= (w < 768) ? 'xs' : ((w < 992) ? 'sm' : ((w < 1200) ? 'md' : 'lg'));
+					if (!hotspots[viewportId]) {
+						viewportId = 0;
+					}
+					if (hotspots[viewportId]) {
+						var hotspot = JSON.parse(hotspots[viewportId]);
+
+						if (hotspot) {
+							$('#@clientId').imageMapPro(hotspot);
+						}
+					}
+				} if (document.readyState === "loading") {
+					document.addEventListener("DOMContentLoaded", loadHotspot);
+				} else { loadHotspot(); }
+			})();
 		</script>
 	}
+
 }

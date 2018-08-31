@@ -1,0 +1,117 @@
+﻿@using Cogworks.Meganav.Models
+@using ContentModels = Umbraco.Web.PublishedContentModels
+@inherits Umbraco.Web.Mvc.UmbracoViewPage<IPublishedContent>
+@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@inherits Merchello.Web.Mvc.MerchelloTemplatePage
+@using Merchello.Core.Models
+@using Merchello.FastTrack.Ui
+@using Merchello.Web
+@{
+    var storeRoot = ExampleUiHelper.Content.GetStoreRoot();
+    var catalogRoot = storeRoot.FirstChild(x => x.DocumentTypeAlias == "ftCatalog" && x.IsVisible());
+    var basketPage = ExampleUiHelper.Content.GetBasket();
+    var accountPage = ExampleUiHelper.Content.GetAccount();
+    var currentPageId = UmbracoContext.Current.PageId;
+}
+
+
+
+@*
+    @using Umbraco.Web;*@
+@{
+    Layout = null;
+
+    var selectionshop = Umbraco.TypedContent(1098).Children()
+                            .Where(x => x.IsVisible());
+
+    var selection = Umbraco.TypedContent(3885).Children()
+             .Where(x => x.IsVisible());
+
+}
+@* @{
+if (Umbraco.TypedContent(1099))
+{
+var mediaId = Umbraco.Field("featuredImageCollection");
+var media   = Umbraco.Media(mediaId.ToString());
+var image   = media.Url;
+
+<img src="@image">
+
+} 
+else {}
+
+}*@
+    <ul class="navbar-nav mx-auto" id="hk_mainmenu">
+
+        @foreach (var item in selectionshop)
+        {
+            <li class="nav-item hk_@item.UrlName">
+                <a class="nav-link @(item.IsAncestorOrSelf(Model.Content) ? "nav-link--active" : null)" href="@item.Url">@item.Name</a>
+            </li>
+        }
+
+        @foreach (var item in selection)
+        {
+            <li class="nav-item hk_@item.UrlName">
+                <a class="nav-link @(item.IsAncestorOrSelf(Model.Content) ? "nav-link--active" : null)" href="@item.Url">@item.Name</a>
+            </li>
+        }
+
+        <li class="nav-item" @(IsActive(basketPage.Id))>
+            <a class="nav-link" href="/Login">Login</a>
+        </li>
+        <li class="nav-item" @(IsActive(basketPage.Id))>
+            <a class="nav-link" href="@basketPage.Url"><span class="fas fa-shopping-cart" aria-hidden="true"></span> (<span data-muilabel="basketcount">@CurrentCustomer.Basket().TotalQuantityCount</span>)</a>
+        </li>
+        
+            <!-- Megamenu-->
+            <li class="nav-item dropdown position-static">
+                @RenderNavigation(Umbraco.TypedContent(1099).GetPropertyValue<IEnumerable<MeganavItem>>("megaMenu"))
+            </li>
+
+</ul>
+
+
+    <!--/.nav-collapse -->
+
+    @helper RenderNavigation(IEnumerable<MeganavItem> megaitems, bool parent = true)
+    {
+
+if (megaitems.Any())
+{
+  
+
+        @*  foreach (var megaitem in megaitems)
+            {
+                //We need to check if this has children or not
+
+            }
+        *@
+    foreach (var megaitem in megaitems)
+    {
+
+        <a data-toggle="@(parent ? "dropdown" : "")" href="@megaitem.Url" target="@megaitem.Target" class="nav-link">@megaitem.Title<i class="@(parent ? "" : "fa fa-angle-down")"></i></a>
+                                <div class="@(parent ? "dropdown-menu megamenu py-lg-0" : "")">
+
+                                    @RenderNavigation(megaitem.Children)
+</div>
+        }
+    }
+}
+
+
+
+    @functions
+{
+        private IHtmlString IsActive(int contentId, bool isDropdown = false)
+        {
+            var css = isDropdown ? "dropdown" : string.Empty;
+            if (Model.Content.Id == contentId)
+            {
+                css += " active";
+            }
+            css = css.Trim();
+
+            return !css.IsNullOrWhiteSpace() ? MvcHtmlString.Create(string.Format(" class=\"{0}\"", css)) : MvcHtmlString.Empty;
+        }
+    }

@@ -53,5 +53,10 @@
         /// Gets or sets the sub total.
         /// </summary>
         public decimal Total { get; set; }
+
+		/// <summary>
+		/// CurrencyCode
+		/// </summary>
+		public string CurrencyCode { get; set; }
     }
 }

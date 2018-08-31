@@ -1,0 +1,24 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using Umbraco.Web
+
+@{ 
+    // 1099 is the categorie content node
+    var CategoryNode = Umbraco.TypedContent(1099).Children.Where(x => x.IsVisible()).ToArray();
+    //var selection = CategoryNode.Children.Where(x => x.IsVisible()).ToArray();
+}
+
+<div class="hk_search">
+    <h3><a href="/">Search</a></h3>
+    <div id="hk_search-input">
+        <ul>
+            <li>
+                <input type="text" class="form-control input-lg" placeholder="Search products..." />
+            </li>
+            <li>
+                <button class="btn btn-info btn-lg" type="button">
+                    <i class="glyphicon fa fa-search "></i>
+                </button>
+            </li>
+        </ul>
+    </div>
+</div>

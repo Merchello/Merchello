@@ -1,0 +1,26 @@
+@model Umbraco.Forms.Mvc.Models.FieldViewModel
+@{
+    var siteKey = Umbraco.Forms.Core.Configuration.GetSetting("RecaptchaPublicKey");
+    var theme = "clean";
+    var themeSetting = Model.AdditionalSettings.FirstOrDefault(x => x.Key == "Theme");
+    if (themeSetting.Value != "")
+    {
+        theme = themeSetting.Value;
+    }
+    var size = "normal";
+    var sizeSetting = Model.AdditionalSettings.FirstOrDefault(x => x.Key == "Size");
+    if (sizeSetting.Value != "")
+    {
+        size = sizeSetting.Value;
+    }
+
+    if (!string.IsNullOrEmpty(siteKey))
+    {
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+        <div class="g-recaptcha" data-sitekey="@siteKey" data-theme="@theme" data-size="@size"></div>
+    }
+    else
+    {
+        <p class="error">ERROR: ReCaptcha v.2 is missing the Site Key - Please update the web.config to include 'key="RecaptchaSiteKey"'</p>
+    }
+}

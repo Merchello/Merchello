@@ -1,12 +1,45 @@
 ﻿<div ng-controller="ETC.HotspotsPickerController">
+	<div class="umb-table">
+		<div class="umb-table-body">
 
+			<div class="umb-table-row">
+				<div class="umb-table-cell">
+					<input type="radio" ng-model="control.value" id="hotspot_0" name="hotspotchoice_{{model.id}}" value="0" />
+				</div>
+				<div class="umb-table-cell">
+					<label for="hotspot_0"> Geen Hotspot</label>
+				</div>
+				<div class="umb-table-cell">
+				</div>
+			</div>
+
+
+			<div class="umb-table-row" ng-repeat="hotspot in hotspots">
+
+				<div class="umb-table-cell">
+					<input type="radio" ng-model="control.value" id="hotspot_{{hotspot.Id}}" name="hotspotchoice_{{model.id}}" value="{{hotspot.Id}}" />
+				</div>
+				<div class="umb-table-cell">
+					<label for="hotspot_{{hotspot.Id}}">{{hotspot.Name}}</label>
+				</div>
+				<div class="umb-table-cell">
+					<label for="hotspot_{{hotspot.Id}}"><img src="{{hotspot.Thumb}}" /></label>
+				</div>
+				<div class="umb-table-cell">
+					<a href="#/Hotspots/Hotspots/edit/{{hotspot.Id}}">Edit hotspot</a>
+				</div>
+			</div>
+
+		</div>
+	</div>
 	<ul class="umb-tree" style="padding:25px;">
 		<li>
-			<label><input type="radio" ng-model="control.value" name="hotspotchoice_{{model.id}}" value="0" /> Geen Hotspot</label>
+
 		</li>
-	
-		<li ng-repeat="hotspot in hotspots">
-			<label><input type="radio" ng-model="control.value" name="hotspotchoice_{{model.id}}" value="{{hotspot.Id}}" /> {{hotspot.Name}} </label>
+
+		<li>
+
+
 		</li>
 	</ul>
 </div>

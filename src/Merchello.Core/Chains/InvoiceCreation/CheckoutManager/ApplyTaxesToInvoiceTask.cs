@@ -67,7 +67,11 @@
                         this.CheckoutManager.Context.Services.StoreSettingService.GetByKey(
                             Core.Constants.StoreSetting.CurrencyCodeKey).Value;
 
-                    taxLineItem.ExtendedData.SetValue(Core.Constants.ExtendedDataKeys.CurrencyCode, currencyCode);
+					ICustomer customer = value.Customer();
+					if (customer != null && !customer.PriceGroup.IsEmpty)
+						currencyCode = customer.PriceGroup.Currency;
+					
+					taxLineItem.ExtendedData.SetValue(Core.Constants.ExtendedDataKeys.CurrencyCode, currencyCode);
 
                     value.Items.Add(taxLineItem);
 

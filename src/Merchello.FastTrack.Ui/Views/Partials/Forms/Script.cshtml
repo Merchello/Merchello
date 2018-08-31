@@ -1,0 +1,109 @@
+@inherits System.Web.Mvc.WebViewPage<Umbraco.Forms.Mvc.Models.FormViewModel>
+@using System.Globalization
+@using Umbraco.Forms.Core
+@using Umbraco.Forms.Mvc.Models
+@using Umbraco.Forms.Mvc.BusinessLogic
+@using Umbraco.Forms.MVC.Extensions
+@using Umbraco.Forms.Core.Extensions
+@using Umbraco.Forms.Web
+
+<input type="hidden" id="fsConditions_@Model.FormClientId" value='@Html.Raw(Model.FieldsetConditionsAsJson())' />
+<input type="hidden" id="fieldConditions_@Model.FormClientId" value='@Html.Raw(Model.FieldConditionsAsJson())' />
+<input type="hidden" id="values_@Model.FormClientId" value='@Html.Raw(Model.AllFieldsAsJson())'/>
+
+<script src="@Url.Content("~/App_Plugins/UmbracoForms/Assets/umbracoforms-dependencies.js")" type="text/javascript"></script>
+
+<script type="text/javascript">
+    var contourDateFormat = "@Html.ConvertDateFormat()";
+
+    //Check for library dependencies
+    performDependencyChecks('@Model.FormClientId');
+</script>
+
+
+<script src="@Url.Content("~/App_Plugins/UmbracoForms/Assets/umbracoforms.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/App_Plugins/UmbracoForms/Assets/umbracoforms-conditions.js")" type="text/javascript"></script>
+
+<script type="text/javascript">
+    (function ($, formId) {
+        var contourFieldValues,
+            recordValues = JSON.parse($("#values_" + formId).val()),
+            fsConditions = JSON.parse($("#fsConditions_" + formId).val()),
+            fieldConditions = JSON.parse($("#fieldConditions_" + formId).val()),
+            form = $("#contour_form_" + formId);
+
+        $(function () {
+            $(".contourPage input, .contourPage textarea, .contourPage select", form).change(function () {
+                PopulateFieldValues();
+                CheckRules();
+            });
+
+            PopulateFieldValues();
+            CheckRules();
+        });
+
+        function PopulateFieldValues() {
+            PopulateRecordValues();
+
+            $(".contourPage select", form).each(function () {
+                contourFieldValues[$(this).attr("id")] = $("option[value='" + $(this).val() + "']", $(this)).text();
+            });
+
+            $(".contourPage textarea", form).each(function () {
+                contourFieldValues[$(this).attr("id")] = $(this).val();
+            });
+
+            $(".contourPage input", form).each(function () {
+
+                if ($(this).attr('type') == "text" || $(this).attr("type") == "hidden") {
+                    contourFieldValues[$(this).attr("id")] = $(this).val();
+                }
+
+                if ($(this).attr('type') == "radio") {
+                    if ($(this).is(':checked')) {
+                        contourFieldValues[$(this).attr("name")] = $(this).val();
+                    }
+                }
+
+                if ($(this).attr('type') == "checkbox") {
+
+                    if ($(this).attr('id') != $(this).attr('name')) {
+                        if ($(this).is(':checked')) {
+                            if (contourFieldValues[$(this).attr("name")] == null) {
+                                contourFieldValues[$(this).attr("name")] = $(this).val();
+                            }
+                            else {
+                                contourFieldValues[$(this).attr("name")] += "," + $(this).val();
+                            }
+                        }
+                    } else {
+
+                        contourFieldValues[$(this).attr("name")] = $(this).is(':checked').toString();
+                    }
+                }
+
+            });
+        }
+
+        function PopulateRecordValues() {
+            var fieldId;
+            contourFieldValues = new Array();
+
+            for (fieldId in recordValues) {
+                if ($("#" + fieldId).length === 0) {
+                    contourFieldValues[fieldId] = recordValues[fieldId];
+                }
+            }
+        }
+
+        function CheckRules() {
+            umbracoForms.conditions.handle({
+                fsConditions: fsConditions,
+                fieldConditions: fieldConditions,
+                values: contourFieldValues
+            });
+        }
+
+    }(jQuery, '@Model.FormClientId'));
+
+</script>

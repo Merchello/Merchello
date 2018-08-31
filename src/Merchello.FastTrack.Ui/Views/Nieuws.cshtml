@@ -1,0 +1,84 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage<ContentModels.Nieuws>
+@*@inherits Umbraco.Web.Mvc.UmbracoTemplatePage*@
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+@{
+    Layout = "Master.cshtml";
+}
+
+
+@* the fun starts here *@
+
+<div class="container_wrapper vwa_main_page vwa_nieuws_page vwa_content" id="">
+	<div class="container vwa_news_items">
+    @{
+    var pageSize = 5;
+    if (Model.Content.HasValue("numberOfItemsPerPage"))
+    {
+        pageSize = Model.Content.GetPropertyValue<int>("numberOfItemsPerPage");
+    }
+    var page = 1; int.TryParse(Request.QueryString["page"], out page);
+    var items = Umbraco.TypedContent(Model.Content.Id).Children.Where(x => x.DocumentTypeAlias == "nieuwsArtikel" && x.IsVisible());
+    var totalPages = (int)Math.Ceiling((double)items.Count() / (double)pageSize);
+
+    if (page > totalPages)
+    {
+        page = totalPages;
+    }
+    else if (page < 1)
+    {
+        page = 1;
+    }
+
+    foreach (var article in CurrentPage.Children.Skip((page - 1) * pageSize).Take(pageSize))
+    {
+
+    <div class="row">
+        <div class="col-sm-6">
+            <a href="@article.Url">
+                @foreach (var image in article.afbeelding)
+                {
+                    <img src="@image.Url" style="" border="0" /> }
+
+
+            </a>
+        </div>
+        <div class="col-sm-6">
+            <h2>
+                <a href="@article.Url">@Umbraco.Truncate(article.paginaTitel, 100)</a>
+                <span>@Umbraco.StripHtml(article.subTitel)</span>
+            </h2>
+            <p>@Umbraco.Truncate(article.bericht, 300)</p>
+            <a href="@article.Url" class="btn vwa_btn_blue_border">@Umbraco.StripHtml(article.verderKnop)</a>
+        </div>
+    </div>
+        }
+
+
+        if (totalPages > 1)
+        {
+            <div class="vwa_pagination-wrapper">
+                <div class="vwa_pagination-container">
+                    <ul class="pagination">
+                        @if (page > 1)
+                {
+                            <li><a href="?page=@(page-1)" class="fa fa-backward"> </a></li>
+                        }
+                        @for (int p = 1; p < totalPages + 1; p++)
+                {
+                            <li class="@(p == page ? "active" : string.Empty)">
+                                <a href="?page=@p">@p</a>
+                            </li>
+                        }
+                        @if (page < totalPages)
+                        {
+                            <li><a href="?page=@(page+1)" class="fa fa-forward"> </a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        }
+    }
+
+	</div>
+
+</div>

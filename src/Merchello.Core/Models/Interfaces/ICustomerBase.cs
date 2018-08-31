@@ -21,5 +21,8 @@
         /// </summary>
         [DataMember]
         bool IsAnonymous { get; }
-    }
+
+		[IgnoreDataMember]
+		ETC.B2B.PriceGroup.Model.PriceGroup PriceGroup { get; }
+	}
 }

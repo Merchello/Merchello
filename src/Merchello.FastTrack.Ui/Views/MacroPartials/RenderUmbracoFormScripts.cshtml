@@ -1,0 +1,20 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using Umbraco.Forms.Web.Controllers
+@{
+    var formsToRender = new List<Guid>();
+    object forms = TempData["UmbracoForms"];
+    if (forms != null)
+    {
+        formsToRender = (List<Guid>)forms;
+    }
+
+    // Reading TempData["UmbracoForms"] should have set it to null but this doesn't
+    // happen if this request didn't return a 200 OK status. https://stackoverflow.com/a/7630709/5018
+    // Explictly clear it so that on the next request the scripts don't get rendered.
+    TempData.Remove("UmbracoForms");
+}
+
+@foreach (Guid form in formsToRender)
+{
+    Html.RenderAction("Render", "UmbracoForms", new { formId = form, mode = "script" });
+}

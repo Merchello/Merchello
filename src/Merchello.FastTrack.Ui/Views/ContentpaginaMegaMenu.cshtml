@@ -1,0 +1,8 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage<ContentModels.ContentpaginaMegaMenu>
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+@{	Layout = "Master.cshtml";
+
+}
+<!-- Grid -->
+@Html.GetGridHtml(Model.Content, "grid")
+<!-- /Grid -->

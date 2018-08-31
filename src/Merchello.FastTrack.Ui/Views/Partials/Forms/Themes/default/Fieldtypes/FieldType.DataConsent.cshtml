@@ -1,0 +1,29 @@
+@model Umbraco.Forms.Mvc.Models.FieldViewModel
+@using Umbraco.Forms.Mvc
+
+<div class="@Html.GetFormFieldClass(Model.FieldTypeName) radiobuttonlist dataconsent" id="@Model.Id">
+
+    <input type="radio" name="@Model.Id" id="@string.Concat(Model.Id, "_Accept")" value="accepted"
+           @if (Model.Mandatory)
+           {
+               <text> data-val="true" data-val-requiredlist="@Model.RequiredErrorMessage" </text>
+           }
+           @if (Model.ContainsValue("accepted"))
+           {
+               <text> checked="checked" </text>
+           }
+    />
+    <label for="@string.Concat(Model.Id, "_Accept")">@Model.AdditionalSettings["AcceptCopy"]</label>
+    <br />
+
+    <input type="radio" name="@Model.Id" id="@string.Concat(Model.Id, "_Decline")" value="declined"
+           @if (Model.Mandatory)
+           {
+               <text> data-val="true" data-val-requiredlist="@Model.RequiredErrorMessage" </text>
+           }
+           @if (Model.ContainsValue("declined"))
+           {
+               <text> checked="checked" </text>
+           } />
+    <label for="@string.Concat(Model.Id, "_Decline")">@Model.AdditionalSettings["DeclineCopy"]</label>
+</div>

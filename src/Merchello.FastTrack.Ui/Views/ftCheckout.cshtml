@@ -3,13 +3,33 @@
 @using Merchello.Web
 
 @{
-    Layout = "FastTrack.cshtml";
+    Layout = "Master.cshtml";
     if (CurrentCustomer.Basket().IsEmpty)
     {
         Response.Redirect(ExampleUiHelper.Content.GetStoreRoot().Url);
     }
 }
 
-@Html.Partial("_Headline")
+<div class="hk_order hk_checkout">
 
-@RenderBody()
+    @RenderBody()
+
+
+    <div class="row hk_category_specs">
+        <div class="col-md-12">
+            <h2 class="hk_shop">Shopping Cart</h2>
+        </div>
+    </div>
+    <div class="hk_shop_forms">
+        @Html.Action("BasketForm", "StoreBasket", new { area = "Merchello" })
+    </div>
+    <div class="row">
+        <div class="col-lg-8 col-xs-6 col-md-6">
+            <a href="/shopping-cart" class="btn btn-primary">Back to Shopping Cart</a>
+        </div>
+        <div class="col-lg-4 col-xs-6 col-md-6 text-right">
+            @*<a href="@ExampleUiHelper.Content.GetCheckout().Url" class="btn btn-primary">Checkout</a>*@
+            <input type="submit" class="btn btn-default" value="Order" />
+        </div>
+    </div>
+</div>

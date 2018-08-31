@@ -1,0 +1,34 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+@{	Layout = "Master.cshtml";
+	
+}
+
+<div class="container_wrapper vwa_main_page vwa_nieuws_page vwa_nieuws_item_page vwa_content" id="">
+		@Html.Partial("Breadcrumb")
+		<div class="container vwa_news_items vwa_news_item">
+			<div class="row">
+					<div class="col-md-8">
+					    @foreach(var image in CurrentPage.afbeelding) {
+                            <img src="@image.Url" style="" border="0"/>
+                            }
+						<h1>@Model.Content.Name</h1>
+						<h2>@CurrentPage.subtitel</h2>
+						<p>@CurrentPage.bericht</p>
+					</div>
+					<div class="col-md-4">
+						<h4>Alle nieuwsberichten</h4>
+						@{  var selection = Model.Content.Site().FirstChild("nieuws").Children("nieuwsArtikel").OrderBy("CreateDate desc")
+                                                .Where(x => x.IsVisible());
+						}
+						<ul>
+							@foreach(var item in selection){
+								<li>
+									<a href="@item.Url">@item.Name</a>
+								</li>
+							}
+						</ul>
+					</div>
+			</div>
+		</div>
+</div>

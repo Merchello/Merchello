@@ -4,49 +4,51 @@
 @using Merchello.Web.Store.Localization
 
 @{
-    Layout = "FastTrack.cshtml";
+    Layout = "Master.cshtml";
 
     var customer = (ICustomer)CurrentCustomer;
 }
 
-<div class="row">
-    <div class="col-md-12">
-        <h2>@string.Format("{0} {1}", customer.FirstName, customer.LastName)</h2>
+<div class="hk_order hk_checkout">
+
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="hk_shop">@string.Format("{0} {1}", customer.FirstName, customer.LastName)</h2>
+        </div>
     </div>
-</div>
-@if (Model.HasProperty("brief") && Model.HasValue("brief"))
-{
-    @Umbraco.Field("brief")
-}
+    @if (Model.HasProperty("brief") && Model.HasValue("brief"))
+    {
+        @Umbraco.Field("brief")
+    }
+    <div class="row">
 
-<div class="row">
+        <div class="col-md-9">
+            @if (!((ICustomer)CurrentCustomer).WishList().IsEmpty)
+            {
+                <h2 class="hk_shop">@StoreFormsResource.LabelWishList</h2>
+                @Html.Action("WishListForm", "StoreWishList", new { area = "Merchello" })
+            }
 
-    <div class="col-md-9">
-        @if (!((ICustomer)CurrentCustomer).WishList().IsEmpty)
-        {
-            <h3>@StoreFormsResource.LabelWishList</h3>
-            @Html.Action("WishListForm", "StoreWishList", new { area = "Merchello" })
-        }
+            @Html.Action("CustomerSalesHistory", "CustomerMembership", new { area = "FastTrack" })
+        </div>
 
-        @Html.Action("CustomerSalesHistory", "CustomerMembership", new { area = "FastTrack" })
+        <div class="col-md-3">
+            <h2 class="hk_shop">@StoreFormsResource.LabelAddresses</h2>
+            @Html.Action("CustomerBillingAddress", "CustomerMembership", new { area = "FastTrack" })
+
+            @Html.Action("CustomerShippingAddress", "CustomerMembership", new { area = "FastTrack" })
+        </div>
     </div>
 
-    <div class="col-md-3">
-        <h3>@StoreFormsResource.LabelAddresses</h3>
-        @Html.Action("CustomerBillingAddress", "CustomerMembership", new { area = "FastTrack" })
-
-        @Html.Action("CustomerShippingAddress", "CustomerMembership", new { area = "FastTrack" })
+    <div class="row">
+        @* Maatwerk HKLiving Invoices *@
+        <h3>invoices</h3>
+        @*Maatwerk HKLiving Invoices*@
+        @*Call to ETCConnector Account Controller*@
+        @Html.Action("Invoices", "Account", new { area = "ETCConnector" })
+        <h3>orders</h3>
+        @*Maatwerk HKLiving Invoices*@
+        @*Call to ETCConnector Account Controller*@
+        @Html.Action("Orders", "Account", new { area = "ETCConnector" })
     </div>
-</div>
-
-<div class="row">
-	@* Maatwerk HKLiving Invoices *@
-	<h3>invoices</h3>
-	@*Maatwerk HKLiving Invoices*@
-	@*Call to ETCConnector Account Controller*@
-	@Html.Action("Invoices", "Account", new { area = "ETCConnector" })
-	<h3>orders</h3>
-	@*Maatwerk HKLiving Invoices*@
-	@*Call to ETCConnector Account Controller*@
-	@Html.Action("Orders", "Account", new { area = "ETCConnector" })
-</div>
+    </div>

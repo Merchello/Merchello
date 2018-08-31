@@ -1,0 +1,8 @@
+@model Umbraco.Forms.Mvc.Models.FieldViewModel
+<textarea name="@Model.Name" id="@Model.Id" rows="2" cols="20"
+@{if(string.IsNullOrEmpty(Model.PlaceholderText) == false){<text>placeholder="@Model.PlaceholderText"</text>}}
+@{if(Model.Mandatory || Model.Validate){<text>data-val="true"</text>}}
+@{if (Model.Mandatory) {<text> data-val-required="@Model.RequiredErrorMessage"</text>}}
+@{if (Model.Validate) {<text> data-val-regex="@Model.InvalidErrorMessage" data-regex="@Html.Raw(Model.Regex)"</text>}}
+>@Model.ValueAsHtmlString</textarea>
+

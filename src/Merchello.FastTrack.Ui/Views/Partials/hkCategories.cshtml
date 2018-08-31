@@ -3,19 +3,60 @@
 
 @{ 
     // 1099 is the categorie content node
-    var CategoryNode = Umbraco.TypedContent(1099).Children.Where(x => x.IsVisible()).ToArray();
-    //var selection = CategoryNode.Children.Where(x => x.IsVisible()).ToArray();
+    var AllCategories = Umbraco.TypedContent(1099).Children.Where(x => x.IsVisible());
+    var featured = AllCategories.Where(x => x.GetPropertyValue<bool>("onlyFeaturedCategory", true));
+    var categories = AllCategories.Where(x => !x.GetPropertyValue<bool>("onlyFeaturedCategory", true) || x.GetPropertyValue<bool>("alsoDefaultCategory", true));
+    var livingCategorie = AllCategories.Where(x => x.GetPropertyValue<bool>("onlyFeaturedCategory", true));
 }
-<h3>Categorieën</h3>
 
-@if (CategoryNode.Length > 0)
+<div>
+    @if (categories.Count() > 0)
+    {
+        <h3><a href="/">Categories</a></h3>
+        
+        <ul class="hk_categories_list">
+            @foreach (var item in categories )
+            {
+                @RenderLink(item)
+            }
+        </ul>
+    }
+</div>
+<div class="hk_featured_cat">
+  
+    @if (featured.Count() > 0)
+    {
+        <h3><a href="/">Featured Categories</a></h3>
+        <ul class="hk_categories_list parent_list">
+            @foreach (var item in featured)
+            {
+                @RenderLink(item)
+            }
+        </ul>
+    }
+</div>
+
+
+@helper RenderLink(IPublishedContent item, String className = "cat-link")
 {
-    <ul>
-        @foreach (var item in CategoryNode)
-        {
-            <li>
-                <a href="@item.Url">@item.Name</a>
-            </li>
+
+    var countChildren = item.Children("ftCategory").Where(x => x.IsVisible()).Count();
+    var active = item.IsAncestorOrSelf(Model.Content);
+    string toggle = countChildren > 0 ? "collapse" : "";
+
+<li>
+
+    <a class="@className @(active ? "active" : "collapsed")" href="@item.Url" data-toggle="@toggle" data-target="#submenu-@item.Name.Replace( " ", "")">@item.Name</a>
+    
+            @if (countChildren > 0)
+            {
+                <i class="fa @(active ? "fa-minus" : "fa-plus") " style="opacity:0.25; font-size:9px; float:right; margin: -17px 0px 0px 0px; z-index:998;position: relative;"></i><ul class="hk_categories_list collapse@(active ? "show" : "") " id="submenu-@item.Name.Replace( " ", "")">
+                @foreach( var subitem in item.Children("ftCategory").Where(x => x.IsVisible())) {
+                    @RenderLink(subitem)
+                    
+                }
+            </ul>
         }
-    </ul>
+        
+    </li>
 }

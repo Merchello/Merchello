@@ -1,0 +1,80 @@
+@inherits WebViewPage<FormViewModel>
+@using ClientDependency.Core.Mvc
+@using Umbraco.Forms.Mvc.Models
+@using Umbraco.Forms.Mvc.BusinessLogic
+@using Umbraco.Forms.Mvc
+
+@*
+    This view is used as the default render view for all forms, unless a theme
+    is chosen, which contains a override of render.cshtm
+    Normally, you would not need to override this view, as you would have to 
+    replicate all functionality of this view seperately
+*@
+
+@{
+    Html.EnableClientValidation(true);
+    Html.EnableUnobtrusiveJavaScript(true);
+
+    //Get the actual view to render the form html
+    var formThemedView = FormThemeResolver.GetFormView(Model);
+
+    //get the script.cshtml view to render client-side assets
+    var formScriptView = FormThemeResolver.GetScriptView(Model);
+
+}
+
+@* In case the form has been marked as submitted - the FormThemeResolver will return the submitted.cshtml file and look for a custom 
+   view. In case there is no view found - it will default to /themes/default/submitted which will just display the standard message
+*@
+@if (Model.SubmitHandled)
+{
+    @Html.Partial(formThemedView);
+
+} else {
+
+    @*Standard form and wrapper *@
+    <div id="umbraco_form_@Model.FormClientId" class="umbraco-forms-form @Model.CssClass umbraco-forms-@Model.Theme">
+
+        @using (Html.BeginUmbracoForm<Umbraco.Forms.Web.Controllers.UmbracoFormsController>("HandleForm"))
+        {
+            @* Standard form meta data *@
+
+            @Html.AntiForgeryToken()
+
+            @Html.HiddenFor(x => Model.FormId)
+            @Html.HiddenFor(x => Model.FormName)
+            @Html.HiddenFor(x => Model.RecordId)
+            @Html.HiddenFor(x => Model.PreviousClicked)
+
+            @* These 2 cannot use the htmlhelper *@
+            <input type="hidden" name="FormStep" value="@Model.FormStep" />
+            <input type="hidden" name="RecordState" value="@Model.RecordState" />
+            
+            @* Render the form html *@
+            @Html.Partial(formThemedView)
+        }
+
+
+        @* Form Scripts *@
+        @if (Model.RenderScriptFiles)
+        {
+            @* Render the scripts.cshtml file to included standard conditionals and validation logic *@
+        Html.RenderPartial(formScriptView);
+
+
+            @* Render required css files needed by fields on the current page*@
+            foreach (var css in Html.GetThemeCssFiles(Model))
+            {
+                if (Model.UseClientDependency)
+                {
+                    Html.RequiresCss(css.Value);
+                }
+                else
+                {
+                    <link rel="stylesheet" href="@Url.Content(css.Value)" />
+                }
+            }
+
+        }
+    </div>
+}

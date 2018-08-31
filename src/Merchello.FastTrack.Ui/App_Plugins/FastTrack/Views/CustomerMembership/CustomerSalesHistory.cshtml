@@ -4,6 +4,14 @@
 @using Merchello.FastTrack.Ui
 @using Merchello.Web.Models.ContentEditing
 
+@{ 
+	string currencyCode = string.Empty;
+	if (Model.Count() > 0)
+	{
+		currencyCode = Model.First().CurrencyCode;
+	}
+}
+
 <div class="panel panel-default">
     <div class="panel-heading">
         <h4>Sales History</h4>
@@ -27,7 +35,7 @@
                     <td>@item.InvoiceDate.ToString("dd-MM-yyyy")</td>
                     <td>@item.InvoiceStatus.Name</td>
                     <td>@GetOrderStatus(item)</td>
-                    <td class="text-right">@item.Total.AsFormattedCurrency()</td>
+                    <td class="text-right">@item.Total.AsFormattedCurrency(item.CurrencyCode)</td>
                 </tr>
             }
             </tbody>
@@ -36,7 +44,7 @@
                 <td colspan="4" class="text-right">
                     Total Purchases:
                 </td>
-                <td class="text-right"><strong>@Model.TotalPurchases.AsFormattedCurrency()</strong></td>
+                <td class="text-right"><strong>@Model.TotalPurchases.AsFormattedCurrency(currencyCode)</strong></td>
             </tr>
             @if (Model.TotalOutstanding > 0)
             {
@@ -44,14 +52,14 @@
                 <td colspan="4" class="text-right">
                     Total Paid:
                 </td>
-                <td class="text-right">@Model.TotalPaid.AsFormattedCurrency()</td>
+                <td class="text-right">@Model.TotalPaid.AsFormattedCurrency(currencyCode)</td>
             </tr>
 
                     <tr>
                         <td colspan="4" class="text-right">
                             Outstanding Balance:
                         </td>
-                        <td class="text-right"><strong>@Model.TotalOutstanding.AsFormattedCurrency()</strong></td>
+                        <td class="text-right"><strong>@Model.TotalOutstanding.AsFormattedCurrency(currencyCode)</strong></td>
                     </tr>
                 }
 

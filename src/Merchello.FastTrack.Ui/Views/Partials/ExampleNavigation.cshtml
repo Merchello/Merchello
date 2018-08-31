@@ -1,0 +1,23 @@
+﻿@using Cogworks.Meganav.Models
+@model IEnumerable<MeganavItem>
+
+@RenderNavigation(Model)
+
+@helper RenderNavigation(IEnumerable<MeganavItem> items)
+{
+    if (items.Any())
+    {
+        <ul>
+            @foreach (var item in items)
+            {
+                <li>
+                    <a href="@item.Url" target="@item.Target">
+                        @item.Title (Level: @item.Level)
+                    </a>
+
+                    @RenderNavigation(item.Children)
+                </li>
+            }
+        </ul>
+    }
+}

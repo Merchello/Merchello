@@ -1,0 +1,128 @@
+﻿@using System.Web.Mvc.Html
+@using Merchello.Web
+@using Merchello.Web.Search
+@using ETC.B2B.WEB
+
+@inherits Merchello.Web.Mvc.MerchelloViewPage<FtSubCategory>
+
+@{
+    Layout = "Master.cshtml";
+
+
+    // Products is the property of documenttype FtCategory, of datatype Merchello.ProductListView
+    // Name Produts can vary per implementation
+    var ProductsProperty = Model.GetProperty("Products");
+    long total = 0;
+
+    Paging paging = null; // Paging.GetPages(1, 10);
+
+    // products to be listed
+    IEnumerable<Merchello.Web.Models.VirtualContent.IProductContent> products = null;
+
+    // stukje uit Merchello.Web.PropertyConverters\ProductListViewValueConverter.cs
+
+    // DataValue is the collection which is choosen in the content node in Umbraco Admin area
+    // Can be string.empty or the selected collection key
+    if (ProductsProperty.DataValue != null)
+    {
+        var collectionKey = ProductsProperty.DataValue.ToString();
+
+        if (collectionKey.IsNullOrWhiteSpace())
+        {
+
+            total = this.Merchello.ProductContentQuery().Execute().TotalItems;
+            var query = this.Merchello.ProductContentQuery().Page(Paging.GetCurrentPage()).ItemsPerPage(25).OrderBy(ProductSortField.Name);
+            products = query.Execute().Items;
+        }
+
+        try
+        {
+            var key = new Guid(collectionKey);
+
+            total = this.Merchello.ProductContentQuery().ConstrainByCollectionKey(key).Execute().TotalItems;
+            var query = this.Merchello.ProductContentQuery().Page(Paging.GetCurrentPage()).ItemsPerPage(10).ConstrainByCollectionKey(key);
+            products = query.Execute().Items;
+        }
+        catch (Exception ex)
+        {
+            // ignore
+        }
+    }
+
+
+    if (products != null)
+    {
+        paging = Paging.GetPages(total, 20);
+        //products = products.Skip(paging.Skip).Take(paging.Take).ToList();
+    }
+
+}
+@{
+
+    var currentPageId = UmbracoContext.Current.PageId;
+
+
+
+}
+@*
+    @Html.Partial("_Headline")
+*@
+
+
+<div class="container-fluid hk_collections hk_category" id="hk_cat_@currentPageId">
+    <div class="row">
+        <div class="col-12 hk_categorie_media hk_categorie_media_top">
+            @Html.GetGridHtml(Umbraco.TypedContent(currentPageId), "collectionGridTop")
+        </div>
+        <div class="col-3 col-xl-3 col-md-3">
+            @Html.Partial("hkSearch")
+            @Html.Partial("hkCategories")
+        </div>
+        <div class="col-9 col-xl-9 col-md-9 col-sm-9">
+            @Html.Partial("_ProductBoxList", products)
+            <div class="row col-12 pagination">
+                <nav aria-label="Page navigation" class="hk_pagination">
+                    <ul class="pagination">
+                        @RenderPaging(paging, paging.CurrentPage)
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-12 hk_categorie_media">
+    @Html.GetGridHtml(Umbraco.TypedContent(currentPageId), "collectionGrid")
+</div>
+
+@helper RenderPaging(Paging paging, long currentId)
+        {
+
+    <li class="page-item"><a class="@(paging.CurrentPage > 1 ? "" : "disabled") fas fa-step-backward" @(paging.CurrentPage > 1 ? "" : "disabled") href="?page=@paging.PreviousPage">&nbsp;</a></li>
+
+if (paging.StartPageToShow > 1)
+{
+        <li class="page-item"><a href="?page=1">1..</a></li><text><span>&nbsp;</span></text>
+}
+
+for (var i = paging.StartPageToShow; i <= paging.EndPageToShow; i++)
+{
+    if (paging.CurrentPage == i)
+    {
+            <span><span>@i</span></span><text>&nbsp;</text>
+    }
+    else
+    {
+            <li class="page-item"><a href="?page=@i">@i</a></li><text>&nbsp;</text>
+    }
+}
+
+
+if (paging.EndPageToShow < paging.TotalPages)
+{
+        <li class="page-item"><a href="?page=@paging.TotalPages">...@paging.TotalPages</a></li><text>&nbsp;</text>
+}
+
+
+    <li class="page-item"><a class="@(paging.CurrentPage < paging.TotalPages ? "" : "disabled") fas fa-step-forward" @(paging.CurrentPage < paging.TotalPages ? "" : "disabled") href="?page=@paging.NextPage">&nbsp;</a></li>
+
+}

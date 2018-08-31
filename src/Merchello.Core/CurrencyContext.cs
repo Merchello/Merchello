@@ -39,7 +39,7 @@
         /// <param name="storeSettingService">
         /// The store setting service.
         /// </param>
-        internal CurrencyContext(IStoreSettingService storeSettingService)
+        public CurrencyContext(IStoreSettingService storeSettingService)
         {
             Mandate.ParameterNotNull(storeSettingService, "storeSettingService");
 
@@ -67,8 +67,7 @@
             {
                 return _instance;
             }
-
-            internal set
+            set
             {
                 _instance = value;
             }
@@ -94,7 +93,7 @@
         /// <summary>
         /// Gets the store currency format.
         /// </summary>
-        private ICurrencyFormat StoreCurrencyFormat
+        protected ICurrencyFormat StoreCurrencyFormat
         {
             get
             {
@@ -116,15 +115,39 @@
         /// <remarks>
         /// Overrides for currency format are made in the Merchello.config
         /// </remarks>
-        public string FormatCurrency(decimal amount)
+        public virtual string FormatCurrency(decimal amount)
         {
             return string.Format(this.StoreCurrencyFormat.Format, this._storeCurrency.Symbol, amount);
         }
 
-        /// <summary>
-        /// Clears the static field values.
-        /// </summary>
-        internal void ResetCurrency()
+		/// <summary>
+		/// Formats the currency based with symbol and configured culture.
+		/// </summary>
+		/// <param name="amount">
+		/// The amount.
+		/// </param>
+		/// <param name="currencyCode">
+		/// The currencycode
+		/// </param>
+		/// <returns>
+		/// The formatted amount.
+		/// </returns>
+		/// <remarks>
+		/// Overrides for currency format are made in the Merchello.config
+		/// </remarks>
+		public virtual string FormatCurrency(decimal amount, string currencyCode)
+		{
+			ICurrency currencyByCode = this._storeSettingService.GetCurrencyByCode(currencyCode);
+			if (currencyByCode != null)
+				return string.Format(this._storeSettingService.GetCurrencyFormat(currencyByCode).Format, (object)currencyByCode.Symbol, (object)amount);
+			return string.Format(this.StoreCurrencyFormat.Format, (object)this.StoreCurrency.Symbol, (object)amount);
+		}
+
+
+		/// <summary>
+		/// Clears the static field values.
+		/// </summary>
+		internal void ResetCurrency()
         {
             this._storeCurrency = null;
             this._currencyFormat = null;

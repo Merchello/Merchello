@@ -1,0 +1,11 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using Umbraco.Web;
+@{
+    var siteSection = Model.Content.AncestorOrSelf(2);
+    var selection = siteSection.Children.Where(x => x.IsVisible());
+}
+
+@foreach (var item in selection)
+{
+    <a class="nav-link nav-link--black nav-link--air-bottom @(item.IsAncestorOrSelf(Model.Content) ? "nav-link--active" : null)" href="@item.Url">@item.Name</a>
+}

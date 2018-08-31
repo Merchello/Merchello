@@ -1,0 +1,19 @@
+@model Umbraco.Forms.Mvc.Models.FieldViewModel
+@using Umbraco.Forms.Core.Extensions
+
+@{
+    var settings = Model.AdditionalSettings;
+    var hasCaption = (settings.ContainsKey("Caption") && !string.IsNullOrEmpty(settings["Caption"]));
+    var hasBody = (settings.ContainsKey("BodyText") && !string.IsNullOrEmpty(settings["BodyText"]));
+}
+
+<div id="@Model.Id">
+    @if (hasCaption)
+    {
+        <h2>@settings["Caption"].ParsePlaceHolders()</h2>
+    }
+    @if (hasBody)
+    {
+        <p>@Html.Raw(settings["BodyText"].ParsePlaceHolders().Replace(System.Environment.NewLine, "<br />"))</p>
+    }
+</div>

@@ -2,27 +2,19 @@
 @using Merchello.FastTrack.Ui
 @using Merchello.Web
 @{
-    Layout = "FastTrack.cshtml";
+    Layout = "Master.cshtml";
 }
 
-@Html.Partial("_Headline")
-
-@if (CurrentCustomer.Basket().Items.Any())
-{
-    @Html.Action("BasketForm", "StoreBasket", new { area = "Merchello" })
-
-    <div class="row">
-        <div class="col-lg-8">
-            <a href="@ExampleUiHelper.Content.GetStoreRoot().Url">Continue Shopping</a>
-        </div>
-        <div class="col-lg-4 text-right">
-            <a href="@ExampleUiHelper.Content.GetCheckout().Url" class="btn btn-primary">Checkout</a>
+<div class="hk_order">
+    <div class="row hk_category_specs">
+        <div class="col-md-12">
+            <h2 class="hk_shop"> Order</h2>
         </div>
     </div>
-}
-else
+</div>
+@if (Model.Content.HasProperty("brief") && Model.Content.HasValue("brief"))
 {
-    <p>
-        <a href="@ExampleUiHelper.Content.GetStoreRoot().Url">There's nothing in your shopping cart, start shopping!</a>
-    </p>
+    @Umbraco.Field("brief")
 }
+@Html.Partial("_ShoppingCart")
+

@@ -1,0 +1,11 @@
+@using System.Runtime.CompilerServices
+@using Umbraco.Forms.Mvc.Helpers
+@model Umbraco.Forms.Mvc.Models.FieldViewModel
+@{
+    var theme = "clean";
+    if (Model.AdditionalSettings.Any(x => x.Key == "Theme"))
+    {
+        theme = Model.AdditionalSettings.FirstOrDefault(x => x.Key == "Theme").Value;
+    }
+}
+@ReCaptchaHelper.ReCaptcha(theme)

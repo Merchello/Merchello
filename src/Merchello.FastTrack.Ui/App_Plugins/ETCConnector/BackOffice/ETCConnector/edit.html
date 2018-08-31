@@ -29,7 +29,7 @@
 									<umb-editor-sub-header-section>
 										<ul>
 											<li>
-												<label> Laatst gespidered :</label>{{Data.DTLastSpidered | date}} {{Data.DTLastSpidered | date : "H:mm"}}
+												<label>Laatste uitvoerdatum :</label>{{Data.DTLastSpidered | date}} {{Data.DTLastSpidered | date : "H:mm"}}
 											</li>
 											<li>
 												<label>Aantal objecten :</label> {{Data.CountObjects}}
@@ -117,6 +117,14 @@
 										<option value="ETC.Connector.Services.ETCServices.AccountProcessor">AccountProcessor</option>
 										<option value="ETC.Connector.Services.ETCServices.ItemImportProcessor">ItemImportProcessor</option>
 										<option value="ETC.Connector.Services.ETCServices.ItemImageProcessor">ItemImageProcessor</option>
+									</select>
+								</umb-control-group>
+							
+								<umb-control-group label="e-Mail beleid" ng-if="Data.ProcessorType == 'ETC.Connector.Services.ETCServices.AccountProcessor'" description="Wanneer krijgen de gebruikers een activatie email">
+									<select ng-model="Data.MailPolicy">
+										<option value="1">Verstuur geen mail</option>
+										<option value="0">Verstuur mail bij nieuwe gebruikers</option>
+										<option value="2">Verstuur alle gebruiker eenmalig een mail bij de eerstvolgende volledige synchronisatie</option>
 									</select>
 								</umb-control-group>
 

@@ -46,11 +46,17 @@
             {
                 var defaultCurrency =
                     this.SalePreparation.MerchelloContext.Services.StoreSettingService.GetByKey(
-                        Constants.StoreSetting.CurrencyCodeKey);
+                        Constants.StoreSetting.CurrencyCodeKey).Value;
 
-                foreach (var item in unTagged)
+
+				ICustomer customer = value.Customer();
+				if (customer != null && !customer.PriceGroup.IsEmpty)
+					defaultCurrency = customer.PriceGroup.Currency;
+
+
+				foreach (var item in unTagged)
                 {
-                    item.ExtendedData.SetValue(Constants.ExtendedDataKeys.CurrencyCode, defaultCurrency.Value);
+                    item.ExtendedData.SetValue(Constants.ExtendedDataKeys.CurrencyCode, defaultCurrency);
                 }
             }
 

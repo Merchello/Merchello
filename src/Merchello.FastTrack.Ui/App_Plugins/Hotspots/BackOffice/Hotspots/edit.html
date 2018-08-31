@@ -21,27 +21,26 @@
 			<umb-editor-header menu="page.menu"
 							   name="data.Name"
 							   name-locked="false"
+							   tabs="Tabs"
 							   hide-icon="false"
 							   hide-description="false"
 							   hide-alias="false">
 			</umb-editor-header>
 
-			<!--<div class="umb-pane">
-		<hotspot-editor></hotspot-editor>
-	</div>-->
+			<div data-element="editor-container" class="umb-editor-container umb-panel-body umb-scrollable row-fluid" ng-class="{'-stop-scrolling': numberOfOverlays > 0}">
+				<hotspot-editor></hotspot-editor>
+			</div>
+
 
 			<!--<umb-editor-container>
-				<hotspot-editor></hotspot-editor>
+				<umb-tabs-content view="true">
+					<umb-tab id="tab0" rel="0">
+						<!--Default-->
+						<!--<hotspot-editor></hotspot-editor>
+					</umb-tab>
+				</umb-tabs-content>
 			</umb-editor-container>-->
 
-
-			<div data-element="editor-container" class="umb-editor-container umb-panel-body umb-scrollable row-fluid" ng-class="{'-stop-scrolling': numberOfOverlays > 0}">
-				
-				
-					<hotspot-editor></hotspot-editor>
-
-				
-			</div>
 
 
 			<div class="umb-tab-buttons umb-editor-drawer">

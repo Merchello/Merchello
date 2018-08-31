@@ -1,0 +1,20 @@
+@model Umbraco.Forms.Mvc.Models.FieldViewModel
+@using Umbraco.Forms.Mvc
+
+@{ var i = 0; }
+          
+<span class="checkboxlist" id="@Model.Id">
+@foreach (Umbraco.Forms.Mvc.Models.PrevalueViewModel pv in Model.PreValues)  
+{
+    <input type="checkbox" 
+           class="@Html.GetFormFieldClass(Model.FieldTypeName)" 
+           name="@Model.Name" id="@string.Concat(Model.Id,"_",i)" value="@pv.Value" 
+    @if (Model.Mandatory) {<text>data-val="true" data-val-requiredlist="@Model.RequiredErrorMessage"</text>}
+    @if (Model.ContainsValue(pv.Value)){<text>checked="checked"</text>}/>
+    
+    <label for="@string.Concat(Model.Id,"_",i)">@pv.Value</label>
+    <br />
+
+    i++;
+}
+</span>

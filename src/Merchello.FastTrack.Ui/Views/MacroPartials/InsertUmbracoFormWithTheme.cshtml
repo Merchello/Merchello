@@ -1,0 +1,48 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+	
+@if (Model.MacroParameters["FormGuid"] != null)
+{
+    var s = Model.MacroParameters["FormGuid"].ToString();
+    var theme = "";
+    var includeScripts = true;
+
+    @*
+        If a theme is provided as a macro parameter, forms will attempt to use custom theme files
+        ex: given the value "test", forms will look up views for the form and fields in a custom directory:
+
+        Form will be rendered with
+            /Views/Partials/Forms/Themes/test/form.cshml
+
+        Fields will be rendered with
+            /Views/Partials/Forms/Themes/test/FieldType/[fieldtypename].cshtml
+
+        If a file is not available in the custom directory, forms will fallback to the default files in
+            /Views/Partials/Forms/Themes/default/
+    *@
+
+    if(Model.MacroParameters.ContainsKey("FormTheme"))
+    {
+        theme = Model.MacroParameters["FormTheme"].ToString();
+    }
+
+    if (Model.MacroParameters.ContainsKey("ExcludeScripts"))
+    {
+
+        @*
+            Inverse the boolean - RenderAction Parameter expects it to be false for exclusion
+            But with default value for Macro Paramater boolean/checkbox being false 
+            We want to ensure by default we include the scripts next to the form
+        *@
+        includeScripts = Model.MacroParameters["ExcludeScripts"].ToString() == "0";
+    }
+
+    var form = new Guid(s);
+    var recordGuid = Guid.Empty;
+
+    if (string.IsNullOrEmpty(Request.QueryString["recordId"]) == false)
+    {
+        Guid.TryParse(Request.QueryString["recordId"], out recordGuid);
+    }
+
+    Html.RenderAction("RenderForm", "UmbracoForms", new {formId = form, recordId = recordGuid, theme = theme, includeScripts = includeScripts });
+}

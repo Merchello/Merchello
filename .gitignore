@@ -235,3 +235,6 @@ src/Merchello.Providers.UI.Client/Bin/*
 src/Merchello.Web.UI.Client/App_Data/*
 src/Merchello.Web.UI.Client/Bin/*
 src/Merchello.FastTrack.Ui/Umbraco/lib/*
+src/Merchello.FastTrack.Ui/App_Plugins/Terratype*
+src/Merchello.FastTrack.Ui/App_Plugins/Meganav*
+src/Merchello.FastTrack.Ui/App_Plugins/UmbracoForms*

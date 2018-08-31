@@ -1,0 +1,17 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+
+
+
+@{
+	var selection = Umbraco.TypedContent(1099).Children()
+						.Where(x => x.IsVisible())
+						.OrderBy("Name");
+}
+<ul>
+	@foreach(var item in selection){
+		<li>
+			<a href="@item.Url">@item.Name</a>
+		</li>
+	}
+</ul>
+

@@ -1,0 +1,8 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using ContentModels = Umbraco.Web.PublishedContentModels
+
+@{
+	Layout = null;
+}@{
+    var contentNode = Umbraco.TypedContent("1535");//<ContentModels.Tankstation>
+}@contentNode.GetPropertyValue("CookiePopup")

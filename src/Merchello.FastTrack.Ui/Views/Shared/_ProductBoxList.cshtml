@@ -6,17 +6,18 @@
 
     @if (Model.Any())
     {
-        foreach (var row in Model.ToArray().Split(3))
+        foreach (var row in Model.ToArray().Split(4))
         {
             <div class="row">
                 @foreach (var product in row)
                 {
-                    <div class="col-md-4">
+                    <div class="col-6 col-xl-3 col-md-6 col-lg-3">
                         @Html.Partial("_ProductBox", product)
                     </div>
                 }
             </div>
         }
+    
     }
     else
     {

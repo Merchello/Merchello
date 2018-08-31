@@ -1,0 +1,97 @@
+@inherits System.Web.Mvc.WebViewPage<Umbraco.Forms.Mvc.Models.FormViewModel>
+@using ClientDependency.Core.Mvc
+@using Umbraco.Forms.Mvc
+@using Umbraco.Forms.MVC.Extensions
+@using Umbraco.Forms.Web
+
+@{
+    var fieldsNotDisplayed = Model.Pages
+                        .Select((x, index) => new { item = x, index = index })
+                        .Where(x => x.index != Model.FormStep).Select(x => x.item)
+                        .SelectMany(x => x.Fieldsets)
+                        .SelectMany(x => x.Containers)
+                        .SelectMany(x => x.Fields)
+                        .ToDictionary(f => f.Id, f => string.IsNullOrWhiteSpace(f.Value) == false ? f.ValueAsHtmlString.ToHtmlString() : string.Empty);
+
+    var fieldSetConditions = Html.Raw(Model.FieldsetConditionsAsJson());
+    var fieldConditions = Html.Raw(Model.FieldConditionsAsJson());
+    var formId = Model.FormClientId;
+    var dateFormat = Html.ConvertDateFormat();
+    var recordValues = Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(fieldsNotDisplayed));
+
+
+    var jsCommand = string.Format(@"
+
+            var contourDateFormat = '{0}',
+                formId = '{1}',
+                fieldSetConditions = {2},
+                fieldConditions = {3},
+                recordvalues = {4};
+            
+            umbracoForms.dependencyCheck(formId);
+
+            var form = $('#umbraco_form_' + formId + ' .umbraco-forms-page');
+            var conditions = new umbracoForms.conditions(form, fieldSetConditions, fieldConditions, recordvalues);
+            conditions.watch();",
+
+            dateFormat,
+            formId,
+            fieldSetConditions,
+            fieldConditions,
+            recordValues);
+
+
+
+    Html.AddFormThemeScriptFile(Model, "~/App_Plugins/UmbracoForms/Assets/Themes/Default/umbracoforms-dependencies.js");
+    Html.AddFormThemeScriptFile(Model, "~/App_Plugins/UmbracoForms/Assets/Themes/Default/umbracoforms.js");
+    Html.AddFormThemeScriptFile(Model, "~/App_Plugins/UmbracoForms/Assets/Themes/Default/umbracoforms-conditions.js");
+    
+    Html.AddFormThemeScriptCommand(Model, jsCommand);
+}
+
+
+@* Only render out scripts on the page if the form has not been submitted yet *@
+@if (Model.SubmitHandled == false)
+{
+    @*
+        If the current page of the form has any Partial view files attached to render
+        Likely used by events and third parties adding tracking or other 3rd party functionality to a form
+    *@
+    if (Model.CurrentPage.PartialViewFiles.Any())
+    {
+        foreach (var partial in Model.CurrentPage.PartialViewFiles)
+        {
+                @Html.Partial(partial.Value)
+        }
+    }
+
+
+   @* Render references to javascript files needed by fields on the current page*@
+   foreach (var script in Html.GetThemeScriptFiles(Model))
+   {
+        if (Model.UseClientDependency)
+        {
+            Html.RequiresJs(script.Value);
+        }
+        else
+        {
+            <script type="text/javascript" src="@Url.Content(script.Value)"></script>
+        }
+    }
+    
+
+    var commands = Html.GetFormThemeScriptCommands(Model);
+   
+    @* Render javascript commands to initialise fields *@
+    if (commands.Count > 0)
+    {
+        <script type="text/javascript">
+            (function () {
+            @foreach (var cmd in commands.Values)
+            {
+          <text>@Html.Raw(cmd)</text>
+            }
+            }());
+        </script>
+    }
+}

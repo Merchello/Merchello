@@ -1,6 +1,6 @@
 ﻿@inherits UmbracoTemplatePage
 
-<div class="row">
+<div class="row hk_category_specs">
     <div class="col-md-12">
         <h2>@(Model.Content.HasProperty("headline") && Model.Content.HasValue("headline") ? Umbraco.Field("headline") : MvcHtmlString.Create(Model.Content.Name))</h2>
     </div>

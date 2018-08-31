@@ -1,0 +1,48 @@
+﻿@using System.Globalization
+@using Umbraco.Forms.Core
+@{
+    var datePickerYearRange = Configuration.GetSetting("DatePickerYearRange");
+    if (string.IsNullOrEmpty(datePickerYearRange))
+    {
+        datePickerYearRange = "10";
+    }
+}
+
+<link rel="stylesheet" href="/App_Plugins/UmbracoForms/Assets/pikaday/pikaday.css" />
+<script src="/App_Plugins/UmbracoForms/Assets/moment/min/moment-with-locales.min.js" type="text/javascript"></script>
+<script src="/App_Plugins/UmbracoForms/Assets/pikaday/pikaday.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+	$(function() {
+		var locales = {
+			default: {
+				previousMonth: "<<",
+				nextMonth: ">>",
+				months: ["@Html.Raw(string.Join("\",\"", CultureInfo.CurrentCulture.DateTimeFormat.MonthNames))"],
+				weekdays: ["@Html.Raw(string.Join("\",\"", CultureInfo.CurrentCulture.DateTimeFormat.DayNames))"],
+				weekdaysShort: ["@Html.Raw(string.Join("\",\"", CultureInfo.CurrentCulture.DateTimeFormat.AbbreviatedDayNames))"]
+			}
+		};
+
+		moment.locale("@CultureInfo.CurrentUICulture.Name");
+		$(".datepickerfield")
+			.each(function () {
+				var currentId = this.id;
+				new Pikaday({
+					field: document.getElementById(currentId),
+					yearRange: "@datePickerYearRange",
+					i18n: locales.default,
+					format: "LL",
+					onSelect: function (date) {
+						setShadow(currentId.replace("_1", ""), date);
+					}
+				});
+			});
+
+		function setShadow(id, date) {
+			var value = moment(date).format('YYYY-MM-DD');
+			var field = document.getElementById(id);
+			field.value = value;
+		}
+	});
+</script>			

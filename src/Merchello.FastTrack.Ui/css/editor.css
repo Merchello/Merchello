@@ -1,0 +1,127 @@
+body#tinymce {
+    padding-bottom: 20px!important;
+}
+
+.h1, .h2, .h3, .h4, h1, h2, h3, h4, .panel .panel-heading {
+    font-family: "Muli", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: #444;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+
+.grid-section h1,
+.grid-section h2,
+.grid-section h3,
+.grid-section h4,
+.grid-section h5, {
+    text-align:center;
+}
+#tinymce h1,
+#tinymce h2,
+#tinymce h3,
+#tinymce h4,
+#tinymce h5, {
+    text-align:center;
+}
+
+#tinymce ul,
+.container_wrapper .grid-section ul {
+      padding:0px 0px 0px 16px;
+}
+  
+.grid-section .column h4{
+    font-family: "Muli", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
+      text-transform:none;
+}
+#tinymce p,
+#tinymce ul li,
+ .grid-section p,
+.grid-section ul li {
+     font-size: 11px;
+    margin-top: 0;
+
+}
+#tinymce h4,
+.grid-section h4 {
+    margin-bottom: 5px!important;
+}
+
+.grid-section ul li {
+      line-height: initial;
+}
+
+footer .grid-section ul li {
+      line-height:23px;
+}
+
+a.btn.btn-grid {
+    background: #fff;
+    border: 1px solid #929292;
+    font-size: 0.8em!important;
+    font-weight: 800;
+    padding: 3px 10px 2px 10px!important;
+    padding: 2px 30px 3px 30px!important;
+    color: #444;
+     margin: 20px;
+}
+
+/**umb_name:Geen opmaak*/
+ {
+}
+
+/**umb_name:Heading H1*/
+.editor{
+   /*   text-transform: none;
+        font-weight:400;
+     margin: 0px 0px 10px 0px!important;*/ 
+}
+
+h1.editor {
+   /*font-size:18px;*/ 
+}
+
+/**umb_name:Heading H2*/
+h2.editor{
+   /* font-size:16px;*/ 
+}
+/**umb_name:Heading H3*/
+h3.editor{
+    /*font-size:14px;*/ 
+
+}
+
+/**umb_name:Heading H4*/
+h4.editor{
+   /* font-size:12px;*/ 
+}
+/**umb_name:Heading H5*/
+h5.editor{
+   /* font-size:11px;*/ 
+
+}
+
+/**umb_name:Heading H6*/
+h6.editor{
+   /* font-size:10px;*/ 
+
+}
+
+/**umb_name:Caption image*/
+p.caption{
+    font-style:italic;
+    opacity:0.5;
+    text-align:center;
+}
+
+
+/**umb_name:Knop standaard*/
+a.btn.btn-grid{background: #fff;
+border: 1px solid #929292;
+font-size: 0.8em!important;
+font-weight: 800;
+padding: 3px 10px 2px 10px!important;
+padding: 2px 30px 3px 30px!important;
+color: #444;}

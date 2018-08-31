@@ -1,0 +1,26 @@
+﻿@inherits Merchello.Web.Mvc.MerchelloTemplatePage
+@using Merchello.FastTrack.Ui
+@using Merchello.Web
+
+@if (CurrentCustomer.Basket().Items.Any())
+{
+    <div class="hk_shop_forms">
+        @Html.Action("BasketForm", "StoreBasket", new { area = "Merchello" })
+    </div>
+    <div class="row">
+        <div class="col-lg-8 col-xs-6">
+            <a href="@ExampleUiHelper.Content.GetStoreRoot().Url" class="btn btn-primary">Continue Shopping</a>
+        </div>
+        <div class="col-lg-4 col-xs-6 text-right">
+            <a href="@ExampleUiHelper.Content.GetCheckout().Url" class="btn btn-primary">Checkout</a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="col-lg-12">
+            <a href="@ExampleUiHelper.Content.GetStoreRoot().Url" style="font-size:0.9em;">There's nothing in your shopping cart, start shopping!</a>
+        </div>
+    </div>
+}

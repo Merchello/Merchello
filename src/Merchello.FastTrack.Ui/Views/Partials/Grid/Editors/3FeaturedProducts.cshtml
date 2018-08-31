@@ -1,0 +1,27 @@
+﻿@inherits UmbracoViewPage<Lecoati.LeBlender.Extension.Models.LeBlenderModel>
+@model dynamic
+@using Umbraco.Web.Templates
+
+@if (Model.value != null)
+{   
+    var url = Model.value.image;
+    if(Model.editor.config != null && Model.editor.config.size != null){
+        url += "?width=" + Model.editor.config.size.width;
+        url += "&height=" + Model.editor.config.size.height;
+
+        if(Model.value.focalPoint != null){
+            url += "&center=" + Model.value.focalPoint.top +"," + Model.value.focalPoint.left;
+            url += "&mode=crop";
+        }
+    }
+
+    var altText = Model.value.altText ?? Model.value.caption ?? string.Empty;
+    
+    <img src="@url" alt="@altText">
+    
+    if (Model.value.caption != null)
+    {
+        <p class="caption">@Model.value.caption</p>
+    }
+}
+

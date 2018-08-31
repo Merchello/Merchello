@@ -1,0 +1,11 @@
+﻿@model Umbraco.Forms.Web.Models.Backoffice.EntrySearchResultCollection
+@foreach (var header in Model.schema)
+{<text>"</text>@Html.Raw(header.Name)<text>",</text>}
+
+@foreach (var row in Model.Results)
+{
+    foreach (var col in row.Fields)
+    {<text>"</text>@Html.Raw(col).ToString().Replace(Environment.NewLine, " ")<text>",</text>}
+
+    @Environment.NewLine
+}

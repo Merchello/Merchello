@@ -1,0 +1,190 @@
+@using Umbraco.Forms.Core
+@using Umbraco.Forms.Mvc.Models
+@using Umbraco.Forms.Mvc.BusinessLogic
+@using Umbraco.Forms.MVC.Extensions
+@using Umbraco.Web
+@using ClientDependency.Core.Mvc;
+
+@model Umbraco.Forms.Mvc.Models.FormViewModel
+@{
+    Html.EnableClientValidation(true);
+    Html.EnableUnobtrusiveJavaScript(true);
+}
+
+
+
+@if (Model.SubmitHandled)
+{
+    if (Model.RenderMode == "full" || Model.RenderMode == "form")
+    {
+        <p class="contourMessageOnSubmit">@Html.Raw(Model.MessageOnSubmit)</p>
+    }
+}
+else
+{
+    if (Model.RenderMode == "full" || Model.RenderMode == "form")
+    {
+
+        <div id="contour_form_@Model.FormClientId" class="contour @Model.CssClass">
+
+            @using (Html.BeginUmbracoForm<Umbraco.Forms.Web.Controllers.UmbracoFormsController>("HandleForm"))
+            {
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" name="FormId" value="@Model.FormId" />
+                @Html.HiddenFor(x => Model.FormName)
+                @Html.HiddenFor(x => Model.RecordId)
+                @Html.HiddenFor(x => Model.PreviousClicked)
+
+                <input type="hidden" name="FormStep" value="@Model.FormStep" />
+                <input type="hidden" name="RecordState" value="@Model.RecordState" />
+
+                <div class="contourPage">
+
+                    @if (string.IsNullOrEmpty(Model.CurrentPage.Caption) == false)
+                    {
+                        <h4 class="contourPageName">@Html.Raw(Model.CurrentPage.Caption)</h4>
+                    }
+
+                    @if (Model.ShowValidationSummary)
+                    {
+                        @Html.ValidationSummary(false)
+                    }
+
+                    @foreach (FieldsetViewModel fs in Model.CurrentPage.Fieldsets)
+                    {
+                        <fieldset class="contourFieldSet" id="@fs.Id">
+                            @if (string.IsNullOrEmpty(fs.Caption) == false)
+                            {
+                                <legend>@Html.Raw(fs.Caption)</legend>
+                            }
+
+                            <div class="row-fluid">
+                                @foreach (var c in fs.Containers)
+                                {
+
+                                    <div class="@("span" + c.Width) @("col-md-" + c.Width)">
+                                        @foreach (FieldViewModel f in c.Fields)
+                                        {
+                                            bool hidden = f.HasCondition && f.ConditionActionType == FieldConditionActionType.Show;
+
+                                            <div class="@f.CssClass" @{ if (hidden) { <text> style="display: none" </text>   } }>
+
+                                                @if (!f.HideLabel)
+                                                {
+                                                    <label for="@f.Id" class="fieldLabel">
+                                                        @Html.Raw(f.Caption) @if (f.ShowIndicator)
+                                                        {
+                                                            <span class="contourIndicator">@Model.Indicator</span>
+                                                        }
+                                                    </label>
+                                                }
+                                                @if (!string.IsNullOrEmpty(f.ToolTip))
+                                                {
+                                                    <span class="help-block">@f.ToolTip</span>
+                                                }
+
+                                                <div>
+                                                    @Html.Partial(FieldViewResolver.GetFieldView(Model.FormId.ToString(), f.FieldType.FieldTypeViewName, f.Caption), f)
+                                                    @if (Model.ShowFieldValidaton)
+                                                    {
+                                                        @Html.ValidationMessage(f.Id)
+                                                    }
+                                                </div>
+                                            </div>
+
+    }
+
+                                    </div>
+
+    }
+                            </div>
+
+                        </fieldset>
+    }
+
+                    <div style="display: none">
+                        <input type="text" name="@Model.FormId.ToString().Replace("-", "")" />
+                    </div>
+
+
+                    <div class="contourNavigation row-fluid">
+                        <div class="col-md-12">
+                            @if (Model.IsMultiPage)
+                            {
+                                if (!Model.IsFirstPage)
+                                {
+                                    <input class="btn prev cancel" type="submit" value="@Model.PreviousCaption" name="__prev" />
+                                }
+                                if (!Model.IsLastPage)
+                                {
+                                    <input type="submit" class="btn next" value="@Model.NextCaption" name="next" />
+                                }
+                                if (Model.IsLastPage)
+                                {
+                                    <input type="submit" class="btn primary" value="@Model.SubmitCaption" name="submitbtn" />
+                                }
+                            }
+                            else
+                            {
+                                <input type="submit" class="btn primary" value="@Model.SubmitCaption" name="submitbtn" />
+                            }
+                        </div>
+                    </div>
+
+                </div>
+    }
+        </div>
+
+    }
+
+    if (Model.CurrentPage.PartialViewFiles.Any())
+    {
+        foreach (var partial in Model.CurrentPage.PartialViewFiles)
+        {
+            @Html.Partial(partial.Value)
+        }
+    }
+
+    if (Model.RenderMode == "full" || Model.RenderMode == "script")
+    {
+        @Html.Partial(FormViewResolver.GetScriptView(Model.FormId), Model)
+
+        foreach (var script in Model.CurrentPage.JavascriptFiles)
+        {
+            if (Model.UseClientDependency)
+            {
+                Html.RequiresJs(script.Value);
+            }
+            else
+            {
+                <script type="text/javascript" src="@Url.Content(script.Value)"></script>
+            }
+        }
+
+        if (Model.CurrentPage.JavascriptCommands.Count > 0)
+        {
+
+            <script type="text/javascript">
+                @foreach (var cmd in Model.CurrentPage.JavascriptCommands)
+                {
+                    <text>@Html.Raw(cmd)</text>
+                }
+
+            </script>
+        }
+
+        foreach (var css in Model.CurrentPage.CssFiles)
+        {
+            if (Model.UseClientDependency)
+            {
+                Html.RequiresCss(css.Value);
+            }
+            else
+            {
+                <link rel="stylesheet" href="@Url.Content(css.Value)" />
+                }
+            }
+
+        }
+    }

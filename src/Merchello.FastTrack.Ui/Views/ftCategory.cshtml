@@ -2,17 +2,11 @@
 @using Merchello.Web
 @using Merchello.Web.Search
 @using ETC.B2B.WEB
-@using ETC.UmbracoETC.Hotspots.Models
-@using Merchello.Web.Models
-@using Merchello.Web.Models.Ui.Rendering
-@using Merchello.Web.Models.VirtualContent
 
 @inherits Merchello.Web.Mvc.MerchelloViewPage<FtCategory>
 
 @{
-	/**/
-
-	Layout = "FastTrack.cshtml";
+	Layout = "Master.cshtml";
 
 
 	// Products is the property of documenttype FtCategory, of datatype Merchello.ProductListView
@@ -20,87 +14,198 @@
 	var ProductsProperty = Model.GetProperty("Products");
 	long total = 0;
 
-	Paging paging = null; // Paging.GetPages(1, 10);
+	// init the pager object with a default items per page of 20, read query parameters.
+	Paging paging = new Paging(20);
 
 	// products to be listed
 	IEnumerable<Merchello.Web.Models.VirtualContent.IProductContent> products = null;
 
-	//
-	this.Merchello.ProductContentQuery().Reset();
+	// url to navigate to when searching
+	paging.SearchUrl = Model.Url;
+	// initialize merchello product searcher
+	var searcher = ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"];
 
-	// stukje uit Merchello.Web.PropertyConverters\ProductListViewValueConverter.cs
 
-	// DataValue is the collection which is choosen in the content node in Umbraco Admin area
-	// Can be string.empty or the selected collection key
-	if (ProductsProperty.DataValue != null)
+	// fields to search -> fields from Developer -> Examine Management -> MerchelloProductIndexer
+	var fields = new string[] { "name", "sku", "price", "barcode", "detachedContents", "" };
+
+	var searchCriteria = searcher.CreateSearchCriteria(Examine.SearchCriteria.BooleanOperation.Or);
+
+	string rawQuery = string.Empty;
+
+	if (string.IsNullOrEmpty(paging.SearchTerm))
 	{
-		var collectionKey = ProductsProperty.DataValue.ToString();
 
-		if (collectionKey.IsNullOrWhiteSpace())
+	}
+	else
+	{
+		// Searching with fuzzynis
+		// rawQuery = "+(" + string.Join(":*" + paging.SearchTerm + "* " + paging.SearchTerm + "~0.1", fields).TrimEnd(" ") + ")";
+
+		// Searching without fuzzynis
+		rawQuery = "+(" + string.Join(":*" + paging.SearchTerm + "* ", fields).TrimEnd(" ") + ") ";
+	}
+
+	// only the available products
+	rawQuery += "+available:true";
+
+	// when searching, de not limit to collections
+	if (string.IsNullOrEmpty(paging.SearchTerm))
+	{
+		string collectionKey = ProductsProperty.DataValue == null ? string.Empty : ProductsProperty.DataValue.ToString();
+
+		if (!string.IsNullOrEmpty(collectionKey))
 		{
-
-			total = this.Merchello.ProductContentQuery().Execute().TotalItems;
-			var query = this.Merchello.ProductContentQuery().Page(Paging.GetCurrentPage()).ItemsPerPage(10).OrderBy(ProductSortField.Name);
-			products = query.Execute().Items;
-		}
-
-		try
-		{
-			var key = new Guid(collectionKey);
-
-			total = this.Merchello.ProductContentQuery().ConstrainByCollectionKey(key).Execute().TotalItems;
-			var query = this.Merchello.ProductContentQuery().Page(Paging.GetCurrentPage()).ItemsPerPage(10).ConstrainByCollectionKey(key);
-			products = query.Execute().Items;
-		}
-		catch (Exception ex)
-		{
-			// ignore
+			// in the selected collection
+			rawQuery += " +staticCollectionKeys:" + collectionKey;
 		}
 	}
 
 
-	if (products != null)
+	/*
+	 For performance its best to Page and sort in lucern examine searcher.
+
+	 However, it's not fully possible to determine of an object is active or not (stock/avalablitity/sku's etc).
+	 When this is the case (products are counted but not visible), set underlying true to false
+	 */
+
+#if true
+
+	/* 
+	Sort and page in Lucerne (best performance)
+	*/
+
+	// perform lucerne search
+	var searchResults = searcher.Search(searchCriteria.RawQuery(rawQuery));
+
+	total = searchResults.Count();
+
+	// calculate pager
+	paging.CalculatePages(total);
+
+	IOrderedEnumerable<SearchResult> ordererd = null;
+
+	// sorting
+	switch (paging.SortTerm.ToLower())
 	{
-		paging = Paging.GetPages(total, 10);
-		//		products = products.Skip(paging.Skip).Take(paging.Take).ToList();
+		case "priceasc":
+			ordererd = searchResults.OrderBy<SearchResult, decimal>(a=> {
+				decimal price;
+				decimal.TryParse(a.Fields["price"], out price);
+				return price;
+			});
+			break;
+		case "pricedesc":
+			ordererd = searchResults.OrderByDescending<SearchResult, decimal>(a =>
+			{
+				decimal price;
+				decimal.TryParse(a.Fields["price"], out price);
+				return price;
+			});
+			break;
+		default:
+			ordererd = searchResults.OrderBy<SearchResult, float>(a => a.Score);
+			break;
 	}
 
+
+
+	// Check if products are active/available (stock/price etc)
+	products = ordererd.Skip((int)((paging.CurrentPage - 1) * paging.ItemsPerPage)).Take(paging.ItemsPerPage).Select(a =>
+	{
+		return this.Merchello.TypedProductContent(new Guid(a.Fields["productKey"]));
+	}
+).Where(a => a != null).ToList();
+
+#else
+	
+	
+	 /* 
+	 Sort and page in merchello object set
+	 */
+	 
+
+	// perform lucerne search
+	var searchResults = searcher.Search(searchCriteria.RawQuery(rawQuery));
+
+
+	// Check if products are active/available (stock/price etc)
+	products = searchResults.Select(a =>
+	{
+		return this.Merchello.TypedProductContent(new Guid(a.Fields["productKey"]));
+	}
+	).Where(a => a != null).ToList();
+
+	total = products.Count();
+
+	// calculate pager
+	paging.CalculatePages(total);
+
+	// sorting
+	switch (paging.SortTerm.ToLower())
+	{
+		case "priceasc":
+			products = products.OrderBy(a => a.Price);
+			break;
+		case "pricedesc":
+			products = products.OrderByDescending(a => a.Price);
+			break;
+	}
+
+	// paging
+	products = products.Skip((int)((paging.CurrentPage - 1) * paging.ItemsPerPage)).Take(paging.ItemsPerPage);
+
+#endif
+
+
+	if (products == null)
+	{
+		// create empty list
+		products = new List<Merchello.Web.Models.VirtualContent.IProductContent>();
+	}
+
+	var currentPageId = UmbracoContext.Current.PageId;
 }
 
-@Html.Partial("_Headline")
+@*
+	@Html.Partial("_Headline")
+*@
 
-<div class="container-fluid">
 
+<div class="container-fluid hk_collections hk_category" id="hk_cat_@currentPageId">
 	<div class="row">
-
-		<div class="col-md-3">
+		<div class="col-12 hk_categorie_media hk_categorie_media_top">
+			@Html.GetGridHtml(Umbraco.TypedContent(currentPageId), "collectionGridTop")
+		</div>
+		<div class="col-3 col-xl-3 col-md-3">
+			@*@Html.Partial("hkSearch")*@
+			@RenderSearchForm(paging)
 			@Html.Partial("hkCategories")
 		</div>
-
-		<div class="col-md-9">
+		<div class="col-9 col-xl-9 col-md-9 col-sm-9">
+			<div class="row">
+				<div class="col-md-6">
+					@RenderSortingDropDown(paging)
+				</div>
+				<div class="col-md-6 text-right">
+					@RenderItemsDropDown(paging)
+				</div>
+			</div>
 			@Html.Partial("_ProductBoxList", products)
+			<div class="row col-12 pagination">
+				<nav aria-label="Page navigation" class="hk_pagination">
+					<ul class="pagination">
+						@RenderPaging(paging, paging.CurrentPage)
+					</ul>
+				</nav>
+			</div>
 		</div>
 	</div>
-	<div class="row">
-		@RenderPaging(paging, paging.CurrentPage)
-	</div>
-
-	<div>
-		HotSpots
-	</div>
-	<div>
-		
-		@*Maatwerk HKLiving Hotspots*@
-		@*Call to  Hotspots Controller*@
-		@if (Model.HasProperty("hotspotpicker") && Model.HasValue("hotspotpicker"))
-		{
-			@Html.Action("HotSpotScript", "HotSpotSurface", new { area = "HotSpots", id = Model.GetPropertyValue("hotspotpicker"), clientId = "image-map-pro-container" })
-		}
-	</div>
-
-	@Html.GetGridHtml(Model, "grid")
-
 </div>
+<div class="col-12 hk_categorie_media">
+	@Html.GetGridHtml(Umbraco.TypedContent(currentPageId), "collectionGrid")
+</div>
+
 
 
 @helper RenderPaging(Paging paging, long currentId)
@@ -109,37 +214,116 @@
 
 		/**/
 
-		<a class="@(paging.CurrentPage > 1 ? "" : "disabled")" @(paging.CurrentPage > 1 ? "href=?page=" + paging.PreviousPage : "disabled")>< Vorige</a>
+		<li class="page-item">
+			<a class="@(paging.CurrentPage > 1 ? "" : "disabled")  fas fa-step-backward" @(paging.CurrentPage > 1 ? "href=?q=" + paging.SearchTerm + "&page=" + paging.PreviousPage + "&ItemsPerPage=" + paging.ItemsPerPage + "&SortTerm=" + paging.SortTerm : "disabled")>&nbsp;</a>
+		</li>
 
 		if (paging.StartPageToShow > 1)
 		{
-			<a href="?page=1">1..</a><text>&nbsp;</text>
+			<li class="page-item"><a href="?q=@(paging.SearchTerm)&page=1&ItemsPerPage=@(paging.ItemsPerPage)&SortTerm=@(paging.SortTerm)">1..</a><text>&nbsp;</text></li>
 		}
 
 		for (var i = paging.StartPageToShow; i <= paging.EndPageToShow; i++)
 		{
 			if (paging.CurrentPage == i)
 			{
-				@i<text>&nbsp;</text>
+				<span><span>@i</span></span><text>&nbsp;</text>
 			}
 			else
 			{
-				<a href="?page=@i">@i</a><text>&nbsp;</text>
+				@*<a href="?q=@(paging.SearchTerm)&page=@i">@i</a><text>&nbsp;</text>*@
+				<li class="page-item"><a href="?q=@(paging.SearchTerm)&page=@(i)&ItemsPerPage=@(paging.ItemsPerPage)&SortTerm=@(paging.SortTerm)">@i</a><text>&nbsp;</text></li>
 			}
 		}
 
-
 		if (paging.EndPageToShow < paging.TotalPages)
 		{
-			<a href="?page=@paging.TotalPages">...@paging.TotalPages</a><text>&nbsp;</text>
+			<li class="page-item"><a href="?q=@(paging.SearchTerm)&page=@(paging.TotalPages)&ItemsPerPage=@(paging.ItemsPerPage)&SortTerm=@(paging.SortTerm)">...@paging.TotalPages</a></li><text>&nbsp;</text>
 		}
-		<a class="@(paging.CurrentPage < paging.TotalPages ? "" : "disabled")" @(paging.CurrentPage < paging.TotalPages ? "href=?page=" + paging.NextPage : "disabled")>Volgende ></a>
+		<li class="page-item">	<a class="@(paging.CurrentPage < paging.TotalPages ? "" : "disabled") fas fa-step-forward" @(paging.CurrentPage < paging.TotalPages ? "href=?q=" + paging.SearchTerm + "&page=" + paging.NextPage + "&ItemsPerPage=" + paging.ItemsPerPage + "&SortTerm=" + paging.SortTerm : "disabled")>&nbsp;</a></li>
 }
 
 
-@section Scripts {
+@helper RenderSortingDropDown(ETC.B2B.WEB.Paging paging)
+	{
 
-	<link rel="stylesheet" href="/scripts/css/image-map-pro.min.css">
-	<script type="text/javascript" src="/scripts/js/image-map-pro.min.js"></script>
+		<div class="dropdown">
+			<button class="form-control form-sort" type="button" data-toggle="dropdown">
+				@{
+					// determine selected sortname
+					string sortname = string.Empty;
+					switch (paging.SortTerm.ToLower())
+					{
+						case "priceasc":
+							sortname = "Price ascending";
+							break;
 
+						case "pricedesc":
+							sortname = "Price descanding";
+							break;
+						default:
+							sortname = "sort products";
+							break;
+					}
+				}
+				@sortname
+                <i class="fa fa-caret-down"></i>
+			</button>
+
+			<ul class="dropdown-menu">
+				<li><a href="?q=@(paging.SearchTerm)&page=@paging.CurrentPage">sort products</a></li>
+				<li><a href="?q=@(paging.SearchTerm)&page=@(paging.CurrentPage)&ItemsPerPage=@(paging.ItemsPerPage)&SortTerm=priceasc">Price ascending</a></li>
+				<li><a href="?q=@(paging.SearchTerm)&page=@(paging.CurrentPage)&ItemsPerPage=@(paging.ItemsPerPage)&SortTerm=pricedesc">Price descanding</a></li>
+			</ul>
+		</div>
+}
+
+@*btn btn-primary dropdown-toggle*@
+@helper RenderItemsDropDown(ETC.B2B.WEB.Paging paging)
+	{
+		<div class="dropdown">
+			<button class="form-control form-sort" type="button" data-toggle="dropdown">
+				show @paging.ItemsPerPage results
+                <i class="fa fa-caret-down"></i>
+			</button>
+			<ul class="dropdown-menu">
+				<li><a href="?q=@(paging.SearchTerm)&page=@(paging.CurrentPage)&ItemsPerPage=20&SortTerm=@(paging.SortTerm)">show 20 results</a></li>
+				<li><a href="?q=@(paging.SearchTerm)&page=@(paging.CurrentPage)&ItemsPerPage=40&SortTerm=@(paging.SortTerm)">show 40 results</a></li>
+				<li><a href="?q=@(paging.SearchTerm)&page=@(paging.CurrentPage)&ItemsPerPage=60&SortTerm=@(paging.SortTerm)">show 60 results</a></li>
+				<li><a href="?q=@(paging.SearchTerm)&page=@(paging.CurrentPage)&ItemsPerPage=80&SortTerm=@(paging.SortTerm)">show 80 results</a></li>
+				<li><a href="?q=@(paging.SearchTerm)&page=@(paging.CurrentPage)&ItemsPerPage=100&SortTerm=@(paging.SortTerm)">show 100 results</a></li>
+			</ul>
+		</div>
+}
+
+@helper  RenderSearchForm(ETC.B2B.WEB.Paging paging)
+	{
+		<div class="hk_search">
+
+			<h3>@(Umbraco.GetDictionaryValue("Search", "Search"))</h3>
+
+			<form action="@paging.SearchUrl" class="form-inline search" id="hk_search-input" method="get">
+
+				<div class="form-group">
+					<div class="input-group">
+						<input type="text" class="form-control" placeholder="@(Umbraco.GetDictionaryValue("Search", "Search"))" id="etc-search-term" value="@paging.SearchTerm" name="q" />
+						<span class="input-group-addon">
+							<button class="" type="submit"><i class="glyphicon fa fa-search "></i></button>
+						</span>
+					</div>
+				</div>
+
+
+				@*<ul>
+				<li>
+					<input type="text" class="form-control input-lg" placeholder="@(Umbraco.GetDictionaryValue("Search", "Search"))"  id="etc-search-term" value="@paging.SearchTerm" name="q" />
+				</li>
+				<li>
+					<button class="btn btn-info btn-lg" type="submit" >
+						<i class="glyphicon fa fa-search "></i>
+					</button>
+				</li>
+			</ul>*@
+			</form>
+		</div>
 }

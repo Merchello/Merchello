@@ -3,9 +3,10 @@
 
 @{
 	/**/
-
-	var paging = Paging.GetPages(Model.Count, 10);
+	var paging = new Paging(10);
+	paging.CalculatePages(Model.Count);
 	var sortedList = Model.OrderBy(a => a.Date).Skip((int)paging.Skip).Take(paging.Take).ToList();
+
 }
 
 

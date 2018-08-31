@@ -1,0 +1,14 @@
+﻿@inherits UmbracoViewPage<ETC.B2B.WEB.Models.Member.MemberActivationModel>
+@{
+	Layout = "EmailTemplateMaster.cshtml";
+
+	string hostname = System.Web.HttpContext.Current.Request.Url.Scheme + "://" + System.Web.HttpContext.Current.Request.Url.Authority;
+
+}
+Hello @Model.Member.Name,<br />
+<br />
+You activatied the forgot password process, click on the link below to reset your password<br />
+<a href="@(hostname)/reset-password/@Model.ActivationLink">@(hostname)/forgotpassword/@Model.ActivationLink</a><br />
+<br />
+Best regards,<br />
+..

@@ -4,67 +4,78 @@
 @using Merchello.Web
 @using Merchello.Web.Models
 @using Merchello.Web.Models.Ui.Rendering
+@using ContentModels = Umbraco.Web.PublishedContentModels;
 @{
-	Layout = "FastTrack.cshtml";
+    Layout = "Master.cshtml";
 
-	var title = Model.Categories == null ? Model.Name : Model.Categories.Name;
-	var categories = Model.Categories != null ? Model.Categories.Children().ToArray() : Enumerable.Empty<IProductCollection>();
+    //var title = Model.Categories == null ? Model.Name : Model.Categories.Name;
+    var categories = Model.Categories != null ? Model.Categories.Children().ToArray() : Enumerable.Empty<IProductCollection>();
 }
+@*
+    @Html.Partial("_Headline")
+*@
 
-@Html.Partial("_Headline")
+@**
+            <div class="container-fluid hk_collections hk_catalog">
+                <div class="row">
+                    <div class="col-3 col-xl-3 col-md-3">
+                        @Html.GetGridHtml(Umbraco.TypedContent(1099), "collectionGridTop")
+                    </div>
+                </div>
+            </div>
+*@
+            <div class="container-fluid hk_collections hk_catalog">
 
-<h3>@title</h3>
+                <div class="row">
 
-<div class="row">
+                    <div class="col-3 col-xl-3 col-md-3">
+                        @Html.Partial("hkSearch")
+                        @Html.Partial("hkCategories")
 
-	<div class="col-md-3">
+                    </div>
 
-		@Html.Partial("hkCategories")
+                    <div class="col-9 col-xl-9 col-md-9 col-sm-9">
 
-		
+                        @*  @Html.GetGridHtml(Umbraco.TypedContent(1099), "catalogGrid") *@
+                        @Html.GetGridHtml(Umbraco.TypedContent(1099), "collectionGrid")
 
-	</div>
+                        @* @foreach (var cat in categories.OrderBy(x => x.Name))
+                            {
+                                <div>
+                                    @CategoryLink(cat)
+                                    <div class="row">
+                                        @foreach (var p in cat.GetProducts(1,0))
+                                        {
+                                            <div class="col-3 col-md-3">
+                                                @Html.Partial("_ProductBox", p)
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }*@
+                    </div>
+                </div>
 
-	<div class="col-md-9">
 
+                @helper CategoryLink(IProductCollection category)
+        {
+if (category.Key != Guid.Empty)
+{
+    var page = ExampleUiHelper.Content.GetCategoryPageForCollection(category.Key);
+    if (page != null)
+    {
+            <h3><a href="@page.Url">@category.Name</a></h3>
+    }
+    else
+    {
+            <h3>@category.Name</h3>
+    }
 
-		@foreach (var cat in categories.OrderBy(x => x.Name))
-	{
-		<div>
-			@CategoryLink(cat)
-			<div class="row">
-				@foreach (var p in cat.GetProducts(1, 3))
-			{
-				<div class="col-md-4">
-					@Html.Partial("_ProductBox", p)
-				</div>
-		}
-			</div>
-		</div>
 }
-	</div>
-</div>
-
-
-@helper CategoryLink(IProductCollection category)
-	{
-		if (category.Key != Guid.Empty)
-		{
-			var page = ExampleUiHelper.Content.GetCategoryPageForCollection(category.Key);
-			if (page != null)
-			{
-				<h4><a href="@page.Url">@category.Name</a></h4>
-			}
-			else
-			{
-				<h4>@category.Name</h4>
-			}
-
-		}
-		else
-		{
-			<h4>@category.Name</h4>
-		}
+else
+{
+        <h4>@category.Name</h4>
+}
 }
 
 

@@ -1,0 +1,119 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using umbraco.MacroEngines
+@*  @Model.MacroParameters.Count // testen hoeveel Models in de Marco worden geladen en zitten? Wijkt dit af, dan zit er wellicht een fout in deze pagina. *@ 
+@* @{ var myCustomParameter = Model.MacroParameters["subheader"].ToString();   } *@
+
+@{
+
+    string mediaIds = string.Empty;
+
+    if (Model.MacroParameters.ContainsKey("Multiple Media Picker"))
+    {
+        mediaIds = Model.MacroParameters["Multiple Media Picker"] as string;
+    }
+}
+
+@{
+    var headermedia = Model.MacroParameters["Header Slider"].ToString();
+    var subheadermedia = Model.MacroParameters["Subheader Slider"].ToString();
+}
+
+<div class="hk_homepage_slider_headers">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 column">
+                <h1><text>@headermedia</text></h1>
+                <h2><text>@subheadermedia</text></h2>
+            </div>
+        </div>
+    </div>
+</div>
+    @if (Request.Url.AbsolutePath.Contains("GetMacroResultAsHtmlForEditor"))
+    {
+
+        <div class="hk_slider hk_homepage_slider">
+            @if (mediaIds != null)
+                {
+                <div id="hk_homepage_slider" class="hk_media_display_list"  style="list-style-type:none; padding:0px; margin:0px;">
+                    @foreach (var mediaId in mediaIds.Split(','))
+                    {
+                        var media = Umbraco.TypedMedia(mediaId);
+
+                        @* a single image *@
+                    if (media.DocumentTypeAlias == "Image")
+                    {
+                        @RenderBackend(media as Image);
+                        }
+
+                    @* a folder with images under it *@
+                    foreach (var image in media.Children<Image>())
+                    {
+                        @RenderBackend(image);
+                        }
+                    }
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+
+        <div class="hk_slider hk-homepage-slider hk_slider_@Umbraco.Field("titleMain")">
+
+
+            @if (mediaIds != null)
+                {
+                <div id="hk_homepage_slider" class="hk_media_display_list" style="list-style-type:none;">
+                    @foreach (var mediaId in mediaIds.Split(','))
+                    {
+                        var media = Umbraco.TypedMedia(mediaId);
+
+                        @* a single image *@
+                    if (media.DocumentTypeAlias == "Image")
+                    {
+                        @Render(media as Image);
+                        }
+
+                    @* a folder with images under it *@
+                    foreach (var image in media.Children<Image>())
+                    {
+
+
+
+
+                        @Render(image);
+
+
+                        }
+                    }
+                </div>
+            }
+
+        </div>
+
+
+    }
+
+    @helper Render(Image item)
+        {
+
+
+    <div class="img" style="list-style-type:none; padding:0px; margin:0px;">
+
+        @*
+            @if (item.HasProperty("headermedia"))
+            {
+                <h2 class='slider titel'>@(item.GetPropertyValue<string>("headermedia"))</h2>
+            }
+        *@
+        <img src="@item.GetCropUrl(width:1280, height:620)" data-lazy="@item.GetCropUrl(width:1280, height:620)" alt="" title="" />
+    </div>
+}
+
+
+    @helper RenderBackend(Image item)
+        {
+
+    <img src="@item.GetCropUrl(width:400, height:194)" alt="" />
+
+}

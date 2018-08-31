@@ -63,5 +63,10 @@
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
         public CheckoutStage CheckoutStage { get; set; }
-    }
+
+		/// <summary>
+		/// CurrencyCode
+		/// </summary>
+		public string CurrencyCode { get; set; }
+	}
 }

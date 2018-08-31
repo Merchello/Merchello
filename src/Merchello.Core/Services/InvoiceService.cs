@@ -278,8 +278,8 @@
             var status = GetInvoiceStatusByKey(invoiceStatusKey);
 
             var defaultCurrencyCode = this.GetDefaultCurrencyCode();
-
-            var invoice = new Invoice(status)
+			
+			var invoice = new Invoice(status)
             {
                 VersionKey = Guid.NewGuid(),
                 InvoiceNumber = invoiceNumber,
@@ -1779,7 +1779,11 @@
 
                 var currencyCode = _storeSettingService.GetByKey(Core.Constants.StoreSetting.CurrencyCodeKey).Value;
 
-                taxLineItem.ExtendedData.SetValue(Core.Constants.ExtendedDataKeys.CurrencyCode, currencyCode);
+				ICustomer customer = invoice.Customer();
+				if (customer != null && !customer.PriceGroup.IsEmpty)
+					currencyCode = customer.PriceGroup.Currency;
+				
+				taxLineItem.ExtendedData.SetValue(Core.Constants.ExtendedDataKeys.CurrencyCode, currencyCode);
 
                 invoice.Items.Add(taxLineItem);
             }

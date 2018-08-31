@@ -1,0 +1,45 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using Umbraco.web
+@{
+	Layout = null;
+}
+
+@{ 
+    // 1099 is the categorie content node
+    var CategoryNode = Umbraco.TypedContent(1099).Children.Where(x => x.IsVisible()).ToArray();
+    //var selection = CategoryNode.Children.Where(x => x.IsVisible()).ToArray();
+}
+    @{
+        if (CurrentPage.Id == 3885)
+        {
+           @* nothing *@
+        }
+        else
+        {
+            <div class="hk_breadcrumb">
+                <div class="">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <ol class="breadcrumb">
+                            
+                                <li><a href="/">Home</a></li>
+                                    @{ if (CurrentPage.Parent.Id == 1099)
+                                        {
+
+                                            <li><a href="@CurrentPage.Parent.Url">@CurrentPage.Parent.Name</a></li>
+                                        }
+                                    }
+                                    
+                                    <li>
+                                        <a href="@CurrentPage.Url">@CurrentPage.Name </a>
+                                    </li>
+</ol>
+                    </div>
+                </div>
+            </div>
+        </div>  }
+        
+                                
+        
+    }
+

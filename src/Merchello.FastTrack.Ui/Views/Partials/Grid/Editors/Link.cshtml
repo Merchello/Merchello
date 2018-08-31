@@ -1,0 +1,17 @@
+﻿@inherits UmbracoViewPage<Lecoati.LeBlender.Extension.Models.LeBlenderModel>
+
+@foreach (var item in Model.Items)
+{
+
+    var linkButton = item.GetValue<IEnumerable<RJP.MultiUrlPicker.Models.Link>>("linkButton");
+    var nameButton = item.GetValue<dynamic>("nameButton");
+    var alignButton = item.GetValue<dynamic>("alignButton");
+
+    foreach (var link in linkButton)
+    {
+		<center>
+			<a class="btn btn-grid" style="" target="@link.Target" href="@link.Url">@Html.Raw(link.Name)</a>
+            
+		</center>
+	}
+}

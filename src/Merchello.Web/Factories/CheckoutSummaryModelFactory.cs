@@ -114,8 +114,9 @@
                     BillingAddress = Create<TBillingAddress>(billing ?? new Address { AddressType = AddressType.Billing }),
                     ShippingAddress = Create<TShippingAddress>(shipping ?? new Address { AddressType = AddressType.Shipping }),
                     Items = invoice.Items.Select(Create),
-                    Total = invoice.Total
-                };
+                    Total = invoice.Total,
+					CurrencyCode = invoice.CurrencyCode
+			};
         }
 
         /// <summary>

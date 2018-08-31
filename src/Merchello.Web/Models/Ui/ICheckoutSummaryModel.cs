@@ -63,5 +63,10 @@
         /// Gets or sets the total.
         /// </summary>
         decimal Total { get; set; }
-    }
+
+		/// <summary>
+		/// CurrencyCode
+		/// </summary>
+		string CurrencyCode { get; set; }
+	}
 }

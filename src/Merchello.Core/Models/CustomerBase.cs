@@ -4,8 +4,8 @@
     using System.Collections.Specialized;
     using System.Reflection;
     using System.Runtime.Serialization;
-
-    using Merchello.Core.Models.EntityBase;
+	using ETC.B2B.PriceGroup.Services;
+	using Merchello.Core.Models.EntityBase;
 
     /// <summary>
     /// Represents a customer base class
@@ -129,10 +129,29 @@
             OnPropertyChanged(_ps.Value.ExtendedDataChangedSelector);
         }
 
-        /// <summary>
-        /// Property selectors.
-        /// </summary>
-        private class PropertySelectors
+
+		private ETC.B2B.PriceGroup.Model.PriceGroup _priceGroup = null;
+
+		/// <summary>
+		/// eTC Price group
+		/// </summary>
+		[IgnoreDataMember]
+		public ETC.B2B.PriceGroup.Model.PriceGroup PriceGroup
+		{
+			get
+			{
+				if (this._priceGroup == null)
+					this._priceGroup = PriceGroupService.GetPriceGroupForMember();
+				return this._priceGroup;
+			}
+		}
+
+
+
+		/// <summary>
+		/// Property selectors.
+		/// </summary>
+		private class PropertySelectors
         {
             /// <summary>
             /// The last activity date selector.

@@ -1,0 +1,96 @@
+/*
+Theme Name: VWA
+Theme URI: https://vwa.nu
+Template: Umbraco
+Author: VWA
+Date: 2018-07-24
+Type: VWA Style CSS
+*/
+
+@media (max-width: 991.98px) {
+    
+.hk_collections .col-9 > .row {
+    margin:40px 0px 0px 0px!important;
+}
+  
+.hk_collections .col-9 .row {
+    margin:0px 0px 0px 0px;
+}
+
+    
+.hk_collections .col-9 .row .col-6{
+    margin:60px 0px 0px 0px;
+}
+    .navbar-expand-lg.navbar-sticky .navbar-collapse {
+        max-height: 80vh;
+        overflow-y: auto;
+        margin: 50px 0px 0px 0px;
+    }
+
+    .navbar-expand-lg>.container, .navbar-expand-lg>.container-fluid {
+    padding-right: 0;
+    background: transparent;
+    padding-left: 0;
+    }
+
+}
+
+@media (max-width: 768px) {
+
+
+#hk_Contact .row.clearfix .grid-section .column img {
+    width: 100%!important;
+    height: auto!important;
+}
+    
+.hk_content .row.clearfix > .grid-section {
+    padding:0px 0px 0px 0px;
+    -webkit-box-flex: 0!important;
+    -ms-flex: 0 0 100%!important;
+    flex: 0 0 100%!important;
+    max-width: 100%!important;
+    width:100%!important;
+    position:relative!important;
+    float:none!important;
+    display:block!important;
+}
+.hk_content.hk_Login > .container > .row .col-md-6:first-child,
+.hk_content.hk_Login > .container > .row .col-md-6 .row .col-md-6:first-child,
+.hk_content .row.clearfix > .grid-section:first-child {
+    margin-bottom:75px;
+    border-right:0px solid #ebebeb;
+}
+.hk_content.hk_Login > .container > .row .col-md-6,
+.hk_content .row.clearfix > .grid-section > .column {
+    -webkit-box-flex: 0!important;
+    -ms-flex: 0 0 100%!important;
+    flex: 0 0 100%!important;
+    max-width: 100%!important;
+    width:100%;
+    position:relative!important;
+    float:left!important;
+    display:inline-block!important;
+}
+
+.hk_content .row.clearfix > .grid-section:last-child > .column {
+   margin-left:0%;
+}
+
+    .footer .container .row .col-md-4 {
+        width: 50%;
+        float: left;
+        margin:0px;
+    }
+    .footer .container .row .col-md-4 > div {
+        float: left!important;
+        margin:0px;
+    }
+}
+
+
+@media (max-width: 440px) {
+	/*.navbar.fixed-top.fixed-top-null.bg-fixed-white:hover, .navbar.fixed-top.fixed-top-null.bg-fixed-white:focus,.bg-hover-white:hover {
+		background: transparent !important;
+		box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.1);
+	}*/
+}

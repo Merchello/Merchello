@@ -52,6 +52,10 @@
     <Reference Include="cms, Version=1.0.6750.39772, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.11.1\lib\net45\cms.dll</HintPath>
     </Reference>
+    <Reference Include="Connect.Utils">
+      <HintPath>..\..\..\vwa-plugins\Connect.Utils.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="controls, Version=1.0.6750.39773, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.11.1\lib\net45\controls.dll</HintPath>
     </Reference>
@@ -245,6 +249,7 @@
     <Compile Include="Configuration\FastTrackConfiguration.cs" />
     <Compile Include="Configuration\FastTrackSection.cs" />
     <Compile Include="Controllers\Membership\CustomerMembershipController.cs" />
+    <Compile Include="Controllers\Membership\ResetPasswordController.cs" />
     <Compile Include="Controllers\Payment\BraintreePayPalController.cs" />
     <Compile Include="Controllers\Payment\BraintreeStandardCcController.cs" />
     <Compile Include="Controllers\Payment\CashPaymentController.cs" />
@@ -285,6 +290,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\vwa-plugins\ETC.B2B.WEB\ETC.B2B.WEB.csproj">
+      <Project>{c2015e2f-1ea0-4b90-a4d7-9ee39d061419}</Project>
+      <Name>ETC.B2B.WEB</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\Merchello.Core\Merchello.Core.csproj">
       <Project>{2a83a229-c24b-4d8d-b806-7c9999eb9461}</Project>
       <Name>Merchello.Core</Name>

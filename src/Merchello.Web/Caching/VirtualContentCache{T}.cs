@@ -88,6 +88,7 @@
         /// </returns>
         public TContent GetByKey(Guid key)
         {
+			// when modifedversion (datamodifiers active), disable cache
 			if (ModifiedVersion)
 			{
 				return _fetch != null ?	 _fetch.Invoke(key) : default(TContent);

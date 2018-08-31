@@ -1,0 +1,111 @@
+
+.navbar.fixed-top.fixed-top-null.bg-fixed-white {
+    background: transparent !important;
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.1);
+}
+
+/*.navbar.fixed-top.bg-fixed-white*/
+.navbar.fixed-top.fixed-top-null.bg-fixed-white:hover,
+.navbar.fixed-top.fixed-top-null.bg-fixed-white:focus {
+    background: #fff !important;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+
+.navbar.fixed-top.fixed-top.bg-fixed-white {
+    opacity:0.95;
+}
+
+.navbar-nav.ml-auto,
+.navbar-nav.mx-auto {
+      margin-right: 0 !important;
+}
+
+#navbarCollapse > ul > li.nav-item > a {
+    font-family: "Muli", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+
+.navbar-toggler:not(:disabled):not(.disabled) {
+    padding: 5px 7px 5px 7px;
+    background: url("/Media/bg-hamburger.png");
+}
+
+.navbar-header button {
+   opacity: 0;
+}
+
+.navbar-dark .navbar-brand {
+    margin-left: 0px;
+}
+
+.navbar-brand img {
+    max-width:50px;
+    height:auto;
+}
+
+.navbar button:focus {
+    outline: 0px;
+    border:0px;
+}
+.fa-bars:before {
+    color: #ADADAD;
+}
+
+.navbar .nav-item {
+    padding: 0px 0px 0px 6px;
+}
+
+.navbar-nav .nav-link,
+.navbar-dark .navbar-nav .nav-link {
+    color: #444444;
+    font-size: .6rem!important;
+}
+
+.navbar-nav .nav-link:focus,
+.navbar-dark .navbar-nav .nav-link:focus, 
+.navbar-nav .nav-link:hover,
+.navbar-dark .navbar-nav .nav-link:hover {
+    background:#f6f6f6;
+    color: #444444!important;
+    font-size: .6rem!important;
+
+}
+
+/* SubNavigation */
+#hk_mainmenu > li.nav-item.dropdown li.megamenu-list-item a{
+    color: #929292;
+    font-weight: 400;
+    text-transform: lowercase;
+    letter-spacing: .15em;
+    font-size: 11px!important;
+}
+
+/* /SubNavigation */
+
+/* Search */
+
+.fa-search:before {
+    color: #444444;
+    font-size: 12px;
+}
+
+.fa-times-circle:before {
+    margin: 0px 0px 0px 0px;
+    line-height: 54px;
+}
+
+/* /Search */
+
+/* Account */
+
+.navbar-nav .fa-shopping-cart,
+.navbar-nav .fa-shopping-cart:before {
+    /*font-size: 1.1em!important;*/
+}
+.Home .navbar-nav .fa-shopping-cart,
+.Home .navbar-nav .fa-shopping-cart:before {
+    /*font-size: 1.3em!important;*/
+}
+
+/* /Account */

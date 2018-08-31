@@ -80,12 +80,21 @@
             var invoice = _checkoutManager.Context.Services.InvoiceService.CreateInvoice(unpaid.Key);
             invoice.VersionKey = _checkoutManager.Context.VersionKey;
 
-            //// var invoice = new Invoice(unpaid) { VersionKey = _checkoutManager.Context.VersionKey };
+			//// var invoice = new Invoice(unpaid) { VersionKey = _checkoutManager.Context.VersionKey };
 
-            // Associate a customer with the invoice if it is a known customer.
-            if (!_checkoutManager.Context.Customer.IsAnonymous) invoice.CustomerKey = _checkoutManager.Context.Customer.Key;
+			// Associate a customer with the invoice if it is a known customer.
+			if (!_checkoutManager.Context.Customer.IsAnonymous)
+			{
+				invoice.CustomerKey = _checkoutManager.Context.Customer.Key;
+				
+			}
 
-            var attempt = TaskHandlers.Any()
+			if (_checkoutManager.Context.Customer.PriceGroup.IsEmpty)
+			{
+				invoice.CurrencyCode = _checkoutManager.Context.Customer.PriceGroup.Currency;
+			}
+
+			var attempt = TaskHandlers.Any()
                        ? TaskHandlers.First().Execute(invoice)
                        : Attempt<IInvoice>.Fail(new InvalidOperationException("The configuration Chain Task List could not be instantiated"));
 
