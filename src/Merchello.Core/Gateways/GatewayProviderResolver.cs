@@ -74,10 +74,22 @@
         {
             get
             {
-                var factory = new Persistence.Factories.GatewayProviderSettingsFactory();
-                return InstanceTypes.Select(type => factory.BuildEntity(type, GetGatewayProviderType(type)))
-                    .Select(CreateInstance).Where(attempt => attempt.Success)
-                    .Select(x => x.Result).ToList();
+				var factory = new Persistence.Factories.GatewayProviderSettingsFactory();
+				var allResolved = new List<GatewayProviderBase>();
+
+				allResolved.AddRange(GetActivatedProviders());
+
+				var inactive = InstanceTypes.Select(type => factory.BuildEntity(type, GetGatewayProviderType(type))).Where(a => !allResolved.Any(b => b.Key == a.Key)).Select(CreateInstance).Where(attempt => attempt.Success)
+					.Select(x => x.Result);
+
+				allResolved.AddRange(inactive);
+
+				return allResolved;
+
+				
+                //return InstanceTypes.Select(type => factory.BuildEntity(type, GetGatewayProviderType(type)))
+                //    .Select(CreateInstance).Where(attempt => attempt.Success)
+                //    .Select(x => x.Result).ToList();
             }
         }
 
