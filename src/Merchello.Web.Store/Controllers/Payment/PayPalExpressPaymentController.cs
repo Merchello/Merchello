@@ -146,9 +146,12 @@
         /// </returns>
         protected override ActionResult HandlePaymentException(StorePaymentModel model, Exception ex)
         {
-            var invoiceKey = model.ViewData.InvoiceKey;
-            var paymentKey = model.ViewData.PaymentKey;
-            EnsureDeleteInvoiceOnCancel(invoiceKey, paymentKey);
+            if (model != null && model.ViewData != null)
+            {
+                var invoiceKey = model.ViewData.InvoiceKey;
+                var paymentKey = model.ViewData.PaymentKey;
+                EnsureDeleteInvoiceOnCancel(invoiceKey, paymentKey);
+            }
             return base.HandlePaymentException(model, ex);
         }
 
