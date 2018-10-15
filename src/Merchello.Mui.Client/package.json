@@ -15,19 +15,19 @@
   },
   "dependencies": {
     "grunt-contrib-sass": "^1.0.0",
-    "grunt-sass": "^2.1.0",
-    "node-sass": "^4.8.3",
+    "grunt-sass": "^3.0.2",
+    "node-sass": "^4.9.4",
     "phantomjs-prebuilt": "^2.1.16"
   },
   "devDependencies": {
-    "grunt": "^1.0.2",
-    "grunt-contrib-clean": "^1.1.0",
-    "grunt-contrib-concat": "~1.0.1",
+    "grunt": "^1.0.3",
+    "grunt-contrib-clean": "^2.0.0",
+    "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-internal": "^2.0.0",
-    "grunt-contrib-jshint": "^1.1.0",
-    "grunt-contrib-nodeunit": "^1.0.0",
-    "grunt-contrib-uglify": "~3.3.0",
-    "grunt-html2js": "~0.5.1"
+    "grunt-contrib-internal": "^3.1.0",
+    "grunt-contrib-jshint": "^2.0.0",
+    "grunt-contrib-nodeunit": "^2.0.0",
+    "grunt-contrib-uglify": "^4.0.0",
+    "grunt-html2js": "^0.5.1"
   }
 }

@@ -45,15 +45,15 @@
                                 <button class="btn btn-info text-right" data-ng-show="showRefund(payment)" data-ng-click="openRefundPaymentDialog(payment)"><localize key="merchelloButtons_refund" /></button>
                             </div>
 
-                            <h5>History</h5>
+                            <h5><localize key="merchelloGeneral_history">History</localize></h5>
 
                             <div class="merchello-list-view clearfix">
                                 <table class="table">
                                     <thead>
                                     <tr>
-                                        <th>Date</th>
-                                        <th>Description</th>
-                                        <th class="text-right">Amount</th>
+                                        <th><localize key="merchelloTableCaptions_date">Date</localize></th>
+                                        <th><localize key="merchelloTableCaptions_description">Description</localize></th>
+                                        <th class="text-right"><localize key="merchelloTableCaptions_amount">Amount</localize></th>
                                         <th class="text-center"></th>
                                     </tr>
                                     </thead>
@@ -72,7 +72,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2" class="text-right">Balance due:</td>
+                                        <td colspan="2" class="text-right"><localize key="merchelloSales_balanceDue">Balance due</localize>:</td>
                                         <td class="text-right">{{remainingBalance | currency : currencySymbol }}</td>
                                         <td></td>
                                     </tr>

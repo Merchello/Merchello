@@ -1,13 +1,13 @@
 <table class="table table-striped merchello-striped-table order-items" data-ng-show="loaded">
     <thead>
-    <tr>
-        <th><localize key="general_name"></localize></th>
-        <th><localize key="merchelloGeneral_sku"></localize></th>
-        <th class="text-center">Qty</th>
-        <th class="text-right">Unit Price</th>
-        <th class="text-right">Total Price</th>
-        <th class="text-right" style="width: 30px;"></th>
-    </tr>
+        <tr>
+            <th><localize key="general_name">Name</localize></th>
+            <th><localize key="merchelloGeneral_sku">SKU</localize></th>
+            <th class="text-center"><localize key="merchelloGeneral_quantity">Qty</localize></th>
+            <th class="text-right"><localize key="merchelloSales_tblInvoiceUnitPrice">Unit Price</localize></th>
+            <th class="text-right"><localize key="merchelloSales_tblInvoiceTotalPrice">Total Price</localize></th>
+            <th class="text-right" style="width: 30px;"></th>
+        </tr>
     </thead>
     <tbody>
     <tr data-ng-repeat="lineItem in itemization.products">
