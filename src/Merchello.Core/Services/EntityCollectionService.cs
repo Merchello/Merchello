@@ -682,7 +682,7 @@
                                      Name = name,
                                      ExtendedData = new ExtendedDataCollection()
                                  };
-
+            if (raiseEvents)
             if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IEntityCollection>(collection), this))
             {
                 collection.WasCancelled = true;
