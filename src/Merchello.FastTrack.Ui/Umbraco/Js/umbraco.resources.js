@@ -1286,6 +1286,15 @@
     function currentUserResource($q, $http, umbRequestHelper, umbDataFormatter) {
         //the factory object returned
         return {
+            saveTourStatus: function (tourStatus) {
+                if (!tourStatus) {
+                    return angularHelper.rejectedPromise({ errorMsg: 'tourStatus cannot be empty' });
+                }
+                return umbRequestHelper.resourcePromise($http.post(umbRequestHelper.getApiUrl('currentUserApiBaseUrl', 'PostSetUserTour'), tourStatus), 'Failed to save tour status');
+            },
+            getTours: function () {
+                return umbRequestHelper.resourcePromise($http.get(umbRequestHelper.getApiUrl('currentUserApiBaseUrl', 'GetUserTours')), 'Failed to get tours');
+            },
             performSetInvitedUserPassword: function (newPassword) {
                 if (!newPassword) {
                     return angularHelper.rejectedPromise({ errorMsg: 'newPassword cannot be empty' });
@@ -1672,6 +1681,7 @@
                 if (!value) {
                     return '';
                 }
+                value = value.replace('#', '');
                 return umbRequestHelper.resourcePromise($http.get(umbRequestHelper.getApiUrl('entityApiBaseUrl', 'GetSafeAlias', {
                     value: value,
                     camelCase: camelCase
@@ -2175,6 +2185,51 @@
     function logResource($q, $http, umbRequestHelper) {
         //the factory object returned
         return {
+            getPagedEntityLog: function (options) {
+                var defaults = {
+                    pageSize: 10,
+                    pageNumber: 1,
+                    orderDirection: 'Descending'
+                };
+                if (options === undefined) {
+                    options = {};
+                }
+                //overwrite the defaults if there are any specified
+                angular.extend(defaults, options);
+                //now copy back to the options we will use
+                options = defaults;
+                //change asc/desct
+                if (options.orderDirection === 'asc') {
+                    options.orderDirection = 'Ascending';
+                } else if (options.orderDirection === 'desc') {
+                    options.orderDirection = 'Descending';
+                }
+                if (options.id === undefined || options.id === null) {
+                    throw 'options.id is required';
+                }
+                return umbRequestHelper.resourcePromise($http.get(umbRequestHelper.getApiUrl('logApiBaseUrl', 'GetPagedEntityLog', options)), 'Failed to retrieve log data for id');
+            },
+            getPagedUserLog: function (options) {
+                var defaults = {
+                    pageSize: 10,
+                    pageNumber: 1,
+                    orderDirection: 'Descending'
+                };
+                if (options === undefined) {
+                    options = {};
+                }
+                //overwrite the defaults if there are any specified
+                angular.extend(defaults, options);
+                //now copy back to the options we will use
+                options = defaults;
+                //change asc/desct
+                if (options.orderDirection === 'asc') {
+                    options.orderDirection = 'Ascending';
+                } else if (options.orderDirection === 'desc') {
+                    options.orderDirection = 'Descending';
+                }
+                return umbRequestHelper.resourcePromise($http.get(umbRequestHelper.getApiUrl('logApiBaseUrl', 'GetPagedEntityLog', options)), 'Failed to retrieve log data for id');
+            },
             /**
          * @ngdoc method
          * @name umbraco.resources.logResource#getEntityLog
@@ -2714,7 +2769,7 @@
           * @methodOf umbraco.resources.mediaResource
           *
           * @description
-          * Empties the media recycle bin
+          * Paginated search for media items starting on the supplied nodeId
           *
           * ##usage
           * <pre>
@@ -2727,7 +2782,7 @@
           * @param {string} query The search query
           * @param {int} pageNumber The page number
           * @param {int} pageSize The number of media items on a page
-          * @param {int} searchFrom Id to search from
+          * @param {int} searchFrom NodeId to search from (-1 for root)
           * @returns {Promise} resourcePromise object.
           *
           */
@@ -3763,6 +3818,25 @@
             return resource;
         }
         angular.module('umbraco.resources').factory('templateQueryResource', templateQueryResource);
+    }());
+    /**
+ * @ngdoc service
+ * @name umbraco.resources.usersResource
+ * @function
+ *
+ * @description
+ * Used by the users section to get users and send requests to create, invite, delete, etc. users.
+ */
+    (function () {
+        'use strict';
+        function tourResource($http, umbRequestHelper, $q, umbDataFormatter) {
+            function getTours() {
+                return umbRequestHelper.resourcePromise($http.get(umbRequestHelper.getApiUrl('tourApiBaseUrl', 'GetTours')), 'Failed to get tours');
+            }
+            var resource = { getTours: getTours };
+            return resource;
+        }
+        angular.module('umbraco.resources').factory('tourResource', tourResource);
     }());
     /**
     * @ngdoc service
