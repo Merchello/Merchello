@@ -74,22 +74,22 @@
         {
             get
             {
-				var factory = new Persistence.Factories.GatewayProviderSettingsFactory();
-				var allResolved = new List<GatewayProviderBase>();
+                // TODO - Must be a better way to do this. Bit of a hack
+                var activatedGateways = GetActivatedProviders().ToArray();
 
-				allResolved.AddRange(GetActivatedProviders());
+                var activatedGatewayKeys = activatedGateways.Select(x => x.Key).ToArray();
 
-				var inactive = InstanceTypes.Select(type => factory.BuildEntity(type, GetGatewayProviderType(type))).Where(a => !allResolved.Any(b => b.Key == a.Key)).Select(CreateInstance).Where(attempt => attempt.Success)
-					.Select(x => x.Result);
+                var factory = new Persistence.Factories.GatewayProviderSettingsFactory();
 
-				allResolved.AddRange(inactive);
+                var allGateWays = InstanceTypes.Select(type => factory.BuildEntity(type, GetGatewayProviderType(type)))
+                    .Select(CreateInstance).Where(attempt => attempt.Success)
+                    .Select(x => x.Result)
+                    .Where(x => !activatedGatewayKeys.Contains(x.Key))
+                    .ToList();
 
-				return allResolved;
+                allGateWays.AddRange(activatedGateways);
 
-				
-                //return InstanceTypes.Select(type => factory.BuildEntity(type, GetGatewayProviderType(type)))
-                //    .Select(CreateInstance).Where(attempt => attempt.Success)
-                //    .Select(x => x.Result).ToList();
+                return allGateWays;
             }
         }
 

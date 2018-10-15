@@ -106,7 +106,8 @@
         [HttpGet]
         public IEnumerable<GatewayProviderDisplay> GetResolvedNotificationGatewayProviders()
         {
-            return _gatewayContext.Notification.GetAllProviders().Select(x => x.GatewayProviderSettings.ToGatewayProviderDisplay());
+            var gatewayProviders = _gatewayContext.Notification.GetAllProviders().Select(x => x.GatewayProviderSettings.ToGatewayProviderDisplay());
+            return gatewayProviders;
         }
 
         /// <summary>
@@ -120,7 +121,10 @@
         [HttpGet]
         public IEnumerable<GatewayProviderDisplay> GetResolvedPaymentGatewayProviders()
         {
-            return _gatewayContext.Payment.GetAllProviders().Select(x => x.GatewayProviderSettings.ToGatewayProviderDisplay());
+            var gatewayProviders = _gatewayContext.Payment.GetAllProviders().ToArray();
+            var gatewayProvidersMapped = gatewayProviders.Select(x => x.GatewayProviderSettings.ToGatewayProviderDisplay());
+            
+            return gatewayProvidersMapped;
         }
 
         /// <summary>
