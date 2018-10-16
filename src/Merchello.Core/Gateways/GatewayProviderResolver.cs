@@ -75,7 +75,6 @@
             get
             {
                 // TODO - Must be a better way to do this. Bit of a hack
-
                 var activatedGateways = GetActivatedProviders().ToArray();
 
                 var activatedGatewayKeys = activatedGateways.Select(x => x.Key).ToArray();

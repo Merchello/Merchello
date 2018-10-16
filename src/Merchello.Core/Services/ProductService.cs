@@ -645,8 +645,12 @@ namespace Merchello.Core.Services
                 repository.AddToCollection(productKey, collectionKey);
             }
 
-            if (AddedToCollection != null) AddedToCollection.Invoke(this, new EventArgs());
-        }
+			if (AddedToCollection != null) AddedToCollection.Invoke(this, new EventArgs());
+
+			// raise event, so the examine can re-index the product.
+			var product = this.GetByKey(productKey);
+			Saved.RaiseEvent(new SaveEventArgs<IProduct>(product), this);
+		}
 
         /// <summary>
         /// Bulks adds products to collections
@@ -660,6 +664,15 @@ namespace Merchello.Core.Services
             {
                 repository.AddToCollections(entityAndCollectionKeys);
             }
+
+			foreach(var keyvalue in entityAndCollectionKeys)
+			{
+				// raise event, so the examine can re-index the product.
+				var product = this.GetByKey(keyvalue.Key);
+
+				if (product!=null)
+					Saved.RaiseEvent(new SaveEventArgs<IProduct>(product), this);
+			}
 
             if (AddedToCollection != null) AddedToCollection.Invoke(this, new EventArgs());
         }
@@ -731,7 +744,16 @@ namespace Merchello.Core.Services
                 repository.RemoveFromCollections(entityKeycollectionKey);
             }
 
-            if (RemovedFromCollection != null) RemovedFromCollection.Invoke(this, new EventArgs());
+			// raise event, so the examine can re-index the product.
+			foreach (var keyvalue in entityKeycollectionKey)
+			{
+				var product = this.GetByKey(keyvalue.Key);
+
+				if (product != null)
+					Saved.RaiseEvent(new SaveEventArgs<IProduct>(product), this);
+			}
+			
+			if (RemovedFromCollection != null) RemovedFromCollection.Invoke(this, new EventArgs());
         }
 
         /// <summary>
@@ -768,7 +790,10 @@ namespace Merchello.Core.Services
 
             if (RemovedFromCollection != null) RemovedFromCollection.Invoke(this, new EventArgs());
 
-        }
+			// raise event, so the examine can re-index the product.
+			var product = this.GetByKey(productKey);
+			Saved.RaiseEvent(new SaveEventArgs<IProduct>(product), this);
+		}
 
         /// <summary>
         /// Gets products from a collection.
