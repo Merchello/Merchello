@@ -9,10 +9,10 @@
     angular.module('merchello').controller('Merchello.Backoffice.ProductEditController',
         ['$scope', '$routeParams', '$window', '$location', '$timeout', 'assetsService', 'notificationsService', 'dialogService', 'merchelloTabsFactory', 'dialogDataFactory',
             'serverValidationManager', 'productResource', 'warehouseResource', 'settingsResource',
-            'productDisplayBuilder', 'productVariantDisplayBuilder', 'warehouseDisplayBuilder', 'settingDisplayBuilder', 'catalogInventoryDisplayBuilder',
+            'productDisplayBuilder', 'productVariantDisplayBuilder', 'warehouseDisplayBuilder', 'settingDisplayBuilder', 'catalogInventoryDisplayBuilder', 'localizationService',
         function($scope, $routeParams, $window, $location, $timeout, assetsService, notificationsService, dialogService, merchelloTabsFactory, dialogDataFactory,
             serverValidationManager, productResource, warehouseResource, settingsResource,
-            productDisplayBuilder, productVariantDisplayBuilder, warehouseDisplayBuilder, settingDisplayBuilder, catalogInventoryDisplayBuilder) {
+            productDisplayBuilder, productVariantDisplayBuilder, warehouseDisplayBuilder, settingDisplayBuilder, catalogInventoryDisplayBuilder, localizationService) {
 
             //--------------------------------------------------------------------------------------
             // Declare and initialize key scope properties
@@ -204,7 +204,7 @@
             function createProduct() {
                 var promise = productResource.add($scope.product);
                 promise.then(function (product) {
-                    notificationsService.success("Product Saved", "");
+                    notificationsService.success(localizationService.localize("merchelloStatusNotifications_productSaveSuccess"), "");
                     $scope.product = productDisplayBuilder.transform(product);
                     // short pause to make sure examine index has a chance to update
                     $timeout(function() {
@@ -216,7 +216,7 @@
                     }, 400);
                     $scope.preValuesLoaded = true;
                 }, function (reason) {
-                    notificationsService.error("Product Save Failed", reason.message);
+                    notificationsService.error(localizationService.localize("merchelloStatusNotifications_productSaveError"), reason.message);
                 });
             }
 
@@ -231,7 +231,7 @@
             function saveProduct() {
                 var promise = productResource.save($scope.product);
                 promise.then(function (product) {
-                    notificationsService.success("Product Saved", "");
+                    notificationsService.success(localizationService.localize("merchelloStatusNotifications_productSaveSuccess"), "");
                     $scope.product = productDisplayBuilder.transform(product);
                     $scope.productVariant = $scope.product.getMasterVariant();
 
@@ -246,7 +246,7 @@
 
                     $scope.preValuesLoaded = true;
                 }, function (reason) {
-                    notificationsService.error("Product Save Failed", reason.message);
+                    notificationsService.error(localizationService.localize("merchelloStatusNotifications_productSaveError"), reason.message);
                 });
             }
 
@@ -306,10 +306,10 @@
             function deleteProductDialogConfirmation() {
                 var promiseDel = productResource.deleteProduct($scope.product);
                 promiseDel.then(function () {
-                    notificationsService.success("Product Deleted", "");
+                    notificationsService.success(localizationService.localize("merchelloStatusNotifications_productDeleteSuccess"), "");
                     $location.url("/merchello/merchello/productlist/manage", true);
                 }, function (reason) {
-                    notificationsService.error("Product Deletion Failed", reason.message);
+                    notificationsService.error(localizationService.localize("merchelloStatusNotifications_productDeleteError"), reason.message);
                 });
             }
 
@@ -325,7 +325,7 @@
                 var dialogData = dialogDataFactory.createDeleteProductDialogData();
                 dialogData.product = $scope.product;
                 dialogData.name = $scope.product.name + ' (' + $scope.product.sku + ')';
-                dialogData.warning = 'This action cannot be reversed.';
+                dialogData.warning = localizationService.localize('merchelloDelete_actionNotReversible');
 
                 dialogService.open({
                     template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
