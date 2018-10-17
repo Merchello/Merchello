@@ -244,7 +244,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
 
                     loadProduct(loadArgs);
 
-                    notificationsService.success('Product Saved');
+                    notificationsService.success(localizationService.localize("merchelloStatusNotifications_productSaveSuccess"));
                 });
             }
 

@@ -81,16 +81,16 @@
              */
             function save(customer) {
                 $scope.preValuesLoaded = false;
-                notificationsService.info("Saving...", "");
+                notificationsService.info(localizationService.localize("merchelloStatusNotifications_customerSaveInProgress"), "");
                 var promiseSaveCustomer = customerResource.SaveCustomer($scope.customer);
                 promiseSaveCustomer.then(function(customer) {
                     $timeout(function() {
-                        notificationsService.success("Customer Saved", "");
+                        notificationsService.success(localizationService.localize("merchelloStatusNotifications_customerSaveSuccess"), "");
                         init();
                     }, 400);
 
                 }, function(reason) {
-                    notificationsService.error("Customer  Failed", reason.message);
+                    notificationsService.error(localizationService.localize("merchelloStatusNotifications_customerSaveError"), reason.message);
                 });
             }
 

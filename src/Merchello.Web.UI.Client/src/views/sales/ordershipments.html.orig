@@ -1,0 +1,126 @@
+<div data-ng-controller="Merchello.Backoffice.OrderShipmentsController" data-ng-show="loaded" class="merchello">
+    <div class="umb-panel umb-editor-wrapper">
+
+        <div class="umb-editor-header umb-panel-header">
+            <div class="umb-panel-header-content-wrapper">
+
+                <div class="umb-panel-header-content">
+                    <div class="umb-panel-header-left-side -top-position">
+                        <div class="umb-panel-header-title-wrapper">
+                            <div class="umb-panel-header-name">
+                                <localize key="merchelloOrder_sales" /> / <localize key="merchelloOrderView_invoiceNumber" />{{invoice.invoiceNumber}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <merchello-tabs tabs="tabs"></merchello-tabs>
+            </div>
+        </div>
+
+        <merchello-panel>
+
+<<<<<<< HEAD
+            <div class="merchello-list-view" data-ng-show="preValuesLoaded">
+                <div class="control-group umb-control-group">
+                    <!--<div class="merchello-section-label">
+                      Shipment Information
+                      <small>Shipments & Providers</small>
+                    </div>-->
+
+                    <table class="table" data-ng-hide="shipments.length === 0">
+                        <thead>
+                            <tr>
+                                <th><localize key="merchelloGeneral_shipment">Shipment</localize></th>
+                                <th><localize key="general_date">Date</localize></th>
+                                <th><localize key="merchelloGeneral_status">Status</localize></th>
+                                <th><localize key="merchelloFulfillShipment_origin">Origin</localize></th>
+                                <th><localize key="merchelloFulfillShipment_destination">Destination</localize></th>
+                                <th><localize key="merchelloGeneral_items">Items</localize></th>
+                                <th><localize key="merchelloGeneral_trackingNumber">Tracking #</localize></th>
+                                <th><localize key="general_actions">Actions</localize></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="shipment in shipments">
+                                <td>#{{shipment.shipmentNumber}}</td>
+                                <td>{{shipment.shippedDate | date: settings.dateFormat }}</td>
+                                <td>{{shipment.shipmentStatus.name}}</td>
+                                <td merchello-address set-address="shipment.getOriginAddress()"></td>
+                                <td merchello-address set-address="shipment.getDestinationAddress()"></td>
+                                <td>{{shipment.items.length}}</td>
+                                <td>{{shipment.trackingCode}}</td>
+                                <td>
+                                    <div class="pull-right" style="position: relative;">
+                                        <a class="btn btn-info" href="#" data-toggle="dropdown">
+                                            <localize key="general_actions" class="ng-isolate-scopee">Actions</localize>
+                                            <span class="caret"></span>
+                                        </a>
+                                        <ul class="dropdown-menu umb-actions" role="menu" aria-labelledby="dLabel">
+                                            <li><a data-ng-click="openShipmentDialog(shipment)"><localize key="merchelloFulfillShipment_editShipment">Edit Shipment</localize></a></li>
+                                            <li data-ng-hide="!isEditableAddress(shipment.shipmentStatus)"><a data-ng-click="openAddressDialog(shipment, 'origin')"><localize key="merchelloFulfillShipment_editOrigin">Edit Origin</localize></a></li>
+                                            <li data-ng-hide="!isEditableAddress(shipment.shipmentStatus)"><a data-ng-click="openAddressDialog(shipment, 'destination')"><localize key="merchelloFulfillShipment_editDestination">Edit Destination</localize></a></li>
+                                            <li><a data-ng-click="updateShippingAddressLineItem(shipment)"><localize key="merchelloFulfillShipment_setSaleDestination">Set Sale Destination</localize></a></li>
+                                            <li data-ng-hide="!isEditableAddress(shipment.shipmentStatus)"><a data-ng-click="openDeleteShipmentDialog(shipment)"><localize key="merchelloFulfillShipment_deleteShipmentn">Delete Shipment</localize></a></li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+=======
+            <table class="table" data-ng-hide="shipments.length === 0">
+                <thead>
+                <tr>
+                    <th><localize key="merchelloGeneral_shipmentNumber">Shipment #</localize></th>
+                    <th><localize key="general_date">Date</localize></th>
+                    <th><localize key="merchelloGeneral_status">Status</localize></th>
+                    <th><localize key="merchelloFulfillShipment_origin">Origin</localize></th>
+                    <th><localize key="merchelloFulfillShipment_destination">Destination</th>
+                    <th><localize key="merchelloFulfillShipment_items">Items</localize></th>
+                    <th><localize key="merchelloGeneral_trackingNumber">Tracking #</localize></th>
+                    <th><localize key="general_actions">Actions</localize></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-ng-repeat="shipment in shipments">
+                    <td>#{{shipment.shipmentNumber}}</td>
+                    <td>{{shipment.shippedDate | date: settings.dateFormat }}</td>
+                    <td>{{shipment.shipmentStatus.name}}</td>
+                    <td merchello-address set-address="shipment.getOriginAddress()"></td>
+                    <td merchello-address set-address="shipment.getDestinationAddress()"></td>
+                    <td>{{shipment.items.length}}</td>
+                    <td>{{shipment.trackingCode}}</td>
+                    <td>
+                        <div class="pull-right" style="position: relative;">
+                        <a class="btn btn-info" href="#" data-toggle="dropdown">
+                            <localize key="general_actions" class="ng-isolate-scopee">Actions</localize>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu umb-actions" role="menu" aria-labelledby="dLabel">
+                            <li><a data-ng-click="openShipmentDialog(shipment)"><localize key="merchelloFulfillShipment_editShipment">Edit Shipment</localize></a></li>
+                            <li data-ng-hide="!isEditableAddress(shipment.shipmentStatus)"><a data-ng-click="openAddressDialog(shipment, 'origin')"><localize key="merchelloFulfillShipment_editOrigin">Edit Origin</localize></a></li>
+                            <li data-ng-hide="!isEditableAddress(shipment.shipmentStatus)"><a data-ng-click="openAddressDialog(shipment, 'destination')"><localize key="merchelloFulfillShipment_editDestination">Edit Destination</localize></a></li>
+                            <li><a data-ng-click="updateShippingAddressLineItem(shipment)"><localize key="merchelloFulfillShipment_setSaleDestination">Set Sale Destination</localize></a></li>
+                            <li data-ng-hide="!isEditableAddress(shipment.shipmentStatus)"><a data-ng-click="openDeleteShipmentDialog(shipment)"><localize key="merchelloFulfillShipment_deleteShipment">Delete Shipment</localize></a></li>
+                        </ul>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div class="well" style="margin-top: 1em" data-ng-hide="shipments.length > 0">
+                <localize key="merchelloFulfillShipment_noShipments">There are no shipments.</localize>
+            </div>
+>>>>>>> 00fffb6b7c213561ef68a3a373f6090481c7efe8
+
+                    <div class="well" style="margin-top: 1em" data-ng-hide="shipments.length > 0">
+                        <localize key="merchelloFulfillShipment_thereAreNoShipments">There are no shipments.</localize>
+                    </div>
+
+                </div>
+            </div>
+        </merchello-panel>
+    </div>
+</div>
