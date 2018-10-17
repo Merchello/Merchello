@@ -370,6 +370,8 @@
     <key alias="addAdjustment">Voeg aanpassing toe</key>
     <key alias="adjustments">Aanpassingen</key>
     <key alias="adjustmentAssignedBy">Toegewezen aan</key>
+    <key alias="lineItemPreview">Line Item Preview</key>
+    <key alias="noLineItemPreview">Unable to preview line item</key>
   </area>
   <area alias="merchelloCustomers">
     <key alias="loginName">Inloggen</key>
@@ -511,6 +513,7 @@
     <key alias="baseSku">Basis Sku</key>
     <key alias="barcode">Barcode</key>
     <key alias="manufacturer">Fabrikant</key>
+    <key alias="allManufacturers">All Manufacturers</key>
     <key alias="manufacturerModel">Model/serienummer van de fabrikant</key>
     <key alias="variantInfo">Product info</key>
     <key alias="variantOptions">Variant Opties</key>
@@ -655,10 +658,7 @@
     <key alias="stock">Voorraad</key>
     <key alias="lowCount">Minimum aantal</key>
     <key alias="location">Locatie</key>
-    <!-- actions -->
-    <!-- phrases -->
   </area>
-
   <!-- TODO KEEP THE MERCHELLO SHIPPING AREA -->
   <area alias="merchelloShipping">
     <!-- things -->
