@@ -649,14 +649,11 @@
     <key alias="setSaleDestination">Set Sale Destination</key>
   </area>
   <area alias="merchelloWarehouse">
-    <!-- things -->
     <key alias="warehouse">Warehouse</key>
     <key alias="warehouses">Warehouses</key>
     <key alias="stock">Stock</key>
     <key alias="lowCount">Low Count</key>
     <key alias="location">Location</key>
-    <!-- actions -->
-    <!-- phrases -->
   </area>
   <!-- TODO KEEP THE MERCHELLO SHIPPING AREA -->
   <area alias="merchelloShipping">
@@ -691,8 +688,6 @@
     <key alias="base">Base Inventory</key>
     <key alias="inventory">Inventory</key>
     <key alias="tracking">Inventory Tracking</key>
-    <!-- actions -->
-    <!-- phrases -->
   </area>
   <area alias="merchelloPlaceholders">
     <key alias="enterProduct">Enter a product name</key>

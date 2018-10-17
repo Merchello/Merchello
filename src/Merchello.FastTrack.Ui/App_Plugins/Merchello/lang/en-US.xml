@@ -15,10 +15,12 @@
     <key alias="multipleOptions">Multiple Options</key>
     <key alias="optional">(optional)</key>
     <key alias="percentSymbol">%</key>
+    <key alias="percent">Percent</key>
     <key alias="moneySymbol">$</key>
     <key alias="trackingNumber">Tracking # </key>
     <key alias="trackingUrl">Tracking URL</key>
     <key alias="shipment">Shipment</key>
+    <key alias="shipmentNumber">Shipment #</key>
     <key alias="sku">SKU</key>
     <key alias="name">Name</key>
     <key alias="quantity">Qty</key>
@@ -495,6 +497,9 @@
     <key alias="couponMaxRedemptionsTitle">Set a maximum number of allowable redemptions</key>
     <key alias="couponMaxRedemptionsInputTitle">Set the maximum number of redemptions</key>
     <key alias="couponMaxRedemptionsInputHelp">Values should be entered as positive numbers.</key>
+    <key alias="discountPriceDialogTitle">REWARD: Discount the price</key>
+    <key alias="discountPriceDialogApplyDiscount">Apply discount in the amount</key>
+    <key alias="discountPriceDialogApplyDiscountDescription">Values should be entered as positive numbers.</key>
   </area>
   <area alias="merchelloVariant">
     <!-- things -->
@@ -550,6 +555,14 @@
     <key alias="startingInventoryWarning"><![CDATA[(Will set starting inventory for <strong>all variants</strong> and <strong>all warehouses</strong>)]]></key>
     <key alias="productOnSale">On sale</key>
     <key alias="allowOutOfStockPurchase">Allow out of stock purchase</key>
+    <key alias="bulkChangePriceTitle">Change Prices For All Selected Items</key>
+    <key alias="bulkChangePriceUpdateCostOfGoods">Update cost of goods price.</key>
+    <key alias="bulkChangePriceUpdateSalePrice">Update sale price.</key>
+    <key alias="bulkChangeInventoryTitle">Update Inventory For All Selected Items</key>
+    <key alias="bulkChangeInventoryNewQuantity">New quantity</key>
+    <key alias="bulkChangeInventoryUpdateLowCount">Update low count.</key>
+    <key alias="bulkChangeInventoryUpdateNewLowCount">New low stock quantity</key>
+    <key alias="bulkChangeInventoryNote">Note: This will update the inventory for all warehouses on all selected variants</key>
   </area>
   <area alias="merchelloOrder">
     <!-- moved to sales -->
@@ -625,10 +638,14 @@
     <!-- phrases -->
     <key alias="fulfillManually">Fulfill Manually</key>
     <key alias="createShipment">Create Shipment</key>
-    <key alias="thereAreNoShipments">There are no shipments</key>
+    <key alias="noShipments">There are no shipments.</key>
+    <key alias="items">Items</key>
     <key alias="origin">Origin</key>
     <key alias="destination">Destination</key>
     <key alias="editShipment">Edit Shipment</key>
+    <key alias="editOrigin">Edit Origin</key>
+    <key alias="editDestination">Edit Destination</key>
+    <key alias="deleteShipment">Delete Shipment</key>
     <key alias="setSaleDestination">Set Sale Destination</key>
   </area>
   <area alias="merchelloWarehouse">
@@ -682,6 +699,7 @@
     <key alias="enterOrder">Start typing an order number or name...</key>to
     <key alias="addStyle">Add a style...</key>
     <key alias="enterOffer">Enter a name for the offer</key>
+    <key alias="offerCodeExample">eg. 10OFF</key>
   </area>
 
   <area alias="merchelloSettings">
@@ -836,6 +854,7 @@
   <area alias="merchelloDelete">
     <key alias="deleteConfirmation">Delete Confirmation</key>
     <key alias="deleteConfirmMessage">Are you sure you want to remove the item </key>
+	<key alias="actionNotReversible">This action cannot be reversed.</key>
   </area>
   <area alias="merchelloProductEdit">
     <key alias="enterProductName">Enter a product name</key>
@@ -890,8 +909,16 @@
   </area>
 
   <!-- NotificationService Messages -->
-  <area alias="merchelloNotification">
-    <key alias="successCouponSave">Successfully saved the coupon.</key>
-    <key alias="failCouponSave">Failed to save coupon.</key>
-  </area>  
+  <area alias="merchelloStatusNotifications">
+    <key alias="couponSaveSuccess">Coupon Saved</key>
+    <key alias="couponSaveError">Coupon Save Failed</key>
+    <key alias="productSaveSuccess">Product Saved</key>
+    <key alias="productSaveInProgress">Saving Product...</key>
+    <key alias="productSaveError">Product Save Failed</key>
+    <key alias="productDeleteSuccess">Product Deleted</key>
+    <key alias="productDeleteError">Product Deletion Failed</key>
+    <key alias="customerSaveSuccess">Customer Saved</key>
+    <key alias="customerSaveError">Customer Save Failed</key>
+    <key alias="customerSaveInProgress">Saving Customer...</key>
+  </area>
 </language>
