@@ -625,6 +625,11 @@
     <!-- phrases -->
     <key alias="fulfillManually">Fulfill Manually</key>
     <key alias="createShipment">Create Shipment</key>
+    <key alias="thereAreNoShipments">There are no shipments</key>
+    <key alias="origin">Origin</key>
+    <key alias="destination">Destination</key>
+    <key alias="editShipment">Edit Shipment</key>
+    <key alias="setSaleDestination">Set Sale Destination</key>
   </area>
   <area alias="merchelloWarehouse">
     <!-- things -->
