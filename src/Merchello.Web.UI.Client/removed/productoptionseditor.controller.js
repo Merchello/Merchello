@@ -1,7 +1,7 @@
 
     angular.module('merchello').controller('Merchello.Backoffice.ProductOptionsEditorController',
-        ['$scope', '$routeParams', '$location', '$timeout', 'notificationsService', 'dialogService', 'merchelloTabsFactory', 'dialogDataFactory', 'productResource', 'settingsResource', 'productDisplayBuilder',
-        function($scope, $routeParams, $location, $timeout, notificationsService, dialogService, merchelloTabsFactory, dialogDataFactory, productResource, settingsResource, productDisplayBuilder) {
+        ['$scope', '$routeParams', '$location', '$timeout', 'notificationsService', 'dialogService', 'merchelloTabsFactory', 'dialogDataFactory', 'productResource', 'settingsResource', 'productDisplayBuilder', 'localizationService',
+        function($scope, $routeParams, $location, $timeout, notificationsService, dialogService, merchelloTabsFactory, dialogDataFactory, productResource, settingsResource, productDisplayBuilder, localizationService) {
 
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
@@ -103,7 +103,7 @@
                 var dialogData = dialogDataFactory.createDeleteProductDialogData();
                 dialogData.product = $scope.product;
                 dialogData.name = $scope.product.name + ' (' + $scope.product.sku + ')';
-                dialogData.warning = 'This action cannot be reversed.';
+                dialogData.warning = localizationService.localize('merchelloDelete_actionNotReversible');
 
                 dialogService.open({
                     template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',

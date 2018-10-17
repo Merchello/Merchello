@@ -638,6 +638,12 @@
     <!-- phrases -->
     <key alias="fulfillManually">Fulfill Manually</key>
     <key alias="createShipment">Create Shipment</key>
+<<<<<<< HEAD
+    <key alias="thereAreNoShipments">There are no shipments</key>
+    <key alias="origin">Origin</key>
+    <key alias="destination">Destination</key>
+    <key alias="editShipment">Edit Shipment</key>
+=======
     <key alias="noShipments">There are no shipments.</key>
     <key alias="items">Items</key>
     <key alias="origin">Origin</key>
@@ -646,6 +652,7 @@
     <key alias="editOrigin">Edit Origin</key>
     <key alias="editDestination">Edit Destination</key>
     <key alias="deleteShipment">Delete Shipment</key>
+>>>>>>> 00fffb6b7c213561ef68a3a373f6090481c7efe8
     <key alias="setSaleDestination">Set Sale Destination</key>
   </area>
   <area alias="merchelloWarehouse">
