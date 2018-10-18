@@ -50,6 +50,7 @@
             CatalogInventories = masterVariant.CatalogInventories;
             DetachedContents = masterVariant.DetachedContents;
             VersionKey = masterVariant.VersionKey;
+            UpdateDate = masterVariant.UpdateDate;
         }
 
         /// <summary>
