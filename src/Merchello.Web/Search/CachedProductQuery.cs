@@ -850,9 +850,8 @@
             var criteria = SearchProvider.CreateSearchCriteria();
             criteria.Field("sku", sku).And().Field("master", "True");
 
-
             var displays = SearchProvider.Search(criteria).Select(PerformMapSearchResultToDisplayObject);
-            var display = displays.FirstOrDefault();
+            var display = displays.FirstOrDefault(x => x.Sku.Equals(sku, StringComparison.InvariantCultureIgnoreCase));
 
             if (display != null) return this.ModifyData(display);
 
@@ -883,7 +882,7 @@
 
             var display = displays.FirstOrDefault(x => x.DetachedContents.Any(y => y.Slug.Equals(slug, StringComparison.InvariantCultureIgnoreCase)));
 
-            // Don't modifiy the data here as it would have been modified in the PerformMapSearchResultToDisplayObject
+            // Don't modify the data here as it would have been modified in the PerformMapSearchResultToDisplayObject
             if (display != null) return display;
 
             var key = _productService.GetKeyForSlug(slug);
