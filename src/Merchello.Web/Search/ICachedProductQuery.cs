@@ -82,7 +82,7 @@
         /// <returns>
         /// The <see cref="IEnumerable{IProductContent}"/>.
         /// </returns>
-        IEnumerable<IProductContent> TypedProductContentFromCollection(Guid collectionKey, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending);
+        IEnumerable<IProductContent> TypedProductContentFromCollection(Guid collectionKey, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending, bool includeUnavailable = false);
 
         /// <summary>
         /// Gets a <see cref="PagedCollection{IProductContent}"/>.
@@ -105,7 +105,7 @@
         /// <returns>
         /// The <see cref="PagedCollection"/>.
         /// </returns>
-        PagedCollection<IProductContent> TypedProductContentPageFromCollection(Guid collectionKey, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending);
+        PagedCollection<IProductContent> TypedProductContentPageFromCollection(Guid collectionKey, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending, bool includeUnavailable = false);
 
         /// <summary>
         /// Search returning an <see cref="IProductContent"/> collection.
@@ -125,7 +125,7 @@
         /// <returns>
         /// The <see cref="IEnumerable{IProductContent}"/>.
         /// </returns>
-        IEnumerable<IProductContent> TypedProductContentSearch(long page, long itemsPerPage, string sortBy = "name", SortDirection sortDirection = SortDirection.Descending);
+        IEnumerable<IProductContent> TypedProductContentSearch(long page, long itemsPerPage, string sortBy = "name", SortDirection sortDirection = SortDirection.Descending, bool includeUnavailable = false);
 
         /// <summary>
         /// Search returning an <see cref="IProductContent"/> collection.
@@ -148,7 +148,7 @@
         /// <returns>
         /// The <see cref="IEnumerable{IProductContent}"/>.
         /// </returns>
-        IEnumerable<IProductContent> TypedProductContentSearch(string term, long page, long itemsPerPage, string sortBy = "name", SortDirection sortDirection = SortDirection.Ascending);
+        IEnumerable<IProductContent> TypedProductContentSearch(string term, long page, long itemsPerPage, string sortBy = "name", SortDirection sortDirection = SortDirection.Ascending, bool includeUnavailable = false);
 
         /// <summary>
         /// Search returning an <see cref="IProductContent"/> paged collection.
@@ -168,7 +168,7 @@
         /// <returns>
         /// The <see cref="PagedCollection"/>.
         /// </returns>
-        PagedCollection<IProductContent> TypedProductContentSearchPaged(long page, long itemsPerPage, string sortBy = "name", SortDirection sortDirection = SortDirection.Descending);
+        PagedCollection<IProductContent> TypedProductContentSearchPaged(long page, long itemsPerPage, string sortBy = "name", SortDirection sortDirection = SortDirection.Descending, bool includeUnavailable = false);
 
         /// <summary>
         /// Search returning an <see cref="IProductContent"/> paged collection.
@@ -191,7 +191,7 @@
         /// <returns>
         /// The <see cref="PagedCollection"/>.
         /// </returns>
-        PagedCollection<IProductContent> TypedProductContentSearchPaged(string term, long page, long itemsPerPage, string sortBy = "name", SortDirection sortDirection = SortDirection.Descending);
+        PagedCollection<IProductContent> TypedProductContentSearchPaged(string term, long page, long itemsPerPage, string sortBy = "name", SortDirection sortDirection = SortDirection.Descending, bool includeUnavailable = false);
 
         /// <summary>
         /// Gets a collection of typed product content by price range.
@@ -217,7 +217,7 @@
         /// <returns>
         /// The <see cref="PagedCollection"/>.
         /// </returns>
-        PagedCollection<IProductContent> TypedProductContentByPriceRange(decimal min, decimal max, long page, long itemsPerPage, string sortBy = "price", SortDirection sortDirection = SortDirection.Descending);
+        PagedCollection<IProductContent> TypedProductContentByPriceRange(decimal min, decimal max, long page, long itemsPerPage, string sortBy = "price", SortDirection sortDirection = SortDirection.Descending, bool includeUnavailable = false);
 
         ///// <summary>
         ///// Gets a collection of typed product content by price range including a search term.
@@ -269,7 +269,7 @@
         /// <returns>
         /// The <see cref="PagedCollection"/>.
         /// </returns>
-        PagedCollection<IProductContent> TypedProductContentPageThatExistInAllCollections(IEnumerable<Guid> collectionKeys, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending);
+        PagedCollection<IProductContent> TypedProductContentPageThatExistInAllCollections(IEnumerable<Guid> collectionKeys, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending, bool includeUnavailable = false);
 
         /// <summary>
         /// Gets a <see cref="PagedCollection{IProductContent}"/> that exists in every collection referenced.
@@ -295,7 +295,7 @@
         /// <returns>
         /// The <see cref="PagedCollection"/>.
         /// </returns>
-        PagedCollection<IProductContent> TypedProductContentPageThatExistInAllCollections(IEnumerable<Guid> collectionKeys, string searchTerm, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending);
+        PagedCollection<IProductContent> TypedProductContentPageThatExistInAllCollections(IEnumerable<Guid> collectionKeys, string searchTerm, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending, bool includeUnavailable = false);
 
         /// <summary>
         /// Gets a <see cref="PagedCollection{IProductContent}"/> that exists in every collection referenced.
@@ -324,7 +324,7 @@
         /// <returns>
         /// The <see cref="PagedCollection"/>.
         /// </returns>
-        PagedCollection<IProductContent> TypedProductContentPageThatExistInAllCollections(IEnumerable<Guid> collectionKeys, decimal min, decimal max, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending);
+        PagedCollection<IProductContent> TypedProductContentPageThatExistInAllCollections(IEnumerable<Guid> collectionKeys, decimal min, decimal max, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending, bool includeUnavailable = false);
 
         /// <summary>
         /// Gets a <see cref="PagedCollection{IProductContent}"/> that exists in every collection referenced.
@@ -356,7 +356,7 @@
         /// <returns>
         /// The <see cref="PagedCollection"/>.
         /// </returns>
-        PagedCollection<IProductContent> TypedProductContentPageThatExistInAllCollections(IEnumerable<Guid> collectionKeys, string searchTerm, decimal min, decimal max, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending);
+        PagedCollection<IProductContent> TypedProductContentPageThatExistInAllCollections(IEnumerable<Guid> collectionKeys, string searchTerm, decimal min, decimal max, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending, bool includeUnavailable = false);
 
 
 
@@ -382,7 +382,7 @@
         /// <returns>
         /// The <see cref="PagedCollection"/>.
         /// </returns>
-        PagedCollection<IProductContent> TypedProductContentPageThatNotInAnyCollections(IEnumerable<Guid> collectionKeys, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending);
+        PagedCollection<IProductContent> TypedProductContentPageThatNotInAnyCollections(IEnumerable<Guid> collectionKeys, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending, bool includeUnavailable = false);
 
         /// <summary>
         /// Gets a <see cref="PagedCollection{IProductContent}"/> that does not exists in any of the collections referenced..
@@ -408,7 +408,7 @@
         /// <returns>
         /// The <see cref="PagedCollection"/>.
         /// </returns>
-        PagedCollection<IProductContent> TypedProductContentPageThatNotInAnyCollections(IEnumerable<Guid> collectionKeys, string searchTerm, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending);
+        PagedCollection<IProductContent> TypedProductContentPageThatNotInAnyCollections(IEnumerable<Guid> collectionKeys, string searchTerm, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending, bool includeUnavailable = false);
 
 
 
@@ -439,7 +439,7 @@
         /// <returns>
         /// The <see cref="PagedCollection"/>.
         /// </returns>
-        PagedCollection<IProductContent> TypedProductContentPageThatNotInAnyCollections(IEnumerable<Guid> collectionKeys, decimal min, decimal max, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending);
+        PagedCollection<IProductContent> TypedProductContentPageThatNotInAnyCollections(IEnumerable<Guid> collectionKeys, decimal min, decimal max, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending, bool includeUnavailable = false);
 
         /// <summary>
         /// Gets a <see cref="PagedCollection{IProductContent}"/> that does not exists in any of the collections referenced..
@@ -471,7 +471,7 @@
         /// <returns>
         /// The <see cref="PagedCollection"/>.
         /// </returns>
-        PagedCollection<IProductContent> TypedProductContentPageThatNotInAnyCollections(IEnumerable<Guid> collectionKeys, string searchTerm, decimal min, decimal max, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending);
+        PagedCollection<IProductContent> TypedProductContentPageThatNotInAnyCollections(IEnumerable<Guid> collectionKeys, string searchTerm, decimal min, decimal max, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending, bool includeUnavailable = false);
 
 
         /// <summary>
@@ -495,7 +495,7 @@
         /// <returns>
         /// The <see cref="PagedCollection"/>.
         /// </returns>
-        PagedCollection<IProductContent> TypedProductContentPageThatExistsInAnyCollections(IEnumerable<Guid> collectionKeys, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending);
+        PagedCollection<IProductContent> TypedProductContentPageThatExistsInAnyCollections(IEnumerable<Guid> collectionKeys, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending, bool includeUnavailable = false);
 
 
         /// <summary>
@@ -522,7 +522,7 @@
         /// <returns>
         /// The <see cref="PagedCollection"/>.
         /// </returns>
-        PagedCollection<IProductContent> TypedProductContentPageThatExistsInAnyCollections(IEnumerable<Guid> collectionKeys, string searchTerm, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending);
+        PagedCollection<IProductContent> TypedProductContentPageThatExistsInAnyCollections(IEnumerable<Guid> collectionKeys, string searchTerm, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending, bool includeUnavailable = false);
 
         /// <summary>
         /// Gets a <see cref="PagedCollection{IProductContent}"/> that exists in any of the collections passed.
@@ -551,7 +551,7 @@
         /// <returns>
         /// The <see cref="PagedCollection"/>.
         /// </returns>
-        PagedCollection<IProductContent> TypedProductContentPageThatExistsInAnyCollections(IEnumerable<Guid> collectionKeys, decimal min, decimal max, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending);
+        PagedCollection<IProductContent> TypedProductContentPageThatExistsInAnyCollections(IEnumerable<Guid> collectionKeys, decimal min, decimal max, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending, bool includeUnavailable = false);
 
         /// <summary>
         /// Gets a <see cref="PagedCollection{IProductContent}"/> that exists in any of the collections passed.
@@ -583,7 +583,7 @@
         /// <returns>
         /// The <see cref="PagedCollection"/>.
         /// </returns>
-        PagedCollection<IProductContent> TypedProductContentPageThatExistsInAnyCollections(IEnumerable<Guid> collectionKeys, string searchTerm, decimal min, decimal max, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending);
+        PagedCollection<IProductContent> TypedProductContentPageThatExistsInAnyCollections(IEnumerable<Guid> collectionKeys, string searchTerm, decimal min, decimal max, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending, bool includeUnavailable = false);
 
 
 

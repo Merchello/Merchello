@@ -28,6 +28,7 @@
 
     using Umbraco.Core.Cache;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Persistence;
 
     /// <summary>
     /// Represents a CachedProductQuery
@@ -65,7 +66,7 @@
         /// </summary>
         public CachedProductQuery()
             : this(MerchelloContext.Current, true)
-        {            
+        {
         }
 
         /// <summary>
@@ -79,7 +80,7 @@
         /// </param>
         public CachedProductQuery(IMerchelloContext merchelloContext, bool enableDataModifiers)
             : this(merchelloContext, enableDataModifiers, DetachedValuesConversionType.Db)
-        {            
+        {
         }
 
         /// <summary>
@@ -97,7 +98,7 @@
         /// <param name="enableDataModifiers">
         /// A value indicating whether or not data modifiers are enabled.
         /// </param>
-        public CachedProductQuery(IMerchelloContext merchelloContext, BaseIndexProvider indexProvider, BaseSearchProvider searchProvider, bool enableDataModifiers) 
+        public CachedProductQuery(IMerchelloContext merchelloContext, BaseIndexProvider indexProvider, BaseSearchProvider searchProvider, bool enableDataModifiers)
             : this(merchelloContext, indexProvider, searchProvider, enableDataModifiers, DetachedValuesConversionType.Db)
         {
         }
@@ -152,8 +153,8 @@
             this.Initialize();
         }
 
-        internal event TypedEventHandler<CachedProductQuery, bool> DataModifierChanged; 
-        
+        internal event TypedEventHandler<CachedProductQuery, bool> DataModifierChanged;
+
         /// <summary>
         /// Gets or sets a value indicating whether enable data modifiers.
         /// </summary>
@@ -264,9 +265,10 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Ascending)
+            SortDirection sortDirection = SortDirection.Ascending,
+            bool includeUnavailable = false)
         {
-            return TypedProductContentPageFromCollection(collectionKey, page, itemsPerPage, sortBy, sortDirection).Items;
+            return TypedProductContentPageFromCollection(collectionKey, page, itemsPerPage, sortBy, sortDirection, includeUnavailable).Items;
         }
 
 
@@ -296,9 +298,10 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Ascending)
+            SortDirection sortDirection = SortDirection.Ascending,
+            bool includeUnavailable = false)
         {
-            var pagedKeys = GetCollectionPagedKeys(collectionKey, page, itemsPerPage, sortBy, sortDirection);
+            var pagedKeys = GetCollectionPagedKeys(collectionKey, page, itemsPerPage, sortBy, sortDirection, includeUnavailable);
 
             return _cache.GetPagedCollectionByCacheKey(pagedKeys, sortBy);
         }
@@ -321,9 +324,9 @@
         /// <returns>
         /// The <see cref="IEnumerable{IProductContent}"/>.
         /// </returns>
-        public IEnumerable<IProductContent> TypedProductContentSearch(long page, long itemsPerPage, string sortBy = "name", SortDirection sortDirection = SortDirection.Descending)
+        public IEnumerable<IProductContent> TypedProductContentSearch(long page, long itemsPerPage, string sortBy = "name", SortDirection sortDirection = SortDirection.Descending, bool includeUnavailable = false)
         {
-            return TypedProductContentSearchPaged(page, itemsPerPage, sortBy, sortDirection).Items;
+            return TypedProductContentSearchPaged(page, itemsPerPage, sortBy, sortDirection, includeUnavailable).Items;
         }
 
         /// <summary>
@@ -352,9 +355,10 @@
             long page,
             long itemsPerPage,
             string sortBy = "name",
-            SortDirection sortDirection = SortDirection.Ascending)
+            SortDirection sortDirection = SortDirection.Ascending,
+            bool includeUnavailable = false)
         {
-            return TypedProductContentSearchPaged(term, page, itemsPerPage, sortBy, sortDirection).Items;
+            return TypedProductContentSearchPaged(term, page, itemsPerPage, sortBy, sortDirection, includeUnavailable).Items;
         }
 
         /// <summary>
@@ -379,16 +383,17 @@
             long page,
             long itemsPerPage,
             string sortBy = "name",
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
-            var cacheKey = PagedKeyCache.GetPagedQueryCacheKey<ICachedProductQuery>("Search", page, itemsPerPage, sortBy, sortDirection);
+            var cacheKey = PagedKeyCache.GetPagedQueryCacheKey<ICachedProductQuery>("Search", page, itemsPerPage, sortBy, sortDirection, includeUnavailable);
             var pagedKeys = PagedKeyCache.GetPageByCacheKey(cacheKey);
 
             if (pagedKeys != null) return _cache.MapPagedCollection(pagedKeys, sortBy);
 
             return
                 _cache.GetPagedCollectionByCacheKey(
-                    PagedKeyCache.CachePage(cacheKey, _productService.GetPagedKeys(page, itemsPerPage, sortBy, sortDirection)), 
+                    PagedKeyCache.CachePage(cacheKey, _productService.GetPagedKeys(page, itemsPerPage, sortBy, sortDirection, includeUnavailable)),
                     sortBy);
         }
 
@@ -418,13 +423,14 @@
             long page,
             long itemsPerPage,
             string sortBy = "name",
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
-            var cacheKey = PagedKeyCache.GetPagedQueryCacheKey<ICachedProductQuery>("Search", page, itemsPerPage, sortBy, sortDirection, new Dictionary<string, string> { { "term", term } });
+            var cacheKey = PagedKeyCache.GetPagedQueryCacheKey<ICachedProductQuery>("Search", page, itemsPerPage, sortBy, sortDirection, includeUnavailable, new Dictionary<string, string> { { "term", term } });
             var pagedKeys = PagedKeyCache.GetPageByCacheKey(cacheKey);
             return
                 _cache.GetPagedCollectionByCacheKey(
-                    pagedKeys ?? _productService.GetPagedKeys(term, page, itemsPerPage, sortBy, sortDirection),
+                    pagedKeys ?? _productService.GetPagedKeys(term, page, itemsPerPage, sortBy, sortDirection, includeUnavailable),
                     sortBy);
         }
 
@@ -435,7 +441,8 @@
             long page,
             long itemsPerPage,
             string sortBy = "price",
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             var cacheKey = PagedKeyCache.GetPagedQueryCacheKey<ICachedProductQuery>(
                 "GetProductsInPriceRange",
@@ -443,6 +450,7 @@
                 itemsPerPage,
                 sortBy,
                 sortDirection,
+                includeUnavailable,
                 new Dictionary<string, string>
                     {
                                     { "min", min.ToString(CultureInfo.InvariantCulture) },
@@ -453,7 +461,7 @@
 
             return
                 _cache.GetPagedCollectionByCacheKey(
-                    pagedKeys ?? _productService.GetProductsKeysInPriceRange(min, max, page, itemsPerPage, sortBy, sortDirection),
+                    pagedKeys ?? _productService.GetProductsKeysInPriceRange(min, max, page, itemsPerPage, sortBy, sortDirection, includeUnavailable),
                     sortBy);
         }
 
@@ -496,13 +504,14 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Ascending)
+            SortDirection sortDirection = SortDirection.Ascending,
+            bool includeUnavailable = false)
         {
             var keys = collectionKeys as Guid[] ?? collectionKeys.ToArray();
 
             if (!keys.Any()) return PagedCollection<IProductContent>.Empty();
 
-            var pagedKeys = ((ProductService)Service).GetKeysThatExistInAllCollections(keys, page, itemsPerPage, sortBy, sortDirection);
+            var pagedKeys = ((ProductService)Service).GetKeysThatExistInAllCollections(keys, page, itemsPerPage, sortBy, sortDirection, includeUnavailable);
 
             return _cache.MapPagedCollection(pagedKeys, sortBy);
         }
@@ -537,13 +546,14 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Ascending)
+            SortDirection sortDirection = SortDirection.Ascending,
+            bool includeUnavailable = false)
         {
             var keys = collectionKeys as Guid[] ?? collectionKeys.ToArray();
 
             if (!keys.Any()) return PagedCollection<IProductContent>.Empty();
 
-            var pagedKeys = ((ProductService)Service).GetKeysThatExistInAllCollections(keys, searchTerm, page, itemsPerPage, sortBy, sortDirection);
+            var pagedKeys = ((ProductService)Service).GetKeysThatExistInAllCollections(keys, searchTerm, page, itemsPerPage, sortBy, sortDirection, includeUnavailable);
 
             return _cache.MapPagedCollection(pagedKeys, sortBy);
         }
@@ -556,13 +566,14 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Ascending)
+            SortDirection sortDirection = SortDirection.Ascending,
+            bool includeUnavailable = false)
         {
             var keys = collectionKeys as Guid[] ?? collectionKeys.ToArray();
 
             if (!keys.Any()) return PagedCollection<IProductContent>.Empty();
 
-            var pagedKeys = ((ProductService)Service).GetKeysThatExistInAllCollections(keys, min, max, page, itemsPerPage, sortBy, sortDirection);
+            var pagedKeys = ((ProductService)Service).GetKeysThatExistInAllCollections(keys, min, max, page, itemsPerPage, sortBy, sortDirection, includeUnavailable);
 
             return _cache.MapPagedCollection(pagedKeys, sortBy);
         }
@@ -576,13 +587,14 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Ascending)
+            SortDirection sortDirection = SortDirection.Ascending,
+            bool includeUnavailable = false)
         {
             var keys = collectionKeys as Guid[] ?? collectionKeys.ToArray();
 
             if (!keys.Any()) return PagedCollection<IProductContent>.Empty();
 
-            var pagedKeys = ((ProductService)Service).GetKeysThatExistInAllCollections(keys, searchTerm, min, max, page, itemsPerPage, sortBy, sortDirection);
+            var pagedKeys = ((ProductService)Service).GetKeysThatExistInAllCollections(keys, searchTerm, min, max, page, itemsPerPage, sortBy, sortDirection, includeUnavailable);
 
             return _cache.MapPagedCollection(pagedKeys, sortBy);
         }
@@ -613,13 +625,14 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Ascending)
+            SortDirection sortDirection = SortDirection.Ascending,
+            bool includeUnavailable = false)
         {
             var keys = collectionKeys as Guid[] ?? collectionKeys.ToArray();
 
             if (!keys.Any()) return PagedCollection<IProductContent>.Empty();
 
-            var pagedKeys = ((ProductService)Service).GetKeysNotInAnyCollections(keys, page, itemsPerPage, sortBy, sortDirection);
+            var pagedKeys = ((ProductService)Service).GetKeysNotInAnyCollections(keys, page, itemsPerPage, sortBy, sortDirection, includeUnavailable);
 
             return _cache.MapPagedCollection(pagedKeys, sortBy);
         }
@@ -654,13 +667,14 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Ascending)
+            SortDirection sortDirection = SortDirection.Ascending,
+            bool includeUnavailable = false)
         {
             var keys = collectionKeys as Guid[] ?? collectionKeys.ToArray();
 
             if (!keys.Any()) return PagedCollection<IProductContent>.Empty();
 
-            var pagedKeys = ((ProductService)Service).GetKeysNotInAnyCollections(keys, searchTerm, page, itemsPerPage, sortBy, sortDirection);
+            var pagedKeys = ((ProductService)Service).GetKeysNotInAnyCollections(keys, searchTerm, page, itemsPerPage, sortBy, sortDirection, includeUnavailable);
 
             return _cache.MapPagedCollection(pagedKeys, sortBy);
         }
@@ -673,13 +687,14 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Ascending)
+            SortDirection sortDirection = SortDirection.Ascending,
+            bool includeUnavailable = false)
         {
             var keys = collectionKeys as Guid[] ?? collectionKeys.ToArray();
 
             if (!keys.Any()) return PagedCollection<IProductContent>.Empty();
 
-            var pagedKeys = ((ProductService)Service).GetKeysNotInAnyCollections(keys, min, max, page, itemsPerPage, sortBy, sortDirection);
+            var pagedKeys = ((ProductService)Service).GetKeysNotInAnyCollections(keys, min, max, page, itemsPerPage, sortBy, sortDirection, includeUnavailable);
 
             return _cache.MapPagedCollection(pagedKeys, sortBy);
         }
@@ -693,13 +708,14 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Ascending)
+            SortDirection sortDirection = SortDirection.Ascending,
+            bool includeUnavailable = false)
         {
             var keys = collectionKeys as Guid[] ?? collectionKeys.ToArray();
 
             if (!keys.Any()) return PagedCollection<IProductContent>.Empty();
 
-            var pagedKeys = ((ProductService)Service).GetKeysNotInAnyCollections(keys, searchTerm, min, max, page, itemsPerPage, sortBy, sortDirection);
+            var pagedKeys = ((ProductService)Service).GetKeysNotInAnyCollections(keys, searchTerm, min, max, page, itemsPerPage, sortBy, sortDirection, includeUnavailable);
 
             return _cache.MapPagedCollection(pagedKeys, sortBy);
         }
@@ -730,13 +746,14 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Ascending)
+            SortDirection sortDirection = SortDirection.Ascending,
+            bool includeUnavailable = false)
         {
             var keys = collectionKeys as Guid[] ?? collectionKeys.ToArray();
 
             if (!keys.Any()) return PagedCollection<IProductContent>.Empty();
 
-            var pagedKeys = ((ProductService)Service).GetKeysThatExistInAnyCollections(keys, page, itemsPerPage, sortBy, sortDirection);
+            var pagedKeys = ((ProductService)Service).GetKeysThatExistInAnyCollections(keys, page, itemsPerPage, sortBy, sortDirection, includeUnavailable);
 
             return _cache.MapPagedCollection(pagedKeys, sortBy);
         }
@@ -771,13 +788,14 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Ascending)
+            SortDirection sortDirection = SortDirection.Ascending,
+            bool includeUnavailable = false)
         {
             var keys = collectionKeys as Guid[] ?? collectionKeys.ToArray();
 
             if (!keys.Any()) return PagedCollection<IProductContent>.Empty();
 
-            var pagedKeys = ((ProductService)Service).GetKeysThatExistInAnyCollections(keys, searchTerm, page, itemsPerPage, sortBy, sortDirection);
+            var pagedKeys = ((ProductService)Service).GetKeysThatExistInAnyCollections(keys, searchTerm, page, itemsPerPage, sortBy, sortDirection, includeUnavailable);
 
             return _cache.MapPagedCollection(pagedKeys, sortBy);
         }
@@ -790,13 +808,14 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Ascending)
+            SortDirection sortDirection = SortDirection.Ascending,
+            bool includeUnavailable = false)
         {
             var keys = collectionKeys as Guid[] ?? collectionKeys.ToArray();
 
             if (!keys.Any()) return PagedCollection<IProductContent>.Empty();
 
-            var pagedKeys = ((ProductService)Service).GetKeysThatExistInAnyCollections(keys, min, max, page, itemsPerPage, sortBy, sortDirection);
+            var pagedKeys = ((ProductService)Service).GetKeysThatExistInAnyCollections(keys, min, max, page, itemsPerPage, sortBy, sortDirection, includeUnavailable);
 
             return _cache.MapPagedCollection(pagedKeys, sortBy);
         }
@@ -810,13 +829,14 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Ascending)
+            SortDirection sortDirection = SortDirection.Ascending,
+            bool includeUnavailable = false)
         {
             var keys = collectionKeys as Guid[] ?? collectionKeys.ToArray();
 
             if (!keys.Any()) return PagedCollection<IProductContent>.Empty();
 
-            var pagedKeys = ((ProductService)Service).GetKeysThatExistInAnyCollections(keys, searchTerm, min, max, page, itemsPerPage, sortBy, sortDirection);
+            var pagedKeys = ((ProductService)Service).GetKeysThatExistInAnyCollections(keys, searchTerm, min, max, page, itemsPerPage, sortBy, sortDirection, includeUnavailable);
 
             return _cache.MapPagedCollection(pagedKeys, sortBy);
         }
@@ -1113,7 +1133,7 @@
 
             return
                 this.GetQueryResultDisplay(
-                    pagedKeys ?? 
+                    pagedKeys ??
                     PagedKeyCache.CachePage(
                         cacheKey,
                         _productService.GetProductsKeysWithOption(optionName, choices, page, itemsPerPage, sortBy, sortDirection)));
@@ -1624,6 +1644,58 @@
         }
 
         /// <summary>
+        /// Gets a paged collection of entity keys for a collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        protected Page<Guid> GetCollectionPagedKeys(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Ascending,
+            bool includeUnavailable = false)
+        {
+            var args = new Dictionary<string, string>
+                {
+                    { "collectionKey", collectionKey.ToString() }
+                };
+
+            var cacheKey = PagedKeyCache.GetPagedQueryCacheKey<CachedQueryableCollectionQueryBase<IProduct, ProductDisplay>>(
+               "GetFromCollection",
+               page,
+               itemsPerPage,
+               sortBy,
+               sortDirection,
+               includeUnavailable,
+               args);
+
+            var pagedKeys = PagedKeyCache.GetPageByCacheKey(cacheKey);
+            if (pagedKeys != null) return pagedKeys;
+
+            var provider = this.GetEntityCollectionProvider(collectionKey);
+            return PagedKeyCache.CachePage(
+                        cacheKey,
+                        _productService.GetPagedKeys(page, itemsPerPage, sortBy, sortDirection, includeUnavailable));
+        }
+
+        /// <summary>
         /// Gets products that are marked on sale
         /// </summary>
         /// <param name="page">
@@ -1703,7 +1775,7 @@
         internal void ReindexEntity(IProductVariant entity)
         {
             IndexProvider.ReIndexNode(entity.SerializeToXml().Root, IndexTypes.ProductVariant);
-        }        
+        }
 
         /// <summary>
         /// The modify data.
