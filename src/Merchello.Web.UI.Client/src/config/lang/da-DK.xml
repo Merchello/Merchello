@@ -15,10 +15,12 @@
     <key alias="multipleOptions">Flere muligheder</key>
     <key alias="optional">(valgfri)</key>
     <key alias="percentSymbol">%</key>
+    <key alias="percent">Percent</key>
     <key alias="moneySymbol">DKK</key>
     <key alias="trackingNumber">Sporingsnummer</key>
     <key alias="trackingUrl">Tracking URL</key>
     <key alias="shipment">Forsendelse</key>
+    <key alias="shipmentNumber">Shipment #</key>
     <key alias="sku">SKU</key>
     <key alias="name">Name</key>
     <key alias="quantity">Antal</key>
@@ -75,6 +77,7 @@
     <key alias="associateWith">Tilknyt til</key>
     <key alias="shared">Delt</key>
     <key alias="custom">Custom</key>
+    <key alias="history">History</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Produkter</key>
@@ -325,6 +328,8 @@
   </area>
   <area alias="merchelloSales">
     <key alias="invoice">Faktura</key>
+    <key alias="description">Description</key>
+    <key alias="amount">Amount</key>
     <key alias="invoiceNumber">Faktura #</key>
     <key alias="invoiceNumberPrefix">Faktura nummer præfix</key>
     <key alias="createInvoice">Create Invoice</key>
@@ -646,14 +651,11 @@
     <key alias="setSaleDestination">Set Sale Destination</key>
   </area>
   <area alias="merchelloWarehouse">
-    <!-- things -->
     <key alias="warehouse">Lager</key>
     <key alias="warehouses">Lagre</key>
     <key alias="stock">Beholdning</key>
     <key alias="lowCount">Lavt antal</key>
     <key alias="location">Lokation</key>
-    <!-- actions -->
-    <!-- phrases -->
   </area>
   <!-- TODO KEEP THE MERCHELLO SHIPPING AREA -->
   <area alias="merchelloShipping">
@@ -688,8 +690,6 @@
     <key alias="base">Basis lagerbeholdning</key>
     <key alias="inventory">Lagerbeholdning</key>
     <key alias="tracking">Sporing af lagerbeholdning</key>
-    <!-- actions -->
-    <!-- phrases -->
   </area>
   <area alias="merchelloPlaceholders">
     <key alias="enterProduct">Angiv et produkt navn</key>
@@ -725,7 +725,7 @@
     <key alias="listViewSearchOptionsTitle">List Search Options</key>
     <key alias="listViewSearchOptionsSubTitle">Fields include in filter</key>
   </area>
-  
+
   <area alias="merchelloShippingCountry">
     <key alias="addCountry">Tilføj et land</key>
     <key alias="typeCountryName">Skriv landenavn</key>

@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>umbraco.MacroEngines</name>
+    </assembly>
+    <members>
+        <member name="T:umbraco.MacroEngines.PluginManagerExtensions">
+            <summary>
+            Extension methods for the PluginTypeResolver
+            </summary>
+        </member>
+        <member name="M:umbraco.MacroEngines.PluginManagerExtensions.ResolveRazorDataTypeModels(Umbraco.Core.PluginManager)">
+            <summary>
+            Returns all available IMacroGuiRendering in application
+            </summary>
+            <param name="resolver"></param>
+            <returns></returns>
+        </member>
+        <member name="T:umbraco.MacroEngines.RazorDataTypeModels.HtmlStringDataTypeModel">
+            <summary>
+            This ensures that the RTE renders with HtmlString encoding and also ensures that the macro contents in it
+            render properly too.
+            </summary>
+        </member>
+        <member name="M:umbraco.MacroEngines.LegacyConverter.ConvertToLegacy(System.Object)">
+            <summary>
+            Checks if the object is DynamicXml or DynamicNull and ensures that we return the legacy class not the new one 
+            as we want this class to always ensure we're dealing with the legacy classes
+            </summary>
+            <param name="result"></param>
+            <returns></returns>
+        </member>
+        <member name="M:umbraco.MacroEngines.ExamineBackedMedia.#ctor(Examine.SearchResult,Examine.Providers.BaseIndexProvider,Examine.Providers.BaseSearchProvider)">
+            <summary>
+            Internal constructor used for unit tests
+            </summary>
+            <param name="result"></param>
+            <param name="indexer"></param>
+            <param name="searcher"></param>
+        </member>
+        <member name="F:umbraco.MacroEngines.Library.RazorLibraryCore._htmlHelper">
+            <summary>
+            An empty HtmlHelper with a blank ViewContext, used only to access some htmlHelper extension methods
+            </summary>
+        </member>
+        <member name="F:umbraco.MacroEngines.DynamicNode.GetDataTypeCallback">
+            <summary>
+            This callback is used only so we can set it dynamically for use in unit tests
+            </summary>
+        </member>
+        <member name="M:umbraco.MacroEngines.DynamicNode.TryGetPropertyData(umbraco.MacroEngines.PropertyResult,System.Object@)">
+            <summary>
+            Returns the value from the property result and ensure it is filtered through the razor data type converters
+            </summary>
+            <param name="propResult"></param>
+            <param name="result">The value result for the property</param>
+            <returns>true if getting the property data was successful</returns>
+        </member>
+        <member name="M:umbraco.MacroEngines.DynamicNode.EnsureOwnersList">
+            <summary>
+            Checks if the owner list is null and attempts to create it if there is a parent. 
+            </summary>
+            <returns>Successful if the owners list is not null, false if the owners list could not be created and remains null</returns>
+        </member>
+        <member name="T:umbraco.MacroEngines.RazorBuildProvider">
+            <summary>
+            Stub Build Provider If Want To Implement Anything Advanced In The Future
+            Also Allows Us To Register Build Provider In Medium Trust
+            </summary>
+        </member>
+        <member name="M:umbraco.MacroEngines.RazorMacroEngine.GetHash(System.String)">
+            <summary>
+            Generates a hash based on the text string passed in.  This method will detect the 
+            security requirements (is FIPS enabled) and return an appropriate hash.
+            </summary>
+            <param name="text">String value to hash</param>
+            <returns>The hash of the text string</returns>
+        </member>
+        <member name="M:umbraco.MacroEngines.RazorMacroEngine.CreateTemporaryRazorFile(System.String,System.String,System.Boolean)">
+            <summary>
+            Creates A Temporary Razor File
+            </summary>
+        </member>
+        <member name="M:umbraco.MacroEngines.RazorMacroEngine.CreateInlineRazorFile(System.String,System.String)">
+            <summary>
+            Creates Inline Razor File
+            </summary>
+        </member>
+        <member name="T:umbraco.MacroEngines.Resources.Strings">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:umbraco.MacroEngines.Resources.Strings.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:umbraco.MacroEngines.Resources.Strings.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:umbraco.MacroEngines.Resources.Strings.WebConfig">
+             <summary>
+               Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot;?&gt;
+            &lt;configuration&gt;
+            
+              &lt;configSections&gt;
+                &lt;sectionGroup name=&quot;system.web.webPages.razor&quot; type=&quot;System.Web.WebPages.Razor.Configuration.RazorWebSectionGroup, System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;&gt;
+                  &lt;section name=&quot;host&quot; type=&quot;System.Web.WebPages.Razor.Configuration.HostSection, System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot; requirePermission=&quot;false&quot; /&gt;
+                  &lt;section name=&quot;page [rest of string was truncated]&quot;;.
+             </summary>
+        </member>
+    </members>
+</doc>
