@@ -134,7 +134,7 @@
 
             // assert there is at least one the can be rendered
             var detachedContent = display.DetachedContents.FirstOrDefault(x => x.CanBeRendered);
-            
+
             if (detachedContent == null) return null;
 
             var publishedContentType = PublishedContentType.Get(PublishedItemType.Content, detachedContent.DetachedContentType.UmbContentType.Alias);
@@ -145,6 +145,29 @@
 
             return new ProductContent(publishedContentType, optionContentTypes, clone, _parent, _defaultStoreLanguage);
         }
+
+        //protected string GetLanguage()
+        //{
+        //    var language = _defaultStoreLanguage;
+        //    var umbracoContext = Umbraco.Web.UmbracoContext.Current;
+        //    if (umbracoContext != null && umbracoContext.IsFrontEndUmbracoRequest)
+        //    {
+        //        language = umbracoContext.PublishedContentRequest.Culture.Name;
+        //    }
+        //    return language;
+        //}
+        //protected IPublishedContent GetParent()
+        //{
+        //    var parent = _parent;
+        //    var umbracoContext = Umbraco.Web.UmbracoContext.Current;
+        //    if (umbracoContext != null && umbracoContext.PublishedContentRequest != null)
+        //    {
+        //        var helper = new Umbraco.Web.UmbracoHelper(umbracoContext);
+        //        parent = helper.TypedContent(umbracoContext.PublishedContentRequest.UmbracoDomain.RootContentId);
+        //    }
+        //    return parent;
+        //}
+
 
         /// <summary>
         /// Gets the collection of <see cref="PublishedContentType"/> associated with product options.
@@ -176,7 +199,7 @@
             {
                 var dct = DetachedContentTypes.FirstOrDefault(x => x.ContentTypeKey != null && x.ContentTypeKey.Value == ct.Key);
                 if (dct != null)
-                publishedContentTypes.Add(dct.Key, PublishedContentType.Get(PublishedItemType.Content, ct.Alias));
+                    publishedContentTypes.Add(dct.Key, PublishedContentType.Get(PublishedItemType.Content, ct.Alias));
             }
 
             return publishedContentTypes;
