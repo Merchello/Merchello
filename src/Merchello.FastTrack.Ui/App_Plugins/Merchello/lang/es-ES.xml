@@ -601,7 +601,7 @@
     <key alias="unarchiveSales">Desarchivar ventas</key>
     <key alias="noSalesYet">Todavía no tienes ventas</key>
     <key alias="butSoonYouWill">¡Pero pronto las tendrás!</key>
-    
+
     <!-- phrases -->
     <key alias="noOrders">No tienes pedidos.</key>
     <key alias="attentionRequired">Tienes pedidos que gestionar</key>
@@ -649,14 +649,11 @@
     <key alias="setSaleDestination">Set Sale Destination</key>
   </area>
   <area alias="merchelloWarehouse">
-    <!-- things -->
     <key alias="warehouse">Almacén</key>
     <key alias="warehouses">Almacenes</key>
     <key alias="stock">Stock</key>
     <key alias="lowCount">Bajo stock</key>
     <key alias="location">Localización</key>
-    <!-- actions -->
-    <!-- phrases -->
   </area>
   <!-- TODO KEEP THE MERCHELLO SHIPPING AREA -->
   <area alias="merchelloShipping">
@@ -691,8 +688,6 @@
     <key alias="base">Inventario base</key>
     <key alias="inventory">Inventario</key>
     <key alias="tracking">Gestión de inventario</key>
-    <!-- actions -->
-    <!-- phrases -->
   </area>
   <area alias="merchelloPlaceholders">
     <key alias="enterProduct">Escribe el nombre del producto</key>

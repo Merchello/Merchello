@@ -328,6 +328,8 @@
   </area>
   <area alias="merchelloSales">
     <key alias="invoice">Invoice</key>
+    <key alias="description">Description</key>
+    <key alias="amount">Amount</key>
     <key alias="invoiceNumber">Invoice #</key>
     <key alias="invoiceNumberPrefix">Invoice Number Prefix</key>
     <key alias="createInvoice">Create Invoice</key>
