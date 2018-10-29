@@ -1,28 +1,29 @@
 <div ng-controller="Merchello.Backoffice.ProductContentTypeListController" ng-show="loaded" class="merchello">
-    <umb-panel>
+    <div class="umb-panel umb-editor-wrapper">
 
-      <div class="umb-editor-header umb-panel-header">
-        <div class="umb-panel-header-content-wrapper">
+        <div class="umb-editor-header umb-panel-header">
+            <div class="umb-panel-header-content-wrapper">
 
-          <div class="umb-panel-header-content">
-            <div class="umb-panel-header-left-side -top-position">
-              <div class="umb-panel-header-title-wrapper">
-                <div class="umb-panel-header-name">
-                  <localize key="merchelloDetachedContent_contentTypes" />
+                <div class="umb-panel-header-content">
+                    <div class="umb-panel-header-left-side -top-position">
+                        <div class="umb-panel-header-title-wrapper">
+                            <div class="umb-panel-header-name">
+                                <localize key="merchelloDetachedContent_contentTypes" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
+
+                <merchello-tabs tabs="tabs"></merchello-tabs>
             </div>
-          </div>
-
-          <merchello-tabs tabs="tabs"></merchello-tabs>
         </div>
-      </div>
 
-      <merchello-panel>
+        <merchello-panel>
 
             <detached-content-type entity-type="Product"></detached-content-type>
 
             <detached-content-type entity-type="ProductOption"></detached-content-type>
         </merchello-panel>
-    </umb-panel>
+
+    </div>
 </div>
