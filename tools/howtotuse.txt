@@ -1,0 +1,11 @@
+Just open up a CMD window and CD into the directory that ExportSqlCE40.exe is in.
+
+Run the following 
+
+ExportSqlCE40.exe "Data Source=PATH_TO_SQLCE_SDF" database.sql 
+
+i.e. 
+
+ExportSqlCE40.exe "Data Source=C:\Users\lee\Desktop\UmbracoCms.7.12.3\App_Data\Umbraco.sdf" database.sql 
+
+This creates a SQL file that you can use to create a MsSql DB
