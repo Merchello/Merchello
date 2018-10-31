@@ -744,7 +744,7 @@
                 var m = _services.MediaService.CreateMedia(fileName, root, fileType);
                 m.SetValue("umbracoFile", fileName, f.Open(FileMode.Open));
                 _services.MediaService.Save(m);
-                _media.Add(alias, m.Id.ToString());
+                _media.Add(alias, string.Concat("\"umb://media/", m.Key.ToString().Replace("-", ""), "\""));
             }
         }
 
