@@ -855,8 +855,8 @@
 
                 sql.Append("SELECT SUM([merchInvoice].total) FROM merchInvoice WHERE [merchInvoice].invoiceDate BETWEEN @starts and @ends AND [merchInvoice].currencyCode = @cc", new
                 {
-                    @starts = startDate.GetDateForSqlStartOfDay(),
-                    @ends = endDate.GetDateForSqlEndOfDay(),
+                    @starts = startDate.GetStartOfDay(),//.GetDateForSqlStartOfDay(),
+                    @ends = endDate.GetEndOfDay(),//.GetDateForSqlEndOfDay(),
                     @cc = currencyCode
                 });
 
@@ -900,7 +900,11 @@
 
             return Database.ExecuteScalar<decimal>(
                 SQL,
-                new { @starts = startDate.GetDateForSqlStartOfDay(), @ends = endDate.GetDateForSqlEndOfDay(), @cc = currencyCode, @sku = sku });
+                new {
+                    @starts = startDate.GetStartOfDay(),//.GetDateForSqlStartOfDay(),
+                    @ends = endDate.GetEndOfDay(),//.GetDateForSqlEndOfDay(),
+                    @cc = currencyCode, @sku = sku
+                });
         }
 
         #region Filter Queries
