@@ -14,7 +14,7 @@
     /// <summary>
     /// A cache for <see cref="IProductContent"/>.
     /// </summary>
-    internal sealed class VirtualProductContentCache : VirtualContentCache<IProductContent, IProduct>, IVirtualProductContentCache
+    public sealed class VirtualProductContentCache : VirtualContentCache<IProductContent, IProduct>, IVirtualProductContentCache
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="VirtualProductContentCache"/> class.

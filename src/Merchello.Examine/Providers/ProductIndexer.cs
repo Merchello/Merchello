@@ -163,7 +163,7 @@
         /// <remarks>
         /// For testing
         /// </remarks>
-        internal void AddProductToIndex(IProduct product)
+        public void AddProductToIndex(IProduct product)
         {
             var nodes = new List<XElement>();
             nodes.AddRange(product.SerializeToXml().Descendants("productVariant"));
@@ -179,7 +179,7 @@
         /// <remarks>
         /// For testing
         /// </remarks>
-        internal void DeleteProductFromIndex(IProduct product)
+        public void DeleteProductFromIndex(IProduct product)
         {
             var ids = product.ProductVariants.Select(x => ((ProductVariant)x).ExamineId).ToList();
             ids.Add(((ProductVariant)((Product) product).MasterVariant).ExamineId);
