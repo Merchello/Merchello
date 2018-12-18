@@ -36,6 +36,7 @@
         /// Gets or sets the new password.
         /// </summary>
         [Required(ErrorMessageResourceType = typeof(StoreFormsResource), ErrorMessageResourceName = "RequiredPassword")]
+        [MinLength(5, ErrorMessageResourceType = typeof(StoreFormsResource), ErrorMessageResourceName = "MinLengthPassword")]
         [Display(ResourceType = typeof(StoreFormsResource), Name = "LabelPassword"), DataType(DataType.Password)]
         public string Password { get; set; }
 

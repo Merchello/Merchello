@@ -239,9 +239,6 @@
         [ChildActionOnly]
         public ActionResult ShippingAddressForm(string view = "")
         {
-            var billingAddress = CheckoutManager.Customer.GetBillToAddress();
-            if (billingAddress == null) return InvalidCheckoutStagePartial();
-
             TShippingAddress model = null;
 
             // Determine if we already have an address saved in the checkout manager
