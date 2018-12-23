@@ -1472,9 +1472,23 @@
             sql.Select("*")
                 .From<ProductVariantDto>(SqlSyntax);
 
-            var whereClauses = entities.Select(entity => string.Format("(Sku = '{0}' and pk != '{1}')", entity.Sku, entity.Key)).ToList();
+            // TODO - This is STILL not working as expected.
+            foreach (var entity in entities)
+            {
+                if (entities.IndexOf(entity) == 0)
+                {                    
+                    // this is the last item
+                    sql.Where("Sku = @sku and pk != @pk", new { @sku = entity.Sku, @pk = entity.Key });
+                }
+                else
+                {
+                    sql.Append("OR (Sku = @sku and pk != @pk)", new { @sku = entity.Sku, @pk = entity.Key });
+                }
+            }
 
-            sql = sql.Where(string.Join(" or ", whereClauses), null);
+            //var whereClauses = entities.Select(entity => string.Format("(Sku = '{0}' and pk != '{1}')", entity.Sku, entity.Key)).ToList();
+
+            //sql = sql.Where(string.Join(" or ", whereClauses), null);
 
             return Database.Fetch<ProductAttributeDto>(sql).Any();
         }
