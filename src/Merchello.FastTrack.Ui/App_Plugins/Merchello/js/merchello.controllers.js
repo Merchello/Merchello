@@ -11147,7 +11147,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                    countries = combined.countries;
                    if ($scope.invoice.currency.symbol === '') {
                        var currency = _.find(combined.currencies, function (symbol) {
-                           return symbol.currecyCode === $scope.invoice.getCurrencyCode()
+                           return symbol.currencyCode === $scope.invoice.getCurrencyCode();
                        });
                        if (currency !== undefined) {
                            $scope.currencySymbol = currency.symbol;
