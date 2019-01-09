@@ -16,6 +16,7 @@
         self.region = '';
         self.postalCode = '';
         self.countryCode = '';
+        self.countryName = '';
         self.phone = '';
         self.email = '';
         self.isDefault = true;
@@ -33,6 +34,7 @@
             adr.region = this.region;
             adr.postalCode = this.postalCode;
             adr.countryCode = this.countryCode;
+            adr.countryName = this.countryName;
             adr.phone = this.phone;
             adr.email = this.email;
             adr.addressType = 'shipping';
@@ -47,6 +49,7 @@
             this.region = address.region;
             this.postalCode = address.postalCode;
             this.countryCode = address.countryCode;
+            this.countryName = address.countryName;
             this.phone = address.phone;
             this.email = address.email;
         }

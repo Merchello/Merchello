@@ -2,8 +2,9 @@
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
-
+    using System.Linq;
     using Merchello.Core;
+    using Merchello.Core.Configuration;
     using Merchello.Core.Models;
 
     using Newtonsoft.Json;
@@ -75,6 +76,11 @@
         public string CountryCode { get; set; }
 
         /// <summary>
+        ///  Gets or sets the country name
+        /// </summary>
+        public string CountryName { get; set; }
+
+        /// <summary>
         /// Gets or sets the phone.
         /// </summary>
         public string Phone { get; set; }
@@ -110,7 +116,14 @@
         /// </returns>
         public static CustomerAddressDisplay ToCustomerAddressDisplay(this ICustomerAddress customerAddress)
         {
-            return AutoMapper.Mapper.Map<CustomerAddressDisplay>(customerAddress);
+            var customer = AutoMapper.Mapper.Map<CustomerAddressDisplay>(customerAddress);
+            var country = MerchelloConfiguration.Current.MerchelloCountries().Countries.FirstOrDefault(x => x.CountryCode.Equals(customer.CountryCode, StringComparison.InvariantCultureIgnoreCase));
+            if(country != null)
+            {
+                customer.CountryName = country.Name;
+            }
+
+            return customer;
         }
 
         /// <summary>

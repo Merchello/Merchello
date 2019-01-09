@@ -6,7 +6,7 @@
     <span class="street-address">{{address.address1}}</span><span class="extended-address" data-ng-show="address.address2 != '' && address.address2 !== null">, {{address.address2}}</span>
     <span class="locality" data-ng-show="address.locality != '' && address.locality !== null">{{address.locality}}, </span><span class="region">{{address.region}}</span><br/>
     <span class="postal-code">{{address.postalCode}}</span><br/>
-    <span class="country-name">{{address.countryCode}}</span><br/>
+    <span class="country-name">{{address.countryName}}</span><br/>
     <span class="tel" data-ng-show="address.phone !== '' && address.phone !== null">Phone: {{address.phone}}</span>
     <span data-ng-show="address.email !== '' && address.email !== null">{{address.email}}</span>
 </div>

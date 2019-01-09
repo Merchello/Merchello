@@ -1,8 +1,10 @@
 ﻿namespace Merchello.Web.Models.ContentEditing
 {
+    using System;
     using System.Diagnostics.CodeAnalysis;
-
+    using System.Linq;
     using Merchello.Core;
+    using Merchello.Core.Configuration;
     using Merchello.Core.Models;
 
     using Newtonsoft.Json;
@@ -49,6 +51,11 @@
         public string CountryCode { get; set; }
 
         /// <summary>
+        /// Gets or sets the country name
+        /// </summary>
+        public string CountryName { get; set; }
+
+        /// <summary>
         /// Gets or sets the phone.
         /// </summary>
         public string Phone { get; set; }
@@ -92,7 +99,13 @@
         /// </returns>
         internal static AddressDisplay ToAddressDisplay(this IAddress address)
         {
-            return AutoMapper.Mapper.Map<AddressDisplay>(address);
+            var mappedAddress = AutoMapper.Mapper.Map<AddressDisplay>(address);
+            var country = MerchelloConfiguration.Current.MerchelloCountries().Countries.FirstOrDefault(x => x.CountryCode.Equals(mappedAddress.CountryCode, StringComparison.InvariantCultureIgnoreCase));
+            if (country != null)
+            {
+                mappedAddress.CountryName = country.Name;
+            }
+            return mappedAddress;
         }
 
         /// <summary>

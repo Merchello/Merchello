@@ -6,6 +6,7 @@
     using System.Linq;
 
     using Merchello.Core;
+    using Merchello.Core.Configuration;
     using Merchello.Core.Models;
 
     /// <summary>
@@ -174,6 +175,14 @@
         {
             var display = AutoMapper.Mapper.Map<CustomerDisplay>(customer);
 
+            foreach(var address in display.Addresses)
+            {
+                var country = MerchelloConfiguration.Current.MerchelloCountries().Countries.FirstOrDefault(x => x.CountryCode.Equals(address.CountryCode, StringComparison.InvariantCultureIgnoreCase));
+                if (country != null)
+                {
+                    address.CountryName = country.Name;
+                }
+            }
             return display;
         }
     }

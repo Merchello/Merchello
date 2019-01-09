@@ -154,7 +154,7 @@
         {
             //return _merchello.Query.Customer.GetByKey(id);        
             var customer = _customerService.GetByKey(id);
-            return AutoMapper.Mapper.Map<CustomerDisplay>(customer);
+            return customer.ToCustomerDisplay();
         }
 
         /// <summary>
