@@ -4908,9 +4908,9 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
  */
 angular.module('merchello').controller('Merchello.Backoffice.OfferEditController',
     ['$scope', '$routeParams', '$location', '$filter', 'merchDateHelper', 'assetsService', 'dialogService', 'eventsService', 'notificationsService', 'settingsResource', 'marketingResource', 'merchelloTabsFactory',
-        'dialogDataFactory', 'settingDisplayBuilder', 'offerProviderDisplayBuilder', 'offerSettingsDisplayBuilder', 'offerComponentDefinitionDisplayBuilder',
+        'dialogDataFactory', 'settingDisplayBuilder', 'offerProviderDisplayBuilder', 'offerSettingsDisplayBuilder', 'offerComponentDefinitionDisplayBuilder', 'localizationService',
     function($scope, $routeParams, $location, $filter, dateHelper, assetsService, dialogService, eventsService, notificationsService, settingsResource, marketingResource, merchelloTabsFactory,
-             dialogDataFactory, settingDisplayBuilder, offerProviderDisplayBuilder, offerSettingsDisplayBuilder, offerComponentDefinitionDisplayBuilder) {
+             dialogDataFactory, settingDisplayBuilder, offerProviderDisplayBuilder, offerSettingsDisplayBuilder, offerComponentDefinitionDisplayBuilder, localizationService) {
 
         $scope.loaded = false;
         $scope.preValuesLoaded = false;
@@ -11147,7 +11147,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                    countries = combined.countries;
                    if ($scope.invoice.currency.symbol === '') {
                        var currency = _.find(combined.currencies, function (symbol) {
-                           return symbol.currecyCode === $scope.invoice.getCurrencyCode()
+                           return symbol.currencyCode === $scope.invoice.getCurrencyCode();
                        });
                        if (currency !== undefined) {
                            $scope.currencySymbol = currency.symbol;
