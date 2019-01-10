@@ -1,7 +1,7 @@
 ﻿namespace Merchello.Web.Editors.Reports
 {
     using System;
-
+    using System.Collections.Generic;
     using Umbraco.Core.Persistence;
 
     /// <summary>
@@ -62,6 +62,21 @@
                     ORDER BY Q2.quantitySold DESC";
 
                 return new Sql(sql, new { @top = count, @start = startDate, @end = endDate, @tfKey = typeFieldKey });
+            }
+
+            public static Sql GetSaleSearchSql(DateTime startDate, DateTime endDate, List<Guid> invoiceStatuses, string search)
+            {
+                //merchInvoiceItem.sku, merchInvoiceItem.[name], 
+                var raw = @"SELECT merchInvoiceItem.quantity, merchInvoiceItem.price, merchInvoiceItem.extendedData
+FROM            merchInvoiceItem INNER JOIN
+                         merchInvoice ON merchInvoiceItem.invoiceKey = merchInvoice.pk INNER JOIN
+                         merchInvoiceStatus ON merchInvoice.invoiceStatusKey = merchInvoiceStatus.pk
+						 WHERE merchInvoiceStatus.pk IN ('1F872A1A-F0DD-4C3E-80AB-99799A28606E', '6606B0EA-15B6-44AA-8557-B2D9D049645C')
+						 AND lineItemTfKey = 'D462C051-07F4-45F5-AAD2-D5C844159F04' 
+						 AND merchInvoice.invoiceDate BETWEEN '01 May 2018' AND '10 January 2019'
+						 AND merchInvoiceItem.[name] LIKE '%nene black%'";
+
+                return new Sql();
             }
         }
          
