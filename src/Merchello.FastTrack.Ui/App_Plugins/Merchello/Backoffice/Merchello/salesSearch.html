@@ -18,12 +18,44 @@
             </div>
         </div>
 
-        <merchello-panel>
-          
+        <merchello-panel>            
             <div class="merchello-pane">
-                <h2>Hello {{salesSearchSnapshot.productName}}</h2>
-            </div>
+                <div class="row">
+                    <div class="span6">
+                        Search Here
+                    </div>
+                    <div class="span6">
+                        <merchello-date-range-button reload="reload" start-date="salesSearchSnapshot.startDate" end-date="salesSearchSnapshot.endDate"></merchello-date-range-button>
+                        <div style="float:right;">
+                            <label class="checkbox inline" ng-repeat="status in salesSearchSnapshot.invoiceStatuses">
+                                <input type="checkbox" ng-model="status.checked"> {{status.name}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <h2 ng-show="salesSearchSnapshot.Search">{{salesSearchSnapshot.Search}}</h2>
 
+                <div class="merchello-list-view umb-listview">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th nowrap="nowrap"><localize key="merchelloGeneral_item" /></th>
+                                <th><localize key="merchelloReports_quantitySold" /></th>
+                                <th><localize key="merchelloGeneral_totals" /></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="result in salesSearchSnapshot.products">
+                                <td nowrap="nowrap">{{result.name}}</td>
+                                <td>{{result.quantity}}</td>
+                                <td>{{result.total | currency: total.currency.symbol}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
         </merchello-panel>
     </div>
 

@@ -10071,21 +10071,26 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesSearch
         function ($http, $scope, $q, umbRequestHelper, $log, $filter, assetsService, dialogService, queryDisplayBuilder,
             settingsResource, invoiceHelper, merchelloTabsFactory, salesOverTimeResource) {
 
+            var datesChangeEventName = 'merchello.reportsdashboard.datechange';
+
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
             $scope.reportData = [];
-            $scope.startDate = '';
-            $scope.endDate = '';
             $scope.settings = {};
             $scope.dateBtnText = '';
             $scope.baseUrl = '';
             $scope.salesSearchSnapshot = {};
+
+            $scope.reload = reload;
             
 
             $scope.openDateRangeDialog = openDateRangeDialog;
             $scope.clearDates = clearDates;
 
             init();
+
+            // Selected statuses
+            $scope.selectedStatuses = [];
 
             function init() {
                 $scope.baseUrl = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloSalesSearchBaseUrl'];
@@ -10115,13 +10120,15 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesSearch
                         $scope.salesSearchSnapshot = data;
                         $scope.loaded = true;
                         $scope.preValuesLoaded = true;
+                        setDateButtonText();
+                        $scope.selectedStatuses = angular.copy($scope.salesSearchSnapshot.invoiceStatuses);
                     });
             }
 
             function openDateRangeDialog() {
                 var dialogData = {
-                    startDate: $scope.startDate,
-                    endDate: $scope.endDate
+                    startDate: $scope.salesSearchSnapshot.startDate,
+                    endDate: $scope.salesSearchSnapshot.endDate
                 };
 
                 dialogService.open({
@@ -10134,7 +10141,7 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesSearch
 
 
             function setDateButtonText() {
-                $scope.dateBtnText = $scope.startDate + ' - ' + $scope.endDate;
+                $scope.dateBtnText = $scope.salesSearchSnapshot.startDate + ' - ' + $scope.salesSearchSnapshot.endDate;
             }
 
             function processDateRange(dialogData) {
@@ -10147,6 +10154,11 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesSearch
                 $scope.loaded = false;
                 $scope.preValuesLoaded = false;
                 loadDefaultData();
+            }
+
+            function reload(startDate, endDate) {
+                $scope.salesSearchSnapshot.startDate = startDate;
+                $scope.salesSearchSnapshot.endDate = endDate;                
             }
 
         }]);

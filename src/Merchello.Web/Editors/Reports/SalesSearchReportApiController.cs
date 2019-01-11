@@ -13,6 +13,9 @@ using Merchello.Web.Reporting;
 using Umbraco.Core.Services;
 using Umbraco.Web;
 using Merchello.Core.Models.TypeFields;
+using Merchello.Core.Models;
+using Umbraco.Core.Persistence;
+using Merchello.Core.Logging;
 
 namespace Merchello.Web.Editors.Reports
 {
@@ -46,6 +49,11 @@ namespace Merchello.Web.Editors.Reports
         private readonly ILocalizedTextService _textService;
 
         /// <summary>
+        /// List of statuses
+        /// </summary>
+        private IEnumerable<InvStatus> _invStatuses;
+
+        /// <summary>
         /// The product line item type field key.
         /// </summary>
         private readonly Guid _productLineItemTfKey = EnumTypeFieldConverter.LineItemType.Product.TypeKey;
@@ -65,9 +73,9 @@ namespace Merchello.Web.Editors.Reports
         ///     Initializes a new instance of the <see cref="SalesSearchReportApiController" /> class
         /// </summary>
         /// <param name="merchelloContext"></param>
-        public SalesSearchReportApiController(IMerchelloContext merchelloContext) : base(merchelloContext)
+        public SalesSearchReportApiController(IMerchelloContext merchelloContext) 
+            : this(merchelloContext, UmbracoContext.Current)
         {
-
         }
 
         /// <summary>
@@ -99,12 +107,107 @@ namespace Merchello.Web.Editors.Reports
         [HttpGet]
         public SalesSearchSnapshot GetInitialData()
         {
-            return new SalesSearchSnapshot
-            {
-              ProductKey = Guid.NewGuid(),
-              ProductName = "Poo Face"
-            };
+            var today = DateTime.Today;
+            var endOfMonth = today.EndOfMonth();
+            //var startMonth = today.FirstOfMonth();
+            var startMonth = new DateTime(2016, 1, 1).FirstOfMonth();
+            var invoiceStatuses = AllStatuses();
+
+            return BuildSalesSearchSnapshot(startMonth, endOfMonth, invoiceStatuses.Select(x => x.Key), string.Empty);
         }
+
+        private IEnumerable<InvStatus> AllStatuses()
+        {
+            if(_invStatuses == null)
+            {
+                _invStatuses = ApplicationContext.DatabaseContext.Database.Query<InvStatus>("SELECT pk, name FROM merchInvoiceStatus").ToList();
+            }
+            return _invStatuses;
+        }
+
+        /// <summary>
+        /// Builds the sales snapshot 
+        /// </summary>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <param name="invoiceStatuses"></param>
+        /// <param name="search"></param>
+        /// <returns></returns>
+        private SalesSearchSnapshot BuildSalesSearchSnapshot(DateTime startDate, DateTime endDate, IEnumerable<Guid> invoiceStatuses, string search)
+        {
+            // Get all the statuses
+            var statuses = AllStatuses();
+
+            // Loop and set selected statuses
+            foreach (var status in statuses) {
+                if (invoiceStatuses.Contains(status.Key))
+                {
+                    status.Checked = true;
+                }
+            }
+
+            // Get the SQL
+            var sql = ReportSqlHelper.SalesByItem.GetSaleSearchSql(startDate, endDate, invoiceStatuses, search);
+
+            // Execure the SQL
+            var results = ApplicationContext.DatabaseContext.Database.Query<SaleItem>(sql).ToList();
+
+            // Group results by the product key
+            var groupedResults = results.GroupBy(x => x.ExtendedData.GetProductKey());
+
+            // List of ProductLineItem to add
+            var ProductLineItemList = new List<ProductLineItem>();
+
+            // Loop each product
+            foreach (var productGroup in groupedResults) {
+
+                // We do a try as the product may be deleted and not exist anymore
+                try
+                {
+                    // Get the base/master product (We need it for the name)
+                    var product = _merchello.Query.Product.GetByKey(productGroup.Key);
+                    if (product != null)
+                    {
+                        var productLineItem = new ProductLineItem
+                        {
+                            Name = product.Name,
+                            Quantity = productGroup.Sum(x => x.Quantity),
+                            Total = productGroup.Sum(x => x.Price),
+                            Variants = new List<ProductLineItem>()
+                        };
+
+                        foreach(var variants in productGroup.GroupBy(x => x.Name))
+                        {
+                            productLineItem.Variants.Add(new ProductLineItem {
+                                Name = variants.FirstOrDefault().Name,
+                                Quantity = variants.Sum(x => x.Quantity),
+                                Total = variants.Sum(x => x.Price)
+                            });
+                        }
+
+                        ProductLineItemList.Add(productLineItem);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MultiLogHelper.Error<SalesSearchReportApiController>("Error in BuildSalesSearchSnapshot", ex);
+                }
+            }
+
+            // Make final model
+            var salesSearchSnapshot = new SalesSearchSnapshot {
+                EndDate = endDate,
+                Search = search,
+                StartDate = startDate,
+                InvoiceStatuses = statuses,
+                Products = ProductLineItemList.OrderBy(x => x.Quantity)
+            };
+           
+            // return
+            return salesSearchSnapshot;
+        }
+
+        #region Overrides
 
         /// <summary>
         ///     Gets the default report data.
@@ -128,7 +231,42 @@ namespace Merchello.Web.Editors.Reports
         /// <summary>
         ///     Registers the controller in Merchello's Angular routing
         /// </summary>
-        public override KeyValuePair<string, object> BaseUrl => GetBaseUrl<SalesSearchReportApiController>("merchelloSalesSearchBaseUrl");
+        public override KeyValuePair<string, object> BaseUrl => GetBaseUrl<SalesSearchReportApiController>("merchelloSalesSearchBaseUrl"); 
 
+        #endregion
+
+        #region Helper Classes
+
+        private class SaleItem
+        {
+            private ExtendedDataCollection extendedData;
+
+            [Column("name")]
+            public string Name { get; set; }
+
+            [Column("quantity")]
+            public int Quantity { get; set; }
+
+            [Column("price")]
+            public double Price { get; set; }
+
+            [Column("extendedData")]
+            public string ExDataString { get; set; }
+
+            [Ignore]
+            public ExtendedDataCollection ExtendedData
+            {
+                get
+                {
+                    if(extendedData == null)
+                    {
+                        extendedData = new ExtendedDataCollection(ExDataString);
+                    }
+                    return extendedData;
+                }
+            }
+        }
+
+        #endregion
     }
 }

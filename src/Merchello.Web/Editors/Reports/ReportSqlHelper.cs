@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Web.Editors.Reports
 {
+    using Merchello.Core;
     using System;
     using System.Collections.Generic;
     using Umbraco.Core.Persistence;
@@ -64,19 +65,34 @@
                 return new Sql(sql, new { @top = count, @start = startDate, @end = endDate, @tfKey = typeFieldKey });
             }
 
-            public static Sql GetSaleSearchSql(DateTime startDate, DateTime endDate, List<Guid> invoiceStatuses, string search)
+            public static Sql GetSaleSearchSql(DateTime startDate, DateTime endDate, IEnumerable<Guid> invoiceStatuses, string search, string typeFieldKey = "D462C051-07F4-45F5-AAD2-D5C844159F04")
             {
-                //merchInvoiceItem.sku, merchInvoiceItem.[name], 
-                var raw = @"SELECT merchInvoiceItem.quantity, merchInvoiceItem.price, merchInvoiceItem.extendedData
-FROM            merchInvoiceItem INNER JOIN
+                var sql = new Sql(@"SELECT merchInvoiceItem.[name], merchInvoiceItem.quantity, merchInvoiceItem.price, merchInvoiceItem.extendedData
+                         FROM merchInvoiceItem INNER JOIN
                          merchInvoice ON merchInvoiceItem.invoiceKey = merchInvoice.pk INNER JOIN
-                         merchInvoiceStatus ON merchInvoice.invoiceStatusKey = merchInvoiceStatus.pk
-						 WHERE merchInvoiceStatus.pk IN ('1F872A1A-F0DD-4C3E-80AB-99799A28606E', '6606B0EA-15B6-44AA-8557-B2D9D049645C')
-						 AND lineItemTfKey = 'D462C051-07F4-45F5-AAD2-D5C844159F04' 
-						 AND merchInvoice.invoiceDate BETWEEN '01 May 2018' AND '10 January 2019'
-						 AND merchInvoiceItem.[name] LIKE '%nene black%'";
+                         merchInvoiceStatus ON merchInvoice.invoiceStatusKey = merchInvoiceStatus.pk")
+                         .Append("WHERE merchInvoiceStatus.pk IN (@invoiceStatuses)", new { invoiceStatuses })
+                         .Append("AND lineItemTfKey = @typeFieldKey", new { @typeFieldKey = Guid.Parse(typeFieldKey) })
+                         .Append("AND merchInvoice.invoiceDate BETWEEN @startDate AND @endDate", new { @startDate = startDate.GetStartOfDay(), @endDate = endDate.GetEndOfDay() });
 
-                return new Sql();
+
+                if (!string.IsNullOrWhiteSpace(search))
+                {
+                    sql.Append("AND merchInvoiceItem.[name] LIKE @search", new { @search = string.Format("%{0}%", search) });
+                }
+
+
+       //         //merchInvoiceItem.sku, merchInvoiceItem.[name], 
+       //         var raw = @"SELECT merchInvoiceItem.quantity, merchInvoiceItem.price, merchInvoiceItem.extendedData
+       //                  FROM merchInvoiceItem INNER JOIN
+       //                  merchInvoice ON merchInvoiceItem.invoiceKey = merchInvoice.pk INNER JOIN
+       //                  merchInvoiceStatus ON merchInvoice.invoiceStatusKey = merchInvoiceStatus.pk
+						 //WHERE merchInvoiceStatus.pk IN ('1F872A1A-F0DD-4C3E-80AB-99799A28606E', '6606B0EA-15B6-44AA-8557-B2D9D049645C')
+						 //AND lineItemTfKey = 'D462C051-07F4-45F5-AAD2-D5C844159F04' 
+						 //AND merchInvoice.invoiceDate BETWEEN '01 May 2018' AND '10 January 2019'
+						 //AND merchInvoiceItem.[name] LIKE '%nene black%'";
+
+                return sql;
             }
         }
          
