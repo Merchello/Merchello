@@ -18,41 +18,111 @@
             </div>
         </div>
 
-        <merchello-panel>            
-            <div class="merchello-pane">
-                <div class="row">
-                    <div class="span6">
-                        Search Here
-                    </div>
-                    <div class="span6">
-                        <merchello-date-range-button reload="reload" start-date="salesSearchSnapshot.startDate" end-date="salesSearchSnapshot.endDate"></merchello-date-range-button>
-                        <div style="float:right;">
-                            <label class="checkbox inline" ng-repeat="status in salesSearchSnapshot.invoiceStatuses">
-                                <input type="checkbox" ng-model="status.checked"> {{status.name}}
-                            </label>
+        <merchello-panel>
+            <div class="merchello-pane report-sales-search reports-section">
+                <div class="report-sales-search-header">
+                    <div class="row">
+                        <div class="span6">
+                            <div class="input-prepend">
+                                <span class="add-on"><i class="icon icon-search"></i></span>
+                                <input class="span10 input-xxlarge" id="prependedInput" type="text" localize="placeholder" placeholder="@general_typeToSearch" />
+                                <button class="btn btn-info" type="button"><localize key="merchelloGeneral_update" /></button>
+                            </div>
+                        </div>
+                        <div class="span6">
+                            <merchello-date-range-button reload="reload" start-date="salesSearchSnapshot.startDate" end-date="salesSearchSnapshot.endDate"></merchello-date-range-button>
+                            <div class="status-list">
+                                <label class="checkbox inline" ng-repeat="status in salesSearchSnapshot.invoiceStatuses">
+                                    <input type="checkbox" ng-model="status.checked"> {{status.name}}
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
-                <h2 ng-show="salesSearchSnapshot.Search">{{salesSearchSnapshot.Search}}</h2>
+
+                <p ng-show="salesSearchSnapshot.Search">Searching for {{salesSearchSnapshot.Search}}</p>
 
                 <div class="merchello-list-view umb-listview">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th nowrap="nowrap"><localize key="merchelloGeneral_item" /></th>
-                                <th><localize key="merchelloReports_quantitySold" /></th>
-                                <th><localize key="merchelloGeneral_totals" /></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr data-ng-repeat="result in salesSearchSnapshot.products">
-                                <td nowrap="nowrap">{{result.name}}</td>
-                                <td>{{result.quantity}}</td>
-                                <td>{{result.total | currency: total.currency.symbol}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+
+                    <div class="umb-table">
+                        <div class="umb-table-head">
+                            <div class="umb-table-row">
+                                <div class="umb-table-cell not-fixed" style="flex:0 1 60%;">
+                                    <span><localize key="merchelloGeneral_item" /></span>
+                                </div>
+                                <div class="umb-table-cell not-fixed">
+                                    <span>Variants</span>
+                                </div>
+                                <div class="umb-table-cell not-fixed">
+                                    <span><localize key="merchelloReports_quantitySold" /></span>
+                                </div>
+                                <div class="umb-table-cell not-fixed">
+                                    <span><localize key="merchelloGeneral_totals" /></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="umb-table-body">
+                            <div ng-repeat="product in salesSearchSnapshot.products">
+                                <div class="umb-table-row">
+                                    <div class="umb-table-cell not-fixed" style="flex:0 1 60%;">
+                                        <span>
+                                            <a href ng-click="toggleFilter($index)"><strong>{{product.name}}</strong></a>
+                                        </span>
+                                    </div>
+                                    <div class="umb-table-cell not-fixed">
+                                        <span>
+                                            <strong>{{product.variants.length}}</strong>
+                                        </span>
+                                    </div>
+                                    <div class="umb-table-cell not-fixed">
+                                        <span>
+                                            <strong>{{product.quantity}}</strong>
+                                        </span>
+                                    </div>
+                                    <div class="umb-table-cell not-fixed">
+                                        <span>
+                                            <strong>{{product.total | currency: total.currency.symbol}}</strong>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="variant-panel" ng-show="toggle[$index]">
+                                    <div class="umb-table">
+                                        <div class="umb-table-head">
+                                            <div class="umb-table-row">
+                                                <div class="umb-table-cell not-fixed" style="flex:0 1 60%;">
+                                                    <span><localize key="merchelloGeneral_item" /></span>
+                                                </div>
+                                                <div class="umb-table-cell not-fixed">
+                                                    <span><localize key="merchelloReports_quantitySold" /></span>
+                                                </div>
+                                                <div class="umb-table-cell not-fixed">
+                                                    <span><localize key="merchelloGeneral_totals" /></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="umb-table-body">
+                                            <div class="umb-table-row" ng-repeat="variant in product.variants">
+                                                <div class="umb-table-cell not-fixed" style="flex:0 1 60%;">
+                                                    <span>{{variant.name}}</span>
+                                                </div>
+                                                <div class="umb-table-cell not-fixed">
+                                                    <span>{{variant.quantity}}</span>
+                                                </div>
+                                                <div class="umb-table-cell not-fixed">
+                                                    <span>{{variant.total | currency: total.currency.symbol}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                            
+                        </div>
+                    </div>
+
+
+
+
                 </div>
 
             </div>

@@ -10080,17 +10080,17 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesSearch
             $scope.dateBtnText = '';
             $scope.baseUrl = '';
             $scope.salesSearchSnapshot = {};
+            $scope.selectedStatuses = [];
+            $scope.toggle = [];
 
-            $scope.reload = reload;
-            
-
-            $scope.openDateRangeDialog = openDateRangeDialog;
-            $scope.clearDates = clearDates;
-
+            // Load
             init();
 
-            // Selected statuses
-            $scope.selectedStatuses = [];
+            // Scope Methods
+            $scope.reload = reload;
+            $scope.toggleFilter = toggleFilter;          
+            $scope.openDateRangeDialog = openDateRangeDialog;
+            $scope.clearDates = clearDates;
 
             function init() {
                 $scope.baseUrl = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloSalesSearchBaseUrl'];
@@ -10109,6 +10109,10 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesSearch
                     $scope.settings = combined.settings;
                     loadDefaultData();
                 });
+            }
+
+            function toggleFilter(inx) {
+                $scope.toggle[inx] = !$scope.toggle[inx];
             }
 
             function loadDefaultData() {

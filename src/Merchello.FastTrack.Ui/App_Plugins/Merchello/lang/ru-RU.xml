@@ -78,6 +78,7 @@
     <key alias="shared">Совместное</key>
     <key alias="custom">Настраиваемое</key>
     <key alias="history">History</key>
+    <key alias="update">Update</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Товары</key>
