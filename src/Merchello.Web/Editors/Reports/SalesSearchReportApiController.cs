@@ -116,6 +116,17 @@ namespace Merchello.Web.Editors.Reports
             return BuildSalesSearchSnapshot(startMonth, endOfMonth, invoiceStatuses.Select(x => x.Key), string.Empty);
         }
 
+        /// <summary>
+        /// Updates the report form
+        /// </summary>
+        /// <param name="salesSearchSnapshot"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public SalesSearchSnapshot UpdateData(SalesSearchSnapshot salesSearchSnapshot)
+        {
+            return BuildSalesSearchSnapshot(salesSearchSnapshot.StartDate, salesSearchSnapshot.EndDate, salesSearchSnapshot.InvoiceStatuses.Where(x => x.Checked).Select(x => x.Key), string.Empty);
+        }
+
         private IEnumerable<InvStatus> AllStatuses()
         {
             if(_invStatuses == null)

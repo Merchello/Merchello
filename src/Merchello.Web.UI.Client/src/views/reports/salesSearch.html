@@ -25,8 +25,8 @@
                         <div class="span6">
                             <div class="input-prepend">
                                 <span class="add-on"><i class="icon icon-search"></i></span>
-                                <input class="span10 input-xxlarge" id="prependedInput" type="text" localize="placeholder" placeholder="@general_typeToSearch" />
-                                <button class="btn btn-info" type="button"><localize key="merchelloGeneral_update" /></button>
+                                <input class="span10 input-xxlarge" id="prependedInput" type="text" localize="placeholder" placeholder="@general_typeToSearch" ng-model="salesSearchSnapshot.search" />
+                                <button class="btn btn-info" type="button" ng-click="updateData()"><localize key="merchelloGeneral_update" /></button>
                             </div>
                         </div>
                         <div class="span6">

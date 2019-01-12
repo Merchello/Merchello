@@ -10071,26 +10071,24 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesSearch
         function ($http, $scope, $q, umbRequestHelper, $log, $filter, assetsService, dialogService, queryDisplayBuilder,
             settingsResource, invoiceHelper, merchelloTabsFactory, salesOverTimeResource) {
 
-            var datesChangeEventName = 'merchello.reportsdashboard.datechange';
-
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
-            $scope.reportData = [];
             $scope.settings = {};
             $scope.dateBtnText = '';
             $scope.baseUrl = '';
             $scope.salesSearchSnapshot = {};
-            $scope.selectedStatuses = [];
             $scope.toggle = [];
+            $scope.originalStartDate = '';
+            $scope.originalEndDate = '';
 
             // Load
             init();
 
             // Scope Methods
-            $scope.reload = reload;
             $scope.toggleFilter = toggleFilter;          
             $scope.openDateRangeDialog = openDateRangeDialog;
-            $scope.clearDates = clearDates;
+            $scope.updateData = updateData;
+            $scope.reload = reload;
 
             function init() {
                 $scope.baseUrl = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloSalesSearchBaseUrl'];
@@ -10111,6 +10109,26 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesSearch
                 });
             }
 
+            function updateData() {
+
+                // Clear the products first
+                // As don't want to post a ton of data we don't need to
+                $scope.salesSearchSnapshot.products = [];
+
+                return umbRequestHelper.resourcePromise(
+                    $http.post($scope.baseUrl + 'UpdateData', $scope.salesSearchSnapshot), 'Failed to update the report')
+                    .then(function (data) {
+                        $scope.salesSearchSnapshot = data;
+                        setDateButtonText();
+                    });
+            }
+
+            function reload() {
+                $scope.salesSearchSnapshot.startDate = $scope.originalStartDate;
+                $scope.salesSearchSnapshot.endDate = $scope.originalEndDate;
+                setDateButtonText();
+            }
+
             function toggleFilter(inx) {
                 $scope.toggle[inx] = !$scope.toggle[inx];
             }
@@ -10120,12 +10138,14 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesSearch
                     $http({
                         url: $scope.baseUrl + 'GetInitialData',
                         method: "GET"
-                    }), 'Failed to retreive default report data').then(function (data) {
+                    }), 'Failed to retreive default report data')
+                    .then(function (data) {
                         $scope.salesSearchSnapshot = data;
                         $scope.loaded = true;
                         $scope.preValuesLoaded = true;
+                        $scope.originalStartDate = $scope.salesSearchSnapshot.startDate;
+                        $scope.originalEndDate = $scope.salesSearchSnapshot.endDate;
                         setDateButtonText();
-                        $scope.selectedStatuses = angular.copy($scope.salesSearchSnapshot.invoiceStatuses);
                     });
             }
 
@@ -10143,28 +10163,15 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesSearch
                 });
             }
 
-
             function setDateButtonText() {
                 $scope.dateBtnText = $scope.salesSearchSnapshot.startDate + ' - ' + $scope.salesSearchSnapshot.endDate;
             }
 
             function processDateRange(dialogData) {
-                $scope.startDate = dialogData.startDate;
-                $scope.endDate = dialogData.endDate;
-                //loadCustomData(); TODO - Call method
+                $scope.salesSearchSnapshot.startDate = dialogData.startDate;
+                $scope.salesSearchSnapshot.endDate = dialogData.endDate;
+                setDateButtonText();
             }
-
-            function clearDates() {
-                $scope.loaded = false;
-                $scope.preValuesLoaded = false;
-                loadDefaultData();
-            }
-
-            function reload(startDate, endDate) {
-                $scope.salesSearchSnapshot.startDate = startDate;
-                $scope.salesSearchSnapshot.endDate = endDate;                
-            }
-
         }]);
 
 angular.module('merchello').controller('Merchello.Sales.Dialogs.InvoiceHeaderController',
