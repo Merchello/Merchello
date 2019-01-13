@@ -54,7 +54,12 @@ namespace Merchello.Web.Models.Reports
         /// <summary>
         ///  Gets or sets the total
         /// </summary>
-        public double Total { get; set; }
+        public decimal Total { get; set; }
+
+        /// <summary>
+        /// Gets or sets the currency symbol
+        /// </summary>
+        public string CurrencySymbol { get; set; }
 
         /// <summary>
         /// Gets or sets the variants

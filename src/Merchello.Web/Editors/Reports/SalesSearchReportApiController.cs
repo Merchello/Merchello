@@ -73,7 +73,7 @@ namespace Merchello.Web.Editors.Reports
         ///     Initializes a new instance of the <see cref="SalesSearchReportApiController" /> class
         /// </summary>
         /// <param name="merchelloContext"></param>
-        public SalesSearchReportApiController(IMerchelloContext merchelloContext) 
+        public SalesSearchReportApiController(IMerchelloContext merchelloContext)
             : this(merchelloContext, UmbracoContext.Current)
         {
         }
@@ -97,7 +97,7 @@ namespace Merchello.Web.Editors.Reports
             _merchello = new MerchelloHelper();
 
             _textService = umbracoContext.Application.Services.TextService;
-        } 
+        }
         #endregion
 
         /// <summary>
@@ -109,8 +109,8 @@ namespace Merchello.Web.Editors.Reports
         {
             var today = DateTime.Today;
             var endOfMonth = today.EndOfMonth();
-            //var startMonth = today.FirstOfMonth();
-            var startMonth = new DateTime(2016, 1, 1).FirstOfMonth();
+            var startMonth = today.FirstOfMonth();
+            //var startMonth = new DateTime(2016, 1, 1).FirstOfMonth();
             var invoiceStatuses = AllStatuses();
 
             return BuildSalesSearchSnapshot(startMonth, endOfMonth, invoiceStatuses.Select(x => x.Key), string.Empty);
@@ -124,12 +124,12 @@ namespace Merchello.Web.Editors.Reports
         [HttpPost]
         public SalesSearchSnapshot UpdateData(SalesSearchSnapshot salesSearchSnapshot)
         {
-            return BuildSalesSearchSnapshot(salesSearchSnapshot.StartDate, salesSearchSnapshot.EndDate, salesSearchSnapshot.InvoiceStatuses.Where(x => x.Checked).Select(x => x.Key), string.Empty);
+            return BuildSalesSearchSnapshot(salesSearchSnapshot.StartDate, salesSearchSnapshot.EndDate, salesSearchSnapshot.InvoiceStatuses.Where(x => x.Checked).Select(x => x.Key), salesSearchSnapshot.Search);
         }
 
         private IEnumerable<InvStatus> AllStatuses()
         {
-            if(_invStatuses == null)
+            if (_invStatuses == null)
             {
                 _invStatuses = ApplicationContext.DatabaseContext.Database.Query<InvStatus>("SELECT pk, name FROM merchInvoiceStatus").ToList();
             }
@@ -150,7 +150,8 @@ namespace Merchello.Web.Editors.Reports
             var statuses = AllStatuses();
 
             // Loop and set selected statuses
-            foreach (var status in statuses) {
+            foreach (var status in statuses)
+            {
                 if (invoiceStatuses.Contains(status.Key))
                 {
                     status.Checked = true;
@@ -169,8 +170,11 @@ namespace Merchello.Web.Editors.Reports
             // List of ProductLineItem to add
             var ProductLineItemList = new List<ProductLineItem>();
 
+            var currencySymbol = this.ActiveCurrencies.FirstOrDefault();
+
             // Loop each product
-            foreach (var productGroup in groupedResults) {
+            foreach (var productGroup in groupedResults)
+            {
 
                 // We do a try as the product may be deleted and not exist anymore
                 try
@@ -184,15 +188,18 @@ namespace Merchello.Web.Editors.Reports
                             Name = product.Name,
                             Quantity = productGroup.Sum(x => x.Quantity),
                             Total = productGroup.Sum(x => x.Price),
-                            Variants = new List<ProductLineItem>()
+                            Variants = new List<ProductLineItem>(),
+                            CurrencySymbol = currencySymbol.Symbol
                         };
 
-                        foreach(var variants in productGroup.GroupBy(x => x.Name))
+                        foreach (var variants in productGroup.GroupBy(x => x.Name))
                         {
-                            productLineItem.Variants.Add(new ProductLineItem {
+                            productLineItem.Variants.Add(new ProductLineItem
+                            {
                                 Name = variants.FirstOrDefault().Name,
                                 Quantity = variants.Sum(x => x.Quantity),
-                                Total = variants.Sum(x => x.Price)
+                                Total = variants.Sum(x => x.Price),
+                                CurrencySymbol = currencySymbol.Symbol
                             });
                         }
 
@@ -206,14 +213,15 @@ namespace Merchello.Web.Editors.Reports
             }
 
             // Make final model
-            var salesSearchSnapshot = new SalesSearchSnapshot {
+            var salesSearchSnapshot = new SalesSearchSnapshot
+            {
                 EndDate = endDate,
                 Search = search,
                 StartDate = startDate,
                 InvoiceStatuses = statuses,
                 Products = ProductLineItemList.OrderBy(x => x.Quantity)
             };
-           
+
             // return
             return salesSearchSnapshot;
         }
@@ -242,7 +250,7 @@ namespace Merchello.Web.Editors.Reports
         /// <summary>
         ///     Registers the controller in Merchello's Angular routing
         /// </summary>
-        public override KeyValuePair<string, object> BaseUrl => GetBaseUrl<SalesSearchReportApiController>("merchelloSalesSearchBaseUrl"); 
+        public override KeyValuePair<string, object> BaseUrl => GetBaseUrl<SalesSearchReportApiController>("merchelloSalesSearchBaseUrl");
 
         #endregion
 
@@ -259,7 +267,7 @@ namespace Merchello.Web.Editors.Reports
             public int Quantity { get; set; }
 
             [Column("price")]
-            public double Price { get; set; }
+            public decimal Price { get; set; }
 
             [Column("extendedData")]
             public string ExDataString { get; set; }
@@ -269,7 +277,7 @@ namespace Merchello.Web.Editors.Reports
             {
                 get
                 {
-                    if(extendedData == null)
+                    if (extendedData == null)
                     {
                         extendedData = new ExtendedDataCollection(ExDataString);
                     }

@@ -10006,7 +10006,6 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesOverTi
                 } else {
                     return '-';
                 }
-
             }
 
             function openDateRangeDialog() {
@@ -10085,7 +10084,7 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesSearch
             init();
 
             // Scope Methods
-            $scope.toggleFilter = toggleFilter;          
+            $scope.toggleFilter = toggleFilter;
             $scope.openDateRangeDialog = openDateRangeDialog;
             $scope.updateData = updateData;
             $scope.reload = reload;
@@ -10109,30 +10108,6 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesSearch
                 });
             }
 
-            function updateData() {
-
-                // Clear the products first
-                // As don't want to post a ton of data we don't need to
-                $scope.salesSearchSnapshot.products = [];
-
-                return umbRequestHelper.resourcePromise(
-                    $http.post($scope.baseUrl + 'UpdateData', $scope.salesSearchSnapshot), 'Failed to update the report')
-                    .then(function (data) {
-                        $scope.salesSearchSnapshot = data;
-                        setDateButtonText();
-                    });
-            }
-
-            function reload() {
-                $scope.salesSearchSnapshot.startDate = $scope.originalStartDate;
-                $scope.salesSearchSnapshot.endDate = $scope.originalEndDate;
-                setDateButtonText();
-            }
-
-            function toggleFilter(inx) {
-                $scope.toggle[inx] = !$scope.toggle[inx];
-            }
-
             function loadDefaultData() {
                 return umbRequestHelper.resourcePromise(
                     $http({
@@ -10147,6 +10122,32 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesSearch
                         $scope.originalEndDate = $scope.salesSearchSnapshot.endDate;
                         setDateButtonText();
                     });
+            }
+
+            function updateData() {
+
+                // Clear the products first
+                // As don't want to post a ton of data we don't need to
+                $scope.salesSearchSnapshot.products = [];
+
+                return umbRequestHelper.resourcePromise(
+                    $http.post($scope.baseUrl + 'UpdateData', $scope.salesSearchSnapshot), 'Failed to update the report')
+                    .then(function (data) {
+                        $scope.salesSearchSnapshot = data;
+                    });
+            }
+
+            function reload(startDate, endDate) {
+                if ($scope.preValuesLoaded) {
+                    $scope.salesSearchSnapshot.startDate = startDate;
+                    $scope.salesSearchSnapshot.endDate = endDate;
+                    setDateButtonText();
+                    updateData();
+                }
+            }
+
+            function toggleFilter(inx) {
+                $scope.toggle[inx] = !$scope.toggle[inx];
             }
 
             function openDateRangeDialog() {
@@ -10168,9 +10169,7 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesSearch
             }
 
             function processDateRange(dialogData) {
-                $scope.salesSearchSnapshot.startDate = dialogData.startDate;
-                $scope.salesSearchSnapshot.endDate = dialogData.endDate;
-                setDateButtonText();
+                // This never gets hit for som
             }
         }]);
 
