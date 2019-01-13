@@ -250,7 +250,13 @@ namespace Merchello.Web.Editors.Reports
         /// <summary>
         ///     Registers the controller in Merchello's Angular routing
         /// </summary>
-        public override KeyValuePair<string, object> BaseUrl => GetBaseUrl<SalesSearchReportApiController>("merchelloSalesSearchBaseUrl");
+        public override KeyValuePair<string, object> BaseUrl
+        {
+            get
+            {
+                return GetBaseUrl<SalesSearchReportApiController>("merchelloSalesSearchBaseUrl");
+            }
+        }
 
         #endregion
 
