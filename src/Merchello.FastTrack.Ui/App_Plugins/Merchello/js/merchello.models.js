@@ -1,6 +1,6 @@
 /*! Merchello
  * https://github.com/meritage/Merchello
- * Copyright (c) 2018 Across the Pond, LLC.
+ * Copyright (c) 2019 Across the Pond, LLC.
  * Licensed MIT
  */
 
@@ -634,6 +634,7 @@ angular.module('merchello.models').constant('EntityCollectionProviderDisplay', E
         self.addressTypeFieldKey = '';
         self.company = '';
         self.countryCode = '';
+        self.countryName = '';
         self.phone = '';
         self.email = '';
         self.isDefault = false;
@@ -3173,6 +3174,7 @@ angular.module('merchello.models').constant('SalesOverTimeResult', SalesOverTime
         self.billToRegion = '';
         self.billToPostalCode = '';
         self.billToCountryCode = '';
+        self.billToCountryName = '';
         self.billToEmail = '';
         self.billToPhone = '';
         self.billToCompany = '';
@@ -3212,6 +3214,7 @@ angular.module('merchello.models').constant('SalesOverTimeResult', SalesOverTime
             adr.locality = this.billToLocality;
             adr.region = this.billToRegion;
             adr.countryCode = this.billToCountryCode;
+            adr.countryName = this.billToCountryName;
             adr.postalCode = this.billToPostalCode;
             adr.name = this.billToName;
             adr.phone = this.billToPhone;
@@ -3761,6 +3764,7 @@ angular.module('merchello.models').constant('InvoiceItemItemizationDisplay', Inv
         self.fromRegion = '';
         self.fromPostalCode = '';
         self.fromCountryCode = '';
+        self.fromCountryName = '';
         self.fromIsCommercial = '';
         self.toOrganization = '';
         self.toName = '';
@@ -3770,6 +3774,7 @@ angular.module('merchello.models').constant('InvoiceItemItemizationDisplay', Inv
         self.toRegion = '';
         self.toPostalCode = '';
         self.toCountryCode = '';
+        self.toCountryName = '';
         self.toIsCommercial = '';
         self.shipMethodKey = '';
         self.phone = '';
@@ -3790,13 +3795,13 @@ angular.module('merchello.models').constant('InvoiceItemItemizationDisplay', Inv
             // returns the shipment destination as an Address
         var getDestinationAddress = function() {
                 return buildAddress.call(this, this.toName, this.toAddress1, this.toAddress2, this.toLocality, this.toRegion,
-                    this.toPostalCode, this.toCountryCode, this.toOrganization, this.toIsCommercial, this.phone, this.email, 'shipping');
+                    this.toPostalCode, this.toCountryCode, this.toCountryName, this.toOrganization, this.toIsCommercial, this.phone, this.email, 'shipping');
             },
 
             // returns the shipment origin as an Address
             getOriginAddress = function() {
                 return buildAddress.call(this, this.fromName, this.fromAddress1, this.fromAddress2, this.fromLocality,
-                    this.fromRegion, this.fromPostalCode, this.fromCountryCode, this.fromOrganization,
+                    this.fromRegion, this.fromPostalCode, this.fromCountryCode, this.fromCountryName, this.fromOrganization,
                     this.fromIsCommercial, '', '', 'shipping');
             },
 
@@ -3809,6 +3814,7 @@ angular.module('merchello.models').constant('InvoiceItemItemizationDisplay', Inv
                 this.toRegion = address.region;
                 this.toPostalCode = address.postalCode;
                 this.toCountryCode = address.countryCode;
+                this.toCountryName = address.countryName;
                 this.toOrganization = address.organization;
                 this.toIsCommercial = address.isCommercial;
                 this.phone = address.phone;
@@ -3823,12 +3829,13 @@ angular.module('merchello.models').constant('InvoiceItemItemizationDisplay', Inv
                 this.fromRegion = address.region;
                 this.fromPostalCode = address.postalCode;
                 this.fromCountryCode = address.countryCode;
+                this.fromCountryName = address.countryName;
                 this.fromOrganization = address.organization;
                 this.fromIsCommercial = address.isCommercial;
             },
 
             // Utility to build an address
-            buildAddress = function(name, address1, address2, locality, region, postalCode, countryCode, organization,
+            buildAddress = function (name, address1, address2, locality, region, postalCode, countryCode, countryName, organization,
                                     isCommercial, phone, email, addressType) {
                 var adr = new AddressDisplay();
                 adr.name = name;
@@ -3838,6 +3845,7 @@ angular.module('merchello.models').constant('InvoiceItemItemizationDisplay', Inv
                 adr.region = region;
                 adr.postalCode = postalCode;
                 adr.countryCode = countryCode;
+                adr.countryName = countryName;
                 adr.organization = organization;
                 adr.isCommercial = isCommercial;
                 adr.phone = phone;
@@ -4196,6 +4204,7 @@ angular.module('merchello.models').constant('TaxationGatewayProviderDisplay', Ta
         self.region = '';
         self.postalCode = '';
         self.countryCode = '';
+        self.countryName = '';
         self.phone = '';
         self.email = '';
         self.isDefault = true;
@@ -4213,6 +4222,7 @@ angular.module('merchello.models').constant('TaxationGatewayProviderDisplay', Ta
             adr.region = this.region;
             adr.postalCode = this.postalCode;
             adr.countryCode = this.countryCode;
+            adr.countryName = this.countryName;
             adr.phone = this.phone;
             adr.email = this.email;
             adr.addressType = 'shipping';
@@ -4227,6 +4237,7 @@ angular.module('merchello.models').constant('TaxationGatewayProviderDisplay', Ta
             this.region = address.region;
             this.postalCode = address.postalCode;
             this.countryCode = address.countryCode;
+            this.countryName = address.countryName;
             this.phone = address.phone;
             this.email = address.email;
         }

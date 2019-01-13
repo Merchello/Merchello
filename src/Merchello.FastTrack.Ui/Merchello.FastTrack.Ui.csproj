@@ -472,6 +472,7 @@
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\salesByItem.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\saleslist.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\salesOverTime.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\salesSearch.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\settings.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\sharedoptions.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\shippingproviders.html" />

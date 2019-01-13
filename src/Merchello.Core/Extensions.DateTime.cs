@@ -155,8 +155,24 @@ namespace Merchello.Core
         /// </returns>
         public static DateTime EndOfMonth(this DateTime current)
         {
-            return new DateTime(current.Year, current.Month, DateTime.DaysInMonth(current.Year, current.Month));
+            return current.FirstOfMonth()
+                .AddMonths(1)
+                .AddMinutes(-1);
         }
+
+        ///// <summary>
+        ///// Gets the last day of a month.
+        ///// </summary>
+        ///// <param name="current">
+        ///// The reference date.
+        ///// </param>
+        ///// <returns>
+        ///// The <see cref="DateTime"/>.
+        ///// </returns>
+        //public static DateTime EndOfMonth(this DateTime current)
+        //{
+        //    return new DateTime(current.Year, current.Month, DateTime.DaysInMonth(current.Year, current.Month));
+        //}
 
         /// <summary>
         /// Gets the start of week.

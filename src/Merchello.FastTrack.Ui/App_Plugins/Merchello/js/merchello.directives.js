@@ -1,6 +1,6 @@
 /*! Merchello
  * https://github.com/meritage/Merchello
- * Copyright (c) 2018 Across the Pond, LLC.
+ * Copyright (c) 2019 Across the Pond, LLC.
  * Licensed MIT
  */
 
@@ -1640,10 +1640,10 @@ angular.module('merchello.directives').directive('merchelloAddress', function() 
                 setAddress: '&setAddress'
             },
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/merchelloaddress.tpl.html',
-            link: function(scope, elm, attr) {
+            link: function (scope, elm, attr) {
                 scope.address = scope.setAddress();
             }
-        }
+        };
     });
 
 angular.module('merchello.directives').directive('merchelloIconBar', function(localizationService) {

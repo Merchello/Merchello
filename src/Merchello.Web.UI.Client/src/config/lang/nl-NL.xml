@@ -79,6 +79,7 @@
     <key alias="shared">Gedeeld</key>
     <key alias="custom">Custom</key>
     <key alias="history">Historie</key>
+    <key alias="update">Update</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Producten</key>

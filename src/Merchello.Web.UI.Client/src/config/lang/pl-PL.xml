@@ -78,6 +78,7 @@
     <key alias="shared">Udostępniane</key>
     <key alias="custom">Custom</key>
     <key alias="trackingUrl">Adres URL przesyłki</key>
+    <key alias="update">Update</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Produkty</key>

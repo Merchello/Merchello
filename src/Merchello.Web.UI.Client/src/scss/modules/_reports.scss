@@ -1,0 +1,43 @@
+.reports-section
+{
+
+}
+
+.report-sales-search {
+    .report-sales-search-header {
+        padding-bottom: 10px;
+        border-bottom: 1px solid #efefef;
+        margin-bottom: 20px;
+    }
+
+    .status-list {
+        float: right;
+        padding-top: 6px;
+    }
+
+    .variant-panel {
+        margin: 0 15px 25px 15px;
+        border-left: 2px #d8d7d9 solid;
+        border-right: 2px #d8d7d9 solid;
+
+        .umb-table-head {
+            .umb-table-row {
+                min-height: 20px;
+
+                .umb-table-cell {
+                    min-height: 20px;
+                }
+            }
+        }
+
+        .umb-table-body {
+            .umb-table-row {
+                min-height: 20px;
+
+                .umb-table-cell {
+                    min-height: 20px;
+                }
+            }
+        }
+    }
+}
