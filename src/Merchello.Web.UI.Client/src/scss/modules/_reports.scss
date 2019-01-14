@@ -1,6 +1,7 @@
-.reports-section
-{
-
+.reports-section {
+    .report-loader {
+        text-align:center;
+    }
 }
 
 .report-sales-search {
@@ -13,6 +14,7 @@
     .status-list {
         float: right;
         padding-top: 6px;
+        clear:right;
     }
 
     .variant-panel {

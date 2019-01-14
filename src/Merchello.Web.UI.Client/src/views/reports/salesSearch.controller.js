@@ -5,8 +5,11 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesSearch
         function ($http, $scope, $q, umbRequestHelper, $log, $filter, assetsService, dialogService, queryDisplayBuilder,
             settingsResource, invoiceHelper, merchelloTabsFactory, salesOverTimeResource) {
 
+            // Umbraco and Merchello
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
+
+            $scope.dataLoaded = false;
             $scope.settings = {};
             $scope.dateBtnText = '';
             $scope.baseUrl = '';
@@ -39,6 +42,8 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesSearch
             function loadSettings() {
                 settingsResource.getAllCombined().then(function (combined) {
                     $scope.settings = combined.settings;
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
                     loadDefaultData();
                 });
             }
@@ -51,11 +56,10 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesSearch
                     }), 'Failed to retreive default report data')
                     .then(function (data) {
                         $scope.salesSearchSnapshot = data;
-                        $scope.loaded = true;
-                        $scope.preValuesLoaded = true;
                         $scope.originalStartDate = $scope.salesSearchSnapshot.startDate;
                         $scope.originalEndDate = $scope.salesSearchSnapshot.endDate;
                         setDateButtonText();
+                        $scope.dataLoaded = true;
                     });
             }
 
@@ -64,16 +68,18 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesSearch
                 // Clear the products first
                 // As don't want to post a ton of data we don't need to
                 $scope.salesSearchSnapshot.products = [];
+                $scope.dataLoaded = false;
 
                 return umbRequestHelper.resourcePromise(
                     $http.post($scope.baseUrl + 'UpdateData', $scope.salesSearchSnapshot), 'Failed to update the report')
                     .then(function (data) {
                         $scope.salesSearchSnapshot = data;
+                        $scope.dataLoaded = true;
                     });
             }
 
             function reload(startDate, endDate) {
-                if ($scope.preValuesLoaded) {
+                if ($scope.dataLoaded) {
                     $scope.salesSearchSnapshot.startDate = startDate;
                     $scope.salesSearchSnapshot.endDate = endDate;
                     setDateButtonText();

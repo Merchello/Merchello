@@ -45,8 +45,10 @@
                 <p ng-show="salesSearchSnapshot.Search">Searching for {{salesSearchSnapshot.Search}}</p>
 
                 <div class="merchello-list-view umb-listview">
-
-                    <div class="umb-table">
+                    <div class="report-loader" ng-show="!dataLoaded">
+                        <img src="/umbraco/assets/img/loader.gif">
+                    </div>
+                    <div class="umb-table" ng-show="dataLoaded">
                         <div class="umb-table-head">
                             <div class="umb-table-row">
                                 <div class="umb-table-cell not-fixed" style="flex:0 1 60%;">
@@ -69,12 +71,14 @@
                                 <div class="umb-table-row">
                                     <div class="umb-table-cell not-fixed" style="flex:0 1 60%;">
                                         <span>
-                                            <a href ng-click="toggleFilter($index)"><strong>{{product.name}}</strong></a>
+                                            <a ng-show="product.variants.length > 0" href ng-click="toggleFilter($index)"><strong>{{product.name}}</strong></a>
+                                            <strong ng-show="product.variants.length <= 0">{{product.name}}</strong>
                                         </span>
                                     </div>
                                     <div class="umb-table-cell not-fixed">
                                         <span>
-                                            <strong>{{product.variants.length}}</strong>
+                                            <strong ng-show="product.variants.length > 0">{{product.variants.length}}</strong>
+                                            <strong ng-show="product.variants.length <= 0">-</strong>
                                         </span>
                                     </div>
                                     <div class="umb-table-cell not-fixed">
@@ -118,7 +122,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>                            
+                            </div>
                         </div>
                     </div>
 
