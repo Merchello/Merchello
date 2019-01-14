@@ -175,7 +175,6 @@ namespace Merchello.Web.Editors.Reports
             // Loop each product
             foreach (var productGroup in groupedResults)
             {
-
                 // We do a try as the product may be deleted and not exist anymore
                 try
                 {
@@ -187,20 +186,35 @@ namespace Merchello.Web.Editors.Reports
                         {
                             Name = product.Name,
                             Quantity = productGroup.Sum(x => x.Quantity),
-                            Total = productGroup.Sum(x => x.Price),
                             Variants = new List<ProductLineItem>(),
                             CurrencySymbol = currencySymbol.Symbol
                         };
 
+                        // Get the correct total
+                        decimal productGroupTotal = 0;
+                        foreach (var p in productGroup) {
+                            productGroupTotal += p.Price * p.Quantity;
+                        }
+                        productLineItem.Total = productGroupTotal;
+
                         foreach (var variants in productGroup.GroupBy(x => x.Name))
                         {
-                            productLineItem.Variants.Add(new ProductLineItem
+                            var variantLineItem = new ProductLineItem
                             {
                                 Name = variants.FirstOrDefault().Name,
                                 Quantity = variants.Sum(x => x.Quantity),
-                                Total = variants.Sum(x => x.Price),
                                 CurrencySymbol = currencySymbol.Symbol
-                            });
+                            };
+
+                            // Get the correct total
+                            decimal productVariantTotal = 0;
+                            foreach (var v in variants)
+                            {
+                                productVariantTotal += v.Price * v.Quantity;
+                            }
+                            variantLineItem.Total = productVariantTotal;
+
+                            productLineItem.Variants.Add(variantLineItem);
                         }
 
                         ProductLineItemList.Add(productLineItem);
@@ -219,7 +233,7 @@ namespace Merchello.Web.Editors.Reports
                 Search = search,
                 StartDate = startDate,
                 InvoiceStatuses = statuses,
-                Products = ProductLineItemList.OrderBy(x => x.Quantity)
+                Products = ProductLineItemList.OrderByDescending(x => x.Total)
             };
 
             // return
