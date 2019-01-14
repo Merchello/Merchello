@@ -22,7 +22,7 @@ namespace Merchello.Web.Editors.Reports
     /// <summary>
     ///     API Controller responsible for the Sales Search Report
     /// </summary>
-    [BackOfficeTree("salesSearch", "reports", "Sales Search", "icon-loading",
+    [BackOfficeTree("salesSearch", "reports", "Product Performance", "icon-loading",
     "/app_plugins/merchello/backoffice/merchello/salessearch.html", 1)]
     [PluginController("Merchello")]
     public class SalesSearchReportApiController : ReportController
@@ -192,10 +192,12 @@ namespace Merchello.Web.Editors.Reports
 
                         // Get the correct total
                         decimal productGroupTotal = 0;
-                        foreach (var p in productGroup) {
+                        foreach (var p in productGroup)
+                        {
                             productGroupTotal += p.Price * p.Quantity;
                         }
                         productLineItem.Total = productGroupTotal;
+
 
                         foreach (var variants in productGroup.GroupBy(x => x.Name))
                         {
@@ -215,6 +217,15 @@ namespace Merchello.Web.Editors.Reports
                             variantLineItem.Total = productVariantTotal;
 
                             productLineItem.Variants.Add(variantLineItem);
+                        }
+
+                        if (productLineItem.Variants.Count() == 1)
+                        {
+                            if (productLineItem.Variants.FirstOrDefault().Name == product.Name)
+                            {
+                                // Same as base product so clear
+                                productLineItem.Variants.Clear();
+                            }
                         }
 
                         ProductLineItemList.Add(productLineItem);
