@@ -47,7 +47,7 @@ angular.module('merchello.directives').directive('customerItemCacheTable',
                         scope.title = data[0];
                         scope.settings = data[1];
                         scope.items = data[2].items;
-                        setCheckoutLink()
+                        setCheckoutLink();
                     });
                 }
 
@@ -115,6 +115,7 @@ angular.module('merchello.directives').directive('customerItemCacheTable',
 
                     var billingAddress = scope.customer.getDefaultBillingAddress();
                     var shippingAddress = scope.customer.getDefaultShippingAddress();
+
 
                     var checkoutData = {
                         customerKey: dialogData.customer.key,

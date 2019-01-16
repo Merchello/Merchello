@@ -1,4 +1,5 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<Merchello.Web.Store.Models.StoreBasketModel>
+@using System.Collections.Generic
 @using System.Web.Mvc.Html
 @using Merchello.Core
 @using Merchello.Web.Models.Ui
@@ -39,10 +40,11 @@
                         // and may need to change for site specific implementations.  Example!
                         if (product.HasValue("image"))
                         {
-                            var mediaId = product.GetPropertyValue<string>("image");
-                            var image = Umbraco.TypedMedia(mediaId);
-
-                            <a href="@product.Url"><img src="@image.GetCropUrl(width: 20)" alt="@product.Name" width="20"/></a>
+                            var images = product.GetPropertyValue<List<IPublishedContent>>("image");
+                            if (images.Any())
+                            {
+                                <a href="@product.Url"><img src="@images.FirstOrDefault().GetCropUrl(width: 20)" alt="@product.Name" width="20"/></a>
+                            }
                         }
                         <a href="@product.Url">
                             <span>@product.Name</span>

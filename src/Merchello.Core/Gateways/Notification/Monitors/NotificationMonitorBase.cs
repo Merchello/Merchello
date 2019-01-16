@@ -87,7 +87,10 @@
         /// </param>
         public virtual void CacheMessage(IEnumerable<INotificationMessage> messages)
         {
-            messages.ForEach(CacheMessage);
+            foreach (var notificationMessage in messages)
+            {
+                CacheMessage(notificationMessage);
+            }
         }
 
         /// <summary>

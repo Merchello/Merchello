@@ -112,7 +112,7 @@ MUI.AddItem = {
                         data: $(this).serialize()
                     }).then(function(result) {
                         MUI.emit('AddItem.added', result);
-                        MUI.Notify.info('Successfully added item to basket');
+                        MUI.Notify.info(MUI.AddItem.addItemSuccess);
                     }, function(err) {
                        MUI.Logger.captureError(err); 
                     });

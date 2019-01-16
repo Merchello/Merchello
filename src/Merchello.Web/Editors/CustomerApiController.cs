@@ -152,12 +152,9 @@
         [HttpGet]
         public CustomerDisplay GetCustomer(Guid id)
         {
-            // TODO - Removed the cached get here as too many backoffice issues
-            //return _merchello.Query.Customer.GetByKey(id);
-
-            // Get the customer fresh to see if it solves back office problems
+            //return _merchello.Query.Customer.GetByKey(id);        
             var customer = _customerService.GetByKey(id);
-            return AutoMapper.Mapper.Map<CustomerDisplay>(customer);            
+            return customer.ToCustomerDisplay();
         }
 
         /// <summary>

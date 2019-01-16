@@ -33,11 +33,11 @@ angular.module('merchello').controller('Merchello.Customer.Dialogs.CustomerNewCu
 
                     var promiseSaveCustomer = customerResource.AddCustomer(customer);
                     promiseSaveCustomer.then(function (customerResponse) {
-                        notificationsService.success("Customer Saved", "");
+                        notificationsService.success(localizationService.localize("merchelloStatusNotifications_customerSaveSuccess"), "");
                         navigationService.hideNavigation();
                         $location.url("/merchello/merchello/customeroverview/" + customerResponse.key, true);
                     }, function (reason) {
-                        notificationsService.error("Customer Save Failed", reason.message);
+                        notificationsService.error(localizationService.localize("merchelloStatusNotifications_customerSaveError"), reason.message);
                     });
                 }
             }

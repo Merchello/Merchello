@@ -38,8 +38,8 @@
         /// <param name="sqlSyntax">
         /// The SQL syntax.
         /// </param>
-        public PaymentMethodRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
-            : base(work, cache, logger, sqlSyntax)
+        public PaymentMethodRepository(IDatabaseUnitOfWork work, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {
         }
 
@@ -77,21 +77,28 @@
         /// </returns>
         protected override IEnumerable<IPaymentMethod> PerformGetAll(params Guid[] keys)
         {
+            var dtos = new List<PaymentMethodDto>();
+
             if (keys.Any())
             {
-                foreach (var key in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    yield return Get(key);
+                    dtos.AddRange(Database.Fetch<PaymentMethodDto>(GetBaseQuery(false).WhereIn<PaymentMethodDto>(x => x.Key, keyList, SqlSyntax)));
                 }
             }
             else
             {
-                var factory = new PaymentMethodFactory();
-                var dtos = Database.Fetch<PaymentMethodDto>(GetBaseQuery(false));
-                foreach (var dto in dtos)
-                {
-                    yield return factory.BuildEntity(dto);
-                }
+                dtos = Database.Fetch<PaymentMethodDto>(GetBaseQuery(false));
+            }
+
+            var factory = new PaymentMethodFactory();
+            foreach (var dto in dtos)
+            {
+                yield return factory.BuildEntity(dto);
             }
         }
 
@@ -110,10 +117,13 @@
             var sqlClause = GetBaseQuery(false);
             var translator = new SqlTranslator<IPaymentMethod>(sqlClause, query);
             var sql = translator.Translate();
-
             var dtos = Database.Fetch<PaymentMethodDto>(sql);
+            if (dtos.Any())
+            {
+                return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
+            }
 
-            return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
+            return Enumerable.Empty<IPaymentMethod>();
         }
 
         /// <summary>

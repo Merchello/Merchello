@@ -9,6 +9,7 @@ $well-blue: #F2FCFC; // The blue coour of a postcard box on the new Umb dashboar
 $active: lighten($green, 50%);
 $selected: lighten($blue, 50%);
 $warning: lighten($orange, 40%);
+$error: #f02e28; // umbraco alert red
 
 //Mixins
 @mixin box-sizing { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; -o-box-sizing: border-box; box-sizing: border-box; }

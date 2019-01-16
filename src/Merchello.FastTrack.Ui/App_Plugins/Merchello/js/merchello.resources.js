@@ -1,6 +1,6 @@
 /*! Merchello
  * https://github.com/meritage/Merchello
- * Copyright (c) 2017 Across the Pond, LLC.
+ * Copyright (c) 2019 Across the Pond, LLC.
  * Licensed MIT
  */
 
@@ -913,6 +913,20 @@ angular.module('merchello.resources')
                             'Failed to save invoice');
                     },
 
+                    /**
+                     * @ngdoc method
+                     * @name saveInvoice
+                     * @description
+                     **/
+                    putInvoiceNewProducts: function (invoiceAddItems) {
+                        var url = baseUrl + 'PutInvoiceNewProducts';
+                        return umbRequestHelper.resourcePromise(
+                            $http.post(url,
+                                invoiceAddItems
+                            ),
+                            'Failed to save invoice');
+                    },
+
                     saveInvoiceAdjustments: function(adjustments) {
                         var url = baseUrl + 'PutInvoiceAdjustments';
                         return umbRequestHelper.resourcePromise(
@@ -945,8 +959,23 @@ angular.module('merchello.resources')
                                 params: { id: invoiceKey }
                             }),
                             'Failed to delete invoice');
-                    }
+                    },
 
+                    /**
+                     * @ngdoc method
+                     * @name cancelInvoice
+                     * @description
+                     **/
+                    cancelInvoice: function (invoiceKey) {
+                        var url = baseUrl + 'CancelInvoice';
+                        return umbRequestHelper.resourcePromise(
+                            $http({
+                                url: url,
+                                method: "GET",
+                                params: { id: invoiceKey }
+                            }),
+                            'Failed to cancel invoice');
+                    }
                 };
             }]);
 

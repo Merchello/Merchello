@@ -15,10 +15,12 @@
     <key alias="multipleOptions">Multiples opciones</key>
     <key alias="optional">(opcional)</key>
     <key alias="percentSymbol">%</key>
+    <key alias="percent">Percent</key>
     <key alias="moneySymbol">€</key>
     <key alias="trackingNumber">Tracking # </key>
     <key alias="trackingUrl">Tracking URL</key>
     <key alias="shipment">Envío</key>
+    <key alias="shipmentNumber">Shipment #</key>
     <key alias="sku">SKU</key>
     <key alias="name">Name</key>
     <key alias="quantity">Cant</key>
@@ -29,18 +31,18 @@
     <key alias="via">Via</key>
     <key alias="options">Opciones</key>
     <key alias="select">Seleccionar</key>
-    <key alias="selected">Selected</key>
+    <key alias="selected">Seleccionado</key>
     <key alias="all">Todo</key>
     <key alias="none">Ninguno</key>
     <key alias="expired">Expirado</key>
-    <key alias="configured">Configured</key>
-    <key alias="notConfigured">Not Configured</key>
-    <key alias="some">Some</key>
-    <key alias="lineItems">Line Items</key>
-    <key alias="setDateRange">Set Date Range</key>
-    <key alias="allDates">All Dates</key>
-    <key alias="starting">Starting</key>
-    <key alias="ending">Ending</key>
+    <key alias="configured">Configurado</key>
+    <key alias="notConfigured">No configurado</key>
+    <key alias="some">Algunos</key>
+    <key alias="lineItems">Líneas de pedido</key>
+    <key alias="setDateRange">Configura rango de fechas</key>
+    <key alias="allDates">Todas las fechas</key>
+    <key alias="starting">Comienzo</key>
+    <key alias="ending">Final</key>
     <key alias="jan">Enero</key>
     <key alias="feb">Febrero</key>
     <key alias="mar">Marzo</key>
@@ -66,15 +68,17 @@
     <key alias="totals">Totales</key>
     <key alias="subTotal">Subtotal</key>
     <key alias="checkout">Checkout</key>
-    <key alias="author">Author</key>
-    <key alias="visibility">Visibility</key>
-    <key alias="public">Public</key>
-    <key alias="private">Private</key>
-    <key alias="increase">Increase</key>
-    <key alias="decrease">Decrease</key>
-    <key alias="associateWith">Associate with</key>
-    <key alias="shared">Shared</key>
-    <key alias="custom">Custom</key>
+    <key alias="author">Autor</key>
+    <key alias="visibility">Visibilidad</key>
+    <key alias="public">Público</key>
+    <key alias="private">Privado</key>
+    <key alias="increase">Incrementar</key>
+    <key alias="decrease">Decrementar</key>
+    <key alias="associateWith">Asociar con</key>
+    <key alias="shared">Compartido</key>
+    <key alias="custom">Personalizado</key>
+    <key alias="history">History</key>
+    <key alias="update">Update</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Productos</key>
@@ -86,14 +90,14 @@
     <key alias="gateways">Gateway Providers</key>
   </area>
   <area alias="merchelloTabs">
-    <key alias="filterGroups">Filter Groups</key>
+    <key alias="filterGroups">Grupos de filtros</key>
     <key alias="productListing">Listado de Productos</key>
-    <key alias="productContentTypes">Product Content Types</key>
+    <key alias="productContentTypes">Tipos de contenido de producto</key>
     <key alias="product">Producto</key>
     <key alias="productVariants">Variantes de Producto</key>
     <key alias="productOptions">Opciones de Producto</key>
     <key alias="productVariantEditor">Editor de variante de producto</key>
-    <key alias="detachedContent">Extended Content</key>
+    <key alias="detachedContent">Contenido extendido</key>
     <key alias="salesListing">Listado de ventas</key>
     <key alias="sales">Venta</key>
     <key alias="payments">Pagos</key>
@@ -107,16 +111,16 @@
     <key alias="notification">Notificaciones</key>
     <key alias="taxation">Impuestos</key>
     <key alias="offerListing">Listado de ofertas</key>
-    <key alias="message">Message</key>
+    <key alias="message">Mensaje</key>
     <key alias="offer">Oferta</key>
     <key alias="coupon">Cupón</key>
     <key alias="reports">Reportes</key>
-    <key alias="render">Render</key>
+    <key alias="render">Renderización</key>
     <key alias="salesOverTime">Ventas en el tiempo</key>
     <key alias="salesByItem">Ventas por artículo</key>
     <key alias="abandonedBasket">Carritos abandonados</key>
-    <key alias="contentTypes">Content Types</key>
-    <key alias="sharedProductOptions">Shared Product Options</key>
+    <key alias="contentTypes">Tipos de contenido</key>
+    <key alias="sharedProductOptions">Opciones de producto compartidas</key>
   </area>
   <area alias="merchelloReports">
     <key alias="anonymousBaskets">Carritos anónimos</key>
@@ -139,12 +143,13 @@
     <key alias="partialPaidInvoiceCollection">Pedidos pagados parcialmente</key>
     <key alias="paidInvoiceCollection">Pedidos pagados</key>
     <key alias="notFulfilledOrderCollection">Pedidos pendientes de envío</key>
+    <key alias="cancelledOrderCollection">Órdenes canceladas</key>
     <key alias="openOrderCollection">Pedidos sin terminar</key>
     <key alias="fulfilledOrderCollection">Pedidos enviados</key>
-    <key alias="addProvider">Add provider</key>
+    <key alias="addProvider">Añadir proveedor</key>
   </area>
   <area alias="merchelloCollections">
-    <key alias="selectedCollection">Selected collection</key>
+    <key alias="selectedCollection">Colección seleccionada</key>
     <key alias="providers">Proveedores de colecciones</key>
     <key alias="newCollection">Nueva colección</key>
     <key alias="manageCollection">Administrar colección</key>
@@ -160,15 +165,15 @@
     <key alias="noQualifyingEntities">No hay otros items que puedan añadirse a la colección.</key>
     <key alias="collectionPickerTitle">Colecciones</key>
     <key alias="collectionPickerInfo">Añadir a una o más colecciones.</key>
-    <key alias="filterPickerTitle">Specified Filters</key>
-    <key alias="filterPickerInfo">Add this item to one or more specified filters.</key>
-    <key alias="filterAssociateFilters">Associate Filters</key>
+    <key alias="filterPickerTitle">Filtros especificados</key>
+    <key alias="filterPickerInfo">Añadir a uno o más filtros.</key>
+    <key alias="filterAssociateFilters">Asociar filtros</key>
     <key alias="allItems">Todos los items</key>
-    <key alias="allProduct">All Products</key>
-    <key alias="allCustomer">All Customers</key>
-    <key alias="allInvoice">All Sales</key>
-    <key alias="allOffer">All Offers</key>
-    <key alias="allProductOption">Shared Product Options</key>
+    <key alias="allProduct">Todos los productos</key>
+    <key alias="allCustomer">Todos los clientes</key>
+    <key alias="allInvoice">Todas las ventas</key>
+    <key alias="allOffer">Todas las ofertas</key>
+    <key alias="allProductOption">Opciones de producto compartidas</key>
     <key alias="productCollections">Colecciones de productos</key>
     <key alias="invoiceCollections">Colecciones de pedidos</key>
     <key alias="customerCollections">Colecciones de clientes</key>
@@ -182,208 +187,217 @@
   </area>
   <area alias="merchelloHeadline">
     <key alias="catalog">Catálogo</key>
-    <key alias="productSpecFilters">Filter Specifications</key>
+    <key alias="productSpecFilters">Especificaciones de filtro</key>
   </area>
   <area alias="merchelloValidation">
     <key alias="nameFieldRequired">El campo nombre es obligatorio</key>
-    <key alias="contentTypeRequired">Content type is required</key>
+    <key alias="contentTypeRequired">El tipo de contenido es obligatorio</key>
     <key alias="noteMessageRequired">El mensaje de la nota es obligatorio</key>
-    <key alias="oneChoiceRequired">At least one choice must be defined.</key>
+    <key alias="oneChoiceRequired">Debes definir al menos una opción</key>
   </area>
   <area alias="merchelloTableCaptions">
     <key alias="name">Nombre</key>
     <key alias="alias">Alias</key>
     <key alias="startDate">Comienzo</key>
-    <key alias="endDate">Finaliza</key>
+    <key alias="endDate">Termina</key>
     <key alias="active">Activo</key>
     <key alias="sortOrder">Ordenación</key>
     <key alias="optionName">Option Name</key>
-    <key alias="optionUi">Option UI</key>
-    <key alias="optionValues">Option Values</key>
-    <key alias="shared">Shared</key>
-    <key alias="sharedCount">Shared Count</key>
-    <key alias="filterGroup">Filter Group</key>
-    <key alias="filters">Filters</key>
+    <key alias="optionUi">UI de la opción</key>
+    <key alias="optionValues">Valores de la opción</key>
+    <key alias="shared">Compartida</key>
+    <key alias="sharedCount">Número de compartidas</key>
+    <key alias="filterGroup">Filtro de grupo</key>
+    <key alias="filters">Filtros</key>
+    <key alias="date">Date</key>
+    <key alias="description">Description</key>
+    <key alias="amount">Amount</key>
   </area>
   <area alias="merchelloNotes">
-    <key alias="notes">Notes</key>
-    <key alias="note">Note</key>
-    <key alias="invoiceNotes">Notes about this sale</key>
-    <key alias="customerNotes">Notes relating to this customer</key>
-    <key alias="paymentNotes">Notes relating to this payment</key>
+    <key alias="notes">Notas</key>
+    <key alias="note">Nota</key>
+    <key alias="invoiceNotes">Notas en esta venta</key>
+    <key alias="customerNotes">Notas de este cliente</key>
+    <key alias="paymentNotes">Notas de este pago</key>
     <key alias="addNote">Añadir nueva nota</key>
     <key alias="editNote">Editar nota</key>
-    <key alias="internalOnly">This note is for internal use only.</key>
+    <key alias="internalOnly">Esta nota es solo para uso interno.</key>
   </area>
   <area alias="merchelloProducts">
     <key alias="emptyProductCollection">No hay productos en esta colección</key>
-    <key alias="shippable">Shippable</key>
-    <key alias="taxable">Taxable</key>
-    <key alias="available">Available</key>
-    <key alias="copyProduct">Copy Product</key>
-    <key alias="newProductName">New Product Name</key>
-    <key alias="newProductSku">New Product SKU</key>
-    <key alias="newPrice">New Price</key>
-    <key alias="newCostOfGoods">New Cost Of Goods</key>
-    <key alias="newSalePrice">New Sale Price</key>
-    <key alias="recentlyUpdated">Recently Updated</key>
-    <key alias="regenSkus">Regenerate SKUs</key>
-    <key alias="regenSkusConfirm">Please confirm you wish to regenerate the product variant SKUs</key>
+    <key alias="shippable">Envíos</key>
+    <key alias="taxable">Impuestos</key>
+    <key alias="available">Disponible</key>
+    <key alias="copyProduct">Copiar producto</key>
+    <key alias="newProductName">Nuevo nombre de producto</key>
+    <key alias="nameIsRequired">Name is a required field.</key>
+    <key alias="newProductSku">Nuevo SKU de producto</key>
+    <key alias="skuIsNotUnique">SKU is not unique</key>
+    <key alias="skuIsRequired">SKU is a required field.</key>    
+    <key alias="newPrice">Nuevo precio</key>
+    <key alias="newCostOfGoods">Nuevo coste</key>
+    <key alias="newSalePrice">Nuevo precio de oferta</key>
+    <key alias="recentlyUpdated">Actualizados recientemente</key>
+    <key alias="regenSkus">Regenerar SKUs</key>
+    <key alias="regenSkusConfirm">Por favor confirma que quieres regenerar los SKUs de las variantes</key>
   </area>
   <area alias="merchelloSpecFilters">
-    <key alias="manageProductFilters">Manage Product Filters</key>
+    <key alias="manageProductFilters">Gestionar filtros de producto</key>
     <key alias="editSpecFilter">
       <![CDATA[
-      <strong>Edit Filters</strong>
-      <small>Add or edit filters, which can be used to enhance product filtering and nagivation.</small>
+      <strong>Editar filtros</strong>
+      <small>Añade o edita filtros, que puedan mejorar el filtrado de productos y la navegación.</small>
       ]]>
     </key>
     <key alias="noSpecFilters">
       <![CDATA[
-      <h5>You have not setup any specification filters</h5>
+      <h5>No has configurado ningún filtro todavía</h5>
       ]]>
     </key>
   </area>
   <area alias="merchelloProductOptions">
-    <key alias="newOption">New Option</key>
-    <key alias="sharedOption">Shared Options</key>
-    <key alias="addProductOption">Add Product Option</key>
-    <key alias="editProductOption">Edit Product Option</key>
-    <key alias="choices">Choices</key>
-    <key alias="customSettings">Custom Settings</key>
-    <key alias="uiOption">UI Option</key>
+    <key alias="newOption">Nueva opción</key>
+    <key alias="sharedOption">Opciones compartidas</key>
+    <key alias="addProductOption">Añadir opción de producto</key>
+    <key alias="editProductOption">Editar opción de producto</key>
+    <key alias="choices">Opciones</key>
+    <key alias="customSettings">Configuración personalizada</key>
+    <key alias="uiOption">Opción de UI</key>
     <key alias="editOptions">
       <![CDATA[
-      <strong>Edit Options</strong>
-      <small>Add or edit options, which will auto-update your variants</small>
+      <strong>Editar Opciones</strong>
+      <small>Añade o edita opciones, que auto-actualizarán tus variantes</small>
       ]]>
     </key>
-    <key alias="sharedCount">Share Count</key>
-    <key alias="manageShared">Manage Shared Product Options</key>
+    <key alias="sharedCount">Cuantas compartidas</key>
+    <key alias="manageShared">Gestionar opciones de producto compartidas</key>
     <key alias="noSharedProductOptions">
       <![CDATA[
-      <h5>You have not setup any shared product options</h5>
+      <h5>No has configurado ninguna opción de producto compartida todavía</h5>
       ]]>
     </key>
     <key alias="noProductOptions">
       <![CDATA[
-      <h5>You have not setup any options for this product</h5>
+      <h5>No has configurado ninguna opción para este producto todavía</h5>
       ]]>
     </key>
   </area>
   <area alias="merchelloDetachedContent">
-    <key alias="selectContentType">Select Content Type</key>
-    <key alias="contentTypes">Content Types</key>
-    <key alias="associateContentType">Associate Content Type</key>
-    <key alias="productContentTypes">Product Content Types</key>
-    <key alias="slug">URL Slug</key>
-    <key alias="slugDescription">URL slugs are the exact address of a specific page.</key>
-    <key alias="selectTemplate">Select an Umbraco template</key>
-    <key alias="canBeRendered">Allow this content to be rendered.</key>
-    <key alias="productContentTypesInfo">Umbraco Content Types (Document Types) that can be assoicated with Merchello products and product variants.</key>
-    <key alias="productContentType">Product Content Type</key>
-    <key alias="umbracoContentTypeName">Umbraco Content Type</key>
+    <key alias="selectContentType">Selecciona un tipo de contenido</key>
+    <key alias="contentTypes">Tipo de contenido</key>
+    <key alias="associateContentType">Asociar tipo de contenido</key>
+    <key alias="productContentTypes">Tipos de contenido de producto</key>
+    <key alias="slug">Segmento URL</key>
+    <key alias="slugDescription">Los segmentos de URL son la dirección exacta de la página de producto.</key>
+    <key alias="selectTemplate">Selecciona una plantilla de Umbraco</key>
+    <key alias="canBeRendered">Permitir que este contenido sea renderizado.</key>
+    <key alias="productContentTypesInfo">Tipos de contenido de Umbraco que puede ser asociado con productos y variantes de Merchello</key>
+    <key alias="productContentType">Tipos de contenido de producto</key>
+    <key alias="umbracoContentTypeName">Tipos de contenido de Umbraco</key>
     <key alias="umbracoContentTypeAlias">Umbraco Alias</key>
-    <key alias="tabs">Tabs</key>
+    <key alias="tabs">Pestañas</key>
     <key alias="noDetachedContentTypes">
       <![CDATA[
-      <h5>You have not associated any Umbraco content types with Merchello</h5>
-      <p>This can be done through the Products context menu.</p>
+      <h5>No has asociado ningún tipo de contenido con Merchello</h5>
+      <p>Lo puedes hacer a través del menú contextual de la sección "Productos"</p>
       ]]>
     </key>
     <key alias="noProductContentType">
       <![CDATA[
-      <h5>You have not selected a product content type</h5>
+      <h5>No has seleccionado un tipo de contenido de producto</h5>
     ]]>
     </key>
-    <key alias="productOptionContentTypes">Product Option Content Types</key>
-    <key alias="productOptionContentType">Option Content Type</key>
+    <key alias="productOptionContentTypes">Tipo de contenido de opción de producto</key>
+    <key alias="productOptionContentType">Tipo de contenido de opción</key>
     <key alias="noProductOptionContentType">
     <![CDATA[
-      <h5>You have not selected a product option content type</h5>
+      <h5>No has seleccionado un tipo de contenido de opción</h5>
     ]]>
     </key>
     <key alias="deleteWarning">
       <![CDATA[
-    This will also delete ALL property data associated with products that use this product type.
+    También se borrarán todas los datos asociados a los productos que usen este tipo.
     ]]>
     </key>
-    <key alias="removeDetachedContent">Remove Extended Content</key>
+    <key alias="removeDetachedContent">Borrar contenido extendido</key>
     <key alias="removeDetachedContentWarning">
       <![CDATA[
-    Deleting extended content does NOT delete the product or variant itself.  Use this action if you want to
-    fully remove or change the associated Umbraco content type. This WILL remove content for ALL languages configured.
+            Borrar el contenido extendido no borra el producto o la variante. Utilízalo si quieres borrar o cambiar el tipo de contenido asociado. 
+	          Se borrará el contenido para todos los idiomas configurados.
     ]]>
     </key>
   </area>
   <area alias="merchelloSales">
-    <key alias="invoice">Pedido</key>
-    <key alias="invoiceNumber">Pedido #</key>
-    <key alias="invoiceNumberPrefix">Invoice Number Prefix</key>
-    <key alias="createInvoice">Create Invoice</key>
+    <key alias="invoice">Venta</key>
+    <key alias="invoiceNumber">Venta #</key>
+    <key alias="invoiceNumberPrefix">Prefijo de número de venta</key>
+    <key alias="createInvoice">Crear venta</key>
     <key alias="poNumber">PO Number</key>
-    <key alias="paymentStatus">Payment Status</key>
-    <key alias="sales">Sales</key>
-    <key alias="capturePayment">Capture Payment</key>
-    <key alias="processPayment">Process Payment</key>
-    <key alias="voidPayment">Void Payment</key>
-    <key alias="refundPayment">Refund Payment</key>
-    <key alias="voidPaymentConfirmMessage">Are you sure you would like to void this payment?</key>
-    <key alias="paymentExpirationWarning">You may not receive payment for expired authorization.</key>
-    <key alias="processedBy">Processed by</key>
-    <key alias="refundMethod">Refund method</key>
+    <key alias="paymentStatus">Estado del pago</key>
+    <key alias="sales">Ventas</key>
+    <key alias="capturePayment">Marcar como pagado</key>
+    <key alias="processPayment">Procesar Pago</key>
+    <key alias="voidPayment">Anular pago</key>
+    <key alias="refundPayment">Devolver pago</key>
+    <key alias="voidPaymentConfirmMessage">¿Estás seguro de que quieres anular este pago?</key>
+    <key alias="paymentExpirationWarning">Puede que no recibas el pago porque haya expirado la autorización.</key>
+    <key alias="processedBy">Procesado por</key>
+    <key alias="refundMethod">Método de devolución</key>
     <key alias="noSales">
       <![CDATA[
-        <h5>You Have No Sales Yet</h5>
-        <p>But you will soon!</p>
+        <h5>No tienes ventas todavía :(</h5>
+        <p>¡Pero pronto las tendrás!</p>
       ]]>
     </key>
     <key alias="emptySalesCollection">No hay ventas en esta colección</key>
-    <key alias="fulfillmentStatus">Fulfillment status</key>
-    <key alias="billingAddress">Billing Address</key>
-    <key alias="noBillingAddress">No Billing Address</key>
-    <key alias="shippingAddress">Shipping Address</key>
-    <key alias="noShippingAddress">No Shipping Address</key>
-    <key alias="noteInvoiceAddressChange">Note: This ONLY changes the addresses associated with THIS invoice.</key>
-    <key alias="noteShipmentAddressChange">Note: This will not change any existing shipment destination addresses.</key>
-    <key alias="editAddress">Edit Address</key>
-    <key alias="shippingMethod">Shipping method</key>
-    <key alias="paid">Paid</key>
-    <key alias="unpaid">Unpaid</key>
-    <key alias="partial">Partial</key>
-    <key alias="balanceDue">Balance due</key>
-    <key alias="manageAdjustments">Manage adjustments</key>
-    <key alias="addAdjustment">Add adjustment</key>
-    <key alias="adjustments">Adjustments</key>
-    <key alias="adjustmentAssignedBy">Assigned by</key>
+    <key alias="fulfillmentStatus">Estado del pedido</key>
+    <key alias="billingAddress">Dirección de facturación</key>
+    <key alias="noBillingAddress">No hay dirección de facturación</key>
+    <key alias="shippingAddress">Dirección de envío</key>
+    <key alias="noShippingAddress">No hay dirección de envío</key>
+    <key alias="noteInvoiceAddressChange">Nota: Solo se cambiarán las direcciones asociadas con esta venta.</key>
+    <key alias="noteShipmentAddressChange">Note: No se cambiarán las direcciones de envío existentes.</key>
+    <key alias="editAddress">Editar dirección</key>
+    <key alias="shippingMethod">Método de envío</key>
+    <key alias="paid">Pagado</key>
+    <key alias="unpaid">Impago</key>
+    <key alias="partial">Parciales</key>
+    <key alias="balanceDue">Equilibrar</key>
+    <key alias="cancelled">Cancelado</key>
+    <key alias="manageAdjustments">Hacer ajustes</key>
+    <key alias="addAdjustment">Añadir ajuste</key>
+    <key alias="adjustments">Ajustes</key>
+    <key alias="adjustmentAssignedBy">Hechos por</key>
+    <key alias="lineItemPreview">Line Item Preview</key>
+    <key alias="noLineItemPreview">Unable to preview line item</key>
   </area>
   <area alias="merchelloCustomers">
     <key alias="loginName">Login</key>
     <key alias="newCustomer">Nuevo cliente</key>
-    <key alias="customers">Customers</key>
-    <key alias="customerInformation">Customer Information</key>
+    <key alias="customers">Clientes</key>
+    <key alias="customerInformation">Información de cliente</key>
     <key alias="basket">Carrito</key>
     <key alias="lastActivityDate">Fecha de última actividad</key>
-    <key alias="lastInvoiceTotal">Last Invoice Total</key>
-    <key alias="location">Location</key>
-    <key alias="customerBaskets">Customer Baskets</key>
+    <key alias="lastInvoiceTotal">Ultima venta</key>
+    <key alias="location">Localización</key>
+    <key alias="customerBaskets">Cestas de clientes</key>
     <key alias="noCustomers">
       <![CDATA[
-        <h5>You Have No Customers</h5>
-        <p>But you will soon!</p>
+        <h5>Todavía no tienes clientes :(</h5>
+        <p>¡Pero pronto los tendrás!</p>
       ]]>
     </key>
     <key alias="customerSaleHistory">
       <![CDATA[
-      Sales History
-      <small>A list of the customer's sales and their status</small>
+      Histórico de ventas
+      <small>Un listado de las ventas de clientes y su estado</small>
       ]]>
     </key>
-    <key alias="emptyCustomerCollection">There are currently no customers in this collection</key>
+    <key alias="emptyCustomerCollection">No hay clientes en esta colección</key>
     <key alias="customerNotes">
       <![CDATA[
-      Customer Notes
-      <small>Notes about the customer (not sale specific)</small>
+      Notas de clientes
+      <small>Notas sobre el cliente (no sobre las venta)</small>
       ]]>
     </key>
     <key alias="customerBasket">
@@ -399,54 +413,56 @@
       ]]>
     </key>
     <key alias="itemCacheEmpty">No hay elementos para mostrar</key>
-    <key alias="totalSpent">Total Spent</key>
-    <key alias="actions">Actions</key>
-    <key alias="editAddress">Edit address</key>
-    <key alias="deleteAddress">Delete address</key>
-    <key alias="addNewAddress">Add New Address</key>
-    <key alias="billingAddresses">Billing Addresses</key>
-    <key alias="billingAddressesHelper">Billing addresses associated with this customer</key>
-    <key alias="shippingAddresses">Shipping Addresses</key>
-    <key alias="shippingAddressesHelper">Shipping addresses associated with this customer</key>
+    <key alias="totalSpent">Total gastado</key>
+    <key alias="actions">Acciones</key>
+    <key alias="editAddress">Editar dirección</key>
+    <key alias="deleteAddress">Borrar dirección</key>
+    <key alias="addNewAddress">Añadir nueva dirección</key>
+    <key alias="billingAddresses">Direcciones de facturación</key>
+    <key alias="billingAddressesHelper">Direcciones de facturación asociadas al cliente</key>
+    <key alias="shippingAddresses">Direcciones de envío</key>
+    <key alias="shippingAddressesHelper">Direcciones de envío asociadas al cliente</key>
 
     <!-- Address Form Labels -->
-    <key alias="label">Label</key>
-    <key alias="fullName">Full Name</key>
-    <key alias="firstName">First Name</key>
-    <key alias="lastName">Last Name</key>
-    <key alias="company">Company</key>
-    <key alias="address">Address</key>
-    <key alias="addressLine2">Address Line 2</key>
-    <key alias="city">City</key>
-    <key alias="country">Country</key>
-    <key alias="stateOrProvince">State/Province</key>
-    <key alias="zipOrPostalCode">Zip/Postal Code</key>
-    <key alias="phone">Phone</key>
-    <key alias="primaryAddress">Primary Address</key>
+    <key alias="label">Etiqueta</key>
+    <key alias="fullName">Nombre completo</key>
+    <key alias="firstName">Nombre</key>
+    <key alias="lastName">Apellidos</key>
+    <key alias="company">Empresa</key>
+    <key alias="address">Dirección</key>
+    <key alias="addressLine2">Dirección 2</key>
+    <key alias="city">Población</key>
+    <key alias="country">País</key>
+    <key alias="stateOrProvince">Provincia/Región</key>
+    <key alias="zipOrPostalCode">Código postal</key>
+    <key alias="phone">Teléfono</key>
+    <key alias="primaryAddress">Dirección principal</key>
     <key alias="email">Email</key>
 
     <!-- Address Table Labels (shorter) -->
-    <key alias="tblLabel">Label</key>
-    <key alias="tblFullName">Name</key>
-    <key alias="tblAddress">Address</key>
-    <key alias="tblAddressLine2">Address 2</key>
-    <key alias="tblLocality">Locality</key>
+    <key alias="tblLabel">Etiqueta</key>
+    <key alias="tblFullName">Nombre</key>
+    <key alias="tblAddress">Dirección</key>
+    <key alias="tblAddressLine2">Dirección 2</key>
+    <key alias="tblLocality">Población</key>
     <key alias="tblRegion">Region</key>
-    <key alias="tblCountry">Country</key>
-    <key alias="tblPostalCode">Postal</key>
+    <key alias="tblCountry">País</key>
+    <key alias="tblPostalCode">CP</key>
 
     <!-- Address Form Validation Messages -->
-    <key alias="labelRequired">Label is a required field</key>
-    <key alias="addressRequired">Address is a required field</key>
-    <key alias="cityRequired">City is a required field</key>
-    <key alias="countryRequired">Country is a required field</key>
-    <key alias="zipOrPostalCodeRequired">Zip/Postal Code is a required field</key>
-    <key alias="emailRequired">Email is a required field</key>
+    <key alias="labelRequired">La etiqueta es obligatoria</key>
+    <key alias="addressRequired">La dirección es obligatoria</key>
+    <key alias="cityRequired">La población es obligatoria</key>
+    <key alias="countryRequired">El país es obligatoria</key>
+    <key alias="zipOrPostalCodeRequired">El código postal es obligatoria</key>
+    <key alias="emailRequired">El email es obligatoria</key>
   </area>
   <area alias="merchelloMarketing">
+    <key alias="availableRewards">Available Rewards</key>
+    <key alias="availableConstraints">Available Constraints</key>
     <key alias="currentOffers">Ofertas</key>
     <key alias="offerCode">Código de la oferta</key>
-    <key alias="offerCodeInUse">Already in use</key>
+    <key alias="offerCodeInUse">Ya está en uso</key>
     <key alias="offerCodeIsOk">Ok!</key>
     <key alias="newOffer">Nueva oferta</key>
     <key alias="noOffer">No se han encontrado ofertas</key>
@@ -457,7 +473,7 @@
     <key alias="mustUniqueOfferCode">Los códigos de oferta tienen que ser únicos.</key>
     <key alias="offerSetExpires">Esta oferta sólo es válida para determinadas fechas.</key>
     <key alias="offerNeverExpires">Esta oferta no acaba nunca.</key>
-    <key alias="offerHasExpired">Offer has expired</key>
+    <key alias="offerHasExpired">La oferta ha expirado</key>
     <key alias="offerValidDates">Fechas válidas para la oferta</key>
     <key alias="offerValidDatesInfo">Configura las fechas para las que es válida la oferta.</key>
     <key alias="offerValidAllDates">Offer is valid for all dates</key>
@@ -465,29 +481,37 @@
     <key alias="offerActive">Active</key>
     <key alias="thisOfferIsNotActive">This offer is not active</key>
     <key alias="thisOfferIsActive">This offer is active</key>
-    <key alias="offerToSetActiveInfo"><![CDATA[ <strong>To set active:</strong> Assign and configure rewards and any constraints ]]></key>
+    <key alias="offerToSetActiveInfo"><![CDATA[ <strong>Para activar:</strong> Asigna y configura recompensas y restricciones ]]></key>
     <key alias="offerConstraintsInfo">Restricciones</key>
     <key alias="offerConstraintsConfig">Configura restricciones para esta oferta.</key>
     <key alias="offerRewardsInfo">Recompensas</key>
     <key alias="offerRewardsConfig">Configura recompensas para esta oferta.</key>
-    <key alias="noConstraints">No Constraints Available</key>
-    <key alias="noRewards">No Rewards Available</key>
-    <key alias="noContraintsAssigned">No Constraints Assigned</key>
-    <key alias="noRewardsAssigned">No Rewards Assigned</key>
-    <key alias="componentAutoSaving">Component updated - auto saving</key>
+    <key alias="noConstraints">No hay restricciones disponibles</key>
+    <key alias="noRewards">No hay recompensas disponibles</key>
+    <key alias="noContraintsAssigned">No hay restricciones asignadas</key>
+    <key alias="noRewardsAssigned">No hay recompensas asignadas</key>
+    <key alias="componentAutoSaving">Componente actualizado - guardado automático</key>
     <key alias="lineItemNameInfo">
-      <![CDATA[Line item name<small>This is the text that will appear on the invoice when the reward is awarded.</small>]]>
+      <![CDATA[Texto de la oferta<small>Este texto aparecerá en el pedido cuando la oferta se aplique.</small>]]>
     </key>
+    <key alias="offerProvider">Offer Provider</key>
+    <key alias="couponMaxRedemptionsTitle">Set a maximum number of allowable redemptions</key>
+    <key alias="couponMaxRedemptionsInputTitle">Set the maximum number of redemptions</key>
+    <key alias="couponMaxRedemptionsInputHelp">Values should be entered as positive numbers.</key>
+    <key alias="discountPriceDialogTitle">REWARD: Discount the price</key>
+    <key alias="discountPriceDialogApplyDiscount">Apply discount in the amount</key>
+    <key alias="discountPriceDialogApplyDiscountDescription">Values should be entered as positive numbers.</key>
   </area>
   <area alias="merchelloVariant">
     <!-- things -->
     <key alias="product">Producto</key>
     <key alias="variant">Variante</key>
     <key alias="sku">SKU</key>
-    <key alias="costOfGoods">Cost of Goods</key>
-    <key alias="baseSku">Base Sku</key>
-    <key alias="barcode">Código de barras</key>sel
+    <key alias="costOfGoods">Coste</key>
+    <key alias="baseSku">Sku base</key>
+    <key alias="barcode">Código de barras</key>
     <key alias="manufacturer">Fabricante</key>
+    <key alias="allManufacturers">All Manufacturers</key>
     <key alias="manufacturerModel">Num. Modelo de Fabricante</key>
     <key alias="variantInfo">Información de producto</key>
     <key alias="variantOptions">Opciones de la variante</key>
@@ -507,8 +531,8 @@
     <key alias="addOptions">Añadir opciones a esta variante y auto-rellenar el resto de variantes para cada opción</key>
     <key alias="deleteProduct">Borrar producto</key>
     <key alias="deleteVariant">Borrar variante</key>
-    <key alias="toggleOnSale">On Sale</key>
-    <key alias="toggleAvailable">Available</key>
+    <key alias="toggleOnSale">En oferta</key>
+    <key alias="toggleAvailable">Disponible</key>
     <key alias="configVariant">Configurar esta variante</key>
     <key alias="selectVariantOptions">Selecciona las variantes/opciones que te gustaría crear.</key>
     <key alias="addFile">Añade un archivo a tu variante de producto</key>
@@ -516,22 +540,30 @@
     <key alias="setInventoryPreferences">Configurar la gestión de "sin stock" y ajustar el stock para esta variante</key>
     <!-- phrases -->
     <key alias="barcodeExamples">e.g. UPC, ISBN</key>
-    <key alias="optionNameExamples">(e.g. Size, Style, Color)</key>
-    <key alias="optionValueExamples">(e.g. red, green, blue)</key>
-    <key alias="hasDigitalDownload">This variant has digital goods</key>
-    <key alias="hasOptions">This variant has options (like size or color)</key>
-    <key alias="isTaxable">This variant is taxable</key>
-    <key alias="isShippable">This variant is shippable</key>
-    <key alias="isOnSale">This variant is on sale</key>
-    <key alias="isAvailable">This variant is available to purchase</key>
+    <key alias="optionNameExamples">(e.g. Talla, Color)</key>
+    <key alias="optionValueExamples">(e.g. rojo, verde, azul)</key>
+    <key alias="hasDigitalDownload">Esta variante tiene descargas</key>
+    <key alias="hasOptions">Esta variante tiene opciones (como talla o color)</key>
+    <key alias="isTaxable">Esta variante está sujeta a impuestos</key>
+    <key alias="isShippable">Esta variante está sujeta a envíos</key>
+    <key alias="isOnSale">Esta variante está en oferta</key>
+    <key alias="isAvailable">Esta variante está disponible para comprar</key>
     <key alias="noProduct">No tienes productos.</key>
-    <key alias="newProductPrompt">Qué tal crear uno ahora? Simplemente haz click en el botón de Nuevo Producto.</key>
+    <key alias="newProductPrompt">¿Qué tal crear uno ahora? Simplemente haz click en el botón de Nuevo Producto.</key>
     <key alias="limitSelect">Número de productos a mostrar</key>
     <key alias="mustUniqueSku">Debe tener una referencia SKU única</key>
     <key alias="inventoryWarning"><![CDATA[<p>Importante: si seleccionas gestionar el inventario, debe ser configurado manualmente para cada variante (abajo) una vez que este producto se haya guardado. También puedes configurar un inventario por defecto, aque se aplicará a <strong>todas las variantes</strong>.</p>]]></key>
-    <key alias="startingInventoryWarning"><![CDATA[(Comenzará el inventario para <strong>todas las variantes</strong> y <strong>todos los almacenes</strong>)]]></key><key alias="productOnSale">Product on sale</key><key alias="toggleOnSale">On Sale</key>
-    <key alias="productOnSale">On sale</key>
-    <key alias="allowOutOfStockPurchase">Allow out of stock purchase</key>
+    <key alias="startingInventoryWarning"><![CDATA[(Comenzará el inventario para <strong>todas las variantes</strong> y <strong>todos los almacenes</strong>)]]></key><key alias="productOnSale">Producto en oferta</key><key alias="toggleOnSale">En oferta</key>
+    <key alias="productOnSale">On oferta</key>
+    <key alias="allowOutOfStockPurchase">Permitir compra sin stock</key>
+    <key alias="bulkChangePriceTitle">Change Prices For All Selected Items</key>
+    <key alias="bulkChangePriceUpdateCostOfGoods">Update cost of goods price.</key>
+    <key alias="bulkChangePriceUpdateSalePrice">Update sale price.</key>
+    <key alias="bulkChangeInventoryTitle">Update Inventory For All Selected Items</key>
+    <key alias="bulkChangeInventoryNewQuantity">New quantity</key>
+    <key alias="bulkChangeInventoryUpdateLowCount">Update low count.</key>
+    <key alias="bulkChangeInventoryUpdateNewLowCount">New low stock quantity</key>
+    <key alias="bulkChangeInventoryNote">Note: This will update the inventory for all warehouses on all selected variants</key>
   </area>
   <area alias="merchelloOrder">
     <!-- moved to sales -->
@@ -570,13 +602,13 @@
     <key alias="unarchiveSales">Desarchivar ventas</key>
     <key alias="noSalesYet">Todavía no tienes ventas</key>
     <key alias="butSoonYouWill">¡Pero pronto las tendrás!</key>
-    
+
     <!-- phrases -->
     <key alias="noOrders">No tienes pedidos.</key>
     <key alias="attentionRequired">Tienes pedidos que gestionar</key>
-    <key alias="fulfilled">Fulfilled</key>
-    <key alias="unfulfilled">Unfulfilled</key>
-    <key alias="open">Open</key>
+    <key alias="fulfilled">Preparado</key>
+    <key alias="unfulfilled">Sin preparar</key>
+    <key alias="open">Abierto</key>
   </area>
   <area alias="merchelloOrderView">
     <!-- things -->
@@ -585,10 +617,10 @@
     <key alias="shippingAddress">Dirección de envío</key>
     <key alias="billingAddress">Dirección de facturación</key>
     <key alias="orderInformation">Información del pedido</key>
-    <key alias="invoiced">Invoiced</key>
+    <key alias="invoiced">Facturado</key>
     <!-- actions -->
-    <key alias="captureFunds">Capture Funds</key>
-    <key alias="newPayment">New Payment</key>
+    <key alias="captureFunds">Cobrar</key>
+    <key alias="newPayment">Nuevo pago</key>
     <!-- phrases -->
     <key alias="billingAndShippingAddressHelper">Direcciones de facturación y envío</key>
     <key alias="orderInformationHelper">Líneas de pedido y costes</key>
@@ -598,7 +630,7 @@
     <key alias="captured">Cobrado</key>
     <key alias="paymentHistory"> Histórico de pagos</key>
     <key alias="saleHistory">Histórico de ventas</key>
-    <key alias="saleHistoryHelper"><![CDATA[A timeline of events regarding this order]]></key>
+    <key alias="saleHistoryHelper"><![CDATA[Un histórico de este pedido]]></key>
     <key alias="paymentHistoryHelper">Registros de estado para uno o más pagos</key>
     <key alias="paymentProcessedBy">Pago procesado por:</key>
     <key alias="resetFilters">Resetear filtros</key>
@@ -607,16 +639,22 @@
     <!-- phrases -->
     <key alias="fulfillManually">Enviar manualmente</key>
     <key alias="createShipment">Crear envío</key>
+    <key alias="noShipments">There are no shipments.</key>
+    <key alias="items">Items</key>
+    <key alias="origin">Origin</key>
+    <key alias="destination">Destination</key>
+    <key alias="editShipment">Edit Shipment</key>
+    <key alias="editOrigin">Edit Origin</key>
+    <key alias="editDestination">Edit Destination</key>
+    <key alias="deleteShipment">Delete Shipment</key>
+    <key alias="setSaleDestination">Set Sale Destination</key>
   </area>
   <area alias="merchelloWarehouse">
-    <!-- things -->
     <key alias="warehouse">Almacén</key>
     <key alias="warehouses">Almacenes</key>
     <key alias="stock">Stock</key>
     <key alias="lowCount">Bajo stock</key>
     <key alias="location">Localización</key>
-    <!-- actions -->
-    <!-- phrases -->
   </area>
   <!-- TODO KEEP THE MERCHELLO SHIPPING AREA -->
   <area alias="merchelloShipping">
@@ -625,7 +663,7 @@
     <key alias="info">Información de envío</key>
     <key alias="weight">Peso</key>
     <key alias="dimensions">Dimensiones</key>
-    <key alias="carrier">Carrier</key>
+    <key alias="carrier">Empresa de envíos</key>
     <!-- actions -->
     <key alias="setVars">Configura las variables de envío: Peso y dimensiones</key>
     <!-- phrases -->
@@ -634,30 +672,30 @@
     <key alias="shippingMethods">Métodos de envío</key>
     <key alias="shippingMethodsHelper">Añade métodos de envío a regiones existentes o crea una nueva región</key>
     <key alias="addCountry">Añade un País</key>
-    <key alias="addCatalog">Add a Catalog</key>
-    <key alias="selectCatalog">Select Catalog</key>
-    <key alias="shippingProvidersMethodsTitle">Shipping Providers &amp; Methods</key>
+    <key alias="addCatalog">Añade un catálogo</key>
+    <key alias="selectCatalog">Selecciona un catálogo</key>
+    <key alias="shippingProvidersMethodsTitle">Métodos de envío</key>
     <key alias="shipContriesInfo">
       <![CDATA[
-        Shipping Countries
-        <small>A list of the catalog's shipping providers and methods, sorted by country.</small>]]>
+        Páises para envíos
+        <small>Un listado de métodos de envío, ordenados por país.</small>]]>
     </key>
-    <key alias="warehouse">Warehouse</key>
-    <key alias="selectShipment">Select Shipment</key>
+    <key alias="warehouse">Almacén</key>
+    <key alias="selectShipment">Selecciona envío</key>
+    <key alias="shipmentStatus">Shipment Status</key>
   </area>
   <area alias="merchelloInventory">
     <!-- things -->
     <key alias="base">Inventario base</key>
     <key alias="inventory">Inventario</key>
     <key alias="tracking">Gestión de inventario</key>
-    <!-- actions -->
-    <!-- phrases -->
   </area>
   <area alias="merchelloPlaceholders">
     <key alias="enterProduct">Escribe el nombre del producto</key>
     <key alias="enterOrder">Comienza a escribir un número o nombre de pedido...</key>to
     <key alias="addStyle">Añade un estilo...</key>
-    <key alias="enterOffer">Enter a name for the offer</key>
+    <key alias="enterOffer">Introduce el nombre de la oferta</key>
+    <key alias="offerCodeExample">eg. 10OFF</key>
   </area>
 
   <area alias="merchelloSettings">
@@ -677,11 +715,14 @@
     <key alias="globalTrackInventory">Gestionar inventario para todos los productos y variantes</key>
     <key alias="globalShippingIsTaxable">Los gastos de envío están sujetos a impuestos</key>
     <key alias="globalTaxationApplication">Configura como aplicar los impuestos</key>
-    <key alias="defaultCultureName">Set the default extended content culture</key>
-    <key alias="listViewSettingsTitle">List settings</key>
-    <key alias="stickyListView">Enable sticky list settings for general list.</key>
-    <key alias="stickyCollectionView">Enable sticky list setting for collection lists.</key>
-    <key alias="stickListingTab"><![CDATA[Enable sticking <b>%0% Listing</b> tab.]]></key>
+    <key alias="defaultCultureName">Configura el idioma por defecto</key>
+    <key alias="listViewSettingsTitle">Configuración de listados</key>
+    <key alias="listViewSettingsDescription">Enabling sticky options in lists, means it will remember the last page you were on or search term when you go back and forth between products and collections/lists making it much easier to manage products.</key>
+    <key alias="stickyListView">Habilita configuraciones de listado para el listado general.</key>
+    <key alias="stickyCollectionView">Habilita configuraciones de listado para listados de colecciones.</key>
+    <key alias="stickListingTab"><![CDATA[Habilita pestaña de <b>%0% Listado</b> tab.]]></key>
+    <key alias="listViewSearchOptionsTitle">List Search Options</key>
+    <key alias="listViewSearchOptionsSubTitle">Fields include in filter</key>
   </area>
 
   <area alias="merchelloShippingCountry">
@@ -793,12 +834,12 @@
     <key alias="deactivate">desactivar</key>
   </area>
   <area alias="merchelloPayment">
-    <key alias="paymentInfo">Payment Information</key>
+    <key alias="paymentInfo">Información de pagos</key>
     <key alias="payment">Pago</key>
     <key alias="addPaymentMethod">Añadir un método</key>
     <key alias="resourceType">Tipo de fuente:</key>
     <key alias="deletePayment">Borrar un método de pago</key>
-    <key alias="paymentMethod">Payment Method</key>
+    <key alias="paymentMethod">Método de pago</key>
   </area>
   <area alias="merchelloPaymentMethod">
     <key alias="addEditPayment">Añadir/Editar un método de pago</key>
@@ -809,6 +850,7 @@
   <area alias="merchelloDelete">
     <key alias="deleteConfirmation">Confirmación de borrado</key>
     <key alias="deleteConfirmMessage">Estás seguro de que quieres eliminar este elemento?</key>
+	<key alias="actionNotReversible">This action cannot be reversed.</key>
   </area>
   <area alias="merchelloProductEdit">
     <key alias="enterProductName">Escribe el nombre del producto</key>
@@ -833,7 +875,7 @@
     <key alias="variantInformation">Información de variante</key>
     <key alias="variantInformationHelper">Edita las variantes de este producto.</key>
     <key alias="selectProduct">Selecciona un producto...</key>
-    <key alias="selectProducts">Select products</key>
+    <key alias="selectProducts">Selecciona productos</key>
     <key alias="selectMerchelloProduct">Selecciona un producto de Merchello</key>
     <key alias="selectYourProduct">Selecciona tu producto</key>
     <key alias="removeProduct">Desconectar este producto</key>
@@ -855,5 +897,24 @@
     <key alias="orderCreated">El pedido %0% ha sido creado</key>
     <key alias="shipmentCreated">Se ha creado un envío con %0% artículos</key>
     <key alias="shipmentStatusChanged">Se ha cambiado el envío a %0%</key>
+  </area>
+
+  <!-- Merchello Property Editors -->
+  <area alias="merchelloCollectionPicker">
+    <key alias="config">Config</key>
+  </area>
+
+  <!-- NotificationService Messages -->
+  <area alias="merchelloStatusNotifications">
+    <key alias="couponSaveSuccess">Coupon Saved</key>
+    <key alias="couponSaveError">Coupon Save Failed</key>
+    <key alias="productSaveSuccess">Product Saved</key>
+    <key alias="productSaveInProgress">Saving Product...</key>
+    <key alias="productSaveError">Product Save Failed</key>
+    <key alias="productDeleteSuccess">Product Deleted</key>
+    <key alias="productDeleteError">Product Deletion Failed</key>
+    <key alias="customerSaveSuccess">Customer Saved</key>
+    <key alias="customerSaveError">Customer Save Failed</key>
+    <key alias="customerSaveInProgress">Saving Customer...</key>
   </area>
 </language>

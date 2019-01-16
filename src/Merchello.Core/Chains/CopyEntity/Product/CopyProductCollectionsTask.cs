@@ -38,7 +38,10 @@
         {
             var collections = Original.GetCollectionsContaining().ToArray();
 
-            collections.ForEach(value.AddToCollection);
+            foreach (var entityCollection in collections)
+            {
+                value.AddToCollection(entityCollection);
+            }
 
             return Attempt<IProduct>.Succeed(value);
         }

@@ -17,12 +17,11 @@
 
     using Umbraco.Core;
     using Umbraco.Core.Cache;
-    using Umbraco.Core.Logging;
 
     /// <summary>
     /// The gateway provider resolver.
     /// </summary>
-    internal class GatewayProviderResolver : MerchelloManyObjectsResolverBase<GatewayProviderResolver, GatewayProviderBase>,  IGatewayProviderResolver
+    internal class GatewayProviderResolver : MerchelloManyObjectsResolverBase<GatewayProviderResolver, GatewayProviderBase>, IGatewayProviderResolver
     {
         /// <summary>
         /// The lock.
@@ -30,9 +29,9 @@
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
         /// <summary>
-        /// The activated gateway provider cache.
+        /// Stores a list of <see cref="GatewayProviderSettings"/> in the singleton for quick reference
         /// </summary>
-        private readonly ConcurrentDictionary<Guid, GatewayProviderBase> _activatedGatewayProviderCache = new ConcurrentDictionary<Guid, GatewayProviderBase>();
+        private readonly ConcurrentDictionary<Guid, IGatewayProviderSettings> _activatedProviderSettingsCache = new ConcurrentDictionary<Guid, IGatewayProviderSettings>();
 
         /// <summary>
         /// The gateway provider service.
@@ -56,7 +55,10 @@
         /// <param name="runtimeCache">
         /// The runtime cache.
         /// </param>
-        internal GatewayProviderResolver(IEnumerable<Type> values, IGatewayProviderService gatewayProviderService, IRuntimeCacheProvider runtimeCache)
+        internal GatewayProviderResolver(
+            IEnumerable<Type> values,
+            IGatewayProviderService gatewayProviderService,
+            IRuntimeCacheProvider runtimeCache)
             : base(values)
         {
             Mandate.ParameterNotNull(gatewayProviderService, "gatewayProviderService");
@@ -65,48 +67,30 @@
             _gatewayProviderService = gatewayProviderService;
             _runtimeCache = runtimeCache;
 
-            BuildActivatedGatewayProviderCache();
+            BuildActivatedProviderSettingsCache();
         }
 
-        /// <summary>
-        /// Gets the values.
-        /// </summary>
         protected override IEnumerable<GatewayProviderBase> Values
         {
             get
             {
-                if (_activatedGatewayProviderCache.Count == InstanceTypes.Count())
-                    return _activatedGatewayProviderCache.Values;
+                // TODO - Must be a better way to do this. Bit of a hack
+                var activatedGateways = GetActivatedProviders().ToArray();
 
-                var allResolved = new List<GatewayProviderBase>();
+                var activatedGatewayKeys = activatedGateways.Select(x => x.Key).ToArray();
 
                 var factory = new Persistence.Factories.GatewayProviderSettingsFactory();
 
-                using (GetWriteLock())
-                {
-                    allResolved.AddRange(_activatedGatewayProviderCache.Values);
+                var allGateWays = InstanceTypes.Select(type => factory.BuildEntity(type, GetGatewayProviderType(type)))
+                    .Select(CreateInstance).Where(attempt => attempt.Success)
+                    .Select(x => x.Result)
+                    .Where(x => !activatedGatewayKeys.Contains(x.Key))
+                    .ToList();
 
-                    var inactive = (from it in InstanceTypes
-                                    let key = it.GetCustomAttribute<GatewayProviderActivationAttribute>(false).Key
-                                    where !_activatedGatewayProviderCache.ContainsKey(key)
-                                    select it).ToList();
+                allGateWays.AddRange(activatedGateways);
 
-                    allResolved.AddRange(
-                        inactive.Select(
-                            type => factory.BuildEntity(type, GetGatewayProviderType(type)))
-                            .Select(CreateInstance).Where(attempt => attempt.Success).Select(x => x.Result));
-                }
-
-                return allResolved;
+                return allGateWays;
             }
-        }
-
-        /// <summary>
-        /// Gets a collection of all activated PaymentGatewayProviders
-        /// </summary>
-        internal IEnumerable<PaymentGatewayProviderBase> PaymentGatewayProviders
-        {
-            get { return GetActivatedProviders<PaymentGatewayProviderBase>() as IEnumerable<PaymentGatewayProviderBase>; }
         }
 
         /// <summary>
@@ -133,7 +117,10 @@
         /// </returns>
         public IEnumerable<GatewayProviderBase> GetActivatedProviders()
         {
-            return _activatedGatewayProviderCache.Values;
+            return _activatedProviderSettingsCache.Values
+                .Select(CreateInstance)
+                .Where(attempt => attempt.Success)
+                .Select(x => x.Result).ToList();
         }
 
         /// <summary>
@@ -169,7 +156,11 @@
         /// </returns>
         public IEnumerable<GatewayProviderBase> GetActivatedProviders<T>() where T : GatewayProviderBase
         {
-            return (from value in _activatedGatewayProviderCache.Values let t = value.GetType() where typeof(T).IsAssignableFrom(t) select value as T).ToList();
+            return (
+                from value in this.GetActivatedProviders()
+                let t = value.GetType()
+                where typeof(T).IsAssignableFrom(t)
+                select value as T).ToList();
         }
 
         /// <summary>
@@ -177,8 +168,8 @@
         /// </summary>
         public void RefreshCache()
         {
-            _activatedGatewayProviderCache.Clear();
-            BuildActivatedGatewayProviderCache();
+            _activatedProviderSettingsCache.Clear();
+            BuildActivatedProviderSettingsCache();
         }
 
         /// <summary>
@@ -210,35 +201,13 @@
         }
 
 
-        /// <summary>
-        /// The build activated gateway provider cache.
-        /// </summary>
-        private void BuildActivatedGatewayProviderCache()
+        private void BuildActivatedProviderSettingsCache()
         {
-            // this will cache the list of all providers that have been "Activated"
-            var allActivated = _gatewayProviderService.GetAllGatewayProviders().ToArray();
-            foreach (var provider in allActivated)
+            var settings = _gatewayProviderService.GetAllGatewayProviders().ToList();
+            foreach (var setting in settings)
             {
-                var attempt = CreateInstance(provider);
-                if (attempt.Success)
-                    AddOrUpdateCache(attempt.Result);
-                else
-                {
-                    MultiLogHelper.Error<GatewayProviderResolver>(string.Format("Failed to create instance of type {0}", provider.Name), attempt.Exception);
-                }
+                _activatedProviderSettingsCache.AddOrUpdate(setting.Key, setting, (x, y) => setting);
             }
-        }
-
-
-        /// <summary>
-        /// The add or update cache.
-        /// </summary>
-        /// <param name="provider">
-        /// The provider.
-        /// </param>
-        private void AddOrUpdateCache(GatewayProviderBase provider)
-        {
-            _activatedGatewayProviderCache.AddOrUpdate(provider.Key, provider, (x, y) => provider);
         }
 
 

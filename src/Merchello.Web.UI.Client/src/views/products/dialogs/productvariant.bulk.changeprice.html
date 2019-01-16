@@ -4,7 +4,7 @@
         <form class="umb-overlay__form">
             
             <div class="umb-overlay-header">
-                <h4 class="umb-overlay__title">Change Prices For All Selected Items</h4>
+                <h4 class="umb-overlay__title"><localize key="merchelloVariant_bulkChangePriceTitle">Change Prices For All Selected Items</localize></h4>
             </div>
 
             <div class="umb-overlay-container form-horizontal merchello-panel-body">
@@ -19,7 +19,7 @@
 
                 <div class="control-group">
                     <div class="form-group row-fluid">
-                        <label class="label-checkbox"><input name="includeCostOfGoods" type="checkbox" data-ng-model="dialogData.includeCostOfGoods"><span>Update cost of goods price.</span></label>
+                        <label class="label-checkbox"><input name="includeCostOfGoods" type="checkbox" data-ng-model="dialogData.includeCostOfGoods"><span><localize key="merchelloVariant_bulkChangePriceUpdateCostOfGoods">Update cost of goods price.</localize></span></label>
                     </div>
                     <div class="form-group row-fluid input-prepend" data-ng-show="dialogData.includeCostOfGoods">
                         <label for="cost-price"><localize key="merchelloProducts_newCostOfGoods">New Cost Of Goods</localize></label>
@@ -30,7 +30,7 @@
 
                 <div class="control-group">
                     <div class="form-group row-fluid">
-                        <label class="label-checkbox"><input name="includeSalePrice" type="checkbox" data-ng-model="dialogData.includeSalePrice"> <span>Update sale price.</span></label>
+                        <label class="label-checkbox"><input name="includeSalePrice" type="checkbox" data-ng-model="dialogData.includeSalePrice"> <span><localize key="merchelloVariant_bulkChangePriceUpdateSalePrice">Update sale price.</localize></span></label>
                     </div>
                     <div class="form-group row-fluid input-prepend" data-ng-show="dialogData.includeSalePrice">
                         <label for="new-sale-price"><localize key="merchelloProducts_newSalePrice">New Sale Price</localize></label>

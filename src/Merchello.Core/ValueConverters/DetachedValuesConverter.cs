@@ -40,6 +40,11 @@
         private readonly IContentTypeService _contentTypeService;
 
         /// <summary>
+        /// The <see cref="MediaService"/>.
+        /// </summary>
+        private readonly IMediaService _mediaService;
+
+        /// <summary>
         /// Internal class for correcting stored detached values.
         /// </summary>
         private readonly DetachedValueCorrector _corrector;
@@ -67,6 +72,7 @@
             {
                 _contentTypeService = applicationContext.Services.ContentTypeService;
                 _dataTypeService = applicationContext.Services.DataTypeService;
+                _mediaService = applicationContext.Services.MediaService;
                 _ready = true;
             }
             else
@@ -310,6 +316,14 @@
 
             //// Create a fake content property data object
             if (additionalData == null) additionalData = new Dictionary<string, object>();
+
+            //The image cropper wants the content key and property key to save correctly.
+            if (propEditor.Alias == "Umbraco.ImageCropper")
+            {
+                additionalData.Add("cuid", contentType.Key);
+                additionalData.Add("puid", propType.Key);
+            }
+
             var contentPropData = new ContentPropertyData(rawValue, propPreValues, additionalData);
 
             try

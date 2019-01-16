@@ -68,11 +68,12 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetKeysThatExistInAllCollections(collectionKeys, min, max, page, itemsPerPage, orderExpression, sortDirection);
+                return repository.GetKeysThatExistInAllCollections(collectionKeys, min, max, page, itemsPerPage, orderExpression, sortDirection, includeUnavailable);
             }
         }
 
@@ -114,12 +115,13 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetKeysThatExistInAllCollections(collectionKeys, term, min, max, page, itemsPerPage, orderExpression, sortDirection);
-            }   
+                return repository.GetKeysThatExistInAllCollections(collectionKeys, term, min, max, page, itemsPerPage, orderExpression, sortDirection, includeUnavailable);
+            }
         }
 
         /// <summary>
@@ -156,11 +158,12 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetKeysNotInAnyCollections(collectionKeys, min, max, page, itemsPerPage, orderExpression, sortDirection);
+                return repository.GetKeysNotInAnyCollections(collectionKeys, min, max, page, itemsPerPage, orderExpression, sortDirection, includeUnavailable);
             }
         }
 
@@ -202,11 +205,12 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetKeysNotInAnyCollections(collectionKeys, term, min, max, page, itemsPerPage, orderExpression, sortDirection);
+                return repository.GetKeysNotInAnyCollections(collectionKeys, term, min, max, page, itemsPerPage, orderExpression, sortDirection, includeUnavailable);
             }
         }
 
@@ -244,11 +248,12 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetKeysThatExistInAnyCollections(collectionKeys, min, max, page, itemsPerPage, orderExpression, sortDirection);
+                return repository.GetKeysThatExistInAnyCollections(collectionKeys, min, max, page, itemsPerPage, orderExpression, sortDirection, includeUnavailable);
             }
         }
 
@@ -290,11 +295,12 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetKeysThatExistInAnyCollections(collectionKeys, term, min, max, page, itemsPerPage, orderExpression, sortDirection);
+                return repository.GetKeysThatExistInAnyCollections(collectionKeys, term, min, max, page, itemsPerPage, orderExpression, sortDirection, includeUnavailable);
             }
         }
 
@@ -307,11 +313,12 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection direction = SortDirection.Ascending)
+            SortDirection direction = SortDirection.Ascending,
+            bool includeUnavailable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetByAdvancedSearch(collectionKey, includeFields, term, manufacturer, page, itemsPerPage, orderExpression, direction);
+                return repository.GetByAdvancedSearch(collectionKey, includeFields, term, manufacturer, page, itemsPerPage, orderExpression, direction, includeUnavailable);
             }
         }
     }

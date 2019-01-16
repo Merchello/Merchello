@@ -84,6 +84,11 @@
         public string FromCountryCode { get; set; }
 
         /// <summary>
+        /// Gets or sets the from Country Name
+        /// </summary>
+        public string FromCountryName { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether from is commercial.
         /// </summary>
         public bool FromIsCommercial { get; set; }
@@ -127,6 +132,11 @@
         /// Gets or sets the to country code.
         /// </summary>
         public string ToCountryCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the to country name
+        /// </summary>
+        public string ToCountryName { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to is commercial.

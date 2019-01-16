@@ -109,6 +109,8 @@
         /// </summary>
         public SortDirection SortDirection { get; set; }
 
+        public bool IncludeUnavailable { get; set; }
+
         /// <summary>
         /// Gets or sets the collection keys.
         /// </summary>
@@ -143,13 +145,13 @@
                 {
                     return _query.TypedProductContentByPriceRange(MinPrice, MaxPrice, Page, ItemsPerPage, SortBy, SortDirection);
                 }
-                
+
                 // don't have a price range with a search term filter.
                 var notImplemented = new NotImplementedException();
                 MultiLogHelper.Error<ProductContentQuery>("Typed product content by search term and price range has not been implemented", notImplemented);
                 throw notImplemented;
             }
-            
+
 
             switch (this.CollectionClusivity)
             {

@@ -36,13 +36,17 @@
             $scope.debugAllowDelete = false;
             $scope.newPaymentOpen = false;
             $scope.entityType = 'Invoice';
-            
+
+            $scope.canAddLineItems = true;
+
+            $scope.remainingBalance = 0;
 
             // exposed methods
             //  dialogs
             $scope.capturePayment = capturePayment;
             $scope.showFulfill = true;
             $scope.openDeleteInvoiceDialog = openDeleteInvoiceDialog;
+            $scope.cancelInvoice = cancelInvoice;
             $scope.processDeleteInvoiceDialog = processDeleteInvoiceDialog,
             $scope.openFulfillShipmentDialog = openFulfillShipmentDialog;
             $scope.processFulfillShipmentDialog = processFulfillShipmentDialog;
@@ -53,6 +57,8 @@
             $scope.setNotPreValuesLoaded = setNotPreValuesLoaded;
             $scope.saveNotes = saveNotes;
             $scope.deleteNote = deleteNote;
+
+            $scope.openProductSelection = openProductSelectionDialog;
 
             // localize the sales history message
             $scope.localizeMessage = localizeMessage;
@@ -83,6 +89,42 @@
 
             function localizeMessage(msg) {
                 return msg.localize(localizationService);
+            }
+
+
+            function openProductSelectionDialog() {
+                var dialogData = {};
+                dialogData.addItems = [];
+
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/customer.productselectionfilter.html',
+                    show: true,
+                    callback: processProductSelection,
+                    dialogData: dialogData
+                });
+            }
+
+            function processProductSelection(dialogData) {
+
+                // Post the model back to the controller
+                var invoiceAddItems = {
+                    InvoiceKey: $scope.invoice.key,
+                    Items: dialogData.addItems,
+                    LineItemType: 'Product',
+                    IsAddProduct: true
+                }
+
+                // Put the new items
+                var invoiceSavePromise = invoiceResource.putInvoiceNewProducts(invoiceAddItems);
+                invoiceSavePromise.then(function () {
+                    $timeout(function () {
+                        refresh();
+                        notificationsService.success('Invoice Updated.');
+                    }, 1500);
+                }, function (reason) {
+                    notificationsService.error("Failed to update invoice", reason.message);
+                });
+
             }
 
             /**
@@ -153,8 +195,9 @@
                         $scope.shipmentLineItems.push(shipmentLineItem);
                     }
 
-                   $scope.tabs.appendCustomerTab($scope.invoice.customerKey);
+                    $scope.tabs.appendCustomerTab($scope.invoice.customerKey);
 
+                    $scope.canAddLineItems = $scope.invoice.enableInvoiceEditQty;
 
                 }, function (reason) {
                     notificationsService.error("Invoice Load Failed", reason.message);
@@ -174,7 +217,7 @@
                    countries = combined.countries;
                    if ($scope.invoice.currency.symbol === '') {
                        var currency = _.find(combined.currencies, function (symbol) {
-                           return symbol.currecyCode === $scope.invoice.getCurrencyCode()
+                           return symbol.currencyCode === $scope.invoice.getCurrencyCode();
                        });
                        if (currency !== undefined) {
                            $scope.currencySymbol = currency.symbol;
@@ -200,9 +243,14 @@
                 var paymentsPromise = paymentResource.getPaymentsByInvoice(key);
                 paymentsPromise.then(function(payments) {
                     $scope.allPayments = paymentDisplayBuilder.transform(payments);
-                    $scope.payments = _.filter($scope.allPayments, function(p) { return !p.voided && !p.collected && p.authorized; });
+                    $scope.payments = _.filter($scope.allPayments, function (p) { return !p.voided && !p.collected && p.authorized; });
+
                     loadPaymentMethods();
                     $scope.preValuesLoaded = true;
+
+                    // Set the remaining balance after the payments have loaded
+                    $scope.remainingBalance = invoiceHelper.round($scope.invoice.remainingBalance($scope.allPayments), 2);
+
                 }, function(reason) {
                     notificationsService.error('Failed to load payments for invoice', reason.message);
                 });
@@ -275,7 +323,7 @@
             function capturePayment() {
                 var dialogData = dialogDataFactory.createCapturePaymentDialogData();
                 dialogData.setPaymentData($scope.payments[0]);
-                dialogData.setInvoiceData($scope.payments, $scope.invoice, $scope.currencySymbol);
+                dialogData.setInvoiceData($scope.allPayments, $scope.invoice, $scope.currencySymbol, invoiceHelper);
                 if (!dialogData.isValid()) {
                     return false;
                 }
@@ -313,10 +361,10 @@
                 var promiseSave = paymentResource.capturePayment(paymentRequest);
                 promiseSave.then(function (payment) {
                     // added a timeout here to give the examine index
-                    $timeout(function() {
-                        notificationsService.success("Payment Captured");
+                    $timeout(function () {
                         loadInvoice(paymentRequest.invoiceKey);
-                    }, 800);
+                        notificationsService.success("Payment Captured");
+                    }, 1500);
                 }, function (reason) {
                     notificationsService.error("Payment Capture Failed", reason.message);
                 });
@@ -340,6 +388,16 @@
                 });
             }
 
+            function cancelInvoice() {
+                var promiseCancelInvoice = invoiceResource.cancelInvoice($scope.invoice.key);
+                promiseCancelInvoice.then(function (response) {
+                    notificationsService.success('Invoice Cancelled');
+                    $location.url("/merchello/merchello/saleslist/manage", true);
+                }, function (reason) {
+                    notificationsService.error('Failed to cancel Invoice', reason.message);
+                });
+            }
+
             /**
              * @ngdoc method
              * @name openFulfillShipmentDialog
@@ -351,8 +409,25 @@
                 var promiseStatuses = shipmentResource.getAllShipmentStatuses();
                 promiseStatuses.then(function(statuses) {
                     var data = dialogDataFactory.createCreateShipmentDialogData();
-                    data.order = $scope.invoice.orders[0];
-                    data.order.items = data.order.getUnShippedItems();
+
+                    // Loop orders until I find one without getUnShippedItems()!!
+
+                    var keepFindingOrder = true;
+                    angular.forEach($scope.invoice.orders, function (order) {
+                        if (keepFindingOrder) {
+                            // Get unshipped items from this order
+                            var unshippedItems = order.getUnShippedItems();
+
+                            // If there are any, return them
+                            if (unshippedItems.length > 0) {
+                                data.order = order;
+                                data.order.items = unshippedItems;
+                                keepFindingOrder = false;
+                            }
+                        }
+                    });
+
+                    data.totalOrders = $scope.invoice.orders;
                     data.shipmentStatuses = statuses;
                     data.currencySymbol = $scope.currencySymbol;
 
@@ -418,10 +493,10 @@
                     var promiseNewShipment = shipmentResource.newShipment(data.shipmentRequest);
                     promiseNewShipment.then(function (shipment) {
                         $timeout(function() {
-                            notificationsService.success('Shipment #' + shipment.shipmentNumber + ' created');
                             //console.info(shipment);
                             loadInvoice(data.invoiceKey);
-                        }, 800);
+                            notificationsService.success('Shipment #' + shipment.shipmentNumber + ' created');
+                        }, 1500);
 
                     }, function (reason) {
                         notificationsService.error("New Shipment Failed", reason.message);
@@ -442,6 +517,8 @@
             function hasUnPackagedLineItems() {
                 var fulfilled = $scope.invoice.getFulfillmentStatus() === 'Fulfilled';
                 if (fulfilled) {
+                    // If this invoice is fullfilled, then they can't add or edit it
+                    $scope.canAddLineItems = false;
                     return false;
                 }
                 var i = 0; // order count
@@ -528,10 +605,10 @@
                     $scope.preValuesLoaded = false;
                     var billingPromise = invoiceResource.saveInvoice($scope.invoice);
                     billingPromise.then(function () {
-                        notificationsService.success('Billing address successfully updated.');
                         $timeout(function () {
                             loadInvoice($scope.invoice.key);
-                        }, 400);
+                            notificationsService.success('Billing address successfully updated.');
+                        }, 1500);
                     }, function (reason) {
                         notificationsService.error("Failed to update billing address", reason.message);
                     });
@@ -543,10 +620,10 @@
                     };
                     var shippingPromise = invoiceResource.saveInvoiceShippingAddress(adrData);
                     shippingPromise.then(function () {
-                        notificationsService.success('Shipping address successfully updated.');
                         $timeout(function () {
                             loadInvoice($scope.invoice.key);
-                        }, 400);
+                            notificationsService.success('Shipping address successfully updated.');
+                        }, 1500);
                     }, function (reason) {
                         notificationsService.error("Failed to update shippingaddress", reason.message);
                     });
@@ -574,7 +651,7 @@
             function refresh() {
                 $timeout(function () {
                     loadInvoice($scope.invoice.key);
-                }, 400);
+                }, 1500);
             }
 
             // initialize the controller

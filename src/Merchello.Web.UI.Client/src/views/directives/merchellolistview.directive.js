@@ -27,7 +27,7 @@ angular.module('merchello.directives').directive('merchelloListView',
                 scope.prev = prev;
                 scope.goToPage = goToPage;
                 scope.enterSearch = enterSearch;
-                scope.search = search;
+                scope.search = _.throttle(search, 750);
                 scope.setPageSize = setPageSize;
                 scope.openDateRangeDialog = openDateRangeDialog;
 
@@ -127,6 +127,7 @@ angular.module('merchello.directives').directive('merchelloListView',
 
                 }
 
+                
                 function search() {
 
                     if (cacheEnabled) {

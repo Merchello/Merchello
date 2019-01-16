@@ -52,10 +52,16 @@
         /// </returns>
         protected override IPaymentResult PerformAuthorizePayment(IInvoice invoice, ProcessorArgumentCollection args)
         {
+            var authorizeAmount = invoice.Total;
+            if (args.ContainsKey("authorizePaymentAmount")) authorizeAmount = Convert.ToDecimal(args["authorizePaymentAmount"]);
+
+            var merchantAccountId = string.Empty;
+            if (args.ContainsKey("merchantAccountId")) merchantAccountId = args["merchantAccountId"];
+
             // The Provider settings 
             if (this.BraintreeApiService.BraintreeProviderSettings.DefaultTransactionOption == TransactionOption.SubmitForSettlement)
             {
-                return this.PerformAuthorizeCapturePayment(invoice, invoice.Total, args);
+                return this.PerformAuthorizeCapturePayment(invoice, authorizeAmount, args);
             }
 
             var paymentMethodToken = args.GetPaymentMethodToken();
@@ -67,7 +73,7 @@
                 return new PaymentResult(Attempt<IPayment>.Fail(error), invoice, false);
             }
 
-            var attempt = this.ProcessPayment(invoice, TransactionOption.Authorize, invoice.Total, paymentMethodToken);
+            var attempt = this.ProcessPayment(invoice, TransactionOption.Authorize, authorizeAmount, paymentMethodToken, "", merchantAccountId);
 
             var payment = attempt.Payment.Result;
 
@@ -111,7 +117,10 @@
                 return new PaymentResult(Attempt<IPayment>.Fail(error), invoice, false);
             }
 
-            var attempt = this.ProcessPayment(invoice, TransactionOption.SubmitForSettlement, invoice.Total, paymentMethodToken);
+            var merchantAccountId = string.Empty;
+            if (args.ContainsKey("merchantAccountId")) merchantAccountId = args["merchantAccountId"];
+
+            var attempt = this.ProcessPayment(invoice, TransactionOption.SubmitForSettlement, amount, paymentMethodToken, "", merchantAccountId);
 
             var payment = attempt.Payment.Result;
 
@@ -162,10 +171,11 @@
         /// <param name="email">
         /// The email.
         /// </param>
+        /// <param name="merchantAccountId"></param>
         /// <returns>
         /// The <see cref="IPaymentResult"/>.
         /// </returns>
-        protected override IPaymentResult ProcessPayment(IInvoice invoice, TransactionOption option, decimal amount, string token, string email = "")
+        protected override IPaymentResult ProcessPayment(IInvoice invoice, TransactionOption option, decimal amount, string token, string email = "", string merchantAccountId = "")
         {
             var payment = this.GatewayProviderService.CreatePayment(PaymentMethodType.CreditCard, amount, this.PaymentMethod.Key);
 
@@ -175,7 +185,7 @@
             payment.PaymentMethodName = this.BackOfficePaymentMethodName;
             payment.ExtendedData.SetValue(Constants.Braintree.ProcessorArguments.PaymentMethodNonce, token);
 
-            var result = this.BraintreeApiService.Transaction.VaultSale(invoice, token, option);
+            var result = this.BraintreeApiService.Transaction.VaultSale(invoice, amount, token, option, merchantAccountId);
 
             if (result.IsSuccess())
             {

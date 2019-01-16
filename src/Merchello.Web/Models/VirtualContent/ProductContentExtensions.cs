@@ -78,15 +78,18 @@
         /// <param name="product">
         /// The <see cref="IProductContent"/>.
         /// </param>
+        /// <param name="isFilter">
+        /// true to get all filters, false to get all collections
+        /// </param>
         /// <returns>
         /// The <see cref="IEnumerable{EntityCollectionDisplay}"/>.
         /// </returns>
-        public static IEnumerable<EntityCollectionDisplay> GetCollectionsContaining(this IProductContent product)
+        public static IEnumerable<EntityCollectionDisplay> GetCollectionsContaining(this IProductContent product, bool isFilter = false)
         {
             if (!MerchelloContext.HasCurrent) return Enumerable.Empty<EntityCollectionDisplay>();
             return
                 ((EntityCollectionService)MerchelloContext.Current.Services.EntityCollectionService)
-                    .GetEntityCollectionsByProductKey(product.Key).Select(x => x.ToEntityCollectionDisplay());
+                    .GetEntityCollectionsByProductKey(product.Key, isFilter).Select(x => x.ToEntityCollectionDisplay());
         }
 
         /// <summary>

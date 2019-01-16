@@ -78,7 +78,10 @@
                     opt => opt.ResolveUsing<NoteEntityTypeResolver>().ConstructedBy(() => new NoteEntityTypeResolver()))
                 .ForMember(
                     dest => dest.NoteTypeField,
-                    opt => opt.ResolveUsing<NoteTypeFieldResolver>().ConstructedBy(() => new NoteTypeFieldResolver()));
+                    opt => opt.ResolveUsing<NoteTypeFieldResolver>().ConstructedBy(() => new NoteTypeFieldResolver()))
+                .ForMember(
+                    dest => dest.RecordDate,
+                    opt => opt.MapFrom(src => src.CreateDate));
 
             // Invoice
             AutoMapper.Mapper.CreateMap<IInvoiceStatus, InvoiceStatusDisplay>();

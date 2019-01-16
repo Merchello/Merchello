@@ -19,6 +19,7 @@
     grunt.initConfig({
         buildVersion: grunt.option('buildversion') || '1',
         distdir: 'build/App_Plugins/MerchelloProviders',
+        transformdir: 'build/transforms',
         vsdir: '../Merchello.FastTrack.UI/App_Plugins/MerchelloProviders',
         appdir: '../Merchello.FastTrack.UI',
         pkg: grunt.file.readJSON('package.json'),
@@ -28,7 +29,7 @@
             '/*! <%= pkg.title || pkg.name %>\n' +
             '<%= pkg.homepage ? " * " + pkg.homepage + "\\n" : "" %>' +
             ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>.\n' +
-            ' * Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %>\n */\n',
+            ' * Licensed <%= _.map(pkg.licenses, "type").join(", ") %>\n */\n',
         
         // file locations
         src: {

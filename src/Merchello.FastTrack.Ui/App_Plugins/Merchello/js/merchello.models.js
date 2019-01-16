@@ -1,6 +1,6 @@
 /*! Merchello
  * https://github.com/meritage/Merchello
- * Copyright (c) 2017 Across the Pond, LLC.
+ * Copyright (c) 2019 Across the Pond, LLC.
  * Licensed MIT
  */
 
@@ -369,9 +369,9 @@ angular.module('merchello.models').constant('EntityUseCount', EntityUseCount);
         }
 
 
-        /// appends a customer tab to the current collection
+        // appends a customer tab to the current collection
         function appendCustomerTab(customerKey) {
-            if(customerKey !== '00000000-0000-0000-0000-000000000000') {
+            if (customerKey !== '00000000-0000-0000-0000-000000000000' && customerKey !== null && customerKey !== undefined) {
                 addTab.call(this, 'customer', 'merchelloTabs_customer', '#/merchello/merchello/customeroverview/' + customerKey);
             }
         }
@@ -634,6 +634,7 @@ angular.module('merchello.models').constant('EntityCollectionProviderDisplay', E
         self.addressTypeFieldKey = '';
         self.company = '';
         self.countryCode = '';
+        self.countryName = '';
         self.phone = '';
         self.email = '';
         self.isDefault = false;
@@ -1149,10 +1150,10 @@ angular.module('merchello.models').constant('AddEditEntityStaticCollectionDialog
         }
 
         //// helper method to set required associated invoice info
-        function setInvoiceData(payments, invoice, currencySymbol) {
+        function setInvoiceData(payments, invoice, currencySymbol, invoiceHelper) {
             if (invoice !== undefined) {
                 this.invoiceKey = invoice.key;
-                this.invoiceBalance = invoice.remainingBalance(payments);
+                this.invoiceBalance = invoiceHelper.round(invoice.remainingBalance(payments), 2);
             }
             if (currencySymbol !== undefined) {
                 this.currencySymbol = currencySymbol;
@@ -3173,6 +3174,7 @@ angular.module('merchello.models').constant('SalesOverTimeResult', SalesOverTime
         self.billToRegion = '';
         self.billToPostalCode = '';
         self.billToCountryCode = '';
+        self.billToCountryName = '';
         self.billToEmail = '';
         self.billToPhone = '';
         self.billToCompany = '';
@@ -3212,6 +3214,7 @@ angular.module('merchello.models').constant('SalesOverTimeResult', SalesOverTime
             adr.locality = this.billToLocality;
             adr.region = this.billToRegion;
             adr.countryCode = this.billToCountryCode;
+            adr.countryName = this.billToCountryName;
             adr.postalCode = this.billToPostalCode;
             adr.name = this.billToName;
             adr.phone = this.billToPhone;
@@ -3244,12 +3247,27 @@ angular.module('merchello.models').constant('SalesOverTimeResult', SalesOverTime
             return this.invoiceStatus.name;
         }
 
-        function getFulfillmentStatus () {
+        function getFulfillmentStatus() {
+            var keepFindingOrder = true;
+            var statusToReturn = 'Fulfilled';
+
             if (!_.isEmpty(this.orders)) {
-                return this.orders[0].orderStatus.name;
+                angular.forEach(this.orders,
+                    function(order) {
+                        if (keepFindingOrder) {
+                            if (order.orderStatus.name !== statusToReturn) {
+
+                                statusToReturn = order.orderStatus.name;
+
+                                keepFindingOrder = false;
+                            }
+                        }
+                    });
+            } else {
+                statusToReturn = 'Not Fulfilled';
             }
-            // TODO this should be localized
-            return 'Not Fulfilled';
+
+            return statusToReturn;
         }
 
         // gets the currency code for the invoice
@@ -3286,7 +3304,11 @@ angular.module('merchello.models').constant('SalesOverTimeResult', SalesOverTime
         }
 
         function getAdjustmentLineItems() {
-            return ensureArray(_.filter(this.items, function(item) {
+            return ensureArray(_.filter(this.items, function (item) {
+                var adjustmentExtendedData = item.extendedData.getValue('merchAdjustment');
+                if (adjustmentExtendedData !== "") {
+                    return true;
+                }
                return item.lineItemTypeField.alias === 'Adjustment';
             }));
         }
@@ -3648,6 +3670,58 @@ angular.module('merchello.models').constant('InvoiceItemItemizationDisplay', Inv
     angular.module('merchello.models').constant('SalesHistoryMessageDisplay', SalesHistoryMessageDisplay);
     /**
      * @ngdoc model
+     * @name ShipFixedRateTableDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's ShipFixedRateTableDisplay object
+     */
+    var ShipFixedRateTableDisplay = function() {
+        var self = this;
+        self.shipMethodKey = '';
+        self.shipCountryKey = '';
+        self.rows = [];
+    };
+
+    ShipFixedRateTableDisplay.prototype = (function() {
+
+        // pushes a new row into the rate table rows collection
+        function addRow(row) {
+            this.rows.push(row);
+        }
+
+        // removes an existing row from the rate table
+        function removeRow(row) {
+            this.rows = _.reject(this.rows, function(r) { return r.key === row.key; });
+        }
+
+        return {
+            addRow: addRow,
+            removeRow: removeRow
+        };
+    }());
+
+    angular.module('merchello.models').constant('ShipFixedRateTableDisplay', ShipFixedRateTableDisplay);
+    /**
+     * @ngdoc model
+     * @name ShipRateTierDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's ShipRateTierDisplay object
+     */
+    var ShipRateTierDisplay = function() {
+        var self = this;
+        self.key = '';
+        self.shipMethodKey = '';
+        self.rangeLow = 0.0;
+        self.rangeHigh = 0.0;
+        self.rate = 0.0;
+    };
+
+    angular.module('merchello.models').constant('ShipRateTierDisplay', ShipRateTierDisplay);
+    /**
+     * @ngdoc model
      * @name ShipCountryDisplay
      * @function
      *
@@ -3666,56 +3740,6 @@ angular.module('merchello.models').constant('InvoiceItemItemizationDisplay', Inv
     };
 
     angular.module('merchello.models').constant('ShipCountryDisplay', ShipCountryDisplay);
-    /**
-     * @ngdoc model
-     * @name ShipMethodDisplay
-     *
-     * @description
-     * Represents a JS version of Merchello's ShipMethodDisplay object
-     */
-    var ShipMethodDisplay = function() {
-        var self = this;
-        self.key = '';
-        self.name = '';
-        self.providerKey = '';
-        self.shipCountryKey = '';
-        self.surchare = 0.0;
-        self.serviceCode = '';
-        self.taxable = false;
-        self.provinces = [];
-    };
-
-    angular.module('merchello.models').constant('ShipMethodDisplay', ShipMethodDisplay);
-    /**
-     * @ngdoc model
-     * @name ShipMethodsQueryDisplay
-     * @function
-     *
-     * @description
-     * Represents a JS version of Merchello's ShipMethodsQueryDisplay object
-     */
-    var ShipMethodsQueryDisplay = function() {
-        var self = this;
-        self.selected = {};
-        self.alternatives = [];
-    };
-
-    angular.module('merchello.models').constant('ShipMethodsQueryDisplay', ShipMethodsQueryDisplay);
-    /**
-     * @ngdoc model
-     * @name ShipMethodDisplay
-     *
-     * @description
-     * Represents a JS version of Merchello's ShipProvinceDisplay object
-     */
-    var ShipProvinceDisplay = function() {
-        var self = this;
-        self.allowShipping = false;
-        // TODO this should be converted to a string in the API for consistency
-        self.rateAdjustment = 1;  // possible values are 1 & 2
-    };
-
-    angular.module('merchello.models').constant('ShipProvinceDisplay', ShipProvinceDisplay);
     /**
     * @ngdoc model
     * @name ShipmentDisplay
@@ -3740,6 +3764,7 @@ angular.module('merchello.models').constant('InvoiceItemItemizationDisplay', Inv
         self.fromRegion = '';
         self.fromPostalCode = '';
         self.fromCountryCode = '';
+        self.fromCountryName = '';
         self.fromIsCommercial = '';
         self.toOrganization = '';
         self.toName = '';
@@ -3749,6 +3774,7 @@ angular.module('merchello.models').constant('InvoiceItemItemizationDisplay', Inv
         self.toRegion = '';
         self.toPostalCode = '';
         self.toCountryCode = '';
+        self.toCountryName = '';
         self.toIsCommercial = '';
         self.shipMethodKey = '';
         self.phone = '';
@@ -3769,13 +3795,13 @@ angular.module('merchello.models').constant('InvoiceItemItemizationDisplay', Inv
             // returns the shipment destination as an Address
         var getDestinationAddress = function() {
                 return buildAddress.call(this, this.toName, this.toAddress1, this.toAddress2, this.toLocality, this.toRegion,
-                    this.toPostalCode, this.toCountryCode, this.toOrganization, this.toIsCommercial, this.phone, this.email, 'shipping');
+                    this.toPostalCode, this.toCountryCode, this.toCountryName, this.toOrganization, this.toIsCommercial, this.phone, this.email, 'shipping');
             },
 
             // returns the shipment origin as an Address
             getOriginAddress = function() {
                 return buildAddress.call(this, this.fromName, this.fromAddress1, this.fromAddress2, this.fromLocality,
-                    this.fromRegion, this.fromPostalCode, this.fromCountryCode, this.fromOrganization,
+                    this.fromRegion, this.fromPostalCode, this.fromCountryCode, this.fromCountryName, this.fromOrganization,
                     this.fromIsCommercial, '', '', 'shipping');
             },
 
@@ -3788,6 +3814,7 @@ angular.module('merchello.models').constant('InvoiceItemItemizationDisplay', Inv
                 this.toRegion = address.region;
                 this.toPostalCode = address.postalCode;
                 this.toCountryCode = address.countryCode;
+                this.toCountryName = address.countryName;
                 this.toOrganization = address.organization;
                 this.toIsCommercial = address.isCommercial;
                 this.phone = address.phone;
@@ -3802,12 +3829,13 @@ angular.module('merchello.models').constant('InvoiceItemItemizationDisplay', Inv
                 this.fromRegion = address.region;
                 this.fromPostalCode = address.postalCode;
                 this.fromCountryCode = address.countryCode;
+                this.fromCountryName = address.countryName;
                 this.fromOrganization = address.organization;
                 this.fromIsCommercial = address.isCommercial;
             },
 
             // Utility to build an address
-            buildAddress = function(name, address1, address2, locality, region, postalCode, countryCode, organization,
+            buildAddress = function (name, address1, address2, locality, region, postalCode, countryCode, countryName, organization,
                                     isCommercial, phone, email, addressType) {
                 var adr = new AddressDisplay();
                 adr.name = name;
@@ -3817,6 +3845,7 @@ angular.module('merchello.models').constant('InvoiceItemItemizationDisplay', Inv
                 adr.region = region;
                 adr.postalCode = postalCode;
                 adr.countryCode = countryCode;
+                adr.countryName = countryName;
                 adr.organization = organization;
                 adr.isCommercial = isCommercial;
                 adr.phone = phone;
@@ -3930,6 +3959,41 @@ angular.module('merchello.models').constant('ShipmentRateQuoteDisplay', Shipment
      * @name ShipMethodDisplay
      *
      * @description
+     * Represents a JS version of Merchello's ShipMethodDisplay object
+     */
+    var ShipMethodDisplay = function() {
+        var self = this;
+        self.key = '';
+        self.name = '';
+        self.providerKey = '';
+        self.shipCountryKey = '';
+        self.surchare = 0.0;
+        self.serviceCode = '';
+        self.taxable = false;
+        self.provinces = [];
+    };
+
+    angular.module('merchello.models').constant('ShipMethodDisplay', ShipMethodDisplay);
+    /**
+     * @ngdoc model
+     * @name ShipMethodsQueryDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's ShipMethodsQueryDisplay object
+     */
+    var ShipMethodsQueryDisplay = function() {
+        var self = this;
+        self.selected = {};
+        self.alternatives = [];
+    };
+
+    angular.module('merchello.models').constant('ShipMethodsQueryDisplay', ShipMethodsQueryDisplay);
+    /**
+     * @ngdoc model
+     * @name ShipMethodDisplay
+     *
+     * @description
      * Represents a JS version of Merchello's ShippingGatewayMethodDisplay object
      */
     var ShippingGatewayMethodDisplay = function() {
@@ -3997,56 +4061,30 @@ angular.module('merchello.models').constant('ShipmentRateQuoteDisplay', Shipment
     angular.module('merchello.models').constant('ShippingGatewayProviderDisplay', ShippingGatewayProviderDisplay);
     /**
      * @ngdoc model
-     * @name ShipFixedRateTableDisplay
-     * @function
+     * @name ShipMethodDisplay
      *
      * @description
-     * Represents a JS version of Merchello's ShipFixedRateTableDisplay object
+     * Represents a JS version of Merchello's ShipProvinceDisplay object
      */
-    var ShipFixedRateTableDisplay = function() {
+    var ShipProvinceDisplay = function() {
         var self = this;
-        self.shipMethodKey = '';
-        self.shipCountryKey = '';
-        self.rows = [];
+        self.allowShipping = false;
+        // TODO this should be converted to a string in the API for consistency
+        self.rateAdjustment = 1;  // possible values are 1 & 2
     };
 
-    ShipFixedRateTableDisplay.prototype = (function() {
+    angular.module('merchello.models').constant('ShipProvinceDisplay', ShipProvinceDisplay);
 
-        // pushes a new row into the rate table rows collection
-        function addRow(row) {
-            this.rows.push(row);
-        }
+var TaxationGatewayProviderDisplay = function () {
+    var self = this;
+    GatewayProviderDisplay.apply(self, arguments);
+    self.taxationByProductProvider = false;
+};
 
-        // removes an existing row from the rate table
-        function removeRow(row) {
-            this.rows = _.reject(this.rows, function(r) { return r.key === row.key; });
-        }
+TaxationGatewayProviderDisplay.prototype = GatewayProviderDisplay.prototype;
+TaxationGatewayProviderDisplay.prototype.constructor = TaxationGatewayProviderDisplay;
 
-        return {
-            addRow: addRow,
-            removeRow: removeRow
-        };
-    }());
-
-    angular.module('merchello.models').constant('ShipFixedRateTableDisplay', ShipFixedRateTableDisplay);
-    /**
-     * @ngdoc model
-     * @name ShipRateTierDisplay
-     * @function
-     *
-     * @description
-     * Represents a JS version of Merchello's ShipRateTierDisplay object
-     */
-    var ShipRateTierDisplay = function() {
-        var self = this;
-        self.key = '';
-        self.shipMethodKey = '';
-        self.rangeLow = 0.0;
-        self.rangeHigh = 0.0;
-        self.rate = 0.0;
-    };
-
-    angular.module('merchello.models').constant('ShipRateTierDisplay', ShipRateTierDisplay);
+angular.module('merchello.models').constant('TaxationGatewayProviderDisplay', TaxationGatewayProviderDisplay);
     /**
      * @ngdoc model
      * @name TaxCountryDisplay
@@ -4130,17 +4168,6 @@ angular.module('merchello.models').constant('ShipmentRateQuoteDisplay', Shipment
     };
 
     angular.module('merchello.models').constant('TaxProvinceDisplay', TaxProvinceDisplay);
-
-var TaxationGatewayProviderDisplay = function () {
-    var self = this;
-    GatewayProviderDisplay.apply(self, arguments);
-    self.taxationByProductProvider = false;
-};
-
-TaxationGatewayProviderDisplay.prototype = GatewayProviderDisplay.prototype;
-TaxationGatewayProviderDisplay.prototype.constructor = TaxationGatewayProviderDisplay;
-
-angular.module('merchello.models').constant('TaxationGatewayProviderDisplay', TaxationGatewayProviderDisplay);
     /**
      * @ngdoc model
      * @name WarehouseCatalogDisplay
@@ -4177,6 +4204,7 @@ angular.module('merchello.models').constant('TaxationGatewayProviderDisplay', Ta
         self.region = '';
         self.postalCode = '';
         self.countryCode = '';
+        self.countryName = '';
         self.phone = '';
         self.email = '';
         self.isDefault = true;
@@ -4194,6 +4222,7 @@ angular.module('merchello.models').constant('TaxationGatewayProviderDisplay', Ta
             adr.region = this.region;
             adr.postalCode = this.postalCode;
             adr.countryCode = this.countryCode;
+            adr.countryName = this.countryName;
             adr.phone = this.phone;
             adr.email = this.email;
             adr.addressType = 'shipping';
@@ -4208,6 +4237,7 @@ angular.module('merchello.models').constant('TaxationGatewayProviderDisplay', Ta
             this.region = address.region;
             this.postalCode = address.postalCode;
             this.countryCode = address.countryCode;
+            this.countryName = address.countryName;
             this.phone = address.phone;
             this.email = address.email;
         }
@@ -4224,32 +4254,6 @@ angular.module('merchello.models').constant('TaxationGatewayProviderDisplay', Ta
     }());
 
     angular.module('merchello.models').constant('WarehouseDisplay', WarehouseDisplay);
-angular.module('merchello.models').factory('pluginViewEditorContentBuilder',
-    ['genericModelBuilder', 'PluginViewEditorContent',
-    function(genericModelBuilder, PluginViewEditorContent) {
-
-        var Constructor = PluginViewEditorContent;
-
-        return {
-            createDefault: function() {
-                return new Constructor();
-            },
-            transform: function(jsonResult) {
-                var results = genericModelBuilder.transform(jsonResult, Constructor);
-                if (angular.isArray(jsonResult)) {
-                    angular.forEach(results, function(r) {
-                        r.label = r.fileName;
-                    });
-                } else {
-                    results.label = results.fileName;
-                }
-
-                return results;
-            }
-        };
-
-}]);
-
     /**
    * @ngdoc service
    * @name merchello.models.genericModelBuilder
@@ -5681,6 +5685,32 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
             };
         }]);
 
+angular.module('merchello.models').factory('pluginViewEditorContentBuilder',
+    ['genericModelBuilder', 'PluginViewEditorContent',
+    function(genericModelBuilder, PluginViewEditorContent) {
+
+        var Constructor = PluginViewEditorContent;
+
+        return {
+            createDefault: function() {
+                return new Constructor();
+            },
+            transform: function(jsonResult) {
+                var results = genericModelBuilder.transform(jsonResult, Constructor);
+                if (angular.isArray(jsonResult)) {
+                    angular.forEach(results, function(r) {
+                        r.label = r.fileName;
+                    });
+                } else {
+                    results.label = results.fileName;
+                }
+
+                return results;
+            }
+        };
+
+}]);
+
     /**
      * @ngdoc models
      * @name catalogInventoryDisplayBuilder
@@ -6396,30 +6426,6 @@ angular.module('merchello.models').factory('salesOverTimeResultBuilder',
 
     /**
      * @ngdoc service
-     * @name merchello.models.salesHistoryMessageDisplayBuilder
-     *
-     * @description
-     * A utility service that builds salesHistoryMessageDisplayBuilder models
-     */
-    angular.module('merchello.models')
-        .factory('salesHistoryMessageDisplayBuilder',
-        ['genericModelBuilder', 'SalesHistoryMessageDisplay',
-            function(genericModelBuilder, SalesHistoryMessageDisplay) {
-
-                var Constructor = SalesHistoryMessageDisplay;
-
-                return {
-                    createDefault: function() {
-                        return new Constructor();
-                    },
-                    transform: function(jsonResult) {
-                        return genericModelBuilder.transform(jsonResult, Constructor);
-                    }
-                };
-            }]);
-
-    /**
-     * @ngdoc service
      * @name merchello.models.auditLogDisplayBuilder
      *
      * @description
@@ -6513,6 +6519,30 @@ angular.module('merchello.models').factory('salesOverTimeResultBuilder',
         }]);
     /**
      * @ngdoc service
+     * @name merchello.models.salesHistoryMessageDisplayBuilder
+     *
+     * @description
+     * A utility service that builds salesHistoryMessageDisplayBuilder models
+     */
+    angular.module('merchello.models')
+        .factory('salesHistoryMessageDisplayBuilder',
+        ['genericModelBuilder', 'SalesHistoryMessageDisplay',
+            function(genericModelBuilder, SalesHistoryMessageDisplay) {
+
+                var Constructor = SalesHistoryMessageDisplay;
+
+                return {
+                    createDefault: function() {
+                        return new Constructor();
+                    },
+                    transform: function(jsonResult) {
+                        return genericModelBuilder.transform(jsonResult, Constructor);
+                    }
+                };
+            }]);
+
+    /**
+     * @ngdoc service
      * @name merchello.models.settingDisplayBuilder
      *
      * @description
@@ -6592,89 +6622,6 @@ angular.module('merchello.models').factory('shipFixedRateTableDisplayBuilder',
             }
         };
     }]);
-
-    /**
-     * @ngdoc service
-     * @name merchello.models.shipMethodDisplayBuilder
-     *
-     * @description
-     * A utility service that builds ShipMethodDisplay models
-     */
-    angular.module('merchello.models')
-        .factory('shipMethodDisplayBuilder',
-            ['genericModelBuilder', 'dialogEditorViewDisplayBuilder', 'shipProvinceDisplayBuilder', 'ShipMethodDisplay',
-            function(genericModelBuilder, dialogEditorViewDisplayBuilder, shipProvinceDisplayBuilder, ShipMethodDisplay) {
-
-                var Constructor = ShipMethodDisplay;
-
-                return {
-                    createDefault: function() {
-                        return new Constructor();
-                    },
-                    transform: function(jsonResult) {
-                        var shipMethods = genericModelBuilder.transform(jsonResult, Constructor);
-                        if(!jsonResult) {
-                            return;
-                        }
-                        if (angular.isArray(jsonResult))
-                        {
-                            for(var i = 0; i < jsonResult.length; i++) {
-                                // todo these should never be returned by the api
-                                if(jsonResult[i] !== null) {
-                                    shipMethods[ i ].provinces = shipProvinceDisplayBuilder.transform(jsonResult[ i ].provinces);
-                                }
-                            }
-                        } else {
-                            if(jsonResult.provinces) {
-                                shipMethods.provinces = shipProvinceDisplayBuilder.transform(jsonResult.provinces);
-                            }
-                        }
-                        return shipMethods;
-                    }
-                };
-
-        }]);
-    /**
-     * @ngdoc service
-     * @name merchello.models.shipProvinceDisplayBuilder
-     *
-     * @description
-     * A utility service that builds ShipProvinceDisplay models
-     */
-    angular.module('merchello.services').factory('shipProvinceDisplayBuilder',
-        ['genericModelBuilder', 'ShipProvinceDisplay', function(genericModelBuilder, ShipProvinceDisplay) {
-
-            var Constructor = ShipProvinceDisplay;
-
-            return {
-                createDefault: function() {
-                    return new Constructor();
-                },
-                transform: function(jsonResult) {
-                    return genericModelBuilder.transform(jsonResult, Constructor);
-                }
-            };
-    }]);
-/**
- * @ngdoc service
- * @name shipRateTierDisplayBuilder
- *
- * @description
- * A utility service that builds ShipRateTierDisplay models
- */
-angular.module('merchello.models').factory('shipRateTierDisplayBuilder',
-    ['genericModelBuilder', 'ShipRateTierDisplay',
-        function(genericModelBuilder, ShipRateTierDisplay) {
-            var Constructor = ShipRateTierDisplay;
-            return {
-                createDefault: function() {
-                    return new Constructor();
-                },
-                transform: function(jsonResult) {
-                    return genericModelBuilder.transform(jsonResult, Constructor);
-                }
-            };
-        }]);
 
     /**
      * @ngdoc service
@@ -6772,6 +6719,47 @@ angular.module('merchello.models').factory('shipmentRateQuoteDisplayBuilder',
             };
         }]);
 
+    /**
+     * @ngdoc service
+     * @name merchello.models.shipMethodDisplayBuilder
+     *
+     * @description
+     * A utility service that builds ShipMethodDisplay models
+     */
+    angular.module('merchello.models')
+        .factory('shipMethodDisplayBuilder',
+            ['genericModelBuilder', 'dialogEditorViewDisplayBuilder', 'shipProvinceDisplayBuilder', 'ShipMethodDisplay',
+            function(genericModelBuilder, dialogEditorViewDisplayBuilder, shipProvinceDisplayBuilder, ShipMethodDisplay) {
+
+                var Constructor = ShipMethodDisplay;
+
+                return {
+                    createDefault: function() {
+                        return new Constructor();
+                    },
+                    transform: function(jsonResult) {
+                        var shipMethods = genericModelBuilder.transform(jsonResult, Constructor);
+                        if(!jsonResult) {
+                            return;
+                        }
+                        if (angular.isArray(jsonResult))
+                        {
+                            for(var i = 0; i < jsonResult.length; i++) {
+                                // todo these should never be returned by the api
+                                if(jsonResult[i] !== null) {
+                                    shipMethods[ i ].provinces = shipProvinceDisplayBuilder.transform(jsonResult[ i ].provinces);
+                                }
+                            }
+                        } else {
+                            if(jsonResult.provinces) {
+                                shipMethods.provinces = shipProvinceDisplayBuilder.transform(jsonResult.provinces);
+                            }
+                        }
+                        return shipMethods;
+                    }
+                };
+
+        }]);
 angular.module('merchello.models').factory('shippingGatewayMethodDisplayBuilder',
     ['genericModelBuilder', 'shipMethodDisplayBuilder', 'shipCountryDisplayBuilder', 'gatewayResourceDisplayBuilder',
         'dialogEditorViewDisplayBuilder', 'ShippingGatewayMethodDisplay',
@@ -6839,6 +6827,48 @@ angular.module('merchello.models').factory('shippingGatewayProviderDisplayBuilde
                 }
             };
     }]);
+
+    /**
+     * @ngdoc service
+     * @name merchello.models.shipProvinceDisplayBuilder
+     *
+     * @description
+     * A utility service that builds ShipProvinceDisplay models
+     */
+    angular.module('merchello.services').factory('shipProvinceDisplayBuilder',
+        ['genericModelBuilder', 'ShipProvinceDisplay', function(genericModelBuilder, ShipProvinceDisplay) {
+
+            var Constructor = ShipProvinceDisplay;
+
+            return {
+                createDefault: function() {
+                    return new Constructor();
+                },
+                transform: function(jsonResult) {
+                    return genericModelBuilder.transform(jsonResult, Constructor);
+                }
+            };
+    }]);
+/**
+ * @ngdoc service
+ * @name shipRateTierDisplayBuilder
+ *
+ * @description
+ * A utility service that builds ShipRateTierDisplay models
+ */
+angular.module('merchello.models').factory('shipRateTierDisplayBuilder',
+    ['genericModelBuilder', 'ShipRateTierDisplay',
+        function(genericModelBuilder, ShipRateTierDisplay) {
+            var Constructor = ShipRateTierDisplay;
+            return {
+                createDefault: function() {
+                    return new Constructor();
+                },
+                transform: function(jsonResult) {
+                    return genericModelBuilder.transform(jsonResult, Constructor);
+                }
+            };
+        }]);
 
     /**
      * @ngdoc service

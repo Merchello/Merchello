@@ -30,9 +30,6 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="logger">
         /// The logger.
         /// </param>
@@ -41,10 +38,9 @@
         /// </param>
         public ShipMethodRepository(
             IDatabaseUnitOfWork work,
-            CacheHelper cache,
             ILogger logger,
             ISqlSyntaxProvider sqlSyntax)
-            : base(work, cache, logger, sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {            
         }
 
@@ -82,21 +78,28 @@
         /// </returns>
         protected override IEnumerable<IShipMethod> PerformGetAll(params Guid[] keys)
         {
+            var dtos = new List<ShipMethodDto>();
+
             if (keys.Any())
             {
-                foreach (var key in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    yield return Get(key);
+                    dtos.AddRange(Database.Fetch<ShipMethodDto>(GetBaseQuery(false).WhereIn<ShipMethodDto>(x => x.Key, keyList, SqlSyntax)));
                 }
             }
             else
             {
-                var factory = new ShipMethodFactory();
-                var dtos = Database.Fetch<ShipMethodDto>(GetBaseQuery(false));
-                foreach (var dto in dtos)
-                {
-                    yield return factory.BuildEntity(dto);
-                }
+                dtos = Database.Fetch<ShipMethodDto>(GetBaseQuery(false));
+            }
+
+            var factory = new ShipMethodFactory();
+            foreach (var dto in dtos)
+            {
+                yield return factory.BuildEntity(dto);
             }
         }
 

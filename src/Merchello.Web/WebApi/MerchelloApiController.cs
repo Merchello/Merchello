@@ -2,8 +2,9 @@
 {
     using System;
     using Merchello.Core;
-
     using Umbraco.Core;
+    using Umbraco.Core.Models.Membership;
+    using Umbraco.Core.Security;
     using Umbraco.Web;
     using Umbraco.Web.Editors;
     
@@ -14,6 +15,8 @@
     [JsonCamelCaseFormatter]
     public abstract class MerchelloApiController : UmbracoAuthorizedJsonController
     {
+        private IUser _currentUser;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MerchelloApiController"/> class.
         /// </summary>
@@ -65,5 +68,25 @@
         /// Useful for debugging
         /// </remarks>
         internal Guid InstanceId { get; private set; }
+
+        /// <summary>
+        /// Gets the current backend user
+        /// </summary>
+        public IUser CurrentUser
+        {
+            get
+            {
+                if (_currentUser == null)
+                {
+                    // Get the user who 
+                    var userTicket = new System.Web.HttpContextWrapper(System.Web.HttpContext.Current).GetUmbracoAuthTicket();
+                    if (userTicket != null)
+                    {
+                        _currentUser = ApplicationContext.Services.UserService.GetByUsername(userTicket.Name);
+                    }
+                }
+                return _currentUser;
+            }
+        }
     }
 }

@@ -180,13 +180,14 @@
         /// The payment method nonce.
         /// </param>
         /// <param name="email">The email</param>
+        /// <param name="merchantAccountId"></param>
         /// <returns>
         /// The <see cref="IPaymentResult"/>.
         /// </returns>
         /// <remarks>
         /// This converts the <see cref="Result{Transaction}"/> into Merchello's <see cref="IPaymentResult"/>
         /// </remarks>
-        protected abstract IPaymentResult ProcessPayment(IInvoice invoice, TransactionOption option, decimal amount, string token, string email = "");
+        protected abstract IPaymentResult ProcessPayment(IInvoice invoice, TransactionOption option, decimal amount, string token, string email = "", string merchantAccountId = "");
 
 
         /// <summary>

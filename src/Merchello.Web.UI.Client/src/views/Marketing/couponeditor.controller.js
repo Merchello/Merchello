@@ -8,9 +8,9 @@
  */
 angular.module('merchello').controller('Merchello.Backoffice.OfferEditController',
     ['$scope', '$routeParams', '$location', '$filter', 'merchDateHelper', 'assetsService', 'dialogService', 'eventsService', 'notificationsService', 'settingsResource', 'marketingResource', 'merchelloTabsFactory',
-        'dialogDataFactory', 'settingDisplayBuilder', 'offerProviderDisplayBuilder', 'offerSettingsDisplayBuilder', 'offerComponentDefinitionDisplayBuilder',
+        'dialogDataFactory', 'settingDisplayBuilder', 'offerProviderDisplayBuilder', 'offerSettingsDisplayBuilder', 'offerComponentDefinitionDisplayBuilder', 'localizationService',
     function($scope, $routeParams, $location, $filter, dateHelper, assetsService, dialogService, eventsService, notificationsService, settingsResource, marketingResource, merchelloTabsFactory,
-             dialogDataFactory, settingDisplayBuilder, offerProviderDisplayBuilder, offerSettingsDisplayBuilder, offerComponentDefinitionDisplayBuilder) {
+        dialogDataFactory, settingDisplayBuilder, offerProviderDisplayBuilder, offerSettingsDisplayBuilder, offerComponentDefinitionDisplayBuilder, localizationService) {
 
         $scope.loaded = false;
         $scope.preValuesLoaded = false;
@@ -191,7 +191,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
                     offerPromise = marketingResource.saveOfferSettings(os);
                 }
                 offerPromise.then(function (settings) {
-                    notificationsService.success("Successfully saved the coupon.");
+                    notificationsService.success(localizationService.localize("merchelloStatusNotifications_couponSaveSuccess"));
                     if (isNew) {
                         $location.url($scope.offerProvider.editorUrl(settings.key), true);
                     } else {
@@ -199,7 +199,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
                         loadOffer(settings.key);
                     }
                 }, function (reason) {
-                    notificationsService.error("Failed to save coupon", reason.message);
+                    notificationsService.error(localizationService.localize("merchelloStatusNotifications_couponSaveError"), reason.message);
                 });
             }
         }

@@ -11,9 +11,20 @@ angular.module('merchello').controller('Merchello.Sales.Dialogs.ManageAdjustment
         $scope.invoiceNumber = '';
         $scope.adjustments = [];
         $scope.amount = 0.0;
+        $scope.sku = 'adj';
+        $scope.lineItemType = '';
+        $scope.isTaxable = false;
+        //$scope.lineItemTypes = [];
+        $scope.amount = 0.0;
         $scope.name = '';
 
         function init() {
+            // Setup the Adjustment types
+            //$scope.lineItemTypes = ["Adjustment", "Shipping", "Tax"];
+
+            // Set the default type
+            $scope.lineItemType = "Adjustment";
+
             $scope.invoiceNumber = $scope.dialogData.invoice.prefixedInvoiceNumber();
             var adjustments = $scope.dialogData.invoice.getAdjustmentLineItems();
             if (adjustments !== undefined && adjustments !== null) {
@@ -37,17 +48,22 @@ angular.module('merchello').controller('Merchello.Sales.Dialogs.ManageAdjustment
             if ($scope.name !== '') {
                 var lineItem = invoiceLineItemDisplayBuilder.createDefault();
                 lineItem.quantity = 1;
+                lineItem.isTaxable = $scope.isTaxable;
                 lineItem.name = $scope.name;
                 lineItem.containerKey = $scope.dialogData.invoice.key;
-                lineItem.lineItemType = 'Adjustment';
+                lineItem.lineItemType = $scope.lineItemType;
                 var amount = Math.abs($scope.amount);
                 lineItem.price = $scope.operator === '+' ? amount : -1 * amount;
-                lineItem.sku = 'adj';
+                lineItem.sku = $scope.sku;
                 lineItem.isNew = true;
+                $scope.adjustments.push(lineItem);
+
+                // Reset
                 $scope.name = '';
                 $scope.amount = 0;
                 $scope.operator = '-';
-                $scope.adjustments.push(lineItem);
+                $scope.sku = 'adj';
+                //$scope.lineItemType = $scope.lineItemType;
             }
         }
 
@@ -55,7 +71,7 @@ angular.module('merchello').controller('Merchello.Sales.Dialogs.ManageAdjustment
             
             var items = [];
             _.each($scope.adjustments, function(adj) {
-               items.push({ key: adj.key, name: adj.name, price: adj.price });
+                items.push({ key: adj.key, name: adj.name, price: adj.price, sku: adj.sku, lineItemType: adj.lineItemType, isTaxable: adj.isTaxable });
             });
 
             var invoiceAdjustmentDisplay = {

@@ -71,5 +71,44 @@
             string sortBy,
             SortDirection sortDirection,
             IDictionary<string, string> args = null);
+
+        /// <summary>
+        /// Gets a cache key for storing paged collection query results.
+        /// </summary>
+        /// <typeparam name="TSender">
+        /// The type of the sender
+        /// </typeparam>
+        /// <param name="methodName">
+        /// The method name.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <param name="includeUnavailable">
+        /// Whether to include unavailable products
+        /// </param>
+        /// <param name="args">
+        /// The args.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        string GetPagedQueryCacheKey<TSender>(
+            string methodName,
+            long page,
+            long itemsPerPage,
+            string sortBy,
+            SortDirection sortDirection,
+            bool includeUnavailable,
+            IDictionary<string, string> args = null);
     }
 }

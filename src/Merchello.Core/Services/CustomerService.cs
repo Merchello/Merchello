@@ -444,7 +444,10 @@
 
             if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<ICustomer>(customerArray), this);
 
-            customerArray.ForEach(DeleteInvoicesAndPayments);
+            foreach (var customer in customerArray)
+            {
+                DeleteInvoicesAndPayments(customer);
+            }
 
             using (new WriteLock(Locker))
             {
@@ -1247,7 +1250,7 @@
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        internal override Page<Guid> GetPagedKeys(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
+        public override Page<Guid> GetPagedKeys(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
         {
             using (var repositoy = RepositoryFactory.CreateCustomerRepository(UowProvider.GetUnitOfWork()))
             {

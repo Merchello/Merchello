@@ -6,6 +6,7 @@ namespace Merchello.Web.Models.ContentEditing
     using System.Linq;
 
     using Merchello.Core;
+    using Merchello.Core.Configuration;
     using Merchello.Core.Gateways;
     using Merchello.Core.Gateways.Notification;
     using Merchello.Core.Gateways.Payment;
@@ -17,8 +18,6 @@ namespace Merchello.Web.Models.ContentEditing
 
     public static class FullfillmentMappingExtensions
 	{
-
-
 		#region AppliedPayment
 
 		internal static AppliedPaymentDisplay ToAppliedPaymentDisplay(this IAppliedPayment appliedPayment)
@@ -48,8 +47,6 @@ namespace Merchello.Web.Models.ContentEditing
 
 		#endregion
 
-
-
 		#region ShipCountryDisplay
 
 		internal static ShipCountryDisplay ToShipCountryDisplay(this IShipCountry shipCountry)
@@ -69,7 +66,6 @@ namespace Merchello.Web.Models.ContentEditing
 		}
 
 		#endregion
-
 
 		#region GatewayResourceDisplay
 
@@ -203,7 +199,15 @@ namespace Merchello.Web.Models.ContentEditing
 
 		public static InvoiceDisplay ToInvoiceDisplay(this IInvoice invoice)
 		{
-			return AutoMapper.Mapper.Map<InvoiceDisplay>(invoice);
+			var mappedInvoice = AutoMapper.Mapper.Map<InvoiceDisplay>(invoice);
+
+            var country = MerchelloConfiguration.Current.MerchelloCountries().Countries.FirstOrDefault(x => x.CountryCode.Equals(mappedInvoice.BillToCountryCode, StringComparison.InvariantCultureIgnoreCase));
+            if (country != null)
+            {
+                mappedInvoice.BillToCountryName = country.Name;
+            }
+
+            return mappedInvoice;
 		}
 
 		internal static IInvoice ToInvoice(this InvoiceDisplay invoiceDisplay, IInvoice destination)
@@ -262,7 +266,7 @@ namespace Merchello.Web.Models.ContentEditing
 
 		internal static IInvoiceStatus ToInvoiceStatus(this InvoiceStatusDisplay invoiceStatusDisplay)
 		{
-			return new InvoiceStatus()
+			return new InvoiceStatus
 			{
 				Key = invoiceStatusDisplay.Key,
 				Alias = invoiceStatusDisplay.Alias,
@@ -372,7 +376,19 @@ namespace Merchello.Web.Models.ContentEditing
 
 		internal static ShipmentDisplay ToShipmentDisplay(this IShipment shipment)
 		{
-			return AutoMapper.Mapper.Map<ShipmentDisplay>(shipment);
+			var shipmentDisplay = AutoMapper.Mapper.Map<ShipmentDisplay>(shipment);
+
+            var country = MerchelloConfiguration.Current.MerchelloCountries().Countries.FirstOrDefault(x => x.CountryCode.Equals(shipmentDisplay.ToCountryCode, StringComparison.InvariantCultureIgnoreCase));
+            shipmentDisplay.ToCountryName = country.Name;
+            shipmentDisplay.FromCountryName = country.Name;
+
+            if(shipmentDisplay.ToCountryCode != shipmentDisplay.FromCountryCode)
+            {
+                country = MerchelloConfiguration.Current.MerchelloCountries().Countries.FirstOrDefault(x => x.CountryCode.Equals(shipmentDisplay.FromCountryCode, StringComparison.InvariantCultureIgnoreCase));
+                shipmentDisplay.FromCountryName = country.Name;
+            }
+
+            return shipmentDisplay;
 		}
 
 		internal static IShipment ToShipment(this ShipmentDisplay shipmentDisplay, IShipment destination)
@@ -425,10 +441,6 @@ namespace Merchello.Web.Models.ContentEditing
 	    }
 
 		#endregion
-
-
-
-	
 
 		#region ShipFixedRateTableDisplay
 

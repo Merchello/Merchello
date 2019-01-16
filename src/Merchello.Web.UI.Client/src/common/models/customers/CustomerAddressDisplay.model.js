@@ -21,6 +21,7 @@
         self.addressTypeFieldKey = '';
         self.company = '';
         self.countryCode = '';
+        self.countryName = '';
         self.phone = '';
         self.email = '';
         self.isDefault = false;

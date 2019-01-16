@@ -25,17 +25,14 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="logger">
         /// The logger.
         /// </param>
         /// <param name="sqlSyntax">
         /// The SQL syntax.
         /// </param>
-        protected LineItemRepositoryBase(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
-            : base(work, cache, logger, sqlSyntax)
+        protected LineItemRepositoryBase(IDatabaseUnitOfWork work, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {            
         }
 

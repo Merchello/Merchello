@@ -212,6 +212,7 @@ namespace Merchello.Core
             return optionChoices.CartesianProduct();
         }
 
+
         #region Static Product Collections
 
         /// <summary>
@@ -311,8 +312,6 @@ namespace Merchello.Core
 
 
         #endregion
-
-
 
         #region ProductAttributeCollection
 

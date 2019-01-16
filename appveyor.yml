@@ -1,5 +1,5 @@
 # version format
-version: 2.6.0.{build}
+version: 2.7.1.{build}
 
 # UMBRACO_PACKAGE_PRERELEASE_SUFFIX if a rtm release build this should be blank, otherwise if empty will default to alpha
 # example UMBRACO_PACKAGE_PRERELEASE_SUFFIX=beta
@@ -9,7 +9,7 @@ init:
 # Test against this version of Node.js
 environment:
   ruby_version: 22-x64
-  nodejs_version: "0.10"
+  nodejs_version: "4"
 
 cache:
 - C:\Ruby%ruby_version%\lib\ruby\gems -> appveyor.yml
@@ -50,6 +50,8 @@ build_script:
 - build-appveyor.cmd
 
 test: off
+
+image: Visual Studio 2017
 
 #test:
 #   assemblies:

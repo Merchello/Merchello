@@ -36,10 +36,11 @@
         /// <param name="currencyCode">
         /// The currency code.
         /// </param>
+        /// <param name="excludeCancelledAndFraud"></param>
         /// <returns>
         /// The sum of the invoice totals.
         /// </returns>
-        decimal SumInvoiceTotals(DateTime startDate, DateTime endDate, string currencyCode);
+        decimal SumInvoiceTotals(DateTime startDate, DateTime endDate, string currencyCode, bool excludeCancelledAndFraud = true);
 
         /// <summary>
         /// Gets the total of line items for a give SKU invoiced in a specific currency across the date range.

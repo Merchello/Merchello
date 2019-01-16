@@ -1,4 +1,6 @@
-﻿namespace Merchello.Core.Services
+﻿using Merchello.Core.Persistence.Repositories;
+
+namespace Merchello.Core.Services
 {
     using System;
     using System.Collections.Generic;
@@ -21,7 +23,7 @@
     using RepositoryFactory = Merchello.Core.Persistence.RepositoryFactory;
 
     /// <summary>
-    /// Represents the Product Service 
+    /// Represents the Product Service
     /// </summary>
     public partial class ProductService : PageCachedServiceBase<IProduct>, IProductService
     {
@@ -33,7 +35,7 @@
         /// <summary>
         /// The valid sort fields.
         /// </summary>
-        private static readonly string[] ValidSortFields = { "sku", "name", "price" };
+        private static readonly string[] ValidSortFields = { "sku", "name", "price", "saleprice" };
 
         /// <summary>
         /// The product variant service.
@@ -45,7 +47,7 @@
         /// </summary>
         public ProductService()
             : this(LoggerResolver.Current.Logger)
-        {            
+        {
         }
 
         /// <summary>
@@ -162,7 +164,7 @@
 
         /// <summary>
         /// Occurs before Delete
-        /// </summary>		
+        /// </summary>
         public static event TypedEventHandler<IProductService, DeleteEventArgs<IProduct>> Deleting;
 
         /// <summary>
@@ -275,7 +277,7 @@
                     return;
                 }
             }
-            
+
             using (new WriteLock(Locker))
             {
                 var uow = UowProvider.GetUnitOfWork();
@@ -329,7 +331,10 @@
             }
 
             // verify that all variants of these products still have attributes - or delete them
-            productArray.ForEach(EnsureProductVariantsHaveAttributes);
+            foreach (var product in productArray)
+            {
+                EnsureProductVariantsHaveAttributes(product);
+            }
 
             if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IProduct>(productArray), this);
         }
@@ -448,7 +453,7 @@
             {
                 return repository.GetPage(page, itemsPerPage, null, ValidateSortByField(sortBy), sortDirection);
             }
-        }       
+        }
 
         /// <summary>
         /// Gets a list of Product give a list of unique keys
@@ -553,7 +558,7 @@
         /// The raise events.
         /// </param>
         public void RemoveDetachedContent(IProduct product, Guid detachedContentTypeKey, bool raiseEvents = true)
-        {                      
+        {
             Save(this.RemoveDetachedContentFromProduct(product, detachedContentTypeKey), raiseEvents);
         }
 
@@ -634,11 +639,40 @@
         public void AddToCollection(Guid productKey, Guid collectionKey)
         {
             if (AddingToCollection != null) AddingToCollection.Invoke(this, new EventArgs());
-           
+
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 repository.AddToCollection(productKey, collectionKey);
             }
+
+			if (AddedToCollection != null) AddedToCollection.Invoke(this, new EventArgs());
+
+			// raise event, so the examine can re-index the product.
+			var product = this.GetByKey(productKey);
+			Saved.RaiseEvent(new SaveEventArgs<IProduct>(product), this);
+		}
+
+        /// <summary>
+        /// Bulks adds products to collections
+        /// </summary>
+        /// <param name="entityAndCollectionKeys"></param>
+        public void AddToCollections(Dictionary<Guid, Guid> entityAndCollectionKeys)
+        {
+            if (AddingToCollection != null) AddingToCollection.Invoke(this, new EventArgs());
+
+            using (var repository = (ProductRepository)RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
+            {
+                repository.AddToCollections(entityAndCollectionKeys);
+            }
+
+			foreach(var keyvalue in entityAndCollectionKeys)
+			{
+				// raise event, so the examine can re-index the product.
+				var product = this.GetByKey(keyvalue.Key);
+
+				if (product!=null)
+					Saved.RaiseEvent(new SaveEventArgs<IProduct>(product), this);
+			}
 
             if (AddedToCollection != null) AddedToCollection.Invoke(this, new EventArgs());
         }
@@ -698,6 +732,31 @@
         }
 
         /// <summary>
+        /// Batche removes from a collection
+        /// </summary>
+        /// <param name="entityKeycollectionKey"></param>
+        public void RemoveFromCollections(Dictionary<Guid, Guid> entityKeycollectionKey)
+        {
+            if (RemovingFromCollection != null) RemovingFromCollection.Invoke(this, new EventArgs());
+
+            using (var repository = (ProductRepository)RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
+            {
+                repository.RemoveFromCollections(entityKeycollectionKey);
+            }
+
+			// raise event, so the examine can re-index the product.
+			foreach (var keyvalue in entityKeycollectionKey)
+			{
+				var product = this.GetByKey(keyvalue.Key);
+
+				if (product != null)
+					Saved.RaiseEvent(new SaveEventArgs<IProduct>(product), this);
+			}
+			
+			if (RemovedFromCollection != null) RemovedFromCollection.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
         /// The remove product from collection.
         /// </summary>
         /// <param name="product">
@@ -731,6 +790,40 @@
 
             if (RemovedFromCollection != null) RemovedFromCollection.Invoke(this, new EventArgs());
 
+			// raise event, so the examine can re-index the product.
+			var product = this.GetByKey(productKey);
+			Saved.RaiseEvent(new SaveEventArgs<IProduct>(product), this);
+		}
+
+        /// <summary>
+        /// Gets products from a collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IProduct}"/>.
+        /// </returns>
+        Page<IProduct> IStaticCollectionService<IProduct>.GetFromCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            return GetFromCollection(collectionKey, page, itemsPerPage, sortBy, sortDirection, false);
         }
 
         /// <summary>
@@ -759,12 +852,44 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetFromCollection(collectionKey, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+                return repository.GetFromCollection(collectionKey, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection, includeUnavailable);
             }
+        }
+
+        /// <summary>
+        /// Gets disctint products from multiple collections.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IProduct}"/>.
+        /// </returns>
+        Page<IProduct> IStaticCollectionService<IProduct>.GetProductsThatExistInAllCollections(
+            IEnumerable<Guid> collectionKeys,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            return GetProductsThatExistInAllCollections(collectionKeys, page, itemsPerPage, sortBy, sortDirection, false);
         }
 
         /// <summary>
@@ -793,12 +918,48 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetEntitiesThatExistInAllCollections(collectionKeys.ToArray(), page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+                return repository.GetEntitiesThatExistInAllCollections(collectionKeys.ToArray(), page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection, includeUnavailable);
             }
+        }
+
+        /// <summary>
+        /// Gets products from a collection filtered by a search term.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IProduct}"/>.
+        /// </returns>
+        Page<IProduct> IStaticCollectionService<IProduct>.GetFromCollection(
+            Guid collectionKey,
+            string searchTerm,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            return GetFromCollection(collectionKey, searchTerm, page, itemsPerPage, sortBy, sortDirection);
         }
 
         /// <summary>
@@ -831,12 +992,48 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetFromCollection(collectionKey, searchTerm, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+                return repository.GetFromCollection(collectionKey, searchTerm, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection, includeUnavailable);
             }
+        }
+
+        /// <summary>
+        /// Gets distinct products from multiple collections filtered by a search term.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection key.
+        /// </param>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IProduct}"/>.
+        /// </returns>
+        Page<IProduct> IStaticCollectionService<IProduct>.GetProductsThatExistInAllCollections(
+            IEnumerable<Guid> collectionKeys,
+            string searchTerm,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            return GetProductsThatExistInAllCollections(collectionKeys, searchTerm, page, itemsPerPage, sortBy, sortDirection, false);
         }
 
         /// <summary>
@@ -869,11 +1066,12 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavaiable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetEntitiesThatExistInAllCollections(collectionKeys.ToArray(), searchTerm, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+                return repository.GetEntitiesThatExistInAllCollections(collectionKeys.ToArray(), searchTerm, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection, includeUnavaiable);
             }
         }
 
@@ -899,11 +1097,12 @@
            long page,
            long itemsPerPage,
            string sortBy = "",
-           SortDirection sortDirection = SortDirection.Descending)
+           SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavaiable = false)
                 {
                     using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
                     {
-                        return repository.GetKeysThatExistInAnyCollections(collectionKeys.ToArray(), page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+                        return repository.GetKeysThatExistInAnyCollections(collectionKeys.ToArray(), page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection, includeUnavaiable);
                     }
         }
 
@@ -933,11 +1132,12 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavaiable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetKeysFromCollection(collectionKey, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+                return repository.GetKeysFromCollection(collectionKey, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection, includeUnavaiable);
             }
         }
 
@@ -967,11 +1167,12 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavaiable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetKeysThatExistInAllCollections(collectionKeys.ToArray(), page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+                return repository.GetKeysThatExistInAllCollections(collectionKeys.ToArray(), page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection, includeUnavaiable);
             }
         }
 
@@ -1005,11 +1206,12 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavaiable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetKeysFromCollection(collectionKey, searchTerm, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+                return repository.GetKeysFromCollection(collectionKey, searchTerm, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection, includeUnavaiable);
             }
         }
 
@@ -1043,11 +1245,12 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavaiable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetKeysThatExistInAllCollections(collectionKeys.ToArray(), searchTerm, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+                return repository.GetKeysThatExistInAllCollections(collectionKeys.ToArray(), searchTerm, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection, includeUnavaiable);
             }
         }
 
@@ -1077,12 +1280,13 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetKeysNotInCollection(collectionKey, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
-            } 
+                return repository.GetKeysNotInCollection(collectionKey, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection, includeUnavailable);
+            }
         }
 
         /// <summary>
@@ -1111,11 +1315,12 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetKeysNotInAnyCollections(collectionKeys.ToArray(), page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+                return repository.GetKeysNotInAnyCollections(collectionKeys.ToArray(), page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection, includeUnavailable);
             }
         }
 
@@ -1149,11 +1354,12 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetKeysNotInCollection(collectionKey, searchTerm, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+                return repository.GetKeysNotInCollection(collectionKey, searchTerm, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection, includeUnavailable);
             }
         }
 
@@ -1187,11 +1393,12 @@
            long page,
            long itemsPerPage,
            string sortBy = "",
-           SortDirection sortDirection = SortDirection.Descending)
+           SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetKeysNotInAnyCollections(collectionKeys.ToArray(), searchTerm, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+                return repository.GetKeysNotInAnyCollections(collectionKeys.ToArray(), searchTerm, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection, includeUnavailable);
             }
         }
 
@@ -1202,11 +1409,12 @@
            long page,
            long itemsPerPage,
            string sortBy = "",
-           SortDirection sortDirection = SortDirection.Descending)
+           SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetKeysThatExistInAnyCollections(collectionKeys.ToArray(), searchTerm, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+                return repository.GetKeysThatExistInAnyCollections(collectionKeys.ToArray(), searchTerm, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection, includeUnavailable);
             }
         }
 
@@ -1239,7 +1447,8 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
@@ -1248,7 +1457,8 @@
                     page,
                     itemsPerPage,
                     this.ValidateSortByField(sortBy),
-                    sortDirection);
+                    sortDirection,
+                    includeUnavailable);
             }
         }
 
@@ -1282,7 +1492,8 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
@@ -1292,7 +1503,8 @@
                     page,
                     itemsPerPage,
                     this.ValidateSortByField(sortBy),
-                    sortDirection);
+                    sortDirection,
+                    includeUnavailable);
             }
         }
 
@@ -1322,7 +1534,8 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
@@ -1331,7 +1544,8 @@
                     page,
                     itemsPerPage,
                     this.ValidateSortByField(sortBy),
-                    sortDirection);
+                    sortDirection,
+                    includeUnavailable);
             }
         }
 
@@ -1365,7 +1579,8 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
@@ -1375,7 +1590,8 @@
                     page,
                     itemsPerPage,
                     this.ValidateSortByField(sortBy),
-                    sortDirection);
+                    sortDirection,
+                    includeUnavailable);
             }
         }
 
@@ -1405,7 +1621,8 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
@@ -1414,7 +1631,8 @@
                     page,
                     itemsPerPage,
                     this.ValidateSortByField(sortBy),
-                    sortDirection);
+                    sortDirection,
+                    includeUnavailable);
             }
         }
 
@@ -1448,7 +1666,8 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
@@ -1458,7 +1677,8 @@
                     page,
                     itemsPerPage,
                     this.ValidateSortByField(sortBy),
-                    sortDirection);
+                    sortDirection,
+                    includeUnavailable);
             }
         }
 
@@ -1496,7 +1716,8 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
@@ -1507,7 +1728,8 @@
                     page,
                     itemsPerPage,
                     this.ValidateSortByField(sortBy),
-                    sortDirection);
+                    sortDirection,
+                    includeUnavailable);
             }
         }
 
@@ -1537,7 +1759,8 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
@@ -1546,7 +1769,8 @@
                     page,
                     itemsPerPage,
                     this.ValidateSortByField(sortBy),
-                    sortDirection);
+                    sortDirection,
+                    includeUnavailable);
             }
         }
 
@@ -1576,7 +1800,8 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
@@ -1585,9 +1810,10 @@
                     page,
                     itemsPerPage,
                     this.ValidateSortByField(sortBy),
-                    sortDirection);
+                    sortDirection,
+                    includeUnavailable);
             }
-        } 
+        }
 
 
         /// <summary>
@@ -1616,7 +1842,8 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
@@ -1625,7 +1852,8 @@
                     page,
                     itemsPerPage,
                     this.ValidateSortByField(sortBy),
-                    sortDirection);
+                    sortDirection,
+                    includeUnavailable);
             }
         }
 
@@ -1655,7 +1883,8 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
@@ -1664,7 +1893,8 @@
                     page,
                     itemsPerPage,
                     this.ValidateSortByField(sortBy),
-                    sortDirection);
+                    sortDirection,
+                    includeUnavailable);
             }
         }
 
@@ -1694,7 +1924,8 @@
             long itemsPerPage,
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending,
-            bool includeAllowOutOfStockPurchase = false)
+            bool includeAllowOutOfStockPurchase = false,
+            bool includeUnavailable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
@@ -1702,7 +1933,8 @@
                     page,
                     itemsPerPage,
                     this.ValidateSortByField(sortBy),
-                    sortDirection);
+                    sortDirection,
+                    includeUnavailable);
             }
         }
 
@@ -1724,7 +1956,7 @@
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        internal Page<Guid> GetProductsKeysOnSale(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
+        internal Page<Guid> GetProductsKeysOnSale(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending, bool includeUnavailable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
@@ -1732,7 +1964,8 @@
                     page,
                     itemsPerPage,
                     this.ValidateSortByField(sortBy),
-                    sortDirection);
+                    sortDirection,
+                    includeUnavailable);
             }
         }
 
@@ -1798,7 +2031,30 @@
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        internal override Page<Guid> GetPagedKeys(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
+        public override Page<Guid> GetPagedKeys(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
+        {
+            return GetPagedKeys(page, itemsPerPage, sortBy, sortDirection, false);
+        }
+
+        /// <summary>
+        /// Gets a page of product keys
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        internal Page<Guid> GetPagedKeys(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending, bool includeUnvailable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
@@ -1827,7 +2083,7 @@
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        internal Page<Guid> GetPagedKeys(string searchTerm, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
+        public Page<Guid> GetPagedKeys(string searchTerm, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending, bool includeUnavailable = false)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
@@ -1875,7 +2131,10 @@
         /// </param>
         private void EnsureVariants(IEnumerable<IProduct> products)
         {
-            products.ForEach(this.EnsureVariants);
+            foreach (var product in products)
+            {
+                this.EnsureVariants(product);
+            }
         }
 
         /// <summary>
@@ -1904,7 +2163,7 @@
             }
 
             var newVariants = new List<IProductVariant>();
-            
+
             // This list is held for the checking against of existing variants
             // previously, it would get new variants over and over again causing performance issues
             var variantsToCheck = new List<IProductVariant>();
@@ -1932,7 +2191,7 @@
 
             if (newVariants.Any())
             {
-               // _productVariantService.Save(newVariants);
+                //_productVariantService.Save(newVariants);
                 foreach (var v in newVariants)
                 {
                     product.ProductVariants.Add(v);

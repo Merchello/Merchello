@@ -75,7 +75,13 @@
         /// </remarks>
         protected override IPaymentResult PerformAuthorizePayment(IInvoice invoice, ProcessorArgumentCollection args)
         {
-            var payment = GatewayProviderService.CreatePayment(PaymentMethodType.Redirect, invoice.Total, PaymentMethod.Key);
+            var authorizeAmount = invoice.Total;
+            if (args.ContainsKey("authorizePaymentAmount"))
+            {
+                authorizeAmount = Convert.ToDecimal(args["authorizePaymentAmount"]);
+            }
+
+            var payment = GatewayProviderService.CreatePayment(PaymentMethodType.Redirect, authorizeAmount, PaymentMethod.Key);
             payment.CustomerKey = invoice.CustomerKey;
             payment.PaymentMethodName = PaymentMethod.Name;
             payment.ReferenceNumber = PaymentMethod.PaymentCode + "-" + invoice.PrefixedInvoiceNumber();
@@ -145,15 +151,20 @@
             {
                 record = _paypalApiService.ExpressCheckout.Capture(invoice, payment, amount, isPartialPayment);
                 payment.SavePayPalTransactionRecord(record);
+                
+                if(record.Success)
+                {
+                    payment.Collected = (amount + applied) == payment.Amount;
+                    payment.Authorized = true;
 
-                payment.Collected = (amount + applied) == payment.Amount;
-                payment.Authorized = true;
+                    GatewayProviderService.Save(payment);
 
+                    GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, "PayPal ExpressCheckout SUCCESS payment", amount);
+
+                    return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, CalculateTotalOwed(invoice).CompareTo(amount) <= 0);
+                }
+                
                 GatewayProviderService.Save(payment);
-
-                GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, "PayPal ExpressCheckout SUCCESS payment", amount);
-
-                return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, CalculateTotalOwed(invoice).CompareTo(amount) <= 0);
             }
 
             return new PaymentResult(Attempt<IPayment>.Fail(payment), invoice, false);

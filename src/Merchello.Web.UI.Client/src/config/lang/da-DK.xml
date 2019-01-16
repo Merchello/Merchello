@@ -15,10 +15,12 @@
     <key alias="multipleOptions">Flere muligheder</key>
     <key alias="optional">(valgfri)</key>
     <key alias="percentSymbol">%</key>
+    <key alias="percent">Percent</key>
     <key alias="moneySymbol">DKK</key>
     <key alias="trackingNumber">Sporingsnummer</key>
     <key alias="trackingUrl">Tracking URL</key>
     <key alias="shipment">Forsendelse</key>
+    <key alias="shipmentNumber">Shipment #</key>
     <key alias="sku">SKU</key>
     <key alias="name">Name</key>
     <key alias="quantity">Antal</key>
@@ -75,6 +77,8 @@
     <key alias="associateWith">Tilknyt til</key>
     <key alias="shared">Delt</key>
     <key alias="custom">Custom</key>
+    <key alias="history">History</key>
+    <key alias="update">Update</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Produkter</key>
@@ -139,6 +143,7 @@
     <key alias="partialPaidInvoiceCollection">Delvist betalte fakturaer</key>
     <key alias="paidInvoiceCollection">Betalte fakturaer</key>
     <key alias="notFulfilledOrderCollection">Uafsluttede ordrer</key>
+    <key alias="cancelledOrderCollection">Annullerede ordrer</key>
     <key alias="openOrderCollection">Åbne ordrer</key>
     <key alias="fulfilledOrderCollection">Afsluttede ordrer</key>
     <key alias="addProvider">Tilføj udbyder</key>
@@ -204,6 +209,9 @@
     <key alias="sharedCount">Shared Count</key>
     <key alias="filterGroup">Filter Group</key>
     <key alias="filters">Filters</key>
+    <key alias="date">Date</key>
+    <key alias="description">Description</key>
+    <key alias="amount">Amount</key>
   </area>
   <area alias="merchelloNotes">
     <key alias="notes">Noter</key>
@@ -222,7 +230,10 @@
     <key alias="available">Tilgængelig</key>
     <key alias="copyProduct">Kopier produkt</key>
     <key alias="newProductName">Nyt produktnavn</key>
+    <key alias="nameIsRequired">Name is a required field.</key>
     <key alias="newProductSku">Nyt produktnummer</key>
+    <key alias="skuIsNotUnique">SKU is not unique</key>
+    <key alias="skuIsRequired">SKU is a required field.</key>    
     <key alias="newPrice">New Price</key>
     <key alias="newCostOfGoods">New Cost Of Goods</key>
     <key alias="newSalePrice">New Sale Price</key>
@@ -318,6 +329,8 @@
   </area>
   <area alias="merchelloSales">
     <key alias="invoice">Faktura</key>
+    <key alias="description">Description</key>
+    <key alias="amount">Amount</key>
     <key alias="invoiceNumber">Faktura #</key>
     <key alias="invoiceNumberPrefix">Faktura nummer præfix</key>
     <key alias="createInvoice">Create Invoice</key>
@@ -351,11 +364,14 @@
     <key alias="paid">Betalt</key>
     <key alias="unpaid">Ubetalt</key>
     <key alias="partial">Delvist</key>
+    <key alias="cancelled">Abgebrochen</key>
     <key alias="balanceDue">Resterende</key>
     <key alias="manageAdjustments">Redigér justeringer</key>
     <key alias="addAdjustment">Tilføj justering</key>
     <key alias="adjustments">Justeringer</key>
     <key alias="adjustmentAssignedBy">Tilføjet af</key>
+    <key alias="lineItemPreview">Line Item Preview</key>
+    <key alias="noLineItemPreview">Unable to preview line item</key>
   </area>
   <area alias="merchelloCustomers">
     <key alias="loginName">Login</key>
@@ -444,6 +460,8 @@
     <key alias="emailRequired">Email is a required field</key>
   </area>
   <area alias="merchelloMarketing">
+    <key alias="availableRewards">Available Rewards</key>
+    <key alias="availableConstraints">Available Constraints</key>
     <key alias="currentOffers">Aktuelle tilbud</key>
     <key alias="offerCode">Kode for tilbud</key>
     <key alias="offerCodeInUse">Already in use</key>
@@ -457,6 +475,7 @@
     <key alias="mustUniqueOfferCode">Tilbudskoder skal være unikke.</key>
     <key alias="offerSetExpires">Dette tilbud er kun gyldigt for specifikke datoer.</key>
     <key alias="offerNeverExpires">Udløber ikke.</key>
+    <key alias="offerHasExpired">Offer has expired</key>
     <key alias="offerValidDates">Gyldige datoer for tilbud</key>
     <key alias="offerValidDatesInfo">Angiv datoerne hvor dette tilbud er gyldigt.</key>
     <key alias="offerValidAllDates">Offer is valid for all dates</key>
@@ -477,6 +496,13 @@
     <key alias="lineItemNameInfo">
       <![CDATA[Ordrelinje navn<small>Dette er den lille tekst som vises på fakturaen når belønningen er anvendt.</small>]]>
     </key>
+    <key alias="offerProvider">Offer Provider</key>
+    <key alias="couponMaxRedemptionsTitle">Set a maximum number of allowable redemptions</key>
+    <key alias="couponMaxRedemptionsInputTitle">Set the maximum number of redemptions</key>
+    <key alias="couponMaxRedemptionsInputHelp">Values should be entered as positive numbers.</key>
+    <key alias="discountPriceDialogTitle">REWARD: Discount the price</key>
+    <key alias="discountPriceDialogApplyDiscount">Apply discount in the amount</key>
+    <key alias="discountPriceDialogApplyDiscountDescription">Values should be entered as positive numbers.</key>
   </area>
   <area alias="merchelloVariant">
     <!-- things -->
@@ -487,6 +513,7 @@
     <key alias="baseSku">Basis SKU</key>
     <key alias="barcode">Stregkode</key>
     <key alias="manufacturer">Forhandler</key>
+    <key alias="allManufacturers">All Manufacturers</key>
     <key alias="manufacturerModel">Forhandler model nr.</key>
     <key alias="variantInfo">Produktinformation</key>
     <key alias="variantOptions">Varianter</key>
@@ -530,7 +557,15 @@
     <key alias="inventoryWarning"><![CDATA[<p>Vigtigt: Hvis du vælger at spore lagerbeholdningen, skal det opsættes manuelt for hver enkelt variant (herunder), når produktet er gemt. Du kan opsætte en basis lagerbeholdning, som tilknyttes <strong>alle varianter</strong> her.</p>]]></key>
     <key alias="startingInventoryWarning"><![CDATA[(Dette vil opsætte en start lagerbeholdning for <strong>alle varianter</strong> og <strong>alle lagre</strong>)]]></key>
     <key alias="productOnSale">Produkt på tilbud</key>
+    <key alias="allowOutOfStockPurchase">Allow out of stock purchase</key>
     <key alias="allowOutOfStockPurchase">Tillad køb selvom varen ikke er på lager</key>
+    <key alias="bulkChangePriceUpdateCostOfGoods">Update cost of goods price.</key>
+    <key alias="bulkChangePriceUpdateSalePrice">Update sale price.</key>
+    <key alias="bulkChangeInventoryTitle">Update Inventory For All Selected Items</key>
+    <key alias="bulkChangeInventoryNewQuantity">New quantity</key>
+    <key alias="bulkChangeInventoryUpdateLowCount">Update low count.</key>
+    <key alias="bulkChangeInventoryUpdateNewLowCount">New low stock quantity</key>
+    <key alias="bulkChangeInventoryNote">Note: This will update the inventory for all warehouses on all selected variants</key>
   </area>
   <area alias="merchelloOrder">
     <!-- moved to sales -->
@@ -606,16 +641,22 @@
     <!-- phrases -->
     <key alias="fulfillManually">Behandl manuelt</key>
     <key alias="createShipment">Opret forsendelsesmetode</key>
+    <key alias="noShipments">There are no shipments.</key>
+    <key alias="items">Items</key>
+    <key alias="origin">Origin</key>
+    <key alias="destination">Destination</key>
+    <key alias="editShipment">Edit Shipment</key>
+    <key alias="editOrigin">Edit Origin</key>
+    <key alias="editDestination">Edit Destination</key>
+    <key alias="deleteShipment">Delete Shipment</key>
+    <key alias="setSaleDestination">Set Sale Destination</key>
   </area>
   <area alias="merchelloWarehouse">
-    <!-- things -->
     <key alias="warehouse">Lager</key>
     <key alias="warehouses">Lagre</key>
     <key alias="stock">Beholdning</key>
     <key alias="lowCount">Lavt antal</key>
     <key alias="location">Lokation</key>
-    <!-- actions -->
-    <!-- phrases -->
   </area>
   <!-- TODO KEEP THE MERCHELLO SHIPPING AREA -->
   <area alias="merchelloShipping">
@@ -643,20 +684,20 @@
     </key>
     <key alias="warehouse">Lager</key>
     <key alias="selectShipment">Select Shipment</key>
+    <key alias="shipmentStatus">Shipment Status</key>
   </area>
   <area alias="merchelloInventory">
     <!-- things -->
     <key alias="base">Basis lagerbeholdning</key>
     <key alias="inventory">Lagerbeholdning</key>
     <key alias="tracking">Sporing af lagerbeholdning</key>
-    <!-- actions -->
-    <!-- phrases -->
   </area>
   <area alias="merchelloPlaceholders">
     <key alias="enterProduct">Angiv et produkt navn</key>
     <key alias="enterOrder">Skriv et ordrenummer eller navn...</key>
     <key alias="addStyle">Tilføj type...</key>
     <key alias="enterOffer">Indtast et navn for rabatten</key>
+    <key alias="offerCodeExample">eg. 10OFF</key>
   </area>
   
   <area alias="merchelloSettings">
@@ -678,11 +719,14 @@
     <key alias="globalTaxationApplication">Opsæt hvordan moms er tilføjet</key>
     <key alias="defaultCultureName">Sæt standard sprog for udvidet indhold</key>
     <key alias="listViewSettingsTitle">List settings</key>
+    <key alias="listViewSettingsDescription">Enabling sticky options in lists, means it will remember the last page you were on or search term when you go back and forth between products and collections/lists making it much easier to manage products.</key>
     <key alias="stickyListView">Enable sticky list settings for general list.</key>
     <key alias="stickyCollectionView">Enable sticky list setting for collection lists.</key>
     <key alias="stickListingTab"><![CDATA[Enable sticking <b>%0% Listing</b> tab.]]></key>
+    <key alias="listViewSearchOptionsTitle">List Search Options</key>
+    <key alias="listViewSearchOptionsSubTitle">Fields include in filter</key>
   </area>
-  
+
   <area alias="merchelloShippingCountry">
     <key alias="addCountry">Tilføj et land</key>
     <key alias="typeCountryName">Skriv landenavn</key>
@@ -808,6 +852,7 @@
   <area alias="merchelloDelete">
     <key alias="deleteConfirmation">Slet bekræftelse</key>
     <key alias="deleteConfirmMessage">Er du sikker du vil fjerne elementet</key>
+	<key alias="actionNotReversible">This action cannot be reversed.</key>
   </area>
   <area alias="merchelloProductEdit">
     <key alias="enterProductName">Indtast et produktnavn</key>
@@ -854,5 +899,24 @@
     <key alias="orderCreated">Ordre %0% blev oprettet</key>
     <key alias="shipmentCreated">Forsendelse blev oprettet med %0% linjeposter</key>
     <key alias="shipmentStatusChanged">Status på forsendelse blev ændret til %0%</key>
+  </area>
+
+  <!-- Merchello Property Editors -->
+  <area alias="merchelloCollectionPicker">
+    <key alias="config">Config</key>
+  </area>
+
+  <!-- NotificationService Messages -->
+  <area alias="merchelloStatusNotifications">
+    <key alias="couponSaveSuccess">Coupon Saved</key>
+    <key alias="couponSaveError">Coupon Save Failed</key>
+    <key alias="productSaveSuccess">Product Saved</key>
+    <key alias="productSaveInProgress">Saving Product...</key>
+    <key alias="productSaveError">Product Save Failed</key>
+    <key alias="productDeleteSuccess">Product Deleted</key>
+    <key alias="productDeleteError">Product Deletion Failed</key>
+    <key alias="customerSaveSuccess">Customer Saved</key>
+    <key alias="customerSaveError">Customer Save Failed</key>
+    <key alias="customerSaveInProgress">Saving Customer...</key>
   </area>
 </language>

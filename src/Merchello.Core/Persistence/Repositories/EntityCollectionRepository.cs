@@ -29,17 +29,14 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
         /// <param name="logger">
         /// The logger.
         /// </param>
         /// <param name="sqlSyntax">
         /// The SQL Syntax.
         /// </param>
-        public EntityCollectionRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
-            : base(work, cache, logger, sqlSyntax)
+        public EntityCollectionRepository(IDatabaseUnitOfWork work, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, logger, sqlSyntax)
         {
         }
 
@@ -276,11 +273,6 @@
         /// </remarks>
         public IEntityFilterGroup GetEntityFilterGroup(Guid key)
         {
-            var cacheKey = Cache.CacheKeys.GetEntityCacheKey<IEntityFilterGroup>(key);
-            var cached = (IEntityFilterGroup)RuntimeCache.GetCacheItem(cacheKey);
-
-            if (cached != null) return cached;
-
             var collection = Get(key);
             if (collection == null) return null;
             var query = Querying.Query<IEntityCollection>.Builder.Where(x => x.ParentKey == key);
@@ -292,7 +284,7 @@
                 filterGroup.Filters.Add(child);
             }
 
-            return (IEntityFilterGroup)RuntimeCache.GetCacheItem(cacheKey, () => filterGroup);
+            return filterGroup;
         }
 
         /// <summary>
@@ -332,21 +324,47 @@
         /// </returns>
         protected override IEnumerable<IEntityCollection> PerformGetAll(params Guid[] keys)
         {
+
+            var dtos = new List<EntityCollectionDto>();
+
             if (keys.Any())
             {
-                foreach (var id in keys)
+                // This is to get around the WhereIn max limit of 2100 parameters and to help with performance of each WhereIn query
+                var keyLists = keys.Split(400).ToList();
+
+                // Loop the split keys and get them
+                foreach (var keyList in keyLists)
                 {
-                    yield return Get(id);
+                    dtos.AddRange(Database.Fetch<EntityCollectionDto>(GetBaseQuery(false).WhereIn<EntityCollectionDto>(x => x.Key, keyList, SqlSyntax)));
                 }
             }
             else
             {
-                var dtos = Database.Fetch<EntityCollectionDto>(GetBaseQuery(false));
-                foreach (var dto in dtos)
-                {
-                    yield return Get(dto.Key);
-                }
+                dtos = Database.Fetch<EntityCollectionDto>(GetBaseQuery(false));
             }
+
+            var factory = new EntityCollectionFactory();
+            foreach (var dto in dtos)
+            {
+                yield return factory.BuildEntity(dto);
+            }
+
+            //TODO - Keeping original code for now
+            //if (keys.Any())
+            //{
+            //    foreach (var id in keys)
+            //    {
+            //        yield return Get(id);
+            //    }
+            //}
+            //else
+            //{
+            //    var dtos = Database.Fetch<EntityCollectionDto>(GetBaseQuery(false));
+            //    foreach (var dto in dtos)
+            //    {
+            //        yield return Get(dto.Key);
+            //    }
+            //}
         }
 
         /// <summary>
@@ -426,9 +444,6 @@
         protected override void PersistDeletedItem(IEntityCollection entity)
         {
             base.PersistDeletedItem(entity);
-
-            if (entity.ParentKey != null)
-                RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IEntityFilterGroup>(entity.ParentKey.Value));
         }
 
         /// <summary>
@@ -454,9 +469,6 @@
             Database.Insert(dto);
             entity.Key = dto.Key;
             entity.ResetDirtyProperties();
-
-            if (entity.ParentKey != null)
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IEntityFilterGroup>(entity.ParentKey.Value));
         }
 
         /// <summary>
@@ -475,8 +487,6 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IEntityCollection>(entity.Key));
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IEntityFilterGroup>(entity.Key));
         }
     }
 }

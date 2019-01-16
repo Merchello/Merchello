@@ -107,7 +107,10 @@
         [HttpGet]
         public OrderDisplay GetOrder(Guid id)
         {
-            return _merchello.Query.Order.GetByKey(id);
+            //return _merchello.Query.Order.GetByKey(id);
+
+            var entity = _orderService.GetByKey(id);
+            return AutoMapper.Mapper.Map<OrderDisplay>(entity);
         }
 
         /// <summary>
@@ -173,7 +176,8 @@
                 throw new KeyNotFoundException("Invoice with id passed not found");
             }
 
-            var shipmentLineItem = invoice.Items.FirstOrDefault(x => x.LineItemType == LineItemType.Shipping);
+            // Get the shipment, making sure it's not an adjustment
+            var shipmentLineItem = invoice.Items.FirstOrDefault(x => x.LineItemType == LineItemType.Shipping && x.ExtendedData != null && !x.ExtendedData.ContainsKey(Constants.ExtendedDataKeys.Adjustment));
 
             if (shipmentLineItem == null)
             {

@@ -22,6 +22,7 @@
                                 </a>
                                 <ul class="dropdown-menu umb-actions" role="menu" aria-labelledby="dLabel">
                                     <li data-ng-hide="invoice.getFulfillmentStatus()==='Fulfilled' && !debugAllowDelete"><a data-ng-click="openDeleteInvoiceDialog()"><localize key="general_delete" /></a></li>
+                                    <li><a data-ng-click="cancelInvoice()"><localize key="general_cancel" /></a></li>
                                 </ul>
                             </div>
      
@@ -33,8 +34,6 @@
             </div>
         </div>
 
-
-
         <merchello-panel>
             
             <div class="row-fluid">
@@ -44,20 +43,17 @@
                     <div class="control-group umb-control-group">
                         
                         <div class="button-bar">
-                            <!-- ACTION: Cancel Sale -->
-                            <!-- ACTION: Capture Payment -->
-                            <button type="button" class="btn btn-info btn-action" data-ng-hide="invoice.isPaid() || payments.length === 0" data-ng-click="capturePayment()"><localize key="merchelloOrderView_captureFunds" /></button>
-
-                            <button type="button" class="btn btn-info btn-action" data-ng-click="toggleNewPaymentOpen()" data-ng-show="!invoice.isPaid() && payments.length === 0 && paymentMethodsLoaded"><localize key="merchelloOrderView_newPayment" /></button>
-                            <!-- ACTION: Fulfill Shipment -->
-                            <button type="button" class="btn btn-info btn-action" data-ng-show="showFulfill && invoice.hasOrder()" data-ng-click="openFulfillShipmentDialog()"><localize key="merchelloGeneral_fulfill" /></button>
-
+                            <button type="button" class="btn btn-info btn-action" ng-hide="invoice.isPaid() || payments.length === 0" data-ng-click="capturePayment()"><localize key="merchelloOrderView_captureFunds" /></button>
+                            <button type="button" class="btn btn-info btn-action" ng-click="toggleNewPaymentOpen()" data-ng-show="!invoice.isPaid() && payments.length === 0 && paymentMethodsLoaded"><localize key="merchelloOrderView_newPayment" /></button>
+                            <button type="button" class="btn btn-info btn-action" ng-show="showFulfill && invoice.hasOrder()" data-ng-click="openFulfillShipmentDialog()"><localize key="merchelloGeneral_fulfill" /></button>
                             <manage-invoice-adjustments invoice="invoice" payment-methods="paymentMethods" pre-values-loaded="preValuesLoaded" all-payments="allPayments" payments="payments" currency-symbol="currencySymbol" reload="reload()"></manage-invoice-adjustments>
+                            <div class="pull-right" ng-show="canAddLineItems">
+                                <merchello-add-icon do-add="openProductSelection()"></merchello-add-icon>
+                            </div>
                         </div>
 
                         <add-payment-table is-open="newPaymentOpen" payments="allPayments" toggle-open="toggleNewPaymentOpen()" reload="reload()" currency-symbol="currencySymbol" invoice="invoice" show-spinner="setNotPreValuesLoaded()" payment-methods="paymentMethods"></add-payment-table>
-                        <invoice-itemization-table invoice="invoice" payment-methods="paymentMethods" pre-values-loaded="preValuesLoaded" all-payments="allPayments" payments="payments" currency-symbol="currencySymbol"></invoice-itemization-table>
-
+                        <invoice-itemization-table invoice="invoice" payment-methods="paymentMethods" pre-values-loaded="preValuesLoaded" all-payments="allPayments" payments="payments" currency-symbol="currencySymbol" reload="reload()" can-edit-line-items="canAddLineItems"></invoice-itemization-table>
 
                     </div>
 

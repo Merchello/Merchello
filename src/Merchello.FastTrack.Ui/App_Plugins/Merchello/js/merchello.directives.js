@@ -1,194 +1,10 @@
 /*! Merchello
  * https://github.com/meritage/Merchello
- * Copyright (c) 2017 Across the Pond, LLC.
+ * Copyright (c) 2019 Across the Pond, LLC.
  * Licensed MIT
  */
 
 (function() { 
-
-/**
- * @ngdoc directive
- * @name offerComponents
- *
- * @description
- * Common form elements for Merchello's OfferComponents
- */
-angular.module('merchello.directives').directive('offerComponents', function() {
-
-    return {
-        restrict: 'E',
-        replace: true,
-        scope: {
-            offerSettings: '=',
-            components: '=',
-            preValuesLoaded: '=',
-            settings: '=',
-            saveOfferSettings: '&',
-            componentType: '@'
-        },
-        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/offer.components.tpl.html',
-        controller:  'Merchello.Directives.OfferComponentsDirectiveController'
-    }
-})
-
-
-/**
- * @ngdoc directive
- * @name offerMainProperties
- *
- * @description
- * Common form elements for Merchello's OfferSettings
- */
-angular.module('merchello.directives').directive('offerMainProperties', function(dialogService, localizationService, eventsService) {
-
-    return {
-        restrict: 'E',
-        replace: true,
-        scope: {
-            offer: '=',
-            context: '=',
-            settings: '=',
-            toggleOfferExpires: '&'
-        },
-        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/offer.mainproperties.tpl.html',
-        link: function (scope, elm, attr) {
-
-            scope.dateBtnText = '';
-            scope.ready = false;
-            var allDates = '';
-            var eventOfferExpiresOpen = 'merchello.offercouponexpires.open';
-
-            scope.openDateRangeDialog = function() {
-                var dialogData = {
-                    startDate: scope.offer.offerStartsDate,
-                    endDate: scope.offer.offerEndsDate
-                };
-
-                dialogService.open({
-                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/daterange.selection.html',
-                    show: true,
-                    callback: processDateRange,
-                    dialogData: dialogData
-                });
-            }
-
-            scope.clearDates = function() {
-                scope.toggleOfferExpires();
-            }
-
-            function init() {
-
-                eventsService.on(eventOfferExpiresOpen, scope.openDateRangeDialog);
-
-                scope.$watch('offer', function(nv, ov) {
-
-                    if (nv) {
-                        if (nv.key !== undefined) {
-                            localizationService.localize('merchelloGeneral_allDates').then(function(value) {
-                                allDates = value;
-                                scope.ready = true;
-                            });
-                        }
-                    }
-
-                });
-
-            }
-
-            function processDateRange(dialogData) {
-                scope.offer.offerStartsDate = dialogData.startDate;
-                scope.offer.offerEndsDate = dialogData.endDate;
-            }
-
-            init();
-        }
-    };
-})
-
-angular.module('merchello.directives').directive('uniqueOfferCode', function() {
-    return {
-        restrict: 'E',
-        replace: true,
-        scope: {
-            offer: '=',
-            offerCode: '=',
-            offerForm: '='
-        },
-        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/offer.uniqueoffercode.tpl.html',
-        controller: function($scope, eventsService, marketingResource) {
-
-            $scope.loaded = false;
-            $scope.checking = false;
-            $scope.isUnique = true;
-
-            var eventOfferSavingName = 'merchello.offercoupon.saving';
-            var input = angular.element( document.querySelector( '#offerCode' ) );
-            var container = angular.element( document.querySelector("#unique-offer-check") );
-
-            var currentCode = '';
-
-            function init() {
-                container.hide();
-                eventsService.on(eventOfferSavingName, onOfferSaving);
-                input.bind("keyup keypress", function (event) {
-                    var code = event.which;
-                    // alpha , numbers, ! and backspace
-
-                    if ((code >47 && code <58) || (code >64 && code <91) || (code >96 && code <123) || code === 33 || code == 8) {
-                        $scope.$apply(function () {
-                            if ($scope.offerCode !== '') {
-                                checkUniqueOfferCode($scope.offerCode);
-                                currentCode = $scope.offerCode;
-                            }
-                        });
-                    } else {
-                        $scope.checking = true;
-                        event.preventDefault();
-                    }
-                });
-                $scope.$watch('offerCode', function(oc) {
-                    if($scope.offerCode !== undefined) {
-                        if (!$scope.loaded) {
-                            $scope.loaded = true;
-                            currentCode = $scope.offer.offerCode;
-                            checkUniqueOfferCode($scope.offer.offerCode);
-                        }
-                    }
-                });
-            }
-            function checkUniqueOfferCode(offerCode) {
-                $scope.checking = true;
-                if (offerCode === '') {
-                    $scope.checking = false;
-                } else {
-                    container.show();
-                    if (offerCode === currentCode) {
-                        $scope.checking = false;
-                        return true;
-                    }
-                    var checkPromise = marketingResource.checkOfferCodeIsUnique(offerCode);
-                    checkPromise.then(function(result) {
-                        $scope.checking = false;
-                        $scope.isUnique = result;
-                    });
-                }
-            }
-
-            function onOfferSaving(e, frm) {
-                var valid = $scope.offer.offerCode !== '';
-                if (valid) {
-                    checkUniqueOfferCode($scope.offer.offerCode);
-                    valid = $scope.isUnique;
-                    $scope.offerCode = $scope.offer.offerCode
-                }
-                frm.offerCode.$setValidity('offerCode', valid);
-            }
-            
-            // Initialize
-            init();
-        }
-    };
-});
 
 angular.module('merchello.directives').directive('entityCollectionTitleBar', function($compile, localizationService, entityCollectionResource, entityCollectionDisplayBuilder, entityCollectionProviderDisplayBuilder) {
   return {
@@ -1203,7 +1019,7 @@ angular.module('merchello.directives').directive('customerItemCacheTable',
                         scope.title = data[0];
                         scope.settings = data[1];
                         scope.items = data[2].items;
-                        setCheckoutLink()
+                        setCheckoutLink();
                     });
                 }
 
@@ -1271,6 +1087,7 @@ angular.module('merchello.directives').directive('customerItemCacheTable',
 
                     var billingAddress = scope.customer.getDefaultBillingAddress();
                     var shippingAddress = scope.customer.getDefaultShippingAddress();
+
 
                     var checkoutData = {
                         customerKey: dialogData.customer.key,
@@ -1700,20 +1517,6 @@ angular.module('merchello.directives').directive('merchelloTabs', [function() {
     };
 }]);
 
-angular.module('merchello.directives').directive('merchEnter', function() {
-    return function (scope, element, attrs) {
-        element.bind("keydown keypress", function (event) {
-            if(event.which === 13) {
-                scope.$apply(function (){
-                    scope.$eval(attrs.merchEnter);
-                });
-
-                event.preventDefault();
-            }
-        });
-    };
-});
-
 angular.module('merchello.directives').directive('merchelloDateRangeButton',
     function($filter, settingsResource, dialogService, merchDateHelper) {
 
@@ -1837,10 +1640,10 @@ angular.module('merchello.directives').directive('merchelloAddress', function() 
                 setAddress: '&setAddress'
             },
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/merchelloaddress.tpl.html',
-            link: function(scope, elm, attr) {
+            link: function (scope, elm, attr) {
                 scope.address = scope.setAddress();
             }
-        }
+        };
     });
 
 angular.module('merchello.directives').directive('merchelloIconBar', function(localizationService) {
@@ -2087,7 +1890,7 @@ angular.module('merchello.directives').directive('merchelloListView',
                 scope.prev = prev;
                 scope.goToPage = goToPage;
                 scope.enterSearch = enterSearch;
-                scope.search = search;
+                scope.search = _.throttle(search, 750);
                 scope.setPageSize = setPageSize;
                 scope.openDateRangeDialog = openDateRangeDialog;
 
@@ -2187,6 +1990,7 @@ angular.module('merchello.directives').directive('merchelloListView',
 
                 }
 
+                
                 function search() {
 
                     if (cacheEnabled) {
@@ -2566,6 +2370,20 @@ angular.module('merchello.directives').directive('merchelloViewEditor',
         }
     }]);
 
+angular.module('merchello.directives').directive('merchEnter', function() {
+    return function (scope, element, attrs) {
+        element.bind("keydown keypress", function (event) {
+            if(event.which === 13) {
+                scope.$apply(function (){
+                    scope.$eval(attrs.merchEnter);
+                });
+
+                event.preventDefault();
+            }
+        });
+    };
+});
+
     /**
      * @ngdoc directive
      * @name resetListfilters
@@ -2844,6 +2662,190 @@ angular.module('merchello.directives').directive('shipCountryGatewayProviders', 
         controller: 'Merchello.Directives.ShipCountryGatewaysProviderDirectiveController'
     };
 });
+/**
+ * @ngdoc directive
+ * @name offerComponents
+ *
+ * @description
+ * Common form elements for Merchello's OfferComponents
+ */
+angular.module('merchello.directives').directive('offerComponents', function() {
+
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            offerSettings: '=',
+            components: '=',
+            preValuesLoaded: '=',
+            settings: '=',
+            saveOfferSettings: '&',
+            componentType: '@'
+        },
+        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/offer.components.tpl.html',
+        controller:  'Merchello.Directives.OfferComponentsDirectiveController'
+    }
+})
+
+
+/**
+ * @ngdoc directive
+ * @name offerMainProperties
+ *
+ * @description
+ * Common form elements for Merchello's OfferSettings
+ */
+angular.module('merchello.directives').directive('offerMainProperties', function(dialogService, localizationService, eventsService) {
+
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            offer: '=',
+            context: '=',
+            settings: '=',
+            toggleOfferExpires: '&'
+        },
+        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/offer.mainproperties.tpl.html',
+        link: function (scope, elm, attr) {
+
+            scope.dateBtnText = '';
+            scope.ready = false;
+            var allDates = '';
+            var eventOfferExpiresOpen = 'merchello.offercouponexpires.open';
+
+            scope.openDateRangeDialog = function() {
+                var dialogData = {
+                    startDate: scope.offer.offerStartsDate,
+                    endDate: scope.offer.offerEndsDate
+                };
+
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/daterange.selection.html',
+                    show: true,
+                    callback: processDateRange,
+                    dialogData: dialogData
+                });
+            }
+
+            scope.clearDates = function() {
+                scope.toggleOfferExpires();
+            }
+
+            function init() {
+
+                eventsService.on(eventOfferExpiresOpen, scope.openDateRangeDialog);
+
+                scope.$watch('offer', function(nv, ov) {
+
+                    if (nv) {
+                        if (nv.key !== undefined) {
+                            localizationService.localize('merchelloGeneral_allDates').then(function(value) {
+                                allDates = value;
+                                scope.ready = true;
+                            });
+                        }
+                    }
+
+                });
+
+            }
+
+            function processDateRange(dialogData) {
+                scope.offer.offerStartsDate = dialogData.startDate;
+                scope.offer.offerEndsDate = dialogData.endDate;
+            }
+
+            init();
+        }
+    };
+})
+
+angular.module('merchello.directives').directive('uniqueOfferCode', function() {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            offer: '=',
+            offerCode: '=',
+            offerForm: '='
+        },
+        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/offer.uniqueoffercode.tpl.html',
+        controller: function($scope, eventsService, marketingResource) {
+
+            $scope.loaded = false;
+            $scope.checking = false;
+            $scope.isUnique = true;
+
+            var eventOfferSavingName = 'merchello.offercoupon.saving';
+            var input = angular.element( document.querySelector( '#offerCode' ) );
+            var container = angular.element( document.querySelector("#unique-offer-check") );
+
+            var currentCode = '';
+
+            function init() {
+                container.hide();
+                eventsService.on(eventOfferSavingName, onOfferSaving);
+                input.bind("keyup keypress", function (event) {
+                    var code = event.which;
+                    // alpha , numbers, ! and backspace
+
+                    if ((code >47 && code <58) || (code >64 && code <91) || (code >96 && code <123) || code === 33 || code == 8) {
+                        $scope.$apply(function () {
+                            if ($scope.offerCode !== '') {
+                                checkUniqueOfferCode($scope.offerCode);
+                                currentCode = $scope.offerCode;
+                            }
+                        });
+                    } else {
+                        $scope.checking = true;
+                        event.preventDefault();
+                    }
+                });
+                $scope.$watch('offerCode', function(oc) {
+                    if($scope.offerCode !== undefined) {
+                        if (!$scope.loaded) {
+                            $scope.loaded = true;
+                            currentCode = $scope.offer.offerCode;
+                            checkUniqueOfferCode($scope.offer.offerCode);
+                        }
+                    }
+                });
+            }
+            function checkUniqueOfferCode(offerCode) {
+                $scope.checking = true;
+                if (offerCode === '') {
+                    $scope.checking = false;
+                } else {
+                    container.show();
+                    if (offerCode === currentCode) {
+                        $scope.checking = false;
+                        return true;
+                    }
+                    var checkPromise = marketingResource.checkOfferCodeIsUnique(offerCode);
+                    checkPromise.then(function(result) {
+                        $scope.checking = false;
+                        $scope.isUnique = result;
+                    });
+                }
+            }
+
+            function onOfferSaving(e, frm) {
+                var valid = $scope.offer.offerCode !== '';
+                if (valid) {
+                    checkUniqueOfferCode($scope.offer.offerCode);
+                    valid = $scope.isUnique;
+                    $scope.offerCode = $scope.offer.offerCode
+                }
+                frm.offerCode.$setValidity('offerCode', valid);
+            }
+            
+            // Initialize
+            init();
+        }
+    };
+});
+
 angular.module('merchello.directives').directive("productOptionsAddEdit",
     ['$timeout', '$q', 'eventsService', 'dialogService', 'productOptionResource', 'productAttributeDisplayBuilder',
     function($timeout, $q, eventsService, dialogService, productOptionResource, productAttributeDisplayBuilder) {
@@ -4351,7 +4353,8 @@ angular.module('merchello.directives').directive('reportWidgeThisWeekVsLast',
                     }
 
                     function loadReportData() {
-                        var today = dateHelper.getGmt0EquivalentDate(new Date());
+                        //var today = dateHelper.getGmt0EquivalentDate(new Date());
+                        var today = new Date();
                         var last = today;
                         var thisWeekEnd = $filter('date')(today, scope.settings.dateFormat);
                         var lastWeekEnd = $filter('date')(last.setDate(last.getDate() - 7), scope.settings.dateFormat);
@@ -4382,7 +4385,8 @@ angular.module('merchello.directives').directive('reportWidgeThisWeekVsLast',
 
                             _.each(scope.resultData[0], function(days) {
 
-                                var dt = dateHelper.getGmt0EquivalentDate(new Date(days.startDate));
+                                //var dt = dateHelper.getGmt0EquivalentDate(new Date(days.startDate));
+                                var dt = new Date(days.startDate);
                                 var dd = dt.getDay();
 
                                 scope.labels.push(scope.weekdays[dd]);
@@ -4885,8 +4889,8 @@ angular.module('merchello.directives').directive('invoiceHeader',
 }])
 
 angular.module('merchello.directives').directive('invoiceItemizationTable',
-    ['$q', 'localizationService', 'invoiceResource', 'invoiceHelper', 'dialogService', 'productResource',
-        function ($q, localizationService, invoiceResource, invoiceHelper, dialogService, productResource) {
+    ['$q', '$timeout', 'localizationService', 'invoiceResource', 'invoiceHelper', 'dialogService', 'productResource', 'notificationsService',
+        function ($q, $timeout, localizationService, invoiceResource, invoiceHelper, dialogService, productResource, notificationsService) {
             return {
                 restrict: 'E',
                 replace: true,
@@ -4897,7 +4901,9 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                     paymentMethods: '=',
                     preValuesLoaded: '=',
                     currencySymbol: '=',
-                    save: '&'
+                    canEditLineItems:'=',
+                    save: '&',
+                    reload:'&'
                 },
                 templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/invoiceitemizationtable.tpl.html',
                 link: function (scope, elm, attr) {
@@ -4925,7 +4931,7 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
 
 
                     // Previews a line item on invoice in a dialog
-                    scope.lineItemPreview = function (sku) {
+                    scope.lineItemPreview = function(sku) {
 
                         // Setup the dialog data
                         var dialogData = {
@@ -4935,7 +4941,7 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
 
                         // Get the product if it exists! We call the vairant service as this seems
                         // to return the base product too
-                        productResource.getVariantBySku(sku).then(function (result) {
+                        productResource.getVariantBySku(sku).then(function(result) {
                             // If we get something back then add it to the diaglogData
                             if (result) {
                                 dialogData.product = result;
@@ -4947,8 +4953,108 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                             show: true,
                             dialogData: dialogData
                         });
-                    }
+                    };
 
+
+                    // The dialog that deals with lineitem quantity changes and deletions
+                    scope.editLineItem = function (lineItem, lineItemType) {
+
+                        var dialogData = {
+                            key: lineItem.key,
+                            quantity: lineItem.quantity,
+                            sku: lineItem.sku,
+                            name: lineItem.name,
+                            price: lineItem.price,
+                            lineItem: lineItem,
+                            deleteLineItem: false,
+                            canDelete: scope.invoice.items.length > 1,
+                            lineItemType: lineItemType,
+                            editAllowed: lineItem.extendedData.getValue('merchCustomProduct') !== ''
+                        };
+
+                        dialogService.open({
+                            template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/sales.edit.lineitem.html',
+                            show: true,
+                            dialogData: dialogData,
+                            callback: updateLineItem
+                        });
+
+                    };
+
+                    // Update a product line item on the invoice (Edit or Delete)
+                    function updateLineItem(lineItemDialogData) {
+
+                        var keepFindingProduct = true;
+                        // Post the model back to the controller
+                        var invoiceAddItems = {};
+
+                        if (lineItemDialogData.deleteLineItem) {
+
+                            // Loop through items                           
+                            angular.forEach(scope.invoice.items, function (item) {
+                                if (keepFindingProduct) {
+                                    if (lineItemDialogData.lineItem.sku === item.sku) {
+
+                                        // Make an invoice AddItemsModel
+                                        invoiceAddItems = {
+                                            InvoiceKey: scope.invoice.key,
+                                            LineItemType: lineItemDialogData.lineItemType,
+                                            Items: [
+                                                {
+                                                    OriginalSku: item.sku,
+                                                    Quantity: 0
+                                                }
+                                            ]
+                                        }
+
+                                        // Stop finding and break (As no break in angular loop, this is best way)
+                                        keepFindingProduct = false;
+                                    }
+                                }
+                            });
+
+                        } else {
+
+                            // Just send everything up and we'll deal with it on the server      
+                            // TODO - Need to manage all these on the server, check for product key
+                            angular.forEach(scope.invoice.items, function (item) {
+                                if (item.lineItemType === "Product" && item.key === lineItemDialogData.key) {
+                                    // Make an invoice AddItemsModel
+                                    invoiceAddItems = {
+                                        InvoiceKey: scope.invoice.key,
+                                        LineItemType: lineItemDialogData.lineItemType,
+                                        Items: [
+                                            {
+                                                Quantity: lineItemDialogData.quantity,
+                                                OriginalQuantity: item.quantity,
+                                                Sku: lineItemDialogData.sku,
+                                                OriginalSku: item.sku,
+                                                Name: lineItemDialogData.name,
+                                                OriginalName: item.name,
+                                                Price: lineItemDialogData.price,
+                                                OriginalPrice: item.price,
+                                                Key: item.key
+                                            }
+                                        ]
+                                    }
+                                }
+                            });                           
+                        }
+
+                        // Put the new items
+                        var invoiceSavePromise = invoiceResource.putInvoiceNewProducts(invoiceAddItems);
+                        invoiceSavePromise.then(function () {
+                            $timeout(function () {
+                                scope.reload();
+                                loadInvoice();
+                                notificationsService.success('Invoice updated.');
+                            }, 1500);
+                        }, function (reason) {
+                            notificationsService.error("Failed to update invoice", reason.message);
+                        });
+
+
+                    };
 
                     function loadInvoice() {
                         var taxLineItem = scope.invoice.getTaxLineItem();
@@ -4964,8 +5070,7 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                             item.email = item.extendedData.getValue("email");
                         });
 
-                        scope.remainingBalance =
-                            invoiceHelper.round(scope.invoice.remainingBalance(scope.allPayments), 2);
+                        scope.remainingBalance = invoiceHelper.round(scope.invoice.remainingBalance(scope.allPayments), 2);
 
                         var label  = scope.remainingBalance == '0' ? 'merchelloOrderView_captured' : 'merchelloOrderView_authorized';
 

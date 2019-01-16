@@ -20,21 +20,8 @@
     /// <summary>
     /// Registers Umbraco event handlers.
     /// </summary>
-    public class UmbracoEventHandler : IApplicationEventHandler
+    public class UmbracoEventHandler : ApplicationEventHandler
     {
-        /// <summary>
-        /// Handles Umbraco Initialized Event.
-        /// </summary>
-        /// <param name="umbracoApplication">
-        /// The <see cref="UmbracoApplicationBase"/>.
-        /// </param>
-        /// <param name="applicationContext">
-        /// Umbraco <see cref="ApplicationContext"/>.
-        /// </param>
-        public void OnApplicationInitialized(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
-        {
-        }
-
         /// <summary>
         /// Handles Umbraco Starting.
         /// </summary>
@@ -44,8 +31,11 @@
         /// <param name="applicationContext">
         /// Umbraco <see cref="ApplicationContext"/>.
         /// </param>
-        public void OnApplicationStarting(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
+        protected override void ApplicationStarting(UmbracoApplicationBase umbracoApplication,
+            ApplicationContext applicationContext)
         {
+            base.ApplicationStarting(umbracoApplication, applicationContext);
+
             // We handle the Initializing event so that we can set the parent node of the virtual content to the store
             // so that published content queries in views will work correctly
             ProductContentFactory.Initializing += ProductContentFactoryOnInitializing;
@@ -81,19 +71,6 @@
         //        Notification.Trigger("OrderShipped", shipment, Core.Observation.Topic.Notifications);
         //    }
         //}
-
-        /// <summary>
-        /// Handles Umbraco Started.
-        /// </summary>
-        /// <param name="umbracoApplication">
-        /// The <see cref="UmbracoApplicationBase"/>.
-        /// </param>
-        /// <param name="applicationContext">
-        /// Umbraco <see cref="ApplicationContext"/>.
-        /// </param>
-        public void OnApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
-        {
-        }
 
 
         //// Event handler methods

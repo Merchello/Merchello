@@ -2,10 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
-
+    using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Services.Interfaces;
 
     using Models;
+    using Umbraco.Core.Persistence;
 
     /// <summary>
     /// Defines the ProductService, which provides access to operations involving <see cref="IProduct"/>
@@ -97,7 +98,7 @@
         /// <param name="keys">List of GUID keys for Product objects to retrieve</param>
         /// <returns>List of <see cref="IProduct"/></returns>
         IEnumerable<IProduct> GetByKeys(IEnumerable<Guid> keys);
-            
+
         /// <summary>
         /// Gets a collection of all <see cref="IProduct"/>.
         /// </summary>
@@ -193,7 +194,7 @@
         /// <returns>
         /// The <see cref="IEnumerable{Product}"/>.
         /// </returns>
-        IEnumerable<IProduct> GetByDetachedContentType(Guid detachedContentTypeKey); 
+        IEnumerable<IProduct> GetByDetachedContentType(Guid detachedContentTypeKey);
 
         #endregion
 
@@ -443,5 +444,133 @@
         //Page<Guid> GetProductsKeysOnSale(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending);
 
         //#endregion
+
+        #region EntityCollectionService
+        /// <summary>
+        /// Gets an entity from a collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{T}"/>.
+        /// </returns>
+        Page<IProduct> GetFromCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false);
+
+        /// <summary>
+        /// Gets distinct entities from a multiple collection.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{T}"/>.
+        /// </returns>
+        Page<IProduct> GetProductsThatExistInAllCollections(
+            IEnumerable<Guid> collectionKeys,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false);
+
+
+        /// <summary>
+        /// Gets an entity from a collection filtered by a search term
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{T}"/>.
+        /// </returns>
+        Page<IProduct> GetFromCollection(
+            Guid collectionKey,
+            string searchTerm,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false);
+
+
+        /// <summary>
+        /// Gets an entity from multiple collections filtered by a search term
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// A collection of collection keys.
+        /// </param>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{T}"/>.
+        /// </returns>
+        Page<IProduct> GetProductsThatExistInAllCollections(
+            IEnumerable<Guid> collectionKeys,
+            string searchTerm,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false);
+        #endregion
     }
 }
