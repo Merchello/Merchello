@@ -200,6 +200,7 @@
     <key alias="alias">Alias</key>
     <key alias="startDate">Start Date</key>
     <key alias="endDate">End Date</key>
+    <key alias="createDate">Create Date</key>
     <key alias="active">Active</key>
     <key alias="sortOrder">Sort Order</key>
     <key alias="optionName">Option Name</key>
