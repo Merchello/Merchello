@@ -201,6 +201,7 @@
     <key alias="alias">Alias</key>
     <key alias="startDate">Begindatum</key>
     <key alias="endDate">Einddatum</key>
+    <key alias="createDate">Makendatum</key>
     <key alias="active">Actief</key>
     <key alias="sortOrder">Sorteervolgorde</key>
     <key alias="optionName">Optie Naam</key>
