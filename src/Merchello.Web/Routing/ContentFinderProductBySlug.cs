@@ -63,7 +63,8 @@
             var prefix = MerchelloConfiguration.Current.GetProductSlugCulturePrefix(contentRequest.Culture.Name);
 
             if (prefix.IsNullOrWhiteSpace()) return slug;
-
+            // Fix: When a url contains non latin character content finder fails as the url is UrlEncoded. Tis solves the isue
+            slug = HttpUtility.UrlDecode(slug);
             // enforce the prefix is present in the slug
             return !slug.StartsWith(prefix) ? 
                 string.Empty : 
