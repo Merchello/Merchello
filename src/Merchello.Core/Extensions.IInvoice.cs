@@ -857,7 +857,11 @@ namespace Merchello.Core
         /// </returns>
         public static decimal TotalItemPrice(this IInvoice invoice)
         {
-            return Ensure2Places(invoice.Items.Where(x => x.LineItemType == LineItemType.Product).Sum(x => x.TotalPrice));
+            var lineItems = invoice.ProductLineItems();
+            if (!lineItems.Any())
+                return Ensure2Places(0);
+
+            return Ensure2Places(lineItems.Sum(x => x.TotalPrice));
         }
 
         /// <summary>
@@ -871,7 +875,11 @@ namespace Merchello.Core
         /// </returns>
         public static decimal TotalCustomItemPrice(this IInvoice invoice)
         {
-            return Ensure2Places(invoice.Items.Where(x => x.LineItemType == LineItemType.Custom).Sum(x => x.TotalPrice));
+            var lineItems = invoice.CustomLineItems();
+            if (!lineItems.Any())
+                return Ensure2Places(0);
+
+            return Ensure2Places(lineItems.Sum(x => x.TotalPrice));
         }
 
         /// <summary>
@@ -885,7 +893,11 @@ namespace Merchello.Core
         /// </returns>
         public static decimal TotalAdjustmentItemPrice(this IInvoice invoice)
         {
-            return Ensure2Places(invoice.Items.Where(x => x.LineItemType == LineItemType.Adjustment).Sum(x => x.TotalPrice));
+            var lineItems = invoice.AdjustmentLineItems();
+            if (!lineItems.Any())
+                return Ensure2Places(0);
+
+            return Ensure2Places(lineItems.Sum(x => x.TotalPrice));
         }
 
         /// <summary>
@@ -899,7 +911,11 @@ namespace Merchello.Core
         /// </returns>
         public static decimal TotalShipping(this IInvoice invoice)
         {
-            return Ensure2Places(invoice.Items.Where(x => x.LineItemType == LineItemType.Shipping).Sum(x => x.TotalPrice));
+            var lineItems = invoice.ShippingLineItems();
+            if (!lineItems.Any())
+                return Ensure2Places(0);
+
+            return Ensure2Places(lineItems.Sum(x => x.TotalPrice));
         }
 
         /// <summary>
@@ -913,7 +929,11 @@ namespace Merchello.Core
         /// </returns>
         public static decimal TotalTax(this IInvoice invoice)
         {
-            return Ensure2Places(invoice.Items.Where(x => x.LineItemType == LineItemType.Tax).Sum(x => x.TotalPrice));
+            var lineItems = invoice.TaxLineItems();
+            if (!lineItems.Any())
+                return Ensure2Places(0);
+
+            return Ensure2Places(lineItems.Sum(x => x.TotalPrice));
         }
 
         /// <summary>
@@ -927,7 +947,11 @@ namespace Merchello.Core
         /// </returns>
         public static decimal TotalDiscounts(this IInvoice invoice)
         {
-            return Ensure2Places(invoice.Items.Where(x => x.LineItemType == LineItemType.Discount).Sum(x => x.TotalPrice));
+            var lineItems = invoice.DiscountLineItems();
+            if (!lineItems.Any())
+                return Ensure2Places(0);
+
+            return Ensure2Places(lineItems.Sum(x => x.TotalPrice));
         }
 
         #endregion
