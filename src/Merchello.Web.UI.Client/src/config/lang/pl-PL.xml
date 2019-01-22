@@ -131,7 +131,7 @@
     <key alias="customerCheckoutPercent">Procent przejść do kasy przez klientów</key>
     <key alias="thisWeekVsLast">W tym tygodniu vs. w zesłym tygodniu</key>
     <key alias="monthlyTotalSales">Całkowita liczba sprzedaży w miesiącu</key>
-    <key alias="topSellingItems"><![CDATA[ Najchęrniej kupowane produkty<small>Top 10</small> ]]></key>
+    <key alias="topSellingItems"><![CDATA[ Najchęrniej kupowane produkty<small>Top 50</small> ]]></key>
     <key alias="thisWeek">W tym tygodniu</key>
     <key alias="lastWeek">W zeszłym tygodniu</key>
     <key alias="quantitySold">Ilość sprzedanych</key>
