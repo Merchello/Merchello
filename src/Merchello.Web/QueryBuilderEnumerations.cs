@@ -44,6 +44,11 @@
         /// <summary>
         /// The product SKU 
         /// </summary>
-        Sku
+        Sku,
+
+        /// <summary>
+        /// The product create date 
+        /// </summary>
+        CreateDate
     }
 }
