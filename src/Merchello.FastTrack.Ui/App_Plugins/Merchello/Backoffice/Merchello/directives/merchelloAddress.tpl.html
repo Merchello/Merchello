@@ -1,12 +1,16 @@
 <div>
     <p data-ng-show="address.label != '' && address.label !== null && address.label !== undefined"><strong>{{address.label}}</strong></p>
-    <span>{{address.name}}{{address.fullName}}<br/></span>
-    <span data-ng-show="address.company != '' && address.company !== null && address.company !== undefined">{{address.company}}<br/></span>
-    <span data-ng-show="address.organization != '' && address.organization !== null && address.organization !== undefined">{{address.organization}}<br/></span>
-    <span class="street-address">{{address.address1}}</span><span class="extended-address" data-ng-show="address.address2 != '' && address.address2 !== null">, {{address.address2}}</span>
-    <span class="locality" data-ng-show="address.locality != '' && address.locality !== null">{{address.locality}}, </span><span class="region">{{address.region}}</span><br/>
-    <span class="postal-code">{{address.postalCode}}</span><br/>
-    <span class="country-name">{{address.countryName}}</span><br/>
+    <ul style="list-style: none; margin: 0; padding: 0;">
+        <li>{{address.name}}{{address.fullName}}</li>
+        <li data-ng-show="address.company != '' && address.company !== null && address.company !== undefined">{{address.company}}</li>
+        <li data-ng-show="address.organization != '' && address.organization !== null && address.organization !== undefined">{{address.organization}}</li>
+        <li data-ng-show="address.address1 != '' && address.address1 !== null && address.address1 !== undefined">{{address.address1}}</li>
+        <li data-ng-show="address.address2 != '' && address.address2 !== null && address.address2 !== undefined">{{address.address2}}</li>
+        <li data-ng-show="address.locality != '' && address.locality !== null && address.locality !== undefined">{{address.locality}}</li>
+        <li data-ng-show="address.region != '' && address.region !== null && address.region !== undefined">{{address.region}}</li>
+        <li data-ng-show="address.postalCode != '' && address.postalCode !== null && address.postalCode !== undefined">{{address.postalCode}}</li>
+        <li data-ng-show="address.countryName != '' && address.countryName !== null && address.countryName !== undefined">{{address.countryName}}</li>
+    </ul>
     <span class="tel" data-ng-show="address.phone !== '' && address.phone !== null">Phone: {{address.phone}}</span>
     <span data-ng-show="address.email !== '' && address.email !== null">{{address.email}}</span>
 </div>

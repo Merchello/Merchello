@@ -132,7 +132,7 @@
     <key alias="customerCheckoutPercent">Percentage klant afrekeningen</key>
     <key alias="thisWeekVsLast">Deze week t.o.v. Vorige week</key>
     <key alias="monthlyTotalSales">Totaal maandelijkse verkopen</key>
-    <key alias="topSellingItems"><![CDATA[ Meest verkochte producten <small>Top 10</small> ]]></key>
+    <key alias="topSellingItems"><![CDATA[ Meest verkochte producten <small>Top 50</small> ]]></key>
     <key alias="thisWeek">Deze week</key>
     <key alias="lastWeek">Vorige week</key>
     <key alias="quantitySold">Verkochte hoeveelheden</key>
@@ -201,6 +201,7 @@
     <key alias="alias">Alias</key>
     <key alias="startDate">Begindatum</key>
     <key alias="endDate">Einddatum</key>
+    <key alias="createDate">Makendatum</key>
     <key alias="active">Actief</key>
     <key alias="sortOrder">Sorteervolgorde</key>
     <key alias="optionName">Optie Naam</key>

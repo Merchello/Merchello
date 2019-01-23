@@ -200,6 +200,7 @@
     <key alias="alias">Алиас</key>
     <key alias="startDate">С даты</key>
     <key alias="endDate">По дату</key>
+    <key alias="createDate">Cоздать дату</key>
     <key alias="active">Активно</key>
     <key alias="sortOrder">Порядок</key>
     <key alias="optionName">Название свойства</key>

@@ -47,6 +47,11 @@
         Sku,
 
         /// <summary>
+        /// The product create date 
+        /// </summary>
+        CreateDate,
+        
+        /// <summary>
         /// The product sell price (sale price if present) 
         /// </summary>
         SellPrice
