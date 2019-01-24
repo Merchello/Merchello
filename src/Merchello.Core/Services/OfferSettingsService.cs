@@ -616,7 +616,7 @@
         /// </returns>
         private string ValidateSortByField(string sortBy)
         {
-            var valid = new[] { "name", "offerCode", "offerStartsDate", "offerEndsDate" };
+            var valid = new[] { "name", "offerCode", "offerStartsDate", "offerEndsDate", "createDate" };
             return !valid.Contains(sortBy, StringComparer.CurrentCultureIgnoreCase) ? "name" : sortBy;
         }
     }

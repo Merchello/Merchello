@@ -226,7 +226,7 @@
         [Authorize]
         public virtual ActionResult ViewReceipt(Guid key, int redirectId)
         {
-            if (key.Equals(Guid.Empty)) return Redirect("/");
+            if (key.Equals(Guid.Empty)) return Redirect("~/");
 
             // set the invoice key in the cookie (Merchello CustomerContext)
             CustomerContext.SetValue("invoiceKey", key.ToString());
