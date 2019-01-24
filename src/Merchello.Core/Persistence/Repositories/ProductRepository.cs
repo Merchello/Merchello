@@ -285,7 +285,7 @@
             SortDirection sortDirection = SortDirection.Descending,
             bool includeUnavailable = false)
         {
-            var sql = new Sql("SELECT *")
+            var sql = new Sql("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
                 .Append("FROM [merchProductVariant]")
                 .Append("WHERE [merchProductVariant].[productKey] IN (")
                 .Append("SELECT DISTINCT([productKey])")
@@ -380,7 +380,7 @@
             bool includeUnavailable = false)
         {
             var sql = new Sql();
-            sql.Append("SELECT *")
+            sql.Append("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
                 .Append("FROM [merchProductVariant]")
                 .Append("WHERE [merchProductVariant].[productKey] IN (")
                 .Append("SELECT DISTINCT([productKey])")
@@ -441,7 +441,7 @@
             bool includeUnavailable = false)
         {
             var sql = new Sql();
-            sql.Append("SELECT *")
+            sql.Append("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
                 .Append("FROM [merchProductVariant]")
                 .Append("WHERE [merchProductVariant].[productKey] IN (")
                 .Append("SELECT DISTINCT([productKey])")
@@ -502,7 +502,7 @@
             bool includeUnavailable = false)
         {
             var sql = new Sql();
-            sql.Append("SELECT *")
+            sql.Append("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
                 .Append("FROM [merchProductVariant]")
                 .Append("WHERE [merchProductVariant].[productKey] IN (")
                 .Append("SELECT DISTINCT([productKey])")
@@ -612,7 +612,7 @@
             modifier += 1;
 
             var sql = new Sql();
-            sql.Append("SELECT *")
+            sql.Append("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
               .Append("FROM [merchProductVariant]")
               .Append("WHERE [merchProductVariant].[productKey] IN (")
               .Append("SELECT DISTINCT([productKey])")
@@ -704,7 +704,7 @@
             bool includeUnavailable = false)
         {
             var sql = new Sql();
-            sql.Append("SELECT *")
+            sql.Append("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
               .Append("FROM [merchProductVariant]")
               .Append("WHERE [merchProductVariant].[manufacturer] IN (@manufacturers)", new { @manufacturers = manufacturer})
               .Append("AND [merchProductVariant].[master] = 1");
@@ -785,7 +785,7 @@
             bool includeUnavailable = false)
         {
             var sql = new Sql();
-            sql.Append("SELECT *")
+            sql.Append("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
               .Append("FROM [merchProductVariant]")
               .Append("WHERE [merchProductVariant].[barcode] IN (@codes)", new { @codes = barcodes })
               .Append("AND [merchProductVariant].[master] = 1");
@@ -831,7 +831,7 @@
             bool includeUnavailable = false)
         {
             var sql = new Sql();
-            sql.Append("SELECT *")
+            sql.Append("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
                .Append("FROM [merchProductVariant]")
                .Append("WHERE [merchProductVariant].[productKey] IN (")
                .Append("SELECT DISTINCT([productKey])")
@@ -883,7 +883,7 @@
             bool includeUnavailable = false)
         {
             var sql = new Sql();
-            sql.Append("SELECT *")
+            sql.Append("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
               .Append("FROM [merchProductVariant]")
               .Append("WHERE [merchProductVariant].[onSale] = 1")
               .Append("AND [merchProductVariant].[master] = 1");
@@ -1126,7 +1126,7 @@
         {
 
             var sql = new Sql();
-            sql.Append("SELECT *")
+            sql.Append("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
               .Append("FROM [merchProductVariant]")
                .Append("WHERE [merchProductVariant].[productKey] IN (")
                .Append("SELECT DISTINCT([productKey])")
@@ -1213,7 +1213,7 @@
             bool includeUnavailable = false)
         {
             var sql = new Sql();
-            sql.Append("SELECT *")
+            sql.Append("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
               .Append("FROM [merchProductVariant]")
                .Append("WHERE [merchProductVariant].[productKey] IN (")
                .Append("SELECT [productKey]")
@@ -1284,7 +1284,7 @@
         private Sql SqlForKeysThatExistInAllCollections(Guid[] collectionKeys, bool isCount = false, bool includeUnavailable = false)
         {
             var sql = new Sql();
-            sql.Select(isCount ? "COUNT(*) AS Count" : "*")
+            sql.Select(isCount ? "COUNT(*) AS Count" : "*, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
                 .Append("FROM [merchProductVariant]")
                .Append("WHERE [merchProductVariant].[productKey] IN (")
                .Append("SELECT [productKey]")
@@ -1495,7 +1495,7 @@
         {
 
             var sql = new Sql();
-            sql.Append("SELECT *")
+            sql.Append("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
               .Append("FROM [merchProductVariant]")
                .Append("WHERE [merchProductVariant].[productKey] NOT IN (")
                .Append("SELECT DISTINCT([productKey])")
@@ -1574,7 +1574,7 @@
             bool includeUnavailable = false)
         {
             var sql = new Sql();
-            sql.Append("SELECT *")
+            sql.Append("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
               .Append("FROM [merchProductVariant]")
                .Append("WHERE [merchProductVariant].[productKey] NOT IN (")
                .Append("SELECT DISTINCT([productKey])")
@@ -1774,7 +1774,7 @@
         {
 
             var sql = new Sql();
-            sql.Append("SELECT *")
+            sql.Append("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
               .Append("FROM [merchProductVariant]")
                .Append("WHERE [merchProductVariant].[productKey] IN (")
                .Append("SELECT DISTINCT([productKey])")

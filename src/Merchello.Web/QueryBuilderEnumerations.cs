@@ -49,6 +49,11 @@
         /// <summary>
         /// The product create date 
         /// </summary>
-        CreateDate
+        CreateDate,
+        
+        /// <summary>
+        /// The product sell price (sale price if present) 
+        /// </summary>
+        SellPrice
     }
 }

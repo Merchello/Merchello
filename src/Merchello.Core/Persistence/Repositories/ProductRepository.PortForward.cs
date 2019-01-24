@@ -57,7 +57,7 @@
             bool includeUnavailable = false)
         {
             var sql = new Sql();
-            sql.Append("SELECT *")
+            sql.Append("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
               .Append("FROM [merchProductVariant]")
                .Append("WHERE [merchProductVariant].[productKey] IN (")
                .Append("SELECT [productKey]")
@@ -133,7 +133,7 @@
         {
 
             var sql = new Sql();
-            sql.Append("SELECT *")
+            sql.Append("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
               .Append("FROM [merchProductVariant]")
                .Append("WHERE [merchProductVariant].[productKey] NOT IN (")
                .Append("SELECT DISTINCT([productKey])")
@@ -202,7 +202,7 @@
         {
 
             var sql = new Sql();
-            sql.Append("SELECT *")
+            sql.Append("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
               .Append("FROM [merchProductVariant]")
                .Append("WHERE [merchProductVariant].[productKey] IN (")
                .Append("SELECT DISTINCT([productKey])")
