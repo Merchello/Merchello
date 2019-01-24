@@ -615,6 +615,30 @@
             return Count(query);
         }
 
+        /// <summary>
+        /// Gets the total count of all invoices within a date range.
+        /// </summary>
+        /// <param name="startDate">
+        /// The start date.
+        /// </param>
+        /// <param name="endDate">
+        /// The end date.
+        /// </param>
+        /// <param name="invoiceStatuses">
+        /// The invoice statuses.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/> representing the count of invoices.
+        /// </returns>
+        public int CountInvoices(DateTime startDate, DateTime endDate, IEnumerable<IInvoiceStatus> invoiceStatuses)
+        {
+            var statusKeys = invoiceStatuses.Select(x => x.Key).ToList();
+            var query =
+                Persistence.Querying.Query<IInvoice>.Builder.Where(
+                    x => x.InvoiceDate >= startDate && x.InvoiceDate <= endDate);
+
+            return Count(query);
+        }
 
         /// <summary>
         /// Gets the total count of all invoices within a date range and customer type
@@ -662,6 +686,32 @@
             using (var repository = RepositoryFactory.CreateInvoiceRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.SumInvoiceTotals(startDate, endDate, currencyCode);
+            }
+        }
+
+        /// <summary>
+        /// Gets the totals of invoices in a date range for a specific currency code.
+        /// </summary>
+        /// <param name="startDate">
+        /// The start date.
+        /// </param>
+        /// <param name="endDate">
+        /// The end date.
+        /// </param>
+        /// <param name="currencyCode">
+        /// The currency code.
+        /// </param>
+        /// <param name="invoiceStatuses">
+        /// The invoice statuses.
+        /// </param>
+        /// <returns>
+        /// The sum of the invoice totals.
+        /// </returns>
+        public decimal SumInvoiceTotals(DateTime startDate, DateTime endDate, string currencyCode, IEnumerable<IInvoiceStatus> invoiceStatuses)
+        {
+            using (var repository = RepositoryFactory.CreateInvoiceRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.SumInvoiceTotals(startDate, endDate, currencyCode, invoiceStatuses);
             }
         }
 
