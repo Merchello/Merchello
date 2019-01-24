@@ -131,7 +131,7 @@
     <key alias="customerCheckoutPercent">Porcentaje de compras de clientes</key>
     <key alias="thisWeekVsLast">Comparativa: esta semana vs anterior</key>
     <key alias="monthlyTotalSales">Ventas mensuales</key>
-    <key alias="topSellingItems"><![CDATA[ Los artículos más vendidos <small>Top 10</small> ]]></key>
+    <key alias="topSellingItems"><![CDATA[ Los artículos más vendidos <small>Top 50</small> ]]></key>
     <key alias="thisWeek">Esta semana</key>
     <key alias="lastWeek">Anterior semana</key>
     <key alias="quantitySold">Cantidad vendida</key>

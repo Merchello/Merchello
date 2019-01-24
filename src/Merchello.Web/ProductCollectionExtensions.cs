@@ -319,6 +319,9 @@ namespace Merchello.Web
                 case "sku":
                     order = ProductSortField.Sku;
                     break;
+                case "createdate":
+                    order = ProductSortField.CreateDate;
+                    break;
                 case "name":
                 default:
                     order = ProductSortField.Name;

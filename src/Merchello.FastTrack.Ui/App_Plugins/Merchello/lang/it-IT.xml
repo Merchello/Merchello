@@ -131,7 +131,7 @@
     <key alias="customerCheckoutPercent">Customer Checkout Percent</key>
     <key alias="thisWeekVsLast">This Week Vs. Last Week</key>
     <key alias="monthlyTotalSales">Monthly Total Sales</key>
-    <key alias="topSellingItems"><![CDATA[ Top Selling Items <small>Top 10</small> ]]></key>
+    <key alias="topSellingItems"><![CDATA[ Top Selling Items <small>Top 50</small> ]]></key>
     <key alias="thisWeek">This Week</key>
     <key alias="lastWeek">Last Week</key>
     <key alias="quantitySold">Quantity Sold</key>

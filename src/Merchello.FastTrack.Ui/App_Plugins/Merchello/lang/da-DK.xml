@@ -131,7 +131,7 @@
     <key alias="customerCheckoutPercent">Kunde køb procent</key>
     <key alias="thisWeekVsLast">Denne uge vs. sidste uge</key>
     <key alias="monthlyTotalSales">Månedtlig salgstotal</key>
-    <key alias="topSellingItems"><![CDATA[ Top sælgende varer <small>Top 10</small> ]]></key>
+    <key alias="topSellingItems"><![CDATA[ Top sælgende varer <small>Top 50</small> ]]></key>
     <key alias="thisWeek">Denne uge</key>
     <key alias="lastWeek">Sidste uge</key>
     <key alias="quantitySold">Antal solgt</key>
