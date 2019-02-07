@@ -805,7 +805,8 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
 
                 // initial settings use standard
                 $scope.rangeStart = $filter('date')(start, $scope.settings.dateFormat);
-                $scope.rangeEnd =  $filter('date')(end, $scope.settings.dateFormat);
+                $scope.rangeEnd = $filter('date')(end, $scope.settings.dateFormat);
+                $scope.showPreDeterminedDates = showPreDeterminedDates;
 
                 setupDatePicker("#filterStartDate", $scope.rangeStart);
                 $element.find("#filterStartDate").datetimepicker().on("changeDate", applyDateStart);
@@ -10048,7 +10049,8 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesOverTi
             function openDateRangeDialog() {
                 var dialogData = {
                     startDate: $scope.startDate,
-                    endDate: $scope.endDate
+                    endDate: $scope.endDate,
+                    showPreDeterminedDates: true
                 };
 
                 dialogService.open({
@@ -10196,7 +10198,8 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesSearch
             function openDateRangeDialog() {
                 var dialogData = {
                     startDate: $scope.salesSearchSnapshot.startDate,
-                    endDate: $scope.salesSearchSnapshot.endDate
+                    endDate: $scope.salesSearchSnapshot.endDate,
+                    showPreDeterminedDates: true
                 };
 
                 dialogService.open({
