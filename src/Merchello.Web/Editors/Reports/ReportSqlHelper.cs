@@ -30,10 +30,13 @@
             /// <param name="count">
             /// The count to return
             /// </param>
+            /// <param name="invoiceStatusKeys">
+            /// The invoice status keys
+            /// </param>
             /// <returns>
             /// The <see cref="Sql"/>.
             /// </returns>
-            public static Sql GetSkuSaleCountSql(DateTime startDate, DateTime endDate, Guid typeFieldKey, int count = 10)
+            public static Sql GetSkuSaleCountSql(DateTime startDate, DateTime endDate, Guid typeFieldKey, int count, IEnumerable<Guid> invoiceStatusKeys)
             {
                 var sql = @"SELECT TOP(@top) Q1.Sku,
                             Q1.invoiceCount,
@@ -48,6 +51,7 @@
 				                    FROM  merchInvoiceItem MII
 				                    INNER JOIN merchInvoice MI ON MII.invoiceKey = MI.pk
 				                    AND	MI.invoiceDate BETWEEN @start AND @end
+                                    AND MI.invoiceStatusKey IN (@invoiceStatusKeys)
 				                    GROUP BY sku)  T3 ON T2.sku = T3.sku
 		                    WHERE T2.lineItemTfKey = @tfKey
 	                    ) Q1
@@ -57,12 +61,13 @@
 		                    FROM	merchInvoiceItem MII
                             INNER JOIN merchInvoice MI ON MII.invoiceKey = MI.pk
 				            AND	MI.invoiceDate BETWEEN @start AND @end
+                            AND MI.invoiceStatusKey IN (@invoiceStatusKeys)
 		                    GROUP BY sku
                     ) Q2 ON Q1.sku = Q2.sku
                     WHERE Q2.quantitySold > 0
                     ORDER BY Q2.quantitySold DESC";
 
-                return new Sql(sql, new { @top = count, @start = startDate, @end = endDate, @tfKey = typeFieldKey });
+                return new Sql(sql, new { @top = count, @start = startDate, @end = endDate, @tfKey = typeFieldKey, @invoiceStatusKeys = invoiceStatusKeys });
             }
 
             public static Sql GetSaleSearchSql(DateTime startDate, DateTime endDate, IEnumerable<Guid> invoiceStatuses, string search, string typeFieldKey = "D462C051-07F4-45F5-AAD2-D5C844159F04")

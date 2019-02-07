@@ -8,6 +8,8 @@
     using Merchello.Web.Models.Querying;
     using Merchello.Web.Models.Reports;
     using Merchello.Web.Reporting;
+    using System.Collections.Generic;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// The monthly report api controller base.
@@ -17,6 +19,11 @@
     /// </typeparam>
     public abstract class MonthlyReportApiControllerBase<TResult> : ReportController
     {
+        /// <summary>
+        /// List of statuses
+        /// </summary>
+        private IEnumerable<InvStatus> _invStatuses;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MonthlyReportApiControllerBase{TResult}"/> class.
         /// </summary>
@@ -38,6 +45,7 @@
         {
             var invoiceDateStart = query.Parameters.FirstOrDefault(x => x.FieldName == "invoiceDateStart");
             var invoiceDateEnd = query.Parameters.FirstOrDefault(x => x.FieldName == "invoiceDateEnd");
+            var invoiceStatuses = GetInvoiceStatusesFromParameters(query);
 
             var isDateSearch = invoiceDateStart != null && !string.IsNullOrEmpty(invoiceDateStart.Value) &&
                invoiceDateEnd != null && !string.IsNullOrEmpty(invoiceDateEnd.Value);
@@ -57,7 +65,7 @@
 
                     var day = endDate.Day;
 
-                    return BuildResult(startDate, endDate);
+                    return BuildResult(startDate, endDate, invoiceStatuses);
 
                 }
 
@@ -104,10 +112,13 @@
         /// <param name="endDate">
         /// The end date.
         /// </param>
+        /// <param name="invoiceStatuses">
+        /// The invoice statuses.
+        /// </param>
         /// <returns>
         /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
-        protected abstract QueryResultDisplay BuildResult(DateTime startDate, DateTime endDate);
+        protected abstract QueryResultDisplay BuildResult(DateTime startDate, DateTime endDate, IEnumerable<InvStatus> invoiceStatuses);
 
         /// <summary>
         /// Performs the actual work of querying for the results.
@@ -118,9 +129,52 @@
         /// <param name="endDate">
         /// The end date.
         /// </param>
+        /// <param name="invoiceStatuses">
+        /// The invoice statuses.
+        /// </param>
         /// <returns>
         /// The typed result.
         /// </returns>
-        protected abstract TResult GetResults(DateTime startDate, DateTime endDate);
+        protected abstract TResult GetResults(DateTime startDate, DateTime endDate, IEnumerable<InvStatus> invoiceStatuses);
+
+        /// <summary>
+        /// Returns a list of invoice statuses from the database.
+        /// </summary>
+        /// <returns>
+        /// A list of invoice statuses
+        /// </returns>
+        protected IEnumerable<InvStatus> AllInvoiceStatuses()
+        {
+            if (_invStatuses == null)
+            {
+                _invStatuses = ApplicationContext.DatabaseContext.Database.Query<InvStatus>("SELECT pk, name FROM merchInvoiceStatus").ToList();
+            }
+
+            foreach (var invStatus in _invStatuses)
+            {
+                invStatus.Checked = true;
+            }
+
+            return _invStatuses;
+        }
+
+        /// <summary>
+        /// Get invocie statuses from query parameters
+        /// </summary>
+        /// <param name="query">The query</param>
+        /// <returns>A list of invoice statuses</returns>
+        protected IEnumerable<InvStatus> GetInvoiceStatusesFromParameters(QueryDisplay query)
+        {
+            var allStatuses = AllInvoiceStatuses();
+            var invoiceStatusesParam = query.Parameters.FirstOrDefault(x => x.FieldName == "invoiceStatuses");
+            if (invoiceStatusesParam != null && !string.IsNullOrWhiteSpace(invoiceStatusesParam.Value))
+            {
+                var statuses = JsonConvert.DeserializeObject<List<InvStatus>>(invoiceStatusesParam.Value);
+                if (statuses.Any())
+                    return statuses;
+            }
+
+            return allStatuses;
+        }
     }
 }
