@@ -91,6 +91,11 @@
         string SearchTerm { get; set; }
 
         /// <summary>
+        /// Gets or sets the custom order by expression.
+        /// </summary>
+        string CustomOrderByExpression { get; set; }
+
+        /// <summary>
         /// Gets or sets the sort by.
         /// </summary>
         ProductSortField SortBy { get; set; }

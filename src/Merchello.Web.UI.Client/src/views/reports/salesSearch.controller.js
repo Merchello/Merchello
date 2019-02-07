@@ -94,7 +94,8 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesSearch
             function openDateRangeDialog() {
                 var dialogData = {
                     startDate: $scope.salesSearchSnapshot.startDate,
-                    endDate: $scope.salesSearchSnapshot.endDate
+                    endDate: $scope.salesSearchSnapshot.endDate,
+                    showPreDeterminedDates: true
                 };
 
                 dialogService.open({
