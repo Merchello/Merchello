@@ -9,7 +9,7 @@
 
             <div class="umb-overlay-container form-horizontal merchello-panel-body">
 
-                <div class="form-group control-group">
+                <div class="form-group control-group" ng-show="showPreDeterminedDates">
                     <p><localize key="merchelloGeneral_preDeterminedDateRange">Select a pre-determined date range:</localize></p>
                     <ul style="list-style:none;margin:0;padding:0;display:inline;">
                         <li>
@@ -25,7 +25,7 @@
                 </div>  
 
                 <div class="form-group control-group">
-                    <p><localize key="merchelloGeneral_customDateRange">Or choose a custom date range:</localize></p>
+                    <p ng-show="showPreDeterminedDates"><localize key="merchelloGeneral_customDateRange">Or choose a custom date range:</localize></p>
                     <div class="input-append date datepicker" id="filterStartDate">
                         <label><localize key="merchelloGeneral_starting">Starting</localize></label>
                         <input name="datepicker" data-ng-format="dateFormat" type="text" data-ng-model="rangeStart" />
