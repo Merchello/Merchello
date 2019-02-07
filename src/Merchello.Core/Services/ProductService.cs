@@ -2120,7 +2120,7 @@ namespace Merchello.Core.Services
         /// </returns>
         protected override string ValidateSortByField(string sortBy)
         {
-            if (sortBy.StartsWith("ORDER BY"))
+            if (sortBy.StartsWith("ORDER BY", StringComparison.InvariantCultureIgnoreCase))
                 return sortBy;
             return ValidSortFields.Contains(sortBy.ToLowerInvariant()) ? sortBy : "name";
         }

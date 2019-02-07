@@ -2544,19 +2544,14 @@
 
             if (!string.IsNullOrEmpty(orderExpression))
             {
-                if (orderExpression.StartsWith("ORDER BY"))
+                if (orderExpression.StartsWith("ORDER BY", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    var trimmedOrderBy = orderExpression.TrimEnd(" ASC").TrimEnd(" DESC");
-                    sql.Append(sortDirection == SortDirection.Ascending
-                        ? string.Format("{0} ASC", trimmedOrderBy)
-                        : string.Format("{0} DESC", trimmedOrderBy));
+                    orderExpression = orderExpression.TrimStart("ORDER BY").TrimEnd(" ASC").TrimEnd(" DESC").Trim();
                 }
-                else
-                {
-                    sql.Append(sortDirection == SortDirection.Ascending
+
+                sql.Append(sortDirection == SortDirection.Ascending
                         ? string.Format("ORDER BY {0} ASC", orderExpression)
                         : string.Format("ORDER BY {0} DESC", orderExpression));
-                }
             }
 
             return Database.Page<ProductVariantDto>(page, itemsPerPage, sql);
