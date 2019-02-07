@@ -85,6 +85,7 @@
         public override void Reset()
         {
             this.SearchTerm = string.Empty;
+            this.CustomOrderByExpression = string.Empty;
             this.Page = 1;
             this.ItemsPerPage = 10;
             this.SortBy = ProductSortField.Name;
@@ -113,6 +114,8 @@
         protected override ICmsContentQuery<IProductContent> Build()
         {
             var sortBy = SortBy.ToString().ToLowerInvariant();
+            if (!string.IsNullOrWhiteSpace(CustomOrderByExpression))
+                sortBy = CustomOrderByExpression;
 
             var query = new ProductContentQuery(_cachedQuery)
             {

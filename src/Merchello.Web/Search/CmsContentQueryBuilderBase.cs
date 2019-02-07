@@ -49,6 +49,11 @@
         public string SearchTerm { get; set; }
 
         /// <summary>
+        /// Gets or sets the custom order by expression.
+        /// </summary>
+        public string CustomOrderByExpression { get; set; }
+
+        /// <summary>
         /// Gets or sets the sort by field.
         /// </summary>
         public ProductSortField SortBy { get; set; }
