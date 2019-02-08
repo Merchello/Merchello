@@ -2,23 +2,22 @@
 {
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models;
-    using System;
-    using System.Linq;
+
     using Umbraco.Core;
 
     /// <summary>
-    /// A discount rule to prohibit a discount from being used with other discounts.
+    /// A discount rule to allow a discount to be used with other discounts.
     /// </summary>
-    [OfferComponent("BDFEF8AC-B572-43E6-AB42-C07678500C87", "Not usable with other coupons", "This coupon cannot be used with other coupons.", RestrictToType = typeof(Coupon))]
-    public class NotUsableWithOtherCouponsConstraint : CouponConstraintBase
+    [OfferComponent("8106FD8A-9BA3-4FFD-B698-89C28037F5FC", "Can be used with other coupons", "This coupon can be used with other coupons, it will override any clashes with the 'Not usable with other coupons' constaint", RestrictToType = typeof(Coupon))]
+    public class CanBeUsedWithOtherCouponsConstraint : CouponConstraintBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="NotUsableWithOtherCouponsConstraint"/> class.
+        /// Initializes a new instance of the <see cref="CanBeUsedWithOtherCouponsConstraint"/> class.
         /// </summary>
         /// <param name="definition">
         /// The <see cref="OfferComponentDefinition"/>.
         /// </param>
-        public NotUsableWithOtherCouponsConstraint(OfferComponentDefinition definition)
+        public CanBeUsedWithOtherCouponsConstraint(OfferComponentDefinition definition)
             : base(definition)
         {
         }
@@ -48,10 +47,7 @@
         /// </returns>
         public override Attempt<ILineItemContainer> TryApply(ILineItemContainer value, ICustomerBase customer)
         {
-            var overrideConstraintId = Guid.Parse("8106FD8A-9BA3-4FFD-B698-89C28037F5FC");
-            return !(value.Items.Any(x => x.ContainsCoupon() && !x.ExtendedData.HasCouponConstraint(overrideConstraintId)))
-                       ? this.Success(value)
-                       : this.Fail(value, "One or more coupons have already been added.");
+            return this.Success(value);
         }
     }
 }

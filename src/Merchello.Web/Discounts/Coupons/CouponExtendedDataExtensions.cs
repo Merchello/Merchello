@@ -59,6 +59,30 @@
         }
 
         /// <summary>
+        /// Determines whether or not the <see cref="ExtendedDataCollection"/> has a coupon constraint
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
+        /// <param name="constraintId">
+        /// The constraint id.
+        /// </param>
+        /// <returns>
+        /// A value indicating whether or not the <see cref="ExtendedDataCollection"/> contains a specific coupon constraint.
+        /// </returns>
+        public static bool HasCouponConstraint(this ExtendedDataCollection extendedData, Guid constraintId)
+        {
+            if (!extendedData.ContainsKey(Core.Constants.ExtendedDataKeys.CouponReward))
+                return false;
+
+            var offerSettings = extendedData.GetOfferSettingsDisplay();
+            if (offerSettings == null)
+                return false;
+
+            return offerSettings.ComponentDefinitions.Any(x => x.ComponentKey == constraintId);
+        }
+
+        /// <summary>
         /// Gets a collection of <see cref="OfferSettingsDisplay"/> from an <see cref="ILineItemContainer"/>.
         /// </summary>
         /// <param name="container">
