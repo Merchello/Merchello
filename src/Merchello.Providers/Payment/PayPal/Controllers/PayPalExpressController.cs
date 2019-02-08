@@ -142,7 +142,7 @@
                 {
                     // we need to empty the basket here
                     Basket.Empty();
-
+                    redirecting.RedirectingToUrl = $"{redirecting.RedirectingToUrl}?invoiceKey={invoiceKey}";
                     // raise the event so the redirect URL can be manipulated
                     RedirectingForSuccess.RaiseEvent(new ObjectEventArgs<PaymentRedirectingUrl>(redirecting), this);
 
