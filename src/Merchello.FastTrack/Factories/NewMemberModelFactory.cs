@@ -93,6 +93,7 @@
         {
             model.MemberTypeAlias = "merchelloCustomer";
             model.PersistLogin = true;
+            model.TermsAndConditions = false;
             model.ViewData = new StoreViewData();
 
             return base.OnCreate(model, customer);

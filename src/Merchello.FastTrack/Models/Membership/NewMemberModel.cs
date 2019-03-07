@@ -63,6 +63,9 @@
         /// </summary>
         public bool PersistLogin { get; set; }
 
+        [Range(typeof(bool), "true", "true", ErrorMessage = "You must agree to our terms of service")]
+        public bool TermsAndConditions { get; set; }
+
         /// <summary>
         /// Gets or sets the success redirect url.
         /// </summary>
