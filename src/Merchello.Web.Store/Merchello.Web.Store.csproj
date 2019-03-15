@@ -241,6 +241,7 @@
   <ItemGroup>
     <Compile Include="Controllers\Api\CountryRegionApiController.cs" />
     <Compile Include="Controllers\Api\ProductDataTableApiController.cs" />
+    <Compile Include="Controllers\Payment\BankTransferControllerBase{T}.cs" />
     <Compile Include="Controllers\Payment\PurchaseOrderPaymentControllerBase{T}.cs" />
     <Compile Include="Controllers\StoreBasketController.cs" />
     <Compile Include="Controllers\CheckoutDiscountController.cs" />
@@ -262,6 +263,7 @@
     <Compile Include="Models\Async\UpdateQuantityResponseItem.cs" />
     <Compile Include="Models\BraintreeCcPaymentModel.cs" />
     <Compile Include="Models\BraintreePaymentModel.cs" />
+    <Compile Include="Models\IBankTransferModel.cs" />
     <Compile Include="Models\IPurchaseOrderPaymentModel.cs" />
     <Compile Include="Models\StoreItemCacheModel.cs" />
     <Compile Include="Models\StorePaymentModel.cs" />

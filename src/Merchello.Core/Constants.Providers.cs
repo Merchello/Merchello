@@ -110,6 +110,14 @@
                 {
                     get { return new Guid("B2612C3D-8BF0-411C-8C56-32E7495AE79C"); }
                 }
+
+                /// <summary>
+                /// Gets the Bank Transfer payment provider key.
+                /// </summary>
+                public static Guid BankTransferProviderKey
+                {
+                    get { return new Guid("B2612C3D-8BF0-411C-8C56-32E7495AE79U"); }
+                }
             }
 
             /// <summary>
