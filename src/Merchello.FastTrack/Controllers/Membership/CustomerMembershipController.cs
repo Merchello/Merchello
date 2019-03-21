@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Configuration;
     using System.Linq;
     using System.Net.Mail;
     using System.Web.Mvc;
@@ -282,8 +283,8 @@
             var customer = (ICustomer)CurrentCustomer;
             var caddress = customer.DefaultCustomerAddress(AddressType.Billing);
 
-            var model = caddress != null ? 
-                this.BillingAddressFactory.Create(customer, caddress) : 
+            var model = caddress != null ?
+                this.BillingAddressFactory.Create(customer, caddress) :
                 this.BillingAddressFactory.Create(new Address { AddressType = AddressType.Billing });
 
             return view.IsNullOrWhiteSpace() ? PartialView(model) : PartialView(view, model);
@@ -305,142 +306,149 @@
             var customer = (ICustomer)CurrentCustomer;
             var caddress = customer.DefaultCustomerAddress(AddressType.Billing);
 
-            var model = caddress != null ? 
-                this.ShippingAddressFactory.Create(customer, caddress) : 
+            var model = caddress != null ?
+                this.ShippingAddressFactory.Create(customer, caddress) :
                 this.ShippingAddressFactory.Create(new Address { AddressType = AddressType.Shipping });
 
             return view.IsNullOrWhiteSpace() ? PartialView(model) : PartialView(view, model);
         }
 
-		/// <summary>
-		/// Handles the membership change password operation.
-		/// </summary>
-		/// <param name="model">
-		/// The <see cref="Models.Membership.ChangePasswordModel"/>.
-		/// </param>
-		/// <returns>
-		/// The <see cref="ActionResult"/>.
-		/// </returns>
-		[HttpPost]
-		[Authorize]
-		[ValidateAntiForgeryToken]
-		public virtual ActionResult ChangePassword(ChangePasswordModel model)
-		{
-			if (!ModelState.IsValid) return CurrentUmbracoPage();
-			var viewData = new StoreViewData();
+        /// <summary>
+        /// Handles the membership change password operation.
+        /// </summary>
+        /// <param name="model">
+        /// The <see cref="Models.Membership.ChangePasswordModel"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public virtual ActionResult ChangePassword(ChangePasswordModel model)
+        {
+            if (!ModelState.IsValid) return CurrentUmbracoPage();
+            var viewData = new StoreViewData();
 
-			if (!((model.Password.Length >= Membership.MinRequiredPasswordLength) &&
-				(model.Password.ToCharArray().Count(c => !char.IsLetterOrDigit(c)) >= Membership.MinRequiredNonAlphanumericCharacters)))
-			{
-				viewData.Success = false;
-				viewData.Messages = new[] { string.Format("New password invalid. Minimum length {0} characters", Membership.MinRequiredPasswordLength) };
-				ViewData["MerchelloViewData"] = viewData;
-				return CurrentUmbracoPage();
-			}
+            if (!((model.Password.Length >= Membership.MinRequiredPasswordLength) &&
+                (model.Password.ToCharArray().Count(c => !char.IsLetterOrDigit(c)) >= Membership.MinRequiredNonAlphanumericCharacters)))
+            {
+                viewData.Success = false;
+                viewData.Messages = new[] { string.Format("New password invalid. Minimum length {0} characters", Membership.MinRequiredPasswordLength) };
+                ViewData["MerchelloViewData"] = viewData;
+                return CurrentUmbracoPage();
+            }
 
-			// change password seems to have a bug that will allow it to change the password even if the supplied 
-			// old password is wrong!
-			// so use the login to check the old password as a hack
-			var currentUser = Membership.GetUser();
-			if (!Members.Login(currentUser.UserName, model.OldPassword))
-			{
-				viewData.Success = false;
-				viewData.Messages = new[] { "Current password incorrect." };
-				ViewData["MerchelloViewData"] = viewData;
-				return CurrentUmbracoPage();
-			}
+            // change password seems to have a bug that will allow it to change the password even if the supplied 
+            // old password is wrong!
+            // so use the login to check the old password as a hack
+            var currentUser = Membership.GetUser();
+            if (!Members.Login(currentUser.UserName, model.OldPassword))
+            {
+                viewData.Success = false;
+                viewData.Messages = new[] { "Current password incorrect." };
+                ViewData["MerchelloViewData"] = viewData;
+                return CurrentUmbracoPage();
+            }
 
-			if (!currentUser.ChangePassword(model.OldPassword, model.Password))
-			{
-				viewData.Success = false;
-				viewData.Messages = new[] { "Change password failed. Please try again." };
-				ViewData["MerchelloViewData"] = viewData;
-				return CurrentUmbracoPage();
-			}
+            if (!currentUser.ChangePassword(model.OldPassword, model.Password))
+            {
+                viewData.Success = false;
+                viewData.Messages = new[] { "Change password failed. Please try again." };
+                ViewData["MerchelloViewData"] = viewData;
+                return CurrentUmbracoPage();
+            }
 
-			viewData.Success = true;
-			viewData.Messages = new[] { "Password updated successfully" };
-			ViewData["MerchelloViewData"] = viewData;
-			return CurrentUmbracoPage();
-		}
+            viewData.Success = true;
+            viewData.Messages = new[] { "Password updated successfully" };
+            ViewData["MerchelloViewData"] = viewData;
+            return CurrentUmbracoPage();
+        }
 
-		/// <summary>
-		/// Handles the membership forgot password operation.
-		/// </summary>
-		/// <param name="model">
-		/// The <see cref="Models.Membership.ForgotPasswordModel"/>.
-		/// </param>
-		/// <returns>
-		/// The <see cref="ActionResult"/>.
-		/// </returns>
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public virtual ActionResult ForgotPassword(ForgotPasswordModel model)
-		{
-			if (!ModelState.IsValid) return CurrentUmbracoPage();
-			var viewData = new StoreViewData();
-			var member = Members.GetByUsername(model.Username);
-			if (member == null)
-			{
-				viewData.Success = false;
-				viewData.Messages = new[] { "Unknown email address." };
-				ViewData["MerchelloViewData"] = viewData;
-				return CurrentUmbracoPage();
-			}
+        /// <summary>
+        /// Handles the membership forgot password operation.
+        /// </summary>
+        /// <param name="model">
+        /// The <see cref="Models.Membership.ForgotPasswordModel"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public virtual ActionResult ForgotPassword(ForgotPasswordModel model)
+        {
+            if (!ModelState.IsValid) return CurrentUmbracoPage();
+            var viewData = new StoreViewData();
+            var member = Members.GetByUsername(model.Username);
+            if (member == null)
+            {
+                viewData.Success = false;
+                viewData.Messages = new[] { "Unknown email address." };
+                ViewData["MerchelloViewData"] = viewData;
+                return CurrentUmbracoPage();
+            }
+            var user = Membership.GetUser(model.Username);
+            if (user.IsLockedOut)
+            {
+                viewData.Success = false;
+                viewData.Messages = new[] { "Unknown email address." };
+                ViewData["MerchelloViewData"] = viewData;
+                return CurrentUmbracoPage();
+            }
 
-			var newPassword = Membership.GeneratePassword(Membership.MinRequiredPasswordLength, 0);
-			var user = Membership.GetUser(model.Username);
-			user.ChangePassword(newPassword, newPassword);
+            var newPassword = user.ResetPassword(user.PasswordQuestion);
 
-			// assumes you have set the SMTP settings in web.config and supplied a default "from" email
-			var msg = new MailMessage
-			{
-				Subject = string.Format("New Password for {0}", Request.Url.Host),
-				Body = string.Format("Your new password is: {0}", newPassword),
-				IsBodyHtml = false
-			};
-			msg.To.Add(new MailAddress(model.Username));
-			using (var smtpClient = new SmtpClient())
-			{
-				smtpClient.Send(msg);
-			}
+            // assumes you have set the SMTP settings in web.config and supplied a default "from" email
+            var msg = new MailMessage
+            {
+                From = new MailAddress(ConfigurationManager.AppSettings["ResetPassword:EmailFrom"]),
+                Subject = string.Format("New Password for {0}", Request.Url.Host),
+                Body = string.Format("Your new password is: {0}", newPassword),
+                IsBodyHtml = false
+            };
+            msg.To.Add(new MailAddress(model.Username));
+            using (var smtpClient = new SmtpClient())
+            {
+                smtpClient.Send(msg);
+            }
 
-			viewData.Success = true;
-			viewData.Messages = new[] { "A new password has been emailed to you." };
-			ViewData["MerchelloViewData"] = viewData;
-			return CurrentUmbracoPage();
-		}
+            viewData.Success = true;
+            viewData.Messages = new[] { "A new password has been emailed to you." };
+            ViewData["MerchelloViewData"] = viewData;
+            return CurrentUmbracoPage();
+        }
 
-		/// <summary>
-		/// Renders the change password form.
-		/// </summary>
-		/// <param name="view">
-		/// The optional view.
-		/// </param>
-		/// <returns>
-		/// The <see cref="ActionResult"/>.
-		/// </returns>
-		[ChildActionOnly]
-		public virtual ActionResult ChangePasswordForm(string view = "")
-		{
-			var model = new ChangePasswordModel();
-			return view.IsNullOrWhiteSpace() ? PartialView(model) : PartialView(view, model);
-		}
+        /// <summary>
+        /// Renders the change password form.
+        /// </summary>
+        /// <param name="view">
+        /// The optional view.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [ChildActionOnly]
+        public virtual ActionResult ChangePasswordForm(string view = "")
+        {
+            var model = new ChangePasswordModel();
+            return view.IsNullOrWhiteSpace() ? PartialView(model) : PartialView(view, model);
+        }
 
-		/// <summary>
-		/// Renders the forgot password form.
-		/// </summary>
-		/// <param name="view">
-		/// The optional view.
-		/// </param>
-		/// <returns>
-		/// The <see cref="ActionResult"/>.
-		/// </returns>
-		[ChildActionOnly]
-		public virtual ActionResult ForgotPasswordForm(string view = "")
-		{
-			var model = new ForgotPasswordModel();
-			return view.IsNullOrWhiteSpace() ? PartialView(model) : PartialView(view, model);
-		}
-	}
+        /// <summary>
+        /// Renders the forgot password form.
+        /// </summary>
+        /// <param name="view">
+        /// The optional view.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [ChildActionOnly]
+        public virtual ActionResult ForgotPasswordForm(string view = "")
+        {
+            var model = new ForgotPasswordModel();
+            return view.IsNullOrWhiteSpace() ? PartialView(model) : PartialView(view, model);
+        }
+    }
 }
