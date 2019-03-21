@@ -275,12 +275,6 @@
     </Compile>
     <Compile Include="Exceptions\BraintreeApiException.cs" />
     <Compile Include="Exceptions\PayPalApiException.cs" />
-    <Compile Include="Payment\BankTransfer\Provider\BankTransferGatewayMethod.cs" />
-    <Compile Include="Payment\BankTransfer\Provider\BankTransferGatewayProvider.cs" />
-    <Compile Include="Payment\BankTransfer\Provider\IBankTransferGatewayMethod.cs" />
-    <Compile Include="Payment\BankTransfer\Provider\IBankTransferGatewayProvider.cs" />
-    <Compile Include="Payment\BankTransfer\BankTransferFormData.cs" />
-    <Compile Include="Payment\BankTransfer\BankTransferInfoExtensions.cs" />
     <Compile Include="Payment\Braintree\Models\BraintreeProviderSettings.cs" />
     <Compile Include="Models\IPaymentProviderSettings.cs" />
     <Compile Include="Payment\PayPal\Controllers\IPayPalSurfaceController.cs" />

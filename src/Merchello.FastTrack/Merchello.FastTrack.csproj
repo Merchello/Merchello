@@ -246,7 +246,6 @@
     <Compile Include="Controllers\Membership\CustomerMembershipController.cs" />
     <Compile Include="Controllers\Payment\BraintreePayPalController.cs" />
     <Compile Include="Controllers\Payment\BraintreeStandardCcController.cs" />
-    <Compile Include="Controllers\Payment\BankTransferController.cs" />
     <Compile Include="Controllers\Payment\CashPaymentController.cs" />
     <Compile Include="Controllers\CheckoutAddressController.cs" />
     <Compile Include="Controllers\CheckoutPaymentMethodController.cs" />
