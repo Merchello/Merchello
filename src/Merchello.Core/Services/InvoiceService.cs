@@ -52,7 +52,7 @@
         /// The store setting service.
         /// </summary>
         private readonly IStoreSettingService _storeSettingService;
-        
+
         #endregion
 
         #region Constructors
@@ -62,7 +62,7 @@
         /// </summary>
         public InvoiceService()
             : this(LoggerResolver.Current.Logger)
-        {            
+        {
         }
 
         /// <summary>
@@ -110,10 +110,10 @@
         /// The store setting service.
         /// </param>
         internal InvoiceService(
-            Persistence.RepositoryFactory repositoryFactory, 
+            Persistence.RepositoryFactory repositoryFactory,
             ILogger logger,
-            IAppliedPaymentService appliedPaymentService, 
-            IOrderService orderService, 
+            IAppliedPaymentService appliedPaymentService,
+            IOrderService orderService,
             IStoreSettingService storeSettingService)
             : this(new PetaPocoUnitOfWorkProvider(logger), repositoryFactory, logger, appliedPaymentService, orderService, storeSettingService)
         {
@@ -176,11 +176,11 @@
         /// The store setting service.
         /// </param>
         internal InvoiceService(
-            IDatabaseUnitOfWorkProvider provider, 
-            Persistence.RepositoryFactory repositoryFactory, 
-            ILogger logger, 
-            IEventMessagesFactory eventMessagesFactory, 
-            IAppliedPaymentService appliedPaymentService, 
+            IDatabaseUnitOfWorkProvider provider,
+            Persistence.RepositoryFactory repositoryFactory,
+            ILogger logger,
+            IEventMessagesFactory eventMessagesFactory,
+            IAppliedPaymentService appliedPaymentService,
             IOrderService orderService,
             IStoreSettingService storeSettingService)
             : base(provider, repositoryFactory, logger, eventMessagesFactory)
@@ -305,10 +305,10 @@
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         public void Save(IInvoice invoice, bool raiseEvents = true)
         {
-            if (!((Invoice) invoice).HasIdentity && invoice.InvoiceNumber <= 0)
+            if (!((Invoice)invoice).HasIdentity && invoice.InvoiceNumber <= 0)
             {
                 // We have to generate a new 'unique' invoice number off the configurable value
-                ((Invoice) invoice).InvoiceNumber = _storeSettingService.GetNextInvoiceNumber();
+                ((Invoice)invoice).InvoiceNumber = _storeSettingService.GetNextInvoiceNumber();
             }
 
             var includesStatusChange = ((Invoice)invoice).IsPropertyDirty("InvoiceStatus") &&
@@ -355,9 +355,9 @@
             {
                 var lastInvoiceNumber =
                     _storeSettingService.GetNextInvoiceNumber(newInvoiceCount);
-                foreach (var newInvoice in invoicesArray.Where(x => x.InvoiceNumber <= 0 && !((Invoice) x).HasIdentity))
+                foreach (var newInvoice in invoicesArray.Where(x => x.InvoiceNumber <= 0 && !((Invoice)x).HasIdentity))
                 {
-                    ((Invoice) newInvoice).InvoiceNumber = lastInvoiceNumber;
+                    ((Invoice)newInvoice).InvoiceNumber = lastInvoiceNumber;
                     lastInvoiceNumber = lastInvoiceNumber - 1;
                 }
             }
@@ -536,9 +536,13 @@
         /// <returns>A collection of <see cref="IInvoice"/></returns>
         public IEnumerable<IInvoice> GetInvoicesByPaymentKey(Guid paymentKey)
         {
-            var invoiceKeys = _appliedPaymentService.GetAppliedPaymentsByPaymentKey(paymentKey).Select(x => x.InvoiceKey).ToArray();
+            var appliedPayments = _appliedPaymentService.GetAppliedPaymentsByPaymentKey(paymentKey);
+            if (appliedPayments.Any())
+            {
+                return GetByKeys(appliedPayments.Select(x => x.InvoiceKey));
+            };
+            return new IInvoice[] { };
 
-            return GetByKeys(invoiceKeys);
         }
 
         /// <summary>
@@ -1113,7 +1117,7 @@
                     this.ValidateSortByField(sortBy),
                     sortDirection);
             }
-        }       
+        }
 
         /// <summary>
         /// The get invoice keys from static collection.
@@ -1669,7 +1673,7 @@
                 {
                     invoice.Items.Add(add);
                 }
-                
+
                 var charges = invoice.Items.Where(x => x.LineItemType != LineItemType.Discount).Sum(x => x.TotalPrice);
                 var discounts = invoice.Items.Where(x => x.LineItemType == LineItemType.Discount).Sum(x => x.TotalPrice);
                 decimal converted;
@@ -1695,7 +1699,7 @@
             using (var repository = RepositoryFactory.CreateInvoiceRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll();
-            } 
+            }
         }
 
         /// <summary>
