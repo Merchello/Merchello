@@ -31,6 +31,8 @@
         /// </summary>
         private bool _hasPriceRangeFilter = false;
 
+        private bool _includeUnvailable = false;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductContentQueryBuilder"/> class.
         /// </summary>
@@ -67,12 +69,23 @@
             _maxPrice = 0M;
         }
 
+        public void IncludeUnvailable()
+        {
+            _includeUnvailable = true;
+        }
+
+        public void ExcludeUnvailable()
+        {
+            _includeUnvailable = false;
+        }
+
         /// <summary>
         /// The reset.
         /// </summary>
         public override void Reset()
         {
             this.SearchTerm = string.Empty;
+            this.CustomOrderByExpression = string.Empty;
             this.Page = 1;
             this.ItemsPerPage = 10;
             this.SortBy = ProductSortField.Name;
@@ -101,6 +114,8 @@
         protected override ICmsContentQuery<IProductContent> Build()
         {
             var sortBy = SortBy.ToString().ToLowerInvariant();
+            if (!string.IsNullOrWhiteSpace(CustomOrderByExpression))
+                sortBy = CustomOrderByExpression;
 
             var query = new ProductContentQuery(_cachedQuery)
             {
@@ -109,7 +124,8 @@
                 SortBy = sortBy,
                 SortDirection = SortDirection,
                 CollectionKeys = this.CollectionKeys,
-                CollectionClusivity = this.CollectionClusivity
+                CollectionClusivity = this.CollectionClusivity,
+                IncludeUnavailable = _includeUnvailable
             };
 
             if (!string.IsNullOrWhiteSpace(SearchTerm))

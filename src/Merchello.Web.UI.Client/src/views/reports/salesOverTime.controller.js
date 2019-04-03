@@ -119,7 +119,6 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesOverTi
                 } else {
                     return '-';
                 }
-
             }
 
             function openDateRangeDialog() {

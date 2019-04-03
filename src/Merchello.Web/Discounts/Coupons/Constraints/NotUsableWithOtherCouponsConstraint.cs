@@ -2,7 +2,8 @@
 {
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models;
-
+    using System;
+    using System.Linq;
     using Umbraco.Core;
 
     /// <summary>
@@ -47,7 +48,8 @@
         /// </returns>
         public override Attempt<ILineItemContainer> TryApply(ILineItemContainer value, ICustomerBase customer)
         {
-            return !value.ContainsAnyCoupons()
+            var overrideConstraintId = Guid.Parse("8106FD8A-9BA3-4FFD-B698-89C28037F5FC");
+            return !(value.Items.Any(x => x.ContainsCoupon() && !x.ExtendedData.HasCouponConstraint(overrideConstraintId)))
                        ? this.Success(value)
                        : this.Fail(value, "One or more coupons have already been added.");
         }

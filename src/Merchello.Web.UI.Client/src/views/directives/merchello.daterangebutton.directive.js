@@ -62,7 +62,8 @@ angular.module('merchello.directives').directive('merchelloDateRangeButton',
                 function openDateRangeDialog() {
                     var dialogData = {
                         startDate: scope.startDate,
-                        endDate: scope.endDate
+                        endDate: scope.endDate,
+                        showPreDeterminedDates: true
                     };
 
                     dialogService.open({

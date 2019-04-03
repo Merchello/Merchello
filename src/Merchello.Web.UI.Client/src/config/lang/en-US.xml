@@ -15,10 +15,12 @@
     <key alias="multipleOptions">Multiple Options</key>
     <key alias="optional">(optional)</key>
     <key alias="percentSymbol">%</key>
+    <key alias="percent">Percent</key>
     <key alias="moneySymbol">$</key>
     <key alias="trackingNumber">Tracking # </key>
     <key alias="trackingUrl">Tracking URL</key>
     <key alias="shipment">Shipment</key>
+    <key alias="shipmentNumber">Shipment #</key>
     <key alias="sku">SKU</key>
     <key alias="name">Name</key>
     <key alias="quantity">Qty</key>
@@ -38,6 +40,11 @@
     <key alias="some">Some</key>
     <key alias="lineItems">Line Items</key>
     <key alias="setDateRange">Set Date Range</key>
+    <key alias="preDeterminedDateRange">Select a pre-determined date range:</key>
+    <key alias="customDateRange">Or choose a custom date range:</key>
+    <key alias="lastWeek">Last Week</key>
+    <key alias="lastMonth">Last Month</key>
+    <key alias="lastYear">Last Year</key>
     <key alias="allDates">All Dates</key>
     <key alias="starting">Starting</key>
     <key alias="ending">Ending</key>
@@ -76,6 +83,7 @@
     <key alias="shared">Shared</key>
     <key alias="custom">Custom</key>
     <key alias="history">History</key>
+    <key alias="update">Update</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Products</key>
@@ -128,7 +136,7 @@
     <key alias="customerCheckoutPercent">Customer Checkout Percent</key>
     <key alias="thisWeekVsLast">This Week Vs. Last Week</key>
     <key alias="monthlyTotalSales">Monthly Total Sales</key>
-    <key alias="topSellingItems"><![CDATA[ Top Selling Items <small>Top 10</small> ]]></key>
+    <key alias="topSellingItems"><![CDATA[ Top Selling Items <small>Top 50</small> ]]></key>
     <key alias="thisWeek">This Week</key>
     <key alias="lastWeek">Last Week</key>
     <key alias="quantitySold">Quantity Sold</key>
@@ -197,6 +205,7 @@
     <key alias="alias">Alias</key>
     <key alias="startDate">Start Date</key>
     <key alias="endDate">End Date</key>
+    <key alias="createDate">Create Date</key>
     <key alias="active">Active</key>
     <key alias="sortOrder">Sort Order</key>
     <key alias="optionName">Option Name</key>
@@ -236,7 +245,7 @@
     <key alias="newSalePrice">New Sale Price</key>
     <key alias="recentlyUpdated">Recently Updated</key>
     <key alias="regenSkus">Regenerate SKUs</key>
-    <key alias="regenSkusConfirm">Please confirm you wish to regenerate the product variant SKUs</key>
+    <key alias="regenSkusConfirm">Please confirm you wish to regenerate the product variant SKUs for </key>
   </area>
   <area alias="merchelloSpecFilters">
     <key alias="manageProductFilters">Manage Product Filters</key>
@@ -326,6 +335,8 @@
   </area>
   <area alias="merchelloSales">
     <key alias="invoice">Invoice</key>
+    <key alias="description">Description</key>
+    <key alias="amount">Amount</key>
     <key alias="invoiceNumber">Invoice #</key>
     <key alias="invoiceNumberPrefix">Invoice Number Prefix</key>
     <key alias="createInvoice">Create Invoice</key>
@@ -365,6 +376,8 @@
     <key alias="addAdjustment">Add adjustment</key>
     <key alias="adjustments">Adjustments</key>
     <key alias="adjustmentAssignedBy">Assigned by</key>
+    <key alias="lineItemPreview">Line Item Preview</key>
+    <key alias="noLineItemPreview">Unable to preview line item</key>
   </area>
   <area alias="merchelloCustomers">
     <key alias="loginName">Login</key>
@@ -493,6 +506,9 @@
     <key alias="couponMaxRedemptionsTitle">Set a maximum number of allowable redemptions</key>
     <key alias="couponMaxRedemptionsInputTitle">Set the maximum number of redemptions</key>
     <key alias="couponMaxRedemptionsInputHelp">Values should be entered as positive numbers.</key>
+    <key alias="discountPriceDialogTitle">REWARD: Discount the price</key>
+    <key alias="discountPriceDialogApplyDiscount">Apply discount in the amount</key>
+    <key alias="discountPriceDialogApplyDiscountDescription">Values should be entered as positive numbers.</key>
   </area>
   <area alias="merchelloVariant">
     <!-- things -->
@@ -548,6 +564,14 @@
     <key alias="startingInventoryWarning"><![CDATA[(Will set starting inventory for <strong>all variants</strong> and <strong>all warehouses</strong>)]]></key>
     <key alias="productOnSale">On sale</key>
     <key alias="allowOutOfStockPurchase">Allow out of stock purchase</key>
+    <key alias="bulkChangePriceTitle">Change Prices For All Selected Items</key>
+    <key alias="bulkChangePriceUpdateCostOfGoods">Update cost of goods price.</key>
+    <key alias="bulkChangePriceUpdateSalePrice">Update sale price.</key>
+    <key alias="bulkChangeInventoryTitle">Update Inventory For All Selected Items</key>
+    <key alias="bulkChangeInventoryNewQuantity">New quantity</key>
+    <key alias="bulkChangeInventoryUpdateLowCount">Update low count.</key>
+    <key alias="bulkChangeInventoryUpdateNewLowCount">New low stock quantity</key>
+    <key alias="bulkChangeInventoryNote">Note: This will update the inventory for all warehouses on all selected variants</key>
   </area>
   <area alias="merchelloOrder">
     <!-- moved to sales -->
@@ -623,16 +647,22 @@
     <!-- phrases -->
     <key alias="fulfillManually">Fulfill Manually</key>
     <key alias="createShipment">Create Shipment</key>
+    <key alias="noShipments">There are no shipments.</key>
+    <key alias="items">Items</key>
+    <key alias="origin">Origin</key>
+    <key alias="destination">Destination</key>
+    <key alias="editShipment">Edit Shipment</key>
+    <key alias="editOrigin">Edit Origin</key>
+    <key alias="editDestination">Edit Destination</key>
+    <key alias="deleteShipment">Delete Shipment</key>
+    <key alias="setSaleDestination">Set Sale Destination</key>
   </area>
   <area alias="merchelloWarehouse">
-    <!-- things -->
     <key alias="warehouse">Warehouse</key>
     <key alias="warehouses">Warehouses</key>
     <key alias="stock">Stock</key>
     <key alias="lowCount">Low Count</key>
     <key alias="location">Location</key>
-    <!-- actions -->
-    <!-- phrases -->
   </area>
   <!-- TODO KEEP THE MERCHELLO SHIPPING AREA -->
   <area alias="merchelloShipping">
@@ -667,14 +697,13 @@
     <key alias="base">Base Inventory</key>
     <key alias="inventory">Inventory</key>
     <key alias="tracking">Inventory Tracking</key>
-    <!-- actions -->
-    <!-- phrases -->
   </area>
   <area alias="merchelloPlaceholders">
     <key alias="enterProduct">Enter a product name</key>
     <key alias="enterOrder">Start typing an order number or name...</key>to
     <key alias="addStyle">Add a style...</key>
     <key alias="enterOffer">Enter a name for the offer</key>
+    <key alias="offerCodeExample">eg. 10OFF</key>
   </area>
 
   <area alias="merchelloSettings">
@@ -829,6 +858,7 @@
   <area alias="merchelloDelete">
     <key alias="deleteConfirmation">Delete Confirmation</key>
     <key alias="deleteConfirmMessage">Are you sure you want to remove the item </key>
+	<key alias="actionNotReversible">This action cannot be reversed.</key>
   </area>
   <area alias="merchelloProductEdit">
     <key alias="enterProductName">Enter a product name</key>
@@ -883,8 +913,16 @@
   </area>
 
   <!-- NotificationService Messages -->
-  <area alias="merchelloNotification">
-    <key alias="successCouponSave">Successfully saved the coupon.</key>
-    <key alias="failCouponSave">Failed to save coupon.</key>
-  </area>  
+  <area alias="merchelloStatusNotifications">
+    <key alias="couponSaveSuccess">Coupon Saved</key>
+    <key alias="couponSaveError">Coupon Save Failed</key>
+    <key alias="productSaveSuccess">Product Saved</key>
+    <key alias="productSaveInProgress">Saving Product...</key>
+    <key alias="productSaveError">Product Save Failed</key>
+    <key alias="productDeleteSuccess">Product Deleted</key>
+    <key alias="productDeleteError">Product Deletion Failed</key>
+    <key alias="customerSaveSuccess">Customer Saved</key>
+    <key alias="customerSaveError">Customer Save Failed</key>
+    <key alias="customerSaveInProgress">Saving Customer...</key>
+  </area>
 </language>

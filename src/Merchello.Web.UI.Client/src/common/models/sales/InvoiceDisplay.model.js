@@ -23,6 +23,7 @@
         self.billToRegion = '';
         self.billToPostalCode = '';
         self.billToCountryCode = '';
+        self.billToCountryName = '';
         self.billToEmail = '';
         self.billToPhone = '';
         self.billToCompany = '';
@@ -62,6 +63,7 @@
             adr.locality = this.billToLocality;
             adr.region = this.billToRegion;
             adr.countryCode = this.billToCountryCode;
+            adr.countryName = this.billToCountryName;
             adr.postalCode = this.billToPostalCode;
             adr.name = this.billToName;
             adr.phone = this.billToPhone;

@@ -6,10 +6,11 @@
 
         @if (Model.HasValue("image"))
         {
-            var mediaId = Model.GetPropertyValue<string>("image");
-            var image = Umbraco.TypedMedia(mediaId);
-            <a href="@Model.Url" alt="@Model.Name"><img class="img-responsive" src="@image.GetCropUrl(200, 200)" alt="@Model.Name"></a>
-            
+            var images = Model.GetPropertyValue<List<IPublishedContent>>("image");
+            if (images.Any())
+            {
+                <a href="@Model.Url" alt="@Model.Name"><img class="img-responsive" src="@images.FirstOrDefault().GetCropUrl(200, 200)" alt="@Model.Name"></a>
+            }            
         }
         @if (Model.HasValue("brief"))
         {

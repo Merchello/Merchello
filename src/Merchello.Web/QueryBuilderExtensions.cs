@@ -187,6 +187,28 @@
         }
 
         /// <summary>
+        /// Sets the ordering of the query result.
+        /// </summary>
+        /// <param name="builder">
+        /// The builder.
+        /// </param>
+        /// <param name="orderByExpression">
+        /// The order by expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductContentQueryBuilder"/>.
+        /// </returns>
+        public static IProductContentQueryBuilder OrderByCustomExpression(this IProductContentQueryBuilder builder, string orderByExpression, SortDirection sortDirection = SortDirection.Ascending)
+        {
+            builder.CustomOrderByExpression = orderByExpression;
+            builder.SortDirection = sortDirection;
+            return builder;
+        }
+
+        /// <summary>
         /// Sets a value indicating whether the query should be inclusive or exclusive with respect to the collection constraints.
         /// </summary>
         /// <param name="builder">

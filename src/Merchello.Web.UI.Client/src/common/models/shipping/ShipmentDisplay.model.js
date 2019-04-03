@@ -22,6 +22,7 @@
         self.fromRegion = '';
         self.fromPostalCode = '';
         self.fromCountryCode = '';
+        self.fromCountryName = '';
         self.fromIsCommercial = '';
         self.toOrganization = '';
         self.toName = '';
@@ -31,6 +32,7 @@
         self.toRegion = '';
         self.toPostalCode = '';
         self.toCountryCode = '';
+        self.toCountryName = '';
         self.toIsCommercial = '';
         self.shipMethodKey = '';
         self.phone = '';
@@ -51,13 +53,13 @@
             // returns the shipment destination as an Address
         var getDestinationAddress = function() {
                 return buildAddress.call(this, this.toName, this.toAddress1, this.toAddress2, this.toLocality, this.toRegion,
-                    this.toPostalCode, this.toCountryCode, this.toOrganization, this.toIsCommercial, this.phone, this.email, 'shipping');
+                    this.toPostalCode, this.toCountryCode, this.toCountryName, this.toOrganization, this.toIsCommercial, this.phone, this.email, 'shipping');
             },
 
             // returns the shipment origin as an Address
             getOriginAddress = function() {
                 return buildAddress.call(this, this.fromName, this.fromAddress1, this.fromAddress2, this.fromLocality,
-                    this.fromRegion, this.fromPostalCode, this.fromCountryCode, this.fromOrganization,
+                    this.fromRegion, this.fromPostalCode, this.fromCountryCode, this.fromCountryName, this.fromOrganization,
                     this.fromIsCommercial, '', '', 'shipping');
             },
 
@@ -70,6 +72,7 @@
                 this.toRegion = address.region;
                 this.toPostalCode = address.postalCode;
                 this.toCountryCode = address.countryCode;
+                this.toCountryName = address.countryName;
                 this.toOrganization = address.organization;
                 this.toIsCommercial = address.isCommercial;
                 this.phone = address.phone;
@@ -84,12 +87,13 @@
                 this.fromRegion = address.region;
                 this.fromPostalCode = address.postalCode;
                 this.fromCountryCode = address.countryCode;
+                this.fromCountryName = address.countryName;
                 this.fromOrganization = address.organization;
                 this.fromIsCommercial = address.isCommercial;
             },
 
             // Utility to build an address
-            buildAddress = function(name, address1, address2, locality, region, postalCode, countryCode, organization,
+            buildAddress = function (name, address1, address2, locality, region, postalCode, countryCode, countryName, organization,
                                     isCommercial, phone, email, addressType) {
                 var adr = new AddressDisplay();
                 adr.name = name;
@@ -99,6 +103,7 @@
                 adr.region = region;
                 adr.postalCode = postalCode;
                 adr.countryCode = countryCode;
+                adr.countryName = countryName;
                 adr.organization = organization;
                 adr.isCommercial = isCommercial;
                 adr.phone = phone;

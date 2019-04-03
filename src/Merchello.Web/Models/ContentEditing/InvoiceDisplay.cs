@@ -92,6 +92,11 @@
         public string BillToCountryCode { get; set; }
 
         /// <summary>
+        /// Gets or sets the bill to country name
+        /// </summary>
+        public string BillToCountryName { get; set; }
+
+        /// <summary>
         /// Gets or sets the bill to email.
         /// </summary>
         public string BillToEmail { get; set; }

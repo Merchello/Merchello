@@ -23,6 +23,9 @@ namespace Merchello.Core
         /// </returns>
         public static IEnumerable<ILineItem> TaxLineItems(this ILineItemContainer container)
         {
+            if (container.Items == null || !container.Items.Any())
+                return Enumerable.Empty<ILineItem>();
+
             return container.Items.Where(x => x.LineItemType == LineItemType.Tax);
         }
 
@@ -37,7 +40,27 @@ namespace Merchello.Core
         /// </returns>
         public static IEnumerable<ILineItem> ProductLineItems(this ILineItemContainer container)
         {
+            if (container.Items == null || !container.Items.Any())
+                return Enumerable.Empty<ILineItem>();
+
             return container.Items.Where(x => x.LineItemType == LineItemType.Product);
+        }
+
+        /// <summary>
+        /// Gets the adjustment line items.
+        /// </summary>
+        /// <param name="container">
+        /// The container.
+        /// </param>
+        /// <returns>
+        /// The collection of adjustment line items.
+        /// </returns>
+        public static IEnumerable<ILineItem> AdjustmentLineItems(this ILineItemContainer container)
+        {
+            if (container.Items == null || !container.Items.Any())
+                return Enumerable.Empty<ILineItem>();
+
+            return container.Items.Where(x => x.LineItemType == LineItemType.Adjustment);
         }
 
         /// <summary>
@@ -47,10 +70,13 @@ namespace Merchello.Core
         /// The container.
         /// </param>
         /// <returns>
-        /// The collection of shipping line item.
+        /// The collection of shipping line items.
         /// </returns>
         public static IEnumerable<ILineItem> ShippingLineItems(this ILineItemContainer container)
         {
+            if (container.Items == null || !container.Items.Any())
+                return Enumerable.Empty<ILineItem>();
+
             return container.Items.Where(x => x.LineItemType == LineItemType.Shipping);
         }
 
@@ -65,6 +91,9 @@ namespace Merchello.Core
         /// </returns>
         public static IEnumerable<ILineItem> DiscountLineItems(this ILineItemContainer container)
         {
+            if (container.Items == null || !container.Items.Any())
+                return Enumerable.Empty<ILineItem>();
+
             return container.Items.Where(x => x.LineItemType == LineItemType.Discount);
         }
 
@@ -79,6 +108,9 @@ namespace Merchello.Core
         /// </returns>
         public static IEnumerable<ILineItem> CustomLineItems(this ILineItemContainer container)
         {
+            if (container.Items == null || !container.Items.Any())
+                return Enumerable.Empty<ILineItem>();
+
             return container.Items.Where(x => x.LineItemType == LineItemType.Custom);
         }
 

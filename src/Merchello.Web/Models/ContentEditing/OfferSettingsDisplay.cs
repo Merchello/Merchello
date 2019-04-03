@@ -48,6 +48,11 @@
         public DateTime OfferEndsDate { get; set; }
 
         /// <summary>
+        /// Gets or sets the create date.
+        /// </summary>
+        public DateTime CreateDate { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether active.
         /// </summary>
         public bool Active { get; set; }

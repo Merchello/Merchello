@@ -172,9 +172,7 @@
         /// </remarks>
         private Attempt<Coupon> GetCouponAttempt(string offerCode)
         {
-            //// TODO RSS cache keys should not be hard coded within a class
-            var cacheKey = string.Format("merchello.basksalepreparation.offercode.{0}", offerCode);
-            return (Attempt<Coupon>)this.Context.Cache.GetCacheItem(cacheKey, () => this._couponManager.Value.GetByOfferCode(offerCode, this.Context.Customer));
+            return this._couponManager.Value.GetByOfferCode(offerCode, this.Context.Customer);
         }
     }
 }

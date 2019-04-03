@@ -1,6 +1,6 @@
 /*! Merchello
  * https://github.com/meritage/Merchello
- * Copyright (c) 2018 Across the Pond, LLC.
+ * Copyright (c) 2019 Across the Pond, LLC.
  * Licensed MIT
  */
 
@@ -775,6 +775,9 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
         $scope.preValuesLoaded = false;
 
         $scope.changeDateFilters = changeDateFilters;
+        $scope.preSelectDate = preSelectDate;
+        $scope.preSelectDays = preSelectDays;
+        $scope.preSelectMonths = preSelectMonths;
 
         $scope.dateFormat = 'YYYY-MM-DD';
         $scope.rangeStart = '';
@@ -802,7 +805,8 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
 
                 // initial settings use standard
                 $scope.rangeStart = $filter('date')(start, $scope.settings.dateFormat);
-                $scope.rangeEnd =  $filter('date')(end, $scope.settings.dateFormat);
+                $scope.rangeEnd = $filter('date')(end, $scope.settings.dateFormat);
+                $scope.showPreDeterminedDates = showPreDeterminedDates;
 
                 setupDatePicker("#filterStartDate", $scope.rangeStart);
                 $element.find("#filterStartDate").datetimepicker().on("changeDate", applyDateStart);
@@ -874,6 +878,32 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
         function changeDateFilters(start, end) {
             $scope.rangeStart = start;
             $scope.rangeEnd = end;
+        }
+
+        function preSelectDays(days) {
+            var end = new Date();
+            var start = new Date().setDate(new Date().getDate() - days);
+            preSelectDate(moment(start).format($scope.dateFormat), moment(end).format($scope.dateFormat));
+        }
+
+        function preSelectMonths(months) {
+            var end = new Date();
+            var start = new Date().setMonth(new Date().getMonth() - months);
+            preSelectDate(moment(start).format($scope.dateFormat), moment(end).format($scope.dateFormat));
+        }
+
+        /**
+         * @ngdoc method
+         * @name preSelectDate
+         * @function
+         *
+         * @param {string} start - String representation of start date.
+         * @param {string} end - String representation of end date.
+         * @description - Change the date filters, then triggera new API call to load the reports.
+         */
+        function preSelectDate(start, end) {
+            changeDateFilters(start, end);
+            save();
         }
 
         /*-------------------------------------------------------------------
@@ -1082,16 +1112,16 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.ListViewSetting
              */
             function save(customer) {
                 $scope.preValuesLoaded = false;
-                notificationsService.info("Saving...", "");
+                notificationsService.info(localizationService.localize("merchelloStatusNotifications_customerSaveInProgress"), "");
                 var promiseSaveCustomer = customerResource.SaveCustomer($scope.customer);
                 promiseSaveCustomer.then(function(customer) {
                     $timeout(function() {
-                        notificationsService.success("Customer Saved", "");
+                        notificationsService.success(localizationService.localize("merchelloStatusNotifications_customerSaveSuccess"), "");
                         init();
                     }, 400);
 
                 }, function(reason) {
-                    notificationsService.error("Customer  Failed", reason.message);
+                    notificationsService.error(localizationService.localize("merchelloStatusNotifications_customerSaveError"), reason.message);
                 });
             }
 
@@ -1728,16 +1758,16 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.ListViewSetting
              */
             function saveCustomer() {
                 $scope.preValuesLoaded = false;
-                notificationsService.info("Saving...", "");
+                notificationsService.info(localizationService.localize("merchelloStatusNotifications_customerSaveSuccess"), "");
                 var promiseSaveCustomer = customerResource.SaveCustomer($scope.customer);
                 promiseSaveCustomer.then(function(customerResponse) {
                     $timeout(function() {
-                    notificationsService.success("Customer Saved", "");
+                    notificationsService.success(localizationService.localize("merchelloStatusNotifications_customerSaveSuccess"), "");
                         loadCustomer($scope.customer.key);
                     }, 400);
 
                 }, function(reason) {
-                    notificationsService.error("Customer  Failed", reason.message);
+                    notificationsService.error(localizationService.localize("merchelloStatusNotifications_customerSaveError"), reason.message);
                 });
             }
 
@@ -1916,11 +1946,11 @@ angular.module('merchello').controller('Merchello.Customer.Dialogs.CustomerNewCu
 
                     var promiseSaveCustomer = customerResource.AddCustomer(customer);
                     promiseSaveCustomer.then(function (customerResponse) {
-                        notificationsService.success("Customer Saved", "");
+                        notificationsService.success(localizationService.localize("merchelloStatusNotifications_customerSaveSuccess"), "");
                         navigationService.hideNavigation();
                         $location.url("/merchello/merchello/customeroverview/" + customerResponse.key, true);
                     }, function (reason) {
-                        notificationsService.error("Customer Save Failed", reason.message);
+                        notificationsService.error(localizationService.localize("merchelloStatusNotifications_customerSaveError"), reason.message);
                     });
                 }
             }
@@ -4908,9 +4938,9 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
  */
 angular.module('merchello').controller('Merchello.Backoffice.OfferEditController',
     ['$scope', '$routeParams', '$location', '$filter', 'merchDateHelper', 'assetsService', 'dialogService', 'eventsService', 'notificationsService', 'settingsResource', 'marketingResource', 'merchelloTabsFactory',
-        'dialogDataFactory', 'settingDisplayBuilder', 'offerProviderDisplayBuilder', 'offerSettingsDisplayBuilder', 'offerComponentDefinitionDisplayBuilder',
+        'dialogDataFactory', 'settingDisplayBuilder', 'offerProviderDisplayBuilder', 'offerSettingsDisplayBuilder', 'offerComponentDefinitionDisplayBuilder', 'localizationService',
     function($scope, $routeParams, $location, $filter, dateHelper, assetsService, dialogService, eventsService, notificationsService, settingsResource, marketingResource, merchelloTabsFactory,
-             dialogDataFactory, settingDisplayBuilder, offerProviderDisplayBuilder, offerSettingsDisplayBuilder, offerComponentDefinitionDisplayBuilder) {
+        dialogDataFactory, settingDisplayBuilder, offerProviderDisplayBuilder, offerSettingsDisplayBuilder, offerComponentDefinitionDisplayBuilder, localizationService) {
 
         $scope.loaded = false;
         $scope.preValuesLoaded = false;
@@ -5091,9 +5121,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
                     offerPromise = marketingResource.saveOfferSettings(os);
                 }
                 offerPromise.then(function (settings) {
-                    localizationService.localize("merchelloNotification_successCouponSave").then(function (value) {
-                        notificationsService.success(value);
-                    });
+                    notificationsService.success(localizationService.localize("merchelloStatusNotifications_couponSaveSuccess"));
                     if (isNew) {
                         $location.url($scope.offerProvider.editorUrl(settings.key), true);
                     } else {
@@ -5101,9 +5129,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
                         loadOffer(settings.key);
                     }
                 }, function (reason) {
-                    localizationService.localize("merchelloNotification_failCouponSave").then(function (value) {
-                        notificationsService.error(value, reason.message);
-                    });
+                    notificationsService.error(localizationService.localize("merchelloStatusNotifications_couponSaveError"), reason.message);
                 });
             }
         }
@@ -6936,8 +6962,8 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.AddProductCont
  * The controller for the product variant view table view directive
  */
 angular.module('merchello').controller('Merchello.Directives.ProductVariantsViewTableDirectiveController',
-    ['$scope', '$q', '$timeout', '$location', 'notificationsService', 'dialogService', 'dialogDataFactory', 'productResource', 'productDisplayBuilder', 'productVariantDisplayBuilder',
-    function($scope, $q, $timeout, $location, notificationsService, dialogService, dialogDataFactory, productResource, productDisplayBuilder, productVariantDisplayBuilder) {
+    ['$scope', '$q', '$timeout', '$location', 'notificationsService', 'dialogService', 'localizationService', 'dialogDataFactory', 'productResource', 'productDisplayBuilder', 'productVariantDisplayBuilder',
+    function($scope, $q, $timeout, $location, notificationsService, dialogService, localizationService, dialogDataFactory, productResource, productDisplayBuilder, productVariantDisplayBuilder) {
 
         $scope.sortProperty = "sku";
         $scope.sortOrder = "asc";
@@ -7218,7 +7244,7 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
          */
         function updateInventory() {
             var dialogData = dialogDataFactory.createBulkEditInventoryCountsDialogData();
-            dialogData.warning = 'Note: This will update the inventory for all warehouses on all selected variants';
+            dialogData.warning = localizationService.localize('merchelloVariant_bulkChangeInventoryNote');
             dialogService.open({
                 template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/productvariant.bulk.updateinventory.html',
                 show: true,
@@ -7647,7 +7673,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
 
                     loadProduct(loadArgs);
 
-                    notificationsService.success('Product Saved');
+                    notificationsService.success(localizationService.localize("merchelloStatusNotifications_productSaveSuccess"));
                 });
             }
 
@@ -7806,10 +7832,10 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
     angular.module('merchello').controller('Merchello.Backoffice.ProductEditController',
         ['$scope', '$routeParams', '$window', '$location', '$timeout', 'assetsService', 'notificationsService', 'dialogService', 'merchelloTabsFactory', 'dialogDataFactory',
             'serverValidationManager', 'productResource', 'warehouseResource', 'settingsResource',
-            'productDisplayBuilder', 'productVariantDisplayBuilder', 'warehouseDisplayBuilder', 'settingDisplayBuilder', 'catalogInventoryDisplayBuilder',
+            'productDisplayBuilder', 'productVariantDisplayBuilder', 'warehouseDisplayBuilder', 'settingDisplayBuilder', 'catalogInventoryDisplayBuilder', 'localizationService',
         function($scope, $routeParams, $window, $location, $timeout, assetsService, notificationsService, dialogService, merchelloTabsFactory, dialogDataFactory,
             serverValidationManager, productResource, warehouseResource, settingsResource,
-            productDisplayBuilder, productVariantDisplayBuilder, warehouseDisplayBuilder, settingDisplayBuilder, catalogInventoryDisplayBuilder) {
+            productDisplayBuilder, productVariantDisplayBuilder, warehouseDisplayBuilder, settingDisplayBuilder, catalogInventoryDisplayBuilder, localizationService) {
 
             //--------------------------------------------------------------------------------------
             // Declare and initialize key scope properties
@@ -8001,7 +8027,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
             function createProduct() {
                 var promise = productResource.add($scope.product);
                 promise.then(function (product) {
-                    notificationsService.success("Product Saved", "");
+                    notificationsService.success(localizationService.localize("merchelloStatusNotifications_productSaveSuccess"), "");
                     $scope.product = productDisplayBuilder.transform(product);
                     // short pause to make sure examine index has a chance to update
                     $timeout(function() {
@@ -8013,7 +8039,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                     }, 400);
                     $scope.preValuesLoaded = true;
                 }, function (reason) {
-                    notificationsService.error("Product Save Failed", reason.message);
+                    notificationsService.error(localizationService.localize("merchelloStatusNotifications_productSaveError"), reason.message);
                 });
             }
 
@@ -8028,7 +8054,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
             function saveProduct() {
                 var promise = productResource.save($scope.product);
                 promise.then(function (product) {
-                    notificationsService.success("Product Saved", "");
+                    notificationsService.success(localizationService.localize("merchelloStatusNotifications_productSaveSuccess"), "");
                     $scope.product = productDisplayBuilder.transform(product);
                     $scope.productVariant = $scope.product.getMasterVariant();
 
@@ -8043,7 +8069,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
 
                     $scope.preValuesLoaded = true;
                 }, function (reason) {
-                    notificationsService.error("Product Save Failed", reason.message);
+                    notificationsService.error(localizationService.localize("merchelloStatusNotifications_productSaveError"), reason.message);
                 });
             }
 
@@ -8103,10 +8129,10 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
             function deleteProductDialogConfirmation() {
                 var promiseDel = productResource.deleteProduct($scope.product);
                 promiseDel.then(function () {
-                    notificationsService.success("Product Deleted", "");
+                    notificationsService.success(localizationService.localize("merchelloStatusNotifications_productDeleteSuccess"), "");
                     $location.url("/merchello/merchello/productlist/manage", true);
                 }, function (reason) {
-                    notificationsService.error("Product Deletion Failed", reason.message);
+                    notificationsService.error(localizationService.localize("merchelloStatusNotifications_productDeleteError"), reason.message);
                 });
             }
 
@@ -8122,7 +8148,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 var dialogData = dialogDataFactory.createDeleteProductDialogData();
                 dialogData.product = $scope.product;
                 dialogData.name = $scope.product.name + ' (' + $scope.product.sku + ')';
-                dialogData.warning = 'This action cannot be reversed.';
+                dialogData.warning = localizationService.localize('merchelloDelete_actionNotReversible');
 
                 dialogService.open({
                     template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
@@ -8146,9 +8172,9 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
      */
     angular.module('merchello').controller('Merchello.Backoffice.ProductEditWithOptionsController',
         ['$scope', '$routeParams', '$timeout', '$location', '$q', 'assetsService', 'notificationsService', 'dialogService', 'serverValidationManager',
-            'merchelloTabsFactory', 'dialogDataFactory', 'productResource', 'settingsResource', 'productDisplayBuilder',
+            'merchelloTabsFactory', 'dialogDataFactory', 'productResource', 'settingsResource', 'productDisplayBuilder', 'localizationService',
         function($scope, $routeParams, $timeout, $location, $q, assetsService, notificationsService, dialogService, serverValidationManager,
-            merchelloTabsFactory, dialogDataFactory, productResource, settingsResource, productDisplayBuilder) {
+            merchelloTabsFactory, dialogDataFactory, productResource, settingsResource, productDisplayBuilder, localizationService) {
 
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
@@ -8223,13 +8249,13 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
             function save(thisForm) {
                 if (thisForm) {
                     if (thisForm.$valid) {
-                        notificationsService.info("Saving Product...", "");
+                        notificationsService.info(localizationService.localize("merchelloStatusNotifications_productSaveInProgress"), "");
                         var promise = productResource.save($scope.product);
                         promise.then(function (product) {
-                            notificationsService.success("Product Saved", "");
+                            notificationsService.success(localizationService.localize("merchelloStatusNotifications_productSaveSuccess"), "");
                             $scope.product = productDisplayBuilder.transform(product);
                         }, function (reason) {
-                            notificationsService.error("Product Save Failed", reason.message);
+                            notificationsService.error(localizationService.localize("merchelloStatusNotifications_productSaveError"), reason.message);
                         });
                     }
                 }
@@ -8247,7 +8273,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 var dialogData = dialogDataFactory.createDeleteProductDialogData();
                 dialogData.product = $scope.product;
                 dialogData.name = $scope.product.name + ' (' + $scope.product.sku + ')';
-                dialogData.warning = 'This action cannot be reversed.';
+                dialogData.warning = localizationService.localize('merchelloDelete_actionNotReversible');
 
                 dialogService.open({
                     template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
@@ -8268,10 +8294,10 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
             function deleteProductDialogConfirmation() {
                 var promiseDel = productResource.deleteProduct($scope.product);
                 promiseDel.then(function () {
-                    notificationsService.success("Product Deleted", "");
+                    notificationsService.success(localizationService.localize("merchelloStatusNotifications_productDeleteSuccess"), "");
                     $location.url("/merchello/merchello/productlist/manage", true);
                 }, function (reason) {
-                    notificationsService.error("Product Deletion Failed", reason.message);
+                    notificationsService.error(localizationService.localize("merchelloStatusNotifications_productDeleteError"), reason.message);
                 });
             }
 
@@ -8576,10 +8602,10 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductFilterGroups
 angular.module('merchello').controller('Merchello.Backoffice.ProductOptionsManagerController', [
     '$scope', '$q', '$routeParams', '$location', '$timeout', 'notificationsService', 'dialogService',
         'merchelloTabsFactory', 'productResource', 'eventsService', 'settingsResource',
-        'productOptionDisplayBuilder', 'productDisplayBuilder', 'queryResultDisplayBuilder',
+        'productOptionDisplayBuilder', 'productDisplayBuilder', 'queryResultDisplayBuilder', 'localizationService',
     function($scope, $q, $routeParams, $location, $timeout, notificationsService, dialogService,
              merchelloTabsFactory, productResource, eventsService, settingsResource,
-             productOptionDisplayBuilder, productDisplayBuilder, queryResultDisplayBuilder) {
+             productOptionDisplayBuilder, productDisplayBuilder, queryResultDisplayBuilder, localizationService) {
 
         $scope.product = {};
         $scope.preValuesLoaded = false;
@@ -8691,7 +8717,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductOptionsManag
                 return;
             }
             if (thisForm.$valid) {
-                notificationsService.info("Saving Product...", "");
+                notificationsService.info(localizationService.localize("merchelloStatusNotifications_productSaveInProgress"), "");
 
                 $scope.product.productOptions = _.sortBy($scope.product.productOptions, function (po) {
                     return po.sortOrder;
@@ -8699,11 +8725,11 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductOptionsManag
 
                 $scope.preValuesLoaded = false;
                 productResource.save($scope.product).then(function (product) {
-                    notificationsService.success("Product Saved", "");
+                    notificationsService.success(localizationService.localize("merchelloStatusNotifications_productSaveSuccess"), "");
                     $scope.product = productDisplayBuilder.transform(product);
                     setTabs();
                 }, function (reason) {
-                    notificationsService.error("Product Save Failed", reason.message);
+                    notificationsService.error(localizationService.localize("merchelloStatusNotifications_productSaveError"), reason.message);
                 });
             }
         }
@@ -8729,7 +8755,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductOptionsManag
             var dialogData = dialogDataFactory.createDeleteProductDialogData();
             dialogData.product = $scope.product;
             dialogData.name = $scope.product.name + ' (' + $scope.product.sku + ')';
-            dialogData.warning = 'This action cannot be reversed.';
+            dialogData.warning = localizationService.localize('merchelloDelete_actionNotReversible');
 
             dialogService.open({
                 template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
@@ -8750,10 +8776,10 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductOptionsManag
         function deleteProductDialogConfirmation() {
             var promiseDel = productResource.deleteProduct($scope.product);
             promiseDel.then(function () {
-                notificationsService.success("Product Deleted", "");
+                notificationsService.success(localizationService.localize("merchelloStatusNotifications_productDeleteSuccess"), "");
                 $location.url("/merchello/merchello/productlist/manage", true);
             }, function (reason) {
-                notificationsService.error("Product Deletion Failed", reason.message);
+                notificationsService.error(localizationService.localize("merchelloStatusNotifications_productDeleteError"), reason.message);
             });
         }
 
@@ -9903,6 +9929,7 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesOverTi
             $scope.series = [];
             $scope.chartData = [];
             $scope.reportData = [];
+            $scope.invoiceStatuses = [];
             $scope.startDate = '';
             $scope.endDate = '';
             $scope.settings = {};
@@ -9912,6 +9939,7 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesOverTi
             $scope.getColumnTotal = getColumnTotal;
             $scope.openDateRangeDialog = openDateRangeDialog;
             $scope.clearDates = clearDates;
+            $scope.statusChange = statusChange;
             $scope.reverse = reverse;
 
 
@@ -9943,6 +9971,7 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesOverTi
             function loadDefaultData() {
                 salesOverTimeResource.getDefaultReportData().then(function(result) {
                     compileChart(result);
+                    $scope.invoiceStatuses = result.invoiceStatuses;
                 });
             }
 
@@ -9951,10 +9980,15 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesOverTi
                 var query = queryDisplayBuilder.createDefault();
                 query.addInvoiceDateParam($scope.startDate, 'start');
                 query.addInvoiceDateParam($scope.endDate, 'end');
+                query.addCustomParam('invoiceStatuses', JSON.stringify($scope.invoiceStatuses));
 
                 salesOverTimeResource.getCustomReportData(query).then(function(result) {
                    compileChart(result);
                 });
+            }
+
+            function statusChange() {
+                loadCustomData();
             }
 
             function compileChart(result) {
@@ -10010,13 +10044,13 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesOverTi
                 } else {
                     return '-';
                 }
-
             }
 
             function openDateRangeDialog() {
                 var dialogData = {
                     startDate: $scope.startDate,
-                    endDate: $scope.endDate
+                    endDate: $scope.endDate,
+                    showPreDeterminedDates: true
                 };
 
                 dialogService.open({
@@ -10066,6 +10100,123 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesOverTi
                 loadDefaultData();
             }
 
+        }]);
+
+
+angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesSearchController',
+    ['$http', '$scope', '$q', 'umbRequestHelper', '$log', '$filter', 'assetsService', 'dialogService', 'queryDisplayBuilder',
+        'settingsResource', 'invoiceHelper', 'merchelloTabsFactory', 'salesOverTimeResource',
+        function ($http, $scope, $q, umbRequestHelper, $log, $filter, assetsService, dialogService, queryDisplayBuilder,
+            settingsResource, invoiceHelper, merchelloTabsFactory, salesOverTimeResource) {
+
+            // Umbraco and Merchello
+            $scope.loaded = false;
+            $scope.preValuesLoaded = false;
+
+            $scope.dataLoaded = false;
+            $scope.settings = {};
+            $scope.dateBtnText = '';
+            $scope.baseUrl = '';
+            $scope.salesSearchSnapshot = {};
+            $scope.toggle = [];
+            $scope.originalStartDate = '';
+            $scope.originalEndDate = '';
+
+            // Load
+            init();
+
+            // Scope Methods
+            $scope.toggleFilter = toggleFilter;
+            $scope.openDateRangeDialog = openDateRangeDialog;
+            $scope.updateData = updateData;
+            $scope.reload = reload;
+
+            function init() {
+                $scope.baseUrl = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloSalesSearchBaseUrl'];
+                loadSettings();
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadSettings
+             * @function
+             *
+             * @description - Load the Merchello settings.
+             */
+            function loadSettings() {
+                settingsResource.getAllCombined().then(function (combined) {
+                    $scope.settings = combined.settings;
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
+                    loadDefaultData();
+                });
+            }
+
+            function loadDefaultData() {
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: $scope.baseUrl + 'GetInitialData',
+                        method: "GET"
+                    }), 'Failed to retreive default report data')
+                    .then(function (data) {
+                        $scope.salesSearchSnapshot = data;
+                        $scope.originalStartDate = $scope.salesSearchSnapshot.startDate;
+                        $scope.originalEndDate = $scope.salesSearchSnapshot.endDate;
+                        setDateButtonText();
+                        $scope.dataLoaded = true;
+                    });
+            }
+
+            function updateData() {
+
+                // Clear the products first
+                // As don't want to post a ton of data we don't need to
+                $scope.salesSearchSnapshot.products = [];
+                $scope.dataLoaded = false;
+
+                return umbRequestHelper.resourcePromise(
+                    $http.post($scope.baseUrl + 'UpdateData', $scope.salesSearchSnapshot), 'Failed to update the report')
+                    .then(function (data) {
+                        $scope.salesSearchSnapshot = data;
+                        $scope.dataLoaded = true;
+                    });
+            }
+
+            function reload(startDate, endDate) {
+                if ($scope.dataLoaded) {
+                    $scope.salesSearchSnapshot.startDate = startDate;
+                    $scope.salesSearchSnapshot.endDate = endDate;
+                    setDateButtonText();
+                    updateData();
+                }
+            }
+
+            function toggleFilter(inx) {
+                $scope.toggle[inx] = !$scope.toggle[inx];
+            }
+
+            function openDateRangeDialog() {
+                var dialogData = {
+                    startDate: $scope.salesSearchSnapshot.startDate,
+                    endDate: $scope.salesSearchSnapshot.endDate,
+                    showPreDeterminedDates: true
+                };
+
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/daterange.selection.html',
+                    show: true,
+                    callback: processDateRange,
+                    dialogData: dialogData
+                });
+            }
+
+            function setDateButtonText() {
+                $scope.dateBtnText = $scope.salesSearchSnapshot.startDate + ' - ' + $scope.salesSearchSnapshot.endDate;
+            }
+
+            function processDateRange(dialogData) {
+                // This never gets hit for som
+            }
         }]);
 
 angular.module('merchello').controller('Merchello.Sales.Dialogs.InvoiceHeaderController',
@@ -11151,7 +11302,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                    countries = combined.countries;
                    if ($scope.invoice.currency.symbol === '') {
                        var currency = _.find(combined.currencies, function (symbol) {
-                           return symbol.currecyCode === $scope.invoice.getCurrencyCode()
+                           return symbol.currencyCode === $scope.invoice.getCurrencyCode();
                        });
                        if (currency !== undefined) {
                            $scope.currencySymbol = currency.symbol;

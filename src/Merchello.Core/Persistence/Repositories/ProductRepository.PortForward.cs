@@ -53,10 +53,11 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             var sql = new Sql();
-            sql.Append("SELECT *")
+            sql.Append("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
               .Append("FROM [merchProductVariant]")
                .Append("WHERE [merchProductVariant].[productKey] IN (")
                .Append("SELECT [productKey]")
@@ -70,6 +71,11 @@
               .Append("([merchProductVariant].[onSale] = 1 AND [merchProductVariant].[salePrice] BETWEEN @low AND @high)", new { @low = min, @high = max })
               .Append(")")
               .Append("AND [merchProductVariant].[master] = 1");
+
+            if (!includeUnavailable)
+            {
+                sql.Append("AND [merchProductVariant].[available] = 1");
+            }
 
             var pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
 
@@ -85,7 +91,8 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
 
             var sql = this.BuildProductSearchSql(term);
@@ -103,6 +110,11 @@
                 .Append("([merchProductVariant].[onSale] = 1 AND [merchProductVariant].[salePrice] BETWEEN @low AND @high)", new { @low = min, @high = max })
                 .Append(")");
 
+            if (!includeUnavailable)
+            {
+                sql.Append("AND [merchProductVariant].[available] = 1");
+            }
+
             var pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
 
             return pagedKeys;
@@ -116,11 +128,12 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
 
             var sql = new Sql();
-            sql.Append("SELECT *")
+            sql.Append("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
               .Append("FROM [merchProductVariant]")
                .Append("WHERE [merchProductVariant].[productKey] NOT IN (")
                .Append("SELECT DISTINCT([productKey])")
@@ -132,6 +145,11 @@
                .Append("([merchProductVariant].[onSale] = 1 AND [merchProductVariant].[salePrice] BETWEEN @low AND @high)", new { @low = min, @high = max })
                .Append(")")
                .Append("AND [merchProductVariant].[master] = 1");
+
+            if (!includeUnavailable)
+            {
+                sql.Append("AND [merchProductVariant].[available] = 1");
+            }
 
             var pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
             return pagedKeys;
@@ -146,7 +164,8 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             var sql = this.BuildProductSearchSql(term);
             sql.Append("AND [merchProductVariant].[productKey] NOT IN (")
@@ -161,6 +180,11 @@
                 .Append("([merchProductVariant].[onSale] = 1 AND [merchProductVariant].[salePrice] BETWEEN @low AND @high)", new { @low = min, @high = max })
                 .Append(")");
 
+            if (!includeUnavailable)
+            {
+                sql.Append("AND [merchProductVariant].[available] = 1");
+            }
+
             var pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
             return pagedKeys;
         }
@@ -173,11 +197,12 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
 
             var sql = new Sql();
-            sql.Append("SELECT *")
+            sql.Append("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
               .Append("FROM [merchProductVariant]")
                .Append("WHERE [merchProductVariant].[productKey] IN (")
                .Append("SELECT DISTINCT([productKey])")
@@ -189,6 +214,11 @@
                .Append("([merchProductVariant].[onSale] = 1 AND [merchProductVariant].[salePrice] BETWEEN @low AND @high)", new { @low = min, @high = max })
                .Append(")")
                .Append("AND [merchProductVariant].[master] = 1");
+
+            if (!includeUnavailable)
+            {
+                sql.Append("AND [merchProductVariant].[available] = 1");
+            }
 
             var pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
             return pagedKeys;
@@ -203,7 +233,8 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
 
             var sql = this.BuildProductSearchSql(term);
@@ -218,6 +249,11 @@
                 .Append("OR")
                 .Append("([merchProductVariant].[onSale] = 1 AND [merchProductVariant].[salePrice] BETWEEN @low AND @high)", new { @low = min, @high = max })
                 .Append(")");
+
+            if (!includeUnavailable)
+            {
+                sql.Append("AND [merchProductVariant].[available] = 1");
+            }
 
             var pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
             return pagedKeys;
@@ -241,7 +277,7 @@
             return results;
         }
 
-        /// <inheritdoc/> 
+        /// <inheritdoc/>
         public PagedCollection<IProduct> GetByAdvancedSearch(
             Guid collectionKey,
             string[] includeFields,
@@ -250,7 +286,8 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection direction = SortDirection.Ascending)
+            SortDirection direction = SortDirection.Ascending,
+            bool includeUnavailable = false)
         {
 
             var sql = BuildAdvancedProductSearchSql(term, includeFields);
@@ -270,6 +307,11 @@
                 .Append(")");
             }
 
+            if (!includeUnavailable)
+            {
+                sql.Append("AND [merchProductVariant].[available] = 1");
+            }
+
             if (!string.IsNullOrEmpty(orderExpression))
             {
                 sql.Append(direction == SortDirection.Ascending
@@ -278,7 +320,7 @@
             }
 
             var results = Database.Page<ProductVariantDto>(page, itemsPerPage, sql);
-            
+
             // We have to check if any results are returned before passing to get all or
             // we WILL actually query every product.
             var products = results.Items.Any()

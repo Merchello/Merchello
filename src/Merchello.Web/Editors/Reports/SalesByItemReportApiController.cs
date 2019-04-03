@@ -114,8 +114,9 @@
             var today = DateTime.Today;
             var endDate = today;
             var startDate = today.AddMonths(-1);
+            var invoiceStatuses = AllInvoiceStatuses();
 
-            return BuildResult(startDate, endDate);
+            return BuildResult(startDate, endDate, invoiceStatuses);
         }
 
         /// <summary>
@@ -127,12 +128,25 @@
         /// <param name="endDate">
         /// The end date.
         /// </param>
+        /// <param name="invoiceStatuses">
+        /// The invoice statuses.
+        /// </param>
         /// <returns>
         /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
-        protected override QueryResultDisplay BuildResult(DateTime startDate, DateTime endDate)
+        protected override QueryResultDisplay BuildResult(DateTime startDate, DateTime endDate, IEnumerable<InvStatus> invoiceStatuses)
         {
-            var results = this.GetResults(startDate, endDate).ToArray();
+            // Get all the statuses
+            var statuses = AllInvoiceStatuses();
+            var selectedStatuses = invoiceStatuses.Where(x => x.Checked).Select(x => x.Key).ToList();
+
+            // Loop and set selected statuses
+            foreach (var status in statuses)
+            {
+                status.Checked = selectedStatuses.Contains(status.Key);
+            }
+
+            var results = this.GetResults(startDate, endDate, statuses).ToArray();
 
             return new QueryResultDisplay()
             {
@@ -140,7 +154,8 @@
                 CurrentPage = 1,
                 ItemsPerPage = results.Count(),
                 TotalItems = results.Count(),
-                TotalPages = 1
+                TotalPages = 1,
+                InvoiceStatuses = statuses
             };
         }
 
@@ -153,17 +168,20 @@
         /// <param name="endDate">
         /// The end date.
         /// </param>
+        /// <param name="invoiceStatuses">
+        /// The invoice statuses.
+        /// </param>
         /// <returns>
         /// The typed result.
         /// </returns>
-        protected override IEnumerable<SalesByItemResult> GetResults(DateTime startDate, DateTime endDate)
+        protected override IEnumerable<SalesByItemResult> GetResults(DateTime startDate, DateTime endDate, IEnumerable<InvStatus> invoiceStatuses)
         {
             // determine the top 5 items within the date range
             var database = ApplicationContext.DatabaseContext.Database;
 
             // We're using an internal helper here so we can keep all of our report SQL queries in a single location
             // in case we want to refactor to some sort of service at a later date.
-            var sql = ReportSqlHelper.SalesByItem.GetSkuSaleCountSql(startDate, endDate, _productLineItemTfKey, 50);
+            var sql = ReportSqlHelper.SalesByItem.GetSkuSaleCountSql(startDate, endDate, _productLineItemTfKey, 50, invoiceStatuses.Where(x => x.Checked).Select(x => x.Key).ToList());
 
             var dtos = database.Query<SkuSaleCountDto>(sql).ToArray();
 

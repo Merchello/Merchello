@@ -67,7 +67,7 @@
                                 <span class="street-address">{{defaultBillingAddress.address1}}</span><span class="extended-address" data-ng-show="defaultBillingAddress.address2 != ''">, {{defaultBillingAddress.address2}}</span>
                                 <span class="locality" data-ng-show="defaultBillingAddress.locality != ''">{{defaultBillingAddress.locality}}, </span><span class="region">{{defaultBillingAddress.region}}</span><br />
                                 <span class="postal-code">{{defaultBillingAddress.postalCode}}</span><br />
-                                <span class="country-name">{{defaultBillingAddress.countryCode}}</span><br />
+                                <span class="country-name">{{defaultBillingAddress.countryName}}</span><br />
                                 <span class="tel" data-ng-show="defaultBillingAddress.phone != ''">Phone: {{defaultBillingAddress.phone}}</span>
                             </div>
                             <div data-ng-show="defaultBillingAddress.isEmpty()">
@@ -95,7 +95,7 @@
                                 <span class="street-address">{{defaultShippingAddress.address1}}</span><span class="extended-address" data-ng-show="defaultShippingAddress.address2 != ''">, {{defaultShippingAddress.address2}}</span>
                                 <span class="locality" data-ng-show="defaultShippingAddress.locality != ''">{{defaultShippingAddress.locality}}, </span><span class="region">{{defaultShippingAddress.region}}</span><br />
                                 <span class="postal-code">{{defaultShippingAddress.postalCode}}</span><br />
-                                <span class="country-name">{{defaultShippingAddress.countryCode}}</span><br />
+                                <span class="country-name">{{defaultShippingAddress.countryName}}</span><br />
                                 <span class="tel" data-ng-show="defaultShippingAddress.phone != ''">Phone: {{defaultShippingAddress.phone}}</span>
                             </div>
                             <div data-ng-show="defaultShippingAddress.isEmpty()">
