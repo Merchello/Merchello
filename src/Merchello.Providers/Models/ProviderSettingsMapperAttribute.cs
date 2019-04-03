@@ -5,7 +5,7 @@
     /// <summary>
     /// An attribute for mapping a provider to its serializable settings.
     /// </summary>
-    internal class ProviderSettingsMapperAttribute : Attribute
+    public class ProviderSettingsMapperAttribute : Attribute
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ProviderSettingsMapperAttribute"/> class.
@@ -16,7 +16,7 @@
         /// <param name="settingsType">
         /// The settings type.
         /// </param>
-        internal ProviderSettingsMapperAttribute(string key, Type settingsType)
+        public ProviderSettingsMapperAttribute(string key, Type settingsType)
         {
             Key = key;
             SettingsType = settingsType;

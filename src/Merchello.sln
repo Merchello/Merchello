@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28729.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Core", "Merchello.Core\Merchello.Core.csproj", "{2A83A229-C24B-4D8D-B806-7C9999EB9461}"
 EndProject
@@ -118,6 +118,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.FastTrack", "Merchello.FastTrack\Merchello.FastTrack.csproj", "{2C3261C5-6999-4372-9B2A-11E8C3296540}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.FastTrack.Ui", "Merchello.FastTrack.Ui\Merchello.FastTrack.Ui.csproj", "{BE1853EB-386A-430F-94E9-A09A316CCB27}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Providers.Payment.PayPal", "Merchello.Providers.Payment.PayPal\Merchello.Providers.Payment.PayPal.csproj", "{E863900E-69C4-4420-B97F-C5B7FB46578A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -320,6 +322,22 @@ Global
 		{BE1853EB-386A-430F-94E9-A09A316CCB27}.Release|x64.Build.0 = Release|Any CPU
 		{BE1853EB-386A-430F-94E9-A09A316CCB27}.Release|x86.ActiveCfg = Release|Any CPU
 		{BE1853EB-386A-430F-94E9-A09A316CCB27}.Release|x86.Build.0 = Release|Any CPU
+		{E863900E-69C4-4420-B97F-C5B7FB46578A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E863900E-69C4-4420-B97F-C5B7FB46578A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E863900E-69C4-4420-B97F-C5B7FB46578A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E863900E-69C4-4420-B97F-C5B7FB46578A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E863900E-69C4-4420-B97F-C5B7FB46578A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E863900E-69C4-4420-B97F-C5B7FB46578A}.Debug|x64.Build.0 = Debug|Any CPU
+		{E863900E-69C4-4420-B97F-C5B7FB46578A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E863900E-69C4-4420-B97F-C5B7FB46578A}.Debug|x86.Build.0 = Debug|Any CPU
+		{E863900E-69C4-4420-B97F-C5B7FB46578A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E863900E-69C4-4420-B97F-C5B7FB46578A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E863900E-69C4-4420-B97F-C5B7FB46578A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E863900E-69C4-4420-B97F-C5B7FB46578A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E863900E-69C4-4420-B97F-C5B7FB46578A}.Release|x64.ActiveCfg = Release|Any CPU
+		{E863900E-69C4-4420-B97F-C5B7FB46578A}.Release|x64.Build.0 = Release|Any CPU
+		{E863900E-69C4-4420-B97F-C5B7FB46578A}.Release|x86.ActiveCfg = Release|Any CPU
+		{E863900E-69C4-4420-B97F-C5B7FB46578A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -329,5 +347,8 @@ Global
 		{4A7FCB29-A39A-4E0B-B0BC-92A7D00FA3AB} = {A6C6EBCD-38C9-4FAD-975A-97FA97578537}
 		{7EFA61BD-198A-4CD9-8176-C266FD1D4E1D} = {A6C6EBCD-38C9-4FAD-975A-97FA97578537}
 		{EF35B5D0-B694-484F-8A62-95ED19F9D05D} = {A6C6EBCD-38C9-4FAD-975A-97FA97578537}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {56F253D9-765E-469F-BB0C-677B47D15425}
 	EndGlobalSection
 EndGlobal

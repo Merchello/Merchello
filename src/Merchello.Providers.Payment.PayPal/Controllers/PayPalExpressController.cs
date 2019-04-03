@@ -18,7 +18,6 @@
     using Merchello.Providers.Payment.PayPal.Services;
     using Merchello.Web.Models.Ui.Async;
     using Merchello.Web.Mvc;
-
     using Umbraco.Core.Events;
     using Umbraco.Web.Mvc;
 

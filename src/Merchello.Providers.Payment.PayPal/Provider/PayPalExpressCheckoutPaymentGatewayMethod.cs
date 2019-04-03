@@ -1,4 +1,6 @@
-﻿namespace Merchello.Providers.Payment.PayPal.Provider
+﻿using Merchello.Providers.Exceptions;
+
+namespace Merchello.Providers.Payment.PayPal.Provider
 {
     using System;
     using System.Linq;
@@ -8,7 +10,6 @@
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
-    using Merchello.Providers.Exceptions;
     using Merchello.Providers.Payment.PayPal.Models;
     using Merchello.Providers.Payment.PayPal.Services;
 

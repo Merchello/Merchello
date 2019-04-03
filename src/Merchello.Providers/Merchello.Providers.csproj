@@ -146,14 +146,6 @@
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="PayPalCoreSDK, Version=1.6.1.0, Culture=neutral, PublicKeyToken=5b4afc1ccaef40fb, processorArchitecture=MSIL">
-      <HintPath>..\packages\PayPalCoreSDK.1.6.1\lib\net45\PayPalCoreSDK.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="PayPalMerchantSDK, Version=2.15.117.0, Culture=neutral, PublicKeyToken=5b4afc1ccaef40fb, processorArchitecture=MSIL">
-      <HintPath>..\packages\PayPalMerchantSDK.2.15.117\lib\net20\PayPalMerchantSDK.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Semver, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\semver.1.1.2\lib\net45\Semver.dll</HintPath>
       <Private>True</Private>
@@ -277,23 +269,8 @@
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
     <Compile Include="Exceptions\BraintreeApiException.cs" />
-    <Compile Include="Exceptions\PayPalApiException.cs" />
     <Compile Include="Payment\Braintree\Models\BraintreeProviderSettings.cs" />
     <Compile Include="Models\IPaymentProviderSettings.cs" />
-    <Compile Include="Payment\PayPal\Controllers\IPayPalSurfaceController.cs" />
-    <Compile Include="Payment\PayPal\Controllers\PayPalExpressController.cs" />
-    <Compile Include="Payment\PayPal\Controllers\PayPalSurfaceControllerBase.cs" />
-    <Compile Include="Payment\PayPal\Factories\ExpressCheckoutResponseFactory.cs" />
-    <Compile Include="Payment\PayPal\Factories\PayPalBasicAmountTypeFactory.cs" />
-    <Compile Include="Payment\PayPal\Factories\PayPalFactorySettings.cs" />
-    <Compile Include="Payment\PayPal\Factories\PayPalPaymentDetailsTypeFactory.cs" />
-    <Compile Include="Payment\PayPal\Factories\PayPalAddressTypeFactory.cs" />
-    <Compile Include="Payment\PayPal\Models\ExpressCheckoutResponse.cs" />
-    <Compile Include="Payment\PayPal\Models\PayPalExpressCheckoutRequestDetailsOverride.cs" />
-    <Compile Include="Payment\PayPal\Models\PayPalExpressCheckoutUrls.cs" />
-    <Compile Include="Payment\PayPal\Models\PayPalExpressTransaction.cs" />
-    <Compile Include="Payment\PayPal\Models\PayPalExpressTransactionRecord.cs" />
-    <Compile Include="Payment\PayPal\Models\PayPalProviderSettings.cs" />
     <Compile Include="Models\ProviderSettingsExtensions.cs" />
     <Compile Include="Models\ProviderSettingsMapperAttribute.cs" />
     <Compile Include="Payment\Braintree\BraintreeApiHelper.cs" />
@@ -338,24 +315,7 @@
     <Compile Include="Payment\Braintree\Services\IBraintreeSubscriptionApiService.cs" />
     <Compile Include="Payment\Braintree\Services\IBraintreeTransactionApiService.cs" />
     <Compile Include="Payment\Braintree\Services\IBraintreeWebhooksApiService.cs" />
-    <Compile Include="Payment\PayPal\Models\CurrencyCodeTypeDecimal.cs" />
-    <Compile Include="Payment\PayPal\Models\PayPalProviderSettingsExtensions.cs" />
     <Compile Include="Models\PaymentRedirectingUrl.cs" />
-    <Compile Include="Payment\PayPal\Models\ProcessorArgumentCollectionExtensions.cs" />
-    <Compile Include="Payment\PayPal\Models\SdkConfig.cs" />
-    <Compile Include="Payment\PayPal\PayPalApiHelper.cs" />
-    <Compile Include="Payment\PayPal\PayPalMode.cs" />
-    <Compile Include="Payment\PayPal\PayPalExpressCheckoutPaymentProcessor.cs" />
-    <Compile Include="Payment\PayPal\PayPalProcessorArgumentCollectionsExtensions.cs" />
-    <Compile Include="Payment\PayPal\Provider\PayPalExpressCheckoutPaymentGatewayMethod.cs" />
-    <Compile Include="Payment\PayPal\Provider\PayPalPaymentGatewayProvider.cs" />
-    <Compile Include="Payment\PayPal\Services\IPayPalApiPaymentService.cs" />
-    <Compile Include="Payment\PayPal\Services\IPayPalApiService.cs" />
-    <Compile Include="Payment\PayPal\Services\IPayPalApiServiceBase.cs" />
-    <Compile Include="Payment\PayPal\Services\IPayPalExpressCheckoutService.cs" />
-    <Compile Include="Payment\PayPal\Services\PayPalApiService.cs" />
-    <Compile Include="Payment\PayPal\Services\PayPalApiServiceBase.cs" />
-    <Compile Include="Payment\PayPal\Services\PayPalExpressCheckoutService.cs" />
     <Compile Include="Payment\PurchaseOrder\PurchaseOrderFormData.cs" />
     <Compile Include="Payment\PurchaseOrder\PurchaseOrderInfoExtensions.cs" />
     <Compile Include="Payment\PurchaseOrder\Provider\IPurchaseOrderPaymentGatewayMethod.cs" />
@@ -382,6 +342,9 @@
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Settings.StyleCop" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Payment\PayPal\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets')" />

@@ -1,4 +1,6 @@
-﻿namespace Merchello.Web.Store.Controllers.Payment
+﻿using Merchello.Providers.Payment.PayPal;
+
+namespace Merchello.Web.Store.Controllers.Payment
 {
     using System;
     using System.Linq;

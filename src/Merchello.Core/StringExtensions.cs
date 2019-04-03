@@ -9,7 +9,7 @@
     /// <summary>
     /// The string extensions.
     /// </summary>
-    internal static class StringExtensions
+    public static class StringExtensions
     {
         /// <summary>
         /// Replaces \ with / in a path.
