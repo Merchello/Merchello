@@ -15,10 +15,12 @@
     <key alias="multipleOptions">Выбор свойств</key>
     <key alias="optional">(необяз.)</key>
     <key alias="percentSymbol">%</key>
+    <key alias="percent">Percent</key>
     <key alias="moneySymbol">$</key>
     <key alias="trackingNumber">№ квитанции </key>
     <key alias="trackingUrl">URL отслеживания</key>
     <key alias="shipment">Доставка</key>
+    <key alias="shipmentNumber">Shipment #</key>
     <key alias="sku">Артикул</key>
     <key alias="name">Название</key>
     <key alias="quantity">К-во</key>
@@ -38,6 +40,11 @@
     <key alias="some">Некоторые</key>
     <key alias="lineItems">Строки</key>
     <key alias="setDateRange">Установить диапазон дат</key>
+    <key alias="preDeterminedDateRange">Выберите заранее определенный диапазон дат:</key>
+    <key alias="customDateRange">Или выберите произвольный диапазон дат:</key>
+    <key alias="lastWeek">Прошлая неделя</key>
+    <key alias="lastMonth">Прошлый месяц</key>
+    <key alias="lastYear">Прошлый год</key>
     <key alias="allDates">Все даты</key>
     <key alias="starting">Начало</key>
     <key alias="ending">Конец</key>
@@ -75,6 +82,8 @@
     <key alias="associateWith">Связать с</key>
     <key alias="shared">Совместное</key>
     <key alias="custom">Настраиваемое</key>
+    <key alias="history">History</key>
+    <key alias="update">Update</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Товары</key>
@@ -90,10 +99,10 @@
     <key alias="productListing">Список товаров</key>
     <key alias="productContentTypes">Типы документов</key>
     <key alias="product">Товар</key>
-    <key alias="productVariants">Варианты товара</key>
-    <key alias="productOptions">Свойства товара</key>
     <key alias="productVariantEditor">Редактор вариантов</key>
     <key alias="detachedContent">Расширенные свойства</key>
+    <key alias="productVariantEditor">Product Variant Editor</key>
+    <key alias="detachedContent">Extended Content</key>
     <key alias="salesListing">Список продаж</key>
     <key alias="sales">Распродажа</key>
     <key alias="payments">Платежи</key>
@@ -196,6 +205,7 @@
     <key alias="alias">Алиас</key>
     <key alias="startDate">С даты</key>
     <key alias="endDate">По дату</key>
+    <key alias="createDate">Cоздать дату</key>
     <key alias="active">Активно</key>
     <key alias="sortOrder">Порядок</key>
     <key alias="optionName">Название свойства</key>
@@ -205,6 +215,9 @@
     <key alias="sharedCount">К-во совмещений</key>
     <key alias="filterGroup">Группа фильтров</key>
     <key alias="filters">Фильтры</key>
+    <key alias="date">Date</key>
+    <key alias="description">Description</key>
+    <key alias="amount">Amount</key>
   </area>
   <area alias="merchelloNotes">
     <key alias="notes">Заметки</key>
@@ -224,6 +237,9 @@
     <key alias="copyProduct">Создать копию</key>
     <key alias="newProductName">Задайте наименование товара</key>
     <key alias="newProductSku">Задайте артикул товара</key>
+    <key alias="newProductSku">New Product SKU</key>
+    <key alias="skuIsNotUnique">SKU is not unique</key>
+    <key alias="skuIsRequired">SKU is a required field.</key>    
     <key alias="newPrice">Новая цена</key>
     <key alias="newCostOfGoods">Новая стоимость товаров</key>
     <key alias="newSalePrice">Новая цена в распродаже</key>
@@ -319,6 +335,8 @@
   </area>
   <area alias="merchelloSales">
     <key alias="invoice">Счет</key>
+    <key alias="description">Description</key>
+    <key alias="amount">Amount</key>
     <key alias="invoiceNumber">Счет №</key>
     <key alias="invoiceNumberPrefix">Префикс № счета</key>
     <key alias="createInvoice">Создать счет</key>
@@ -343,6 +361,7 @@
     <key alias="fulfillmentStatus">Завершение</key>
     <key alias="billingAddress">Платежный адрес</key>
     <key alias="noBillingAddress">Нет плат. адреса</key>
+    <key alias="noBillingAddress">No Billing Address</key>
     <key alias="shippingAddress">Адрес доставки</key>
     <key alias="noShippingAddress">Нет адреса доставки</key>
     <key alias="noteInvoiceAddressChange">ВНИМАНИЕ: здесь изменится только адрес, связанный с ЭТИМ счетом.</key>
@@ -449,6 +468,8 @@
   </area>
   <area alias="merchelloMarketing">
     <key alias="currentOffers">Текущие предложения</key>
+    <key alias="availableConstraints">Available Constraints</key>
+    <key alias="currentOffers">Current Offers</key>
     <key alias="offerCode">Код предложения</key>
     <key alias="offerCodeInUse">Уже использован</key>
     <key alias="offerCodeIsOk">Ok!</key>
@@ -482,6 +503,13 @@
     <key alias="lineItemNameInfo">
       <![CDATA[Пометка товара<small>Этот текст появится в счете для товаров с вознаграждением.</small>]]>
     </key>
+    <key alias="offerProvider">Offer Provider</key>
+    <key alias="couponMaxRedemptionsTitle">Set a maximum number of allowable redemptions</key>
+    <key alias="couponMaxRedemptionsInputTitle">Set the maximum number of redemptions</key>
+    <key alias="couponMaxRedemptionsInputHelp">Values should be entered as positive numbers.</key>
+    <key alias="discountPriceDialogTitle">REWARD: Discount the price</key>
+    <key alias="discountPriceDialogApplyDiscount">Apply discount in the amount</key>
+    <key alias="discountPriceDialogApplyDiscountDescription">Values should be entered as positive numbers.</key>
   </area>
   <area alias="merchelloVariant">
     <!-- things -->
@@ -498,6 +526,7 @@
     <key alias="downloads">Цифровой загружаемый товар</key>
     <key alias="optionName">Название свойства</key>
     <key alias="optionValues">Значения свойства</key>
+    <key alias="optionValues">Option Values</key>
     <!-- actions -->
     <key alias="newProduct">Новый товар</key>
     <key alias="createProduct">Создать товар</key>
@@ -536,6 +565,14 @@
     <key alias="startingInventoryWarning"><![CDATA[(Будет установлен начальный остаток для <strong>всех вариантов товара</strong> на <strong>всех складах</strong>)]]></key>
     <key alias="productOnSale">Распродажа</key>
     <key alias="allowOutOfStockPurchase">Разрешить продажу товара 'не в наличии'</key>
+    <key alias="bulkChangePriceTitle">Change Prices For All Selected Items</key>
+    <key alias="bulkChangePriceUpdateCostOfGoods">Update cost of goods price.</key>
+    <key alias="bulkChangePriceUpdateSalePrice">Update sale price.</key>
+    <key alias="bulkChangeInventoryTitle">Update Inventory For All Selected Items</key>
+    <key alias="bulkChangeInventoryNewQuantity">New quantity</key>
+    <key alias="bulkChangeInventoryUpdateLowCount">Update low count.</key>
+    <key alias="bulkChangeInventoryUpdateNewLowCount">New low stock quantity</key>
+    <key alias="bulkChangeInventoryNote">Note: This will update the inventory for all warehouses on all selected variants</key>
   </area>
   <area alias="merchelloOrder">
     <!-- moved to sales -->
@@ -605,21 +642,28 @@
     <key alias="paymentHistoryHelper">Записи состояния для одного или нескольких платежей</key>
     <key alias="paymentProcessedBy">Платеж произведен через:</key>
     <key alias="resetFilters">Сбросить фильтры</key>
+    <key alias="resetFilters">Reset Filters</key>
   </area>
   <area alias="merchelloFulfillShipment">
     <!-- phrases -->
     <key alias="fulfillManually">Завершить вручную</key>
     <key alias="createShipment">Создать доставку</key>
+    <key alias="noShipments">There are no shipments.</key>
+    <key alias="items">Items</key>
+    <key alias="origin">Origin</key>
+    <key alias="destination">Destination</key>
+    <key alias="editShipment">Edit Shipment</key>
+    <key alias="editOrigin">Edit Origin</key>
+    <key alias="editDestination">Edit Destination</key>
+    <key alias="deleteShipment">Delete Shipment</key>
+    <key alias="setSaleDestination">Set Sale Destination</key>
   </area>
   <area alias="merchelloWarehouse">
-    <!-- things -->
     <key alias="warehouse">Склад</key>
     <key alias="warehouses">Склады</key>
     <key alias="stock">Запас</key>
     <key alias="lowCount">Мало</key>
     <key alias="location">Размещение</key>
-    <!-- actions -->
-    <!-- phrases -->
   </area>
   <!-- TODO KEEP THE MERCHELLO SHIPPING AREA -->
   <area alias="merchelloShipping">
@@ -647,6 +691,7 @@
     </key>
     <key alias="warehouse">Склад</key>
     <key alias="selectShipment">Выбрать доставку</key>
+    <key alias="shipmentStatus">Shipment Status</key>
   </area>
   <area alias="merchelloInventory">
     <!-- things -->
@@ -661,6 +706,7 @@
     <key alias="enterOrder">Начните набирать номер заказа или наименование...</key>to
     <key alias="addStyle">Добавить стиль...</key>
     <key alias="enterOffer">Укажите название спец. предложения</key>
+    <key alias="offerCodeExample">eg. 10OFF</key>
   </area>
 
   <area alias="merchelloSettings">
@@ -685,6 +731,9 @@
     <key alias="stickyListView">Разркшить привязанные свойства для всех списков.</key>
     <key alias="stickyCollectionView">Разрешить привязанные свойства для списков коллекций.</key>
     <key alias="stickListingTab"><![CDATA[Разрешить привязанную вкладку <b>Список %0%</b>.]]></key>
+    <key alias="stickListingTab"><![CDATA[Enable sticking <b>%0% Listing</b> tab.]]></key>
+    <key alias="listViewSearchOptionsTitle">List Search Options</key>
+    <key alias="listViewSearchOptionsSubTitle">Fields include in filter</key>
   </area>
 
   <area alias="merchelloShippingCountry">
@@ -812,6 +861,7 @@
   <area alias="merchelloDelete">
     <key alias="deleteConfirmation">Подтверждение удаления</key>
     <key alias="deleteConfirmMessage">Вы уверены, что хотите удалить </key>
+	<key alias="actionNotReversible">This action cannot be reversed.</key>
   </area>
   <area alias="merchelloProductEdit">
     <key alias="enterProductName">Задайте наименование вара</key>
@@ -836,10 +886,10 @@
     <key alias="variantInformation">Информация о товаре</key>
     <key alias="variantInformationHelper">Изменить варианты для этого товара.</key>
     <key alias="selectProduct">Выбрать товар...</key>
-    <key alias="selectProducts">Выбрать товары</key>
-    <key alias="selectMerchelloProduct">Выберите товар магазина</key>
     <key alias="selectYourProduct">Выберите товар</key>
     <key alias="removeProduct">Отключить этот товар</key>
+    <key alias="selectYourProduct">Select Your Product</key>
+    <key alias="removeProduct">Disconnect This Product</key>
     <key alias="itemLocation">Размещение</key>
   </area>
 
@@ -856,7 +906,26 @@
     <key alias="invoiceCreated">Совершена покупка. Счет № %0%</key>
     <key alias="invoiceStatusChanged">Счет отмечен как %0%</key>
     <key alias="orderCreated">Заказ № %0% был создан</key>
-    <key alias="shipmentCreated">Создана квитанция о доставке на %0% позиций</key>
-    <key alias="shipmentStatusChanged">Статус доставки изменился на %0%</key>
+    <key alias="shipmentCreated">Shipment was created with %0% line items</key>
+    <key alias="shipmentStatusChanged">Shipment status was changed to %0%</key>
+  </area>
+
+  <!-- Merchello Property Editors -->
+  <area alias="merchelloCollectionPicker">
+    <key alias="config">Config</key>
+  </area>
+
+  <!-- NotificationService Messages -->
+  <area alias="merchelloStatusNotifications">
+    <key alias="couponSaveSuccess">Coupon Saved</key>
+    <key alias="couponSaveError">Coupon Save Failed</key>
+    <key alias="productSaveSuccess">Product Saved</key>
+    <key alias="productSaveInProgress">Saving Product...</key>
+    <key alias="productSaveError">Product Save Failed</key>
+    <key alias="productDeleteSuccess">Product Deleted</key>
+    <key alias="productDeleteError">Product Deletion Failed</key>
+    <key alias="customerSaveSuccess">Customer Saved</key>
+    <key alias="customerSaveError">Customer Save Failed</key>
+    <key alias="customerSaveInProgress">Saving Customer...</key>
   </area>
 </language>

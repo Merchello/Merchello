@@ -43,6 +43,26 @@
         decimal SumInvoiceTotals(DateTime startDate, DateTime endDate, string currencyCode, bool excludeCancelledAndFraud = true);
 
         /// <summary>
+        /// Gets the totals of invoices in a date range for a specific currency code.
+        /// </summary>
+        /// <param name="startDate">
+        /// The start date.
+        /// </param>
+        /// <param name="endDate">
+        /// The end date.
+        /// </param>
+        /// <param name="currencyCode">
+        /// The currency code.
+        /// </param>
+        /// <param name="invoiceStatuses">
+        /// The invoice statuses.
+        /// </param>
+        /// <returns>
+        /// The sum of the invoice totals.
+        /// </returns>
+        decimal SumInvoiceTotals(DateTime startDate, DateTime endDate, string currencyCode, IEnumerable<IInvoiceStatus> invoiceStatuses);
+
+        /// <summary>
         /// Gets the total of line items for a give SKU invoiced in a specific currency across the date range.
         /// </summary>
         /// <param name="startDate">

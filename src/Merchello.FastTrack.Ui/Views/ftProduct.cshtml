@@ -26,10 +26,12 @@
         <div class="row">
             @if (Model.HasValue("image"))
             {
-                var mediaId = Model.GetPropertyValue<string>("image");
-                var image = Umbraco.TypedMedia(mediaId);
+                var images = Model.GetPropertyValue<List<IPublishedContent>>("image");
                 <div class="col-xs-8">
-                    <img class="img-responsive" src="@image.GetCropUrl(height: 450)" alt="@Model.Name">
+                    @foreach (var image in images)
+                    {
+                        <img class="img-responsive" src="@image.GetCropUrl(height: 450)" alt="@Model.Name">
+                    }
                 </div>
             }
             <div class="col-xs-4">

@@ -1,6 +1,6 @@
 /*! Merchello
  * https://github.com/meritage/Merchello
- * Copyright (c) 2018 Across the Pond, LLC.
+ * Copyright (c) 2019 Across the Pond, LLC.
  * Licensed MIT
  */
 
@@ -402,6 +402,7 @@ angular.module('merchello.services').service('merchelloListViewHelper',
                     { name: 'rewards', localizeKey: 'merchelloMarketing_offerRewardsInfo', resultColumn: true },
                     { name: 'offerStartDate', localizeKey: 'merchelloTableCaptions_startDate' },
                     { name: 'offerEndDate', localizeKey: 'merchelloTableCaptions_endDate' },
+                    { name: 'createDate', localizeKey: 'merchelloTableCaptions_createDate' },
                     { name: 'active', localizeKey: 'merchelloTableCaptions_active' }
                 ]
             },

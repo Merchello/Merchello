@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28729.10
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2048
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Core", "Merchello.Core\Merchello.Core.csproj", "{2A83A229-C24B-4D8D-B806-7C9999EB9461}"
 EndProject
@@ -118,6 +118,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.FastTrack", "Merchello.FastTrack\Merchello.FastTrack.csproj", "{2C3261C5-6999-4372-9B2A-11E8C3296540}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.FastTrack.Ui", "Merchello.FastTrack.Ui\Merchello.FastTrack.Ui.csproj", "{BE1853EB-386A-430F-94E9-A09A316CCB27}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{CDEC41B0-45DE-4283-8C2E-24A3745EC356}"
+	ProjectSection(SolutionItems) = preProject
+		..\tools\ExportSqlCE40.exe = ..\tools\ExportSqlCE40.exe
+		..\tools\howtotuse.txt = ..\tools\howtotuse.txt
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Providers.Payment.PayPal", "Merchello.Providers.Payment.PayPal\Merchello.Providers.Payment.PayPal.csproj", "{E863900E-69C4-4420-B97F-C5B7FB46578A}"
 EndProject
@@ -349,6 +355,6 @@ Global
 		{EF35B5D0-B694-484F-8A62-95ED19F9D05D} = {A6C6EBCD-38C9-4FAD-975A-97FA97578537}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {56F253D9-765E-469F-BB0C-677B47D15425}
+		SolutionGuid = {5CC0E126-3B9A-47B2-A8CE-77652CBF2AD5}
 	EndGlobalSection
 EndGlobal

@@ -56,11 +56,11 @@
                                             <span class="caret"></span>
                                         </a>
                                         <ul class="dropdown-menu umb-actions" role="menu" aria-labelledby="dLabel">
-                                            <li><a data-ng-click="openShipmentDialog(shipment)"><localize key="merchelloFulfillShipment_editShipment">Edit Shipment</localize></a></li>
-                                            <li data-ng-hide="!isEditableAddress(shipment.shipmentStatus)"><a data-ng-click="openAddressDialog(shipment, 'origin')"><localize key="merchelloFulfillShipment_editOrigin">Edit Origin</localize></a></li>
-                                            <li data-ng-hide="!isEditableAddress(shipment.shipmentStatus)"><a data-ng-click="openAddressDialog(shipment, 'destination')"><localize key="merchelloFulfillShipment_editDestination">Edit Destination</localize></a></li>
-                                            <li><a data-ng-click="updateShippingAddressLineItem(shipment)"><localize key="merchelloFulfillShipment_setSaleDestination">Set Sale Destination</localize></a></li>
-                                            <li data-ng-hide="!isEditableAddress(shipment.shipmentStatus)"><a data-ng-click="openDeleteShipmentDialog(shipment)"><localize key="merchelloFulfillShipment_deleteShipmentn">Delete Shipment</localize></a></li>
+                            <li><a data-ng-click="openShipmentDialog(shipment)"><localize key="merchelloFulfillShipment_editShipment">Edit Shipment</localize></a></li>
+                            <li data-ng-hide="!isEditableAddress(shipment.shipmentStatus)"><a data-ng-click="openAddressDialog(shipment, 'origin')"><localize key="merchelloFulfillShipment_editOrigin">Edit Origin</localize></a></li>
+                            <li data-ng-hide="!isEditableAddress(shipment.shipmentStatus)"><a data-ng-click="openAddressDialog(shipment, 'destination')"><localize key="merchelloFulfillShipment_editDestination">Edit Destination</localize></a></li>
+                            <li><a data-ng-click="updateShippingAddressLineItem(shipment)"><localize key="merchelloFulfillShipment_setSaleDestination">Set Sale Destination</localize></a></li>
+                            <li data-ng-hide="!isEditableAddress(shipment.shipmentStatus)"><a data-ng-click="openDeleteShipmentDialog(shipment)"><localize key="merchelloFulfillShipment_deleteShipment">Delete Shipment</localize></a></li>
                                         </ul>
                                     </div>
                                 </td>
@@ -69,11 +69,17 @@
                     </table>
 
                     <div class="well" style="margin-top: 1em" data-ng-hide="shipments.length > 0">
-                        <localize key="merchelloFulfillShipment_thereAreNoShipments">There are no shipments.</localize>
+                <localize key="merchelloFulfillShipment_noShipments">There are no shipments.</localize>
                     </div>
 
                 </div>
             </div>
         </merchello-panel>
     </div>
+      
+
+        </div>
+      </div>
+    </merchello-panel>
+  </div>
 </div>

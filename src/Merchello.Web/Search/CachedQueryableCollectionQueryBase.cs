@@ -81,7 +81,7 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Ascending)
         {
-            
+
             return
                 this.GetQueryResultDisplay(GetCollectionPagedKeys(collectionKey, page, itemsPerPage, sortBy, sortDirection));
         }
@@ -270,7 +270,7 @@
             return this.GetQueryResultDisplay(
                     PagedKeyCache
                     .CachePage(
-                        cacheKey, 
+                        cacheKey,
                         ((CachedQueryableEntityCollectionProviderBase<TEntity>)provider).GetPagedEntityKeysNotInCollection(args, page, itemsPerPage, sortBy, sortDirection)));
         }
 
@@ -294,9 +294,9 @@
             var attempt = EntityCollectionProviderResolver.Current.GetProviderForCollection<CachedEntityCollectionProviderBase<TEntity>>(collectionKey);
 
             if (attempt.Success) return attempt.Result;
-            
+
             LogHelper.Error<CachedProductQuery>("EntityCollectionProvider was not resolved", attempt.Exception);
-            throw attempt.Exception;                        
+            throw attempt.Exception;
         }
 
         /// <summary>
@@ -347,7 +347,7 @@
             return PagedKeyCache.CachePage(
                        cacheKey,
                        provider.GetPagedEntityKeys(page, itemsPerPage, sortBy, sortDirection));
-        } 
+        }
 
         /// <summary>
         /// Builds the search term args.

@@ -10,6 +10,7 @@
     using Merchello.Core.Models.EntityBase;
 
     using Umbraco.Core.Persistence;
+    using Merchello.Web.Models.Reports;
 
     /// <summary>
     /// A wrapper to return query results
@@ -40,6 +41,11 @@
         /// Gets or sets the results to be serialized
         /// </summary>
         public IEnumerable<object> Items { get; set; }
+
+        /// <summary>
+        /// Gets or sets the invoice statuses.
+        /// </summary>
+        public IEnumerable<InvStatus> InvoiceStatuses { get; set; }
     }
 
     /// <summary>

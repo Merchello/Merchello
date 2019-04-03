@@ -23,5 +23,15 @@
         /// Clears the price range constraints.
         /// </summary>
         void ClearPriceRange();
+
+        /// <summary>
+        /// Include unavailable products
+        /// </summary>
+        void IncludeUnvailable();
+
+        /// <summary>
+        /// Exclude unvailable products (this is the default)
+        /// </summary>
+        void ExcludeUnvailable();
     }
 }

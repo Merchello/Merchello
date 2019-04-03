@@ -63,9 +63,7 @@
             {
                 var key = new Guid(source.ToString());
                 var collection = MerchelloContext.Current.Services.EntityCollectionService.GetByKey(key);
-
-                return new ProductCollection(collection);
-
+                return collection != null ? new ProductCollection(collection) : null;
             }
             catch (Exception ex)
             {

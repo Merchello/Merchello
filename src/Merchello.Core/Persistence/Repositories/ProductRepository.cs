@@ -128,7 +128,7 @@
         }
 
         /// <summary>
-        /// Searches the 
+        /// Searches the
         /// </summary>
         /// <param name="searchTerm">
         /// The search term.
@@ -154,6 +154,38 @@
             long itemsPerPage,
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
+        {
+            return SearchKeys(searchTerm, page, itemsPerPage, orderExpression, sortDirection, false);
+        }
+
+        /// <summary>
+        /// Searches the
+        /// </summary>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public Page<Guid> SearchKeys(
+            string searchTerm,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             var sql = this.BuildProductSearchSql(searchTerm);
 
@@ -250,9 +282,10 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
-            var sql = new Sql("SELECT *")
+            var sql = new Sql("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
                 .Append("FROM [merchProductVariant]")
                 .Append("WHERE [merchProductVariant].[productKey] IN (")
                 .Append("SELECT DISTINCT([productKey])")
@@ -269,6 +302,11 @@
                 .Append(") [merchProductVariant]")
                 .Append(")")
                 .Append("AND [merchProductVariant].[master] = 1");
+
+            if (!includeUnavailable)
+            {
+                sql.Append("AND [merchProductVariant].[available] = 1");
+            }
 
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
@@ -299,9 +337,10 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
-            return GetProductsKeysWithOption(new[] { optionName }, page, itemsPerPage, orderExpression, sortDirection);
+            return GetProductsKeysWithOption(new[] { optionName }, page, itemsPerPage, orderExpression, sortDirection, includeUnavailable);
         }
 
         /// <summary>
@@ -325,6 +364,9 @@
         /// <param name="sortDirection">
         /// The sort direction.
         /// </param>
+        /// <param name="includeUnavailable">
+        /// Include products that are marked as not available
+        /// </param>
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
@@ -334,10 +376,11 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             var sql = new Sql();
-            sql.Append("SELECT *")
+            sql.Append("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
                 .Append("FROM [merchProductVariant]")
                 .Append("WHERE [merchProductVariant].[productKey] IN (")
                 .Append("SELECT DISTINCT([productKey])")
@@ -356,6 +399,11 @@
                 .Append(") [merchProductVariant]")
                 .Append(")")
                 .Append("AND [merchProductVariant].[master] = 1");
+
+            if (!includeUnavailable)
+            {
+                sql.Append("AND [merchProductVariant].[available] = 1");
+            }
 
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
@@ -378,6 +426,9 @@
         /// <param name="sortDirection">
         /// The sort direction.
         /// </param>
+        /// <param name="includeUnavailable">
+        /// Include products that are marked as not available
+        /// </param>
         /// <returns>
         /// The <see cref="Page{GUID}"/>.
         /// </returns>
@@ -386,10 +437,11 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             var sql = new Sql();
-            sql.Append("SELECT *")
+            sql.Append("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
                 .Append("FROM [merchProductVariant]")
                 .Append("WHERE [merchProductVariant].[productKey] IN (")
                 .Append("SELECT DISTINCT([productKey])")
@@ -404,6 +456,11 @@
                 .Append(") [merchProductVariant]")
                 .Append(")")
                 .Append("AND [merchProductVariant].[master] = 1");
+
+            if (!includeUnavailable)
+            {
+                sql.Append("AND [merchProductVariant].[available] = 1");
+            }
 
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
@@ -429,6 +486,9 @@
         /// <param name="sortDirection">
         /// The sort direction.
         /// </param>
+        /// <param name="includeUnavailable">
+        /// Include products that are marked as not available
+        /// </param>
         /// <returns>
         /// The <see cref="Page{GUID}"/>.
         /// </returns>
@@ -438,10 +498,11 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             var sql = new Sql();
-            sql.Append("SELECT *")
+            sql.Append("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
                 .Append("FROM [merchProductVariant]")
                 .Append("WHERE [merchProductVariant].[productKey] IN (")
                 .Append("SELECT DISTINCT([productKey])")
@@ -460,7 +521,12 @@
                 .Append(") [merchProductVariant]")
                 .Append(")")
                 .Append("AND [merchProductVariant].[master] = 1");
-                        
+
+            if (!includeUnavailable)
+            {
+                sql.Append("AND [merchProductVariant].[available] = 1");
+            }
+
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
 
@@ -494,9 +560,10 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
-            return GetProductsKeysInPriceRange(min, max, 0, page, itemsPerPage, orderExpression, sortDirection);
+            return GetProductsKeysInPriceRange(min, max, 0, page, itemsPerPage, orderExpression, sortDirection, includeUnavailable);
         }
 
         /// <summary>
@@ -523,6 +590,9 @@
         /// <param name="sortDirection">
         /// The sort direction.
         /// </param>
+        /// <param name="includeUnavailable">
+        /// Include products that are marked as not available
+        /// </param>
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
@@ -533,7 +603,8 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             var modifier = taxModifier;
             if (modifier > 0) modifier = taxModifier / 100;
@@ -541,7 +612,7 @@
             modifier += 1;
 
             var sql = new Sql();
-            sql.Append("SELECT *")
+            sql.Append("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
               .Append("FROM [merchProductVariant]")
               .Append("WHERE [merchProductVariant].[productKey] IN (")
               .Append("SELECT DISTINCT([productKey])")
@@ -551,6 +622,12 @@
               .Append("([merchProductVariant].[onSale] = 1 AND [merchProductVariant].[salePrice] BETWEEN @low AND @high)", new { @low = min * modifier, @high = max * modifier })
               .Append(")")
               .Append("AND [merchProductVariant].[master] = 1");
+
+            if (!includeUnavailable)
+            {
+                sql.Append("AND [merchProductVariant].[available] = 1");
+            }
+
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
 
@@ -572,6 +649,9 @@
         /// <param name="sortDirection">
         /// The sort direction.
         /// </param>
+        /// <param name="includeUnavailable">
+        /// Include products that are marked as not available
+        /// </param>
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
@@ -580,7 +660,8 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             return GetProductsKeysByManufacturer(
                 new[] { manufacturer },
@@ -608,6 +689,9 @@
         /// <param name="sortDirection">
         /// The sort direction.
         /// </param>
+        /// <param name="includeUnavailable">
+        /// Include products that are marked as not available
+        /// </param>
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
@@ -616,13 +700,20 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             var sql = new Sql();
-            sql.Append("SELECT *")
+            sql.Append("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
               .Append("FROM [merchProductVariant]")
               .Append("WHERE [merchProductVariant].[manufacturer] IN (@manufacturers)", new { @manufacturers = manufacturer})
               .Append("AND [merchProductVariant].[master] = 1");
+
+            if (!includeUnavailable)
+            {
+                sql.Append("AND [merchProductVariant].[available] = 1");
+            }
+
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
 
@@ -644,6 +735,9 @@
         /// <param name="sortDirection">
         /// The sort direction.
         /// </param>
+        /// <param name="includeUnavailable">
+        /// Include products that are marked as not available
+        /// </param>
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
@@ -652,7 +746,8 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             return GetProductsKeysByBarcode(new[] { barcode }, page, itemsPerPage, orderExpression, sortDirection);
         }
@@ -675,6 +770,9 @@
         /// <param name="sortDirection">
         /// The sort direction.
         /// </param>
+        /// <param name="includeUnavailable">
+        /// Include products that are marked as not available
+        /// </param>
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
@@ -683,13 +781,20 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             var sql = new Sql();
-            sql.Append("SELECT *")
+            sql.Append("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
               .Append("FROM [merchProductVariant]")
               .Append("WHERE [merchProductVariant].[barcode] IN (@codes)", new { @codes = barcodes })
               .Append("AND [merchProductVariant].[master] = 1");
+
+            if (!includeUnavailable)
+            {
+                sql.Append("AND [merchProductVariant].[available] = 1");
+            }
+
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
 
@@ -711,6 +816,9 @@
         /// <param name="includeAllowOutOfStockPurchase">
         /// The include allow out of stock purchase.
         /// </param>
+        /// <param name="includeUnavailable">
+        /// Include products that are marked as not available
+        /// </param>
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
@@ -719,10 +827,11 @@
             long itemsPerPage,
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending,
-            bool includeAllowOutOfStockPurchase = false)
+            bool includeAllowOutOfStockPurchase = false,
+            bool includeUnavailable = false)
         {
             var sql = new Sql();
-            sql.Append("SELECT *")
+            sql.Append("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
                .Append("FROM [merchProductVariant]")
                .Append("WHERE [merchProductVariant].[productKey] IN (")
                .Append("SELECT DISTINCT([productKey])")
@@ -736,6 +845,11 @@
                .Append(") [merchProductVariant]")
                .Append(")")
                .Append("AND [merchProductVariant].[master] = 1");
+
+            if (!includeUnavailable)
+            {
+                sql.Append("AND [merchProductVariant].[available] = 1");
+            }
 
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
@@ -755,6 +869,9 @@
         /// <param name="sortDirection">
         /// The sort direction.
         /// </param>
+        /// <param name="includeUnavailable">
+        /// Include products that are marked as not available
+        /// </param>
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
@@ -762,13 +879,20 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             var sql = new Sql();
-            sql.Append("SELECT *")
+            sql.Append("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
               .Append("FROM [merchProductVariant]")
               .Append("WHERE [merchProductVariant].[onSale] = 1")
               .Append("AND [merchProductVariant].[master] = 1");
+
+            if (!includeUnavailable)
+            {
+                sql.Append("AND [merchProductVariant].[available] = 1");
+            }
+
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
 
@@ -868,7 +992,7 @@
                         CreateDate = DateTime.Now,
                         UpdateDate = DateTime.Now
                     });
-                }               
+                }
             }
 
             Database.BulkInsertRecords(dtos);
@@ -952,6 +1076,43 @@
         /// <param name="sortDirection">
         /// The sort direction.
         /// </param>
+        /// <param name="includeUnavailable">
+        /// Include products that are marked as not available
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        Page<Guid> IStaticEntityCollectionRepository<IProduct>.GetKeysFromCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            return GetKeysFromCollection(collectionKey, page, itemsPerPage, orderExpression, sortDirection, false);
+        }
+
+        /// <summary>
+        /// The get product keys from collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <param name="includeUnavailable">
+        /// Include products that are marked as not available
+        /// </param>
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
@@ -960,11 +1121,12 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
 
             var sql = new Sql();
-            sql.Append("SELECT *")
+            sql.Append("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
               .Append("FROM [merchProductVariant]")
                .Append("WHERE [merchProductVariant].[productKey] IN (")
                .Append("SELECT DISTINCT([productKey])")
@@ -973,9 +1135,49 @@
                .Append(")")
                .Append("AND [merchProductVariant].[master] = 1");
 
+            if (!includeUnavailable)
+            {
+                sql.Append("AND [merchProductVariant].[available] = 1");
+            }
+
             var pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
 
             return pagedKeys;
+        }
+
+
+        /// <summary>
+        /// The get product keys from collection.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <param name="includeUnavailable">
+        /// Include products that are marked as not available
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        Page<Guid> IStaticEntityCollectionRepository<IProduct>.GetKeysThatExistInAllCollections(
+            Guid[] collectionKeys,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            return GetKeysThatExistInAllCollections(collectionKeys, page, itemsPerPage, orderExpression, sortDirection, false);
         }
 
         /// <summary>
@@ -996,6 +1198,9 @@
         /// <param name="sortDirection">
         /// The sort direction.
         /// </param>
+        /// <param name="includeUnavailable">
+        /// Include products that are marked as not available
+        /// </param>
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
@@ -1004,10 +1209,11 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             var sql = new Sql();
-            sql.Append("SELECT *")
+            sql.Append("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
               .Append("FROM [merchProductVariant]")
                .Append("WHERE [merchProductVariant].[productKey] IN (")
                .Append("SELECT [productKey]")
@@ -1018,17 +1224,21 @@
                .Append(")")
                .Append("AND [merchProductVariant].[master] = 1");
 
+            if (!includeUnavailable)
+            {
+                sql.Append("AND [merchProductVariant].[available] = 1");
+            }
             var pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
 
             return pagedKeys;
         }
 
-        public int CountKeysThatExistInAllCollections(Guid[] collectionKeys)
+        public int CountKeysThatExistInAllCollections(Guid[] collectionKeys, bool includeUnavailable = false)
         {
-            return Database.ExecuteScalar<int>(SqlForKeysThatExistInAllCollections(collectionKeys, true));
+            return Database.ExecuteScalar<int>(SqlForKeysThatExistInAllCollections(collectionKeys, true, includeUnavailable));
         }
 
-        public IEnumerable<Tuple<IEnumerable<Guid>, int>> CountKeysThatExistInAllCollections(IEnumerable<Guid[]> collectionKeysGroups)
+        public IEnumerable<Tuple<IEnumerable<Guid>, int>> CountKeysThatExistInAllCollections(IEnumerable<Guid[]> collectionKeysGroups, bool includeUnavailable = false)
         {
             var sql = new Sql();
             var keysGroups = collectionKeysGroups as Guid[][] ?? collectionKeysGroups.ToArray();
@@ -1047,9 +1257,15 @@
                        .Append("GROUP BY productKey")
                        .Append("HAVING COUNT(*) = @keyCount", new { @keyCount = group.Count() })
                        .Append(")")
-                       .Append("AND [merchProductVariant].[master] = 1")
-                    .Append(") AS T1");
- 
+                       .Append("AND [merchProductVariant].[master] = 1");
+
+                if (!includeUnavailable)
+                {
+                    sql.Append("AND [merchProductVariant].[available] = 1");
+                }
+
+                sql.Append(") AS T1");
+
             }
 
             var dtos = Database.Fetch<CountDto>(sql);
@@ -1065,10 +1281,10 @@
             return results;
         }
 
-        private Sql SqlForKeysThatExistInAllCollections(Guid[] collectionKeys, bool isCount = false)
+        private Sql SqlForKeysThatExistInAllCollections(Guid[] collectionKeys, bool isCount = false, bool includeUnavailable = false)
         {
             var sql = new Sql();
-            sql.Select(isCount ? "COUNT(*) AS Count" : "*")
+            sql.Select(isCount ? "COUNT(*) AS Count" : "*, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
                 .Append("FROM [merchProductVariant]")
                .Append("WHERE [merchProductVariant].[productKey] IN (")
                .Append("SELECT [productKey]")
@@ -1079,7 +1295,47 @@
                .Append(")")
                .Append("AND [merchProductVariant].[master] = 1");
 
+            if (!includeUnavailable)
+            {
+                sql.Append("AND [merchProductVariant].[available] = 1");
+            }
+
             return sql;
+        }
+
+        /// <summary>
+        /// The get keys from collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="term">
+        /// The term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        Page<Guid> IStaticEntityCollectionRepository<IProduct>.GetKeysFromCollection(
+            Guid collectionKey,
+            string term,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            return GetKeysFromCollection(collectionKey, term, page, itemsPerPage, orderExpression, sortDirection, false);
         }
 
         /// <summary>
@@ -1112,7 +1368,8 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
 
             var sql = this.BuildProductSearchSql(term);
@@ -1124,9 +1381,25 @@
                     new { @eckey = collectionKey })
                 .Append(")");
 
+            if (!includeUnavailable)
+            {
+                sql.Append("AND [merchProductVariant].[available] = 1");
+            }
+
             var pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
 
             return pagedKeys;
+        }
+
+        Page<Guid> IStaticEntityCollectionRepository<IProduct>.GetKeysThatExistInAllCollections(
+            Guid[] collectionKeys,
+            string term,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            return GetKeysThatExistInAllCollections(collectionKeys, term, page, itemsPerPage, orderExpression, sortDirection, false);
         }
 
         public Page<Guid> GetKeysThatExistInAllCollections(
@@ -1135,7 +1408,8 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             var sql = this.BuildProductSearchSql(term);
             sql.Append("AND [merchProductVariant].[productKey] IN (")
@@ -1148,9 +1422,46 @@
                 .Append("HAVING COUNT(*) = @keyCount", new { @keyCount = collectionKeys.Count() })
                 .Append(")");
 
+            if (!includeUnavailable)
+            {
+                sql.Append("AND [merchProductVariant].[available] = 1");
+            }
+
+
             var pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
 
             return pagedKeys;
+        }
+
+        /// <summary>
+        /// The get keys not in collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        Page<Guid> IStaticEntityCollectionRepository<IProduct>.GetKeysNotInCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            return GetKeysNotInCollection(collectionKey, page, itemsPerPage, orderExpression, sortDirection, false);
         }
 
         /// <summary>
@@ -1179,11 +1490,12 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
 
             var sql = new Sql();
-            sql.Append("SELECT *")
+            sql.Append("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
               .Append("FROM [merchProductVariant]")
                .Append("WHERE [merchProductVariant].[productKey] NOT IN (")
                .Append("SELECT DISTINCT([productKey])")
@@ -1192,8 +1504,44 @@
                .Append(")")
                .Append("AND [merchProductVariant].[master] = 1");
 
+            if (!includeUnavailable)
+            {
+                sql.Append("AND [merchProductVariant].[available] = 1");
+            }
+
             var pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
             return pagedKeys;
+        }
+
+        /// <summary>
+        /// Gets the page of product keys that do not exist in any of the collections with keys passed.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection keys.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        Page<Guid> IStaticEntityCollectionRepository<IProduct>.GetKeysNotInAnyCollections(
+            Guid[] collectionKeys,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            return GetKeysNotInAnyCollections(collectionKeys, page, itemsPerPage, orderExpression, sortDirection, false);
         }
 
         /// <summary>
@@ -1222,11 +1570,11 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
-
             var sql = new Sql();
-            sql.Append("SELECT *")
+            sql.Append("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
               .Append("FROM [merchProductVariant]")
                .Append("WHERE [merchProductVariant].[productKey] NOT IN (")
                .Append("SELECT DISTINCT([productKey])")
@@ -1235,8 +1583,48 @@
                .Append(")")
                .Append("AND [merchProductVariant].[master] = 1");
 
+            if (!includeUnavailable)
+            {
+                sql.Append("AND [merchProductVariant].[available] = 1");
+            }
+
             var pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
             return pagedKeys;
+        }
+
+        /// <summary>
+        /// The get keys not in collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="term">
+        /// The term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        Page<Guid> IStaticEntityCollectionRepository<IProduct>.GetKeysNotInCollection(
+            Guid collectionKey,
+            string term,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            return GetKeysNotInCollection(collectionKey, term, page, itemsPerPage, orderExpression, sortDirection, false);
         }
 
         /// <summary>
@@ -1269,7 +1657,8 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
 
             var sql = this.BuildProductSearchSql(term);
@@ -1285,13 +1674,25 @@
             return pagedKeys;
         }
 
-        public Page<Guid> GetKeysNotInAnyCollections(
+        Page<Guid> IStaticEntityCollectionRepository<IProduct>.GetKeysNotInAnyCollections(
             Guid[] collectionKeys,
             string term,
             long page,
             long itemsPerPage,
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
+        {
+            return GetKeysNotInAnyCollections(collectionKeys, term, page, itemsPerPage, orderExpression, sortDirection);
+        }
+
+        public Page<Guid> GetKeysNotInAnyCollections(
+            Guid[] collectionKeys,
+            string term,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             var sql = this.BuildProductSearchSql(term);
             sql.Append("AND [merchProductVariant].[productKey] NOT IN (")
@@ -1302,8 +1703,44 @@
                     new { @eckeys = collectionKeys })
                 .Append(")");
 
+            if (!includeUnavailable)
+            {
+                sql.Append("AND [merchProductVariant].[available] = 1");
+            }
+
             var pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
             return pagedKeys;
+        }
+
+        /// <summary>
+        /// Gets a collection of keys that exist in any one of the collections passed.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection keys.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        Page<Guid> IStaticEntityCollectionRepository<IProduct>.GetKeysThatExistInAnyCollections(
+            Guid[] collectionKeys,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            return GetKeysThatExistInAnyCollections(collectionKeys, page, itemsPerPage, orderExpression, sortDirection, false);
         }
 
         /// <summary>
@@ -1332,11 +1769,12 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
 
             var sql = new Sql();
-            sql.Append("SELECT *")
+            sql.Append("SELECT *, (CASE WHEN salePrice > 0 THEN salePrice ELSE price END) AS 'sellPrice'")
               .Append("FROM [merchProductVariant]")
                .Append("WHERE [merchProductVariant].[productKey] IN (")
                .Append("SELECT DISTINCT([productKey])")
@@ -1345,8 +1783,48 @@
                .Append(")")
                .Append("AND [merchProductVariant].[master] = 1");
 
-           var pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+            if (!includeUnavailable)
+            {
+                sql.Append("AND [merchProductVariant].[available] = 1");
+            }
+
+            var pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
             return pagedKeys;
+        }
+
+        /// <summary>
+        /// Gets a collection of keys that exist in any one of the collections passed.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection keys.
+        /// </param>
+        /// <param name="term">
+        /// The search term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        Page<Guid> IStaticEntityCollectionRepository<IProduct>.GetKeysThatExistInAnyCollections(
+            Guid[] collectionKeys,
+            string term,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            return GetKeysThatExistInAnyCollections(collectionKeys, term, page, itemsPerPage, orderExpression, sortDirection, false);
         }
 
         /// <summary>
@@ -1379,7 +1857,8 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
         {
             var sql = this.BuildProductSearchSql(term);
             sql.Append("AND [merchProductVariant].[productKey] IN (")
@@ -1389,6 +1868,11 @@
                     "WHERE [merchProduct2EntityCollection].[entityCollectionKey] IN (@eckeys)",
                     new { @eckeys = collectionKeys })
                 .Append(")");
+
+            if (!includeUnavailable)
+            {
+                sql.Append("AND [merchProductVariant].[available] = 1");
+            }
 
             var pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
             return pagedKeys;
@@ -1422,7 +1906,39 @@
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
         {
-            var p = this.GetKeysFromCollection(collectionKey, page, itemsPerPage, orderExpression, sortDirection);
+            return GetFromCollection(collectionKey, page, itemsPerPage, orderExpression, sortDirection);
+        }
+
+        /// <summary>
+        /// The get products from collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IProduct}"/>.
+        /// </returns>
+        public Page<IProduct> GetFromCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
+        {
+            var p = this.GetKeysFromCollection(collectionKey, page, itemsPerPage, orderExpression, sortDirection, includeUnavailable);
 
             return new Page<IProduct>()
             {
@@ -1455,14 +1971,46 @@
         /// <returns>
         /// The <see cref="Page{IProduct}"/>.
         /// </returns>
-        public Page<IProduct> GetEntitiesThatExistInAllCollections(
+        Page<IProduct> IStaticEntityCollectionRepository<IProduct>.GetEntitiesThatExistInAllCollections(
             Guid[] collectionKeys,
             long page,
             long itemsPerPage,
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
         {
-            var p = this.GetKeysThatExistInAllCollections(collectionKeys, page, itemsPerPage, orderExpression, sortDirection);
+            return GetEntitiesThatExistInAllCollections(collectionKeys, page, itemsPerPage, orderExpression, sortDirection, false);
+        }
+
+        /// <summary>
+        /// The get products from collection.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IProduct}"/>.
+        /// </returns>
+        public Page<IProduct> GetEntitiesThatExistInAllCollections(
+            Guid[] collectionKeys,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
+        {
+            var p = this.GetKeysThatExistInAllCollections(collectionKeys, page, itemsPerPage, orderExpression, sortDirection, includeUnavailable);
 
             return new Page<IProduct>()
             {
@@ -1506,7 +2054,43 @@
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
         {
-            var p = GetKeysFromCollection(collectionKey, term, page, itemsPerPage, orderExpression, sortDirection);
+            return GetFromCollection(collectionKey, term, page, itemsPerPage, orderExpression, sortDirection, false);
+        }
+
+        /// <summary>
+        /// The get from collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="term">
+        /// The term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IProduct}"/>.
+        /// </returns>
+        public Page<IProduct> GetFromCollection(
+            Guid collectionKey,
+            string term,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
+        {
+            var p = GetKeysFromCollection(collectionKey, term, page, itemsPerPage, orderExpression, sortDirection, includeUnavailable);
 
             return new Page<IProduct>()
             {
@@ -1542,7 +2126,7 @@
         /// <returns>
         /// The <see cref="Page{IProduct}"/>.
         /// </returns>
-        public Page<IProduct> GetEntitiesThatExistInAllCollections(
+        Page<IProduct> IStaticEntityCollectionRepository<IProduct>.GetEntitiesThatExistInAllCollections(
             Guid[] collectionKeys,
             string term,
             long page,
@@ -1550,7 +2134,43 @@
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
         {
-            var p = this.GetKeysThatExistInAllCollections(collectionKeys, term, page, itemsPerPage, orderExpression, sortDirection);
+            return GetEntitiesThatExistInAllCollections(collectionKeys, page, itemsPerPage, orderExpression, sortDirection, false);
+        }
+
+        /// <summary>
+        /// The get from collection.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection key.
+        /// </param>
+        /// <param name="term">
+        /// The term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IProduct}"/>.
+        /// </returns>
+        public Page<IProduct> GetEntitiesThatExistInAllCollections(
+            Guid[] collectionKeys,
+            string term,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false)
+        {
+            var p = this.GetKeysThatExistInAllCollections(collectionKeys, term, page, itemsPerPage, orderExpression, sortDirection, includeUnavailable);
 
             return new Page<IProduct>()
             {
@@ -1597,6 +2217,41 @@
             };
         }
 
+        /// <summary>
+        /// Get the paged keys.
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sql">
+        /// The <see cref="Sql"/>.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        protected Page<Guid> GetPagedKeys(long page, long itemsPerPage, Sql sql, string orderExpression, SortDirection sortDirection = SortDirection.Descending, bool includeUnavailable = false)
+        {
+            var p = GetDtoPage(page, itemsPerPage, sql, orderExpression, sortDirection, includeUnavailable);
+
+            return new Page<Guid>()
+            {
+                CurrentPage = p.CurrentPage,
+                ItemsPerPage = p.ItemsPerPage,
+                TotalItems = p.TotalItems,
+                TotalPages = p.TotalPages,
+                Items = p.Items.Select(x => x.ProductKey).ToList()
+            };
+        }
+
 
         /// <summary>
         /// The perform get.
@@ -1619,8 +2274,8 @@
 
             var factory = new ProductFactory(
                 _productOptionRepository.GetProductAttributeCollectionForVariant(dto.ProductVariantDto.Key),
-                _productVariantRepository.GetCategoryInventoryCollection(dto.ProductVariantDto.Key), 
-                _productOptionRepository.GetProductOptionCollection, 
+                _productVariantRepository.GetCategoryInventoryCollection(dto.ProductVariantDto.Key),
+                _productOptionRepository.GetProductOptionCollection,
                 _productVariantRepository.GetProductVariantCollection,
                 _productVariantRepository.GetDetachedContentCollection(dto.ProductVariantDto.Key));
 
@@ -1742,10 +2397,10 @@
         protected override IEnumerable<string> GetDeleteClauses()
         {
             var list = new List<string>
-                {                    
+                {
                     "DELETE FROM merchCatalogInventory WHERE productVariantKey IN (SELECT pk FROM merchProductVariant WHERE productKey = @Key)",
                     "DELETE FROM merchProductVariantDetachedContent WHERE productVariantKey IN (SELECT pk FROM merchProductVariant WHERE productKey = @Key)",
-                    "DELETE FROM merchProductVariantIndex WHERE productVariantKey IN (SELECT pk FROM merchProductVariant WHERE productKey = @Key)",                    
+                    "DELETE FROM merchProductVariantIndex WHERE productVariantKey IN (SELECT pk FROM merchProductVariant WHERE productKey = @Key)",
                     "DELETE FROM merchProductVariant WHERE productKey = @Key",
                     "DELETE FROM merchProduct2EntityCollection WHERE productKey = @Key",
                     "DELETE FROM merchProduct WHERE pk = @Key"
@@ -1880,13 +2535,23 @@
         /// <returns>
         /// The <see cref="Page{ProductVariantDto}"/>.
         /// </returns>
-        private new Page<ProductVariantDto> GetDtoPage(long page, long itemsPerPage, Sql sql, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
+        private new Page<ProductVariantDto> GetDtoPage(long page, long itemsPerPage, Sql sql, string orderExpression, SortDirection sortDirection = SortDirection.Descending, bool includeUnavailable = false)
         {
+            if (!includeUnavailable)
+            {
+                sql.Append("AND [merchProductVariant].[available] = 1");
+            }
+
             if (!string.IsNullOrEmpty(orderExpression))
             {
+                if (orderExpression.StartsWith("ORDER BY", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    orderExpression = orderExpression.TrimStart("ORDER BY").TrimEnd(" ASC").TrimEnd(" DESC").Trim();
+                }
+
                 sql.Append(sortDirection == SortDirection.Ascending
-                    ? string.Format("ORDER BY {0} ASC", orderExpression)
-                    : string.Format("ORDER BY {0} DESC", orderExpression));
+                        ? string.Format("ORDER BY {0} ASC", orderExpression)
+                        : string.Format("ORDER BY {0} DESC", orderExpression));
             }
 
             return Database.Page<ProductVariantDto>(page, itemsPerPage, sql);

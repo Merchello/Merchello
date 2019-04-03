@@ -126,7 +126,8 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending);
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false);
 
         /// <summary>
         /// Gets a paged list of distinct keys for entities in multiple collections.
@@ -166,7 +167,8 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending);
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false);
 
         /// <summary>
         /// The get keys not in multiple collection.
@@ -202,7 +204,8 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending);
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false);
 
         /// <summary>
         /// The get keys not in multiple collections.
@@ -242,7 +245,8 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending);
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false);
 
         /// <summary>
         /// Gets a collection of keys that exist in any one of the collections passed.
@@ -278,7 +282,8 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending);
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false);
 
         /// <summary>
         /// Gets a collection of keys that exist in any one of the collections passed.
@@ -318,7 +323,8 @@
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending);
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeUnavailable = false);
 
         /// <summary>
         /// Gets a list of all manufacturers.
@@ -358,6 +364,6 @@
         /// <returns>
         /// The <see cref="PagedCollection"/>.
         /// </returns>
-        PagedCollection<IProduct> GetByAdvancedSearch(Guid collectionKey, string[] includeFields, string term, string manufacturer, long page, long itemsPerPage, string orderExpression, SortDirection direction = SortDirection.Ascending);
+        PagedCollection<IProduct> GetByAdvancedSearch(Guid collectionKey, string[] includeFields, string term, string manufacturer, long page, long itemsPerPage, string orderExpression, SortDirection direction = SortDirection.Ascending, bool includeUnavailable = false);
     }
 }

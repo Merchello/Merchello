@@ -3,11 +3,13 @@
         <form class="umb-overlay__form" name="priceAdjustForm" id="priceAdjustForm">
 
             <div class="umb-overlay-header">
-                <h4 class="umb-overlay__title">REWARD: Discount the price</h4>
+                <h4 class="umb-overlay__title"><localize key="merchelloMarketing_discountPriceDialogTitle">REWARD: Discount the price</localize></h4>
             </div>
 
             <div class="umb-overlay-container form-horizontal merchello-panel-body">
-                <label for="discount">Apply discount in the amount<small>Values should be entered as positive numbers.</small></label>
+                <label for="discount"><localize key="merchelloMarketing_discountPriceDialogApplyDiscount">Apply discount in the amount</localize>
+                <small><localize key="merchelloMarketing_discountPriceDialogApplyDiscountDescription">Values should be entered as positive numbers.</localize></small>
+                </label>
                 <div class="form-group row-fluid input-prepend input-append">
                     <span class="add-on" data-ng-show="adjustmentType === 'flat'">{{currencySymbol}}</span>
                     <input data-ng-model="amount" class="col-xs-5 span5" data-ng-required="true" type="number"/>
@@ -16,11 +18,11 @@
                 <div class="form-group row-fluid adjustment-type">
                     <label class="label-checkbox">
                         <input type="radio" data-ng-model="adjustmentType" value="flat"/>
-                        <span>Amount</span>
+                        <span><localize key="merchelloGeneral_amount">Amount</localize></span>
                     </label>
                     <label class="label-checkbox">
                         <input type="radio" data-ng-model="adjustmentType" value="percent"/>
-                        <span>Percent</span>
+                        <span><localize key="merchelloGeneral_percent">Percent</localize></span>
                     </label>
                 </div>
             </div>

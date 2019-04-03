@@ -57,9 +57,11 @@
                                 <td>
                                     @if (item.LineItemType == LineItemType.Product && item.Product.HasValue("image"))
                                     {
-                                        var mediaId = item.Product.GetPropertyValue<string>("image");
-                                        var image = Umbraco.TypedMedia(mediaId);
-                                        <img src="@image.GetCropUrl(50, 50)" alt="@item.Product.Name"/>
+                                        var images = item.Product.GetPropertyValue<List<IPublishedContent>>("image");
+                                        if (images.Any())
+                                        {
+                                            <img src="@images.FirstOrDefault().GetCropUrl(50, 50)" alt="@item.Product.Name" width="50"/>
+                                        }
                                     }
                                 </td>
                                 <td>@item.Name</td>

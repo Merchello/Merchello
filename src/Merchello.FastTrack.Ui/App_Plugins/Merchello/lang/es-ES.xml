@@ -15,10 +15,12 @@
     <key alias="multipleOptions">Multiples opciones</key>
     <key alias="optional">(opcional)</key>
     <key alias="percentSymbol">%</key>
+    <key alias="percent">Percent</key>
     <key alias="moneySymbol">€</key>
     <key alias="trackingNumber">Tracking # </key>
     <key alias="trackingUrl">Tracking URL</key>
     <key alias="shipment">Envío</key>
+    <key alias="shipmentNumber">Shipment #</key>
     <key alias="sku">SKU</key>
     <key alias="name">Name</key>
     <key alias="quantity">Cant</key>
@@ -75,6 +77,8 @@
     <key alias="associateWith">Asociar con</key>
     <key alias="shared">Compartido</key>
     <key alias="custom">Personalizado</key>
+    <key alias="history">History</key>
+    <key alias="update">Update</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Productos</key>
@@ -127,7 +131,7 @@
     <key alias="customerCheckoutPercent">Porcentaje de compras de clientes</key>
     <key alias="thisWeekVsLast">Comparativa: esta semana vs anterior</key>
     <key alias="monthlyTotalSales">Ventas mensuales</key>
-    <key alias="topSellingItems"><![CDATA[ Los artículos más vendidos <small>Top 10</small> ]]></key>
+    <key alias="topSellingItems"><![CDATA[ Los artículos más vendidos <small>Top 50</small> ]]></key>
     <key alias="thisWeek">Esta semana</key>
     <key alias="lastWeek">Anterior semana</key>
     <key alias="quantitySold">Cantidad vendida</key>
@@ -205,6 +209,9 @@
     <key alias="sharedCount">Número de compartidas</key>
     <key alias="filterGroup">Filtro de grupo</key>
     <key alias="filters">Filtros</key>
+    <key alias="date">Date</key>
+    <key alias="description">Description</key>
+    <key alias="amount">Amount</key>
   </area>
   <area alias="merchelloNotes">
     <key alias="notes">Notas</key>
@@ -223,7 +230,10 @@
     <key alias="available">Disponible</key>
     <key alias="copyProduct">Copiar producto</key>
     <key alias="newProductName">Nuevo nombre de producto</key>
+    <key alias="nameIsRequired">Name is a required field.</key>
     <key alias="newProductSku">Nuevo SKU de producto</key>
+    <key alias="skuIsNotUnique">SKU is not unique</key>
+    <key alias="skuIsRequired">SKU is a required field.</key>    
     <key alias="newPrice">Nuevo precio</key>
     <key alias="newCostOfGoods">Nuevo coste</key>
     <key alias="newSalePrice">Nuevo precio de oferta</key>
@@ -312,8 +322,8 @@
     <key alias="removeDetachedContent">Borrar contenido extendido</key>
     <key alias="removeDetachedContentWarning">
       <![CDATA[
-      Borrar el contenido extendido no borra el producto o la variante. Utilízalo si quieres borrar o cambiar el tipo de contenido asociado. 
-      Se borrará el contenido para todos los idiomas configurados.
+            Borrar el contenido extendido no borra el producto o la variante. Utilízalo si quieres borrar o cambiar el tipo de contenido asociado. 
+	          Se borrará el contenido para todos los idiomas configurados.
     ]]>
     </key>
   </area>
@@ -358,6 +368,8 @@
     <key alias="addAdjustment">Añadir ajuste</key>
     <key alias="adjustments">Ajustes</key>
     <key alias="adjustmentAssignedBy">Hechos por</key>
+    <key alias="lineItemPreview">Line Item Preview</key>
+    <key alias="noLineItemPreview">Unable to preview line item</key>
   </area>
   <area alias="merchelloCustomers">
     <key alias="loginName">Login</key>
@@ -446,6 +458,8 @@
     <key alias="emailRequired">El email es obligatoria</key>
   </area>
   <area alias="merchelloMarketing">
+    <key alias="availableRewards">Available Rewards</key>
+    <key alias="availableConstraints">Available Constraints</key>
     <key alias="currentOffers">Ofertas</key>
     <key alias="offerCode">Código de la oferta</key>
     <key alias="offerCodeInUse">Ya está en uso</key>
@@ -480,6 +494,13 @@
     <key alias="lineItemNameInfo">
       <![CDATA[Texto de la oferta<small>Este texto aparecerá en el pedido cuando la oferta se aplique.</small>]]>
     </key>
+    <key alias="offerProvider">Offer Provider</key>
+    <key alias="couponMaxRedemptionsTitle">Set a maximum number of allowable redemptions</key>
+    <key alias="couponMaxRedemptionsInputTitle">Set the maximum number of redemptions</key>
+    <key alias="couponMaxRedemptionsInputHelp">Values should be entered as positive numbers.</key>
+    <key alias="discountPriceDialogTitle">REWARD: Discount the price</key>
+    <key alias="discountPriceDialogApplyDiscount">Apply discount in the amount</key>
+    <key alias="discountPriceDialogApplyDiscountDescription">Values should be entered as positive numbers.</key>
   </area>
   <area alias="merchelloVariant">
     <!-- things -->
@@ -490,6 +511,7 @@
     <key alias="baseSku">Sku base</key>
     <key alias="barcode">Código de barras</key>
     <key alias="manufacturer">Fabricante</key>
+    <key alias="allManufacturers">All Manufacturers</key>
     <key alias="manufacturerModel">Num. Modelo de Fabricante</key>
     <key alias="variantInfo">Información de producto</key>
     <key alias="variantOptions">Opciones de la variante</key>
@@ -534,6 +556,14 @@
     <key alias="startingInventoryWarning"><![CDATA[(Comenzará el inventario para <strong>todas las variantes</strong> y <strong>todos los almacenes</strong>)]]></key><key alias="productOnSale">Producto en oferta</key><key alias="toggleOnSale">En oferta</key>
     <key alias="productOnSale">On oferta</key>
     <key alias="allowOutOfStockPurchase">Permitir compra sin stock</key>
+    <key alias="bulkChangePriceTitle">Change Prices For All Selected Items</key>
+    <key alias="bulkChangePriceUpdateCostOfGoods">Update cost of goods price.</key>
+    <key alias="bulkChangePriceUpdateSalePrice">Update sale price.</key>
+    <key alias="bulkChangeInventoryTitle">Update Inventory For All Selected Items</key>
+    <key alias="bulkChangeInventoryNewQuantity">New quantity</key>
+    <key alias="bulkChangeInventoryUpdateLowCount">Update low count.</key>
+    <key alias="bulkChangeInventoryUpdateNewLowCount">New low stock quantity</key>
+    <key alias="bulkChangeInventoryNote">Note: This will update the inventory for all warehouses on all selected variants</key>
   </area>
   <area alias="merchelloOrder">
     <!-- moved to sales -->
@@ -572,7 +602,7 @@
     <key alias="unarchiveSales">Desarchivar ventas</key>
     <key alias="noSalesYet">Todavía no tienes ventas</key>
     <key alias="butSoonYouWill">¡Pero pronto las tendrás!</key>
-    
+
     <!-- phrases -->
     <key alias="noOrders">No tienes pedidos.</key>
     <key alias="attentionRequired">Tienes pedidos que gestionar</key>
@@ -609,16 +639,22 @@
     <!-- phrases -->
     <key alias="fulfillManually">Enviar manualmente</key>
     <key alias="createShipment">Crear envío</key>
+    <key alias="noShipments">There are no shipments.</key>
+    <key alias="items">Items</key>
+    <key alias="origin">Origin</key>
+    <key alias="destination">Destination</key>
+    <key alias="editShipment">Edit Shipment</key>
+    <key alias="editOrigin">Edit Origin</key>
+    <key alias="editDestination">Edit Destination</key>
+    <key alias="deleteShipment">Delete Shipment</key>
+    <key alias="setSaleDestination">Set Sale Destination</key>
   </area>
   <area alias="merchelloWarehouse">
-    <!-- things -->
     <key alias="warehouse">Almacén</key>
     <key alias="warehouses">Almacenes</key>
     <key alias="stock">Stock</key>
     <key alias="lowCount">Bajo stock</key>
     <key alias="location">Localización</key>
-    <!-- actions -->
-    <!-- phrases -->
   </area>
   <!-- TODO KEEP THE MERCHELLO SHIPPING AREA -->
   <area alias="merchelloShipping">
@@ -646,20 +682,20 @@
     </key>
     <key alias="warehouse">Almacén</key>
     <key alias="selectShipment">Selecciona envío</key>
+    <key alias="shipmentStatus">Shipment Status</key>
   </area>
   <area alias="merchelloInventory">
     <!-- things -->
     <key alias="base">Inventario base</key>
     <key alias="inventory">Inventario</key>
     <key alias="tracking">Gestión de inventario</key>
-    <!-- actions -->
-    <!-- phrases -->
   </area>
   <area alias="merchelloPlaceholders">
     <key alias="enterProduct">Escribe el nombre del producto</key>
     <key alias="enterOrder">Comienza a escribir un número o nombre de pedido...</key>to
     <key alias="addStyle">Añade un estilo...</key>
     <key alias="enterOffer">Introduce el nombre de la oferta</key>
+    <key alias="offerCodeExample">eg. 10OFF</key>
   </area>
 
   <area alias="merchelloSettings">
@@ -681,9 +717,12 @@
     <key alias="globalTaxationApplication">Configura como aplicar los impuestos</key>
     <key alias="defaultCultureName">Configura el idioma por defecto</key>
     <key alias="listViewSettingsTitle">Configuración de listados</key>
+    <key alias="listViewSettingsDescription">Enabling sticky options in lists, means it will remember the last page you were on or search term when you go back and forth between products and collections/lists making it much easier to manage products.</key>
     <key alias="stickyListView">Habilita configuraciones de listado para el listado general.</key>
     <key alias="stickyCollectionView">Habilita configuraciones de listado para listados de colecciones.</key>
     <key alias="stickListingTab"><![CDATA[Habilita pestaña de <b>%0% Listado</b> tab.]]></key>
+    <key alias="listViewSearchOptionsTitle">List Search Options</key>
+    <key alias="listViewSearchOptionsSubTitle">Fields include in filter</key>
   </area>
 
   <area alias="merchelloShippingCountry">
@@ -811,6 +850,7 @@
   <area alias="merchelloDelete">
     <key alias="deleteConfirmation">Confirmación de borrado</key>
     <key alias="deleteConfirmMessage">Estás seguro de que quieres eliminar este elemento?</key>
+	<key alias="actionNotReversible">This action cannot be reversed.</key>
   </area>
   <area alias="merchelloProductEdit">
     <key alias="enterProductName">Escribe el nombre del producto</key>
@@ -857,5 +897,24 @@
     <key alias="orderCreated">El pedido %0% ha sido creado</key>
     <key alias="shipmentCreated">Se ha creado un envío con %0% artículos</key>
     <key alias="shipmentStatusChanged">Se ha cambiado el envío a %0%</key>
+  </area>
+
+  <!-- Merchello Property Editors -->
+  <area alias="merchelloCollectionPicker">
+    <key alias="config">Config</key>
+  </area>
+
+  <!-- NotificationService Messages -->
+  <area alias="merchelloStatusNotifications">
+    <key alias="couponSaveSuccess">Coupon Saved</key>
+    <key alias="couponSaveError">Coupon Save Failed</key>
+    <key alias="productSaveSuccess">Product Saved</key>
+    <key alias="productSaveInProgress">Saving Product...</key>
+    <key alias="productSaveError">Product Save Failed</key>
+    <key alias="productDeleteSuccess">Product Deleted</key>
+    <key alias="productDeleteError">Product Deletion Failed</key>
+    <key alias="customerSaveSuccess">Customer Saved</key>
+    <key alias="customerSaveError">Customer Save Failed</key>
+    <key alias="customerSaveInProgress">Saving Customer...</key>
   </area>
 </language>
