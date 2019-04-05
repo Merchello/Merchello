@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2C3261C5-6999-4372-9B2A-11E8C3296540}</ProjectGuid>
+    <ProjectGuid>{BCCD3172-C664-4444-A662-6C8A44BC9AF5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Merchello.FastTrack</RootNamespace>
-    <AssemblyName>Merchello.FastTrack</AssemblyName>
+    <RootNamespace>Merchello.Providers.Payment.Braintree</RootNamespace>
+    <AssemblyName>Merchello.Providers.Payment.Braintree</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,33 +30,35 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AutoMapper, Version=3.3.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="AutoMapper.Net4, Version=3.3.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.Net4.dll</HintPath>
-      <Private>True</Private>
+    </Reference>
+    <Reference Include="Braintree, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31b586f34d3e96c7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Braintree.3.3.0\lib\net452\Braintree.dll</HintPath>
     </Reference>
     <Reference Include="businesslogic, Version=1.0.6837.12339, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\businesslogic.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="ClientDependency.Core, Version=1.9.7.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ClientDependency.1.9.7\lib\net45\ClientDependency.Core.dll</HintPath>
     </Reference>
     <Reference Include="ClientDependency.Core.Mvc, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ClientDependency-Mvc5.1.8.0.0\lib\net45\ClientDependency.Core.Mvc.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="cms, Version=1.0.6837.12339, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\cms.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="controls, Version=1.0.6837.12340, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\controls.dll</HintPath>
-    </Reference>
-    <Reference Include="CookComputing.XmlRpcV2, Version=2.5.0.0, Culture=neutral, PublicKeyToken=a7d6e17aa302004d, processorArchitecture=MSIL">
-      <HintPath>..\packages\xmlrpcnet.2.5.0\lib\net20\CookComputing.XmlRpcV2.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Examine, Version=0.1.89.0, Culture=neutral, processorArchitecture=MSIL">
@@ -67,7 +69,6 @@
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="ImageProcessor, Version=2.5.6.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ImageProcessor.2.5.6\lib\net45\ImageProcessor.dll</HintPath>
@@ -77,31 +78,30 @@
     </Reference>
     <Reference Include="interfaces, Version=1.0.6837.12326, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\interfaces.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\log4net.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Log4Net.Async, Version=2.0.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Log4Net.Async.2.0.4\lib\net40\Log4Net.Async.dll</HintPath>
     </Reference>
     <Reference Include="Lucene.Net, Version=2.9.4.1, Culture=neutral, PublicKeyToken=85089178b9ac3181, processorArchitecture=MSIL">
       <HintPath>..\packages\Lucene.Net.2.9.4.1\lib\net40\Lucene.Net.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="MarkdownSharp, Version=1.14.5.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Markdown.1.14.7\lib\net45\MarkdownSharp.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data, Version=1.0.1559.20655, Culture=neutral">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\Microsoft.ApplicationBlocks.Data.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.2.1\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
@@ -126,42 +126,40 @@
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="MiniProfiler, Version=2.1.0.0, Culture=neutral, PublicKeyToken=b44f9351044011a3, processorArchitecture=MSIL">
       <HintPath>..\packages\MiniProfiler.2.1.0\lib\net40\MiniProfiler.dll</HintPath>
-      <Private>True</Private>
     </Reference>
-    <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <HintPath>..\packages\MySql.Data.6.9.9\lib\net45\MySql.Data.dll</HintPath>
+    <Reference Include="MySql.Data, Version=6.9.12.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.6.9.12\lib\net45\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Semver, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\semver.1.1.2\lib\net45\Semver.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\semver.1.1.2\lib\net451\Semver.dll</HintPath>
     </Reference>
     <Reference Include="SQLCE4Umbraco, Version=1.0.6837.12340, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\SQLCE4Umbraco.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SqlServerCe, Version=4.0.0.1, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\System.Data.SqlServerCe.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Data.SqlServerCe.Entity, Version=4.0.0.1, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\System.Data.SqlServerCe.Entity.dll</HintPath>
+      <Private>True</Private>
     </Reference>
+    <Reference Include="System.Net" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Threading.Tasks.Dataflow, Version=4.6.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Threading.Tasks.Dataflow.4.7.0\lib\portable-net45+win8+wpa81\System.Threading.Tasks.Dataflow.dll</HintPath>
@@ -170,38 +168,29 @@
       <HintPath>..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -211,84 +200,104 @@
     <Reference Include="System.Xml" />
     <Reference Include="TidyNet, Version=1.0.0.0, Culture=neutral">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\TidyNet.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="umbraco, Version=1.0.6837.12341, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\umbraco.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Umbraco.Core, Version=1.0.6837.12334, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\Umbraco.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="umbraco.DataLayer, Version=1.0.6837.12339, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\umbraco.DataLayer.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="umbraco.editorControls, Version=1.0.6837.12344, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\umbraco.editorControls.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="umbraco.MacroEngines, Version=1.0.6837.12345, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\umbraco.MacroEngines.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="umbraco.providers, Version=1.0.6837.12340, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\umbraco.providers.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Umbraco.Web.UI, Version=1.0.6837.12345, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\Umbraco.Web.UI.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="UmbracoExamine, Version=0.7.0.12340, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\UmbracoExamine.dll</HintPath>
-    </Reference>
-    <Reference Include="UrlRewritingNet.UrlRewriter, Version=2.0.7.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\UrlRewritingNet.2.0.7\lib\UrlRewritingNet.UrlRewriter.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration\FastTrackConfiguration.cs" />
-    <Compile Include="Configuration\FastTrackSection.cs" />
-    <Compile Include="Controllers\Membership\CustomerMembershipController.cs" />
-    <Compile Include="Controllers\Payment\CashPaymentController.cs" />
-    <Compile Include="Controllers\CheckoutAddressController.cs" />
-    <Compile Include="Controllers\CheckoutPaymentMethodController.cs" />
-    <Compile Include="Controllers\CheckoutShipRateQuoteController.cs" />
-    <Compile Include="Controllers\CheckoutSummaryController.cs" />
-    <Compile Include="Controllers\Payment\PurchaseOrderPaymentController.cs" />
-    <Compile Include="Factories\FastTrackBillingAddressModelFactory.cs" />
-    <Compile Include="Factories\FastTrackCheckoutAddressModelFactoryBase{T}.cs" />
-    <Compile Include="Factories\FastTrackCheckoutSummaryModelFactory.cs" />
-    <Compile Include="Factories\FastTrackShippingAddressModelFactory.cs" />
-    <Compile Include="Factories\NewMemberModelFactory.cs" />
-    <Compile Include="Install\FastTrackDataInstaller.cs" />
-    <Compile Include="Install\Installer.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Models\FastTrackBillingAddressModel.cs" />
-    <Compile Include="Models\FastTrackCheckoutAddressModel.cs" />
-    <Compile Include="Models\FastTrackCheckoutSummaryModel.cs" />
-    <Compile Include="Models\FastTrackPaymentMethodModel.cs" />
-    <Compile Include="Models\FastTrackShipRateQuoteModel.cs" />
-    <Compile Include="Models\IFastTrackCheckoutAddressModel.cs" />
-    <Compile Include="Models\ISuccessRedirectUrl.cs" />
-    <Compile Include="Models\Membership\ChangePasswordModel.cs" />
-    <Compile Include="Models\Membership\ForgotPasswordModel.cs" />
-    <Compile Include="Models\Membership\LoginModel.cs" />
-    <Compile Include="Models\Membership\NewMemberModel.cs" />
-    <Compile Include="Models\Payment\FastTrackPaymentModel.cs" />
-    <Compile Include="Models\Payment\PurchaseOrderPaymentModel.cs" />
-    <Compile Include="PackageActions\AddConfigSection.cs" />
+    <Compile Include="AutomapperProfile.cs" />
+    <Compile Include="BraintreeApiException.cs" />
+    <Compile Include="BraintreeApiHelper.cs" />
+    <Compile Include="BraintreeCustomerExtensions.cs" />
+    <Compile Include="BraintreeExtensions.cs" />
+    <Compile Include="BraintreeProcessorArguementCollectionExtensions.cs" />
+    <Compile Include="Builders\IBuilder.cs" />
+    <Compile Include="Builders\InvoiceTransactionRequestBuilder.cs" />
+    <Compile Include="Builders\RequestBuilderBase.cs" />
+    <Compile Include="Caching\CacheKeys.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\BraintreeApiController.cs" />
+    <Compile Include="Controllers\BraintreeWebhooksControllerBase.cs" />
+    <Compile Include="Controllers\Payment\BraintreePaymentControllerBase{T}.cs" />
+    <Compile Include="Controllers\Payment\BraintreePayPalController.cs" />
+    <Compile Include="Controllers\Payment\BraintreeStandardCcController.cs" />
+    <Compile Include="Controllers\Payment\FastTrackBraintreeControllerBase.cs" />
+    <Compile Include="EnvironmentType.cs" />
+    <Compile Include="Factories\BraintreePaymentModelFactory.cs" />
+    <Compile Include="MappingExtensions.cs" />
+    <Compile Include="Models\BillingAddress.cs" />
+    <Compile Include="Models\BraintreeCcPaymentModel.cs" />
+    <Compile Include="Models\BraintreePaymentModel.cs" />
+    <Compile Include="Models\BraintreeProviderSettings.cs" />
+    <Compile Include="Models\MerchantDescriptor.cs" />
+    <Compile Include="Models\TransactionOption.cs" />
+    <Compile Include="Models\TransactionReference.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PublishedContentExtensions.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
+    <Compile Include="Provider\BraintreePaymentGatewayMethodBase.cs" />
+    <Compile Include="Provider\BraintreePaymentGatewayProvider.cs" />
+    <Compile Include="Provider\BraintreeStandardPaymentGatewayBase.cs" />
+    <Compile Include="Provider\BraintreeStandardTransactionPaymentGatewayMethod.cs" />
+    <Compile Include="Provider\BraintreeSubscriptionRecordPaymentMethod.cs" />
+    <Compile Include="Provider\BraintreeVaultPaymentGatewayMethodBase.cs" />
+    <Compile Include="Provider\BraintreeVaultTransactionPaymentGatewayMethod.cs" />
+    <Compile Include="Provider\IBraintreePaymentGatewayProvider.cs" />
+    <Compile Include="Provider\IBraintreeStandardTransactionPaymentGatewayMethod.cs" />
+    <Compile Include="Provider\IBraintreeSubscriptionRecordPaymentGatewayMethod.cs" />
+    <Compile Include="Provider\IBraintreeVaultTransactionPaymentGatewayMethod.cs" />
+    <Compile Include="Provider\IPayPalOneTimeTransactionPaymentGatewayMethod.cs" />
+    <Compile Include="Provider\PayPalOneTimeTransactionPaymentGatewayMethod.cs" />
+    <Compile Include="Provider\PayPalVaultTransactionPaymentGatewayMethod.cs" />
+    <Compile Include="Services\BraintreeApiRequestFactory.cs" />
+    <Compile Include="Services\BraintreeApiService.cs" />
+    <Compile Include="Services\BraintreeApiServiceBase.cs" />
+    <Compile Include="Services\BraintreeCustomerApiService.cs" />
+    <Compile Include="Services\BraintreePaymentMethodApiService.cs" />
+    <Compile Include="Services\BraintreeSubscriptionApiService.cs" />
+    <Compile Include="Services\BraintreeTransactionApiService.cs" />
+    <Compile Include="Services\BraintreeWebhooksApiService.cs" />
+    <Compile Include="Services\IBraintreeApiService.cs" />
+    <Compile Include="Services\IBraintreeCustomerApiService.cs" />
+    <Compile Include="Services\IBraintreePaymentMethodApiService.cs" />
+    <Compile Include="Services\IBraintreeSubscriptionApiService.cs" />
+    <Compile Include="Services\IBraintreeTransactionApiService.cs" />
+    <Compile Include="Services\IBraintreeWebhooksApiService.cs" />
+    <Compile Include="UmbracoApplicationEvents.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Merchello.Core\Merchello.Core.csproj">
       <Project>{2a83a229-c24b-4d8d-b806-7c9999eb9461}</Project>
       <Name>Merchello.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Merchello.Examine\Merchello.Examine.csproj">
-      <Project>{28a665a9-2aad-4230-ab8c-0f0b0f1b2115}</Project>
-      <Name>Merchello.Examine</Name>
     </ProjectReference>
     <ProjectReference Include="..\Merchello.Providers\Merchello.Providers.csproj">
       <Project>{90c37ac8-cfe3-4199-a7b2-826278eb59e5}</Project>
@@ -303,14 +312,9 @@
       <Name>Merchello.Web</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets')" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

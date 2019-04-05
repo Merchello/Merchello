@@ -11,7 +11,7 @@
     /// <summary>
     /// The provider settings resolver.
     /// </summary>
-    internal sealed class ProviderSettingsResolver
+    public sealed class ProviderSettingsResolver
     {
         /// <summary>
         /// The current instance of the ProviderSettingsResolver.

@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id></id>
+    <version>0.0.0</version>
+    <title></title>
+    <authors></authors>
+    <owners></owners>
+    <projectUrl></projectUrl>
+    <iconUrl></iconUrl>
+    <requireLicenseAcceptance></requireLicenseAcceptance>
+    <description></description>
+    <summary></summary>
+    <copyright></copyright>
+    <licenseUrl></licenseUrl>
+    <language></language>
+    <tags></tags>
+    <dependencies>
+      <dependency id="Merchello.Core" version="2.1.0" />
+      <dependency id="PayPalMerchantSDK" version="2.15.117" />
+    </dependencies>
+  </metadata>
+</package>

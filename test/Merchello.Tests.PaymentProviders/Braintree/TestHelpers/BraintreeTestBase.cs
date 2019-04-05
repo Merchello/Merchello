@@ -39,7 +39,7 @@
                 "debug@debug.com");
 
             this.BraintreeProviderSettings = TestHelper.GetBraintreeProviderSettings();
-
+            // BH: Replace with Automapper profiles
             AutoMapperMappings.CreateMappings();
 
             this.Gateway = this.BraintreeProviderSettings.AsBraintreeGateway();

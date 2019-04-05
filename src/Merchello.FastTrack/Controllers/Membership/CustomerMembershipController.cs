@@ -18,7 +18,7 @@
     using Merchello.Web.Store.Controllers;
     using Merchello.Web.Store.Models;
 
-    using Umbraco.Core;
+    using ucore = Umbraco.Core;
     using Umbraco.Core.Services;
     using Umbraco.Web;
     using Umbraco.Web.Models;
@@ -56,12 +56,12 @@
         /// <param name="newMemberModelFactory">
         /// The new member model factory.
         /// </param>
-        public CustomerMembershipController(NewMemberModelFactory<NewMemberModel> newMemberModelFactory)
+        public CustomerMembershipController(NewMemberModelFactory<NewMemberModel> newMemberModelFactory) : base()
         {
-            Mandate.ParameterNotNull(newMemberModelFactory, "newMemberModelFactory");
+            ucore.Mandate.ParameterNotNull(newMemberModelFactory, "newMemberModelFactory");
             NewMemberModelFactory = newMemberModelFactory;
 
-            _memberService = ApplicationContext.Current.Services.MemberService;
+            _memberService = ApplicationContext.Services.MemberService;
 
             this.BillingAddressFactory = new FastTrackBillingAddressModelFactory();
             this.ShippingAddressFactory = new FastTrackShippingAddressModelFactory();

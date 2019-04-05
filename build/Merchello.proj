@@ -57,6 +57,8 @@
 		<PackageId>Merchello.Core</PackageId>
     <TestPackageId>Merchello.TestsBase</TestPackageId>
     <FastTrackPackageId>Merchello.FastTrack</FastTrackPackageId>
+    <PaypalPackageId>Merchello.Paypal</PaypalPackageId>
+    <BraintreePackageId>Merchello.Braintree</BraintreePackageId>
 		<Copyright>Copyright &#169; 2015 - 2017 Across the Pond, LLC, Our Umbraco and other contributors</Copyright>
 		<Owners>Across the Pond, LLC</Owners>
 		<IconUrl>https://github.com/rustyswayne/Merchello/tree/appveyor/build/icon40x40-transparent.png</IconUrl>
@@ -249,8 +251,9 @@
     <Copy SourceFiles="@(AppPluginFTFastTrackViews)" DestinationFiles="@(AppPluginFTFastTrackViews -> '$(BuildNuGetDir)\FastTrack\content\App_Plugins\FastTrack\Views\%(RecursiveDir)%(Filename)%(Extension)')" />
     
     <!-- now add the payment provider dependencies for umbraco package generation -->
+    <!-- BH: Don't do this. Payment providers can be rolled into Fasttrack, but not core -->
     <Copy SourceFiles="@(ProviderFiles)" DestinationFolder="$(BuildUmbDir)\bin" />
-    <Copy SourceFiles="@(ProviderDependencyFiles)" DestinationFolder="$(BuildUmbDir)\bin" /> 
+    <!--<Copy SourceFiles="@(ProviderDependencyFiles)" DestinationFolder="$(BuildUmbDir)\bin" />--> 
     <Copy SourceFiles="@(AppTrayIcon)" DestinationFolder="$(BuildUmbDir)\Umbraco\images\tray" />
     <Copy SourceFiles="@(AppPluginFiles)" DestinationFiles="@(AppPluginFiles->'$(BuildUmbDir)\App_Plugins\Merchello\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(AppPluginPaymentFiles)" DestinationFiles="@(AppPluginPaymentFiles->'$(BuildUmbDir)\App_Plugins\MerchelloProviders\%(RecursiveDir)%(Filename)%(Extension)')" />

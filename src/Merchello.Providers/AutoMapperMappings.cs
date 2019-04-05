@@ -1,28 +1,26 @@
-﻿namespace Merchello.Providers
+﻿using System;
+using System.Linq;
+using AutoMapper;
+
+namespace Merchello.Providers
 {
     /// <summary>
     /// Creates AutoMapper mappings - used in <see cref="UmbracoApplicationEvents"/>
     /// </summary>
-    internal static partial class AutoMapperMappings
+    public static class AutoMapperMappings
     {
         /// <summary>
         /// The create mappings.
         /// </summary>
         public static void CreateMappings()
         {
-            // Actual mappings are done in nested files
-            // AutoMapperMappings-AuthorizeNet.cs
-            // AutoMapperMappings-Braintree.cs
-            // AutoMapperMappings-PayPal.cs
-
-            // Authorize.NET
-            CreateAuthorizeNetMappings();
-
-            // Braintree
-            CreateBraintreeMappings();
-
-            // PayPal
-            CreatePayPalMappings();
+            // BH: Replaced with Automapper profiles
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies().Where(p => p.FullName.StartsWith("Merchello.Providers.Payment"))) {
+                // BH: Yeah I know I'm magic-stringing, deal with it
+                foreach (var type in assembly.GetExportedTypes().Where(p => p.BaseType == typeof(Profile))) {
+                    Mapper.AddProfile((Profile)Activator.CreateInstance(type));
+                }
+            }
         }
     }
 }

@@ -16,7 +16,9 @@
 		<language></language>
 		<tags></tags>
 		<dependencies>
-      <!--dependency id="Merchello.Core" version="2.1.0" /-->
+      <dependency id="Merchello.Core" version="2.1.0" />
+      <dependency id="Merchello.Paypal" version="2.1.0" />
+      <dependency id="Merchello.Braintree" version="2.1.0" />
 		</dependencies>
 	</metadata>
 </package>

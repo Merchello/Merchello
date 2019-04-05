@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="Controllers\IPayPalSurfaceController.cs" />
     <Compile Include="Controllers\Payment\PayPalExpressPaymentController.cs" />
     <Compile Include="Controllers\PayPalExpressController.cs" />
@@ -80,14 +81,6 @@
     <Compile Include="UmbracoApplicationEvents.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="PayPalMerchantSDK">
-      <Version>2.15.117</Version>
-    </PackageReference>
-    <PackageReference Include="UmbracoCms.Core">
-      <Version>7.10.4</Version>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Merchello.Core\Merchello.Core.csproj">
       <Project>{2a83a229-c24b-4d8d-b806-7c9999eb9461}</Project>
       <Name>Merchello.Core</Name>
@@ -105,5 +98,10 @@
       <Name>Merchello.Web</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets')" />
 </Project>

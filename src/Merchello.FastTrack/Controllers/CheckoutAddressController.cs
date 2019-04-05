@@ -9,7 +9,7 @@
     using Merchello.Web.Controllers;
     using Merchello.Web.Models.Ui;
 
-    using Umbraco.Core;
+    // using Umbraco.Core;
     using Umbraco.Web.Mvc;
 
     /// <summary>

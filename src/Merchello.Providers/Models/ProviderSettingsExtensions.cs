@@ -6,7 +6,7 @@
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Logging;
     using Merchello.Core.Models;
-    using Merchello.Providers.Payment.Braintree.Models;
+    // using Merchello.Providers.Payment.Braintree.Models;
     using Merchello.Providers.Payment.Models;
     // using Merchello.Providers.Payment.PayPal.Models;
     using Merchello.Providers.Resolvers;
@@ -22,33 +22,6 @@
     /// </summary>
     public static class ProviderSettingsExtensions
     {
-
-        /// <summary>
-        /// Gets the Braintree provider settings from the ExtendedDataCollection
-        /// </summary>
-        /// <param name="extendedData">
-        /// The extended data.
-        /// </param>
-        /// <returns>
-        /// The <see cref="BraintreeProviderSettings"/>.
-        /// </returns>
-        public static BraintreeProviderSettings GetBrainTreeProviderSettings(this ExtendedDataCollection extendedData)
-        {
-            BraintreeProviderSettings settings;
-            if (extendedData.ContainsKey(Constants.Braintree.ExtendedDataKeys.ProviderSettings))
-            {
-                var json = extendedData.GetValue(Constants.Braintree.ExtendedDataKeys.ProviderSettings);
-                settings = JsonConvert.DeserializeObject<BraintreeProviderSettings>(json);
-            }
-            else
-            {
-                settings = new BraintreeProviderSettings();
-            }
-
-            return settings;
-        }
-
-
         /// <summary>
         /// Gets the <see cref="ProviderSettingsMapperAttribute"/>.
         /// </summary>
@@ -58,7 +31,7 @@
         /// <returns>
         /// The <see cref="ProviderSettingsMapperAttribute"/>.
         /// </returns>
-        internal static ProviderSettingsMapperAttribute ProviderSettingsMapping(this PaymentGatewayProviderBase provider)
+        public static ProviderSettingsMapperAttribute ProviderSettingsMapping(this PaymentGatewayProviderBase provider)
         {
             return provider.GetType().GetCustomAttribute<ProviderSettingsMapperAttribute>(false);
         }
@@ -75,7 +48,7 @@
         /// <returns>
         /// The <see cref="T"/>.
         /// </returns>
-        internal static T GetProviderSettings<T>(this PaymentGatewayProviderBase provider)
+        public static T GetProviderSettings<T>(this PaymentGatewayProviderBase provider)
             where T : IPaymentProviderSettings
         {
             return (T)provider.GetProviderSettings();
@@ -93,7 +66,7 @@
         /// <param name="settings">
         /// The settings.
         /// </param>
-        internal static void SaveProviderSettings(this IGatewayProviderSettings record, PaymentGatewayProviderBase provider, IPaymentProviderSettings settings)
+        public static void SaveProviderSettings(this IGatewayProviderSettings record, PaymentGatewayProviderBase provider, IPaymentProviderSettings settings)
         {
             var att = provider.ProviderSettingsMapping();
             if (att == null) return;
@@ -125,7 +98,7 @@
         /// <exception cref="NullReferenceException">
         /// Throws an exception if the default settings cannot be instantiated
         /// </exception>
-        private static IPaymentProviderSettings GetProviderSettings(this PaymentGatewayProviderBase provider)
+        public static IPaymentProviderSettings GetProviderSettings(this PaymentGatewayProviderBase provider)
         {
             var logData = MultiLogger.GetBaseLoggingData();
             var att = provider.ProviderSettingsMapping();

@@ -1,4 +1,4 @@
-﻿namespace Merchello.FastTrack.Controllers.Payment
+﻿namespace Merchello.Providers.Payment.Braintree.Controllers.Payment
 {
     using System.Web.Mvc;
 

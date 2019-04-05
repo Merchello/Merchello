@@ -247,10 +247,8 @@
     <Compile Include="Controllers\CheckoutDiscountController.cs" />
     <Compile Include="Controllers\CheckoutResolvePaymentController.cs" />
     <Compile Include="Controllers\CustomerMembershipController.cs" />
-    <Compile Include="Controllers\Payment\BraintreePaymentControllerBase{T}.cs" />
     <Compile Include="Controllers\Payment\CashPaymentControllerBase{T}.cs" />
     <Compile Include="Controllers\StoreWishListController.cs" />
-    <Compile Include="Factories\BraintreePaymentModelFactory.cs" />
     <Compile Include="Factories\ItemCacheModelFactory.cs" />
     <Compile Include="Localization\StoreFormsResource.Designer.cs">
       <DependentUpon>StoreFormsResource.resx</DependentUpon>
@@ -260,8 +258,6 @@
     <Compile Include="Models\Async\AddItemAsyncResponse.cs" />
     <Compile Include="Models\Async\UpdateQuantityAsyncResponse.cs" />
     <Compile Include="Models\Async\UpdateQuantityResponseItem.cs" />
-    <Compile Include="Models\BraintreeCcPaymentModel.cs" />
-    <Compile Include="Models\BraintreePaymentModel.cs" />
     <Compile Include="Models\IPurchaseOrderPaymentModel.cs" />
     <Compile Include="Models\StoreItemCacheModel.cs" />
     <Compile Include="Models\StorePaymentModel.cs" />

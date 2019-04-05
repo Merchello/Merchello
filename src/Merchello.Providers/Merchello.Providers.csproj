@@ -39,12 +39,9 @@
       <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.Net4.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Braintree, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31b586f34d3e96c7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Braintree.3.3.0\lib\net452\Braintree.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="businesslogic, Version=1.0.6837.12339, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\businesslogic.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="ClientDependency.Core, Version=1.9.7.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ClientDependency.1.9.7\lib\net45\ClientDependency.Core.dll</HintPath>
@@ -55,9 +52,11 @@
     </Reference>
     <Reference Include="cms, Version=1.0.6837.12339, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\cms.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="controls, Version=1.0.6837.12340, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\controls.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="CookComputing.XmlRpcV2, Version=2.5.0.0, Culture=neutral, PublicKeyToken=a7d6e17aa302004d, processorArchitecture=MSIL">
       <HintPath>..\packages\xmlrpcnet.2.5.0\lib\net20\CookComputing.XmlRpcV2.dll</HintPath>
@@ -81,9 +80,11 @@
     </Reference>
     <Reference Include="interfaces, Version=1.0.6837.12326, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\interfaces.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\log4net.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Log4Net.Async, Version=2.0.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Log4Net.Async.2.0.4\lib\net40\Log4Net.Async.dll</HintPath>
@@ -98,6 +99,7 @@
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data, Version=1.0.1559.20655, Culture=neutral">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\Microsoft.ApplicationBlocks.Data.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
@@ -152,14 +154,17 @@
     </Reference>
     <Reference Include="SQLCE4Umbraco, Version=1.0.6837.12340, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\SQLCE4Umbraco.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SqlServerCe, Version=4.0.0.1, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\System.Data.SqlServerCe.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Data.SqlServerCe.Entity, Version=4.0.0.1, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\System.Data.SqlServerCe.Entity.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -213,30 +218,39 @@
     <Reference Include="System.Xml" />
     <Reference Include="TidyNet, Version=1.0.0.0, Culture=neutral">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\TidyNet.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="umbraco, Version=1.0.6837.12341, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\umbraco.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Umbraco.Core, Version=1.0.6837.12334, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\Umbraco.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="umbraco.DataLayer, Version=1.0.6837.12339, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\umbraco.DataLayer.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="umbraco.editorControls, Version=1.0.6837.12344, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\umbraco.editorControls.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="umbraco.MacroEngines, Version=1.0.6837.12345, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\umbraco.MacroEngines.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="umbraco.providers, Version=1.0.6837.12340, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\umbraco.providers.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Umbraco.Web.UI, Version=1.0.6837.12345, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\Umbraco.Web.UI.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="UmbracoExamine, Version=0.7.0.12340, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.3\lib\net45\UmbracoExamine.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="UrlRewritingNet.UrlRewriter, Version=2.0.7.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UrlRewritingNet.2.0.7\lib\UrlRewritingNet.UrlRewriter.dll</HintPath>
@@ -245,76 +259,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoMapperMappings.cs" />
-    <Compile Include="AutoMapperMappings-AuthorizeNet.cs">
-      <DependentUpon>AutoMapperMappings.cs</DependentUpon>
-    </Compile>
-    <Compile Include="AutoMapperMappings-Braintree.cs">
-      <DependentUpon>AutoMapperMappings.cs</DependentUpon>
-    </Compile>
-    <Compile Include="AutoMapperMappings-PayPal.cs">
-      <DependentUpon>AutoMapperMappings.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Caching\CacheKeys.cs" />
     <Compile Include="Constants-PurchaseOrder.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
     <Compile Include="Constants.cs" />
-    <Compile Include="Constants-AuthorizeNet.cs">
-      <DependentUpon>Constants.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Constants-Braintree.cs">
-      <DependentUpon>Constants.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Constants-PayPal.cs">
-      <DependentUpon>Constants.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Exceptions\BraintreeApiException.cs" />
-    <Compile Include="Payment\Braintree\Models\BraintreeProviderSettings.cs" />
     <Compile Include="Models\IPaymentProviderSettings.cs" />
     <Compile Include="Models\ProviderSettingsExtensions.cs" />
     <Compile Include="Models\ProviderSettingsMapperAttribute.cs" />
-    <Compile Include="Payment\Braintree\BraintreeApiHelper.cs" />
-    <Compile Include="Payment\Braintree\BraintreeCustomerExtensions.cs" />
-    <Compile Include="Payment\Braintree\BraintreeProcessorArguementCollectionExtensions.cs" />
-    <Compile Include="Payment\Braintree\Builders\IBuilder.cs" />
-    <Compile Include="Payment\Braintree\Builders\InvoiceTransactionRequestBuilder.cs" />
-    <Compile Include="Payment\Braintree\Builders\RequestBuilderBase.cs" />
-    <Compile Include="Payment\Braintree\Controllers\BraintreeApiController.cs" />
-    <Compile Include="Payment\Braintree\Controllers\BraintreeWebhooksControllerBase.cs" />
-    <Compile Include="Payment\Braintree\EnvironmentType.cs" />
-    <Compile Include="Payment\Braintree\MappingExtensions.cs" />
-    <Compile Include="Payment\Braintree\Models\BillingAddress.cs" />
-    <Compile Include="Payment\Braintree\Models\MerchantDescriptor.cs" />
-    <Compile Include="Payment\Braintree\Models\TransactionOption.cs" />
-    <Compile Include="Payment\Braintree\Models\TransactionReference.cs" />
-    <Compile Include="Payment\Braintree\Provider\BraintreePaymentGatewayMethodBase.cs" />
-    <Compile Include="Payment\Braintree\Provider\BraintreePaymentGatewayProvider.cs" />
-    <Compile Include="Payment\Braintree\Provider\BraintreeStandardPaymentGatewayBase.cs" />
-    <Compile Include="Payment\Braintree\Provider\BraintreeStandardTransactionPaymentGatewayMethod.cs" />
-    <Compile Include="Payment\Braintree\Provider\BraintreeSubscriptionRecordPaymentMethod.cs" />
-    <Compile Include="Payment\Braintree\Provider\BraintreeVaultPaymentGatewayMethodBase.cs" />
-    <Compile Include="Payment\Braintree\Provider\BraintreeVaultTransactionPaymentGatewayMethod.cs" />
-    <Compile Include="Payment\Braintree\Provider\IBraintreePaymentGatewayProvider.cs" />
-    <Compile Include="Payment\Braintree\Provider\IBraintreeStandardTransactionPaymentGatewayMethod.cs" />
-    <Compile Include="Payment\Braintree\Provider\IBraintreeSubscriptionRecordPaymentGatewayMethod.cs" />
-    <Compile Include="Payment\Braintree\Provider\IBraintreeVaultTransactionPaymentGatewayMethod.cs" />
-    <Compile Include="Payment\Braintree\Provider\IPayPalOneTimeTransactionPaymentGatewayMethod.cs" />
-    <Compile Include="Payment\Braintree\Provider\PayPalOneTimeTransactionPaymentGatewayMethod.cs" />
-    <Compile Include="Payment\Braintree\Provider\PayPalVaultTransactionPaymentGatewayMethod.cs" />
-    <Compile Include="Payment\Braintree\Services\BraintreeApiRequestFactory.cs" />
-    <Compile Include="Payment\Braintree\Services\BraintreeApiService.cs" />
-    <Compile Include="Payment\Braintree\Services\BraintreeApiServiceBase.cs" />
-    <Compile Include="Payment\Braintree\Services\BraintreeCustomerApiService.cs" />
-    <Compile Include="Payment\Braintree\Services\BraintreePaymentMethodApiService.cs" />
-    <Compile Include="Payment\Braintree\Services\BraintreeSubscriptionApiService.cs" />
-    <Compile Include="Payment\Braintree\Services\BraintreeTransactionApiService.cs" />
-    <Compile Include="Payment\Braintree\Services\BraintreeWebhooksApiService.cs" />
-    <Compile Include="Payment\Braintree\Services\IBraintreeApiService.cs" />
-    <Compile Include="Payment\Braintree\Services\IBraintreeCustomerApiService.cs" />
-    <Compile Include="Payment\Braintree\Services\IBraintreePaymentMethodApiService.cs" />
-    <Compile Include="Payment\Braintree\Services\IBraintreeSubscriptionApiService.cs" />
-    <Compile Include="Payment\Braintree\Services\IBraintreeTransactionApiService.cs" />
-    <Compile Include="Payment\Braintree\Services\IBraintreeWebhooksApiService.cs" />
     <Compile Include="Models\PaymentRedirectingUrl.cs" />
     <Compile Include="Payment\PurchaseOrder\PurchaseOrderFormData.cs" />
     <Compile Include="Payment\PurchaseOrder\PurchaseOrderInfoExtensions.cs" />
@@ -326,7 +277,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyVisibility.cs" />
     <Compile Include="Resolvers\ProviderSettingsResolver.cs" />
-    <Compile Include="UmbracoApplicationEvents.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Merchello.Core\Merchello.Core.csproj">
@@ -344,7 +294,7 @@
     <None Include="Settings.StyleCop" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Payment\PayPal\" />
+    <Folder Include="Exceptions\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets')" />
