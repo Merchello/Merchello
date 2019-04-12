@@ -895,9 +895,17 @@
             {
                 var invoice = _invoiceService.GetByKey(data.InvoiceKey);
                 var shippingLineItems = invoice.ShippingLineItems().ToArray();
-                foreach (var lineItem in shippingLineItems)
+                if (shippingLineItems.Any())
                 {
-                    lineItem.ExtendedData.AddAddress(data.Address.ToAddress(), Constants.ExtendedDataKeys.ShippingDestinationAddress);
+                    foreach (var lineItem in shippingLineItems)
+                    {
+                        lineItem.ExtendedData.AddAddress(data.Address.ToAddress(), Constants.ExtendedDataKeys.ShippingDestinationAddress);
+                    }
+                }
+                else
+                {
+                   // Problem. There is no shipping line item when there should be! Needs more investigating as this does very, very occasionally happen
+                    MultiLogHelper.Warn<InvoiceApiController>(string.Format("No shipping address line item when trying to save shipping address for {0}", invoice.PrefixedInvoiceNumber()));
                 }
 
                 _invoiceService.Save(invoice);
