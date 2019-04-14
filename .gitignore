@@ -219,3 +219,6 @@ src/Merchello.FastTrack.Ui/App_Data/umbraco.config
 src/Merchello.Core/App_Data/NuGetBackup/
 src/Merchello.Web/App_Data/NuGetBackup/
 src/Merchello.FastTrack.Ui/App_Data/TEMP/ClientDependency/*
+/src/Merchello.FastTrack.Ui/bin/Microsoft.Web.Helpers.dll
+/src/Merchello.FastTrack.Ui/bin/System.Net.Http.Extensions.dll
+/src/Merchello.FastTrack.Ui/bin/System.Net.Http.Primitives.dll

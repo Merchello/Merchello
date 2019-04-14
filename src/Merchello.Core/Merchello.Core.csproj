@@ -517,6 +517,7 @@
     <Compile Include="Extensions.Version.cs">
       <DependentUpon>Extensions.cs</DependentUpon>
     </Compile>
+    <Compile Include="Gateways\Shipping\ShippingEvents.cs" />
     <Compile Include="Logging\IRemoteLogger.cs" />
     <Compile Include="Models\DetachedContent\DetachedContentValuesSerializationHelper.cs" />
     <Compile Include="Models\EntityBase\IDateStamped.cs" />
