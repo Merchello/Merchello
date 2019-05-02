@@ -155,6 +155,14 @@
         /// <returns>A value indication whether or not the SKU exists</returns>
         bool SkuExists(string sku);
 
+
+        /// <summary>
+        /// Gets the product key from the product slug
+        /// </summary>
+        /// <param name="slug"></param>
+        /// <returns></returns>
+        Guid GetKeyForSlug(string slug);
+
         #region Detached Content
 
         /// <summary>

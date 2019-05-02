@@ -625,7 +625,7 @@
         /// </returns>
         public static bool HasVirtualContent(this ProductDisplay display)
         {
-            return display.Available && display.DetachedContents.Any(x => x.CanBeRendered);
+            return display.DetachedContents.Any(x => x.CanBeRendered);
         }
 
         /// <summary>

@@ -2101,7 +2101,7 @@ namespace Merchello.Core.Services
         /// <returns>
         /// The product key.
         /// </returns>
-        internal Guid GetKeyForSlug(string slug)
+        public Guid GetKeyForSlug(string slug)
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {

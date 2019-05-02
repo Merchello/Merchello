@@ -1,7 +1,6 @@
 ﻿namespace Merchello.Core.Models.Rdbms
 {
     using System;
-
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.DatabaseAnnotations;
 
