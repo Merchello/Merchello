@@ -1,0 +1,39 @@
+﻿<div class="merchello">
+    <div class="umb-panel merchello-side-panel" ng-controller="Merchello.Sales.Dialogs.DeleteDiscount" data-ng-show="loaded">
+        <div class="umb-overlay umb-overlay-right">
+            <div class="umb-overlay__form">
+
+                <div class="umb-overlay-header">
+                    <h4 class="umb-overlay__title"><localize key="merchelloSales_manageAdjustments" /></h4>
+                </div>
+
+                <div class="umb-overlay-container form-horizontal merchello-panel-body">
+
+
+                    <div class="alert alert-error">
+                        This cannot be undone and will remove the discount from the invoice
+                    </div>
+
+                </div>
+
+                <div class="umb-overlay-drawer">
+                    <div class="umb-overlay-drawer__align-right">
+
+                        <div class="umb-button">
+                            <a href data-ng-click="close()" class="btn btn-link">
+                                <localize key="general_cancel"></localize>
+                            </a>
+                        </div>
+
+                        <div class="umb-button">
+                            <button data-ng-click="submit(dialogData)" class="btn btn-success" prevent-default>
+                                <localize key="buttons_save"></localize>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
