@@ -188,7 +188,18 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                     };
 
                     function removeDiscount(dialogData) {
-                        var discount = dialogData.discount;
+                        var invoiceSavePromise = invoiceResource.deleteDiscount(scope.invoice.key, dialogData.discount.sku);
+                        invoiceSavePromise.then(function () {
+                                $timeout(function () {
+                                        scope.reload();
+                                        loadInvoice();
+                                        notificationsService.success('Invoice updated.');
+                                    },
+                                    1500);
+                            },
+                            function (reason) {
+                                notificationsService.error("Failed to update invoice", reason.message);
+                            });
                     }
 
                     function loadInvoice() {

@@ -170,15 +170,6 @@
                     this.Basket.AddItem(product, product.Name, quantity, extendedData);
                 }
 
-                // TODO DELETE ME
-                // TESTING
-                var deleteExtendedData = new ExtendedDataCollection();
-                deleteExtendedData.SetValue(Merchello.Core.Constants.ExtendedDataKeys.Taxable, "true");
-
-                var discount = new ItemCacheLineItem(LineItemType.Discount, "Testing Discount Delete", "Disc", 1, 10, extendedData);
-                Basket.AddItem(discount);
-                // TODO DELETE ME
-
                 this.Basket.Save();
 
                 // If this request is not an AJAX request return the redirect
