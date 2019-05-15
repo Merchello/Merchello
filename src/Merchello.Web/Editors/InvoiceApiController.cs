@@ -943,5 +943,37 @@
 
             return Request.CreateResponse(HttpStatusCode.OK);
         }
+
+        [HttpPost, HttpDelete, HttpGet]
+        public HttpResponseMessage DeleteDiscount(Guid invoiceId, string discountSku)
+        {
+            var invoice = _invoiceService.GetByKey(invoiceId);
+            if (invoice == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+
+            // Remove discount 
+            ILineItem discountToDelete = null;
+            foreach (var invoiceItem in invoice.Items)
+            {
+                if (invoiceItem.Sku == discountSku)
+                {
+                    discountToDelete = invoiceItem;
+                    break;
+                }
+            }
+
+            if (discountToDelete != null)
+            {
+                // Remove discount
+                invoice.Items.Remove(discountToDelete);
+
+                // Resync the invoice (And save)
+                ((InvoiceService)_invoiceService).ReSyncInvoiceTotal(invoice, true);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
     }
 }

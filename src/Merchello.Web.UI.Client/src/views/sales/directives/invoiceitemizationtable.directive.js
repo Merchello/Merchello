@@ -11,12 +11,13 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                     paymentMethods: '=',
                     preValuesLoaded: '=',
                     currencySymbol: '=',
-                    canEditLineItems:'=',
+                    canEditLineItems: '=',
+
                     save: '&',
-                    reload:'&'
+                    reload: '&'
                 },
                 templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/invoiceitemizationtable.tpl.html',
-                link: function (scope, elm, attr) {
+                link: function(scope, elm, attr) {
 
                     scope.loaded = false;
                     scope.authorizedCapturedLabel = '';
@@ -32,11 +33,12 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                     function init() {
 
                         // ensure that the parent scope promises have been resolved
-                        scope.$watch('preValuesLoaded', function (pvl) {
-                            if (pvl === true) {
-                                loadInvoice();
-                            }
-                        });
+                        scope.$watch('preValuesLoaded',
+                            function(pvl) {
+                                if (pvl === true) {
+                                    loadInvoice();
+                                }
+                            });
                     }
 
 
@@ -67,7 +69,7 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
 
 
                     // The dialog that deals with lineitem quantity changes and deletions
-                    scope.editLineItem = function (lineItem, lineItemType) {
+                    scope.editLineItem = function(lineItem, lineItemType) {
 
                         var dialogData = {
                             key: lineItem.key,
@@ -101,70 +103,104 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                         if (lineItemDialogData.deleteLineItem) {
 
                             // Loop through items                           
-                            angular.forEach(scope.invoice.items, function (item) {
-                                if (keepFindingProduct) {
-                                    if (lineItemDialogData.lineItem.sku === item.sku) {
+                            angular.forEach(scope.invoice.items,
+                                function(item) {
+                                    if (keepFindingProduct) {
+                                        if (lineItemDialogData.lineItem.sku === item.sku) {
 
+                                            // Make an invoice AddItemsModel
+                                            invoiceAddItems = {
+                                                InvoiceKey: scope.invoice.key,
+                                                LineItemType: lineItemDialogData.lineItemType,
+                                                Items: [
+                                                    {
+                                                        OriginalSku: item.sku,
+                                                        Quantity: 0
+                                                    }
+                                                ]
+                                            };
+
+                                            // Stop finding and break (As no break in angular loop, this is best way)
+                                            keepFindingProduct = false;
+                                        }
+                                    }
+                                });
+
+                        } else {
+
+                            // Just send everything up and we'll deal with it on the server      
+                            // TODO - Need to manage all these on the server, check for product key
+                            angular.forEach(scope.invoice.items,
+                                function(item) {
+                                    if (item.lineItemType === "Product" && item.key === lineItemDialogData.key) {
                                         // Make an invoice AddItemsModel
                                         invoiceAddItems = {
                                             InvoiceKey: scope.invoice.key,
                                             LineItemType: lineItemDialogData.lineItemType,
                                             Items: [
                                                 {
+                                                    Quantity: lineItemDialogData.quantity,
+                                                    OriginalQuantity: item.quantity,
+                                                    Sku: lineItemDialogData.sku,
                                                     OriginalSku: item.sku,
-                                                    Quantity: 0
+                                                    Name: lineItemDialogData.name,
+                                                    OriginalName: item.name,
+                                                    Price: lineItemDialogData.price,
+                                                    OriginalPrice: item.price,
+                                                    Key: item.key
                                                 }
                                             ]
                                         }
-
-                                        // Stop finding and break (As no break in angular loop, this is best way)
-                                        keepFindingProduct = false;
                                     }
-                                }
-                            });
-
-                        } else {
-
-                            // Just send everything up and we'll deal with it on the server      
-                            // TODO - Need to manage all these on the server, check for product key
-                            angular.forEach(scope.invoice.items, function (item) {
-                                if (item.lineItemType === "Product" && item.key === lineItemDialogData.key) {
-                                    // Make an invoice AddItemsModel
-                                    invoiceAddItems = {
-                                        InvoiceKey: scope.invoice.key,
-                                        LineItemType: lineItemDialogData.lineItemType,
-                                        Items: [
-                                            {
-                                                Quantity: lineItemDialogData.quantity,
-                                                OriginalQuantity: item.quantity,
-                                                Sku: lineItemDialogData.sku,
-                                                OriginalSku: item.sku,
-                                                Name: lineItemDialogData.name,
-                                                OriginalName: item.name,
-                                                Price: lineItemDialogData.price,
-                                                OriginalPrice: item.price,
-                                                Key: item.key
-                                            }
-                                        ]
-                                    }
-                                }
-                            });                           
+                                });
                         }
 
                         // Put the new items
                         var invoiceSavePromise = invoiceResource.putInvoiceNewProducts(invoiceAddItems);
-                        invoiceSavePromise.then(function () {
-                            $timeout(function () {
-                                scope.reload();
-                                loadInvoice();
-                                notificationsService.success('Invoice updated.');
-                            }, 1500);
-                        }, function (reason) {
-                            notificationsService.error("Failed to update invoice", reason.message);
+                        invoiceSavePromise.then(function() {
+                                $timeout(function() {
+                                        scope.reload();
+                                        loadInvoice();
+                                        notificationsService.success('Invoice updated.');
+                                    },
+                                    1500);
+                            },
+                            function(reason) {
+                                notificationsService.error("Failed to update invoice", reason.message);
+                            });
+
+
+                    }
+
+                    scope.deleteDiscount = function(discount) {
+
+                        var dialogData = {
+                            discount: discount
+                        };
+
+                        dialogService.open({
+                            template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/sales.delete.discount.html',
+                            show: true,
+                            dialogData: dialogData,
+                            callback: removeDiscount
                         });
 
-
                     };
+
+                    function removeDiscount(dialogData) {
+                        var invoiceSavePromise = invoiceResource.deleteDiscount(scope.invoice.key, dialogData.discount.sku);
+                        invoiceSavePromise.then(function () {
+                                $timeout(function () {
+                                        scope.reload();
+                                        loadInvoice();
+                                        notificationsService.success('Invoice updated.');
+                                    },
+                                    1500);
+                            },
+                            function (reason) {
+                                notificationsService.error("Failed to update invoice", reason.message);
+                            });
+                    }
 
                     function loadInvoice() {
                         var taxLineItem = scope.invoice.getTaxLineItem();
@@ -175,14 +211,18 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                         scope.discountLineItems = scope.invoice.getDiscountLineItems();
                         scope.adjustmentLineItems = scope.invoice.getAdjustmentLineItems();
 
-                        angular.forEach(scope.adjustmentLineItems, function(item) {
-                            item.userName = item.extendedData.getValue("userName");
-                            item.email = item.extendedData.getValue("email");
-                        });
+                        angular.forEach(scope.adjustmentLineItems,
+                            function(item) {
+                                item.userName = item.extendedData.getValue("userName");
+                                item.email = item.extendedData.getValue("email");
+                            });
 
-                        scope.remainingBalance = invoiceHelper.round(scope.invoice.remainingBalance(scope.allPayments), 2);
+                        scope.remainingBalance =
+                            invoiceHelper.round(scope.invoice.remainingBalance(scope.allPayments), 2);
 
-                        var label  = scope.remainingBalance == '0' ? 'merchelloOrderView_captured' : 'merchelloOrderView_authorized';
+                        var label = scope.remainingBalance == '0'
+                            ? 'merchelloOrderView_captured'
+                            : 'merchelloOrderView_authorized';
 
                         $q.all([
                             localizationService.localize(label),
@@ -198,5 +238,5 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                     // initialize the directive
                     init();
                 }
-            }
+            };
         }]);

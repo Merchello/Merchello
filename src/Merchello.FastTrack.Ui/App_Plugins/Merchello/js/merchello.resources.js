@@ -961,6 +961,17 @@ angular.module('merchello.resources')
                             'Failed to delete invoice');
                     },
 
+                    deleteDiscount: function (invoiceKey, discountSku) {
+                        var url = baseUrl + 'DeleteDiscount';
+                        return umbRequestHelper.resourcePromise(
+                            $http({
+                                url: url,
+                                method: "GET",
+                                params: { invoiceId: invoiceKey, discountSku: discountSku }
+                            }),
+                            'Failed to delete discount');
+                    },
+
                     /**
                      * @ngdoc method
                      * @name cancelInvoice

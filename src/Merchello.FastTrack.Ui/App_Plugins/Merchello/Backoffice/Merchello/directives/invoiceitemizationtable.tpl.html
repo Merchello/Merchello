@@ -62,7 +62,11 @@
         <td class="text-center">{{discountItem.quantity}}</td>
         <td class="text-right">({{discountItem.price | currency : currencySymbol}})</td>
         <td class="text-right">({{discountItem.quantity * discountItem.price | currency : currencySymbol}})</td>
-        <td></td>
+        <td>
+            <span class="merchello-icons">
+                <a class="merchello-icon merchello-icon-delete" ng-click="deleteDiscount(discountItem)" title="Delete" prevent-default><i class="icon icon-delete"></i></a>
+            </span>
+        </td>
     </tr>
     <tr>
         <td colspan="4" class="text-right"><localize key="merchelloShipping_shipping" /></td>
