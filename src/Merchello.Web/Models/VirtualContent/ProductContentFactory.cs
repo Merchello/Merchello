@@ -146,6 +146,25 @@
             return new ProductContent(publishedContentType, optionContentTypes, clone, _parent, _defaultStoreLanguage);
         }
 
+        public IProductVariantContent BuildContent(ProductVariantDisplay display)
+        {
+            if (!display.DetachedContents.Any(x => x.CanBeRendered)) return null;
+
+            // assert there is at least one the can be rendered
+            var detachedContent = display.DetachedContents.FirstOrDefault(x => x.CanBeRendered);
+
+            if (detachedContent == null) return null;
+
+            var publishedContentType = PublishedContentType.Get(PublishedItemType.Content, detachedContent.DetachedContentType.UmbContentType.Alias);
+
+            //var optionContentTypes = GetProductOptionContentTypes(display);
+
+            var clone = CloneHelper.JsonClone<ProductVariantDisplay>(display);
+
+            //return new ProductVariantContent(publishedContentType, new Dictionary<Guid, PublishedContentType>(), clone, _parent, _defaultStoreLanguage);
+            return new ProductVariantContent(clone, publishedContentType, new Dictionary<Guid, PublishedContentType>(), new List<IProductAttributeContent>(), _defaultStoreLanguage);
+        }
+
         //protected string GetLanguage()
         //{
         //    var language = _defaultStoreLanguage;
