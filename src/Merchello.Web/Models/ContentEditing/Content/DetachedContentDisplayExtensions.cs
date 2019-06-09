@@ -163,7 +163,7 @@ namespace Merchello.Web.Models.ContentEditing.Content
         /// <returns>
         /// The detached contents.
         /// </returns>
-        internal static void EnsureAttributeDetachedDataValues(this ProductAttributeDisplay attribute)
+        public static void EnsureAttributeDetachedDataValues(this ProductAttributeDisplay attribute)
         {
             if (attribute.DetachedDataValues != null && attribute.DetachedDataValues.Any()) return;
 
@@ -180,7 +180,7 @@ namespace Merchello.Web.Models.ContentEditing.Content
         /// <param name="conversionType">
         /// The value conversion type.
         /// </param>
-        internal static void EnsureValueConversion(this ProductDisplay display, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
+        public static void EnsureValueConversion(this ProductDisplay display, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
         {
             if (display != null)
             {
@@ -204,7 +204,7 @@ namespace Merchello.Web.Models.ContentEditing.Content
         /// <param name="conversionType">
         /// The value conversion type.
         /// </param>
-        internal static void EnsureValueConversion(this ProductDisplayBase display, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
+        public static void EnsureValueConversion(this ProductDisplayBase display, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
         {
             if (display == null) return;
 
@@ -222,7 +222,7 @@ namespace Merchello.Web.Models.ContentEditing.Content
             }
         }
 
-        internal static void EnsureValueConversion(this ProductOptionDisplay display, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
+        public static void EnsureValueConversion(this ProductOptionDisplay display, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
         {
             if (display.DetachedContentTypeKey.Equals(Guid.Empty)) return;
 
@@ -237,7 +237,7 @@ namespace Merchello.Web.Models.ContentEditing.Content
             }
         }
 
-        internal static void EnsureValueConversion(this ProductAttributeDisplay display, IContentType contentType, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
+        public static void EnsureValueConversion(this ProductAttributeDisplay display, IContentType contentType, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
         {
             if (display.ValueConversion == conversionType) return;
 

@@ -788,7 +788,13 @@
 
         #region IProductVariant
 
-        internal static ProductVariantDisplay ToProductVariantDisplay(this IProductVariant productVariant, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
+        /// <summary>
+        /// Turns a product variant into a display object
+        /// </summary>
+        /// <param name="productVariant"></param>
+        /// <param name="conversionType"></param>
+        /// <returns></returns>
+        public static ProductVariantDisplay ToProductVariantDisplay(this IProductVariant productVariant, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
         {            
             var display = AutoMapper.Mapper.Map<ProductVariantDisplay>(productVariant);
             display.EnsureValueConversion(conversionType);
