@@ -643,6 +643,24 @@
         }
 
         /// <summary>
+        /// Creates <see cref="IProductVariantContent"/> from the display object.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <param name="factory">
+        /// The factory.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductVariantContent"/>.
+        /// </returns>
+        public static IProductVariantContent AsProductContent(this ProductVariantDisplay display, ProductContentFactory factory)
+        {
+            if (!display.DetachedContents.Any(x => x.CanBeRendered)) return null;
+            return factory.BuildContent(display);
+        }
+
+        /// <summary>
         /// Creates <see cref="IProductContent"/> from the display object.
         /// </summary>
         /// <param name="display">
