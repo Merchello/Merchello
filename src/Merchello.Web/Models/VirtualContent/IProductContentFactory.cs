@@ -17,5 +17,6 @@
         /// The <see cref="IProductContent"/>.
         /// </returns>
         IProductContent BuildContent(ProductDisplay display);
+        IProductVariantContent BuildContent(ProductVariantDisplay display);
     }
 }
