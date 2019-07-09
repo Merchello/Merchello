@@ -1035,9 +1035,9 @@
                         }
                     }
                 }
-                // If we have a scheduled publish or unpublish date change the default button to 
+                // If we have a scheduled publish date change the default button to 
                 // "save" and update the label to "save and schedule
-                if (args.content.releaseDate || args.content.removeDate) {
+                if (args.content.releaseDate) {
                     // if save button is alread the default don't change it just update the label
                     if (buttons.defaultButton && buttons.defaultButton.letter === 'A') {
                         buttons.defaultButton.labelKey = 'buttons_saveAndSchedule';
@@ -1710,13 +1710,6 @@
                     }
                 }
                 return crop;
-            },
-            centerInsideViewPort: function (img, viewport) {
-                var left = viewport.width / 2 - img.width / 2, top = viewport.height / 2 - img.height / 2;
-                return {
-                    left: left,
-                    top: top
-                };
             },
             alignToCoordinates: function (image, center, viewport) {
                 var min_left = image.width - viewport.width;
@@ -4440,7 +4433,7 @@
 * @name umbraco.services.mediaHelper
 * @description A helper object used for dealing with media items
 **/
-    function mediaHelper(umbRequestHelper) {
+    function mediaHelper(umbRequestHelper, $log) {
         //container of fileresolvers
         var _mediaFileResolvers = {};
         return {
@@ -4448,11 +4441,11 @@
          * @ngdoc function
          * @name umbraco.services.mediaHelper#getImagePropertyValue
          * @methodOf umbraco.services.mediaHelper
-         * @function    
+         * @function
          *
          * @description
          * Returns the file path associated with the media property if there is one
-         * 
+         *
          * @param {object} options Options object
          * @param {object} options.mediaModel The media object to retrieve the image path from
          * @param {object} options.imageOnly Optional, if true then will only return a path if the media item is an image
@@ -4508,11 +4501,11 @@
          * @ngdoc function
          * @name umbraco.services.mediaHelper#getImagePropertyValue
          * @methodOf umbraco.services.mediaHelper
-         * @function    
+         * @function
          *
          * @description
          * Returns the actual image path associated with the image property if there is one
-         * 
+         *
          * @param {object} options Options object
          * @param {object} options.imageModel The media object to retrieve the image path from
          */
@@ -4529,11 +4522,11 @@
          * @ngdoc function
          * @name umbraco.services.mediaHelper#getThumbnail
          * @methodOf umbraco.services.mediaHelper
-         * @function    
+         * @function
          *
          * @description
          * formats the display model used to display the content to the model used to save the content
-         * 
+         *
          * @param {object} options Options object
          * @param {object} options.imageModel The media object to retrieve the image path from
          */
@@ -4554,43 +4547,39 @@
          * @ngdoc function
          * @name umbraco.services.mediaHelper#resolveFileFromEntity
          * @methodOf umbraco.services.mediaHelper
-         * @function    
+         * @function
          *
          * @description
          * Gets the media file url for a media entity returned with the entityResource
-         * 
+         *
          * @param {object} mediaEntity A media Entity returned from the entityResource
          * @param {boolean} thumbnail Whether to return the thumbnail url or normal url
          */
             resolveFileFromEntity: function (mediaEntity, thumbnail) {
-                if (!angular.isObject(mediaEntity.metaData)) {
-                    throw 'Cannot resolve the file url from the mediaEntity, it does not contain the required metaData';
+                if (!angular.isObject(mediaEntity.metaData) || !mediaEntity.metaData.MediaPath) {
+                    //don't throw since this image legitimately might not contain a media path, but output a warning
+                    $log.warn('Cannot resolve the file url from the mediaEntity, it does not contain the required metaData');
+                    return null;
                 }
-                var values = _.values(mediaEntity.metaData);
-                for (var i = 0; i < values.length; i++) {
-                    var val = values[i];
-                    if (angular.isObject(val) && val.PropertyEditorAlias) {
-                        for (var resolver in _mediaFileResolvers) {
-                            if (val.PropertyEditorAlias === resolver) {
-                                //we need to format a property variable that coincides with how the property would be structured
-                                // if it came from the mediaResource just to keep things slightly easier for the file resolvers.
-                                var property = { value: val.Value };
-                                return _mediaFileResolvers[resolver](property, mediaEntity, thumbnail);
-                            }
-                        }
+                if (thumbnail) {
+                    if (this.detectIfImageByExtension(mediaEntity.metaData.MediaPath)) {
+                        return this.getThumbnailFromPath(mediaEntity.metaData.MediaPath);
+                    } else {
+                        return null;
                     }
+                } else {
+                    return mediaEntity.metaData.MediaPath;
                 }
-                return '';
             },
             /**
          * @ngdoc function
          * @name umbraco.services.mediaHelper#resolveFile
          * @methodOf umbraco.services.mediaHelper
-         * @function    
+         * @function
          *
          * @description
          * Gets the media file url for a media object returned with the mediaResource
-         * 
+         *
          * @param {object} mediaEntity A media Entity returned from the entityResource
          * @param {boolean} thumbnail Whether to return the thumbnail url or normal url
          */
@@ -4660,11 +4649,11 @@
          * @ngdoc function
          * @name umbraco.services.mediaHelper#scaleToMaxSize
          * @methodOf umbraco.services.mediaHelper
-         * @function    
+         * @function
          *
          * @description
          * Finds the corrct max width and max height, given maximum dimensions and keeping aspect ratios
-         * 
+         *
          * @param {number} maxSize Maximum width & height
          * @param {number} width Current width
          * @param {number} height Current height
@@ -4704,11 +4693,11 @@
          * @ngdoc function
          * @name umbraco.services.mediaHelper#getThumbnailFromPath
          * @methodOf umbraco.services.mediaHelper
-         * @function    
+         * @function
          *
          * @description
          * Returns the path to the thumbnail version of a given media library image path
-         * 
+         *
          * @param {string} imagePath Image path, ex: /media/1234/my-image.jpg
          */
             getThumbnailFromPath: function (imagePath) {
@@ -4726,11 +4715,11 @@
          * @ngdoc function
          * @name umbraco.services.mediaHelper#detectIfImageByExtension
          * @methodOf umbraco.services.mediaHelper
-         * @function    
+         * @function
          *
          * @description
          * Returns true/false, indicating if the given path has an allowed image extension
-         * 
+         *
          * @param {string} imagePath Image path, ex: /media/1234/my-image.jpg
          */
             detectIfImageByExtension: function (imagePath) {
@@ -5015,6 +5004,7 @@
         var mainTreeEventHandler = null;
         //tracks the user profile dialog
         var userDialog = null;
+        var syncTreePromise;
         function setMode(mode) {
             switch (mode) {
             case 'tree':
@@ -5059,6 +5049,7 @@
                 appState.setSectionState('showSearchResults', false);
                 appState.setGlobalState('stickyNavigation', false);
                 appState.setGlobalState('showTray', false);
+                appState.setMenuState('currentNode', null);
                 if (appState.getGlobalState('isTablet') === true) {
                     appState.setGlobalState('showNavigation', false);
                 }
@@ -5143,6 +5134,11 @@
                 //when a tree is loaded into a section, we need to put it into appState
                 mainTreeEventHandler.bind('treeLoaded', function (ev, args) {
                     appState.setTreeState('currentRootNode', args.tree);
+                    if (syncTreePromise) {
+                        mainTreeEventHandler.syncTree(syncTreePromise.args).then(function (syncArgs) {
+                            syncTreePromise.resolve(syncArgs);
+                        });
+                    }
                 });
                 //when a tree node is synced this event will fire, this allows us to set the currentNode
                 mainTreeEventHandler.bind('treeSynced', function (ev, args) {
@@ -5248,8 +5244,10 @@
                         return mainTreeEventHandler.syncTree(args);
                     }
                 }
-                //couldn't sync
-                return angularHelper.rejectedPromise();
+                //create a promise and resolve it later
+                syncTreePromise = $q.defer();
+                syncTreePromise.args = args;
+                return syncTreePromise.promise;
             },
             /**
             Internal method that should ONLY be used by the legacy API wrapper, the legacy API used to
@@ -5386,7 +5384,7 @@
                     if (menuAction.length !== 2) {
                         //if it is not two parts long then this most likely means that it's a legacy action
                         var js = action.metaData['jsAction'].replace('javascript:', '');
-                        //there's not really a different way to acheive this except for eval
+                        //there's not really a different way to achieve this except for eval
                         eval(js);
                     } else {
                         var menuActionService = $injector.get(menuAction[0]);
@@ -5547,12 +5545,13 @@
 	     * hides the currently open dialog
 	     */
             hideDialog: function (showMenu) {
-                setMode('default');
                 if (showMenu) {
                     this.showMenu(undefined, {
                         skipDefault: true,
                         node: appState.getMenuState('currentNode')
                     });
+                } else {
+                    setMode('default');
                 }
             },
             /**
@@ -5928,7 +5927,7 @@
  * @ngdoc service
  * @name umbraco.services.searchService
  *
- *  
+ *
  * @description
  * Service for handling the main application search, can currently search content, media and members
  *
@@ -5941,10 +5940,10 @@
  *          angular.forEach(results, function(result){
  *                  //returns:
  *                  {name: "name", id: 1234, menuUrl: "url", editorPath: "url", metaData: {}, subtitle: "/path/etc" }
- *           })          
- *           var result = 
- *       }) 
- * </pre> 
+ *           })
+ *           var result =
+ *       })
+ * </pre>
  */
     angular.module('umbraco.services').factory('searchService', function ($q, $log, entityResource, contentResource, umbRequestHelper, $injector, searchResultFormatter) {
         return {
@@ -5985,7 +5984,7 @@
                 if (!args.term) {
                     throw 'args.term is required';
                 }
-                return entityResource.search(args.term, 'Document', args.searchFrom, args.canceler).then(function (data) {
+                return entityResource.search(args.term, 'Document', args.searchFrom, args.canceler, args.dataTypeId).then(function (data) {
                     _.each(data, function (item) {
                         searchResultFormatter.configureContentResult(item);
                     });
@@ -6007,7 +6006,7 @@
                 if (!args.term) {
                     throw 'args.term is required';
                 }
-                return entityResource.search(args.term, 'Media', args.searchFrom).then(function (data) {
+                return entityResource.search(args.term, 'Media', args.searchFrom, args.canceler, args.dataTypeId).then(function (data) {
                     _.each(data, function (item) {
                         searchResultFormatter.configureMediaResult(item);
                     });
@@ -6032,7 +6031,7 @@
                 return entityResource.searchAll(args.term, args.canceler).then(function (data) {
                     _.each(data, function (resultByType) {
                         //we need to format the search result data to include things like the subtitle, urls, etc...
-                        // this is done with registered angular services as part of the SearchableTreeAttribute, if that 
+                        // this is done with registered angular services as part of the SearchableTreeAttribute, if that
                         // is not found, than we format with the default formatter
                         var formatterMethod = searchResultFormatter.configureDefaultResult;
                         //check if a custom formatter is specified...
@@ -6759,7 +6758,7 @@
  * @ngdoc service
  * @name umbraco.services.tinyMceService
  *
- *  
+ *
  * @description
  * A service containing all logic for all of the Umbraco TinyMCE plugins
  */
@@ -6819,7 +6818,7 @@
 		 * @description
 		 * Creates the umbrco insert embedded media tinymce plugin
 		 *
-		 * @param {Object} editor the TinyMCE editor instance        
+		 * @param {Object} editor the TinyMCE editor instance
 		 * @param {Object} $scope the current controller scope
 		 */
             createInsertEmbeddedMedia: function (editor, scope, callback) {
@@ -6844,7 +6843,7 @@
 		 * @description
 		 * Creates the umbrco insert media tinymce plugin
 		 *
-		 * @param {Object} editor the TinyMCE editor instance        
+		 * @param {Object} editor the TinyMCE editor instance
 		 * @param {Object} $scope the current controller scope
 		 */
             createMediaPicker: function (editor, scope, callback) {
@@ -6916,7 +6915,7 @@
 		 * @description
 		 * Creates the insert umbrco macro tinymce plugin
 		 *
-		 * @param {Object} editor the TinyMCE editor instance      
+		 * @param {Object} editor the TinyMCE editor instance
 		 * @param {Object} $scope the current controller scope
 		 */
             createInsertMacro: function (editor, $scope, callback) {
@@ -6935,7 +6934,7 @@
                     });
                 });
                 /**
-			 * Because the macro gets wrapped in a P tag because of the way 'enter' works, this 
+			 * Because the macro gets wrapped in a P tag because of the way 'enter' works, this
 			 * method will return the macro element if not wrapped in a p, or the p if the macro
 			 * element is the only one inside of it even if we are deep inside an element inside the macro
 			 */
@@ -6943,7 +6942,7 @@
                     var e = $(element).closest('.umb-macro-holder');
                     if (e.length > 0) {
                         if (e.get(0).parentNode.nodeName === 'P') {
-                            //now check if we're the only element                    
+                            //now check if we're the only element
                             if (element.parentNode.childNodes.length === 1) {
                                 return e.get(0).parentNode;
                             }
@@ -6972,7 +6971,7 @@
                                 if (endSelection !== startSelection) {
                                     //if the end selection is a macro then move the cursor
                                     //NOTE: we don't have to handle when the selection comes from a previous parent because
-                                    // that is automatically taken care of with the normal onNodeChanged logic since the 
+                                    // that is automatically taken care of with the normal onNodeChanged logic since the
                                     // evt.element will be the macro once it becomes part of the selection.
                                     var $testForMacro = $(endSelection).closest('.umb-macro-holder');
                                     if ($testForMacro.length > 0) {
@@ -7060,7 +7059,7 @@
                         });
                         //set onNodeChanged event listener
                         editor.on('NodeChange', onNodeChanged);
-                        /** 
+                        /**
 					 * Listen for the keydown in the editor, we'll check if we are currently on a macro element, if so
 					 * we'll check if the key down is a supported key which requires an action, otherwise we ignore the request
 					 * so the macro cannot be edited.
@@ -7389,32 +7388,6 @@
                     prependToContext: true
                 });
             },
-            /**
-		 * @ngdoc method
-		 * @name umbraco.services.tinyMceService#getAnchorNames
-		 * @methodOf umbraco.services.tinyMceService
-		 *
-		 * @description
-		 * From the given string, generates a string array where each item is the id attribute value from a named anchor
-		 * 'some string <a id="anchor"></a>with a named anchor' returns ['anchor']
-		 *
-		 * @param {string} input the string to parse      
-		 */
-            getAnchorNames: function (input) {
-                if (!input)
-                    return [];
-                var anchorPattern = /<a id=\\"(.*?)\\">/gi;
-                var matches = input.match(anchorPattern);
-                var anchors = [];
-                if (matches) {
-                    anchors = matches.map(function (v) {
-                        return v.substring(v.indexOf('"') + 1, v.lastIndexOf('\\'));
-                    });
-                }
-                return anchors.filter(function (val, i, self) {
-                    return self.indexOf(val) === i;
-                });
-            },
             insertLinkInEditor: function (editor, target, anchorElm) {
                 var href = target.url;
                 // We want to use the Udi. If it is set, we use it, else fallback to id, and finally to null
@@ -7463,7 +7436,7 @@
                         editor.execCommand('mceInsertLink', false, createElemAttributes());
                     }
                 }
-                if (!href) {
+                if (!href && !target.anchor) {
                     editor.execCommand('unlink');
                     return;
                 }
@@ -7473,8 +7446,12 @@
                     insertLink();
                     return;
                 }
-                // Is email and not //user@domain.com
-                if (href.indexOf('@') > 0 && href.indexOf('//') === -1 && href.indexOf('mailto:') === -1) {
+                if (!href) {
+                    href = '';
+                }
+                // Is email and not //user@domain.com and protocol (e.g. mailto:, sip:) is not specified
+                if (href.indexOf('@') > 0 && href.indexOf('//') === -1 && href.indexOf(':') === -1) {
+                    // assume it's a mailto link
                     href = 'mailto:' + href;
                     insertLink();
                     return;
@@ -8399,7 +8376,15 @@
                         self.loadNodeChildren({
                             node: node,
                             section: node.section
-                        }).then(function () {
+                        }).then(function (children) {
+                            //we've reloaded a portion of the tree, call the callback if one is specified.
+                            //TODO: In v8, we can just use deferred.notify
+                            if (args.treeNodeExpanded && angular.isFunction(args.treeNodeExpanded)) {
+                                args.treeNodeExpanded({
+                                    node: node,
+                                    children: children
+                                });
+                            }
                             //ok, got the children, let's find it
                             var found = self.getChildNode(node, args.path[currPathIndex]);
                             if (found) {
@@ -8854,12 +8839,17 @@
                 }
                 /** The default error callback used if one is not supplied in the opts */
                 function defaultError(data, status, headers, config) {
-                    return {
+                    var err = {
                         //NOTE: the default error message here should never be used based on the above docs!
                         errorMsg: angular.isString(opts) ? opts : 'An error occurred!',
                         data: data,
                         status: status
                     };
+                    // if "opts" is a promise, we set "err.errorMsg" to be that promise
+                    if (typeof opts == 'object' && typeof opts.then == 'function') {
+                        err.errorMsg = opts;
+                    }
+                    return err;
                 }
                 //create the callbacs based on whats been passed in.
                 var callbacks = {
@@ -9263,6 +9253,25 @@
                 lastServerTimeoutSet = new Date();
             }
         }
+        function getMomentLocales(locales, supportedLocales) {
+            var localeUrls = [];
+            var locales = locales.split(',');
+            for (var i = 0; i < locales.length; i++) {
+                var locale = locales[i].toString().toLowerCase();
+                if (locale !== 'en-us') {
+                    if (supportedLocales.indexOf(locale + '.js') > -1) {
+                        localeUrls.push('lib/moment/' + locale + '.js');
+                    }
+                    if (locale.indexOf('-') > -1) {
+                        var majorLocale = locale.split('-')[0] + '.js';
+                        if (supportedLocales.indexOf(majorLocale) > -1) {
+                            localeUrls.push('lib/moment/' + majorLocale);
+                        }
+                    }
+                }
+            }
+            return localeUrls;
+        }
         /** resets all user data, broadcasts the notAuthenticated event and shows the login dialog */
         function userAuthExpired(isLogout) {
             //store the last user id and clear the user
@@ -9284,7 +9293,7 @@
                 userAuthExpired();
             }
         });
-        return {
+        var services = {
             /** Internal method to display the login dialog */
             _showLoginDialog: function () {
                 openLoginDialog();
@@ -9371,41 +9380,33 @@
             },
             /** Loads the Moment.js Locale for the current user. */
             loadMomentLocaleForCurrentUser: function () {
-                function loadLocales(currentUser, supportedLocales) {
-                    var locale = currentUser.locale.toLowerCase();
-                    if (locale !== 'en-us') {
-                        var localeUrls = [];
-                        if (supportedLocales.indexOf(locale + '.js') > -1) {
-                            localeUrls.push('lib/moment/' + locale + '.js');
-                        }
-                        if (locale.indexOf('-') > -1) {
-                            var majorLocale = locale.split('-')[0] + '.js';
-                            if (supportedLocales.indexOf(majorLocale) > -1) {
-                                localeUrls.push('lib/moment/' + majorLocale);
-                            }
-                        }
-                        return assetsService.load(localeUrls, $rootScope);
-                    } else {
-                        //return a noop promise
-                        var deferred = $q.defer();
-                        var promise = deferred.promise;
-                        deferred.resolve(true);
-                        return promise;
-                    }
-                }
                 var promises = {
                     currentUser: this.getCurrentUser(),
                     supportedLocales: javascriptLibraryService.getSupportedLocalesForMoment()
                 };
                 return $q.all(promises).then(function (values) {
-                    return loadLocales(values.currentUser, values.supportedLocales);
+                    return services.loadLocales(values.currentUser.locale, values.supportedLocales);
                 });
+            },
+            /** Loads specific Moment.js Locales. */
+            loadLocales: function (locales, supportedLocales) {
+                var localeUrls = getMomentLocales(locales, supportedLocales);
+                if (localeUrls.length >= 1) {
+                    return assetsService.load(localeUrls, $rootScope);
+                } else {
+                    //return a noop promise
+                    var deferred = $q.defer();
+                    var promise = deferred.promise;
+                    deferred.resolve(true);
+                    return promise;
+                }
             },
             /** Called whenever a server request is made that contains a x-umb-user-seconds response header for which we can update the user's remaining timeout seconds */
             setUserTimeout: function (newTimeout) {
                 setUserTimeoutInternal(newTimeout);
             }
         };
+        return services;
     });
     (function () {
         'use strict';
