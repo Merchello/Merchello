@@ -1780,6 +1780,19 @@ In the following example you see how to run some custom logic before a step goes
         }
         angular.module('umbraco.directives').directive('umbTour', TourDirective);
     }());
+    /**
+@ngdoc directive
+@name umbraco.directives.directive:umbTourStep
+@restrict E
+@scope
+
+@description
+<b>Added in Umbraco 7.8</b>. The tour step component is a component that can be used in custom views for tour steps.
+
+@param {callback} onClose The callback which should be performened when the close button of the tour step is clicked
+@param {boolean=} hideClose A boolean indicating if the close button needs to be shown
+
+**/
     (function () {
         'use strict';
         function TourStepDirective() {
@@ -1806,6 +1819,19 @@ In the following example you see how to run some custom logic before a step goes
         }
         angular.module('umbraco.directives').directive('umbTourStep', TourStepDirective);
     }());
+    /**
+@ngdoc directive
+@name umbraco.directives.directive:umbTourStepContent
+@restrict E
+@scope
+
+@description
+<b>Added in Umbraco 7.8</b>. The tour step content component is a component that can be used in custom views for tour steps.
+It's meant to be used in the umb-tour-step directive.
+All markup in the body of the directive will be shown after the content attribute
+
+@param {string} content The content that needs to be shown
+**/
     (function () {
         'use strict';
         function TourStepContentDirective() {
@@ -1820,6 +1846,20 @@ In the following example you see how to run some custom logic before a step goes
         }
         angular.module('umbraco.directives').directive('umbTourStepContent', TourStepContentDirective);
     }());
+    /**
+@ngdoc directive
+@name umbraco.directives.directive:umbTourStepCounter
+@restrict E
+@scope
+
+@description
+<b>Added in Umbraco 7.8</b>. The tour step counter component is a component that can be used in custom views for tour steps.
+It's meant to be used in the umb-tour-step-footer directive. It will show the progress you have made in a tour eg. step 2/12
+
+
+@param {int} currentStep The current step the tour is on
+@param {int} totalSteps The current step the tour is on
+**/
     (function () {
         'use strict';
         function TourStepCounterDirective() {
@@ -1836,6 +1876,18 @@ In the following example you see how to run some custom logic before a step goes
         }
         angular.module('umbraco.directives').directive('umbTourStepCounter', TourStepCounterDirective);
     }());
+    /**
+@ngdoc directive
+@name umbraco.directives.directive:umbTourStepFooter
+@restrict E
+@scope
+
+@description
+<b>Added in Umbraco 7.8</b>. The tour step footer component is a component that can be used in custom views for tour steps. It's meant to be used in the umb-tour-step directive.
+All markup in the body of the directive will be shown as the footer of the tour step
+
+
+**/
     (function () {
         'use strict';
         function TourStepFooterDirective() {
@@ -1849,6 +1901,18 @@ In the following example you see how to run some custom logic before a step goes
         }
         angular.module('umbraco.directives').directive('umbTourStepFooter', TourStepFooterDirective);
     }());
+    /**
+@ngdoc directive
+@name umbraco.directives.directive:umbTourStepHeader
+@restrict E
+@scope
+
+@description
+<b>Added in Umbraco 7.8</b>. The tour step header component is a component that can be used in custom views for tour steps. It's meant to be used in the umb-tour-step directive.
+
+
+@param {string} title The title that needs to be shown
+**/
     (function () {
         'use strict';
         function TourStepHeaderDirective() {
@@ -2131,6 +2195,7 @@ Use this directive to render a button with a dropdown of alternative actions.
 
         <umb-toggle
             checked="vm.checked"
+            disabled="vm.disabled"
             on-click="vm.toggle()"
             show-labels="true"
             label-on="Start"
@@ -2151,6 +2216,7 @@ Use this directive to render a button with a dropdown of alternative actions.
 
             var vm = this;
             vm.checked = false;
+            vm.disabled = false;
 
             vm.toggle = toggle;
 
@@ -2165,6 +2231,7 @@ Use this directive to render a button with a dropdown of alternative actions.
 </pre>
 
 @param {boolean} checked Set to <code>true</code> or <code>false</code> to toggle the switch.
+@param {boolean} disabled Set to <code>true</code> or <code>false</code> to disable/enable the switch.
 @param {callback} onClick The function which should be called when the toggle is clicked.
 @param {string=} showLabels Set to <code>true</code> or <code>false</code> to show a "On" or "Off" label next to the switch.
 @param {string=} labelOn Set a custom label for when the switched is turned on. It will default to "On".
@@ -2215,6 +2282,7 @@ Use this directive to render a button with a dropdown of alternative actions.
                 templateUrl: 'views/components/buttons/umb-toggle.html',
                 scope: {
                     checked: '=',
+                    disabled: '=',
                     onClick: '&',
                     labelOn: '@?',
                     labelOff: '@?',
@@ -2554,7 +2622,7 @@ Use this directive to render a button with a dropdown of alternative actions.
     }());
     (function () {
         'use strict';
-        function ContentNodeInfoDirective($timeout, $location, logResource, eventsService, userService, localizationService, dateHelper) {
+        function ContentNodeInfoDirective($timeout, $location, logResource, eventsService, userService, localizationService, dateHelper, redirectUrlsResource) {
             function link(scope, element, attrs, ctrl) {
                 var evts = [];
                 var isInfoTab = false;
@@ -2586,10 +2654,19 @@ Use this directive to render a button with a dropdown of alternative actions.
                     formatDatesToLocal();
                     // Make sure to set the node status
                     setNodePublishStatus(scope.node);
+                    //default setting for redirect url management
+                    scope.urlTrackerDisabled = false;
                     // Declare a fallback URL for the <umb-node-preview/> directive
                     if (scope.documentType !== null) {
                         scope.previewOpenUrl = '#/settings/documenttypes/edit/' + scope.documentType.id;
                     }
+                    // only allow configuring scheduled publishing if the user has publish ("U") and unpublish ("Z") permissions on this node
+                    scope.allowScheduledPublishing = _.contains(scope.node.allowedActions, 'U') && _.contains(scope.node.allowedActions, 'Z');
+                    ensureUniqueUrls();
+                }
+                // make sure we don't show duplicate URLs in case multiple URL providers assign the same URLs to the content (see issue 3842 for details)
+                function ensureUniqueUrls() {
+                    scope.node.urls = _.uniq(scope.node.urls);
                 }
                 scope.auditTrailPageChange = function (pageNumber) {
                     scope.auditTrailOptions.pageNumber = pageNumber;
@@ -2636,6 +2713,22 @@ Use this directive to render a button with a dropdown of alternative actions.
                         scope.auditTrailOptions.totalPages = data.totalPages;
                         setAuditTrailLogTypeColor(scope.auditTrail);
                         scope.loadingAuditTrail = false;
+                    });
+                }
+                function loadRedirectUrls() {
+                    scope.loadingRedirectUrls = true;
+                    //check if Redirect Url Management is enabled
+                    redirectUrlsResource.getEnableState().then(function (response) {
+                        scope.urlTrackerDisabled = response.enabled !== true;
+                        if (scope.urlTrackerDisabled === false) {
+                            redirectUrlsResource.getRedirectsForContentItem(scope.node.udi).then(function (data) {
+                                scope.redirectUrls = data.searchResults;
+                                scope.hasRedirects = typeof data.searchResults !== 'undefined' && data.searchResults.length > 0;
+                                scope.loadingRedirectUrls = false;
+                            });
+                        } else {
+                            scope.loadingRedirectUrls = false;
+                        }
                     });
                 }
                 function setAuditTrailLogTypeColor(auditTrail) {
@@ -2750,12 +2843,13 @@ Use this directive to render a button with a dropdown of alternative actions.
                         scope.node.removeDateTime = scope.node.removeDate ? ucfirst(dateHelper.getLocalDate(scope.node.removeDate, currentUser.locale, 'HH:mm')) : null;
                     });
                 }
-                // load audit trail when on the info tab
+                // load audit trail and redirects when on the info tab
                 evts.push(eventsService.on('app.tabChange', function (event, args) {
                     $timeout(function () {
                         if (args.id === -1) {
                             isInfoTab = true;
                             loadAuditTrail();
+                            loadRedirectUrls();
                         } else {
                             isInfoTab = false;
                         }
@@ -2771,8 +2865,10 @@ Use this directive to render a button with a dropdown of alternative actions.
                     }
                     if (isInfoTab) {
                         loadAuditTrail();
+                        loadRedirectUrls();
                         formatDatesToLocal();
                         setNodePublishStatus(scope.node);
+                        ensureUniqueUrls();
                     }
                 });
                 //ensure to unregister from all events!
@@ -3583,7 +3679,7 @@ Use this directive to construct a header inside the main editor window.
                     icon: '=',
                     hideIcon: '@',
                     alias: '=',
-                    hideAlias: '@',
+                    hideAlias: '=',
                     description: '=',
                     hideDescription: '@',
                     descriptionLocked: '@',
@@ -4229,29 +4325,32 @@ Use this directive to construct the main editor window.
         return {
             restrict: 'A',
             link: function (scope, element, attr, formCtrl) {
-                var origColor = null;
-                if (attr.hexBgOrig) {
-                    //set the orig based on the attribute if there is one
-                    origColor = attr.hexBgOrig;
-                }
-                attr.$observe('hexBgColor', function (newVal) {
-                    if (newVal) {
-                        if (!origColor) {
-                            //get the orig color before changing it
-                            origColor = element.css('border-color');
-                        }
-                        //validate it - test with and without the leading hash.
-                        if (/^([0-9a-f]{3}|[0-9a-f]{6})$/i.test(newVal)) {
-                            element.css('background-color', '#' + newVal);
-                            return;
-                        }
-                        if (/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(newVal)) {
-                            element.css('background-color', newVal);
-                            return;
-                        }
+                // Only add inline hex background color if defined and not "true".
+                if (attr.hexBgInline === undefined || attr.hexBgInline !== undefined && attr.hexBgInline === 'true') {
+                    var origColor = null;
+                    if (attr.hexBgOrig) {
+                        // Set the orig based on the attribute if there is one.
+                        origColor = attr.hexBgOrig;
                     }
-                    element.css('background-color', origColor);
-                });
+                    attr.$observe('hexBgColor', function (newVal) {
+                        if (newVal) {
+                            if (!origColor) {
+                                // Get the orig color before changing it.
+                                origColor = element.css('border-color');
+                            }
+                            // Validate it - test with and without the leading hash.
+                            if (/^([0-9a-f]{3}|[0-9a-f]{6})$/i.test(newVal)) {
+                                element.css('background-color', '#' + newVal);
+                                return;
+                            }
+                            if (/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(newVal)) {
+                                element.css('background-color', newVal);
+                                return;
+                            }
+                        }
+                        element.css('background-color', origColor);
+                    });
+                }
             }
         };
     }
@@ -4544,6 +4643,103 @@ Use this directive to prevent default action of an element. Effectively implemen
             }
         };
     });
+    /**
+@ngdoc directive
+@name umbraco.directives.directive:umbCheckbox
+@restrict E
+@scope
+
+@description
+<b>Added in Umbraco version 7.14.0</b> Use this directive to render an umbraco checkbox.
+
+<h3>Markup example</h3>
+<pre>
+    <div ng-controller="My.Controller as vm">
+
+        <umb-checkbox
+            name="checkboxlist"
+            value="{{key}}"
+            model="true"
+            text="{{text}}">
+        </umb-checkbox>
+
+    </div>
+</pre>
+
+@param {boolean} model Set to <code>true</code> or <code>false</code> to set the checkbox to checked or unchecked.
+@param {string} value Set the value of the checkbox.
+@param {string} name Set the name of the checkbox.
+@param {string} text Set the text for the checkbox label.
+
+
+**/
+    (function () {
+        'use strict';
+        function CheckboxDirective() {
+            var directive = {
+                restrict: 'E',
+                replace: true,
+                templateUrl: 'views/components/forms/umb-checkbox.html',
+                scope: {
+                    model: '=',
+                    value: '@',
+                    name: '@',
+                    text: '@',
+                    required: '='
+                }
+            };
+            return directive;
+        }
+        angular.module('umbraco.directives').directive('umbCheckbox', CheckboxDirective);
+    }());
+    /**
+@ngdoc directive
+@name umbraco.directives.directive:umbRadiobutton
+@restrict E
+@scope
+
+@description
+<b>Added in Umbraco version 7.14.0</b> Use this directive to render an umbraco radio button.
+
+<h3>Markup example</h3>
+<pre>
+    <div ng-controller="My.Controller as vm">
+
+        <umb-radiobutton
+            name="checkboxlist"
+            value="{{key}}"
+            model="true"
+            text="{{text}}">
+        </umb-radiobutton>
+
+    </div>
+</pre>
+
+@param {boolean} model Set to <code>true</code> or <code>false</code> to set the radiobutton to checked or unchecked.
+@param {string} value Set the value of the radiobutton.
+@param {string} name Set the name of the radiobutton.
+@param {string} text Set the text for the radiobutton label.
+
+
+**/
+    (function () {
+        'use strict';
+        function RadiobuttonDirective() {
+            var directive = {
+                restrict: 'E',
+                replace: true,
+                templateUrl: 'views/components/forms/umb-radiobutton.html',
+                scope: {
+                    model: '=',
+                    value: '@',
+                    name: '@',
+                    text: '@'
+                }
+            };
+            return directive;
+        }
+        angular.module('umbraco.directives').directive('umbRadiobutton', RadiobuttonDirective);
+    }());
     /*
 example usage: <textarea json-edit="myObject" rows="8" class="form-control"></textarea>
 
@@ -4649,7 +4845,7 @@ will override element type to textarea and add own attribute ngModel tied to jso
         }
         angular.module('umbraco.directives').directive('umbSelectWhen', SelectWhen);
     }());
-    angular.module('umbraco.directives').directive('gridRte', function (tinyMceService, stylesheetResource, angularHelper, assetsService, $q, $timeout) {
+    angular.module('umbraco.directives').directive('gridRte', function (tinyMceService, stylesheetResource, angularHelper, assetsService, $q, $timeout, eventsService) {
         return {
             scope: {
                 uniqueId: '=',
@@ -4968,8 +5164,18 @@ will override element type to textarea and add own attribute ngModel tied to jso
                             //    // is required for our plugins listening to this event to execute
                             //    tinyMceEditor.fire('LoadContent', null);
                             //};
+                            var tabShownListener = eventsService.on('app.tabChange', function (e, args) {
+                                var tabId = args.id;
+                                var myTabId = element.closest('.umb-tab-pane').attr('rel');
+                                if (String(tabId) === myTabId) {
+                                    //the tab has been shown, trigger the mceAutoResize (as it could have timed out before the tab was shown)
+                                    if (tinyMceEditor !== undefined && tinyMceEditor != null) {
+                                        tinyMceEditor.execCommand('mceAutoResize', false, null, null);
+                                    }
+                                }
+                            });
                             //listen for formSubmitting event (the result is callback used to remove the event subscription)
-                            var unsubscribe = scope.$on('formSubmitting', function () {
+                            var formSubmittingListener = scope.$on('formSubmitting', function () {
                                 //TODO: Here we should parse out the macro rendered content so we can save on a lot of bytes in data xfer
                                 // we do parse it out on the server side but would be nice to do that on the client side before as well.
                                 scope.value = tinyMceEditor ? tinyMceEditor.getContent() : null;
@@ -4978,7 +5184,8 @@ will override element type to textarea and add own attribute ngModel tied to jso
                             // NOTE: this is very important otherwise if this is part of a modal, the listener still exists because the dom
                             // element might still be there even after the modal has been hidden.
                             scope.$on('$destroy', function () {
-                                unsubscribe();
+                                formSubmittingListener();
+                                eventsService.unsubscribe(tabShownListener);
                                 if (tinyMceEditor !== undefined && tinyMceEditor != null) {
                                     tinyMceEditor.destroy();
                                 }
@@ -5284,23 +5491,6 @@ Use this directive to construct a title. Recommended to use it inside an {@link 
                     // scope.dimensions.viewport.width - 2 * scope.dimensions.margin;
                     scope.dimensions.cropper.height = _viewPortH;    //  scope.dimensions.viewport.height - 2 * scope.dimensions.margin;
                 };
-                //when loading an image without any crop info, we center and fit it
-                var resizeImageToEditor = function () {
-                    //returns size fitting the cropper
-                    var size = cropperHelper.calculateAspectRatioFit(scope.dimensions.image.width, scope.dimensions.image.height, scope.dimensions.cropper.width, scope.dimensions.cropper.height, true);
-                    //sets the image size and updates the scope
-                    scope.dimensions.image.width = size.width;
-                    scope.dimensions.image.height = size.height;
-                    //calculate the best suited ratios
-                    scope.dimensions.scale.min = size.ratio;
-                    scope.dimensions.scale.max = 2;
-                    scope.dimensions.scale.current = size.ratio;
-                    //center the image
-                    var position = cropperHelper.centerInsideViewPort(scope.dimensions.image, scope.dimensions.cropper);
-                    scope.dimensions.top = position.top;
-                    scope.dimensions.left = position.left;
-                    setConstraints();
-                };
                 //resize to a given ratio
                 var resizeImageToScale = function (ratio) {
                     //do stuff
@@ -5367,11 +5557,16 @@ Use this directive to construct a title. Recommended to use it inside an {@link 
                     scope.loaded = false;
                     //set dimensions on image, viewport, cropper etc
                     setDimensions(image);
-                    //if we have a crop already position the image
-                    if (scope.crop) {
-                        resizeImageToCrop();
-                    } else {
-                        resizeImageToEditor();
+                    //create a default crop if we haven't got one already
+                    var createDefaultCrop = !scope.crop;
+                    if (createDefaultCrop) {
+                        calculateCropBox();
+                    }
+                    resizeImageToCrop();
+                    //if we're creating a new crop, make sure to zoom out fully
+                    if (createDefaultCrop) {
+                        scope.dimensions.scale.current = scope.dimensions.scale.min;
+                        resizeImageToScale(scope.dimensions.scale.min);
                     }
                     //sets constaints for the cropper
                     setConstraints();
@@ -5389,7 +5584,7 @@ Use this directive to construct a title. Recommended to use it inside an {@link 
                 var throttledResizing = _.throttle(function () {
                     resizeImageToScale(scope.dimensions.scale.current);
                     calculateCropBox();
-                }, 100);
+                }, 16);
                 //happens when we change the scale
                 scope.$watch('dimensions.scale.current', function () {
                     if (scope.loaded) {
@@ -5429,7 +5624,8 @@ Use this directive to construct a title. Recommended to use it inside an {@link 
             scope: {
                 src: '=',
                 center: '=',
-                onImageLoaded: '='
+                onImageLoaded: '&',
+                onGravityChanged: '&'
             },
             link: function (scope, element, attrs) {
                 //Internal values for keeping track of the dot and the size of the editor
@@ -5445,7 +5641,7 @@ Use this directive to construct a title. Recommended to use it inside an {@link 
                 var $image = element.find('img');
                 var $overlay = element.find('.overlay');
                 scope.style = function () {
-                    if (scope.dimensions.width <= 0) {
+                    if (scope.dimensions.width <= 0 || scope.dimensions.height <= 0) {
                         setDimensions();
                     }
                     return {
@@ -5458,19 +5654,21 @@ Use this directive to construct a title. Recommended to use it inside an {@link 
                     var offsetX = event.offsetX - 10;
                     var offsetY = event.offsetY - 10;
                     calculateGravity(offsetX, offsetY);
-                    lazyEndEvent();
+                    gravityChanged();
                 };
                 var setDimensions = function () {
-                    scope.dimensions.width = $image.width();
-                    scope.dimensions.height = $image.height();
-                    if (scope.center) {
-                        scope.dimensions.left = scope.center.left * scope.dimensions.width - 10;
-                        scope.dimensions.top = scope.center.top * scope.dimensions.height - 10;
-                    } else {
-                        scope.center = {
-                            left: 0.5,
-                            top: 0.5
-                        };
+                    if (scope.isCroppable) {
+                        scope.dimensions.width = $image.width();
+                        scope.dimensions.height = $image.height();
+                        if (scope.center) {
+                            scope.dimensions.left = scope.center.left * scope.dimensions.width - 10;
+                            scope.dimensions.top = scope.center.top * scope.dimensions.height - 10;
+                        } else {
+                            scope.center = {
+                                left: 0.5,
+                                top: 0.5
+                            };
+                        }
                     }
                 };
                 var calculateGravity = function (offsetX, offsetY) {
@@ -5479,11 +5677,11 @@ Use this directive to construct a title. Recommended to use it inside an {@link 
                     scope.center.left = (scope.dimensions.left + 10) / scope.dimensions.width;
                     scope.center.top = (scope.dimensions.top + 10) / scope.dimensions.height;
                 };
-                var lazyEndEvent = _.debounce(function () {
-                    scope.$apply(function () {
-                        scope.$emit('imageFocalPointStop');
-                    });
-                }, 2000);
+                var gravityChanged = function () {
+                    if (angular.isFunction(scope.onGravityChanged)) {
+                        scope.onGravityChanged();
+                    }
+                };
                 //Drag and drop positioning, using jquery ui draggable
                 //TODO ensure that the point doesnt go outside the box
                 $overlay.draggable({
@@ -5499,16 +5697,34 @@ Use this directive to construct a title. Recommended to use it inside an {@link 
                             var offsetY = $overlay[0].offsetTop;
                             calculateGravity(offsetX, offsetY);
                         });
-                        lazyEndEvent();
+                        gravityChanged();
                     }
                 });
                 //// INIT /////
                 $image.load(function () {
                     $timeout(function () {
+                        scope.isCroppable = true;
+                        scope.hasDimensions = true;
+                        if (scope.src) {
+                            if (scope.src.endsWith('.svg')) {
+                                scope.isCroppable = false;
+                                scope.hasDimensions = false;
+                            } else {
+                                // From: https://stackoverflow.com/a/51789597/5018
+                                var type = scope.src.substring(scope.src.indexOf('/') + 1, scope.src.indexOf(';base64'));
+                                if (type.startsWith('svg')) {
+                                    scope.isCroppable = false;
+                                    scope.hasDimensions = false;
+                                }
+                            }
+                        }
                         setDimensions();
                         scope.loaded = true;
                         if (angular.isFunction(scope.onImageLoaded)) {
-                            scope.onImageLoaded();
+                            scope.onImageLoaded({
+                                'isCroppable': scope.isCroppable,
+                                'hasDimensions': scope.hasDimensions
+                            });
                         }
                     });
                 });
@@ -6806,7 +7022,15 @@ Opens an overlay to show a custom YSOD. </br>
                         treeService.syncTree({
                             node: treeNode,
                             path: path,
-                            forceReload: forceReload
+                            forceReload: forceReload,
+                            //when the tree node is expanding during sync tree, handle it and raise appropriate events
+                            treeNodeExpanded: function (args) {
+                                emitEvent('treeNodeExpanded', {
+                                    tree: scope.tree,
+                                    node: args.node,
+                                    children: args.children
+                                });
+                            }
                         }).then(function (data) {
                             if (activate === undefined || activate === true) {
                                 scope.currentNode = data;
@@ -6970,7 +7194,7 @@ Opens an overlay to show a custom YSOD. </br>
     </file>
    </example>
  */
-    angular.module('umbraco.directives').directive('umbTreeItem', function ($compile, $http, $templateCache, $interpolate, $log, $location, $rootScope, $window, treeService, $timeout, localizationService) {
+    angular.module('umbraco.directives').directive('umbTreeItem', function ($compile, $http, $templateCache, $interpolate, $log, $location, $rootScope, $window, treeService, $timeout, localizationService, appState) {
         return {
             restrict: 'E',
             replace: true,
@@ -7052,6 +7276,18 @@ Opens an overlay to show a custom YSOD. </br>
                     }
                     if (node.selected) {
                         css.push('umb-tree-node-checked');
+                    }
+                    //is this the current action node (this is not the same as the current selected node!)
+                    var actionNode = appState.getMenuState('currentNode');
+                    if (actionNode) {
+                        if (actionNode.id === node.id && actionNode.id !== '-1') {
+                            css.push('active');
+                        }
+                        // special handling of root nodes with id -1 
+                        // as there can be many nodes with id -1 in a tree we need to check the treeAlias instead
+                        if (actionNode.id === '-1' && actionNode.metaData.treeAlias === node.metaData.treeAlias) {
+                            css.push('active');
+                        }
                     }
                     return css.join(' ');
                 };
@@ -7205,6 +7441,7 @@ Opens an overlay to show a custom YSOD. </br>
                 searchFromName: '@',
                 showSearch: '@',
                 section: '@',
+                datatypeId: '@',
                 hideSearchCallback: '=',
                 searchCallback: '='
             },
@@ -7244,6 +7481,10 @@ Opens an overlay to show a custom YSOD. </br>
                         //append a start node context if there is one
                         if (scope.searchFromId) {
                             searchArgs['searchFrom'] = scope.searchFromId;
+                        }
+                        //append dataTypeId value if there is one
+                        if (scope.datatypeId) {
+                            searchArgs['dataTypeId'] = scope.datatypeId;
                         }
                         searcher(searchArgs).then(function (data) {
                             scope.searchCallback(data);
@@ -8089,20 +8330,25 @@ Use this directive to generate color swatches to pick from.
     </umb-color-swatches>
 </pre>
 @param {array} colors (<code>attribute</code>): The array of colors.
-@param {string} colors (<code>attribute</code>): The array of colors.
 @param {string} selectedColor (<code>attribute</code>): The selected color.
 @param {string} size (<code>attribute</code>): The size (s, m).
+@param {string} useLabel (<code>attribute</code>): Specify if labels should be used.
+@param {string} useColorClass (<code>attribute</code>): Specify if color values are css classes.
 @param {function} onSelect (<code>expression</code>): Callback function when the item is selected.
 **/
     (function () {
         'use strict';
         function ColorSwatchesDirective() {
             function link(scope, el, attr, ctrl) {
+                // Set default to true if not defined
+                if (angular.isUndefined(scope.useColorClass)) {
+                    scope.useColorClass = false;
+                }
                 scope.setColor = function (color) {
                     //scope.selectedColor({color: color });
                     scope.selectedColor = color;
                     if (scope.onSelect) {
-                        scope.onSelect(color);
+                        scope.onSelect({ color: color });
                     }
                 };
             }
@@ -8115,7 +8361,9 @@ Use this directive to generate color swatches to pick from.
                     colors: '=?',
                     size: '@',
                     selectedColor: '=',
-                    onSelect: '&'
+                    onSelect: '&',
+                    useLabel: '=',
+                    useColorClass: '=?'
                 },
                 link: link
             };
@@ -8941,7 +9189,7 @@ the directive will use {@link umbraco.directives.directive:umbLockedField umbLoc
 @param {string} aliasFrom (<code>binding</code>): The model to generate the alias from.
 @param {boolean=} enableLock (<code>binding</code>): Set to <code>true</code> to add a lock next to the alias from where it can be unlocked and changed.
 **/
-    angular.module('umbraco.directives').directive('umbGenerateAlias', function ($timeout, entityResource) {
+    angular.module('umbraco.directives').directive('umbGenerateAlias', function ($timeout, entityResource, localizationService) {
         return {
             restrict: 'E',
             templateUrl: 'views/components/umb-generate-alias.html',
@@ -8958,26 +9206,37 @@ the directive will use {@link umbraco.directives.directive:umbLockedField umbLoc
                 var generateAliasTimeout = '';
                 var updateAlias = false;
                 scope.locked = true;
-                scope.placeholderText = 'Enter alias...';
+                scope.labels = {
+                    idle: 'Enter alias...',
+                    busy: 'Generating alias...'
+                };
+                scope.placeholderText = scope.labels.idle;
+                localizationService.localize('placeholders_enterAlias').then(function (value) {
+                    scope.labels.idle = scope.placeholderText = value;
+                });
+                localizationService.localize('placeholders_generatingAlias').then(function (value) {
+                    scope.labels.busy = value;
+                });
                 function generateAlias(value) {
                     if (generateAliasTimeout) {
                         $timeout.cancel(generateAliasTimeout);
                     }
                     if (value !== undefined && value !== '' && value !== null) {
                         scope.alias = '';
-                        scope.placeholderText = 'Generating Alias...';
+                        scope.placeholderText = scope.labels.busy;
                         generateAliasTimeout = $timeout(function () {
                             updateAlias = true;
                             entityResource.getSafeAlias(encodeURIComponent(value), true).then(function (safeAlias) {
                                 if (updateAlias) {
                                     scope.alias = safeAlias.alias;
                                 }
+                                scope.placeholderText = scope.labels.idle;
                             });
                         }, 500);
                     } else {
                         updateAlias = true;
                         scope.alias = '';
-                        scope.placeholderText = 'Enter alias...';
+                        scope.placeholderText = scope.labels.idle;
                     }
                 }
                 // if alias gets unlocked - stop watching alias
@@ -8988,13 +9247,15 @@ the directive will use {@link umbraco.directives.directive:umbLockedField umbLoc
                 }));
                 // validate custom entered alias
                 eventBindings.push(scope.$watch('alias', function (newValue, oldValue) {
-                    if (scope.alias === '' && bindWatcher === true || scope.alias === null && bindWatcher === true) {
-                        // add watcher
-                        eventBindings.push(scope.$watch('aliasFrom', function (newValue, oldValue) {
-                            if (bindWatcher) {
-                                generateAlias(newValue);
-                            }
-                        }));
+                    if (scope.alias === '' || scope.alias === null || scope.alias === undefined) {
+                        if (bindWatcher === true) {
+                            // add watcher
+                            eventBindings.push(scope.$watch('aliasFrom', function (newValue, oldValue) {
+                                if (bindWatcher) {
+                                    generateAlias(newValue);
+                                }
+                            }));
+                        }
                     }
                 }));
                 // clean up
@@ -10405,6 +10666,18 @@ Use this directive to generate a thumbnail grid of media items.
                             scope.items.splice(i, 1);
                             i--;
                         }
+                        // If subfolder search is not enabled remove the media items that's not needed
+                        // Make sure that includeSubFolder is not undefined since the directive is used
+                        // in contexts where it should not be used. Currently only used when we trigger
+                        // a media picker
+                        if (scope.includeSubFolders !== undefined) {
+                            if (scope.includeSubFolders !== 'true') {
+                                if (item.parentId !== parseInt(scope.currentFolderId)) {
+                                    scope.items.splice(i, 1);
+                                    i--;
+                                }
+                            }
+                        }
                     }
                     if (scope.items.length > 0) {
                         setFlexValues(scope.items);
@@ -10545,7 +10818,9 @@ Use this directive to generate a thumbnail grid of media items.
                     itemMaxHeight: '@',
                     itemMinWidth: '@',
                     itemMinHeight: '@',
-                    onlyImages: '@'
+                    onlyImages: '@',
+                    includeSubFolders: '@',
+                    currentFolderId: '@'
                 },
                 link: link
             };
@@ -10600,6 +10875,8 @@ Use this directive to generate a thumbnail grid of media items.
                         // update children
                         miniListView.children = data.items;
                         _.each(miniListView.children, function (c) {
+                            // child allowed by default
+                            c.allowed = true;
                             // convert legacy icon for node
                             if (c.icon) {
                                 c.icon = iconHelper.convertFromLegacyIcon(c.icon);
@@ -10609,6 +10886,15 @@ Use this directive to generate a thumbnail grid of media items.
                                 c.hasChildren = c.metaData.HasChildren;
                                 if (scope.entityType === 'Document') {
                                     c.published = c.metaData.IsPublished;
+                                }
+                            }
+                            // filter items if there is a filter and it's not advanced
+                            // ** ignores advanced filter at the moment
+                            if (scope.entityTypeFilter && !scope.entityTypeFilter.filterAdvanced) {
+                                var a = scope.entityTypeFilter.filter.toLowerCase().replace(/\s/g, '').split(',');
+                                var found = a.indexOf(c.metaData.ContentTypeAlias.toLowerCase()) >= 0;
+                                if (!scope.entityTypeFilter.filterExclude && !found || scope.entityTypeFilter.filterExclude && found) {
+                                    c.allowed = false;
                                 }
                             }
                         });
@@ -10624,7 +10910,7 @@ Use this directive to generate a thumbnail grid of media items.
                     event.stopPropagation();
                 };
                 scope.selectNode = function (node) {
-                    if (scope.onSelect) {
+                    if (scope.onSelect && node.allowed) {
                         scope.onSelect({ 'node': node });
                     }
                 };
@@ -10719,7 +11005,8 @@ Use this directive to generate a thumbnail grid of media items.
                     entityType: '@',
                     startNodeId: '=',
                     onSelect: '&',
-                    onClose: '&'
+                    onClose: '&',
+                    entityTypeFilter: '='
                 },
                 link: link
             };
@@ -11315,6 +11602,10 @@ Use this directive make an element sticky and follow the page when scrolling.
                 var clonedBar = null;
                 var cloneIsMade = false;
                 function activate() {
+                    if (bar.parents('.umb-property').length > 1) {
+                        bar.addClass('nested');
+                        return;
+                    }
                     if (attr.scrollableContainer) {
                         scrollableContainer = $(attr.scrollableContainer);
                     } else {
