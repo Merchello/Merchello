@@ -25,6 +25,17 @@
         }
 
         /// <summary>
+        /// Changes the product display content by ui culture.
+        /// </summary>
+        /// <param name="content"></param>
+        /// <returns></returns>
+        private IProductContent UpdateLanguage(IProductContent content)
+        {
+            content?.SpecifyCulture(System.Threading.Thread.CurrentThread.CurrentUICulture);
+            return content;
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="VirtualProductContentCache"/> class.
         /// </summary>
         /// <param name="cache">
@@ -82,9 +93,9 @@
         {
             var cacheKey = GetSlugCacheKey(slug, ModifiedVersion);
             var content = (IProductContent)Cache.RuntimeCache.GetCacheItem(cacheKey);
-            if (content != null) return content;
+            if (content != null) return UpdateLanguage(content);
 
-            return CacheContent(cacheKey, get.Invoke(slug));
+            return UpdateLanguage(CacheContent(cacheKey, get.Invoke(slug)));
         }
 
         /// <summary>
@@ -101,11 +112,11 @@
         /// </returns>
         public IProductContent GetBySku(string sku, Func<string, IProductContent> get)
         {
-            var cacheKey = GetSkuCacheKey(sku, ModifiedVersion);
+             var cacheKey = GetSkuCacheKey(sku, ModifiedVersion);
             var content = (IProductContent)Cache.RuntimeCache.GetCacheItem(cacheKey);
-            if (content != null) return content;
+            if (content != null) return UpdateLanguage(content);
 
-            return CacheContent(cacheKey, get.Invoke(sku));
+            return UpdateLanguage(CacheContent(cacheKey, get.Invoke(sku)));
         }
 
         /// <summary>
