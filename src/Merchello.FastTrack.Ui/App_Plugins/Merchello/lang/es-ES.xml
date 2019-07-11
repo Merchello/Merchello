@@ -40,6 +40,11 @@
     <key alias="some">Algunos</key>
     <key alias="lineItems">Líneas de pedido</key>
     <key alias="setDateRange">Configura rango de fechas</key>
+    <key alias="preDeterminedDateRange">Seleccione un intervalo de fechas predeterminado:</key>
+    <key alias="customDateRange">O elige un intervalo de fechas personalizado:</key>
+    <key alias="lastWeek">La semana pasada</key>
+    <key alias="lastMonth">El mes pasado</key>
+    <key alias="lastYear">El año pasado</key>
     <key alias="allDates">Todas las fechas</key>
     <key alias="starting">Comienzo</key>
     <key alias="ending">Final</key>

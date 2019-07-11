@@ -9929,7 +9929,6 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesOverTi
             $scope.series = [];
             $scope.chartData = [];
             $scope.reportData = [];
-            $scope.invoiceStatuses = [];
             $scope.startDate = '';
             $scope.endDate = '';
             $scope.settings = {};
@@ -9939,7 +9938,6 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesOverTi
             $scope.getColumnTotal = getColumnTotal;
             $scope.openDateRangeDialog = openDateRangeDialog;
             $scope.clearDates = clearDates;
-            $scope.statusChange = statusChange;
             $scope.reverse = reverse;
 
 
@@ -9971,7 +9969,6 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesOverTi
             function loadDefaultData() {
                 salesOverTimeResource.getDefaultReportData().then(function(result) {
                     compileChart(result);
-                    $scope.invoiceStatuses = result.invoiceStatuses;
                 });
             }
 
@@ -9980,15 +9977,10 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesOverTi
                 var query = queryDisplayBuilder.createDefault();
                 query.addInvoiceDateParam($scope.startDate, 'start');
                 query.addInvoiceDateParam($scope.endDate, 'end');
-                query.addCustomParam('invoiceStatuses', JSON.stringify($scope.invoiceStatuses));
 
                 salesOverTimeResource.getCustomReportData(query).then(function(result) {
                    compileChart(result);
                 });
-            }
-
-            function statusChange() {
-                loadCustomData();
             }
 
             function compileChart(result) {
@@ -10049,8 +10041,7 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesOverTi
             function openDateRangeDialog() {
                 var dialogData = {
                     startDate: $scope.startDate,
-                    endDate: $scope.endDate,
-                    showPreDeterminedDates: true
+                    endDate: $scope.endDate
                 };
 
                 dialogService.open({

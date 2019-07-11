@@ -40,6 +40,11 @@
     <key alias="some">Nogle</key>
     <key alias="lineItems">Ordrelinjer</key>
     <key alias="setDateRange">Sæt dato-interval</key>
+    <key alias="preDeterminedDateRange">Vælg et forudbestemt datointerval:</key>
+    <key alias="customDateRange">Eller vælg et brugerdefineret datointerval:</key>
+    <key alias="lastWeek">Sidste uge</key>
+    <key alias="lastMonth">Sidste måned</key>
+    <key alias="lastYear">Sidste år</key>
     <key alias="allDates">Alle datoer</key>
     <key alias="starting">Start</key>
     <key alias="ending">Slut</key>

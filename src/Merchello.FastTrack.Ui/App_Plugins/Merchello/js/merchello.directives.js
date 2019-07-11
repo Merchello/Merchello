@@ -4332,9 +4332,7 @@ angular.module('merchello.directives').directive('reportWidgeThisWeekVsLast',
                     scope.labels = [];
                     scope.series = [];
                     scope.weekdays = [];
-                    scope.invoiceStatuses = [];
 
-                    scope.statusChange = statusChange;
                     scope.getTotalsColumn = getTotalsColumn;
 
                     assetsService.loadCss('/App_Plugins/Merchello/lib/charts/angular-chart.min.css').then(function() {
@@ -4351,7 +4349,6 @@ angular.module('merchello.directives').directive('reportWidgeThisWeekVsLast',
                         ]).then(function(data) {
                             scope.weekdays = data[0];
                             scope.settings = data[1];
-                            scope.invoiceStatuses = data[0].invoiceStatuses;
                             loadReportData();
                         });
 
@@ -4366,13 +4363,7 @@ angular.module('merchello.directives').directive('reportWidgeThisWeekVsLast',
                         var lastQuery = queryDisplayBuilder.createDefault();
                         var currentQuery = queryDisplayBuilder.createDefault();
                         currentQuery.addInvoiceDateParam(thisWeekEnd, 'end');
-                        if (scope.invoiceStatuses) {
-                            currentQuery.addCustomParam('invoiceStatuses', JSON.stringify(scope.invoiceStatuses));
-                        }
                         lastQuery.addInvoiceDateParam(lastWeekEnd, 'end');
-                        if (scope.invoiceStatuses) {
-                            lastQuery.addCustomParam('invoiceStatuses', JSON.stringify(scope.invoiceStatuses));
-                        }
 
                         var deferred = $q.defer();
                         $q.all([
@@ -4380,15 +4371,10 @@ angular.module('merchello.directives').directive('reportWidgeThisWeekVsLast',
                             salesOverTimeResource.getWeeklyResult(lastQuery)
 
                         ]).then(function(data) {
-                            scope.resultData = [data[0].items, data[1].items];
-                            scope.invoiceStatuses = data[0].invoiceStatuses;
+                            scope.resultData = [ data[0].items, data[1].items];
                             compileChart();
                         });
 
-                    }
-
-                    function statusChange() {
-                        loadReportData();
                     }
 
                     function compileChart() {
@@ -4492,10 +4478,8 @@ angular.module('merchello.directives').directive('reportWidgetTopSelling',
 
             scope.startDate = '';
             scope.endDate = '';
-            scope.invoiceStatuses = [];
 
             scope.reload = reload;
-            scope.statusChange = statusChange;
 
             assetsService.loadCss('/App_Plugins/Merchello/lib/charts/angular-chart.min.css').then(function() {
                 init();
@@ -4514,9 +4498,6 @@ angular.module('merchello.directives').directive('reportWidgetTopSelling',
                 var query = queryDisplayBuilder.createDefault();
                 query.addInvoiceDateParam($filter('date')(scope.startDate, 'yyyy-MM-dd'), 'start');
                 query.addInvoiceDateParam($filter('date')(scope.endDate, 'yyyy-MM-dd'), 'end');
-                if (scope.invoiceStatuses) {
-                    query.addCustomParam('invoiceStatuses', JSON.stringify(scope.invoiceStatuses));
-                }
 
                 salesByItemResource.getCustomReportData(query).then(function(results) {
 
@@ -4531,7 +4512,6 @@ angular.module('merchello.directives').directive('reportWidgetTopSelling',
                     }
 
                     scope.results = results.items;
-                    scope.invoiceStatuses = results.invoiceStatuses;
                     dataLoaded(true);
                     scope.loaded = true;
                 });
@@ -4540,10 +4520,6 @@ angular.module('merchello.directives').directive('reportWidgetTopSelling',
             function reload(startDate, endDate) {
                 scope.startDate = startDate;
                 scope.endDate = endDate;
-                loadReportData();
-            }
-
-            function statusChange() {
                 loadReportData();
             }
 
