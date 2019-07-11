@@ -862,7 +862,52 @@
 
                 if (excludeCancelledAndFraud)
                 {
-                    sql.Append("AND [merchInvoice].invoiceStatusKey != '53077EFD-6BF0-460D-9565-0E00567B5176' AND [merchInvoice].invoiceStatusKey != '75E1E5EB-33E8-4904-A8E5-4B64A37D6087'");
+                    sql.Append("AND [merchInvoice].invoiceStatusKey != '" + Core.Constants.InvoiceStatus.Cancelled.ToString() + "' AND [merchInvoice].invoiceStatusKey != '" + Core.Constants.InvoiceStatus.Fraud.ToString() + "'");
+                }
+
+                return Database.ExecuteScalar<decimal>(sql);
+            }
+
+            return -1;
+        }
+
+        /// <summary>
+        ///  Gets the totals of invoices in a date range for a specific currency code.
+        /// </summary>
+        /// <param name="startDate">
+        /// The start date.
+        /// </param>
+        /// <param name="endDate">
+        /// The end date.
+        /// </param>
+        /// <param name="currencyCode">
+        /// The currency code.
+        /// </param>
+        /// <param name="invoiceStatuses">
+        /// The invoice statuses.
+        /// </param>
+        /// <returns>
+        /// The sum of the invoice totals.
+        /// </returns>
+        public decimal SumInvoiceTotals(DateTime startDate, DateTime endDate, string currencyCode, IEnumerable<IInvoiceStatus> invoiceStatuses)
+        {
+            if (startDate != DateTime.MinValue && startDate != DateTime.MaxValue &&
+                endDate != DateTime.MinValue && endDate != DateTime.MaxValue &&
+                endDate > startDate)
+            {
+                var sql = new Sql();
+
+                sql.Append("SELECT SUM([merchInvoice].total) FROM merchInvoice WHERE [merchInvoice].invoiceDate BETWEEN @starts and @ends AND [merchInvoice].currencyCode = @cc", new
+                {
+                    @starts = startDate.GetDateForSqlStartOfDay(),
+                    @ends = endDate.GetDateForSqlEndOfDay(),
+                    @cc = currencyCode
+                });
+
+                if (invoiceStatuses != null && invoiceStatuses.Any())
+                {
+                    var keys = invoiceStatuses.Select(x => x.Key);
+                    sql.Append("AND [merchInvoice].invoiceStatusKey IN (@keys)", new { @keys });
                 }
 
                 return Database.ExecuteScalar<decimal>(sql);

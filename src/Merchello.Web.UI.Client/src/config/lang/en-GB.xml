@@ -40,6 +40,11 @@
     <key alias="some">Some</key>
     <key alias="lineItems">Line Items</key>
     <key alias="setDateRange">Set Date Range</key>
+    <key alias="preDeterminedDateRange">Select a pre-determined date range:</key>
+    <key alias="customDateRange">Or choose a custom date range:</key>
+    <key alias="lastWeek">Last Week</key>
+    <key alias="lastMonth">Last Month</key>
+    <key alias="lastYear">Last Year</key>
     <key alias="allDates">All Dates</key>
     <key alias="starting">Starting</key>
     <key alias="ending">Ending</key>

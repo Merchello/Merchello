@@ -15,6 +15,8 @@
     using Umbraco.Core.Services;
     using Umbraco.Web;
     using Umbraco.Web.Mvc;
+    using Merchello.Core.Models;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// A controller for rendering the sales over time report.
@@ -36,7 +38,6 @@
         /// The text service.
         /// </summary>
         private readonly ILocalizedTextService _textService;
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SalesOverTimeReportApiController"/> class.
@@ -100,8 +101,9 @@
             var endOfMonth = GetEndOfMonth(today);
             var startMonth = endOfMonth.AddMonths(-11);
             var startOfYear = GetFirstOfMonth(startMonth);
+            var invoiceStatuses = AllInvoiceStatuses();
 
-            return BuildResult(startOfYear, endOfMonth);
+            return BuildResult(startOfYear, endOfMonth, invoiceStatuses);
         }
 
         /// <summary>
@@ -114,6 +116,7 @@
         {
             var invoiceDateStart = query.Parameters.FirstOrDefault(x => x.FieldName == "invoiceDateStart");
             var invoiceDateEnd = query.Parameters.FirstOrDefault(x => x.FieldName == "invoiceDateEnd");
+            var invoiceStatuses = GetInvoiceStatusesFromParameters(query);
 
             var isDateSearch = invoiceDateStart != null && !string.IsNullOrEmpty(invoiceDateStart.Value) &&
                invoiceDateEnd != null && !string.IsNullOrEmpty(invoiceDateEnd.Value);
@@ -135,7 +138,7 @@
                     var endOfMonth = GetEndOfMonth(endDate);
                     var startOfYear = GetFirstOfMonth(startDate);
 
-                    return BuildResult(startOfYear, endOfMonth);
+                    return BuildResult(startOfYear, endOfMonth, invoiceStatuses);
                 }
 
                 return GetDefaultReportData();
@@ -158,6 +161,7 @@
         {
             var invoiceDateEnd = query.Parameters.FirstOrDefault(x => x.FieldName == "invoiceDateEnd");
             var isDateSearch = invoiceDateEnd != null && !string.IsNullOrEmpty(invoiceDateEnd.Value);
+            var invoiceStatuses = GetInvoiceStatusesFromParameters(query);
 
             DateTime weekEnding;
             if (!isDateSearch)
@@ -181,7 +185,7 @@
                 var endDate = currentDate.AddDays(1).AddMilliseconds(-1);
 
                 count++;
-                results.Add(GetResults(currentDate, endDate));
+                results.Add(GetResults(currentDate, endDate, invoiceStatuses));
                 currentDate = currentDate.AddDays(1);
             }
 
@@ -191,7 +195,8 @@
                 CurrentPage = 1,
                 ItemsPerPage = count,
                 TotalItems = count,
-                TotalPages = 1
+                TotalPages = 1,
+                InvoiceStatuses = invoiceStatuses
             };
         }
 
@@ -204,11 +209,24 @@
         /// <param name="endDate">
         /// The end date.
         /// </param>
+        /// <param name="invoiceStatuses">
+        /// The invoice statuses.
+        /// </param>
         /// <returns>
         /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
-        protected override QueryResultDisplay BuildResult(DateTime startDate, DateTime endDate)
+        protected override QueryResultDisplay BuildResult(DateTime startDate, DateTime endDate, IEnumerable<InvStatus> invoiceStatuses)
         {
+            // Get all the statuses
+            var statuses = AllInvoiceStatuses();
+            var selectedStatuses = invoiceStatuses.Where(x => x.Checked).Select(x => x.Key).ToList();
+
+            // Loop and set selected statuses
+            foreach (var status in statuses)
+            {
+                status.Checked = selectedStatuses.Contains(status.Key);
+            }
+
             var count = 0;
 
             var currentDate = startDate;
@@ -218,7 +236,7 @@
             {
                 var monthEnd = currentDate.AddMonths(1).AddMilliseconds(-1);
                 count++;
-                results.Add(this.GetResults(currentDate, monthEnd));
+                results.Add(this.GetResults(currentDate, monthEnd, statuses));
                 currentDate = currentDate.AddMonths(1);
             }
 
@@ -228,7 +246,8 @@
                 CurrentPage = 1,
                 ItemsPerPage = count,
                 TotalItems = count,
-                TotalPages = 1
+                TotalPages = 1,
+                InvoiceStatuses = statuses
             };
         }
 
@@ -241,19 +260,31 @@
         /// <param name="endDate">
         /// The end date.
         /// </param>
+        /// <param name="invoiceStatuses">
+        /// The invoice statuses.
+        /// </param>
         /// <returns>
         /// The <see cref="SalesOverTimeResult"/>.
         /// </returns>
-        protected override SalesOverTimeResult GetResults(DateTime startDate, DateTime endDate)
+        protected override SalesOverTimeResult GetResults(DateTime startDate, DateTime endDate, IEnumerable<InvStatus> invoiceStatuses)
         {
             var monthName = _textService.GetLocalizedMonthName(_culture, startDate.Month);
+            var checkedStatuses = invoiceStatuses.Where(x => x.Checked).Select(x => new InvoiceStatus { Key = x.Key }).ToList();
 
-            var count = _invoiceService.CountInvoices(startDate, endDate);
+            var count = 0;
+            if (checkedStatuses != null && checkedStatuses.Any())
+            {
+                count = _invoiceService.CountInvoices(startDate, endDate, checkedStatuses.Select(x => new InvoiceStatus { Key = x.Key }).ToList());
+            }
+            else
+            {
+                count = _invoiceService.CountInvoices(startDate, endDate);
+            }
 
             var totals = this.ActiveCurrencies.Select(c => new ResultCurrencyValue()
             {
                 Currency = c.ToCurrencyDisplay(),
-                Value = startDate > DateTime.Today ? 0M : this._invoiceService.SumInvoiceTotals(startDate, endDate, c.CurrencyCode)
+                Value = startDate > DateTime.Today ? 0M : checkedStatuses != null && checkedStatuses.Any() ? _invoiceService.SumInvoiceTotals(startDate, endDate, c.CurrencyCode, checkedStatuses) : _invoiceService.SumInvoiceTotals(startDate, endDate, c.CurrencyCode)
             }).ToList();
 
             return new SalesOverTimeResult()

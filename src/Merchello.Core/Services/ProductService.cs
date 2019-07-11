@@ -35,7 +35,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// The valid sort fields.
         /// </summary>
-        private static readonly string[] ValidSortFields = { "sku", "name", "price", "saleprice", "createdate" };
+        private static readonly string[] ValidSortFields = { "sku", "name", "price", "saleprice", "createdate", "sellprice" };
 
         /// <summary>
         /// The product variant service.
@@ -2120,6 +2120,8 @@ namespace Merchello.Core.Services
         /// </returns>
         protected override string ValidateSortByField(string sortBy)
         {
+            if (sortBy.StartsWith("ORDER BY", StringComparison.InvariantCultureIgnoreCase))
+                return sortBy;
             return ValidSortFields.Contains(sortBy.ToLowerInvariant()) ? sortBy : "name";
         }
 

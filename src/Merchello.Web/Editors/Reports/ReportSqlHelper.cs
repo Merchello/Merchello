@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Merchello.Core;
 using Umbraco.Core.Persistence;

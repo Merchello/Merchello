@@ -1,6 +1,15 @@
 <div data-ng-show="loaded">
     <h2><localize key="merchelloReports_topSellingItems" /></h2>
     <div class="row">
+        <div class="span12 text-right">
+            <div class="status-list">
+                <label class="checkbox inline" ng-repeat="status in invoiceStatuses">
+                    <input type="checkbox" ng-model="status.checked" ng-change="statusChange()"> {{status.name}}
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <merchello-date-range-button reload="reload" start-date="startDate" end-date="endDate"></merchello-date-range-button>
         <div>
             <canvas id="pie" class="chart chart-pie"

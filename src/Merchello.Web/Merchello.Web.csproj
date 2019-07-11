@@ -263,6 +263,7 @@
     <Compile Include="Caching\IVirtualProductContentCache.cs" />
     <Compile Include="Discounts\Coupons\Constraints\ExcludeProductsOnSaleConstraint.cs" />
     <Compile Include="Discounts\Coupons\Constraints\ExcludeProductsOnSaleConstraintVisitor.cs" />
+    <Compile Include="Discounts\Coupons\Constraints\CanBeUsedWithOtherCouponsConstraint.cs" />
     <Compile Include="Editors\Reports\SalesSearchReportApiController.cs" />
     <Compile Include="Models\ContentEditing\InvoiceAddItem.cs" />
     <Compile Include="Models\ContentEditing\InvoiceItemItemizationDisplay.cs" />

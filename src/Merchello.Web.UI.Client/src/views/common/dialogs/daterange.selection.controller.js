@@ -6,6 +6,9 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
         $scope.preValuesLoaded = false;
 
         $scope.changeDateFilters = changeDateFilters;
+        $scope.preSelectDate = preSelectDate;
+        $scope.preSelectDays = preSelectDays;
+        $scope.preSelectMonths = preSelectMonths;
 
         $scope.dateFormat = 'YYYY-MM-DD';
         $scope.rangeStart = '';
@@ -33,7 +36,8 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
 
                 // initial settings use standard
                 $scope.rangeStart = $filter('date')(start, $scope.settings.dateFormat);
-                $scope.rangeEnd =  $filter('date')(end, $scope.settings.dateFormat);
+                $scope.rangeEnd = $filter('date')(end, $scope.settings.dateFormat);
+                $scope.showPreDeterminedDates = showPreDeterminedDates;
 
                 setupDatePicker("#filterStartDate", $scope.rangeStart);
                 $element.find("#filterStartDate").datetimepicker().on("changeDate", applyDateStart);
@@ -105,6 +109,32 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
         function changeDateFilters(start, end) {
             $scope.rangeStart = start;
             $scope.rangeEnd = end;
+        }
+
+        function preSelectDays(days) {
+            var end = new Date();
+            var start = new Date().setDate(new Date().getDate() - days);
+            preSelectDate(moment(start).format($scope.dateFormat), moment(end).format($scope.dateFormat));
+        }
+
+        function preSelectMonths(months) {
+            var end = new Date();
+            var start = new Date().setMonth(new Date().getMonth() - months);
+            preSelectDate(moment(start).format($scope.dateFormat), moment(end).format($scope.dateFormat));
+        }
+
+        /**
+         * @ngdoc method
+         * @name preSelectDate
+         * @function
+         *
+         * @param {string} start - String representation of start date.
+         * @param {string} end - String representation of end date.
+         * @description - Change the date filters, then triggera new API call to load the reports.
+         */
+        function preSelectDate(start, end) {
+            changeDateFilters(start, end);
+            save();
         }
 
         /*-------------------------------------------------------------------

@@ -775,6 +775,9 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
         $scope.preValuesLoaded = false;
 
         $scope.changeDateFilters = changeDateFilters;
+        $scope.preSelectDate = preSelectDate;
+        $scope.preSelectDays = preSelectDays;
+        $scope.preSelectMonths = preSelectMonths;
 
         $scope.dateFormat = 'YYYY-MM-DD';
         $scope.rangeStart = '';
@@ -802,7 +805,8 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
 
                 // initial settings use standard
                 $scope.rangeStart = $filter('date')(start, $scope.settings.dateFormat);
-                $scope.rangeEnd =  $filter('date')(end, $scope.settings.dateFormat);
+                $scope.rangeEnd = $filter('date')(end, $scope.settings.dateFormat);
+                $scope.showPreDeterminedDates = showPreDeterminedDates;
 
                 setupDatePicker("#filterStartDate", $scope.rangeStart);
                 $element.find("#filterStartDate").datetimepicker().on("changeDate", applyDateStart);
@@ -874,6 +878,32 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
         function changeDateFilters(start, end) {
             $scope.rangeStart = start;
             $scope.rangeEnd = end;
+        }
+
+        function preSelectDays(days) {
+            var end = new Date();
+            var start = new Date().setDate(new Date().getDate() - days);
+            preSelectDate(moment(start).format($scope.dateFormat), moment(end).format($scope.dateFormat));
+        }
+
+        function preSelectMonths(months) {
+            var end = new Date();
+            var start = new Date().setMonth(new Date().getMonth() - months);
+            preSelectDate(moment(start).format($scope.dateFormat), moment(end).format($scope.dateFormat));
+        }
+
+        /**
+         * @ngdoc method
+         * @name preSelectDate
+         * @function
+         *
+         * @param {string} start - String representation of start date.
+         * @param {string} end - String representation of end date.
+         * @description - Change the date filters, then triggera new API call to load the reports.
+         */
+        function preSelectDate(start, end) {
+            changeDateFilters(start, end);
+            save();
         }
 
         /*-------------------------------------------------------------------
@@ -9899,6 +9929,7 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesOverTi
             $scope.series = [];
             $scope.chartData = [];
             $scope.reportData = [];
+            $scope.invoiceStatuses = [];
             $scope.startDate = '';
             $scope.endDate = '';
             $scope.settings = {};
@@ -9908,6 +9939,7 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesOverTi
             $scope.getColumnTotal = getColumnTotal;
             $scope.openDateRangeDialog = openDateRangeDialog;
             $scope.clearDates = clearDates;
+            $scope.statusChange = statusChange;
             $scope.reverse = reverse;
 
 
@@ -9939,6 +9971,7 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesOverTi
             function loadDefaultData() {
                 salesOverTimeResource.getDefaultReportData().then(function(result) {
                     compileChart(result);
+                    $scope.invoiceStatuses = result.invoiceStatuses;
                 });
             }
 
@@ -9947,10 +9980,15 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesOverTi
                 var query = queryDisplayBuilder.createDefault();
                 query.addInvoiceDateParam($scope.startDate, 'start');
                 query.addInvoiceDateParam($scope.endDate, 'end');
+                query.addCustomParam('invoiceStatuses', JSON.stringify($scope.invoiceStatuses));
 
                 salesOverTimeResource.getCustomReportData(query).then(function(result) {
                    compileChart(result);
                 });
+            }
+
+            function statusChange() {
+                loadCustomData();
             }
 
             function compileChart(result) {
@@ -10011,7 +10049,8 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesOverTi
             function openDateRangeDialog() {
                 var dialogData = {
                     startDate: $scope.startDate,
-                    endDate: $scope.endDate
+                    endDate: $scope.endDate,
+                    showPreDeterminedDates: true
                 };
 
                 dialogService.open({
@@ -10159,7 +10198,8 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesSearch
             function openDateRangeDialog() {
                 var dialogData = {
                     startDate: $scope.salesSearchSnapshot.startDate,
-                    endDate: $scope.salesSearchSnapshot.endDate
+                    endDate: $scope.salesSearchSnapshot.endDate,
+                    showPreDeterminedDates: true
                 };
 
                 dialogService.open({

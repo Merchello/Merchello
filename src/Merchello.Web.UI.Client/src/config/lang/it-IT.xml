@@ -40,6 +40,11 @@
     <key alias="some">Some</key>
     <key alias="lineItems">Line Items</key>
     <key alias="setDateRange">Set Date Range</key>
+    <key alias="preDeterminedDateRange">Seleziona un intervallo di date predeterminato:</key>
+    <key alias="customDateRange">Oppure scegli un intervallo di date personalizzato:</key>
+    <key alias="lastWeek">La settimana scorsa</key>
+    <key alias="lastMonth">Lo scorso mese</key>
+    <key alias="lastYear">L'anno scorso</key>
     <key alias="allDates">All Dates</key>
     <key alias="starting">Starting</key>
     <key alias="ending">Ending</key>

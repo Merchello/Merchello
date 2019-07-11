@@ -1,5 +1,14 @@
 <div>
     <h2><localize key="merchelloReports_thisWeekVsLast" /></h2>
+    <div class="row">
+        <div class="span12 text-right">
+            <div class="status-list">
+                <label class="checkbox inline" ng-repeat="status in invoiceStatuses">
+                    <input type="checkbox" ng-model="status.checked" ng-change="statusChange()"> {{status.name}}
+                </label>
+            </div>
+        </div>
+    </div>
     <canvas id="line" class="chart chart-bar" chart-data="chartData"
             chart-labels="labels" chart-legend="true" chart-series="series">
     </canvas>

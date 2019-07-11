@@ -40,6 +40,11 @@
     <key alias="some">Некоторые</key>
     <key alias="lineItems">Строки</key>
     <key alias="setDateRange">Установить диапазон дат</key>
+    <key alias="preDeterminedDateRange">Выберите заранее определенный диапазон дат:</key>
+    <key alias="customDateRange">Или выберите произвольный диапазон дат:</key>
+    <key alias="lastWeek">Прошлая неделя</key>
+    <key alias="lastMonth">Прошлый месяц</key>
+    <key alias="lastYear">Прошлый год</key>
     <key alias="allDates">Все даты</key>
     <key alias="starting">Начало</key>
     <key alias="ending">Конец</key>
