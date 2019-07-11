@@ -34,6 +34,10 @@ namespace Merchello.Web.Models.Reports
         /// </summary>
         public IEnumerable<ProductLineItem> Products { get; set; }
 
+        /// <summary>
+        /// Include Manufacturers in search
+        /// </summary>
+        public bool IncludeManufacturer { get; set; }
     }
 
     /// <summary>

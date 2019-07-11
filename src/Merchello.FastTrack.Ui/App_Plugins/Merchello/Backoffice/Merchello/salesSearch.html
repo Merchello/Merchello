@@ -25,11 +25,13 @@
                         <div class="span6">
                             <div class="input-prepend">
                                 <span class="add-on"><i class="icon icon-search"></i></span>
-                                <input class="span10 input-xxlarge" type="text" 
-                                       localize="placeholder" placeholder="@general_typeToSearch" 
+                                <input class="span10 input-xxlarge" type="text"
+                                       localize="placeholder" placeholder="@general_typeToSearch"
                                        ng-model="salesSearchSnapshot.search" />
                                 <button class="btn btn-info" type="button" ng-click="updateData()"><localize key="merchelloGeneral_update" /></button>
                             </div>
+                            <div class="clearfix" style="margin-bottom: 8px;"></div>
+                            <input type="checkbox" ng-model="salesSearchSnapshot.includeManufacturer"> Include Manufacturer In Search
                         </div>
                         <div class="span6">
                             <merchello-date-range-button reload="reload" start-date="salesSearchSnapshot.startDate" end-date="salesSearchSnapshot.endDate"></merchello-date-range-button>
