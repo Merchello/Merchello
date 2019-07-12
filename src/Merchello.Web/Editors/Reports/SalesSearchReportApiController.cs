@@ -113,7 +113,7 @@ namespace Merchello.Web.Editors.Reports
             //var startMonth = new DateTime(2016, 1, 1).FirstOfMonth();
             var invoiceStatuses = AllStatuses();
 
-            return BuildSalesSearchSnapshot(startMonth, endOfMonth, invoiceStatuses.Select(x => x.Key), string.Empty);
+            return BuildSalesSearchSnapshot(startMonth, endOfMonth, invoiceStatuses.Select(x => x.Key), string.Empty, false);
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace Merchello.Web.Editors.Reports
         [HttpPost]
         public SalesSearchSnapshot UpdateData(SalesSearchSnapshot salesSearchSnapshot)
         {
-            return BuildSalesSearchSnapshot(salesSearchSnapshot.StartDate, salesSearchSnapshot.EndDate, salesSearchSnapshot.InvoiceStatuses.Where(x => x.Checked).Select(x => x.Key), salesSearchSnapshot.Search);
+            return BuildSalesSearchSnapshot(salesSearchSnapshot.StartDate, salesSearchSnapshot.EndDate, salesSearchSnapshot.InvoiceStatuses.Where(x => x.Checked).Select(x => x.Key), salesSearchSnapshot.Search, salesSearchSnapshot.IncludeManufacturer);
         }
 
         private IEnumerable<InvStatus> AllStatuses()
@@ -139,15 +139,17 @@ namespace Merchello.Web.Editors.Reports
         /// <summary>
         /// Builds the sales snapshot 
         /// </summary>
-        /// <param name="startDate"></param>
-        /// <param name="endDate"></param>
-        /// <param name="invoiceStatuses"></param>
-        /// <param name="search"></param>
+        /// <param name="startDate">The start date</param>
+        /// <param name="endDate">The end date</param>
+        /// <param name="invoiceStatuses">Which invoice statuses to search</param>
+        /// <param name="search">The keyword used to search</param>
+        /// <param name="includeManufacturer">Include manufacturer name in the search</param>
         /// <returns></returns>
-        private SalesSearchSnapshot BuildSalesSearchSnapshot(DateTime startDate, DateTime endDate, IEnumerable<Guid> invoiceStatuses, string search)
+        private SalesSearchSnapshot BuildSalesSearchSnapshot(DateTime startDate, DateTime endDate, IEnumerable<Guid> invoiceStatuses, string search, bool includeManufacturer)
         {
             // Get all the statuses
-            var statuses = AllStatuses();
+            var statuses = AllStatuses().ToArray();
+            invoiceStatuses = invoiceStatuses.ToArray();
 
             // Loop and set selected statuses
             foreach (var status in statuses)
@@ -159,7 +161,7 @@ namespace Merchello.Web.Editors.Reports
             }
 
             // Get the SQL
-            var sql = ReportSqlHelper.SalesByItem.GetSaleSearchSql(startDate, endDate, invoiceStatuses, search);
+            var sql = ReportSqlHelper.SalesByItem.GetSaleSearchSql(startDate, endDate, invoiceStatuses, search, includeManufacturer);
 
             // Execure the SQL
             var results = ApplicationContext.DatabaseContext.Database.Query<SaleItem>(sql).ToList();
@@ -168,7 +170,7 @@ namespace Merchello.Web.Editors.Reports
             var groupedResults = results.GroupBy(x => x.ExtendedData.GetProductKey());
 
             // List of ProductLineItem to add
-            var ProductLineItemList = new List<ProductLineItem>();
+            var productLineItemList = new List<ProductLineItem>();
 
             var currencySymbol = this.ActiveCurrencies.FirstOrDefault();
 
@@ -228,7 +230,7 @@ namespace Merchello.Web.Editors.Reports
                             }
                         }
 
-                        ProductLineItemList.Add(productLineItem);
+                        productLineItemList.Add(productLineItem);
                     }
                 }
                 catch (Exception ex)
@@ -244,7 +246,8 @@ namespace Merchello.Web.Editors.Reports
                 Search = search,
                 StartDate = startDate,
                 InvoiceStatuses = statuses,
-                Products = ProductLineItemList.OrderByDescending(x => x.Total)
+                Products = productLineItemList.OrderByDescending(x => x.Total),
+                IncludeManufacturer = includeManufacturer
             };
 
             // return

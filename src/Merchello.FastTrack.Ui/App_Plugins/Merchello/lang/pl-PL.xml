@@ -40,6 +40,11 @@
     <key alias="some">Część</key>
     <key alias="lineItems">Przedmioty</key>
     <key alias="setDateRange">Ustaw zakres dat</key>
+    <key alias="preDeterminedDateRange">Wybierz wcześniej określony zakres dat:</key>
+    <key alias="customDateRange">Lub wybierz niestandardowy zakres dat:</key>
+    <key alias="lastWeek">Zeszły tydzień</key>
+    <key alias="lastMonth">W zeszłym miesiącu</key>
+    <key alias="lastYear">Ostatni rok</key>
     <key alias="allDates">Wszystkie daty</key>
     <key alias="starting">Początek</key>
     <key alias="ending">Koniec</key>

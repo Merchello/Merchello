@@ -1,40 +1,40 @@
-﻿namespace Merchello.Web.Editors.Reports
-{
-    using Merchello.Core;
-    using System;
-    using System.Collections.Generic;
-    using Umbraco.Core.Persistence;
+using System;
+using System.Collections.Generic;
+using Merchello.Core;
+using Umbraco.Core.Persistence;
 
+namespace Merchello.Web.Editors.Reports
+{
     /// <summary>
-    /// Utility class to keep report SQL in a single logical location.
+    ///     Utility class to keep report SQL in a single logical location.
     /// </summary>
     internal static class ReportSqlHelper
     {
         /// <summary>
-        /// Queries for SaleByItem Report.
+        ///     Queries for SaleByItem Report.
         /// </summary>
         public static class SalesByItem
         {
             /// <summary>
-            /// Gets the SQL for top 5 SKUs and sale count over a date range.
+            ///     Gets the SQL for top 5 SKUs and sale count over a date range.
             /// </summary>
             /// <param name="startDate">
-            /// The start date.
+            ///     The start date.
             /// </param>
             /// <param name="endDate">
-            /// The end date.
+            ///     The end date.
             /// </param>
             /// <param name="typeFieldKey">
-            /// The line item type field key.  Set to "product" in API controller
+            ///     The line item type field key.  Set to "product" in API controller
             /// </param>
             /// <param name="count">
-            /// The count to return
+            ///     The count to return
             /// </param>
             /// <param name="invoiceStatusKeys">
             /// The invoice status keys
             /// </param>
             /// <returns>
-            /// The <see cref="Sql"/>.
+            ///     The <see cref="Sql" />.
             /// </returns>
             public static Sql GetSkuSaleCountSql(DateTime startDate, DateTime endDate, Guid typeFieldKey, int count, IEnumerable<Guid> invoiceStatusKeys)
             {
@@ -67,39 +67,43 @@
                     WHERE Q2.quantitySold > 0
                     ORDER BY Q2.quantitySold DESC";
 
-                return new Sql(sql, new { @top = count, @start = startDate, @end = endDate, @tfKey = typeFieldKey, @invoiceStatusKeys = invoiceStatusKeys });
+                return new Sql(sql, new {@top = count, @start = startDate, @end = endDate, @tfKey = typeFieldKey, @invoiceStatusKeys = invoiceStatusKeys });
             }
 
-            public static Sql GetSaleSearchSql(DateTime startDate, DateTime endDate, IEnumerable<Guid> invoiceStatuses, string search, string typeFieldKey = "D462C051-07F4-45F5-AAD2-D5C844159F04")
+            public static Sql GetSaleSearchSql(DateTime startDate, DateTime endDate, IEnumerable<Guid> invoiceStatuses,
+                string search, bool includeManufacturer = false,
+                string typeFieldKey = "D462C051-07F4-45F5-AAD2-D5C844159F04")
             {
-                var sql = new Sql(@"SELECT merchInvoiceItem.[name], merchInvoiceItem.quantity, merchInvoiceItem.price, merchInvoiceItem.extendedData
+                var sql = new Sql(
+                        @"SELECT merchInvoiceItem.[name], merchInvoiceItem.quantity, merchInvoiceItem.price, merchInvoiceItem.extendedData
                          FROM merchInvoiceItem INNER JOIN
                          merchInvoice ON merchInvoiceItem.invoiceKey = merchInvoice.pk INNER JOIN
                          merchInvoiceStatus ON merchInvoice.invoiceStatusKey = merchInvoiceStatus.pk")
-                         .Append("WHERE merchInvoiceStatus.pk IN (@invoiceStatuses)", new { invoiceStatuses })
-                         .Append("AND lineItemTfKey = @typeFieldKey", new { @typeFieldKey = Guid.Parse(typeFieldKey) })
-                         .Append("AND merchInvoice.invoiceDate BETWEEN @startDate AND @endDate", new { @startDate = startDate.GetStartOfDay(), @endDate = endDate.GetEndOfDay() });
+                    .Append("WHERE merchInvoiceStatus.pk IN (@invoiceStatuses)", new {invoiceStatuses})
+                    .Append("AND lineItemTfKey = @typeFieldKey", new {typeFieldKey = Guid.Parse(typeFieldKey)})
+                    .Append("AND merchInvoice.invoiceDate BETWEEN @startDate AND @endDate",
+                        new {startDate = startDate.GetStartOfDay(), endDate = endDate.GetEndOfDay()});
 
 
                 if (!string.IsNullOrWhiteSpace(search))
                 {
-                    sql.Append("AND merchInvoiceItem.[name] LIKE @search", new { @search = string.Format("%{0}%", search) });
+                    sql.Append("AND (merchInvoiceItem.[name] LIKE @search",
+                        new {search = string.Format("%{0}%", search)});
+
+                    if (includeManufacturer)
+                    {
+                        sql.Append(
+                            "OR CAST(merchInvoiceItem.extendedData AS XML).value('(/extendedData/merchManufacturer)[1]', 'nvarchar(100)') LIKE @search)",
+                            new {search = string.Format("%{0}%", search)});
+                    }
+                    else
+                    {
+                        sql.Append(")");
+                    }
                 }
-
-
-       //         //merchInvoiceItem.sku, merchInvoiceItem.[name], 
-       //         var raw = @"SELECT merchInvoiceItem.quantity, merchInvoiceItem.price, merchInvoiceItem.extendedData
-       //                  FROM merchInvoiceItem INNER JOIN
-       //                  merchInvoice ON merchInvoiceItem.invoiceKey = merchInvoice.pk INNER JOIN
-       //                  merchInvoiceStatus ON merchInvoice.invoiceStatusKey = merchInvoiceStatus.pk
-						 //WHERE merchInvoiceStatus.pk IN ('1F872A1A-F0DD-4C3E-80AB-99799A28606E', '6606B0EA-15B6-44AA-8557-B2D9D049645C')
-						 //AND lineItemTfKey = 'D462C051-07F4-45F5-AAD2-D5C844159F04' 
-						 //AND merchInvoice.invoiceDate BETWEEN '01 May 2018' AND '10 January 2019'
-						 //AND merchInvoiceItem.[name] LIKE '%nene black%'";
 
                 return sql;
             }
         }
-         
     }
 }

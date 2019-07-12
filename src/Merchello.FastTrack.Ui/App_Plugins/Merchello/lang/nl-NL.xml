@@ -40,6 +40,11 @@
     <key alias="some">Sommige</key>
     <key alias="lineItems">Orderregels</key>
     <key alias="setDateRange">Stel datum bereik in</key>
+    <key alias="preDeterminedDateRange">Selecteer een vooraf bepaald datumbereik:</key>
+    <key alias="customDateRange">Of kies een aangepast datumbereik:</key>
+    <key alias="lastWeek">Vorige week</key>
+    <key alias="lastMonth">Vorige maand</key>
+    <key alias="lastYear">Vorig jaar</key>
     <key alias="allDates">Alle data</key>
     <key alias="starting">Van</key>
     <key alias="ending">Tot</key>
