@@ -68,7 +68,7 @@
         /// <remarks>
         /// For testing
         /// </remarks>
-        internal void AddOrderToIndex(IOrder order)
+        public void AddOrderToIndex(IOrder order)
         {
             var nodes = new List<XElement> { order.SerializeToXml().Root };
             AddNodesToIndex(nodes, IndexTypes.Order);

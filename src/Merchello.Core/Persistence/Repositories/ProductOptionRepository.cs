@@ -29,7 +29,7 @@
     /// We have to be careful with the runtime cache here since various usages of the product option will be used by different products.
     /// We will need to make sure when we filter the choices, the object is previously cloned into a new option.
     /// </remarks>
-    internal class ProductOptionRepository : MerchelloPetaPocoRepositoryBase<IProductOption>, IProductOptionRepository
+    public class ProductOptionRepository : MerchelloPetaPocoRepositoryBase<IProductOption>, IProductOptionRepository
     {
         /// <summary>
         /// Valid sort fields.
@@ -85,7 +85,7 @@
         // TODO - this is a quick fix for an examine re-index issue where a shared product option is saved and individual products
         // that implement that option indexed values are not updated.
         // see: http://issues.merchello.com/youtrack/issue/M-1233
-        internal static event TypedEventHandler<ProductOptionRepository, ObjectEventArgs<IEnumerable<Guid>>>  ReIndex; 
+        public static event TypedEventHandler<ProductOptionRepository, ObjectEventArgs<IEnumerable<Guid>>>  ReIndex; 
 
         /// <summary>
         /// Saves options associated with a product.

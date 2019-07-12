@@ -27,7 +27,7 @@
     /// <typeparam name="TEntity">
     /// The type of associated entity to be used in cache purges
     /// </typeparam>
-    internal abstract class VirtualContentCache<TContent, TEntity> : IVirtualContentCache<TContent, TEntity>
+    public abstract class VirtualContentCache<TContent, TEntity> : IVirtualContentCache<TContent, TEntity>
         where TContent : IPublishedContent
         where TEntity : IEntity
     {

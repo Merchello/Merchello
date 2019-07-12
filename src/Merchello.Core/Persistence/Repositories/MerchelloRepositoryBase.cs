@@ -17,7 +17,7 @@
 	/// Represent an abstract Repository, which is the base of the Repository implementations
 	/// </summary>
 	/// <typeparam name="TEntity">Type of <see cref="IEntity"/> entity for which the repository is used</typeparam>
-	internal abstract class MerchelloRepositoryBase<TEntity> : DisposableObject, IRepositoryQueryable<Guid, TEntity>, IUnitOfWorkRepository 
+	public abstract class MerchelloRepositoryBase<TEntity> : DisposableObject, IRepositoryQueryable<Guid, TEntity>, IUnitOfWorkRepository 
 		where TEntity : class, IEntity
 	{
         /// <summary>

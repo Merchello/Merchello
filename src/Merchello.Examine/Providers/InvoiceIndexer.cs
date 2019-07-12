@@ -78,7 +78,7 @@
         /// </summary>
         /// <param name="invoice">The <see cref="IInvoice"/> to be indexed</param>
         /// <remarks>For testing</remarks>
-        internal void AddInvoiceToIndex(IInvoice invoice)
+        public void AddInvoiceToIndex(IInvoice invoice)
         {
             var nodes = new List<XElement> { invoice.SerializeToXml().Root };
             AddNodesToIndex(nodes, IndexTypes.Invoice);

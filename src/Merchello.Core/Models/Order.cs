@@ -215,7 +215,7 @@
 
         /// <inheritdoc/>
         [IgnoreDataMember]
-        internal int ExamineId
+        public int ExamineId
         {
             get { return _examineId; }
             set { _examineId = value; }

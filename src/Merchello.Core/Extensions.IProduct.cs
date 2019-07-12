@@ -398,7 +398,7 @@ namespace Merchello.Core
         /// <returns>
         /// The <see cref="XDocument"/>.
         /// </returns>
-        internal static XDocument SerializeToXml(this IProductVariant productVariant, ProductOptionCollection productOptionCollection = null, IEnumerable<Guid> collections = null)
+        public static XDocument SerializeToXml(this IProductVariant productVariant, ProductOptionCollection productOptionCollection = null, IEnumerable<Guid> collections = null)
         {
             string xml;
             using (var sw = new StringWriter())
