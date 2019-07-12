@@ -111,12 +111,19 @@ namespace Merchello.Web
         /// </param>
         protected override void EnsureCustomerCreationAndConvertBasket(ICustomerBase customer)
         {
-            if (!customer.IsAnonymous) return;
+            if (!customer.IsAnonymous)
+            {
+                return;
+            }
 
-            var memberId = Convert.ToInt32(this.MembershipProviderKey(customer.Key));
+            var membershipProviderKey = this.MembershipProviderKey(customer.Key);
+            if (!int.TryParse(membershipProviderKey, NumberStyles.None, CultureInfo.InvariantCulture, out var memberId))
+            {
+                return;
+            }
+
             var member = _memberService.GetById(memberId);
-
-            if (MerchelloConfiguration.Current.CustomerMemberTypes.Any(x => x == member.ContentTypeAlias))
+            if (member != null && MerchelloConfiguration.Current.CustomerMemberTypes.Any(x => x == member.ContentTypeAlias))
             {
                 base.EnsureCustomerCreationAndConvertBasket(customer);
             }
