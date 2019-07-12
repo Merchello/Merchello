@@ -10,7 +10,7 @@
     /// <summary>
     /// Marker interface for the DetachedContentTypeRepository.
     /// </summary>
-    internal interface IDetachedContentTypeRepository : IRepositoryQueryable<Guid, IDetachedContentType>
+    public interface IDetachedContentTypeRepository : IRepositoryQueryable<Guid, IDetachedContentType>
     {         
     }
 }

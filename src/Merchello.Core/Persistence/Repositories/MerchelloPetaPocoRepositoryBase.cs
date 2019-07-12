@@ -17,7 +17,7 @@
 	/// Represent an abstract Repository for PetaPoco based repositories
 	/// </summary>
 	/// <typeparam name="TEntity">The type of entity</typeparam>    
-    internal abstract class MerchelloPetaPocoRepositoryBase<TEntity> : MerchelloRepositoryBase<TEntity>
+    public abstract class MerchelloPetaPocoRepositoryBase<TEntity> : MerchelloRepositoryBase<TEntity>
 		where TEntity : class, IEntity
     {
         /// <summary>

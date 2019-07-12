@@ -170,7 +170,7 @@
         /// <summary>
         /// Special event that fires when an order record is updated
         /// </summary>
-        internal static event TypedEventHandler<IShipmentService, SaveEventArgs<IOrder>> UpdatedOrder; 
+        public static event TypedEventHandler<IShipmentService, SaveEventArgs<IOrder>> UpdatedOrder; 
 
         #endregion
 

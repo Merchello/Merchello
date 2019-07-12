@@ -14,7 +14,7 @@
     /// <summary>
     /// A cache for <see cref="IProductContent"/>.
     /// </summary>
-    internal sealed class VirtualProductContentCache : VirtualContentCache<IProductContent, IProduct>, IVirtualProductContentCache
+    public sealed class VirtualProductContentCache : VirtualContentCache<IProductContent, IProduct>, IVirtualProductContentCache
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="VirtualProductContentCache"/> class.
@@ -22,6 +22,18 @@
         public VirtualProductContentCache()
             : this(ApplicationContext.Current.ApplicationCache)
         {
+        }
+
+        /// <summary>
+        /// Changes the product display content by ui culture.
+        /// </summary>
+        /// <param name="content"></param>
+        /// <returns></returns>
+        private IProductContent UpdateLanguage(IProductContent content)
+        {
+            if(null != content)
+                content.SpecifyCulture(System.Threading.Thread.CurrentThread.CurrentUICulture);
+            return content;
         }
 
         /// <summary>
@@ -82,9 +94,9 @@
         {
             var cacheKey = GetSlugCacheKey(slug, ModifiedVersion);
             var content = (IProductContent)Cache.RuntimeCache.GetCacheItem(cacheKey);
-            if (content != null) return content;
+            if (content != null) return UpdateLanguage(content);
 
-            return CacheContent(cacheKey, get.Invoke(slug));
+            return UpdateLanguage(CacheContent(cacheKey, get.Invoke(slug)));
         }
 
         /// <summary>
@@ -101,11 +113,11 @@
         /// </returns>
         public IProductContent GetBySku(string sku, Func<string, IProductContent> get)
         {
-            var cacheKey = GetSkuCacheKey(sku, ModifiedVersion);
+             var cacheKey = GetSkuCacheKey(sku, ModifiedVersion);
             var content = (IProductContent)Cache.RuntimeCache.GetCacheItem(cacheKey);
-            if (content != null) return content;
+            if (content != null) return UpdateLanguage(content);
 
-            return CacheContent(cacheKey, get.Invoke(sku));
+            return UpdateLanguage(CacheContent(cacheKey, get.Invoke(sku)));
         }
 
         /// <summary>

@@ -63,7 +63,7 @@
         /// </summary>
         /// <param name="customer">The <see cref="ICustomer"/> to be indexed</param>
         /// <remarks>For testing</remarks>
-        internal void AddCustomerToIndex(ICustomer customer)
+        public void AddCustomerToIndex(ICustomer customer)
         {
             var nodes = new List<XElement> { customer.SerializeToXml().Root };
             AddNodesToIndex(nodes, IndexTypes.Customer);
@@ -74,7 +74,7 @@
         /// </summary>
         /// <param name="customer">The <see cref="ICustomer"/> to be removed from the index</param>
         /// <remarks>For testing</remarks>
-        internal void DeleteCustomerFromIndex(ICustomer customer)
+        public void DeleteCustomerFromIndex(ICustomer customer)
         {
             DeleteFromIndex(((Customer)customer).ExamineId.ToString(CultureInfo.InvariantCulture));
         }
