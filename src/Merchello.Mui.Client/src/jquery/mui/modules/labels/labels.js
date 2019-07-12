@@ -12,9 +12,20 @@ MUI.Labels = {
         basketItemCount: function(evt, args) {
             if (args.Success) {
                 var label = $('[data-muilabel="basketcount"]');
+                var $quickcheckout = $('[data-value="quickcheckout"]');
                 if (label.length > 0) {
                     $(label).html(args.ItemCount);
+                    // If there's a quick checkout menu item show or hide it according to basket count.
+                    if ($quickcheckout.length > 0) {
+                        if (args.ItemCount !== 0) {
+                            $quickcheckout.removeClass('mui-quickcheckout');
+                        }
+                        else {
+                            $quickcheckout.addClass('mui-quickcheckout');
+                        }
+                    }
                 }
+
             }
         }
     }
