@@ -17,7 +17,7 @@ MUI.Labels = {
                     $(label).html(args.ItemCount);
                     // If there's a quick checkout menu item show or hide it according to basket count.
                     if ($quickcheckout.length > 0) {
-                        if (args.ItemCount != 0) {
+                        if (args.ItemCount !== 0) {
                             $quickcheckout.removeClass('mui-quickcheckout');
                         }
                         else {
