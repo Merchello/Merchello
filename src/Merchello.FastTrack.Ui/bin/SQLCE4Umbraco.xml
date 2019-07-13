@@ -1,0 +1,274 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SQLCE4Umbraco</name>
+    </assembly>
+    <members>
+        <member name="M:SqlCE4Umbraco.SqlCeApplicationBlock.ExecuteScalar(System.String,System.Data.CommandType,System.String,System.Data.SqlServerCe.SqlCeParameter[])">
+            <summary>
+            
+            </summary>
+            <param name="connectionString"></param>
+            <param name="commandType"></param>
+            <param name="commandText"></param>
+            <param name="commandParameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SqlCE4Umbraco.SqlCeApplicationBlock.ExecuteNonQuery(System.String,System.Data.CommandType,System.String,System.Data.SqlServerCe.SqlCeParameter[])">
+            <summary>
+            
+            </summary>
+            <param name="connectionString"></param>
+            <param name="commandType"></param>
+            <param name="commandText"></param>
+            <param name="commandParameters"></param>
+        </member>
+        <member name="M:SqlCE4Umbraco.SqlCeApplicationBlock.ExecuteReader(System.String,System.Data.CommandType,System.String,System.Data.SqlServerCe.SqlCeParameter[])">
+            <summary>
+            
+            </summary>
+            <param name="connectionString"></param>
+            <param name="commandType"></param>
+            <param name="commandText"></param>
+            <param name="commandParameters"></param>
+            <returns></returns>
+        </member>
+        <member name="T:SqlCE4Umbraco.SqlCeDataReaderHelper">
+            <summary>
+            Class that adapts a SqlDataReader.SqlDataReader to a RecordsReaderAdapter.
+            </summary>
+        </member>
+        <member name="M:SqlCE4Umbraco.SqlCeDataReaderHelper.#ctor(System.Data.SqlServerCe.SqlCeDataReader)">
+            <summary>
+            Initializes a new instance of the <see cref="!:SqlServerDataReader"/> class.
+            </summary>
+            <param name="dataReader">The data reader.</param>
+        </member>
+        <member name="P:SqlCE4Umbraco.SqlCeDataReaderHelper.HasRecords">
+            <summary>
+            Gets a value indicating whether this instance has records.
+            </summary>
+            <value>
+            	<c>true</c> if this instance has records; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="T:SqlCE4Umbraco.SqlCEHelper">
+            <summary>
+            Sql Helper for an SQL Server database.
+            </summary>
+        </member>
+        <member name="M:SqlCE4Umbraco.SqlCEHelper.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SqlCE4Umbraco.SqlCEHelper"/> class.
+            </summary>
+            <param name="connectionString">The connection string.</param>
+        </member>
+        <member name="M:SqlCE4Umbraco.SqlCEHelper.CreateEmptyDatabase">
+            <summary>
+            Checks if the actual database exists, if it doesn't then it will create it
+            </summary>
+        </member>
+        <member name="M:SqlCE4Umbraco.SqlCEHelper.ClearDatabase">
+            <summary>
+            Most likely only will be used for unit tests but will remove all tables from the database
+            </summary>
+        </member>
+        <member name="M:SqlCE4Umbraco.SqlCEHelper.DropForeignKeys(System.String)">
+            <summary>
+            Drops all foreign keys on a table.
+            </summary>
+            <param name="table">The name of the table.</param>
+            <remarks>To be used in unit tests.</remarks>
+        </member>
+        <member name="M:SqlCE4Umbraco.SqlCEHelper.ReplaceDataDirectory(System.String)">
+            <summary>
+            Replaces the data directory with a local path.
+            </summary>
+            <param name="path">The path.</param>
+            <returns>A local path with the resolved 'DataDirectory' mapping.</returns>
+        </member>
+        <member name="M:SqlCE4Umbraco.SqlCEHelper.CreateParameter(System.String,System.Object)">
+            <summary>
+            Creates a new parameter for use with this specific implementation of ISqlHelper.
+            </summary>
+            <param name="parameterName">Name of the parameter.</param>
+            <param name="value">Value of the parameter.</param>
+            <returns>A new parameter of the correct type.</returns>
+            <remarks>Abstract factory pattern</remarks>
+        </member>
+        <member name="M:SqlCE4Umbraco.SqlCEHelper.ExecuteScalar(System.String,System.Data.SqlServerCe.SqlCeParameter[])">
+            <summary>
+            Executes a command that returns a single value.
+            </summary>
+            <param name="commandText">The command text.</param>
+            <param name="parameters">The parameters.</param>
+            <returns>The return value of the command.</returns>
+        </member>
+        <member name="M:SqlCE4Umbraco.SqlCEHelper.ExecuteNonQuery(System.String,System.Data.SqlServerCe.SqlCeParameter[])">
+            <summary>
+            Executes a command and returns the number of rows affected.
+            </summary>
+            <param name="commandText">The command text.</param>
+            <param name="parameters">The parameters.</param>
+            <returns>
+            The number of rows affected by the command.
+            </returns>
+        </member>
+        <member name="M:SqlCE4Umbraco.SqlCEHelper.ExecuteReader(System.String,System.Data.SqlServerCe.SqlCeParameter[])">
+            <summary>
+            Executes a command and returns a records reader containing the results.
+            </summary>
+            <param name="commandText">The command text.</param>
+            <param name="parameters">The parameters.</param>
+            <returns>
+            A data reader containing the results of the command.
+            </returns>
+        </member>
+        <member name="T:SqlCE4Umbraco.SqlCEInstaller">
+            <summary>
+            Database installer for an SQL Server data source.
+            </summary>
+        </member>
+        <member name="F:SqlCE4Umbraco.SqlCEInstaller.LatestVersionSupported">
+            <summary>The latest database version this installer supports.</summary>
+        </member>
+        <member name="F:SqlCE4Umbraco.SqlCEInstaller.m_VersionSpecs">
+            <summary>The specifications to determine the database version.</summary>
+        </member>
+        <member name="P:SqlCE4Umbraco.SqlCEInstaller.CanConnect">
+            <summary>
+            This ensures that the database exists, then runs the base method
+            </summary>
+        </member>
+        <member name="P:SqlCE4Umbraco.SqlCEInstaller.CanUpgrade">
+            <summary>
+            Gets a value indicating whether the installer can upgrade the data source.
+            </summary>
+            <value>
+            	<c>true</c> if the installer can upgrade the data source; otherwise, <c>false</c>.
+            </value>
+            <remarks>Empty data sources can't be upgraded, just installed.</remarks>
+        </member>
+        <member name="P:SqlCE4Umbraco.SqlCEInstaller.VersionSpecs">
+            <summary>
+            Gets the version specification for evaluation by DetermineCurrentVersion.
+            Only first matching specification is taken into account.
+            </summary>
+            <value>The version specifications.</value>
+        </member>
+        <member name="M:SqlCE4Umbraco.SqlCEInstaller.#ctor(SqlCE4Umbraco.SqlCEHelper)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SqlCE4Umbraco.SqlCEInstaller"/> class.
+            </summary>
+            <param name="sqlHelper">The SQL helper.</param>
+        </member>
+        <member name="P:SqlCE4Umbraco.SqlCEInstaller.FullInstallSql">
+            <summary>
+            Returns the sql to do a full install
+            </summary>
+        </member>
+        <member name="P:SqlCE4Umbraco.SqlCEInstaller.UpgradeSql">
+            <summary>
+            Returns the sql to do an upgrade
+            </summary>
+        </member>
+        <member name="T:SqlCE4Umbraco.SqlCEParameter">
+            <summary>
+            Parameter class for the SqlCEHelper.
+            </summary>
+        </member>
+        <member name="M:SqlCE4Umbraco.SqlCEParameter.#ctor(System.String,System.Object)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SqlCE4Umbraco.SqlCEParameter"/> class.
+            </summary>
+            <param name="parameterName">Name of the parameter.</param>
+            <param name="value">Value of the parameter.</param>
+        </member>
+        <member name="T:SqlCE4Umbraco.SqlCETableUtility">
+            <summary>
+            SQL Server implementation of <see cref="T:umbraco.DataLayer.Utility.Table.DefaultTableUtility`1"/>.
+            </summary>
+        </member>
+        <member name="M:SqlCE4Umbraco.SqlCETableUtility.#ctor(SqlCE4Umbraco.SqlCEHelper)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SqlCE4Umbraco.SqlCETableUtility"/> class.
+            </summary>
+            <param name="sqlHelper">The SQL helper.</param>
+        </member>
+        <member name="M:SqlCE4Umbraco.SqlCETableUtility.GetTable(System.String)">
+            <summary>
+            Gets the table with the specified name.
+            </summary>
+            <param name="name">The name.</param>
+            <returns>The table, or <c>null</c> if no table with that name exists.</returns>
+        </member>
+        <member name="M:SqlCE4Umbraco.SqlCETableUtility.SaveTable(umbraco.DataLayer.Utility.Table.ITable)">
+            <summary>
+            Saves or updates the table.
+            </summary>
+            <param name="table">The table to be saved.</param>
+        </member>
+        <member name="M:SqlCE4Umbraco.SqlCETableUtility.CreateTable(umbraco.DataLayer.Utility.Table.ITable)">
+            <summary>
+            Creates the table in the data source.
+            </summary>
+            <param name="table">The table.</param>
+        </member>
+        <member name="M:SqlCE4Umbraco.SqlCETableUtility.CreateColumn(umbraco.DataLayer.Utility.Table.ITable,umbraco.DataLayer.Utility.Table.IField)">
+            <summary>
+            Creates a new column in the table.
+            </summary>
+            <param name="table">The table.</param>
+            <param name="field">The field used to create the column.</param>
+        </member>
+        <member name="M:SqlCE4Umbraco.SqlCETableUtility.GetType(umbraco.DataLayer.IRecordsReader)">
+            <summary>
+            Gets the .Net type corresponding to the specified database data type.
+            </summary>
+            <param name="dataTypeReader">The data type reader.</param>
+            <returns>The .Net type</returns>
+        </member>
+        <member name="M:SqlCE4Umbraco.SqlCETableUtility.GetDatabaseType(umbraco.DataLayer.Utility.Table.IField)">
+            <summary>
+            Gets the database type corresponding to the field, complete with field properties.
+            </summary>
+            <param name="field">The field.</param>
+            <returns>The database type.</returns>
+        </member>
+        <member name="M:SqlCE4Umbraco.SqlCETableUtility.GetDatabaseTypeName(umbraco.DataLayer.Utility.Table.IField)">
+            <summary>
+            Gets the name of the database type, without field properties.
+            </summary>
+            <param name="field">The field.</param>
+            <returns></returns>
+        </member>
+        <member name="T:SqlCE4Umbraco.SqlCEUtility">
+            <summary>
+            Utility for an SQL Server data source.
+            </summary>
+        </member>
+        <member name="M:SqlCE4Umbraco.SqlCEUtility.#ctor(SqlCE4Umbraco.SqlCEHelper)">
+            <summary>
+            Initializes a new instance of the <see cref="T:umbraco.DataLayer.SqlHelpers.SqlServer.SqlServerUtility"/> class.
+            </summary>
+            <param name="sqlHelper">The SQL helper.</param>
+        </member>
+        <member name="M:SqlCE4Umbraco.SqlCEUtility.CreateInstaller">
+            <summary>
+            Creates an installer.
+            </summary>
+            <returns>The SQL Server installer.</returns>
+        </member>
+        <member name="M:SqlCE4Umbraco.SqlCEUtility.CreateTableUtility">
+            <summary>
+            Creates a table utility.
+            </summary>
+            <returns>The table utility</returns>
+        </member>
+        <member name="M:SQLCE4Umbraco.SqlCeContextGuardian.CloseBackgroundConnection">
+            <summary>
+            Sometimes we need to ensure this is closed especially in unit tests
+            </summary>
+        </member>
+    </members>
+</doc>
