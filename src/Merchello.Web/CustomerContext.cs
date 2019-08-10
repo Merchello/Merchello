@@ -117,7 +117,8 @@ namespace Merchello.Web
             }
 
             var membershipProviderKey = this.MembershipProviderKey(customer.Key);
-            if (!int.TryParse(membershipProviderKey, NumberStyles.None, CultureInfo.InvariantCulture, out var memberId))
+            int memberId;
+            if (!int.TryParse(membershipProviderKey, NumberStyles.None, CultureInfo.InvariantCulture, out memberId))
             {
                 return;
             }
