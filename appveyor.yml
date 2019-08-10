@@ -69,8 +69,7 @@ deploy:
   - provider: NuGet
     server: https://www.myget.org/F/merchello-dev/api/v2
     symbol_server: https://www.myget.org/F/merchello-dev/api/v2/package
-    api_key:
-      secure: 5d653b55-54d4-44ab-94d6-b6997af31bf6
+    api_key: 5d653b55-54d4-44ab-94d6-b6997af31bf6
     artifact: /.*\.nupkg/
     on:
       branch: merchello-dev
