@@ -1,4 +1,8 @@
-﻿namespace Merchello.Web
+﻿using System.Collections.Generic;
+using Merchello.Web.Models.ContentEditing;
+using Merchello.Web.Models.VirtualContent;
+
+namespace Merchello.Web
 {
     using System;
     using System.Linq;
@@ -143,11 +147,47 @@
             ProductService.AddedToCollection += ProductServiceAddedToCollection;
             ProductService.RemovedFromCollection += ProductServiceRemovedFromCollection;
             ProductService.Deleted += ProductServiceDeleted;
+            ProductService.Saved += ProductServiceOnSaved;
 
             EntityCollectionService.Saved += EntityCollectionSaved;
             EntityCollectionService.Deleted += EntityCollectionDeleted;
 
             if (merchelloIsStarted) this.VerifyMerchelloVersion();
+        }
+
+        private void ProductServiceOnSaved(IProductService sender, SaveEventArgs<IProduct> e)
+        {
+            // On save we need to set the default variant if it has variants
+            foreach (var eSavedEntity in e.SavedEntities)
+            {
+                if (eSavedEntity.ProductVariants.Any())
+                {
+                    // TODO: Must be a better way of doing this as it seems very hacky and open to things screwing up, but default variant was not implemented correctly
+                    // TODO: so this is a work around to save a TON of refactoring/reworking and breaking changes to existing stores
+
+                    var productContent = eSavedEntity.ToProductDisplay().AsProductContent();
+                    var defaultVariant = productContent.GetDefaultProductVariant();
+
+                    // Get the default one
+                    foreach (var productVariant in eSavedEntity.ProductVariants)
+                    {
+                        if (defaultVariant.Key == productVariant.Key && productVariant.IsDefault == false)
+                        {
+                            productVariant.IsDefault = true;
+                        }
+                        else if(defaultVariant.Key != productVariant.Key && productVariant.IsDefault)
+                        {
+                            productVariant.IsDefault = false;
+                        }
+
+                        if (productVariant.IsDirty())
+                        {
+                            MerchelloContext.Current.Services.ProductVariantService.Save(productVariant, false);
+                        }
+                    }
+
+                }
+            }
         }
 
         private void EntityCollectionSaved(IEntityCollectionService sender, SaveEventArgs<Core.Models.Interfaces.IEntityCollection> e)

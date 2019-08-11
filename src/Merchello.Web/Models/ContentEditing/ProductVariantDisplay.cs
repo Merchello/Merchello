@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
 
     /// <summary>
     /// The product variant display.
@@ -23,5 +22,10 @@
         /// Gets or sets the attributes.
         /// </summary>
         public IEnumerable<ProductAttributeDisplay> Attributes { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether master.
+        /// </summary>
+        public bool IsDefault { get; set; }
     }
 }

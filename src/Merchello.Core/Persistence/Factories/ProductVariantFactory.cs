@@ -87,6 +87,7 @@
                 Download = dto.Download,
                 DownloadMediaId = dto.DownloadMediaId,
                 Master = dto.Master,
+                IsDefault = dto.IsDefault,
                 ExamineId = dto.ProductVariantIndexDto.Id, 
                 CatalogInventoryCollection = _catalogInventories,
                 ProductAttributes = _productAttributeCollection,
@@ -127,6 +128,7 @@
                 Download = entity.Download,
                 DownloadMediaId = entity.DownloadMediaId,
                 Master = ((ProductVariant)entity).Master,
+                IsDefault = ((ProductVariant)entity).IsDefault,
                 ProductVariantIndexDto = new ProductVariantIndexDto()
                     {
                       Id = ((ProductVariant)entity).ExamineId,

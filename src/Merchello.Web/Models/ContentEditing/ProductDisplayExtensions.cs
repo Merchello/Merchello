@@ -851,6 +851,7 @@
             destination.DownloadMediaId = productVariantDisplay.DownloadMediaId;
 
             destination.ProductKey = productVariantDisplay.ProductKey;
+            destination.IsDefault = productVariantDisplay.IsDefault;
 
             // We need to refactor the CatalogInventories to not be immutable if we are
             // going to need to do operations like this.  In the UI, the user "unchecks" a catalog that was

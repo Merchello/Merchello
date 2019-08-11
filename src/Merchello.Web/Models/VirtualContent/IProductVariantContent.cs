@@ -42,5 +42,10 @@
         /// content is defined for the containing ProductContent but some or all variants have not been extended.
         /// </remarks>
         bool HasProperty(string alias);
+
+        /// <summary>
+        /// Gets the default variant to display
+        /// </summary>
+        bool IsDefault { get; }
     }
 }

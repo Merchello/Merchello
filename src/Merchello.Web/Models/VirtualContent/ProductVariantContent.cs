@@ -192,6 +192,16 @@
         }
 
         /// <summary>
+        /// Is this the default variant to display
+        /// </summary>
+        public bool IsDefault {
+            get
+            {
+                return _variant.IsDefault;
+            }
+        }
+
+        /// <summary>
         /// Gets the product variant display.
         /// </summary>
         internal ProductVariantDisplay ProductVariantDisplay

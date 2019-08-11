@@ -15,7 +15,7 @@ namespace Merchello.Tests.UnitTests.Models
         public void Init()
         {
             var variant = new ProductVariant(Guid.NewGuid(), new ProductAttributeCollection(),
-                new CatalogInventoryCollection(), true, "Product Name", "TestSku", 10M);
+                new CatalogInventoryCollection(), true, false, "Product Name", "TestSku", 10M);
             _product = new Product(variant);
         }
 
@@ -77,7 +77,7 @@ namespace Merchello.Tests.UnitTests.Models
             var att = new ProductAttribute("Choice1", "choice") { Key = Guid.NewGuid() };
             var attCollection = new ProductAttributeCollection();
             attCollection.Add(att);
-            var expected = new ProductVariant(Guid.NewGuid(), attCollection, new CatalogInventoryCollection(), false,
+            var expected = new ProductVariant(Guid.NewGuid(), attCollection, new CatalogInventoryCollection(), false, false,
                 "Variant", "variant", 5M);
             _product.ProductOptions.Add(new ProductOption("Option1") { Key = Guid.NewGuid() });
             _product.ProductOptions.First(x => x.Name == "Option1").Choices.Add(att);
@@ -102,7 +102,7 @@ namespace Merchello.Tests.UnitTests.Models
             var att = new ProductAttribute("Choice1", "choice") { Key = Guid.NewGuid() };
             var key = att.Key;
             var attCollection = new ProductAttributeCollection {att};
-            var expected = new ProductVariant(Guid.NewGuid(), attCollection, new CatalogInventoryCollection(), false,
+            var expected = new ProductVariant(Guid.NewGuid(), attCollection, new CatalogInventoryCollection(), false, false,
                 "Variant", "variant", 5M);
             _product.ProductOptions.Add(new ProductOption("Option1") { Key = Guid.NewGuid() });
             _product.ProductOptions.First(x => x.Name == "Option1").Choices.Add(att);
@@ -123,7 +123,7 @@ namespace Merchello.Tests.UnitTests.Models
             var att = new ProductAttribute("Choice1", "choice") { Key = Guid.NewGuid() };
             var attCollection = new ProductAttributeCollection();
             attCollection.Add(att);
-            var expected = new ProductVariant(Guid.NewGuid(), attCollection, new CatalogInventoryCollection(), false,
+            var expected = new ProductVariant(Guid.NewGuid(), attCollection, new CatalogInventoryCollection(), false, false,
                 "Variant", "variant", 5M);
             _product.ProductOptions.Add(new ProductOption("Option1") { Key = Guid.NewGuid() });
             _product.ProductOptions.First(x => x.Name == "Option1").Choices.Add(att);

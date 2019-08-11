@@ -89,7 +89,8 @@
                 UpdateDate = FieldAsDateTime(result, "updateDate"),
                 Attributes = RawJsonFieldAsCollection<ProductAttributeDisplay>(result, "attributes"),
                 CatalogInventories = RawJsonFieldAsCollection<CatalogInventoryDisplay>(result, "catalogInventories"),
-                DetachedContents = GetProductVariantDetachedContentDisplayCollection(result, "detachedContents")
+                DetachedContents = GetProductVariantDetachedContentDisplayCollection(result, "detachedContents"),
+                IsDefault = FieldAsBoolean(result.Fields["isDefault"])
             };
             return pvd;
         }
@@ -394,7 +395,12 @@
         /// </returns>
         public static bool FieldAsBoolean(string value)
         {
-            return string.Equals("True", value);
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                return string.Equals("True", value.Trim());
+            }
+
+            return false;
         }
 
         /// <summary>
