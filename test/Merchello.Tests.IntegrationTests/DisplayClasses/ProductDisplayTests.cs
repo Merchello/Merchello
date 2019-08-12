@@ -149,6 +149,7 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             Assert.AreEqual(productVariant.Sku, productVariantDisplay.Sku);
             Assert.AreEqual(productVariant.Price, productVariantDisplay.Price);
             Assert.AreEqual(productVariant.ProductKey, productVariantDisplay.ProductKey);
+            Assert.AreEqual(productVariant.IsDefault, productVariantDisplay.IsDefault);
             Assert.AreEqual(productVariant.TrackInventory, productVariantDisplay.TrackInventory);
             Assert.AreEqual(productVariant.Attributes.Count(), productVariantDisplay.Attributes.Count());
             Assert.IsTrue(productVariantDisplay.CatalogInventories.Any());

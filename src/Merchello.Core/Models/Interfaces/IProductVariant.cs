@@ -38,5 +38,10 @@
         /// Gets a value indicating whether this represents the master product variant.
         /// </summary>
         bool Master { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether this variant is the default variant to display
+        /// </summary>
+        bool IsDefault { get; set; }
     }
 }

@@ -178,6 +178,12 @@
         [Constraint(Default = "0")]
         public bool Master { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this variant is the default variant
+        /// </summary>
+        [Column("isDefault")]
+        [Constraint(Default = "0")]
+        public bool IsDefault { get; set; }
 
         /// <summary>
         /// Gets or sets the version key.

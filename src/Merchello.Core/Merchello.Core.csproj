@@ -527,6 +527,7 @@
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoFiveZero\AddIndexesToInvoice.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoFiveZero\AddIndexesToProductVariant.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoFourZero\AddShipmentTrackingUrlColumns.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoSevenTwo\AddIsDefaultColumn.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoThreeOne\AlterProductAttributeColumnToNtext.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IProductBackOfficeRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IPortForwardProductRepository.cs" />

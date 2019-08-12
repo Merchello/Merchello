@@ -7,7 +7,7 @@
     using System.Reflection;
     using System.Runtime.Serialization;
 
-    using Merchello.Core.Models.DetachedContent;
+    using DetachedContent;
 
     /// <summary>
     /// Defines a product variant
@@ -38,6 +38,11 @@
         private bool _master;
 
         /// <summary>
+        /// The value indicating whether or not this is the default variant to display
+        /// </summary>
+        private bool _isDefault;
+
+        /// <summary>
         /// The examine id.
         /// </summary>
         private int _examineId = 1;
@@ -57,7 +62,7 @@
         /// The price.
         /// </param>
         internal ProductVariant(string name, string sku, decimal price)
-            : this(Guid.Empty, new ProductAttributeCollection(), new CatalogInventoryCollection(), false, name, sku, price)
+            : this(Guid.Empty, new ProductAttributeCollection(), new CatalogInventoryCollection(), false, false, name, sku, price)
         {            
         }
 
@@ -85,7 +90,7 @@
             string name,
             string sku,
             decimal price)
-            : this(productKey, attributes, new CatalogInventoryCollection(), false, name, sku, price)
+            : this(productKey, attributes, new CatalogInventoryCollection(), false, false, name, sku, price)
         {            
         }
 
@@ -117,7 +122,7 @@
             string name,
             string sku,
             decimal price)
-            : this(productKey, attributes, catalogInventoryCollection, false, name, sku, price)
+            : this(productKey, attributes, catalogInventoryCollection, false, false, name, sku, price)
         {            
         }
 
@@ -136,6 +141,7 @@
         /// <param name="master">
         /// The master.
         /// </param>
+        /// <param name="isDefault"></param>
         /// <param name="name">
         /// The name.
         /// </param>
@@ -145,8 +151,8 @@
         /// <param name="price">
         /// The price.
         /// </param>
-        internal ProductVariant(Guid productKey, ProductAttributeCollection attributes, CatalogInventoryCollection catalogInventoryCollection, bool master, string name, string sku, decimal price)
-            : this(productKey, attributes, catalogInventoryCollection, new DetachedContentCollection<IProductVariantDetachedContent>(), false, name, sku, price)
+        internal ProductVariant(Guid productKey, ProductAttributeCollection attributes, CatalogInventoryCollection catalogInventoryCollection, bool master, bool isDefault, string name, string sku, decimal price)
+            : this(productKey, attributes, catalogInventoryCollection, new DetachedContentCollection<IProductVariantDetachedContent>(), master, isDefault, name, sku, price)
         {
         }
 
@@ -168,6 +174,9 @@
         /// <param name="master">
         /// The master.
         /// </param>
+        /// <param name="isDefault">
+        /// The isDefault
+        /// </param>
         /// <param name="name">
         /// The name.
         /// </param>
@@ -177,7 +186,7 @@
         /// <param name="price">
         /// The price.
         /// </param>
-        internal ProductVariant(Guid productKey, ProductAttributeCollection attributes, CatalogInventoryCollection catalogInventoryCollection, DetachedContentCollection<IProductVariantDetachedContent> detachedContents,  bool master, string name, string sku, decimal price)
+        internal ProductVariant(Guid productKey, ProductAttributeCollection attributes, CatalogInventoryCollection catalogInventoryCollection, DetachedContentCollection<IProductVariantDetachedContent> detachedContents,  bool master, bool isDefault, string name, string sku, decimal price)
             : base(name, sku, price, catalogInventoryCollection, detachedContents)
         {
             Ensure.ParameterNotNull(attributes, "attributes");
@@ -247,6 +256,21 @@
         }
 
         /// <inheritdoc/>
+        [DataMember]
+        public bool IsDefault
+        {
+            get
+            {
+                return _isDefault;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(value, ref _isDefault, _ps.Value.IsDefaultSelector);
+            }
+        }
+
+        /// <inheritdoc/>
         [IgnoreDataMember]
         internal ProductAttributeCollection ProductAttributes
         {
@@ -290,6 +314,11 @@
             /// The master selector.
             /// </summary>
             public readonly PropertyInfo MasterSelector = ExpressionHelper.GetPropertyInfo<ProductVariant, bool>(x => x.Master);
+
+            /// <summary>
+            /// The default selector.
+            /// </summary>
+            public readonly PropertyInfo IsDefaultSelector = ExpressionHelper.GetPropertyInfo<ProductVariant, bool>(x => x.IsDefault);
 
             /// <summary>
             /// The attributes changed selector.

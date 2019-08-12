@@ -1,4 +1,8 @@
-﻿namespace Merchello.Web
+﻿using System.Collections.Generic;
+using Merchello.Web.Models.ContentEditing;
+using Merchello.Web.Models.VirtualContent;
+
+namespace Merchello.Web
 {
     using System;
     using System.Linq;
@@ -138,16 +142,88 @@
             BasketConversionBase.Converted += OnBasketConverted;
 
             // Detached Content
+            // **This text is bold**
             DetachedContentTypeService.Deleting += DetachedContentTypeServiceOnDeleting;
 
             ProductService.AddedToCollection += ProductServiceAddedToCollection;
             ProductService.RemovedFromCollection += ProductServiceRemovedFromCollection;
             ProductService.Deleted += ProductServiceDeleted;
+            ProductService.Saved += ProductServiceOnSaved;
 
             EntityCollectionService.Saved += EntityCollectionSaved;
             EntityCollectionService.Deleted += EntityCollectionDeleted;
 
             if (merchelloIsStarted) this.VerifyMerchelloVersion();
+        }
+
+        /// <summary>
+        /// Product service saved
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ProductServiceOnSaved(IProductService sender, SaveEventArgs<IProduct> e)
+        {
+            // On save we need to set the default variant if it has variants
+            foreach (var eSavedEntity in e.SavedEntities)
+            {
+                SetDefaultVariant(eSavedEntity);
+            }
+        }
+
+        /// <summary>
+        /// Sets the default variant to display, this is different to 'master'. This allows us to search for variants and display the default selected one
+        /// much more efficiently. Instead of getting the master product and then fishing in ALL variants to find the default one.
+        /// </summary>
+        /// <remarks>
+        /// Must be a better way of doing this as it seems very hacky and open to things screwing up, but default variant was not implemented correctly
+        /// so this is a work around to save a TON of refactoring/reworking and breaking changes to existing stores 
+        /// </remarks>
+        /// <param name="product"></param>
+        private void SetDefaultVariant(IProduct product)
+        {
+            // Get the master variant from the product as it's used either way
+            var masterVariant = ((Product)product).MasterVariant;
+
+            if (product.ProductVariants.Any())
+            {
+                // This is exactly why I'm implementing this. Its a stupid/inefficient way of find the default variant to display.
+                var productContent = product.ToProductDisplay().AsProductContent();
+                var defaultVariant = productContent.GetDefaultProductVariant();
+
+                // Get the default one and make sure it's selected. Deselect the others.
+                foreach (var productVariant in product.ProductVariants)
+                {
+                    if (defaultVariant.Key == productVariant.Key && productVariant.IsDefault == false)
+                    {
+                        productVariant.IsDefault = true;
+                    }
+                    else if (defaultVariant.Key != productVariant.Key && productVariant.IsDefault)
+                    {
+                        productVariant.IsDefault = false;
+                    }
+
+                    if (productVariant.IsDirty())
+                    {
+                        MerchelloContext.Current.Services.ProductVariantService.Save(productVariant, false);
+                    }
+                }
+
+                // Has variants so make sure master variant is not the default
+                if (masterVariant.IsDefault)
+                {
+                    masterVariant.IsDefault = false;
+                    MerchelloContext.Current.Services.ProductVariantService.Save(masterVariant, false);
+                }
+            }
+            else
+            {
+                // No variants so master variant is default
+                if (masterVariant.IsDefault == false)
+                {
+                    masterVariant.IsDefault = true;
+                    MerchelloContext.Current.Services.ProductVariantService.Save(masterVariant, false);
+                }
+            }
         }
 
         private void EntityCollectionSaved(IEntityCollectionService sender, SaveEventArgs<Core.Models.Interfaces.IEntityCollection> e)
