@@ -131,7 +131,6 @@
         [DataMember]
         int? DownloadMediaId { get; set; }
 
-
         /// <summary>
         /// Gets the version key.
         /// </summary>

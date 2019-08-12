@@ -68,6 +68,14 @@
         IProductVariant GetByKey(Guid key);
 
         /// <summary>
+        /// Gets a collection of all <see cref="IProductVariant"/>.
+        /// </summary>
+        /// <returns>
+        /// The collection of all <see cref="IProductVariant"/>.
+        /// </returns>
+        IEnumerable<IProductVariant> GetAll();
+
+        /// <summary>
         /// Gets an <see cref="IProductVariant"/> object by it's unique SKU.
         /// </summary>
         /// <param name="sku">
