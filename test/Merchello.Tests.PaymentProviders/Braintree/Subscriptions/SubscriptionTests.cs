@@ -88,7 +88,7 @@
             { 
                 var trans = subscription.Transactions.FirstOrDefault();
 
-                var cs = trans.Customer;
+                var cs = trans.CustomerDetails;
 
                 Assert.NotNull(cs);
             }
@@ -170,7 +170,7 @@
             { 
                 var trans = subscription.Transactions.FirstOrDefault();
 
-                var cs = trans.Customer;
+                var cs = trans.CustomerDetails;
 
                 Assert.NotNull(cs);
             }

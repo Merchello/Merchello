@@ -260,7 +260,7 @@
         /// </returns>
         public string GenerateClientRequestToken()
         {
-            var attempt = this.TryGetApiResult(() => this.BraintreeGateway.ClientToken.generate(this.RequestFactory.CreateClientTokenRequest(Guid.Empty)));
+            var attempt = this.TryGetApiResult(() => this.BraintreeGateway.ClientToken.Generate(this.RequestFactory.CreateClientTokenRequest(Guid.Empty)));
 
             return attempt.Success ? attempt.Result : string.Empty;
         }
@@ -283,7 +283,7 @@
 
             if (braintreeCustomer == null) throw new BraintreeException("Failed to retrieve and/or create a Braintree Customer");
 
-            var attempt = this.TryGetApiResult(() => this.BraintreeGateway.ClientToken.generate(this.RequestFactory.CreateClientTokenRequest(customer.Key)));
+            var attempt = this.TryGetApiResult(() => this.BraintreeGateway.ClientToken.Generate(this.RequestFactory.CreateClientTokenRequest(customer.Key)));
 
             return attempt.Success ? attempt.Result : string.Empty;
         }

@@ -105,7 +105,7 @@
             var request = factory.CreateClientTokenRequest(Guid.Empty);
 
             //// Act
-            var token = this.Gateway.ClientToken.generate(request);
+            var token = this.Gateway.ClientToken.Generate(request);
 
             //// Assert
             Assert.IsNotNullOrEmpty(token);
@@ -121,7 +121,7 @@
             var request = factory.CreateClientTokenRequest(this.TestCustomer.Key);
 
             //// Act
-            var token = this.Gateway.ClientToken.generate(request);
+            var token = this.Gateway.ClientToken.Generate(request);
 
             //// Assert
             Assert.IsNotNullOrEmpty(token);

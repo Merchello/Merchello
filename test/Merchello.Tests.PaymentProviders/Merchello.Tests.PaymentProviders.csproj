@@ -39,9 +39,8 @@
       <HintPath>..\..\src\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.Net4.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Braintree, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31b586f34d3e96c7, processorArchitecture=MSIL">
-      <HintPath>..\..\src\packages\Braintree.3.3.0\lib\net452\Braintree.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Braintree, Version=4.15.0.0, Culture=neutral, PublicKeyToken=31b586f34d3e96c7, processorArchitecture=MSIL">
+      <HintPath>..\..\src\packages\Braintree.4.15.0\lib\net452\Braintree.dll</HintPath>
     </Reference>
     <Reference Include="businesslogic, Version=1.0.7128.14461, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\src\packages\UmbracoCms.Core.7.15.0\lib\net452\businesslogic.dll</HintPath>
