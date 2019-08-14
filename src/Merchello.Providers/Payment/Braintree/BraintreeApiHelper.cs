@@ -52,7 +52,7 @@
         {
             var customerService = merchelloContext.Services.CustomerService;
 
-            return customerService.GetByKey(new Guid(transaction.Customer.Id));
+            return customerService.GetByKey(new Guid(transaction.CustomerDetails.Id));
         }
 
         /// <summary>

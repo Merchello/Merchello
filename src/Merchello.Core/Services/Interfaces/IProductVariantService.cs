@@ -117,5 +117,7 @@
         /// The <see cref="bool"/> indicating whether or not the SKU exists.
         /// </returns>
         bool SkuExists(string sku);
+
+
     }
 }
