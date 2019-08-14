@@ -7,44 +7,44 @@ init:
   - set UMBRACO_PACKAGE_PRERELEASE_SUFFIX=
 
 # Test against this version of Node.js
-environment:
-  ruby_version: 22-x64
-  nodejs_version: "4"
-
-cache:
-- C:\Ruby%ruby_version%\lib\ruby\gems -> appveyor.yml
-- C:\projects\merchello\src\Merchello.Web.UI.Client\node_modules -> appveyor.yml
-- C:\projects\merchello\src\packages -> appveyor.yml
-
-
-# Install scripts. (runs after repo cloning)
-install:
-  #- git clone https://github.com/sass/sassc.git
-  #- git clone https://github.com/sass/sass-spec.git
-  - set PATH=C:\Ruby%ruby_version%\bin;%PATH%
-  - gem install sass
-  # Get the latest stable version of Node.js or io.js
-  - ps: Install-Product node $env:nodejs_version
-  # install modules
-  - cmd: ECHO Changing directory to Merchello.Web.UI.Client
-  - ps: cd  src\Merchello.Web.UI.Client
-  - npm install
-  - npm install -g grunt-cli
-  - ps: grunt build
-  - cmd: ECHO Changing directory back to Merchello
-  - ps: cd  ..\..
-  - cmd: ECHO Changing directory to Merchello.Providers.UI.Client
-  - ps: cd src\Merchello.Providers.UI.Client
-  - npm install
-  - ps: grunt build
-  - cmd: ECHO Changing directory back to Merchello
-  - ps: cd  ..\..
-  - cmd: ECHO Changing directory to Merchello.Mui.Client
-  - ps: cd src\Merchello.Mui.Client
-  - npm install
-  - ps: grunt build
-  - cmd: ECHO Changing directory back to Merchello
-  - ps: cd  ..\..
+#environment:
+#  ruby_version: 22-x64
+#  nodejs_version: "4"
+#
+#cache:
+#- C:\Ruby%ruby_version%\lib\ruby\gems -> appveyor.yml
+#- C:\projects\merchello\src\Merchello.Web.UI.Client\node_modules -> appveyor.yml
+#- C:\projects\merchello\src\packages -> appveyor.yml
+#
+#
+## Install scripts. (runs after repo cloning)
+#install:
+#  #- git clone https://github.com/sass/sassc.git
+#  #- git clone https://github.com/sass/sass-spec.git
+#  - set PATH=C:\Ruby%ruby_version%\bin;%PATH%
+#  - gem install sass
+#  # Get the latest stable version of Node.js or io.js
+#  - ps: Install-Product node $env:nodejs_version
+#  # install modules
+#  - cmd: ECHO Changing directory to Merchello.Web.UI.Client
+#  - ps: cd  src\Merchello.Web.UI.Client
+#  - npm install
+#  - npm install -g grunt-cli
+#  - ps: grunt build
+#  - cmd: ECHO Changing directory back to Merchello
+#  - ps: cd  ..\..
+#  - cmd: ECHO Changing directory to Merchello.Providers.UI.Client
+#  - ps: cd src\Merchello.Providers.UI.Client
+#  - npm install
+#  - ps: grunt build
+#  - cmd: ECHO Changing directory back to Merchello
+#  - ps: cd  ..\..
+#  - cmd: ECHO Changing directory to Merchello.Mui.Client
+#  - ps: cd src\Merchello.Mui.Client
+#  - npm install
+#  - ps: grunt build
+#  - cmd: ECHO Changing directory back to Merchello
+#  - ps: cd  ..\..
 
 build_script:
 - build-appveyor.cmd
