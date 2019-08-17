@@ -438,6 +438,7 @@ namespace Merchello.Core
                     writer.WriteAttributeString("slugs", string.Join(" ", productVariant.DetachedContents.Select(x => x.Slug)));
                     writer.WriteAttributeString("detachedContents", GetDetachedContentsJson(((ProductVariant)productVariant).DetachedContents));
                     writer.WriteAttributeString("versionKey", productVariant.VersionKey.ToString());
+                    writer.WriteAttributeString("isDefault", productVariant.IsDefault.ToString());
 
                     // 1.11.0 - static collections
                     if (collections != null)
