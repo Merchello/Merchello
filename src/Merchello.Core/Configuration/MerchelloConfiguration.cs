@@ -194,6 +194,22 @@ namespace Merchello.Core.Configuration
         }
 
         /// <summary>
+        /// Gets a value indicating whether to remove the trailing slash off product urls
+        /// </summary>
+        public bool RemoveTrailingSlashFromProductUrls
+        {
+            get
+            {
+                var trailingSlashRemoval = Section.Settings["RemoveTrailingSlashFromProductUrls"];
+                if (trailingSlashRemoval == null)
+                {
+                    return false;
+                }
+                return bool.Parse(trailingSlashRemoval.Value);
+            }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether auto update database schema.
         /// </summary>
         /// <remarks>

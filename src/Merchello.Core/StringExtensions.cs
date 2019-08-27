@@ -72,11 +72,16 @@
         /// <param name="value">
         /// The char value to assert
         /// </param>
+        /// <param name="removeTrailingSlash"></param>
         /// <returns>
         /// The asserted string.
         /// </returns>
-        public static string EnsureStartsAndEndsWith(this string input, char value)
+        public static string EnsureStartsAndEndsWith(this string input, char value, bool removeTrailingSlash = false)
         {
+            if (removeTrailingSlash)
+            {
+                return input.EnsureStartsWith(value).TrimEnd('/');
+            }
             return input.EnsureStartsWith(value).EnsureEndsWith(value);
         }
 

@@ -208,9 +208,8 @@
             get
             {
                 return SlugPrefix.IsNullOrWhiteSpace()
-                           ? UrlName.EnsureStartsAndEndsWith('/')
-                           : string.Format("{0}{1}", SlugPrefix.EnsureEndsWith('/'), UrlName)
-                                 .EnsureStartsAndEndsWith('/');
+                           ? UrlName.EnsureStartsAndEndsWith('/', MerchelloConfiguration.Current.RemoveTrailingSlashFromProductUrls)
+                           : string.Format("{0}{1}", SlugPrefix.EnsureEndsWith('/'), UrlName).EnsureStartsAndEndsWith('/', MerchelloConfiguration.Current.RemoveTrailingSlashFromProductUrls);
             }
         }
 
