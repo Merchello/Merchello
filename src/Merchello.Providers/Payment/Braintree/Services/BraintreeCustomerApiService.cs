@@ -258,9 +258,9 @@
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        public string GenerateClientRequestToken()
+        public string GenerateClientRequestToken(string merchantAccountId = "")
         {
-            var attempt = this.TryGetApiResult(() => this.BraintreeGateway.ClientToken.Generate(this.RequestFactory.CreateClientTokenRequest(Guid.Empty)));
+            var attempt = this.TryGetApiResult(() => this.BraintreeGateway.ClientToken.Generate(this.RequestFactory.CreateClientTokenRequest(Guid.Empty, merchantAccountId)));
 
             return attempt.Success ? attempt.Result : string.Empty;
         }
@@ -271,19 +271,20 @@
         /// <param name="customer">
         /// The customer.
         /// </param>
+        /// <param name="merchantAccountId"></param>
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
         /// <exception cref="BraintreeException">
         /// Throws an exception if the braintree customer returns null
         /// </exception>
-        public string GenerateClientRequestToken(ICustomer customer)
+        public string GenerateClientRequestToken(ICustomer customer, string merchantAccountId = "")
         {
             var braintreeCustomer = this.GetBraintreeCustomer(customer);
 
             if (braintreeCustomer == null) throw new BraintreeException("Failed to retrieve and/or create a Braintree Customer");
 
-            var attempt = this.TryGetApiResult(() => this.BraintreeGateway.ClientToken.Generate(this.RequestFactory.CreateClientTokenRequest(customer.Key)));
+            var attempt = this.TryGetApiResult(() => this.BraintreeGateway.ClientToken.Generate(this.RequestFactory.CreateClientTokenRequest(customer.Key, merchantAccountId)));
 
             return attempt.Success ? attempt.Result : string.Empty;
         }

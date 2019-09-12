@@ -110,7 +110,7 @@
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        string GenerateClientRequestToken();
+        string GenerateClientRequestToken(string merchantAccountId = "");
 
         /// <summary>
         /// Generates a ClientRequestToken for a persisted <see cref="ICustomer"/>
@@ -118,10 +118,12 @@
         /// <param name="customer">
         /// The customer.
         /// </param>
+        /// <param name="merchantAccountId"></param>
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        string GenerateClientRequestToken(ICustomer customer);
+        string GenerateClientRequestToken(ICustomer customer, string merchantAccountId = "");
+
 
         /// <summary>
         /// Returns true or false indicating whether the customer exists in Braintree

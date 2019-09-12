@@ -74,17 +74,27 @@
         /// <param name="customerKey">
         /// The customer key.
         /// </param>
+        /// <param name="merchantAccountId">
+        /// The merchant account Id
+        /// </param>
         /// <returns>
         /// The <see cref="ClientTokenRequest"/>.
         /// </returns>
-        public ClientTokenRequest CreateClientTokenRequest(Guid customerKey)
+        public ClientTokenRequest CreateClientTokenRequest(Guid customerKey, string merchantAccountId)
         {
-            return customerKey == Guid.Empty ? 
-                new ClientTokenRequest() : 
-                new ClientTokenRequest()
-                    {
-                        CustomerId = customerKey.ToString() 
-                    };
+            var ctr = new ClientTokenRequest();
+
+            if (customerKey != Guid.Empty)
+            {
+                ctr.CustomerId = customerKey.ToString();
+            }
+
+            if (!string.IsNullOrWhiteSpace(merchantAccountId))
+            {
+                ctr.MerchantAccountId = merchantAccountId;
+            }
+
+            return ctr;
         }
 
         #endregion

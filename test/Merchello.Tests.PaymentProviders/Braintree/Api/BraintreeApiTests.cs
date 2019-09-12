@@ -102,7 +102,7 @@
             //// Arrange
             var factory = new BraintreeApiRequestFactory(this.BraintreeProviderSettings);
 
-            var request = factory.CreateClientTokenRequest(Guid.Empty);
+            var request = factory.CreateClientTokenRequest(Guid.Empty, string.Empty);
 
             //// Act
             var token = this.Gateway.ClientToken.Generate(request);
@@ -118,7 +118,7 @@
             //// Arrange
             var factory = new BraintreeApiRequestFactory(this.BraintreeProviderSettings);
             this.BraintreeApiService.Customer.Create(this.TestCustomer);
-            var request = factory.CreateClientTokenRequest(this.TestCustomer.Key);
+            var request = factory.CreateClientTokenRequest(this.TestCustomer.Key, string.Empty);
 
             //// Act
             var token = this.Gateway.ClientToken.Generate(request);
