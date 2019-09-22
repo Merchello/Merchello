@@ -190,11 +190,32 @@ namespace Merchello.Web
                         var allowedUserGroups = backoffice[nodeId];
                         if (allowedUserGroups != null && !string.IsNullOrWhiteSpace(allowedUserGroups.Value))
                         {
+                            var allowedUserGroupList = allowedUserGroups.Value.Split(',')
+                                                        .Select(x => x.Trim())
+                                                        .Where(x => !string.IsNullOrWhiteSpace(x))
+                                                        .ToArray();
 
+                            var isAllowedAccess = false;
+                            foreach (var role in jsonResponse.Roles)
+                            {
+                                foreach (var s in allowedUserGroupList)
+                                {
+                                    if (s == role)
+                                    {
+                                        isAllowedAccess = true;
+                                        goto CheckAccess;
+                                    }
+                                }
+                            }
+                            CheckAccess:
 
-                            //toRemove.Add(eNode.Id);
+                            if (isAllowedAccess == false)
+                            {
+                                toRemove.Add(eNode.Id);
+                            }
                         }
                     }
+                    
                 }
 
                 if (toRemove.Any())
