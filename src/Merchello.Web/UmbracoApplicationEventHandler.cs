@@ -1,6 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Web;
+using Merchello.Core.Configuration.Outline;
 using Merchello.Web.Models.ContentEditing;
 using Merchello.Web.Models.VirtualContent;
+using Newtonsoft.Json;
+using Umbraco.Core.Security;
+using Umbraco.Web.Trees;
 
 namespace Merchello.Web
 {
@@ -153,8 +158,52 @@ namespace Merchello.Web
             EntityCollectionService.Saved += EntityCollectionSaved;
             EntityCollectionService.Deleted += EntityCollectionDeleted;
 
+            TreeControllerBase.TreeNodesRendering += TreeControllerBaseOnTreeNodesRendering;
+
             if (merchelloIsStarted) this.VerifyMerchelloVersion();
         }
+
+        private void TreeControllerBaseOnTreeNodesRendering(TreeControllerBase sender, TreeNodesRenderingEventArgs e)
+        {
+            // this example will filter any content tree node whose node name starts with
+            // 'Private', for any user that is of the type 'customUser'
+
+            var ticket = new HttpContextWrapper(HttpContext.Current).GetUmbracoAuthTicket();
+            if (ticket != null)
+            {
+                // Get a list of trees/nodes for Merchello
+                var backoffice = MerchelloConfiguration.Current.BackOffice
+                    .GetTrees()
+                    .Where(x => x.Visible)
+                    .ToDictionary(x => x.Id, x => x.ChildSettings.AllSettings().FirstOrDefault(s => s.Alias == "allowedUserGroupAliases"));
+
+                // Get the users groups from the ticket
+                var userData = new { Name = "", Username = "", Roles = new List<string>() };
+                var jsonResponse = JsonConvert.DeserializeAnonymousType(ticket.UserData, userData);
+
+                var toRemove = new List<object>();
+                foreach (var eNode in e.Nodes)
+                {
+                    var nodeId = eNode.Id.ToString();
+                    if (!string.IsNullOrWhiteSpace(nodeId) && backoffice.ContainsKey(nodeId))
+                    {
+                        var allowedUserGroups = backoffice[nodeId];
+                        if (allowedUserGroups != null && !string.IsNullOrWhiteSpace(allowedUserGroups.Value))
+                        {
+
+
+                            //toRemove.Add(eNode.Id);
+                        }
+                    }
+                }
+
+                if (toRemove.Any())
+                {
+                    e.Nodes.RemoveAll(x => toRemove.Contains(x.Id));
+                }
+            }
+        }
+
 
         /// <summary>
         /// Product service saved
