@@ -1,60 +1,32 @@
-﻿namespace Merchello.Web.Editors.Reports
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Http;
+using Merchello.Core;
+using Merchello.Core.Configuration;
+using Merchello.Core.Services;
+using Merchello.Web.Models.ContentEditing;
+using Merchello.Web.Models.Querying;
+using Merchello.Web.Models.Reports;
+using Merchello.Web.Reporting;
+using Merchello.Web.Trees;
+using Umbraco.Web.Mvc;
+
+namespace Merchello.Web.Editors.Reports
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Http;
-
-    using Merchello.Core;
-    using Merchello.Core.Configuration;
-    using Merchello.Core.Models;
-    using Merchello.Core.Services;
-    using Merchello.Web.Models.ContentEditing;
-    using Merchello.Web.Models.Querying;
-    using Merchello.Web.Models.Reports;
-    using Merchello.Web.Reporting;
-
     /// <summary>
-    /// The controller responsible for rendering the abandoned basket report.
+    ///     The controller responsible for rendering the abandoned basket report.
     /// </summary>
+    /// <summary>
+    ///     API Controller responsible for the Sales Search Report
+    /// </summary>
+    [BackOfficeTree("abandonedBasket", "reports", "Abandoned Baskets", "icon-shopping-basket-alt-2",
+        "/app_plugins/merchello/backoffice/merchello/abandonedBasket.html", 1)]
+    [PluginController("Merchello")]
     public class AbandonedBasketReportApiController : ReportController
     {
-        #region Fields
-
         /// <summary>
-        /// The item cache type.
-        /// </summary>
-        private readonly ItemCacheType _itemCacheType = ItemCacheType.Basket;
-
-        /// <summary>
-        /// The item cache service.
-        /// </summary>
-        private readonly IItemCacheService _itemCacheService;
-
-        /// <summary>
-        /// The invoice service.
-        /// </summary>
-        private readonly IInvoiceService _invoiceService;
-
-        /// <summary>
-        /// The start date.
-        /// </summary>
-        private readonly DateTime _startDate;
-
-        /// <summary>
-        /// The end date.
-        /// </summary>
-        private readonly DateTime _endDate;
-
-        /// <summary>
-        /// The max days.
-        /// </summary>
-        private readonly int _maxDays;
-
-        #endregion
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AbandonedBasketReportApiController"/> class.
+        ///     Initializes a new instance of the <see cref="AbandonedBasketReportApiController" /> class.
         /// </summary>
         public AbandonedBasketReportApiController()
             : this(Core.MerchelloContext.Current)
@@ -62,10 +34,10 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AbandonedBasketReportApiController"/> class.
+        ///     Initializes a new instance of the <see cref="AbandonedBasketReportApiController" /> class.
         /// </summary>
         /// <param name="merchelloContext">
-        /// The merchello context.
+        ///     The merchello context.
         /// </param>
         public AbandonedBasketReportApiController(IMerchelloContext merchelloContext)
             : base(merchelloContext)
@@ -80,65 +52,62 @@
         }
 
         /// <summary>
-        /// Gets the base url definition for Server Variables Parsing.e
+        ///     Gets the base url definition for Server Variables Parsing.e
         /// </summary>
-        public override KeyValuePair<string, object> BaseUrl
-        {
-            get
-            {
-                return GetBaseUrl<AbandonedBasketReportApiController>("merchelloAbandonedBasketApiBaseUrl");
-            }
-        }
+        public override KeyValuePair<string, object> BaseUrl =>
+            GetBaseUrl<AbandonedBasketReportApiController>("merchelloAbandonedBasketApiBaseUrl");
 
         /// <summary>
-        /// Gets the default report data for initial page load.
+        ///     Gets the default report data for initial page load.
         /// </summary>
         /// <returns>
-        /// The <see cref="QueryResultDisplay"/>.
+        ///     The <see cref="QueryResultDisplay" />.
         /// </returns>
         [HttpGet]
         public override QueryResultDisplay GetDefaultReportData()
         {
-            var anonymousBasketCount = _itemCacheService.Count(this._itemCacheType, CustomerType.Anonymous, _startDate, _endDate);
+            var anonymousBasketCount =
+                _itemCacheService.Count(_itemCacheType, CustomerType.Anonymous, _startDate, _endDate);
             var anonymousCheckoutCount = _invoiceService.CountInvoices(_startDate, _endDate, CustomerType.Anonymous);
-            var customerBasketCount = _itemCacheService.Count(this._itemCacheType, CustomerType.Customer, _startDate, _endDate);
+            var customerBasketCount =
+                _itemCacheService.Count(_itemCacheType, CustomerType.Customer, _startDate, _endDate);
             var customerCheckoutCount = _invoiceService.CountInvoices(_startDate, _endDate, CustomerType.Customer);
 
 
-            var result = new QueryResultDisplay()
-                             {
-                                 TotalItems = 1,
-                                 TotalPages = 1,
-                                 CurrentPage = 1,
-                                 ItemsPerPage = 1,
-                                 Items = new[]
-                                    {
-                                        new AbandonedBasketResult()
-                                            {
-                                                ConfiguredDays = _maxDays,
-                                                StartDate = _startDate,
-                                                EndDate = _endDate,
-                                                AnonymousBasketCount = anonymousBasketCount,
-                                                AnonymousCheckoutCount = anonymousCheckoutCount,
-                                                AnonymousCheckoutPercent = GetCheckoutPercent(anonymousBasketCount, anonymousCheckoutCount),
-                                                CustomerBasketCount = customerBasketCount,
-                                                CustomerCheckoutCount = customerCheckoutCount,
-                                                CustomerCheckoutPercent = GetCheckoutPercent(customerBasketCount, customerCheckoutCount)
-                                            }
-                                    }
-                             };
+            var result = new QueryResultDisplay
+            {
+                TotalItems = 1,
+                TotalPages = 1,
+                CurrentPage = 1,
+                ItemsPerPage = 1,
+                Items = new[]
+                {
+                    new AbandonedBasketResult
+                    {
+                        ConfiguredDays = _maxDays,
+                        StartDate = _startDate,
+                        EndDate = _endDate,
+                        AnonymousBasketCount = anonymousBasketCount,
+                        AnonymousCheckoutCount = anonymousCheckoutCount,
+                        AnonymousCheckoutPercent = GetCheckoutPercent(anonymousBasketCount, anonymousCheckoutCount),
+                        CustomerBasketCount = customerBasketCount,
+                        CustomerCheckoutCount = customerCheckoutCount,
+                        CustomerCheckoutPercent = GetCheckoutPercent(customerBasketCount, customerCheckoutCount)
+                    }
+                }
+            };
 
             return result;
         }
 
         /// <summary>
-        /// Gets the customers saved baskets.
+        ///     Gets the customers saved baskets.
         /// </summary>
         /// <param name="query">
-        /// The query.
+        ///     The query.
         /// </param>
         /// <returns>
-        /// The <see cref="QueryResultDisplay"/>.
+        ///     The <see cref="QueryResultDisplay" />.
         /// </returns>
         [HttpPost]
         public QueryResultDisplay GetCustomerSavedBaskets(QueryDisplay query)
@@ -152,7 +121,7 @@
                 query.SortBy,
                 query.SortDirection);
 
-            return new QueryResultDisplay()
+            return new QueryResultDisplay
             {
                 Items = page.Items.Select(x => x.ToCustomerItemCacheDisplay()),
                 CurrentPage = page.CurrentPage - 1,
@@ -163,21 +132,59 @@
         }
 
         /// <summary>
-        /// Calculates the checkout percentage.
+        ///     Calculates the checkout percentage.
         /// </summary>
         /// <param name="basketCount">
-        /// The basket count.
+        ///     The basket count.
         /// </param>
         /// <param name="checkoutCount">
-        /// The checkout count.
+        ///     The checkout count.
         /// </param>
         /// <returns>
-        /// The <see cref="decimal"/>.
+        ///     The <see cref="decimal" />.
         /// </returns>
         private decimal GetCheckoutPercent(int basketCount, int checkoutCount)
         {
-            if (basketCount + checkoutCount == 0) return 0;
-            return (checkoutCount / (decimal)(basketCount + checkoutCount)) * 100;
+            if (basketCount + checkoutCount == 0)
+            {
+                return 0;
+            }
+
+            return checkoutCount / (decimal) (basketCount + checkoutCount) * 100;
         }
+
+        #region Fields
+
+        /// <summary>
+        ///     The item cache type.
+        /// </summary>
+        private readonly ItemCacheType _itemCacheType = ItemCacheType.Basket;
+
+        /// <summary>
+        ///     The item cache service.
+        /// </summary>
+        private readonly IItemCacheService _itemCacheService;
+
+        /// <summary>
+        ///     The invoice service.
+        /// </summary>
+        private readonly IInvoiceService _invoiceService;
+
+        /// <summary>
+        ///     The start date.
+        /// </summary>
+        private readonly DateTime _startDate;
+
+        /// <summary>
+        ///     The end date.
+        /// </summary>
+        private readonly DateTime _endDate;
+
+        /// <summary>
+        ///     The max days.
+        /// </summary>
+        private readonly int _maxDays;
+
+        #endregion
     }
 }
