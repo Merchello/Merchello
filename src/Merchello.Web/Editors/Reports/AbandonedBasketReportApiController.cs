@@ -20,8 +20,7 @@ namespace Merchello.Web.Editors.Reports
     /// <summary>
     ///     API Controller responsible for the Sales Search Report
     /// </summary>
-    [BackOfficeTree("abandonedBasket", "reports", "Abandoned Baskets", "icon-shopping-basket-alt-2",
-        "/app_plugins/merchello/backoffice/merchello/abandonedBasket.html", 1)]
+    [BackOfficeTree("abandonedBasket", "reports", "Abandoned Baskets", "icon-shopping-basket-alt-2", "/app_plugins/merchello/backoffice/merchello/abandonedBasket.html", 1)]
     [PluginController("Merchello")]
     public class AbandonedBasketReportApiController : ReportController
     {
@@ -54,8 +53,13 @@ namespace Merchello.Web.Editors.Reports
         /// <summary>
         ///     Gets the base url definition for Server Variables Parsing.e
         /// </summary>
-        public override KeyValuePair<string, object> BaseUrl =>
-            GetBaseUrl<AbandonedBasketReportApiController>("merchelloAbandonedBasketApiBaseUrl");
+        public override KeyValuePair<string, object> BaseUrl
+        {
+            get
+            {
+                return GetBaseUrl<AbandonedBasketReportApiController>("merchelloAbandonedBasketApiBaseUrl");
+            }
+        }
 
         /// <summary>
         ///     Gets the default report data for initial page load.
