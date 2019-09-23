@@ -9786,14 +9786,14 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.AbandonedBa
     function($scope, merchelloTabsFactory) {
 
         $scope.loaded = false;
-        $scope.tabs = [];
+        //$scope.tabs = [];
 
         var graphLoaded = false;
         var basketsLoaded = false;
 
         function init() {
-            $scope.tabs = merchelloTabsFactory.createReportsTabs();
-            $scope.tabs.setActive('abandonedBasket');
+            //$scope.tabs = merchelloTabsFactory.createReportsTabs();
+            //$scope.tabs.setActive('abandonedBasket');
             $scope.loaded = true;
 
         }
