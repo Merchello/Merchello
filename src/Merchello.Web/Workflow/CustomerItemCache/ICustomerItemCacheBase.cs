@@ -324,6 +324,13 @@
         void UpdateQuantity(string sku, int quantity);
 
         /// <summary>
+        /// Update price
+        /// </summary>
+        /// <param name="sku"></param>
+        /// <param name="price"></param>
+        void UpdatePrice(string sku, decimal price);
+
+        /// <summary>
         /// Updates the quantity of an item in the item cache
         /// </summary>
         /// <param name="productVariant">
