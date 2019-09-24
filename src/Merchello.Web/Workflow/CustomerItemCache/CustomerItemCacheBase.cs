@@ -572,6 +572,22 @@
         }
 
         /// <summary>
+        /// Updates price
+        /// </summary>
+        /// <param name="sku"></param>
+        /// <param name="price"></param>
+        public void UpdatePrice(string sku, decimal price)
+        {
+            if (!_itemCache.Items.Contains(sku)) return;
+
+            UpdatingItem.RaiseEvent(new UpdateItemEventArgs<ILineItem>(_itemCache.Items[sku]), this);
+
+            _itemCache.Items[sku].Price = price;
+
+            UpdatedItem.RaiseEvent(new UpdateItemEventArgs<ILineItem>(_itemCache.Items[sku]), this);
+        }
+
+        /// <summary>
         /// Updates a customer item cache item's quantity
         /// </summary>
         /// <param name="productVariant">
