@@ -1,6 +1,8 @@
 # Merchello
 
-Merchello is a highly configurable, developer friendly, open source eCommerce package for [Umbraco CMS](http://www.umbraco.com)
+Merchello is a highly configurable, open source eCommerce package for [Umbraco CMS](http://www.umbraco.com) v7 ONLY. However, this project is no longer actively developed. 
+
+If you are looking for an eCommerce solution for Umbraco v8 then I suggest you take a look at Vendr. You can follow them on Twitter here [@heyvendr](https://twitter.com/heyvendr) or signup on their website [getvendr.net](https://getvendr.net)
 
 ## Basic features
 
@@ -19,27 +21,13 @@ Merchello comes with the following core features, but it's also built so you can
 
 ## Downloading
 
-You can download releases of Merchello via our package on [our.umbraco.org](http://our.umbraco.org/projects/collaboration/merchello)
+Look on the releases tab
 
 ## Documentation / Website
 
 Our documentation is a tad outdated, but it's all we have at the moment. We are always looking for help with the docs ;)
 
 [https://merchello.readme.io/](https://merchello.readme.io/)
-
-## Donate
-
-Everything we develop, create and spend time on here at Merchello is done entirely FREE for the Umbraco community.
-
-Gratitude licenses ensure that we can put in that extra time to polish and enhance Merchello so all of the Umbraco community benefit. 
-
-So if you can't help Merchello through writing docs, fixing bugs or developing new features. How about just purchasing a Gratitude License?
-
-[Purchase a $100 Gratitude License](https://www.paypal.com/cgi-bin/webscr@?cmd=_xclick&business=payments@merchello.com&lc=GB&item_name=Merchello+Gratitude+License&amount=100&currency_code=USD&button_subtype=services&no_note=1&no_shipping=2&rm=1&return=https://www.merchello.com/gratitude-thank-you/&cancel_return=https://www.merchello.com&item_number=MERCHGRAT)
-
-## Forums
-
-Merchello's forum is an extension of it's project package on [our.umbraco.org](http://our.umbraco.org/projects/collaboration/merchello), and if you have questions about use, implementation, or have ideas you want to share with us to make it better, then this is the best place to post your questions.
 
 ## Contribute
 

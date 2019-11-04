@@ -207,15 +207,15 @@ namespace Merchello.Web.Models.ContentEditing.Content
         public static void EnsureValueConversion(this ProductDisplayBase display, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
         {
             if (display == null) return;
-
-            if (display.DetachedContents.Any())
+            var dtC = display.DetachedContents.ToList();
+            if (dtC.Any())
             {
-                foreach (var dc in display.DetachedContents)
+                foreach (var dc in dtC)
                 {
                     var contentType = DetachedValuesConverter.Current.GetContentTypeByKey(dc.DetachedContentType.UmbContentType.Key);
                     if (dc.ValueConversion != conversionType && contentType != null)
                     {
-                            dc.DetachedDataValues = DetachedValuesConverter.Current.Convert(contentType, dc.DetachedDataValues, conversionType);
+                            dc.DetachedDataValues = DetachedValuesConverter.Current.Convert(contentType, dc.DetachedDataValues.ToList(), conversionType);
                             dc.ValueConversion = conversionType;
                     }
                 }
