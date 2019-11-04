@@ -2,7 +2,7 @@
 
 Merchello is a highly configurable, open source eCommerce package for [Umbraco CMS](http://www.umbraco.com) v7 ONLY. However, this project is no longer actively developed. 
 
-If you are looking for an eCommerce solution for Umbraco v8 then I suggest you take a look at Vendr. You can follow them on Twitter here [@heyvendr](https://twitter.com/heyvendr) or signup on their website [getvendr.net](https://getvendr.net)
+If you are looking for an eCommerce solution for Umbraco v8 then I suggest you take a look at Vendr. You can follow them on Twitter here [@heyvendr](https://twitter.com/heyvendr) or signup on their website [getvendr.net](http://getvendr.net)
 
 ## Basic features
 
