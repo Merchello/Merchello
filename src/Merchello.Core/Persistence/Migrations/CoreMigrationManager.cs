@@ -43,25 +43,6 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CoreMigrationManager"/> class.
         /// </summary>
-        public CoreMigrationManager()
-            : this(ApplicationContext.Current)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CoreMigrationManager"/> class.
-        /// </summary>
-        /// <param name="applicationContext">
-        /// The application context.
-        /// </param>
-        public CoreMigrationManager(ApplicationContext applicationContext)
-            : this(applicationContext.DatabaseContext.Database, applicationContext.DatabaseContext.SqlSyntax, LoggerResolver.Current.Logger)
-        {            
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CoreMigrationManager"/> class.
-        /// </summary>
         /// <param name="database">
         /// The database.
         /// </param>

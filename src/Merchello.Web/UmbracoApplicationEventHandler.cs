@@ -160,7 +160,7 @@ namespace Merchello.Web
 
             TreeControllerBase.TreeNodesRendering += TreeControllerBaseOnTreeNodesRendering;
 
-            if (merchelloIsStarted) this.VerifyMerchelloVersion();
+            if (merchelloIsStarted) this.VerifyMerchelloVersion(applicationContext);
         }
 
         private void TreeControllerBaseOnTreeNodesRendering(TreeControllerBase sender, TreeNodesRenderingEventArgs e)
@@ -661,10 +661,10 @@ namespace Merchello.Web
         /// <remarks>
         /// This process also does database schema migrations (for Merchello) if necessary
         /// </remarks>
-        private void VerifyMerchelloVersion()
+        private void VerifyMerchelloVersion(ApplicationContext context)
         {
             LogHelper.Info<UmbracoApplicationEventHandler>("Verifying Merchello Version.");
-            var manager = new WebMigrationManager();
+            var manager = new WebMigrationManager(context);
             manager.Upgraded += MigrationManagerOnUpgraded;
             manager.EnsureMerchelloVersion();
         }

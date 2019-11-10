@@ -641,7 +641,7 @@
                 return GetItemCache(merchelloContext, customer, versionKey);
             }
 
-            runtimeCache.InsertCacheItem(cacheKey, () => itemCache);
+            runtimeCache.InsertCacheItem(cacheKey, () => itemCache, TimeSpan.FromHours(6));
 
             return itemCache;
         }

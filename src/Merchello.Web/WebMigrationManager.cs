@@ -41,14 +41,6 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="WebMigrationManager"/> class.
         /// </summary>
-        public WebMigrationManager()
-            : this(ApplicationContext.Current)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="WebMigrationManager"/> class.
-        /// </summary>
         /// <param name="applicationContext">
         /// The application Context.
         /// </param>

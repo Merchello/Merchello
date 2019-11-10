@@ -152,9 +152,7 @@
                         new NullCacheProvider())
                 : context.ApplicationCache;
 
-
             var serviceContext = new ServiceContext(new RepositoryFactory(cache, logger, _sqlSyntaxProvider), _unitOfWorkProvider, logger, new TransientMessageFactory());
-
 
             InitializeLoggerResolver(logger);
 

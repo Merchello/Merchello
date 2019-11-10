@@ -136,7 +136,7 @@
         /// Gets the application wide cache accessor
         /// </summary>
         /// <remarks>
-        /// This is generally a short cut to the ApplicationContext.Current.ApplicationCache
+        /// This is generally a short cut to the ApplicationContext.ApplicationCache
         /// </remarks>
         public CacheHelper Cache { get; private set; }
 
