@@ -4,13 +4,10 @@
     using System.Threading;
     using Configuration;
     using Gateways;
-
-    using Merchello.Core.Cache;
     using Merchello.Core.Logging;
 
     using Services;
     using Umbraco.Core;
-    using Umbraco.Core.Logging;
 
     /// <summary>
     /// The MerchelloContext singleton
@@ -40,20 +37,6 @@
         private volatile bool _disposed;
 
         #endregion
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MerchelloContext"/> class.
-        /// </summary>
-        /// <param name="serviceContext">
-        /// The service context.
-        /// </param>
-        /// <param name="gatewayContext">
-        /// The gateway context.
-        /// </param>
-        internal MerchelloContext(IServiceContext serviceContext, IGatewayContext gatewayContext)
-            : this(serviceContext, gatewayContext, ApplicationContext.Current.ApplicationCache)
-        {            
-        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MerchelloContext"/> class.
@@ -153,7 +136,7 @@
         /// Gets the application wide cache accessor
         /// </summary>
         /// <remarks>
-        /// This is generally a short cut to the ApplicationContext.Current.ApplicationCache
+        /// This is generally a short cut to the ApplicationContext.ApplicationCache
         /// </remarks>
         public CacheHelper Cache { get; private set; }
 

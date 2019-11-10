@@ -6,6 +6,6 @@
     /// Marker interface for Merchello migrations.
     /// </summary>
     internal interface IMerchelloMigration : IMigration
-    {         
+    {
     }
 }

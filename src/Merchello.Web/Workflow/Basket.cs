@@ -64,7 +64,7 @@
 
             var customerItemCache = merchelloContext.Services.ItemCacheService.GetItemCacheWithKey(basket.Customer, ItemCacheType.Basket);
             basket = new Basket(customerItemCache, basket.Customer);
-            merchelloContext.Cache.RuntimeCache.GetCacheItem(cacheKey, () => basket);
+            merchelloContext.Cache.RuntimeCache.GetCacheItem(cacheKey, () => basket, TimeSpan.FromHours(2));
         }
   
 
@@ -115,7 +115,7 @@
 
             if (basket.Validate())
             {
-                merchelloContext.Cache.RuntimeCache.GetCacheItem(cacheKey, () => basket);
+                merchelloContext.Cache.RuntimeCache.GetCacheItem(cacheKey, () => basket, TimeSpan.FromHours(2));
             }
 
             return basket;

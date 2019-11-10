@@ -90,7 +90,7 @@ namespace Merchello.Web.Search.Provisional
             tree = BuildTreeNode(filterGroups, tuples, collectionKeys);
 
 
-            return (TreeNode<ProductFilterGroupNode>)_cache.GetCacheItem(cacheKey, () => tree);
+            return (TreeNode<ProductFilterGroupNode>)_cache.GetCacheItem(cacheKey, () => tree, TimeSpan.FromHours(6));
         }
 
         /// <summary>

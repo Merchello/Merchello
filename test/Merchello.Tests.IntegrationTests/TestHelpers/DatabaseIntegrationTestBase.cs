@@ -55,10 +55,11 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
             // Umbraco Application
             var applicationMock = new Mock<UmbracoApplication>();
+            var applicationContextMock = new Mock<ApplicationContext>();
 
             // Merchello CoreBootStrap
             var bootManager = new Web.WebBootManager(logger, _dbPreTestDataWorker.SqlSyntaxProvider);
-            bootManager.Initialize();
+            bootManager.Initialize(applicationContextMock.Object);
 
 
             if (MerchelloContext.Current == null) Assert.Ignore("MerchelloContext.Current is null");

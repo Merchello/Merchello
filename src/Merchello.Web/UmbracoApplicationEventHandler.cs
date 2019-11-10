@@ -96,7 +96,7 @@ namespace Merchello.Web
             {
                 // Initialize Merchello
                 Log.Info("Attempting to initialize Merchello");
-                MerchelloBootstrapper.Init(new WebBootManager());
+                MerchelloBootstrapper.Init(new WebBootManager(applicationContext), applicationContext);
                 Log.Info("Initialization of Merchello complete");                
             }
             catch (Exception ex)
@@ -120,7 +120,7 @@ namespace Merchello.Web
         {
             base.ApplicationStarted(umbracoApplication, applicationContext);
 
-            Core.CoreBootManager.FinalizeBoot();
+            Core.CoreBootManager.FinalizeBoot(applicationContext);
 
             MultiLogHelper.Info<UmbracoApplicationEventHandler>("Initializing Customer related events");
 
@@ -159,8 +159,7 @@ namespace Merchello.Web
             EntityCollectionService.Deleted += EntityCollectionDeleted;
 
             TreeControllerBase.TreeNodesRendering += TreeControllerBaseOnTreeNodesRendering;
-
-            if (merchelloIsStarted) this.VerifyMerchelloVersion();
+            if (merchelloIsStarted) this.VerifyMerchelloVersion(applicationContext);
         }
 
         private void TreeControllerBaseOnTreeNodesRendering(TreeControllerBase sender, TreeNodesRenderingEventArgs e)
@@ -661,10 +660,10 @@ namespace Merchello.Web
         /// <remarks>
         /// This process also does database schema migrations (for Merchello) if necessary
         /// </remarks>
-        private void VerifyMerchelloVersion()
+        private void VerifyMerchelloVersion(ApplicationContext context)
         {
             LogHelper.Info<UmbracoApplicationEventHandler>("Verifying Merchello Version.");
-            var manager = new WebMigrationManager();
+            var manager = new WebMigrationManager(context);
             manager.Upgraded += MigrationManagerOnUpgraded;
             manager.EnsureMerchelloVersion();
         }

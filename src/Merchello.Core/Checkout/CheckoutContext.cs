@@ -245,7 +245,7 @@
                 return CreateCheckoutContext(merchelloContext, customer, versionKey, settings);
             }
 
-            cache.InsertCacheItem(cacheKey, () => itemCache);
+            cache.InsertCacheItem(cacheKey, () => itemCache, TimeSpan.FromHours(6));
 
             return new CheckoutContext(customer, itemCache, merchelloContext, settings) { IsNewVersion = true };
         }
