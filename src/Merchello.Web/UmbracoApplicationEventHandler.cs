@@ -96,7 +96,7 @@ namespace Merchello.Web
             {
                 // Initialize Merchello
                 Log.Info("Attempting to initialize Merchello");
-                MerchelloBootstrapper.Init(new WebBootManager());
+                MerchelloBootstrapper.Init(new WebBootManager(applicationContext), applicationContext);
                 Log.Info("Initialization of Merchello complete");                
             }
             catch (Exception ex)
@@ -120,7 +120,7 @@ namespace Merchello.Web
         {
             base.ApplicationStarted(umbracoApplication, applicationContext);
 
-            Core.CoreBootManager.FinalizeBoot();
+            Core.CoreBootManager.FinalizeBoot(applicationContext);
 
             MultiLogHelper.Info<UmbracoApplicationEventHandler>("Initializing Customer related events");
 

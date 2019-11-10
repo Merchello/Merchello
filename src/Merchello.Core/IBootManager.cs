@@ -1,4 +1,6 @@
-﻿namespace Merchello.Core
+﻿using Umbraco.Core;
+
+namespace Merchello.Core
 {
     using System;
 
@@ -13,7 +15,7 @@
         /// <returns>
         /// The <see cref="IBootManager"/>
         /// </returns>
-        IBootManager Initialize();
+        IBootManager Initialize(ApplicationContext applicationContext);
 
         /// <summary>
         /// Fires after initialization and calls the callback to allow for customizations to occur

@@ -36,6 +36,7 @@ namespace Merchello.Tests.Base.TestHelpers
 
             // Umbraco Application
             var applicationMock = new Mock<UmbracoApplication>();
+            var applicationContext = new Mock<ApplicationContext>();
 
             // Sets Umbraco SqlSytax and ensure database is setup
             DbPreTestDataWorker = new DbPreTestDataWorker();
@@ -45,7 +46,7 @@ namespace Merchello.Tests.Base.TestHelpers
 
             // Merchello CoreBootStrap
             var bootManager = new WebBootManager(DbPreTestDataWorker.TestLogger, DbPreTestDataWorker.SqlSyntaxProvider);
-            bootManager.Initialize();    
+            bootManager.Initialize(applicationContext.Object);    
             
 
             if(MerchelloContext.Current == null) Assert.Ignore("MerchelloContext.Current is null");

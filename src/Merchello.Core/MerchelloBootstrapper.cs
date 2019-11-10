@@ -1,4 +1,5 @@
 ﻿using System;
+using Umbraco.Core;
 
 namespace Merchello.Core
 {
@@ -13,10 +14,11 @@ namespace Merchello.Core
         /// <param name="bootManager">
         /// The boot manager.
         /// </param>
-        public static void Init(BootManagerBase bootManager)
+        /// <param name="applicationContext"></param>
+        public static void Init(BootManagerBase bootManager, ApplicationContext applicationContext)
         {
             bootManager
-                .Initialize()
+                .Initialize(applicationContext)
                 .Startup(merchContext => bootManager.OnMerchelloStarting(bootManager, new EventArgs()))
                 .Complete(merchContext => bootManager.OnMerchelloStarted(bootManager, new EventArgs()));
         }

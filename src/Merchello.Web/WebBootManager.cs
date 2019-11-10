@@ -31,8 +31,8 @@
         /// Initializes a new instance of the <see cref="WebBootManager"/> class. 
         /// A boot strap class for the Merchello plugin which initializes all objects including the Web portion of the plugin
         /// </summary>
-        public WebBootManager()
-            : base(LoggerResolver.Current.Logger, ApplicationContext.Current.DatabaseContext.SqlSyntax)
+        public WebBootManager(ApplicationContext applicationContext)
+            : base(LoggerResolver.Current.Logger, applicationContext.DatabaseContext.SqlSyntax)
         {
         }
 
@@ -60,11 +60,11 @@
         /// Initialize objects before anything during the boot cycle happens
         /// </summary>
         /// <returns>The <see cref="IBootManager"/></returns>
-        public override IBootManager Initialize()
+        public override IBootManager Initialize(ApplicationContext context)
         {
             EnsureDatabase();
 
-            base.Initialize();
+            base.Initialize(context);
 
             // initialize the AutoMapperMappings
             AutoMapperMappings.CreateMappings();

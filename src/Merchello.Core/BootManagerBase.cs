@@ -1,4 +1,6 @@
-﻿namespace Merchello.Core
+﻿using Umbraco.Core;
+
+namespace Merchello.Core
 {
     using System;
 
@@ -14,7 +16,7 @@
 
         #endregion 
 
-        public abstract IBootManager Initialize();
+        public abstract IBootManager Initialize(ApplicationContext applicationContext);
 
         public abstract IBootManager Startup(Action<MerchelloContext> afterStartup);
         

@@ -134,7 +134,7 @@
         /// <exception cref="InvalidOperationException">
         /// Throws an exception if Merchello is already initialized
         /// </exception>
-        public override IBootManager Initialize()
+        public override IBootManager Initialize(ApplicationContext context)
         {
             if (IsInitialized)
                 throw new InvalidOperationException("The Merchello core boot manager has already been initialized");
@@ -145,12 +145,12 @@
 
             var logger = GetMultiLogger();
 
-            var cache = ApplicationContext.Current == null
+            var cache = context == null
                 ? new CacheHelper(
                         new ObjectCacheRuntimeCacheProvider(),
                         new StaticCacheProvider(),
                         new NullCacheProvider())
-                : ApplicationContext.Current.ApplicationCache;
+                : context.ApplicationCache;
 
 
             var serviceContext = new ServiceContext(new RepositoryFactory(cache, logger, _sqlSyntaxProvider), _unitOfWorkProvider, logger, new TransientMessageFactory());
@@ -229,10 +229,10 @@
         /// used by certain resolver base classes - Umbraco ResolutionBase) 
         /// </remarks>
         // ReSharper disable once StyleCop.SA1204
-        public static void FinalizeBoot()
+        public static void FinalizeBoot(ApplicationContext applicationContext)
         {
             // Once the application is booted, initialize the value converters
-            InitializeValueConverters();
+            InitializeValueConverters(applicationContext);
 
             // Once the application is booted, initialize the subscriptions which require reading from 
             // a resolver (MonitorResolver) which can only be done after resolution is frozen - which
@@ -243,11 +243,11 @@
         /// <summary>
         /// Initializes value converters.
         /// </summary>
-        protected static void InitializeValueConverters()
+        protected static void InitializeValueConverters(ApplicationContext applicationContext)
         {
             // initialize the DetachedPublishedPropertyConverter singleton
             if (!DetachedValuesConverter.HasCurrent)
-                DetachedValuesConverter.Current = new DetachedValuesConverter(ApplicationContext.Current, PluginManager.Current.ResolveDetachedValueOverriders());
+                DetachedValuesConverter.Current = new DetachedValuesConverter(applicationContext, PluginManager.Current.ResolveDetachedValueOverriders());
         }
 
         /// <summary>
