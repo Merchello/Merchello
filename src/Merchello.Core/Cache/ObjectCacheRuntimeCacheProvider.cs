@@ -241,8 +241,8 @@ namespace Merchello.Core.Cache
 
         private static CacheItemPolicy GetPolicy(TimeSpan? timeout = null, bool isSliding = false, CacheItemRemovedCallback removedCallback = null, string[] dependentFiles = null)
         {
-            var absolute = isSliding ? ObjectCache.InfiniteAbsoluteExpiration : (timeout == null ? ObjectCache.InfiniteAbsoluteExpiration : DateTime.Now.Add(timeout.Value));
-            var sliding = isSliding == false ? ObjectCache.NoSlidingExpiration : (timeout ?? ObjectCache.NoSlidingExpiration);
+            var absolute = isSliding ? DateTime.Now.AddHours(6) : timeout == null ? DateTime.Now.AddHours(6) : DateTime.Now.Add(timeout.Value);
+            var sliding = isSliding == false ? ObjectCache.NoSlidingExpiration : timeout ?? ObjectCache.NoSlidingExpiration;
 
             var policy = new CacheItemPolicy
             {
