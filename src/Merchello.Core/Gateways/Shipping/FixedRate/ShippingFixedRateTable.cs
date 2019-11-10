@@ -162,7 +162,7 @@
                     {
                         var rows = gatewayProviderService.GetShipRateTiersByShipMethodKey(shipMethodKey);
                         return new ShippingFixedRateTable(shipMethodKey, rows);
-                    });
+                    }, TimeSpan.FromHours(6));
         }
 
         /// <summary>
@@ -185,7 +185,7 @@
 
             // persist and enter into cache
             gatewayProviderService.Save(rateTable.Rows);
-            cache.GetCacheItem(CacheKeys.GatewayShipMethodCacheKey(rateTable.ShipMethodKey), () => rateTable);
+            cache.GetCacheItem(CacheKeys.GatewayShipMethodCacheKey(rateTable.ShipMethodKey), () => rateTable, TimeSpan.FromHours(6));
         }
 
         /// <summary>
@@ -220,7 +220,7 @@
             gatewayProviderService.Save(rateTable.Rows);
             gatewayProviderService.Delete(shipRateTier);
 
-            cache.GetCacheItem(CacheKeys.GatewayShipMethodCacheKey(rateTable.ShipMethodKey), () => rateTable);
+            cache.GetCacheItem(CacheKeys.GatewayShipMethodCacheKey(rateTable.ShipMethodKey), () => rateTable, TimeSpan.FromHours(6));
         }  
 
         /// <summary>

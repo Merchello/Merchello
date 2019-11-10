@@ -159,7 +159,6 @@ namespace Merchello.Web
             EntityCollectionService.Deleted += EntityCollectionDeleted;
 
             TreeControllerBase.TreeNodesRendering += TreeControllerBaseOnTreeNodesRendering;
-
             if (merchelloIsStarted) this.VerifyMerchelloVersion(applicationContext);
         }
 

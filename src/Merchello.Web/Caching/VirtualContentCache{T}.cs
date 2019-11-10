@@ -215,7 +215,7 @@
         internal virtual TContent CacheContent(string cacheKey, TContent content)
         {
             if (content == null) return default(TContent);
-            _cache.RuntimeCache.GetCacheItem(cacheKey, () => content, TimeSpan.FromHours(2), true);
+            _cache.RuntimeCache.GetCacheItem(cacheKey, () => content, TimeSpan.FromHours(2));
             return content;
         }
 

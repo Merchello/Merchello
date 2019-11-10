@@ -64,7 +64,7 @@
 
             var customerItemCache = merchelloContext.Services.ItemCacheService.GetItemCacheWithKey(wishlist.Customer, ItemCacheType.Wishlist);
             wishlist = new WishList(customerItemCache, wishlist.Customer);
-            merchelloContext.Cache.RuntimeCache.GetCacheItem(cacheKey, () => wishlist);
+            merchelloContext.Cache.RuntimeCache.GetCacheItem(cacheKey, () => wishlist, TimeSpan.FromHours(2));
         }
 
         /// <summary>
@@ -162,7 +162,7 @@
 
             if (wishlist.Validate())
             {
-                merchelloContext.Cache.RuntimeCache.GetCacheItem(cacheKey, () => wishlist);    
+                merchelloContext.Cache.RuntimeCache.GetCacheItem(cacheKey, () => wishlist, TimeSpan.FromHours(2));    
             }
             
             return wishlist;

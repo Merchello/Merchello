@@ -110,7 +110,7 @@
             {
                 Created.RaiseEvent(new Core.Events.NewEventArgs<Customer>(result.Target), this);
 
-                return Attempt.Succeed((Customer)this.RuntimeCache.GetCacheItem(this.MakeCustomerCacheKey(customer), () => result.Target));
+                return Attempt.Succeed((Customer)this.RuntimeCache.GetCacheItem(this.MakeCustomerCacheKey(customer), () => result.Target, TimeSpan.FromHours(6)));
             }
 
             var error = new BraintreeApiException(result.Errors);
@@ -154,7 +154,7 @@
 
                 Updated.RaiseEvent(new SaveEventArgs<Customer>(result.Target), this);
 
-                return Attempt<Customer>.Succeed((Customer)this.RuntimeCache.GetCacheItem(cacheKey, () => result.Target));
+                return Attempt<Customer>.Succeed((Customer)this.RuntimeCache.GetCacheItem(cacheKey, () => result.Target, TimeSpan.FromHours(6)));
             }
 
             var error = new BraintreeApiException(result.Errors);
@@ -242,7 +242,7 @@
             {
                 var cacheKey = this.MakeCustomerCacheKey(customer);
 
-                return (Customer)this.RuntimeCache.GetCacheItem(cacheKey, () => this.BraintreeGateway.Customer.Find(customer.Key.ToString()));
+                return (Customer)this.RuntimeCache.GetCacheItem(cacheKey, () => this.BraintreeGateway.Customer.Find(customer.Key.ToString()), TimeSpan.FromHours(6));
             }
 
             if (!createOnNotFound) return null;
@@ -315,7 +315,7 @@
 
                 braintreeCustomer = attempt.Result;
 
-                this.RuntimeCache.GetCacheItem(cacheKey, () => braintreeCustomer);
+                this.RuntimeCache.GetCacheItem(cacheKey, () => braintreeCustomer, TimeSpan.FromHours(6));
             }
 
             return braintreeCustomer != null;            

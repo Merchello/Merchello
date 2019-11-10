@@ -168,7 +168,7 @@
 
                 Created.RaiseEvent(new Core.Events.NewEventArgs<PaymentMethod>(result.Target), this);
 
-                return Attempt<PaymentMethod>.Succeed((PaymentMethod)this.RuntimeCache.GetCacheItem(cacheKey, () => result.Target));
+                return Attempt<PaymentMethod>.Succeed((PaymentMethod)this.RuntimeCache.GetCacheItem(cacheKey, () => result.Target, TimeSpan.FromHours(6)));
             }
 
             var error = new BraintreeApiException(result.Errors, result.Message);
@@ -255,7 +255,7 @@
 
                 Updated.RaiseEvent(new SaveEventArgs<PaymentMethod>(result.Target), this);
 
-                return Attempt<PaymentMethod>.Succeed((PaymentMethod)this.RuntimeCache.GetCacheItem(cacheKey, () => result.Target));
+                return Attempt<PaymentMethod>.Succeed((PaymentMethod)this.RuntimeCache.GetCacheItem(cacheKey, () => result.Target, TimeSpan.FromHours(6)));
             }
 
             var error = new BraintreeApiException(result.Errors, result.Message);
@@ -314,7 +314,7 @@
 
                 if (!attempt.Success) return false;
                 paymentMethod = attempt.Result;
-                this.RuntimeCache.GetCacheItem(cacheKey, () => paymentMethod);
+                this.RuntimeCache.GetCacheItem(cacheKey, () => paymentMethod, TimeSpan.FromHours(6));
 
                 return true;
             }
@@ -346,7 +346,7 @@
 
                 if (attempt.Success)
                 {
-                    this.RuntimeCache.GetCacheItem(cacheKey, () => attempt.Result);
+                    this.RuntimeCache.GetCacheItem(cacheKey, () => attempt.Result, TimeSpan.FromHours(6));
                 }
 
                 return attempt.Success ? attempt.Result : null;
