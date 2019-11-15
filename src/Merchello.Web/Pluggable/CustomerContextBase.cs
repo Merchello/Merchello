@@ -590,7 +590,7 @@ namespace Merchello.Web.Pluggable
             this._umbracoContext.HttpContext.Response.Cookies.Add(cookie);
 
             this._cache.RequestCache.GetCacheItem(CustomerCookieName, () => this.ContextData);
-            this._cache.RuntimeCache.GetCacheItem(CacheKeys.CustomerCacheKey(customer.Key), () => customer, TimeSpan.FromMinutes(15), true);
+            this._cache.RuntimeCache.GetCacheItem(CacheKeys.CustomerCacheKey(customer.Key), () => customer, TimeSpan.FromMinutes(20), true);
         }
     }
 }
