@@ -44,7 +44,7 @@
             if (!this.Reconcile(itemization))
             {
                 itemization.Reconciles = false;
-                MultiLogHelper.Warn<InvoiceItemizationStrategyBase>("Reconciliation of invoice total failed in the itemization strategy");
+                MultiLogHelper.Warn<InvoiceItemizationStrategyBase>(string.Format("Reconciliation of invoice {0} total failed in the itemization strategy", Invoice.InvoiceNumber));
             }
 
             itemization.ItemizationTotal = itemization.CalculateTotal();
