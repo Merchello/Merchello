@@ -431,24 +431,28 @@
         /// </remarks>
         internal void Delete(IEnumerable<ICustomerAddress> addresses, bool raiseEvents = true)
         {
-            var addressArray = addresses as ICustomerAddress[] ?? addresses.ToArray();
-            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<ICustomerAddress>(addressArray), this);
-
-            using (new WriteLock(Locker))
+            if (addresses != null)
             {
-                var uow = UowProvider.GetUnitOfWork();
-                using (var repository = RepositoryFactory.CreateCustomerAddressRepository(uow))
+                var addressArray = addresses as ICustomerAddress[] ?? addresses.ToArray();
+                addressArray = addressArray.Where(x => x != null).ToArray();
+                if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<ICustomerAddress>(addressArray), this);
+
+                using (new WriteLock(Locker))
                 {
-                    foreach (var address in addressArray)
+                    var uow = UowProvider.GetUnitOfWork();
+                    using (var repository = RepositoryFactory.CreateCustomerAddressRepository(uow))
                     {
-                        repository.Delete(address);
+                        foreach (var address in addressArray)
+                        {
+                            repository.Delete(address);
+                        }
+
+                        uow.Commit();
                     }
-
-                    uow.Commit();
                 }
-            }
 
-            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<ICustomerAddress>(addressArray), this);
+                if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<ICustomerAddress>(addressArray), this);
+            }
         }
 
         /// <summary>
