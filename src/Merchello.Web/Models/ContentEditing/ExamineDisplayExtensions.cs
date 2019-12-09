@@ -50,6 +50,26 @@
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="productVariants"></param>
+        /// <param name="conversionType"></param>
+        /// <returns></returns>
+        internal static ProductDisplay ToProductDisplay(this SearchResult result, IEnumerable<ProductVariantDisplay> productVariants, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
+        {
+            // this should be the master variant
+            var productDisplay = new ProductDisplay(result.ToProductVariantDisplay())
+            {
+                ProductVariants = productVariants,
+                ProductOptions = RawJsonFieldAsCollection<ProductOptionDisplay>(result, "productOptions")
+            };
+
+            productDisplay.EnsureValueConversion(conversionType);
+            return productDisplay;
+        }
+
+        /// <summary>
         /// Converts Lucene cached ProductVariant into <see cref="ProductVariantDisplay"/>
         /// </summary>
         /// <param name="result">
