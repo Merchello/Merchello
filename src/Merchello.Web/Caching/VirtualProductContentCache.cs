@@ -31,8 +31,10 @@
         /// <returns></returns>
         private IProductContent UpdateLanguage(IProductContent content)
         {
-            if(null != content)
+            if (content != null && content.CultureName != System.Threading.Thread.CurrentThread.CurrentCulture.Name)
+            {
                 content.SpecifyCulture(System.Threading.Thread.CurrentThread.CurrentUICulture);
+            }
             return content;
         }
 
