@@ -1816,14 +1816,17 @@
             var allProducts = SearchProvider.Search(criteria).ToArray();
 
             var defaultProduct = allProducts.FirstOrDefault(x => x.Fields["master"] == "True");
-
-            // Get the variant 
-            var display = this.ModifyData(defaultProduct.ToProductDisplay(GetVariantsByProduct(allProducts), this._conversionType));
-
-            if (display != null)
+            if (defaultProduct != null)
             {
-                display.EnsureValueConversion(this._conversionType);
-                return display;
+                // Get the variant 
+                var display = this.ModifyData(defaultProduct.ToProductDisplay(GetVariantsByProduct(allProducts), this._conversionType));
+
+                if (display != null)
+                {
+                    display.EnsureValueConversion(this._conversionType);
+                    return display;
+                }
+
             }
 
             var entity = Service.GetByKey(key);
