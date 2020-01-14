@@ -31,7 +31,7 @@
                                 <button class="btn btn-info" type="button" ng-click="updateData()"><localize key="merchelloGeneral_update" /></button>
                             </div>
                             <div class="clearfix" style="margin-bottom: 8px;"></div>
-                            <input type="checkbox" ng-model="salesSearchSnapshot.includeManufacturer"> Include Manufacturer In Search
+                            <input type="checkbox" ng-model="salesSearchSnapshot.onlyManufacturer"> Search Only Manufacturers
                         </div>
                         <div class="span6">
                             <merchello-date-range-button reload="reload" start-date="salesSearchSnapshot.startDate" end-date="salesSearchSnapshot.endDate"></merchello-date-range-button>

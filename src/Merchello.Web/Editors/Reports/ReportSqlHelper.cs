@@ -71,7 +71,7 @@ namespace Merchello.Web.Editors.Reports
             }
 
             public static Sql GetSaleSearchSql(DateTime startDate, DateTime endDate, IEnumerable<Guid> invoiceStatuses,
-                string search, bool includeManufacturer = false,
+                string search, bool searchManufacturer = false,
                 string typeFieldKey = "D462C051-07F4-45F5-AAD2-D5C844159F04")
             {
                 var sql = new Sql(
@@ -87,19 +87,11 @@ namespace Merchello.Web.Editors.Reports
 
                 if (!string.IsNullOrWhiteSpace(search))
                 {
-                    sql.Append("AND (merchInvoiceItem.[name] LIKE @search",
+                    sql.Append(
+                        searchManufacturer == false
+                            ? "AND merchInvoiceItem.[name] LIKE @search"
+                            : "AND CAST(merchInvoiceItem.extendedData AS XML).value('(/extendedData/merchManufacturer)[1]', 'nvarchar(100)') LIKE @search",
                         new {search = string.Format("%{0}%", search)});
-
-                    if (includeManufacturer)
-                    {
-                        sql.Append(
-                            "OR CAST(merchInvoiceItem.extendedData AS XML).value('(/extendedData/merchManufacturer)[1]', 'nvarchar(100)') LIKE @search)",
-                            new {search = string.Format("%{0}%", search)});
-                    }
-                    else
-                    {
-                        sql.Append(")");
-                    }
                 }
 
                 return sql;
