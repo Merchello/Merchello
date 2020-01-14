@@ -124,7 +124,7 @@ namespace Merchello.Web.Editors.Reports
         [HttpPost]
         public SalesSearchSnapshot UpdateData(SalesSearchSnapshot salesSearchSnapshot)
         {
-            return BuildSalesSearchSnapshot(salesSearchSnapshot.StartDate, salesSearchSnapshot.EndDate, salesSearchSnapshot.InvoiceStatuses.Where(x => x.Checked).Select(x => x.Key), salesSearchSnapshot.Search, salesSearchSnapshot.IncludeManufacturer);
+            return BuildSalesSearchSnapshot(salesSearchSnapshot.StartDate, salesSearchSnapshot.EndDate, salesSearchSnapshot.InvoiceStatuses.Where(x => x.Checked).Select(x => x.Key), salesSearchSnapshot.Search, salesSearchSnapshot.OnlyManufacturer);
         }
 
         private IEnumerable<InvStatus> AllStatuses()
@@ -143,9 +143,9 @@ namespace Merchello.Web.Editors.Reports
         /// <param name="endDate">The end date</param>
         /// <param name="invoiceStatuses">Which invoice statuses to search</param>
         /// <param name="search">The keyword used to search</param>
-        /// <param name="includeManufacturer">Include manufacturer name in the search</param>
+        /// <param name="searchManufacturer">Only search manufacturer name in the search</param>
         /// <returns></returns>
-        private SalesSearchSnapshot BuildSalesSearchSnapshot(DateTime startDate, DateTime endDate, IEnumerable<Guid> invoiceStatuses, string search, bool includeManufacturer)
+        private SalesSearchSnapshot BuildSalesSearchSnapshot(DateTime startDate, DateTime endDate, IEnumerable<Guid> invoiceStatuses, string search, bool searchManufacturer)
         {
             // Get all the statuses
             var statuses = AllStatuses().ToArray();
@@ -161,7 +161,7 @@ namespace Merchello.Web.Editors.Reports
             }
 
             // Get the SQL
-            var sql = ReportSqlHelper.SalesByItem.GetSaleSearchSql(startDate, endDate, invoiceStatuses, search, includeManufacturer);
+            var sql = ReportSqlHelper.SalesByItem.GetSaleSearchSql(startDate, endDate, invoiceStatuses, search, searchManufacturer);
 
             // Execure the SQL
             var results = ApplicationContext.DatabaseContext.Database.Query<SaleItem>(sql).ToList();
@@ -247,7 +247,7 @@ namespace Merchello.Web.Editors.Reports
                 StartDate = startDate,
                 InvoiceStatuses = statuses,
                 Products = productLineItemList.OrderByDescending(x => x.Total),
-                IncludeManufacturer = includeManufacturer
+                OnlyManufacturer = searchManufacturer
             };
 
             // return

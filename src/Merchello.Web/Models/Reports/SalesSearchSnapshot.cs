@@ -35,9 +35,9 @@ namespace Merchello.Web.Models.Reports
         public IEnumerable<ProductLineItem> Products { get; set; }
 
         /// <summary>
-        /// Include Manufacturers in search
+        /// Only search Manufacturer in search
         /// </summary>
-        public bool IncludeManufacturer { get; set; }
+        public bool OnlyManufacturer { get; set; }
     }
 
     /// <summary>
