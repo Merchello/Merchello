@@ -74,7 +74,13 @@
 
             // Removed RemoveSpecialCharacters() as we are using the above Umbraco method
             // Removed SafeEncodeUrlSegments() too as sometimes creates weird urls
-            return value.ToLowerInvariant().EnsureNotStartsOrEndsWith('/');
+            return value.ToLowerInvariant().EnsureNotStartsOrEndsWith('/')
+                                // Bit hacky, but is pretty quick
+                                .Replace("----", "-")
+                                .Replace("---", "-")
+                                .Replace("--", "-")
+                                .TrimStart('-')
+                                .TrimEnd('-');
         }
 
         /// <summary>
