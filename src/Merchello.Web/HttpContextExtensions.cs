@@ -41,11 +41,13 @@ namespace Merchello.Web
                     ipAddress = context.Request.UserHostAddress;
                 }
 
-                if (ipAddress?.Count(x => x == ':') == 1)
+                if (!string.IsNullOrWhiteSpace(ipAddress))
                 {
-                    return ipAddress.Split(':')[0];
+                    if (ipAddress.Count(x => x == ':') == 1)
+                    {
+                        return ipAddress.Split(':')[0];
+                    }
                 }
-
             }
 
             return ipAddress;
