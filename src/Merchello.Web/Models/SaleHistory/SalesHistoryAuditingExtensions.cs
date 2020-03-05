@@ -1,4 +1,6 @@
-﻿namespace Merchello.Web.Models.SaleHistory
+﻿using System.Web;
+
+namespace Merchello.Web.Models.SaleHistory
 {
     using System;
     using System.Globalization;
@@ -32,7 +34,8 @@
             {
                 area = Area,
                 key = "invoiceCreated",
-                invoiceNumber = invoice.PrefixedInvoiceNumber()
+                invoiceNumber = invoice.PrefixedInvoiceNumber(),
+                ipAddress = HttpContext.Current.GetIpAddress()
             };            
 
             UpdateAuditLog(invoice.Key, EntityType.Invoice, obj.Serialize());
@@ -231,7 +234,8 @@
             var obj = new
             {
                 area = Area,
-                key = "paymentDeclined"
+                key = "paymentDeclined",
+                ipAddress = HttpContext.Current.GetIpAddress()
             };
             if (payment != null)
             {
