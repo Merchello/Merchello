@@ -6,7 +6,7 @@
     /// <summary>
     /// The anonymous customer factory.
     /// </summary>
-    internal class AnonymousCustomerFactory : IEntityFactory<IAnonymousCustomer, AnonymousCustomerDto>
+    public class AnonymousCustomerFactory : IEntityFactory<IAnonymousCustomer, AnonymousCustomerDto>
     {
         /// <summary>
         /// The build entity.

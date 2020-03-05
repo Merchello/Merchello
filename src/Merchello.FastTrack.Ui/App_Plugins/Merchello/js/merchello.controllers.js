@@ -806,7 +806,10 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
                 // initial settings use standard
                 $scope.rangeStart = $filter('date')(start, $scope.settings.dateFormat);
                 $scope.rangeEnd = $filter('date')(end, $scope.settings.dateFormat);
-                $scope.showPreDeterminedDates = showPreDeterminedDates;
+                if ($scope.dialogData.showPreDeterminedDates) {
+                    $scope.showPreDeterminedDates = $scope.dialogData.showPreDeterminedDates;
+                }
+
 
                 setupDatePicker("#filterStartDate", $scope.rangeStart);
                 $element.find("#filterStartDate").datetimepicker().on("changeDate", applyDateStart);
