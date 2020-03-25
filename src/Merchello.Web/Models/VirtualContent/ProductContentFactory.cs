@@ -16,7 +16,6 @@
     using Umbraco.Web;
 
     using Constants = Merchello.Core.Constants;
-    using StringExtensions = Merchello.Core.StringExtensions;
 
     /// <summary>
     /// Represents a ProductContentFactory.
@@ -238,7 +237,7 @@
 
             _parentCulture = _parent != null ? _parent.GetCulture().Name : string.Empty;
 
-            _defaultStoreLanguage = StringExtensions.IsNullOrWhiteSpace(this._parentCulture) ?
+            _defaultStoreLanguage = this._parentCulture.IsNullOrWhiteSpace() ?
                 _storeSettingService.GetByKey(Constants.StoreSetting.DefaultExtendedContentCulture).Value :
                 _parentCulture;
 

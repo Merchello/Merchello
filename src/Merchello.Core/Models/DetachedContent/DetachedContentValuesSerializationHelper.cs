@@ -9,6 +9,8 @@
 
     using Newtonsoft.Json;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// Represents a serialization helper to ensure consistency in serialization and deserialization of detached
     /// content values.

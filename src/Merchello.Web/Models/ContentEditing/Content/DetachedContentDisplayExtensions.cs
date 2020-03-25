@@ -11,7 +11,8 @@ namespace Merchello.Web.Models.ContentEditing.Content
     using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.ValueConverters;
     using Merchello.Web.Models.VirtualContent;
-    
+
+    using Umbraco.Core;
     using Umbraco.Core.Models;
     using Umbraco.Core.Models.PublishedContent;
 

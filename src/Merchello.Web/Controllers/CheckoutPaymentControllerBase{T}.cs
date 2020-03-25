@@ -13,6 +13,8 @@
     using Merchello.Web.Models.Ui;
     using Merchello.Web.Mvc;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// A base controller responsible for handling payment method selection operations..
     /// </summary>

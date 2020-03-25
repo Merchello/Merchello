@@ -8,7 +8,6 @@
     using Merchello.Core.Models;
     using Merchello.Providers.Payment.Braintree.Models;
     using Merchello.Providers.Payment.Models;
-    using Merchello.Providers.Payment.PayPal.Models;
     using Merchello.Providers.Resolvers;
 
     using Newtonsoft.Json;
@@ -43,31 +42,6 @@
             else
             {
                 settings = new BraintreeProviderSettings();
-            }
-
-            return settings;
-        }
-
-        /// <summary>
-        /// Gets the <see cref="PayPalProviderSettings"/>.
-        /// </summary>
-        /// <param name="extendedData">
-        /// The extended data.
-        /// </param>
-        /// <returns>
-        /// The <see cref="PayPalProviderSettings"/>.
-        /// </returns>
-        public static PayPalProviderSettings GetPayPalProviderSettings(this ExtendedDataCollection extendedData)
-        {
-            PayPalProviderSettings settings;
-            if (extendedData.ContainsKey(Constants.PayPal.ExtendedDataKeys.ProviderSettings))
-            {
-                var json = extendedData.GetValue(Constants.PayPal.ExtendedDataKeys.ProviderSettings);
-                settings = JsonConvert.DeserializeObject<PayPalProviderSettings>(json);
-            }
-            else
-            {
-                settings = new PayPalProviderSettings();
             }
 
             return settings;

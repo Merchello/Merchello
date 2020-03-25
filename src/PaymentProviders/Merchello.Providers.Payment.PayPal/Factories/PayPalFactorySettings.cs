@@ -2,6 +2,8 @@
 {
     using Merchello.Core;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// Setting for the <see cref="PayPalPaymentDetailsTypeFactory"/>.
     /// </summary>

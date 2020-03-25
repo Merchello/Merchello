@@ -276,6 +276,10 @@
       <Project>{81d9e7da-5a5a-444a-823f-1d97d7d5fedf}</Project>
       <Name>Merchello.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\PaymentProviders\Merchello.Providers.Payment.PayPal\Merchello.Providers.Payment.PayPal.csproj">
+      <Project>{38bf4d3d-e859-4bdd-b389-6e02c8acc3ae}</Project>
+      <Name>Merchello.Providers.Payment.PayPal</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Merchello.Tests.Base\Merchello.Tests.Base.csproj">
       <Project>{ac1a12fd-34cd-488a-90a1-528de5941c33}</Project>
       <Name>Merchello.Tests.Base</Name>
@@ -295,6 +299,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\src\packages\AutoMapper.3.3.1\tools\AutoMapper.targets" Condition="Exists('..\..\src\packages\AutoMapper.3.3.1\tools\AutoMapper.targets')" />

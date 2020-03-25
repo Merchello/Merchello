@@ -8,6 +8,7 @@
     using Merchello.Core.Configuration;
     using Merchello.Web.Models.ContentEditing;
 
+    using Umbraco.Core;
     using Umbraco.Core.Models;
     using Umbraco.Core.Models.PublishedContent;
 

@@ -1,8 +1,8 @@
 ﻿namespace Merchello.Providers.Payment.PayPal.Models
 {
     using System.Diagnostics.CodeAnalysis;
-
-    using Merchello.Providers.Exceptions;
+    
+    using Merchello.Providers.Payment.PayPal.Exceptions;
 
     using Umbraco.Core;
 

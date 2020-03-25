@@ -11,6 +11,8 @@
     using Merchello.Web.Factories;
     using Merchello.Web.Models.Ui;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// A base controller to handle checkout address operations.
     /// </summary>

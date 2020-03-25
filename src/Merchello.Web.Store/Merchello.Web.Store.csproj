@@ -242,7 +242,6 @@
     <Compile Include="Controllers\CustomerMembershipController.cs" />
     <Compile Include="Controllers\Payment\BraintreePaymentControllerBase{T}.cs" />
     <Compile Include="Controllers\Payment\CashPaymentControllerBase{T}.cs" />
-    <Compile Include="Controllers\Payment\PayPalExpressPaymentController.cs" />
     <Compile Include="Controllers\StoreWishListController.cs" />
     <Compile Include="Factories\BraintreePaymentModelFactory.cs" />
     <Compile Include="Factories\ItemCacheModelFactory.cs" />
@@ -273,7 +272,6 @@
     <Compile Include="Models\ProductDataTableRow.cs" />
     <Compile Include="Models\StoreViewData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UmbracoApplicationEvents.cs" />
     <Compile Include="Validation\ValidateExpiresDateAttribute.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -15,6 +15,7 @@
     using Merchello.Web.Models.VirtualContent;
     using Merchello.Web.Workflow.CustomerItemCache;
 
+    using Umbraco.Core;
     using Umbraco.Core.Models;
     using Umbraco.Core.Models.PublishedContent;
 
@@ -317,7 +318,7 @@
 
             if (taxIncludedInProductPrice)
             {
-                extendedData.TryAdd(Constants.ExtendedDataKeys.TaxIncludedInProductPrice, true.ToString());
+                extendedData.TryAdd(Merchello.Core.Constants.ExtendedDataKeys.TaxIncludedInProductPrice, true.ToString());
             }
 
             // See if this variant is on sale
@@ -343,7 +344,7 @@
 
             if (taxIncludedInProductPrice)
             {
-                extendedData.TryAdd(Constants.ExtendedDataKeys.TaxIncludedInProductPrice, true.ToString());
+                extendedData.TryAdd(Merchello.Core.Constants.ExtendedDataKeys.TaxIncludedInProductPrice, true.ToString());
             }
 
             // See if this variant is on sale

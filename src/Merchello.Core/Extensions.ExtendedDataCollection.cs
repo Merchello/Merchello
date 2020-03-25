@@ -15,6 +15,8 @@ namespace Merchello.Core
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// Extensions methods for <see cref="ExtendedDataCollection"/>.
     /// </summary>

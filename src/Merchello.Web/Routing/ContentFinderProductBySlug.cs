@@ -1,11 +1,14 @@
-﻿using System.Web;
-using Merchello.Core;
-using Merchello.Core.Configuration;
-using Merchello.Web.Models.VirtualContent;
-using Umbraco.Web.Routing;
-
-namespace Merchello.Web.Routing
+﻿namespace Merchello.Web.Routing
 {
+	using System.Web;
+
+	using Merchello.Core;
+	using Merchello.Core.Configuration;
+	using Merchello.Web.Models.VirtualContent;
+
+	using Umbraco.Core;
+	using Umbraco.Web.Routing;
+
     /// <summary>
     ///     Responsible for finding ProductContent by it's slug.
     /// </summary>

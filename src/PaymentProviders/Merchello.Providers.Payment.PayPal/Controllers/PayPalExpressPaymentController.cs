@@ -1,4 +1,4 @@
-﻿namespace Merchello.Web.Store.Controllers.Payment
+﻿namespace Merchello.Providers.Payment.PayPal.Controllers
 {
     using System;
     using System.Linq;
@@ -13,6 +13,7 @@
     using Merchello.Web.Controllers;
     using Merchello.Web.Store.Models;
 
+    using Umbraco.Core;
     using Umbraco.Web.Mvc;
 
     /// <summary>

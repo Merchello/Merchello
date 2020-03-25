@@ -1,4 +1,4 @@
-﻿namespace Merchello.Web.Store
+﻿namespace Merchello.Providers.Payment.PayPal
 {
     using Merchello.Core;
     using Merchello.Core.Events;

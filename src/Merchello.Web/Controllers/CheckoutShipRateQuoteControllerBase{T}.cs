@@ -7,7 +7,8 @@
     using Merchello.Core;
     using Merchello.Web.Factories;
     using Merchello.Web.Models.Ui;
-    
+
+    using Umbraco.Core;
 
     /// <summary>
     /// The checkout ship rate quote controller.

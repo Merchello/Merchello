@@ -1,4 +1,6 @@
-﻿namespace Merchello.Providers.Payment.PayPal.Services
+﻿using Merchello.Providers.Payment.PayPal.Exceptions;
+
+namespace Merchello.Providers.Payment.PayPal.Services
 {
     using System;
     using System.Collections.Generic;
@@ -7,7 +9,6 @@
     using Merchello.Core.Events;
     using Merchello.Core.Logging;
     using Merchello.Core.Models;
-    using Merchello.Providers.Exceptions;
     using Merchello.Providers.Payment.PayPal.Factories;
     using Merchello.Providers.Payment.PayPal.Models;
 
@@ -16,6 +17,7 @@
     using global::PayPal.PayPalAPIInterfaceService.Model;
 
 
+    using Umbraco.Core;
     using Umbraco.Core.Events;
 
     /// <summary>

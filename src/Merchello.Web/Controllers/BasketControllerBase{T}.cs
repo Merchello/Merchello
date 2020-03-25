@@ -19,6 +19,7 @@
 
     using Newtonsoft.Json;
 
+	using Umbraco.Core;
 
     /// <summary>
     /// A base controller used for Basket implementations.

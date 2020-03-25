@@ -2,6 +2,7 @@
 namespace Merchello.Core.Acquired
 {
     using System;
+    using Umbraco.Core;
 
     /// <summary>
     /// Currently just used to get the machine name in med trust and to format a machine name for use with file names

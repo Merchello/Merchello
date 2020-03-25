@@ -8,6 +8,7 @@
     using Merchello.Core.Models.Rdbms;
     using Merchello.Core.Persistence.Querying;
 
+    using Umbraco.Core;
     using Umbraco.Core.Persistence;
 
     /// <inheritdoc/>

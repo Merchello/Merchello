@@ -19,6 +19,7 @@
     using Merchello.Web.Models.Ui.Async;
     using Merchello.Web.Mvc;
 
+    using Umbraco.Core;
     using Umbraco.Core.Events;
     using Umbraco.Web.Mvc;
 

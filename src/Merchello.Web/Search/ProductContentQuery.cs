@@ -9,6 +9,8 @@
     using Merchello.Web.Models;
     using Merchello.Web.Models.VirtualContent;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// Represents a product filter query.
     /// </summary>

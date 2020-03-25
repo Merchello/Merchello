@@ -1,11 +1,11 @@
-﻿namespace Merchello.Providers.Exceptions
+﻿namespace Merchello.Providers.Payment.PayPal.Exceptions
 {
     using System.Collections.Generic;
     using System.Linq;
 
     using Merchello.Core.Exceptions;
 
-    using PayPal.PayPalAPIInterfaceService.Model;
+    using global::PayPal.PayPalAPIInterfaceService.Model;
 
     /// <summary>
     /// An exception for PayPal errors.

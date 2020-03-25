@@ -332,7 +332,7 @@
         /// <returns>
         /// The <see cref="IExtendedLoggerData"/>.
         /// </returns>
-        internal static IExtendedLoggerData GetBaseLoggingData()
+        public static IExtendedLoggerData GetBaseLoggingData()
         {
             var data = new ExtendedLoggerData();
             data.AddCategory("Merchello");

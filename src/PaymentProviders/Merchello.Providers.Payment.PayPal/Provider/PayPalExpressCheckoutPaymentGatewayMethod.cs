@@ -1,4 +1,6 @@
-﻿namespace Merchello.Providers.Payment.PayPal.Provider
+﻿using Merchello.Providers.Payment.PayPal.Exceptions;
+
+namespace Merchello.Providers.Payment.PayPal.Provider
 {
     using System;
     using System.Linq;
@@ -8,7 +10,6 @@
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
-    using Merchello.Providers.Exceptions;
     using Merchello.Providers.Payment.PayPal.Models;
     using Merchello.Providers.Payment.PayPal.Services;
 
@@ -192,7 +193,7 @@
         {
             var record = payment.GetPayPalTransactionRecord();
 
-            if (StringExtensions.IsNullOrWhiteSpace(record.Data.CaptureTransactionId))
+            if (record.Data.CaptureTransactionId.IsNullOrWhiteSpace())
             {
                 var error = new NullReferenceException("PayPal transaction could not be found and/or deserialized from payment extended data collection");
                 return new PaymentResult(Attempt<IPayment>.Fail(payment, error), invoice, false);

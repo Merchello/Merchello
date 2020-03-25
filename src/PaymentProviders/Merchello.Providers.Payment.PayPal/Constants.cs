@@ -1,6 +1,6 @@
 ﻿namespace Merchello.Providers
 {
-    using System;
+	using System;
 
     /// <summary>
     /// Constants segment for the PayPal provider.
