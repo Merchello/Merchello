@@ -548,7 +548,6 @@
     <Content Include="App_Plugins\FastTrack\Views\Partials\InvalidCheckoutStage.cshtml" />
     <Content Include="App_Plugins\FastTrack\Views\Shared\_RequireJsSubmitBtn.cshtml" />
     <Content Include="App_Plugins\FastTrack\Views\web.config" />
-    <Content Include="media\created-packages\Merchello_FastTrack_2.2.0.zip" />
     <Content Include="App_Plugins\FastTrack\config\fasttrack.config" />
     <Content Include="App_Plugins\FastTrack\Views\PurchaseOrderPayment\PaymentForm.cshtml" />
     <Content Include="App_Plugins\MerchelloProviders\assets\css\styles.css.map" />
@@ -701,7 +700,9 @@
       <Name>Merchello.Web</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="media\created-packages\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
