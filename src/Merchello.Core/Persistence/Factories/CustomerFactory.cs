@@ -53,7 +53,8 @@
                 Notes = notes ?? new List<INote>(),
                 Addresses = addresses ?? new List<ICustomerAddress>(),
                 CreateDate = dto.CreateDate,
-                UpdateDate = dto.UpdateDate
+                UpdateDate = dto.UpdateDate,
+                LastActivityDate = dto.LastActivityDate
             };
 
             customer.ResetDirtyProperties();
