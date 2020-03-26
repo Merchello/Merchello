@@ -1,4 +1,6 @@
-﻿namespace Merchello.Providers.Payment.PayPal
+﻿using Merchello.Providers.Payment.PayPal.Controllers;
+
+namespace Merchello.Providers.Payment.PayPal
 {
     using System;
     using System.Web;
@@ -9,7 +11,6 @@
     using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Providers.Models;
-    using Merchello.Providers.Payment.Braintree.Controllers;
     using Merchello.Providers.Payment.PayPal.Factories;
     using Merchello.Providers.Payment.PayPal.Models;
     using Merchello.Providers.Payment.PayPal.Provider;
@@ -67,7 +68,7 @@
             logData.AddCategory("PayPal");
 
             var ex = new NullReferenceException("The PayPalPaymentGatewayProvider could not be resolved.  The provider must be activiated");
-            MultiLogHelper.Error<BraintreeApiController>("PayPalPaymentGatewayProvider not activated.", ex, logData);
+            MultiLogHelper.Error<IPayPalSurfaceController>("PayPalPaymentGatewayProvider not activated.", ex, logData);
             throw ex;
         }
 

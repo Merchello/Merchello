@@ -1,4 +1,6 @@
-﻿namespace Merchello.Web.Store.Factories
+﻿using Merchello.Providers.Payment.Braintree.Models;
+
+namespace Merchello.Providers.Payment.Braintree
 {
     using Core.Gateways.Payment;
 

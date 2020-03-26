@@ -6,7 +6,6 @@
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Logging;
     using Merchello.Core.Models;
-    using Merchello.Providers.Payment.Braintree.Models;
     using Merchello.Providers.Payment.Models;
     using Merchello.Providers.Resolvers;
 
@@ -22,33 +21,7 @@
     public static class ProviderSettingsExtensions
     {
 
-        /// <summary>
-        /// Gets the Braintree provider settings from the ExtendedDataCollection
-        /// </summary>
-        /// <param name="extendedData">
-        /// The extended data.
-        /// </param>
-        /// <returns>
-        /// The <see cref="BraintreeProviderSettings"/>.
-        /// </returns>
-        public static BraintreeProviderSettings GetBrainTreeProviderSettings(this ExtendedDataCollection extendedData)
-        {
-            BraintreeProviderSettings settings;
-            if (extendedData.ContainsKey(Constants.Braintree.ExtendedDataKeys.ProviderSettings))
-            {
-                var json = extendedData.GetValue(Constants.Braintree.ExtendedDataKeys.ProviderSettings);
-                settings = JsonConvert.DeserializeObject<BraintreeProviderSettings>(json);
-            }
-            else
-            {
-                settings = new BraintreeProviderSettings();
-            }
-
-            return settings;
-        }
-
-
-        /// <summary>
+	    /// <summary>
         /// Gets the <see cref="ProviderSettingsMapperAttribute"/>.
         /// </summary>
         /// <param name="provider">

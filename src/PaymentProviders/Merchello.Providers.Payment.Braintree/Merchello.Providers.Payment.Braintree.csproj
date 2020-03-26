@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{38BF4D3D-E859-4BDD-B389-6E02C8ACC3AE}</ProjectGuid>
+    <ProjectGuid>{DF69BF05-5AC0-432D-9132-6ADCF570E991}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Merchello.Providers.Payment.PayPal</RootNamespace>
-    <AssemblyName>Merchello.Providers.Payment.PayPal</AssemblyName>
+    <RootNamespace>Merchello.Providers.Payment.Braintree</RootNamespace>
+    <AssemblyName>Merchello.Providers.Payment.Braintree</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -36,6 +36,9 @@
     </Reference>
     <Reference Include="AutoMapper.Net4, Version=3.3.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.Net4.dll</HintPath>
+    </Reference>
+    <Reference Include="Braintree, Version=4.16.0.0, Culture=neutral, PublicKeyToken=31b586f34d3e96c7, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Braintree.4.16.0\lib\net452\Braintree.dll</HintPath>
     </Reference>
     <Reference Include="businesslogic, Version=1.0.7128.14461, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\UmbracoCms.Core.7.15.0\lib\net452\businesslogic.dll</HintPath>
@@ -127,12 +130,6 @@
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
-    <Reference Include="PayPalCoreSDK, Version=1.6.1.0, Culture=neutral, PublicKeyToken=5b4afc1ccaef40fb, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\PayPalCoreSDK.1.6.1\lib\net451\PayPalCoreSDK.dll</HintPath>
-    </Reference>
-    <Reference Include="PayPalMerchantSDK, Version=2.15.117.0, Culture=neutral, PublicKeyToken=5b4afc1ccaef40fb, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\PayPalMerchantSDK.2.15.117\lib\net20\PayPalMerchantSDK.dll</HintPath>
-    </Reference>
     <Reference Include="Semver, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\semver.1.1.2\lib\net451\Semver.dll</HintPath>
     </Reference>
@@ -151,6 +148,7 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Net" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
@@ -221,42 +219,59 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutomapperProfile.cs" />
+    <Compile Include="BraintreeApiException.cs" />
+    <Compile Include="BraintreeApiHelper.cs" />
+    <Compile Include="BraintreeCustomerExtensions.cs" />
+    <Compile Include="BraintreePaymentModelFactory.cs" />
+    <Compile Include="BraintreeProcessorArguementCollectionExtensions.cs" />
+    <Compile Include="BraintreeProviderSettingsExtensions.cs" />
+    <Compile Include="Builders\IBuilder.cs" />
+    <Compile Include="Builders\InvoiceTransactionRequestBuilder.cs" />
+    <Compile Include="Builders\RequestBuilderBase.cs" />
+    <Compile Include="Caching\CacheKeys.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Controllers\IPayPalSurfaceController.cs" />
-    <Compile Include="Controllers\PayPalExpressController.cs" />
-    <Compile Include="Controllers\PayPalExpressPaymentController.cs" />
-    <Compile Include="Controllers\PayPalSurfaceControllerBase.cs" />
-    <Compile Include="Exceptions\PayPalApiException.cs" />
-    <Compile Include="Factories\ExpressCheckoutResponseFactory.cs" />
-    <Compile Include="Factories\PayPalAddressTypeFactory.cs" />
-    <Compile Include="Factories\PayPalBasicAmountTypeFactory.cs" />
-    <Compile Include="Factories\PayPalFactorySettings.cs" />
-    <Compile Include="Factories\PayPalPaymentDetailsTypeFactory.cs" />
-    <Compile Include="Models\CurrencyCodeTypeDecimal.cs" />
-    <Compile Include="Models\ExpressCheckoutResponse.cs" />
-    <Compile Include="Models\PayPalExpressCheckoutRequestDetailsOverride.cs" />
-    <Compile Include="Models\PayPalExpressCheckoutUrls.cs" />
-    <Compile Include="Models\PayPalExpressTransaction.cs" />
-    <Compile Include="Models\PayPalExpressTransactionRecord.cs" />
-    <Compile Include="Models\PayPalProviderSettings.cs" />
-    <Compile Include="Models\PayPalProviderSettingsExtensions.cs" />
-    <Compile Include="Models\ProcessorArgumentCollectionExtensions.cs" />
-    <Compile Include="Models\SdkConfig.cs" />
-    <Compile Include="PayPalApiHelper.cs" />
-    <Compile Include="PayPalExpressCheckoutPaymentProcessor.cs" />
-    <Compile Include="PayPalMode.cs" />
-    <Compile Include="PayPalProcessorArgumentCollectionsExtensions.cs" />
+    <Compile Include="Controllers\BraintreeApiController.cs" />
+    <Compile Include="Controllers\BraintreePaymentControllerBase{T}.cs" />
+    <Compile Include="Controllers\BraintreeWebhooksControllerBase.cs" />
+    <Compile Include="EnvironmentType.cs" />
+    <Compile Include="MappingExtensions.cs" />
+    <Compile Include="Models\BillingAddress.cs" />
+    <Compile Include="Models\BraintreeCcPaymentModel.cs" />
+    <Compile Include="Models\BraintreePaymentModel.cs" />
+    <Compile Include="Models\BraintreeProviderSettings.cs" />
+    <Compile Include="Models\MerchantDescriptor.cs" />
+    <Compile Include="Models\TransactionOption.cs" />
+    <Compile Include="Models\TransactionReference.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ProviderExtensions.cs" />
-    <Compile Include="Provider\PayPalExpressCheckoutPaymentGatewayMethod.cs" />
-    <Compile Include="Provider\PayPalPaymentGatewayProvider.cs" />
-    <Compile Include="Services\IPayPalApiPaymentService.cs" />
-    <Compile Include="Services\IPayPalApiService.cs" />
-    <Compile Include="Services\IPayPalApiServiceBase.cs" />
-    <Compile Include="Services\IPayPalExpressCheckoutService.cs" />
-    <Compile Include="Services\PayPalApiService.cs" />
-    <Compile Include="Services\PayPalApiServiceBase.cs" />
-    <Compile Include="Services\PayPalExpressCheckoutService.cs" />
+    <Compile Include="Provider\BraintreePaymentGatewayMethodBase.cs" />
+    <Compile Include="Provider\BraintreePaymentGatewayProvider.cs" />
+    <Compile Include="Provider\BraintreeStandardPaymentGatewayBase.cs" />
+    <Compile Include="Provider\BraintreeStandardTransactionPaymentGatewayMethod.cs" />
+    <Compile Include="Provider\BraintreeSubscriptionRecordPaymentMethod.cs" />
+    <Compile Include="Provider\BraintreeVaultPaymentGatewayMethodBase.cs" />
+    <Compile Include="Provider\BraintreeVaultTransactionPaymentGatewayMethod.cs" />
+    <Compile Include="Provider\IBraintreePaymentGatewayProvider.cs" />
+    <Compile Include="Provider\IBraintreeStandardTransactionPaymentGatewayMethod.cs" />
+    <Compile Include="Provider\IBraintreeSubscriptionRecordPaymentGatewayMethod.cs" />
+    <Compile Include="Provider\IBraintreeVaultTransactionPaymentGatewayMethod.cs" />
+    <Compile Include="Provider\IPayPalOneTimeTransactionPaymentGatewayMethod.cs" />
+    <Compile Include="Provider\PayPalOneTimeTransactionPaymentGatewayMethod.cs" />
+    <Compile Include="Provider\PayPalVaultTransactionPaymentGatewayMethod.cs" />
+    <Compile Include="Services\BraintreeApiRequestFactory.cs" />
+    <Compile Include="Services\BraintreeApiService.cs" />
+    <Compile Include="Services\BraintreeApiServiceBase.cs" />
+    <Compile Include="Services\BraintreeCustomerApiService.cs" />
+    <Compile Include="Services\BraintreePaymentMethodApiService.cs" />
+    <Compile Include="Services\BraintreeSubscriptionApiService.cs" />
+    <Compile Include="Services\BraintreeTransactionApiService.cs" />
+    <Compile Include="Services\BraintreeWebhooksApiService.cs" />
+    <Compile Include="Services\IBraintreeApiService.cs" />
+    <Compile Include="Services\IBraintreeCustomerApiService.cs" />
+    <Compile Include="Services\IBraintreePaymentMethodApiService.cs" />
+    <Compile Include="Services\IBraintreeSubscriptionApiService.cs" />
+    <Compile Include="Services\IBraintreeTransactionApiService.cs" />
+    <Compile Include="Services\IBraintreeWebhooksApiService.cs" />
     <Compile Include="UmbracoApplicationEvents.cs" />
   </ItemGroup>
   <ItemGroup>

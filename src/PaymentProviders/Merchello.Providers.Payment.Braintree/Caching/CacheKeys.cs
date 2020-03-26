@@ -1,4 +1,4 @@
-﻿namespace Merchello.Providers.Payment.Caching
+﻿namespace Merchello.Providers.Payment.Braintree.Caching
 {
     using System;
 

@@ -1,12 +1,11 @@
-﻿namespace Merchello.Web.Store.Models
+﻿namespace Merchello.Providers.Payment.Braintree.Models
 {
-    using System;
-    using System.ComponentModel.DataAnnotations;
+	using System;
+	using System.ComponentModel.DataAnnotations;
+	using Merchello.Web.Store.Localization;
+	using Merchello.Web.Store.Validation;
 
-    using Merchello.Web.Store.Localization;
-    using Merchello.Web.Store.Validation;
-
-    /// <summary>
+	/// <summary>
     /// A model for rendering and processing .
     /// </summary>
     [Obsolete("Use BraintreePaymentModel")]

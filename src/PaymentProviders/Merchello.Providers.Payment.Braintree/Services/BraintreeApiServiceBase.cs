@@ -14,7 +14,7 @@
     using Umbraco.Core.Cache;
     using Umbraco.Core.Logging;
 
-    using CacheKeys = Merchello.Providers.Payment.Caching.CacheKeys;
+    using CacheKeys = Caching.CacheKeys;
 
     /// <summary>
     /// A base class for local Braintree services.

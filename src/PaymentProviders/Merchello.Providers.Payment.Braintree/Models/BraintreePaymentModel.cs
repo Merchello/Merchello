@@ -1,5 +1,7 @@
-﻿namespace Merchello.Web.Store.Models
+﻿namespace Merchello.Providers.Payment.Braintree.Models
 {
+	using Merchello.Web.Store.Models;
+
     /// <summary>
     /// A model for rendering and processing basic BrainTree Payments.
     /// </summary>

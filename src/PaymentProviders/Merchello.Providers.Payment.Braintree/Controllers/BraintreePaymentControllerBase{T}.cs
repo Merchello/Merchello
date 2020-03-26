@@ -1,4 +1,4 @@
-﻿namespace Merchello.Web.Store.Controllers.Payment
+﻿namespace Merchello.Providers.Payment.Braintree.Controllers
 {
     using System;
     using System.Web.Mvc;
@@ -7,6 +7,7 @@
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Models;
     using Merchello.Providers.Payment.Braintree;
+    using Merchello.Providers.Payment.Braintree.Models;
     using Merchello.Web.Controllers;
     using Merchello.Web.Factories;
     using Merchello.Web.Store.Factories;

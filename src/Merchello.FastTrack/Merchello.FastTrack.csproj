@@ -297,6 +297,10 @@
       <Project>{81d9e7da-5a5a-444a-823f-1d97d7d5fedf}</Project>
       <Name>Merchello.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PaymentProviders\Merchello.Providers.Payment.Braintree\Merchello.Providers.Payment.Braintree.csproj">
+      <Project>{df69bf05-5ac0-432d-9132-6adcf570e991}</Project>
+      <Name>Merchello.Providers.Payment.Braintree</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

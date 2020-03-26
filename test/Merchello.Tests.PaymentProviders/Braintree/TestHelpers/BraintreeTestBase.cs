@@ -40,7 +40,7 @@
 
             this.BraintreeProviderSettings = TestHelper.GetBraintreeProviderSettings();
 
-            AutoMapperMappings.CreateMappings();
+            // TODO: BH: Add Automapper
 
             this.Gateway = this.BraintreeProviderSettings.AsBraintreeGateway();
 
