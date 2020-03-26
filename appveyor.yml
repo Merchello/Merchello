@@ -15,7 +15,7 @@ init:
 #- C:\Ruby%ruby_version%\lib\ruby\gems -> appveyor.yml
 #- C:\projects\merchello\src\Merchello.Web.UI.Client\node_modules -> appveyor.yml
 #- C:\projects\merchello\src\packages -> appveyor.yml
-#
+# Another
 #
 ## Install scripts. (runs after repo cloning)
 #install:
