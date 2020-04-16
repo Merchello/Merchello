@@ -224,7 +224,7 @@
       <HintPath>..\packages\UmbracoCms.Core.7.15.0\lib\net452\umbraco.dll</HintPath>
     </Reference>
     <Reference Include="Umbraco.Core, Version=1.0.7128.14457, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\UmbracoCms.Core.7.15.0\lib\net452\Umbraco.Core.dll</HintPath>
+      <HintPath>..\Merchello.FastTrack.Ui\Bin\Umbraco.Core.dll</HintPath>
     </Reference>
     <Reference Include="umbraco.DataLayer, Version=1.0.7128.14461, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.15.0\lib\net452\umbraco.DataLayer.dll</HintPath>
