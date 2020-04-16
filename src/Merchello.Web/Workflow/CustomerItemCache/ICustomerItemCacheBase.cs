@@ -186,6 +186,12 @@
         /// Adds a <see cref="IProductVariant"/> to the item cache
         /// </summary>
         /// <param name="productVariant">The product variant to be added</param>
+        void AddItem(IProductVariant productVariant);
+
+        /// <summary>
+        /// Adds a <see cref="IProductVariant"/> to the item cache
+        /// </summary>
+        /// <param name="productVariant">The product variant to be added</param>
         /// <param name="extendedData">The <see cref="ExtendedDataCollection"/>.</param>
         void AddItem(IProductVariant productVariant, ExtendedDataCollection extendedData);
 
