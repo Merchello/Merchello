@@ -342,7 +342,8 @@ angular.module('merchello.services').service('merchelloListViewHelper',
                     { name: 'totalInventory', localizeKey: 'merchelloGeneral_quantity', resultColumn: true },
                     { name: 'onSale', localizeKey: 'merchelloVariant_productOnSale', resultColumn: true },
                     { name: 'price', localizeKey: 'merchelloGeneral_price' }
-                ]
+                ],
+                pageSize: 15
             },
 
             // TODO remove this
@@ -377,7 +378,7 @@ angular.module('merchello.services').service('merchelloListViewHelper',
                     { name: 'fulfillmentStatus', localizeKey: 'merchelloOrder_fulfillmentStatus', resultColumn: true },
                     { name: 'total', localizeKey: 'merchelloGeneral_total' }
                 ],
-                pageSize: 10,
+                pageSize: 15,
                 orderBy: 'invoiceNumber',
                 orderDirection: 'desc'
             },

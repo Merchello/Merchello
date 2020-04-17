@@ -24,6 +24,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
 
             $scope.invoiceDisplayBuilder = invoiceDisplayBuilder;
             $scope.load = load;
+            $scope.batchDelete = batchDelete;
             $scope.getColumnValue = getColumnValue;
 
 
@@ -83,6 +84,10 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                 } else {
                     return invoiceResource.searchInvoices(query);
                 }
+            }
+
+            function batchDelete(ids) {
+                alert(ids);
             }
 
             function getColumnValue(result, col) {
