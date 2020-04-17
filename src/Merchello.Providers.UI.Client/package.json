@@ -27,7 +27,7 @@
     "requirejs": "^2.3.5"
   },
   "devDependencies": {
-    "bower": "~1.8.4",
+    "bower": "~1.8.8",
     "grunt": "^1.0.2",
     "grunt-contrib-clean": "~1.1.0",
     "grunt-contrib-concat": "~1.0.1",

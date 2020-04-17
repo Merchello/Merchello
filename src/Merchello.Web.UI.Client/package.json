@@ -24,7 +24,7 @@
     "grunt-sass": "^2.1.0",
     "jasmine-core": "^3.1.0",
     "node-sass": "^4.8.3",
-    "npm": "^5.8.0",
+    "npm": "^6.13.4",
     "phantomjs-prebuilt": "^2.1.16",
     "requirejs": "^2.3.5"
   },

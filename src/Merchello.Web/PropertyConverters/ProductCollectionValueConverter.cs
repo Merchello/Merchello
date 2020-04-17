@@ -56,7 +56,7 @@
         public override object ConvertDataToSource(PublishedPropertyType propertyType, object source, bool preview)
         {
             
-            if (source == null)
+            if (string.IsNullOrEmpty(source.ToString()))
                 return null;
 
             try

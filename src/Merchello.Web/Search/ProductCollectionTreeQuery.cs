@@ -38,7 +38,7 @@
         /// <inheritdoc/>
         public TreeNode<IProductCollection> GetTreeByValue(IProductCollection value)
         {
-            var cacheKey = GetCacheKey("GetTreeByValue");
+            var cacheKey = GetCacheKey("GetTreeByValue", value.Key);
             var tree = (TreeNode<IProductCollection>)Cache.GetCacheItem(cacheKey);
 
             if (tree != null) return tree;
