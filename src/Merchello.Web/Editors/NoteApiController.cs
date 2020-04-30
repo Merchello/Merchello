@@ -47,7 +47,7 @@
         public NoteApiController(IMerchelloContext merchelloContext)
             : base(merchelloContext)
         {
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
             _noteService = merchelloContext.Services.NoteService;
             _merchelloHelper = new MerchelloHelper();
         }

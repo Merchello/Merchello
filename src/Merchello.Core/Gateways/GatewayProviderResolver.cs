@@ -61,8 +61,8 @@
             IRuntimeCacheProvider runtimeCache)
             : base(values)
         {
-            Mandate.ParameterNotNull(gatewayProviderService, "gatewayProviderService");
-            Mandate.ParameterNotNull(runtimeCache, "runtimeCache");
+            Ensure.ParameterNotNull(gatewayProviderService, "gatewayProviderService");
+            Ensure.ParameterNotNull(runtimeCache, "runtimeCache");
 
             _gatewayProviderService = gatewayProviderService;
             _runtimeCache = runtimeCache;

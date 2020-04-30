@@ -44,7 +44,7 @@
         /// </param>
         public OrderConfirmationTrigger(IMerchelloContext merchelloContext)
         {
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
             _storeSettingService = merchelloContext.Services.StoreSettingService;
             _shipMethodService = ((ServiceContext)merchelloContext.Services).ShipMethodService;
         }

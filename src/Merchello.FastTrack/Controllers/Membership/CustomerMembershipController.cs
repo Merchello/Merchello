@@ -58,7 +58,7 @@
         /// </param>
         public CustomerMembershipController(NewMemberModelFactory<NewMemberModel> newMemberModelFactory)
         {
-            Mandate.ParameterNotNull(newMemberModelFactory, "newMemberModelFactory");
+            Ensure.ParameterNotNull(newMemberModelFactory, "newMemberModelFactory");
             NewMemberModelFactory = newMemberModelFactory;
 
             _memberService = ApplicationContext.Current.Services.MemberService;

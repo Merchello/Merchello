@@ -30,8 +30,8 @@
         /// </param>
         protected TaxCalculationStrategyBase(IInvoice invoice, IAddress taxAddress)
         {
-            Mandate.ParameterNotNull(invoice, "invoice");
-            Mandate.ParameterNotNull(taxAddress, "taxAddress");
+            Ensure.ParameterNotNull(invoice, "invoice");
+            Ensure.ParameterNotNull(taxAddress, "taxAddress");
 
             _invoice = invoice;
             _taxAddress = taxAddress;

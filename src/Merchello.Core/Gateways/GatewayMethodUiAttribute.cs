@@ -23,7 +23,7 @@
         /// </param>
         public GatewayMethodUiAttribute(string alias)
         {
-            Mandate.ParameterNotNullOrEmpty(alias, "alias");
+            Ensure.ParameterNotNullOrEmpty(alias, "alias");
 
             Alias = alias;
         }

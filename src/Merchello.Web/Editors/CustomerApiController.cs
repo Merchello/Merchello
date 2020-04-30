@@ -77,8 +77,8 @@
         public CustomerApiController(IMerchelloContext merchelloContext, IMemberService memberService)
             : base(merchelloContext)
         {
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
-            Mandate.ParameterNotNull(memberService, "memberService");
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterNotNull(memberService, "memberService");
 
             _customerService = merchelloContext.Services.CustomerService;
             _customerAddressService = ((Core.Services.ServiceContext)merchelloContext.Services).CustomerAddressService;
@@ -102,8 +102,8 @@
         internal CustomerApiController(IMerchelloContext merchelloContext, UmbracoContext umbracoContext, IMemberService memberService)
             : base(merchelloContext, umbracoContext)
         {
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
-            Mandate.ParameterNotNull(memberService, "memberService");
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterNotNull(memberService, "memberService");
 
             _customerService = merchelloContext.Services.CustomerService;
             _memberService = memberService;
@@ -255,8 +255,8 @@
            
             DateTime startDate;
             DateTime endDate;
-            Mandate.ParameterNotNull(lastActivityDateStart, "lastActivityDateStart is a required parameter");
-            Mandate.ParameterCondition(DateTime.TryParse(lastActivityDateStart.Value, out startDate), "Failed to convert lastActivityDateStart to a valid DateTime");
+            Ensure.ParameterNotNull(lastActivityDateStart, "lastActivityDateStart is a required parameter");
+            Ensure.ParameterCondition(DateTime.TryParse(lastActivityDateStart.Value, out startDate), "Failed to convert lastActivityDateStart to a valid DateTime");
 
             endDate = lastActivityDateEnd == null
                 ? DateTime.MaxValue

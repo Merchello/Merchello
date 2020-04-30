@@ -19,7 +19,7 @@
         /// </param>
         public OfferComponentDefinition(OfferComponentConfiguration configuration)
         {
-            Mandate.ParameterNotNull(configuration, "configuration");
+            Ensure.ParameterNotNull(configuration, "configuration");
             this.OfferSettingsKey = configuration.OfferSettingsKey;
             this.OfferCode = configuration.OfferCode;
             this.ComponentKey = configuration.ComponentKey;

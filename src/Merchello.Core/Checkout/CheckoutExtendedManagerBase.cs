@@ -60,8 +60,8 @@
         /// </remarks>
         public virtual void AddItem(ILineItem lineItem)
         {
-            Mandate.ParameterNotNullOrEmpty(lineItem.Sku, "The line item must have a sku");
-            Mandate.ParameterNotNullOrEmpty(lineItem.Name, "The line item must have a name");
+            Ensure.ParameterNotNullOrEmpty(lineItem.Sku, "The line item must have a sku");
+            Ensure.ParameterNotNullOrEmpty(lineItem.Name, "The line item must have a name");
 
             if (lineItem.Quantity <= 0) lineItem.Quantity = 1;
             if (lineItem.Price < 0) lineItem.Price = 0;

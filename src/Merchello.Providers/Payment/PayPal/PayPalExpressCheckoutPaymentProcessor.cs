@@ -26,7 +26,7 @@
         /// </param>
         public PayPalExpressCheckoutPaymentProcessor(IPayPalApiService service)
         {
-            Mandate.ParameterNotNull(service, "service");
+            Ensure.ParameterNotNull(service, "service");
             this._service = (PayPalExpressCheckoutService)service.ExpressCheckout;
         }
 

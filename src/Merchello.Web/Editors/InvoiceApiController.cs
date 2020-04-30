@@ -283,8 +283,8 @@
             Guid key;
 
             var customerKey = query.Parameters.FirstOrDefault(x => x.FieldName == "customerKey");
-            Mandate.ParameterNotNull(customerKey, "customerKey was null");
-            Mandate.ParameterCondition(Guid.TryParse(customerKey.Value, out key), "customerKey was not a valid GUID");
+            Ensure.ParameterNotNull(customerKey, "customerKey was null");
+            Ensure.ParameterCondition(Guid.TryParse(customerKey.Value, out key), "customerKey was not a valid GUID");
 
             return _merchello.Query.Invoice.SearchByCustomer(
                 key,
@@ -312,8 +312,8 @@
 
             DateTime startDate;
             DateTime endDate;
-            Mandate.ParameterNotNull(invoiceDateStart, "invoiceDateStart is a required parameter");
-            Mandate.ParameterCondition(DateTime.TryParse(invoiceDateStart.Value, out startDate), "Failed to convert invoiceDateStart to a valid DateTime");
+            Ensure.ParameterNotNull(invoiceDateStart, "invoiceDateStart is a required parameter");
+            Ensure.ParameterCondition(DateTime.TryParse(invoiceDateStart.Value, out startDate), "Failed to convert invoiceDateStart to a valid DateTime");
 
             endDate = invoiceDateEnd == null
                 ? DateTime.MaxValue

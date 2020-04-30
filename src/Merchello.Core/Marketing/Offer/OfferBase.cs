@@ -48,7 +48,7 @@
         /// </param>
         protected OfferBase(IOfferSettings settings)
         {
-            Mandate.ParameterNotNull(settings, "settings");
+            Ensure.ParameterNotNull(settings, "settings");
             
             this.Settings = settings;
 

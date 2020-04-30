@@ -379,7 +379,7 @@ namespace Merchello.Core
         /// </returns>
         internal static ICustomerAddress SaveCustomerAddress(this ICustomer customer, IMerchelloContext merchelloContext, ICustomerAddress address)
         {
-            Mandate.ParameterCondition(address.CustomerKey == customer.Key, "The customer address is not associated with this customer.");
+            Ensure.ParameterCondition(address.CustomerKey == customer.Key, "The customer address is not associated with this customer.");
 
             var addressList = new List<ICustomerAddress>();
 
@@ -431,7 +431,7 @@ namespace Merchello.Core
         /// </param>
         internal static void DeleteCustomerAddress(this ICustomer customer, IMerchelloContext merchelloContext, ICustomerAddress address)
         {
-            Mandate.ParameterCondition(address.CustomerKey == customer.Key, "The customer address is not associated with this customer.");
+            Ensure.ParameterCondition(address.CustomerKey == customer.Key, "The customer address is not associated with this customer.");
 
             var addresses = customer.Addresses.Where(x => x.Key != address.Key).ToList();
 

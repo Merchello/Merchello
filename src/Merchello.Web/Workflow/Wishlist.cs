@@ -30,7 +30,7 @@
         internal WishList(IItemCache itemCache, ICustomerBase customer)
             : base(itemCache, customer)
         {
-            Mandate.ParameterCondition(itemCache.ItemCacheType == ItemCacheType.Wishlist, "itemCache");
+            Ensure.ParameterCondition(itemCache.ItemCacheType == ItemCacheType.Wishlist, "itemCache");
         }
        
         /// <summary>
@@ -119,7 +119,7 @@
         /// <returns>The <see cref="IWishList"/></returns>
         internal static IWishList GetWishList(IMerchelloContext merchelloContext, string loginName)
         {
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
             
             var customer = merchelloContext.Services.CustomerService.GetByLoginName(loginName);
             return customer == null ? null : GetWishList(merchelloContext, customer);
@@ -133,7 +133,7 @@
         /// <returns>The <see cref="IWishList"/></returns>
         internal static IWishList GetWishList(IMerchelloContext merchelloContext, Guid customerKey)
         {
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
 
             var customer = merchelloContext.Services.CustomerService.GetByKey(customerKey);
             return customer == null ? null : GetWishList(merchelloContext, customer);
@@ -147,8 +147,8 @@
         /// <returns>The <see cref="IWishList"/></returns>
         internal static IWishList GetWishList(IMerchelloContext merchelloContext, ICustomerBase customer)
         {
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
-            Mandate.ParameterNotNull(customer, "customer");
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterNotNull(customer, "customer");
 
             var cacheKey = MakeCacheKey(customer);
 

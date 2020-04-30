@@ -43,7 +43,7 @@
         /// </param>
         public CheckoutShipRateQuoteModelFactory(IMerchelloContext merchelloContext)
         {
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
             _gatewayContext = merchelloContext.Gateways;
         }
 

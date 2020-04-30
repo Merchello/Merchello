@@ -236,7 +236,7 @@
         /// </returns>
         public Customer GetBraintreeCustomer(ICustomer customer, bool createOnNotFound = true)
         {
-            Mandate.ParameterNotNull(customer, "customer");
+            Ensure.ParameterNotNull(customer, "customer");
 
             if (this.Exists(customer))
             {

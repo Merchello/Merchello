@@ -158,7 +158,7 @@
         /// </param>
         public PaymentGatewayMethodAttribute(string title, string authorizeEditorView, string authorizeCaptureEditorView, string voidPaymentEditorView, string refundPaymentEditorView, string capturePaymentEditorView, bool includeInPaymentSelection = true, bool requiresCustomer = false)
         {
-            Mandate.ParameterNotNullOrEmpty(title, "title");
+            Ensure.ParameterNotNullOrEmpty(title, "title");
 
             Title = title;
             AuthorizeEditorView = authorizeEditorView;

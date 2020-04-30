@@ -81,9 +81,9 @@
         /// </param>
         internal MerchelloDatabaseSchemaHelper(Database db, ILogger logger, ISqlSyntaxProvider syntaxProvider)
         {
-            Mandate.ParameterNotNull(db, "db");
-            Mandate.ParameterNotNull(logger, "logger");
-            Mandate.ParameterNotNull(syntaxProvider, "syntaxProvider");
+            Ensure.ParameterNotNull(db, "db");
+            Ensure.ParameterNotNull(logger, "logger");
+            Ensure.ParameterNotNull(syntaxProvider, "syntaxProvider");
 
             _db = db;
             _logger = logger;

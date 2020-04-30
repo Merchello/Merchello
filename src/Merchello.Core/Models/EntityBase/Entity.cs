@@ -199,6 +199,7 @@
         /// <summary>
         /// Method to call on entity saved when first added
         /// </summary>
+        [Obsolete("BH: Swap to NPoco")]
         internal virtual void AddingEntity()
         {
             if (Key == Guid.Empty)
@@ -211,6 +212,7 @@
         /// <summary>
         /// Method to call on entity saved/updated
         /// </summary>
+        [Obsolete("BH: Swap to NPoco")]
         internal virtual void UpdatingEntity()
         {
             UpdateDate = DateTime.Now;

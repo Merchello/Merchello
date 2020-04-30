@@ -75,7 +75,7 @@
         /// <returns>The <see cref="IPaymentResult"/></returns>
         public override IPaymentResult AuthorizePayment(IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args)
         {
-            Mandate.ParameterNotNull(paymentGatewayMethod, "paymentGatewayMethod");
+            Ensure.ParameterNotNull(paymentGatewayMethod, "paymentGatewayMethod");
 
             if (!this.IsReadyToInvoice()) return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("SalesPreparation is not ready to invoice")), null, false);
 
@@ -133,7 +133,7 @@
         /// <returns>A <see cref="IPaymentResult"/></returns>
         public override IPaymentResult AuthorizeCapturePayment(IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args)
         {
-            Mandate.ParameterNotNull(paymentGatewayMethod, "paymentGatewayMethod");
+            Ensure.ParameterNotNull(paymentGatewayMethod, "paymentGatewayMethod");
 
             if (!this.IsReadyToInvoice()) return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("SalesPreparation is not ready to invoice")), null, false);
 

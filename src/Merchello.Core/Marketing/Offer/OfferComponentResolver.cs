@@ -44,7 +44,7 @@
         /// </param>
         internal OfferComponentResolver(IEnumerable<Type> values, IOfferProviderResolver offerProviderResolver)
         {
-            Mandate.ParameterNotNull(offerProviderResolver, "offerProviderResolver");
+            Ensure.ParameterNotNull(offerProviderResolver, "offerProviderResolver");
             _instanceTypes = values.ToList();
             _offerProviderResolver = offerProviderResolver;
         }

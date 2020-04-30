@@ -113,9 +113,9 @@ namespace Merchello.Core.Services
         {
             var recipientArray = recipients as string[] ?? recipients.ToArray();
 
-            Mandate.ParameterCondition(methodKey != Guid.Empty, "methodKey");
-            Mandate.ParameterNotNullOrEmpty(name, "name");
-            Mandate.ParameterNotNullOrEmpty(fromAddress, "fromAddress");            
+            Ensure.ParameterCondition(methodKey != Guid.Empty, "methodKey");
+            Ensure.ParameterNotNullOrEmpty(name, "name");
+            Ensure.ParameterNotNullOrEmpty(fromAddress, "fromAddress");            
 
             var message = new NotificationMessage(methodKey, name, fromAddress)
             {

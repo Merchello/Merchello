@@ -47,8 +47,8 @@
         /// </param>
         public NumericalValueFilterConstraintVisitor(decimal target, string op, string property)
         {            
-            Mandate.ParameterNotNullOrEmpty(property, "property");
-            Mandate.ParameterCondition(property.Equals("quantity") || property.Equals("price"), "property must be 'quantity' or 'price'");
+            Ensure.ParameterNotNullOrEmpty(property, "property");
+            Ensure.ParameterCondition(property.Equals("quantity") || property.Equals("price"), "property must be 'quantity' or 'price'");
             _property = property;
             this._operator = op;
             _target = target;

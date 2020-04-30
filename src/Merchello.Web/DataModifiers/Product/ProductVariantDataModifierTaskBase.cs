@@ -24,7 +24,7 @@
         /// </param>
         protected ProductVariantDataModifierTaskBase(IMerchelloContext merchelloContext)
         {
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
             this._merchelloContext = merchelloContext;
         }
 

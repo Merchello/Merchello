@@ -45,7 +45,7 @@
         internal ReportApiControllerResolver(IMerchelloContext merchelloContext, IEnumerable<Type> value)
             : base(value)
         {  
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
             
             _merchelloContext = merchelloContext;
         }

@@ -29,8 +29,8 @@
 
         public OfferConstraintChainTask(OfferConstraintComponentBase<T> component, ICustomerBase customer)
         {
-            Mandate.ParameterNotNull(component, "component");
-            Mandate.ParameterNotNull(customer, "customer");
+            Ensure.ParameterNotNull(component, "component");
+            Ensure.ParameterNotNull(customer, "customer");
 
             _component = component;
             _customer = customer;

@@ -21,8 +21,8 @@
         /// </param>
         public GatewayMethodEditorAttribute(string title, string editorView)
         {
-            Mandate.ParameterNotNullOrEmpty(title, "title");
-            Mandate.ParameterNotNullOrEmpty(editorView, "editorView");
+            Ensure.ParameterNotNullOrEmpty(title, "title");
+            Ensure.ParameterNotNullOrEmpty(editorView, "editorView");
 
             Title = title;
             Description = string.Empty;
@@ -43,9 +43,9 @@
         /// </param>
         public GatewayMethodEditorAttribute(string title, string description, string editorView)
         {            
-            Mandate.ParameterNotNullOrEmpty(title, "title");
-            Mandate.ParameterNotNullOrEmpty(description, "description");
-            Mandate.ParameterNotNullOrEmpty(editorView, "editorView");
+            Ensure.ParameterNotNullOrEmpty(title, "title");
+            Ensure.ParameterNotNullOrEmpty(description, "description");
+            Ensure.ParameterNotNullOrEmpty(editorView, "editorView");
 
             Title = title;
             Description = description;

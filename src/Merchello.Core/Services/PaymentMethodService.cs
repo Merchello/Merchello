@@ -109,9 +109,9 @@
         /// <returns><see cref="Attempt"/> indicating whether or not the creation of the <see cref="IPaymentMethod"/> with respective success or fail</returns>
         internal Attempt<IPaymentMethod> CreatePaymentMethodWithKey(Guid providerKey, string name, string description, string paymentCode, bool raiseEvents = true)
         {
-            Mandate.ParameterCondition(!Guid.Empty.Equals(providerKey), "providerKey");
-            Mandate.ParameterNotNullOrEmpty(name, "name");
-            Mandate.ParameterNotNullOrEmpty(paymentCode, "paymentCode");
+            Ensure.ParameterCondition(!Guid.Empty.Equals(providerKey), "providerKey");
+            Ensure.ParameterNotNullOrEmpty(name, "name");
+            Ensure.ParameterNotNullOrEmpty(paymentCode, "paymentCode");
 
             if (GetPaymentMethodByPaymentCode(providerKey, paymentCode) != null) return Attempt<IPaymentMethod>.Fail(new ConstraintException("A PaymentMethod already exists for the provider for the paymentCode '" + paymentCode + "'"));
 

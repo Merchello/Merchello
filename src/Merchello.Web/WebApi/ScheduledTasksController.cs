@@ -39,7 +39,7 @@
         /// </param>
         public ScheduledTasksApiController(IMerchelloContext merchelloContext)
         {
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
             _anonymousCustomerService = ((ServiceContext)merchelloContext.Services).AnonymousCustomerService;
         }
 

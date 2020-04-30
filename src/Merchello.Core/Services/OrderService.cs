@@ -149,8 +149,8 @@ namespace Merchello.Core.Services
         public OrderService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory, IStoreSettingService storeSettingService, IShipmentService shipmentService)
             : base(provider, repositoryFactory, logger, eventMessagesFactory)
         {
-            Mandate.ParameterNotNull(storeSettingService, "storeSettingService");
-            Mandate.ParameterNotNull(shipmentService, "shipmentService");
+            Ensure.ParameterNotNull(storeSettingService, "storeSettingService");
+            Ensure.ParameterNotNull(shipmentService, "shipmentService");
             _storeSettingService = storeSettingService;
             _shipmentService = shipmentService;
         }
@@ -361,9 +361,9 @@ namespace Merchello.Core.Services
         /// </remarks>
         public IOrder CreateOrder(Guid orderStatusKey, Guid invoiceKey, int orderNumber, bool raiseEvents = true)
         {
-            Mandate.ParameterCondition(!Guid.Empty.Equals(orderStatusKey), "orderStatusKey");
-            Mandate.ParameterCondition(!Guid.Empty.Equals(invoiceKey), "invoiceKey");
-            Mandate.ParameterCondition(orderNumber >= 0, "orderNumber must be greater than or equal to 0");
+            Ensure.ParameterCondition(!Guid.Empty.Equals(orderStatusKey), "orderStatusKey");
+            Ensure.ParameterCondition(!Guid.Empty.Equals(invoiceKey), "invoiceKey");
+            Ensure.ParameterCondition(orderNumber >= 0, "orderNumber must be greater than or equal to 0");
 
             var status = GetOrderStatusByKey(orderStatusKey);
 
@@ -395,8 +395,8 @@ namespace Merchello.Core.Services
         /// <returns><see cref="IOrder"/></returns>
         public IOrder CreateOrderWithKey(Guid orderStatusKey, Guid invoiceKey, bool raiseEvents = true)
         {
-            Mandate.ParameterCondition(!Guid.Empty.Equals(orderStatusKey), "orderStatusKey");
-            Mandate.ParameterCondition(!Guid.Empty.Equals(invoiceKey), "invoiceKey");
+            Ensure.ParameterCondition(!Guid.Empty.Equals(orderStatusKey), "orderStatusKey");
+            Ensure.ParameterCondition(!Guid.Empty.Equals(invoiceKey), "invoiceKey");
 
             var status = GetOrderStatusByKey(orderStatusKey);
 

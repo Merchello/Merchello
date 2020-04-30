@@ -66,10 +66,10 @@
         /// </param>
         public CheckoutContext(ICustomerBase customer, IItemCache itemCache, IMerchelloContext merchelloContext, ICheckoutContextSettings settings)
         {
-            Mandate.ParameterNotNull(customer, "customer");
-            Mandate.ParameterNotNull(itemCache, "itemCache");
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
-            Mandate.ParameterNotNull(settings, "settings");
+            Ensure.ParameterNotNull(customer, "customer");
+            Ensure.ParameterNotNull(itemCache, "itemCache");
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterNotNull(settings, "settings");
 
             this.MerchelloContext = merchelloContext;
             this.ItemCache = itemCache;

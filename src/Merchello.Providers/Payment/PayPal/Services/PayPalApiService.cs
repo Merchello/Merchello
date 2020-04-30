@@ -32,7 +32,7 @@
         public PayPalApiService(PayPalProviderSettings settings)
             : base(settings)
         {
-            Mandate.ParameterNotNull(settings, "settings");
+            Ensure.ParameterNotNull(settings, "settings");
             _settings = settings;
 
             this.Initialize();

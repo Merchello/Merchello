@@ -83,8 +83,8 @@
         /// <returns>The <see cref="IGatewayProviderSettings"/></returns>
         internal IGatewayProviderSettings BuildEntity(Type t, GatewayProviderType gatewayProviderType)
         {
-            Mandate.ParameterNotNull(t, "Type t cannot be null");
-            Mandate.ParameterCondition(t.GetCustomAttribute<GatewayProviderActivationAttribute>(false) != null, "Type t must have a GatewayProviderActivationAttribute");
+            Ensure.ParameterNotNull(t, "Type t cannot be null");
+            Ensure.ParameterCondition(t.GetCustomAttribute<GatewayProviderActivationAttribute>(false) != null, "Type t must have a GatewayProviderActivationAttribute");
 
             var att = t.GetCustomAttribute<GatewayProviderActivationAttribute>(false);
                            

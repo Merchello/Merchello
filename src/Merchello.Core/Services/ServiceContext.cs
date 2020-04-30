@@ -200,10 +200,10 @@
             ILogger logger,
             IEventMessagesFactory eventMessagesFactory)
         {
-            Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
-            Mandate.ParameterNotNull(dbUnitOfWorkProvider, "dbUnitOfWorkProvider");
-            Mandate.ParameterNotNull(logger, "logger");
-            Mandate.ParameterNotNull(eventMessagesFactory, "eventMessagesFactory");
+            Ensure.ParameterNotNull(repositoryFactory, "repositoryFactory");
+            Ensure.ParameterNotNull(dbUnitOfWorkProvider, "dbUnitOfWorkProvider");
+            Ensure.ParameterNotNull(logger, "logger");
+            Ensure.ParameterNotNull(eventMessagesFactory, "eventMessagesFactory");
 
             _repositoryFactory = repositoryFactory;
             DatabaseUnitOfWorkProvider = dbUnitOfWorkProvider;

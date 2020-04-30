@@ -52,7 +52,7 @@
         /// </param>
         protected WishListControllerBase(ItemCacheModelFactory<TItemCacheModel, TLineItemModel> itemCacheModelFactory)
         {
-            Mandate.ParameterNotNull(itemCacheModelFactory, "itemCacheModelFactory");
+            Ensure.ParameterNotNull(itemCacheModelFactory, "itemCacheModelFactory");
             _itemCacheModelFactory = itemCacheModelFactory;
 
             this.Initialize();

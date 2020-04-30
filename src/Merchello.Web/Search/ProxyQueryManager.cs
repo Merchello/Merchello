@@ -31,7 +31,7 @@
         /// </remarks>
         internal ProxyQueryManager(ICacheProvider cache)
         {
-            Mandate.ParameterNotNull(cache, "cache");
+            Ensure.ParameterNotNull(cache, "cache");
 
             this._cache = cache;
         }

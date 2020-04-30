@@ -28,7 +28,7 @@
         internal Basket(IItemCache itemCache, ICustomerBase customer)
             : base(itemCache, customer)
         {
-            Mandate.ParameterCondition(itemCache.ItemCacheType == ItemCacheType.Basket, "itemCache");
+            Ensure.ParameterCondition(itemCache.ItemCacheType == ItemCacheType.Basket, "itemCache");
         }
 
         /// <summary>
@@ -100,8 +100,8 @@
         /// <returns>The <see cref="IBasket"/></returns>
         internal static IBasket GetBasket(IMerchelloContext merchelloContext, ICustomerBase customer)
         {
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
-            Mandate.ParameterNotNull(customer, "customer");
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterNotNull(customer, "customer");
 
             var cacheKey = MakeCacheKey(customer);
 

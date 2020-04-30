@@ -26,7 +26,7 @@
         /// </param>
         protected InvoiceCreationAttemptChainTaskBase(SalePreparationBase salePreparation)
         {
-            Mandate.ParameterNotNull(salePreparation, "salePreparation");
+            Ensure.ParameterNotNull(salePreparation, "salePreparation");
 
             this._salePreparation = salePreparation;
         }

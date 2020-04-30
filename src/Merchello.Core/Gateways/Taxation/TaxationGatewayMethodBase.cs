@@ -22,7 +22,7 @@
         /// </param>
         protected TaxationGatewayMethodBase(ITaxMethod taxMethod)
         {
-            Mandate.ParameterNotNull(taxMethod, "taxMethod");
+            Ensure.ParameterNotNull(taxMethod, "taxMethod");
 
             _taxMethod = taxMethod;
         }

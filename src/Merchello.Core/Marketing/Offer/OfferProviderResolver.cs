@@ -45,7 +45,7 @@
         public OfferProviderResolver(IEnumerable<Type> value, IOfferSettingsService offerSettingsService)
             : base(value)
         {
-            Mandate.ParameterNotNull(offerSettingsService, "offerSettingsService");
+            Ensure.ParameterNotNull(offerSettingsService, "offerSettingsService");
             _offerSettingsService = offerSettingsService;
 
             BuildOfferProviderCache();

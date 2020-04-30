@@ -26,7 +26,7 @@
         /// </param>
         public AttemptChainTaskHandler(IAttemptChainTask<T> task)
         {
-            Mandate.ParameterNotNull(task, "task");
+            Ensure.ParameterNotNull(task, "task");
 
             _task = task;
 

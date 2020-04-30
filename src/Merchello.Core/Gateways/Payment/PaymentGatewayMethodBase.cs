@@ -38,8 +38,8 @@
         /// </param>
         protected PaymentGatewayMethodBase(IGatewayProviderService gatewayProviderService, IPaymentMethod paymentMethod)
         {
-            Mandate.ParameterNotNull(gatewayProviderService, "gatewayProviderService");
-            Mandate.ParameterNotNull(paymentMethod, "paymentMethod");
+            Ensure.ParameterNotNull(gatewayProviderService, "gatewayProviderService");
+            Ensure.ParameterNotNull(paymentMethod, "paymentMethod");
 
             _gatewayProviderService = gatewayProviderService;
             _paymentMethod = paymentMethod;
@@ -123,7 +123,7 @@
         /// <returns>A <see cref="IPaymentResult"/></returns>
         public virtual IPaymentResult AuthorizePayment(IInvoice invoice, ProcessorArgumentCollection args)
         {
-            Mandate.ParameterNotNull(invoice, "invoice");
+            Ensure.ParameterNotNull(invoice, "invoice");
 
             var operationData = new AuthorizeOperationData()
             {
@@ -164,7 +164,7 @@
         /// <returns>A <see cref="IPaymentResult"/></returns>
         public virtual IPaymentResult AuthorizeCapturePayment(IInvoice invoice, decimal amount, ProcessorArgumentCollection args)
         {
-            Mandate.ParameterNotNull(invoice, "invoice");
+            Ensure.ParameterNotNull(invoice, "invoice");
 
             var operationData = new AuthorizeOperationData()
                 {
@@ -209,7 +209,7 @@
         /// <returns>A <see cref="IPaymentResult"/></returns>
         public virtual IPaymentResult CapturePayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args)
         {
-            Mandate.ParameterNotNull(invoice, "invoice");
+            Ensure.ParameterNotNull(invoice, "invoice");
 
             var operationData = new PaymentOperationData()
                                     {
@@ -256,7 +256,7 @@
         /// <returns>A <see cref="IPaymentResult"/></returns>
         public virtual IPaymentResult RefundPayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args)
         {
-            Mandate.ParameterNotNull(invoice, "invoice");
+            Ensure.ParameterNotNull(invoice, "invoice");
             if (!invoice.HasIdentity) return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("Cannot refund a payment on an invoice that cannot have payments")), invoice, false);
 
             var operationData = new PaymentOperationData()
@@ -294,7 +294,7 @@
         /// <returns>A <see cref="IPaymentResult"/></returns>
         public virtual IPaymentResult VoidPayment(IInvoice invoice, IPayment payment, ProcessorArgumentCollection args)
         {
-            Mandate.ParameterNotNull(invoice, "invoice");
+            Ensure.ParameterNotNull(invoice, "invoice");
             if (!invoice.HasIdentity) return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("Cannot void a payment on an invoice that cannot have payments")), invoice, false);
 
             var operationData = new PaymentOperationData()

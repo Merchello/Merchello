@@ -44,7 +44,7 @@
         /// </param>
         public PayPalPaymentDetailsTypeFactory(PayPalFactorySettings settings)
         {
-            Mandate.ParameterNotNull(settings, "settings");
+            Ensure.ParameterNotNull(settings, "settings");
             _settings = settings;
         }
 

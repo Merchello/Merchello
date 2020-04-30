@@ -19,7 +19,7 @@
         public MonitorResolver(INotificationContext notificationContext, IEnumerable<Type> value)
             : base(value)
         {
-            Mandate.ParameterNotNull(notificationContext, "notificationContext");
+            Ensure.ParameterNotNull(notificationContext, "notificationContext");
             _notificationContext = notificationContext;
 
             BuildCache();

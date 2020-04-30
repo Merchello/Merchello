@@ -36,7 +36,7 @@
         /// </param>
         internal CheckoutInvoiceBuilderChain(ICheckoutManagerBase checkoutManager)
         {
-            Mandate.ParameterNotNull(checkoutManager, "checkoutManager");
+            Ensure.ParameterNotNull(checkoutManager, "checkoutManager");
 
             _checkoutManager = checkoutManager;
 

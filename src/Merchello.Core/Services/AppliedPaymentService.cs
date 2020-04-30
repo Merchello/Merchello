@@ -351,9 +351,9 @@
         /// </returns>
         internal IAppliedPayment CreateAppliedPaymentWithKey(Guid paymentKey, Guid invoiceKey, Guid appliedPaymentTfKey, string description, decimal amount, bool raiseEvents = true)
         {
-            Mandate.ParameterCondition(!Guid.Empty.Equals(paymentKey), "paymentKey");
-            Mandate.ParameterCondition(!Guid.Empty.Equals(invoiceKey), "invoiceKey");
-            Mandate.ParameterCondition(!Guid.Empty.Equals(appliedPaymentTfKey), "appliedPaymentTfKey");
+            Ensure.ParameterCondition(!Guid.Empty.Equals(paymentKey), "paymentKey");
+            Ensure.ParameterCondition(!Guid.Empty.Equals(invoiceKey), "invoiceKey");
+            Ensure.ParameterCondition(!Guid.Empty.Equals(appliedPaymentTfKey), "appliedPaymentTfKey");
 
             var appliedPayment = new AppliedPayment(paymentKey, invoiceKey, appliedPaymentTfKey)
             {

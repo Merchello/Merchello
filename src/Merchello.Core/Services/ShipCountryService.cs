@@ -119,7 +119,7 @@
         public ShipCountryService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory, IStoreSettingService storeSettingService)
             : base(provider, repositoryFactory, logger, eventMessagesFactory)
         {
-            Mandate.ParameterNotNull(storeSettingService, "storeSettingService");
+            Ensure.ParameterNotNull(storeSettingService, "storeSettingService");
             _storeSettingService = storeSettingService;
         }
 
@@ -167,7 +167,7 @@
         /// </returns>
         internal Attempt<IShipCountry> CreateShipCountryWithKey(Guid warehouseCatalogKey, ICountry country, bool raiseEvents = true)
         {
-            Mandate.ParameterCondition(warehouseCatalogKey != Guid.Empty, "warehouseCatalog");
+            Ensure.ParameterCondition(warehouseCatalogKey != Guid.Empty, "warehouseCatalog");
             if (country == null) return Attempt<IShipCountry>.Fail(new ArgumentNullException("country"));
 
             var shipCountry = new ShipCountry(warehouseCatalogKey, country);

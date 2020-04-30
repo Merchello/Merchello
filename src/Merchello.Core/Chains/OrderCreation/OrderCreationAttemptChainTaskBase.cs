@@ -22,7 +22,7 @@
         /// </param>
         protected OrderCreationAttemptChainTaskBase(IInvoice invoice)
         {
-            Mandate.ParameterNotNull(invoice, "invoice");
+            Ensure.ParameterNotNull(invoice, "invoice");
 
             _invoice = invoice;
         }

@@ -45,7 +45,7 @@
         /// </param>
         internal EntityCollectionProviderResolver(IEnumerable<Type> values, IMerchelloContext merchelloContext)
         {
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
             _merchelloContext = merchelloContext;
             _instanceTypes = values.ToList();          
         }

@@ -68,8 +68,8 @@
         /// </param>
         internal GatewayContext(IServiceContext serviceContext, IGatewayProviderResolver resolver)
         {
-            Mandate.ParameterNotNull(serviceContext, "serviceContext");
-            Mandate.ParameterNotNull(resolver, "resolver");
+            Ensure.ParameterNotNull(serviceContext, "serviceContext");
+            Ensure.ParameterNotNull(resolver, "resolver");
 
             _gatewayProviderService = serviceContext.GatewayProviderService;
             _resolver = resolver;

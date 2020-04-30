@@ -111,7 +111,7 @@
         internal WarehouseCatalogService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory, IProductVariantService productVariantService)
             : base(provider, repositoryFactory, logger, eventMessagesFactory)
         {
-            Mandate.ParameterNotNull(productVariantService, "productVariantService");
+            Ensure.ParameterNotNull(productVariantService, "productVariantService");
             _productVariantService = productVariantService;
         }
 
@@ -185,7 +185,7 @@
             string description = "",
             bool raiseEvents = true)
         {
-            Mandate.ParameterCondition(!warehouseKey.Equals(Guid.Empty), "warehouseKey");
+            Ensure.ParameterCondition(!warehouseKey.Equals(Guid.Empty), "warehouseKey");
 
             var catalog = new WarehouseCatalog(warehouseKey) { Name = name, Description = description };
 

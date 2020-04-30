@@ -29,11 +29,11 @@
         /// </param>
         internal MigrationResolver(ILogger logger, IEnumerable<Type> instanceTypes)
         {
-            Mandate.ParameterNotNull(logger, "logger");
+            Ensure.ParameterNotNull(logger, "logger");
             _logger = logger;
 
             // ReSharper disable PossibleMultipleEnumeration
-            Mandate.ParameterNotNull(instanceTypes, "instanceTypes");
+            Ensure.ParameterNotNull(instanceTypes, "instanceTypes");
             this.InstanceTypes = instanceTypes;
             // ReSharper restore PossibleMultipleEnumeration
         }

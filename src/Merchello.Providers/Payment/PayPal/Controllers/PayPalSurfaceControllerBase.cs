@@ -91,7 +91,7 @@
         /// </exception>
         protected virtual IInvoice GetInvoice(Guid invoiceKey)
         {
-            Mandate.ParameterCondition(!Guid.Empty.Equals(invoiceKey), "invoiceKey");
+            Ensure.ParameterCondition(!Guid.Empty.Equals(invoiceKey), "invoiceKey");
             var invoice = InvoiceService.GetByKey(invoiceKey);
             if (invoice == null)
             {
@@ -115,7 +115,7 @@
         /// </exception>
         protected virtual IPayment GetPayment(Guid paymentKey)
         {
-            Mandate.ParameterCondition(!Guid.Empty.Equals(paymentKey), "paymentKey");
+            Ensure.ParameterCondition(!Guid.Empty.Equals(paymentKey), "paymentKey");
             var payment = PaymentService.GetByKey(paymentKey);
             if (payment == null)
             {

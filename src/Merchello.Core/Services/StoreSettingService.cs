@@ -242,9 +242,9 @@
         /// <returns><see cref="IStoreSetting"/></returns>
         public IStoreSetting CreateStoreSettingWithKey(string name, string value, string typeName, bool raiseEvents)
         {
-            Mandate.ParameterNotNullOrEmpty(name, "name");
-            Mandate.ParameterNotNullOrEmpty(value, "value");
-            Mandate.ParameterNotNullOrEmpty(typeName, "typeName");
+            Ensure.ParameterNotNullOrEmpty(name, "name");
+            Ensure.ParameterNotNullOrEmpty(value, "value");
+            Ensure.ParameterNotNullOrEmpty(typeName, "typeName");
 
             var storeSetting = new StoreSetting()
             {

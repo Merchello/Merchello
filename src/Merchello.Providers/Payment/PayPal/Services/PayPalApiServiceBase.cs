@@ -28,7 +28,7 @@
         /// </param>
         protected PayPalApiServiceBase(PayPalProviderSettings settings)
         {
-            Mandate.ParameterNotNull(settings, "settings");
+            Ensure.ParameterNotNull(settings, "settings");
             _settings = settings;
         }
 

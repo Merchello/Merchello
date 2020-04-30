@@ -69,10 +69,10 @@
         /// </param>
         internal SalePreparationBase(IMerchelloContext merchelloContext, IItemCache itemCache, ICustomerBase customer)
         {                       
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
-            Mandate.ParameterNotNull(itemCache, "ItemCache");
-            Mandate.ParameterCondition(itemCache.ItemCacheType == ItemCacheType.Checkout, "itemCache");
-            Mandate.ParameterNotNull(customer, "customer");
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterNotNull(itemCache, "ItemCache");
+            Ensure.ParameterCondition(itemCache.ItemCacheType == ItemCacheType.Checkout, "itemCache");
+            Ensure.ParameterNotNull(customer, "customer");
 
             _merchelloContext = merchelloContext;
             _customer = customer;
@@ -301,8 +301,8 @@
         /// </remarks>
         public void AddItem(ILineItem lineItem)
         {
-            Mandate.ParameterNotNullOrEmpty(lineItem.Sku, "The line item must have a sku");
-            Mandate.ParameterNotNullOrEmpty(lineItem.Name, "The line item must have a name");
+            Ensure.ParameterNotNullOrEmpty(lineItem.Sku, "The line item must have a sku");
+            Ensure.ParameterNotNullOrEmpty(lineItem.Name, "The line item must have a name");
 
             if (lineItem.Quantity <= 0) lineItem.Quantity = 1;
             if (lineItem.Price < 0) lineItem.Price = 0;
@@ -384,7 +384,7 @@
         /// <returns>The <see cref="IPaymentResult"/></returns>
         public virtual IPaymentResult AuthorizePayment(IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args)
         {
-            Mandate.ParameterNotNull(paymentGatewayMethod, "paymentGatewayMethod");
+            Ensure.ParameterNotNull(paymentGatewayMethod, "paymentGatewayMethod");
 
             if (!IsReadyToInvoice()) return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("SalesPreparation is not ready to invoice")), null, false);
 
@@ -441,7 +441,7 @@
         /// <returns>A <see cref="IPaymentResult"/></returns>
         public virtual IPaymentResult AuthorizeCapturePayment(IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args)
         {
-            Mandate.ParameterNotNull(paymentGatewayMethod, "paymentGatewayMethod");
+            Ensure.ParameterNotNull(paymentGatewayMethod, "paymentGatewayMethod");
 
             if (!IsReadyToInvoice()) return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("SalesPreparation is not ready to invoice")), null, false);
 

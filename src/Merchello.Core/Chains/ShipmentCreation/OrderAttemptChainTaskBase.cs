@@ -40,9 +40,9 @@
         /// </param>
         protected OrderAttemptChainTaskBase(IMerchelloContext merchelloContext, IOrder order, IEnumerable<Guid> keysToShip)
         {
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
-            Mandate.ParameterNotNull(order, "order");
-            Mandate.ParameterNotNull(keysToShip, "keysToShip");
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterNotNull(order, "order");
+            Ensure.ParameterNotNull(keysToShip, "keysToShip");
 
             _merchelloContext = merchelloContext;
             _order = order;

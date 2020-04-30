@@ -68,8 +68,8 @@
         /// </param>
         protected CustomerItemCacheBase(IItemCache itemCache, ICustomerBase customer)
         {
-            Mandate.ParameterNotNull(itemCache, "ItemCache");
-            Mandate.ParameterNotNull(customer, "customer");
+            Ensure.ParameterNotNull(itemCache, "ItemCache");
+            Ensure.ParameterNotNull(customer, "customer");
             _customer = customer;
             _itemCache = itemCache;
             EnableDataModifiers = true;

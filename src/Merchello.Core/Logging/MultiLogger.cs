@@ -59,7 +59,7 @@
         public MultiLogger(ILogger logger, IRemoteLogger remoteRemoteLogger)
             : base()
         {
-            Mandate.ParameterNotNull(logger, "logger");
+            Ensure.ParameterNotNull(logger, "logger");
             _umbracoLogger = logger;
 
             if (remoteRemoteLogger != null)

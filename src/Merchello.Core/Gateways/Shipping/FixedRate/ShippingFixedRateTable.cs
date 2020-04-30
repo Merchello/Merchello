@@ -53,8 +53,8 @@
             IsTest = false;
             var shipRateTiers = rows as IShipRateTier[] ?? rows.ToArray();
 
-            Mandate.ParameterCondition(shipMethodKey != Guid.Empty, "shipMethodKey");
-            Mandate.ParameterNotNull(shipRateTiers, "rows");
+            Ensure.ParameterCondition(shipMethodKey != Guid.Empty, "shipMethodKey");
+            Ensure.ParameterNotNull(shipRateTiers, "rows");
             
             _shipMethodKey = shipMethodKey;
             _shipRateTiers = new List<IShipRateTier>();

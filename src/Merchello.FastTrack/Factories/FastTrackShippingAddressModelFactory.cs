@@ -36,7 +36,7 @@
         /// </param>
         public FastTrackShippingAddressModelFactory(IShippingContext shippingContext)
         {
-            Mandate.ParameterNotNull(shippingContext, "shippingContext");
+            Ensure.ParameterNotNull(shippingContext, "shippingContext");
             _shippingContext = shippingContext;
         }
 

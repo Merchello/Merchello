@@ -45,7 +45,7 @@
         public BraintreeSubscriptionRecordPaymentMethod(IGatewayProviderService gatewayProviderService, IPaymentMethod paymentMethod, IBraintreeApiService braintreeApiService)
             : base(gatewayProviderService, paymentMethod)
         {
-            Mandate.ParameterNotNull(braintreeApiService, "braintreeApiService");
+            Ensure.ParameterNotNull(braintreeApiService, "braintreeApiService");
 
             this._braintreeApiService = braintreeApiService;
         }

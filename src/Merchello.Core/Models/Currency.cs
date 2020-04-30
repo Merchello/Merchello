@@ -26,9 +26,9 @@
         /// </param>
         public Currency(string currencyCode, string symbol, string name)
         {
-            Mandate.ParameterNotNullOrEmpty(currencyCode, "currencyCode");
-            Mandate.ParameterNotNullOrEmpty(symbol, "symbol");
-            Mandate.ParameterNotNullOrEmpty(name, "name");
+            Ensure.ParameterNotNullOrEmpty(currencyCode, "currencyCode");
+            Ensure.ParameterNotNullOrEmpty(symbol, "symbol");
+            Ensure.ParameterNotNullOrEmpty(name, "name");
 
             CurrencyCode = currencyCode;
             Symbol = symbol;

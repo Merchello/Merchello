@@ -38,7 +38,7 @@
         /// </param>
         public BasketItemInventoryValidation(IProductVariantService productVariantService)
         {
-            Mandate.ParameterNotNull(productVariantService, "productVariantService");
+            Ensure.ParameterNotNull(productVariantService, "productVariantService");
 
             _productVariantService = productVariantService;
             this._failedInventoryValidation = new List<InventoryValidation>();

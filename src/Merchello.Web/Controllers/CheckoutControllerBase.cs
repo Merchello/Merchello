@@ -33,7 +33,7 @@
         /// </param>
         protected CheckoutControllerBase(CheckoutContextSettingsFactory contextSettingsFactory)
         {
-            Mandate.ParameterNotNull(contextSettingsFactory, "checkoutContextSettingsFactory");
+            Ensure.ParameterNotNull(contextSettingsFactory, "checkoutContextSettingsFactory");
             this._contextSettingsFactory = contextSettingsFactory;
         }
 

@@ -88,12 +88,12 @@
         public ShipmentBuilderChain(IMerchelloContext merchelloContext, IOrder order, IEnumerable<Guid> keysToShip, Guid shipMethodKey, Guid shipmentStatusKey, string trackingNumber, string trackingUrl, string carrier)
         {
             var toShip = keysToShip as Guid[] ?? keysToShip.ToArray();
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
-            Mandate.ParameterNotNull(order, "order");
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterNotNull(order, "order");
             
-            Mandate.ParameterNotNull(toShip, "keysToShip");
-            Mandate.ParameterCondition(!shipMethodKey.Equals(Guid.Empty), "shipMethodKey");
-            Mandate.ParameterCondition(!shipmentStatusKey.Equals(Guid.Empty), "shipmentStatusKey");
+            Ensure.ParameterNotNull(toShip, "keysToShip");
+            Ensure.ParameterCondition(!shipMethodKey.Equals(Guid.Empty), "shipMethodKey");
+            Ensure.ParameterCondition(!shipmentStatusKey.Equals(Guid.Empty), "shipmentStatusKey");
 
             _merchelloContext = merchelloContext;
             _order = order;

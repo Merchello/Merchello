@@ -47,7 +47,7 @@
         public AuditLogApiController(IMerchelloContext merchelloContext)
             : base(merchelloContext)
         {
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
             _auditLogService = merchelloContext.Services.AuditLogService;
             _merchelloHelper = new MerchelloHelper(merchelloContext, false);
         }

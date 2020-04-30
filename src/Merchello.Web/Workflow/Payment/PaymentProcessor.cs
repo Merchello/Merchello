@@ -59,7 +59,7 @@
         /// </param>
         public PaymentProcessor(IMerchelloContext merchelloContext, PaymentRequestDisplay request)
         {
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
             
             this._merchelloContext = merchelloContext;
 

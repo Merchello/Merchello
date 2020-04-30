@@ -33,7 +33,7 @@
         public FixedRateTaxCalculationStrategy(IInvoice invoice, IAddress taxAddress, ITaxMethod taxMethod)
             : base(invoice, taxAddress)
         {
-            Mandate.ParameterNotNull(taxMethod, "countryTaxRate");
+            Ensure.ParameterNotNull(taxMethod, "countryTaxRate");
             
             _taxMethod = taxMethod;
         }

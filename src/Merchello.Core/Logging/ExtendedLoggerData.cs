@@ -45,7 +45,7 @@
         /// </param>
         public ExtendedLoggerData(ILogger logger)
         {
-            Mandate.ParameterNotNull(logger, "logger");
+            Ensure.ParameterNotNull(logger, "logger");
             _logger = logger;
         }
 

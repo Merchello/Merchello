@@ -185,7 +185,7 @@
             string name,
             bool raiseEvents = true)
         {
-            Mandate.ParameterCondition(!Guid.Empty.Equals(entityTfKey), "entityTfKey");           
+            Ensure.ParameterCondition(!Guid.Empty.Equals(entityTfKey), "entityTfKey");           
 
             var dt = new DetachedContentType(entityTfKey, contentTypeKey.Equals(Guid.Empty) ? (Guid?)null : contentTypeKey) { Name = name };
 

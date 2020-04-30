@@ -39,9 +39,9 @@
         /// </param>
         protected ShippingGatewayMethodBase(IGatewayResource gatewayResource, IShipMethod shipMethod, IShipCountry shipCountry)
         {
-            Mandate.ParameterNotNull(gatewayResource, "gatewayResource");
-            Mandate.ParameterNotNull(shipMethod, "shipMethod");
-            Mandate.ParameterNotNull(shipCountry, "shipCountry");
+            Ensure.ParameterNotNull(gatewayResource, "gatewayResource");
+            Ensure.ParameterNotNull(shipMethod, "shipMethod");
+            Ensure.ParameterNotNull(shipCountry, "shipCountry");
 
             _gatewayResource = gatewayResource;
             _shipMethod = shipMethod;

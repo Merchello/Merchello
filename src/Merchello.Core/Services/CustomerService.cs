@@ -206,10 +206,10 @@
             IPaymentService paymentService)
             : base(provider, repositoryFactory, logger, eventMessagesFactory)
         {
-            Mandate.ParameterNotNull(anonymousCustomerService, "anonymousCustomerService");
-            Mandate.ParameterNotNull(customerAddressService, "customerAddressService");
-            Mandate.ParameterNotNull(invoiceService, "invoiceServie");
-            Mandate.ParameterNotNull(paymentService, "paymentService");
+            Ensure.ParameterNotNull(anonymousCustomerService, "anonymousCustomerService");
+            Ensure.ParameterNotNull(customerAddressService, "customerAddressService");
+            Ensure.ParameterNotNull(invoiceService, "invoiceServie");
+            Ensure.ParameterNotNull(paymentService, "paymentService");
             _anonymousCustomerService = anonymousCustomerService;
             _customerAddressService = customerAddressService;
             _invoiceService = invoiceService;
@@ -267,7 +267,7 @@
         /// <returns>The <see cref="ICustomer"/></returns>
         public ICustomer CreateCustomer(string loginName, string firstName, string lastName, string email)
         {
-            Mandate.ParameterNotNullOrEmpty(loginName, "loginName");
+            Ensure.ParameterNotNullOrEmpty(loginName, "loginName");
             var customer = new Customer(loginName)
                 {
                     FirstName = firstName,
@@ -305,7 +305,7 @@
         /// </returns>
         public ICustomer CreateCustomerWithKey(string loginName, string firstName, string lastName, string email)
         {
-            Mandate.ParameterNotNullOrEmpty(loginName, "loginName");
+            Ensure.ParameterNotNullOrEmpty(loginName, "loginName");
 
             var customer = new Customer(loginName)
             {

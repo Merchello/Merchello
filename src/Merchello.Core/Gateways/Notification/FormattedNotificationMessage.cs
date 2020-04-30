@@ -48,8 +48,8 @@
         /// </param>
         public FormattedNotificationMessage(INotificationMessage notificationMessage, IFormatter formatter)
         {
-            Mandate.ParameterNotNull(formatter, "formatter");
-            Mandate.ParameterNotNull(notificationMessage, "message");
+            Ensure.ParameterNotNull(formatter, "formatter");
+            Ensure.ParameterNotNull(notificationMessage, "message");
 
             _notificationMessage = notificationMessage;
             _formatter = formatter;

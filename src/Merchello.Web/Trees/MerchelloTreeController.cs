@@ -85,7 +85,7 @@
         public MerchelloTreeController(UmbracoContext context)
         {
             if (ApplicationContext == null) throw new NullReferenceException("Umbraco ApplicationContent is null");
-            Mandate.ParameterNotNull(context, "context");
+            Ensure.ParameterNotNull(context, "context");
 
             //// http://issues.merchello.com/youtrack/issue/M-732
             _textService = ApplicationContext.Services.TextService;

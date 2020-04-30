@@ -186,9 +186,9 @@
             IStoreSettingService storeSettingService)
             : base(provider, repositoryFactory, logger, eventMessagesFactory)
         {
-            Mandate.ParameterNotNull(appliedPaymentService, "appliedPaymentService");
-            Mandate.ParameterNotNull(storeSettingService, "storeSettingService");
-            Mandate.ParameterNotNull(orderService, "orderService");
+            Ensure.ParameterNotNull(appliedPaymentService, "appliedPaymentService");
+            Ensure.ParameterNotNull(storeSettingService, "storeSettingService");
+            Ensure.ParameterNotNull(orderService, "orderService");
 
             _appliedPaymentService = appliedPaymentService;
             _orderService = orderService;
@@ -272,8 +272,8 @@
         /// </remarks>
         public IInvoice CreateInvoice(Guid invoiceStatusKey, int invoiceNumber, bool raiseEvents = true)
         {
-            Mandate.ParameterCondition(Guid.Empty != invoiceStatusKey, "invoiceStatusKey");
-            Mandate.ParameterCondition(invoiceNumber >= 0, "invoiceNumber must be greater than or equal to 0");
+            Ensure.ParameterCondition(Guid.Empty != invoiceStatusKey, "invoiceStatusKey");
+            Ensure.ParameterCondition(invoiceNumber >= 0, "invoiceNumber must be greater than or equal to 0");
 
             var status = GetInvoiceStatusByKey(invoiceStatusKey);
 

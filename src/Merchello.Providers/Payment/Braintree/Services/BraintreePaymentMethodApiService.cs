@@ -67,7 +67,7 @@
         internal BraintreePaymentMethodApiService(IMerchelloContext merchelloContext, BraintreeProviderSettings settings, IBraintreeCustomerApiService customerApiService)
             : base(merchelloContext, settings)
         {
-            Mandate.ParameterNotNull(customerApiService, "customerApiProvider");
+            Ensure.ParameterNotNull(customerApiService, "customerApiProvider");
 
             this._braintreeCustomerApiService = customerApiService;
         }
@@ -237,7 +237,7 @@
         /// </returns>
         public Attempt<PaymentMethod> Update(string token, PaymentMethodRequest request)
         {
-            Mandate.ParameterNotNull(request, "request");
+            Ensure.ParameterNotNull(request, "request");
 
             Updating.RaiseEvent(new SaveEventArgs<PaymentMethodRequest>(request), this);
 

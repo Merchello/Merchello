@@ -34,8 +34,8 @@
         /// </param>
         protected CopyEntityTaskBase(IMerchelloContext merchelloContext, T original)
         {
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
-            Mandate.ParameterCondition(original is IEntity, "orginal");
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterCondition(original is IEntity, "orginal");
             _merchelloContext = merchelloContext;
             _original = original;
         }

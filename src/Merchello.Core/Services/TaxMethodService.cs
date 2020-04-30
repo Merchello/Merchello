@@ -112,7 +112,7 @@
         public TaxMethodService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory, IStoreSettingService storeSettingService)
             : base(provider, repositoryFactory, logger, eventMessagesFactory)
         {
-            Mandate.ParameterNotNull(storeSettingService, "storeSettingService");
+            Ensure.ParameterNotNull(storeSettingService, "storeSettingService");
             _storeSettingService = storeSettingService;
         }
 

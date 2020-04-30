@@ -94,9 +94,9 @@
         /// </remarks>
         public override IShippingGatewayMethod CreateShippingGatewayMethod(IGatewayResource gatewayResource, IShipCountry shipCountry, string name)
         {
-            Mandate.ParameterNotNull(gatewayResource, "gatewayResource");
-            Mandate.ParameterNotNull(shipCountry, "shipCountry");
-            Mandate.ParameterNotNullOrEmpty(name, "name");
+            Ensure.ParameterNotNull(gatewayResource, "gatewayResource");
+            Ensure.ParameterNotNull(shipCountry, "shipCountry");
+            Ensure.ParameterNotNullOrEmpty(name, "name");
 
             var attempt = GatewayProviderService.CreateShipMethodWithKey(GatewayProviderSettings.Key, shipCountry, name, gatewayResource.ServiceCode + string.Format("-{0}", Guid.NewGuid()));
             

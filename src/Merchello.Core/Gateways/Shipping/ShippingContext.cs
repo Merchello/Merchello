@@ -33,7 +33,7 @@
         public ShippingContext(IGatewayProviderService gatewayProviderService, IStoreSettingService storeSettingService, IGatewayProviderResolver resolver)
             : base(gatewayProviderService, resolver)
         {
-            Mandate.ParameterNotNull(storeSettingService, "storeSettingService");
+            Ensure.ParameterNotNull(storeSettingService, "storeSettingService");
 
             _storeSettingService = storeSettingService;
         }

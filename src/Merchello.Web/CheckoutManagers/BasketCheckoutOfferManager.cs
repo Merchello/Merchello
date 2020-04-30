@@ -39,7 +39,7 @@
         public BasketCheckoutOfferManager(ICheckoutContext context, ICheckoutPaymentManager paymentManager)
             : base(context)
         {
-            Mandate.ParameterNotNull(paymentManager, "paymentManager");
+            Ensure.ParameterNotNull(paymentManager, "paymentManager");
 
             this._paymentManager = paymentManager;
         }

@@ -12,8 +12,8 @@
     {
         public ReplaceablePattern(string alias, string pattern, string replacement)
         {
-            Mandate.ParameterNotNullOrEmpty(alias, "alias");
-            Mandate.ParameterNotNullOrEmpty(pattern, "pattern");
+            Ensure.ParameterNotNullOrEmpty(alias, "alias");
+            Ensure.ParameterNotNullOrEmpty(pattern, "pattern");
 
             Alias = alias;
             Pattern = pattern;

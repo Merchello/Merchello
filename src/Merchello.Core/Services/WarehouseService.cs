@@ -109,7 +109,7 @@
         public WarehouseService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory, IWarehouseCatalogService warehouseCatalogService)
             : base(provider, repositoryFactory, logger, eventMessagesFactory)
         {
-            Mandate.ParameterNotNull(warehouseCatalogService, "warehouseCatalogService");
+            Ensure.ParameterNotNull(warehouseCatalogService, "warehouseCatalogService");
             _warehouseCatalogService = warehouseCatalogService;
         }
 
@@ -363,7 +363,7 @@
         /// </returns>
         internal IWarehouse CreateWarehouse(string name)
         {
-            Mandate.ParameterNotNull(name, "name");
+            Ensure.ParameterNotNull(name, "name");
 
             var warehouse = new Warehouse()
             {

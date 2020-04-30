@@ -81,10 +81,10 @@
         /// </param>
         public CopyProductTaskChain(IMerchelloContext merchelloContext, IProduct original, string name, string sku)
         {
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
-            Mandate.ParameterNotNull(original, "original");
-            Mandate.ParameterNotNullOrEmpty(name, "name");
-            Mandate.ParameterNotNullOrEmpty(sku, "sku");
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterNotNull(original, "original");
+            Ensure.ParameterNotNullOrEmpty(name, "name");
+            Ensure.ParameterNotNullOrEmpty(sku, "sku");
 
             this._merchelloContext = merchelloContext;
             

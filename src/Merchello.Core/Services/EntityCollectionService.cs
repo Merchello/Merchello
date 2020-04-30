@@ -675,8 +675,8 @@
         /// </returns>
         internal IEntityCollection CreateEntityCollection(Guid entityTfKey, Guid providerKey, string name, bool raiseEvents = true)
         {
-            Mandate.ParameterCondition(!Guid.Empty.Equals(entityTfKey), "entityTfKey");
-            Mandate.ParameterCondition(!Guid.Empty.Equals(providerKey), "providerKey");
+            Ensure.ParameterCondition(!Guid.Empty.Equals(entityTfKey), "entityTfKey");
+            Ensure.ParameterCondition(!Guid.Empty.Equals(providerKey), "providerKey");
             var collection = new EntityCollection(entityTfKey, providerKey)
                                  {
                                      Name = name,

@@ -30,7 +30,7 @@
         /// </param>
         public SmtpNotificationGatewayProviderSettings(string host)
         {
-            Mandate.ParameterNotNullOrEmpty(host, "host");
+            Ensure.ParameterNotNullOrEmpty(host, "host");
             Host = host;
             Port = 25;
         }

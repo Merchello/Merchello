@@ -87,9 +87,9 @@
             string localizedNameKey = "",
             string editorView = "")
         {
-            Mandate.ParameterNotNullOrEmpty(key, "key");
-            Mandate.ParameterNotNullOrEmpty(entityTfKey, "entityTfKey");
-            Mandate.ParameterNotNullOrEmpty(name, "name");
+            Ensure.ParameterNotNullOrEmpty(key, "key");
+            Ensure.ParameterNotNullOrEmpty(entityTfKey, "entityTfKey");
+            Ensure.ParameterNotNullOrEmpty(name, "name");
             this.Key = new Guid(key);
             this.EntityTfKey = new Guid(entityTfKey);
             this.Name = name;

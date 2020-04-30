@@ -23,8 +23,8 @@
         /// </param>
         protected BasketConversionBase(IBasket anonymousBasket, IBasket customerBasket)
         {
-            Mandate.ParameterNotNull(anonymousBasket, "anonymousBasket");
-            Mandate.ParameterNotNull(customerBasket, "customerBasket");
+            Ensure.ParameterNotNull(anonymousBasket, "anonymousBasket");
+            Ensure.ParameterNotNull(customerBasket, "customerBasket");
 
             AnonymousBasket = anonymousBasket;
             CustomerBasket = customerBasket;

@@ -126,7 +126,7 @@
         public ShipmentService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory, IStoreSettingService storeSettingService)
             : base(provider, repositoryFactory, logger, eventMessagesFactory)
         {
-            Mandate.ParameterNotNull(storeSettingService, "storeSettingService");
+            Ensure.ParameterNotNull(storeSettingService, "storeSettingService");
             _storeSettingService = storeSettingService;
         }
 
@@ -239,10 +239,10 @@
         /// </returns>
         public IShipment CreateShipment(IShipmentStatus shipmentStatus, IAddress origin, IAddress destination, LineItemCollection items, bool raiseEvents = true)
         {
-            Mandate.ParameterNotNull(shipmentStatus, "shipmentStatus");
-            Mandate.ParameterNotNull(origin, "origin");
-            Mandate.ParameterNotNull(destination, "destination");
-            Mandate.ParameterNotNull(items, "items");
+            Ensure.ParameterNotNull(shipmentStatus, "shipmentStatus");
+            Ensure.ParameterNotNull(origin, "origin");
+            Ensure.ParameterNotNull(destination, "destination");
+            Ensure.ParameterNotNull(items, "items");
 
             // Use the visitor to filter out and validate shippable line items
             var visitor = new ShippableProductVisitor();

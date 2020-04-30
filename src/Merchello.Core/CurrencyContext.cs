@@ -41,7 +41,7 @@
         /// </param>
         internal CurrencyContext(IStoreSettingService storeSettingService)
         {
-            Mandate.ParameterNotNull(storeSettingService, "storeSettingService");
+            Ensure.ParameterNotNull(storeSettingService, "storeSettingService");
 
             this._storeSettingService = storeSettingService;
         }

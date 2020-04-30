@@ -186,17 +186,17 @@
              INotificationMethodService notificationMethodService, INotificationMessageService notificationMessageService, IWarehouseService warehouseService)
             : base(provider, repositoryFactory, logger, eventMessagesFactory)
         {
-            Mandate.ParameterNotNull(shipMethodService, "shipMethodService");
-            Mandate.ParameterNotNull(shipRateTierService, "shipRateTierService");
-            Mandate.ParameterNotNull(shipCountryService, "shipCountryService");
-            Mandate.ParameterNotNull(taxMethodService, "countryTaxRateService");
-            Mandate.ParameterNotNull(paymentService, "paymentService");
-            Mandate.ParameterNotNull(paymentMethodService, "paymentMethodService");
-            Mandate.ParameterNotNull(invoiceService, "invoiceService");
-            Mandate.ParameterNotNull(orderService, "orderService");
-            Mandate.ParameterNotNull(notificationMethodService, "notificationMethodService");
-            Mandate.ParameterNotNull(notificationMessageService, "notificationMessageService");
-            Mandate.ParameterNotNull(warehouseService, "warehouseService");
+            Ensure.ParameterNotNull(shipMethodService, "shipMethodService");
+            Ensure.ParameterNotNull(shipRateTierService, "shipRateTierService");
+            Ensure.ParameterNotNull(shipCountryService, "shipCountryService");
+            Ensure.ParameterNotNull(taxMethodService, "countryTaxRateService");
+            Ensure.ParameterNotNull(paymentService, "paymentService");
+            Ensure.ParameterNotNull(paymentMethodService, "paymentMethodService");
+            Ensure.ParameterNotNull(invoiceService, "invoiceService");
+            Ensure.ParameterNotNull(orderService, "orderService");
+            Ensure.ParameterNotNull(notificationMethodService, "notificationMethodService");
+            Ensure.ParameterNotNull(notificationMessageService, "notificationMessageService");
+            Ensure.ParameterNotNull(warehouseService, "warehouseService");
 
             _shipMethodService = shipMethodService;
             _shipRateTierService = shipRateTierService;

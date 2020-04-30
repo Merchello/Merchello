@@ -33,7 +33,7 @@
         /// </param>
         protected MerchelloApiController(IMerchelloContext merchelloContext) : this(merchelloContext, UmbracoContext.Current)
         {
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
             
             MerchelloContext = merchelloContext;
             InstanceId = Guid.NewGuid();
@@ -50,7 +50,7 @@
         /// </param>
         protected MerchelloApiController(IMerchelloContext merchelloContext, UmbracoContext umbracoContext) : base(umbracoContext)
         {
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
 
             MerchelloContext = merchelloContext;
             InstanceId = Guid.NewGuid();

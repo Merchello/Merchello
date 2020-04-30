@@ -36,7 +36,7 @@
         /// </param>
         protected OfferManagerBase(IOfferSettingsService offerSettingsService)
         {
-            Mandate.ParameterNotNull(offerSettingsService, "offerSettingsService");
+            Ensure.ParameterNotNull(offerSettingsService, "offerSettingsService");
 
             _offerSettingsService = offerSettingsService;
         }

@@ -42,8 +42,8 @@
         /// </param>
         protected NotificationGatewayMethodBase(IGatewayProviderService gatewayProviderService, INotificationMethod notificationMethod)
         {
-            Mandate.ParameterNotNull(gatewayProviderService, "gatewayProviderService");
-            Mandate.ParameterNotNull(notificationMethod, "notificationMethod");
+            Ensure.ParameterNotNull(gatewayProviderService, "gatewayProviderService");
+            Ensure.ParameterNotNull(notificationMethod, "notificationMethod");
 
             _notificationMethod = notificationMethod;
             _gatewayProviderService = gatewayProviderService;

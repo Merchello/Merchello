@@ -32,7 +32,7 @@
         /// </param>
         public BraintreeApiRequestFactory(BraintreeProviderSettings settings)
         {
-            Mandate.ParameterNotNull(settings, "settings");
+            Ensure.ParameterNotNull(settings, "settings");
 
             this._settings = settings;
         }
@@ -143,7 +143,7 @@
         /// </returns>
         public CreditCardRequest CreateCreditCardRequest(string paymentMethodNonce, CreditCardOptionsRequest optionsRequest, IAddress billingAddress = null, bool isUpdate = false)
         {
-            Mandate.ParameterNotNullOrEmpty(paymentMethodNonce, "paymentMethodNonce");
+            Ensure.ParameterNotNullOrEmpty(paymentMethodNonce, "paymentMethodNonce");
 
             var request = new CreditCardRequest()
             {
@@ -199,7 +199,7 @@
         /// </returns>
         public CustomerRequest CreateCustomerRequest(ICustomer customer)
         {
-            Mandate.ParameterNotNull(customer, "customer");
+            Ensure.ParameterNotNull(customer, "customer");
 
             return new CustomerRequest
                        {
@@ -305,7 +305,7 @@
         /// </returns>
         public PaymentMethodRequest CreatePaymentMethodRequest(ICustomer customer, string paymentMethodNonce, bool isDefault = true)
         {
-            Mandate.ParameterNotNullOrEmpty(paymentMethodNonce, "paymentMethodNonce");
+            Ensure.ParameterNotNullOrEmpty(paymentMethodNonce, "paymentMethodNonce");
 
             var request = new PaymentMethodRequest
                               {
@@ -392,8 +392,8 @@
         /// </returns>
         public SubscriptionRequest CreateSubscriptionRequest(string paymentMethodToken, string planId, decimal? price = null, string merchantAccountId = "")
         {
-            Mandate.ParameterNotNullOrEmpty(paymentMethodToken, "paymentMethodToken");
-            Mandate.ParameterNotNullOrEmpty(planId, "planId");
+            Ensure.ParameterNotNullOrEmpty(paymentMethodToken, "paymentMethodToken");
+            Ensure.ParameterNotNullOrEmpty(planId, "planId");
 
             var request = new SubscriptionRequest
                        {
@@ -496,7 +496,7 @@
         /// </returns>
         public SubscriptionRequest CreateSubscriptionRequest(string paymentMethodToken, string planId, int billingDayOfMonth)
         {
-            Mandate.ParameterCondition(0 < billingDayOfMonth && 31 <= billingDayOfMonth, "billingDayOfMonth");
+            Ensure.ParameterCondition(0 < billingDayOfMonth && 31 <= billingDayOfMonth, "billingDayOfMonth");
 
             var request = this.CreateSubscriptionRequest(paymentMethodToken, planId);
             request.BillingDayOfMonth = billingDayOfMonth;

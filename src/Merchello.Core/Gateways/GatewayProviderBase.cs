@@ -40,9 +40,9 @@
         /// <param name="runtimeCacheProvider">Umbraco's <see cref="IRuntimeCacheProvider"/></param>
         protected GatewayProviderBase(IGatewayProviderService gatewayProviderService, IGatewayProviderSettings gatewayProviderSettings, IRuntimeCacheProvider runtimeCacheProvider)
         {
-            Mandate.ParameterNotNull(gatewayProviderService, "gatewayProviderService");
-            Mandate.ParameterNotNull(gatewayProviderSettings, "gatewayProvider");
-            Mandate.ParameterNotNull(runtimeCacheProvider, "runtimeCacheProvider");
+            Ensure.ParameterNotNull(gatewayProviderService, "gatewayProviderService");
+            Ensure.ParameterNotNull(gatewayProviderSettings, "gatewayProvider");
+            Ensure.ParameterNotNull(runtimeCacheProvider, "runtimeCacheProvider");
 
             _gatewayProviderService = gatewayProviderService;
             _gatewayProviderSettings = gatewayProviderSettings;

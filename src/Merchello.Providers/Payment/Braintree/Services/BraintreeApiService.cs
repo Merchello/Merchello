@@ -69,8 +69,8 @@ namespace Merchello.Providers.Payment.Braintree.Services
         /// </remarks>
         internal BraintreeApiService(IMerchelloContext merchelloContext, BraintreeProviderSettings settings)
         {
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
-            Mandate.ParameterNotNull(settings, "settings");
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterNotNull(settings, "settings");
 
             this._settings = settings;
 

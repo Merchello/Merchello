@@ -32,7 +32,7 @@
         /// </param>
         internal InvoiceBuilderChain(SalePreparationBase salePreparation)
         {
-            Mandate.ParameterNotNull(salePreparation, "salesPreparation");
+            Ensure.ParameterNotNull(salePreparation, "salesPreparation");
             _salePreparation = salePreparation;
 
             ResolveChain(Core.Constants.TaskChainAlias.SalesPreparationInvoiceCreate);

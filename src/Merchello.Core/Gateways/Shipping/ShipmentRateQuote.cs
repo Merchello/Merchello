@@ -37,9 +37,9 @@
         /// </param>
         public ShipmentRateQuote(IShipment shipment, IShipMethod shipMethod, ExtendedDataCollection extendedData)
         {
-            Mandate.ParameterNotNull(shipment, "shipment");
-            Mandate.ParameterNotNull(shipMethod, "shipMethod");
-            Mandate.ParameterNotNull(extendedData, "extendedData");
+            Ensure.ParameterNotNull(shipment, "shipment");
+            Ensure.ParameterNotNull(shipMethod, "shipMethod");
+            Ensure.ParameterNotNull(extendedData, "extendedData");
 
             shipment.ShipMethodKey = shipMethod.Key;
 

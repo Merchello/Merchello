@@ -41,9 +41,9 @@
         /// </param>
         protected ShipmentRateQuoteStrategyBase(IShipment shipment, IShippingGatewayMethod[] shippingGatewayMethods, IRuntimeCacheProvider runtimeCache)
         {
-            Mandate.ParameterNotNull(shipment, "shipment");
-            Mandate.ParameterNotNull(shippingGatewayMethods, "gatewayShipMethods");
-            Mandate.ParameterNotNull(runtimeCache, "runtimeCache");
+            Ensure.ParameterNotNull(shipment, "shipment");
+            Ensure.ParameterNotNull(shippingGatewayMethods, "gatewayShipMethods");
+            Ensure.ParameterNotNull(runtimeCache, "runtimeCache");
 
             _shipment = shipment;
             _shippingGatewayMethods = shippingGatewayMethods;

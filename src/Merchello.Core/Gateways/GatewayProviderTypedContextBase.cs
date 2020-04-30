@@ -37,8 +37,8 @@
         /// </param>
         protected GatewayProviderTypedContextBase(IGatewayProviderService gatewayProviderService, IGatewayProviderResolver resolver)
         {
-            Mandate.ParameterNotNull(gatewayProviderService, "gatewayProviderService");            
-            Mandate.ParameterNotNull(resolver, "resolver");
+            Ensure.ParameterNotNull(gatewayProviderService, "gatewayProviderService");            
+            Ensure.ParameterNotNull(resolver, "resolver");
 
             _gatewayProviderService = gatewayProviderService;            
             _resolver = resolver;

@@ -57,7 +57,7 @@
         /// </param>
         public TaxCalculationResult(string name, decimal taxRate, decimal taxAmount, ExtendedDataCollection extendedData)
         {
-            Mandate.ParameterNotNull(extendedData, "extendedData");
+            Ensure.ParameterNotNull(extendedData, "extendedData");
 
             Name = string.IsNullOrEmpty(name) ? "Tax" : name;
             TaxRate = taxRate;

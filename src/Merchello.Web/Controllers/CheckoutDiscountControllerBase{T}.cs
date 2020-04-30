@@ -67,7 +67,7 @@
             CheckoutContextSettingsFactory contextSettingsFactory)
             : base(contextSettingsFactory)
         {
-            Mandate.ParameterNotNull(checkoutDiscountModelFactory, "checkoutDiscountFactory");
+            Ensure.ParameterNotNull(checkoutDiscountModelFactory, "checkoutDiscountFactory");
             this.CheckoutDiscountModelModelFactory = checkoutDiscountModelFactory;
         }
 

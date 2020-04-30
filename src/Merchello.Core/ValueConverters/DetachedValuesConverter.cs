@@ -245,7 +245,7 @@
         /// </returns>
         internal IContentType GetContentTypeByKey(Guid contentTypeKey)
         {
-            Mandate.ParameterCondition(!Guid.Empty.Equals(contentTypeKey), "contentTypeKey");
+            Ensure.ParameterCondition(!Guid.Empty.Equals(contentTypeKey), "contentTypeKey");
 
             return _contentTypeService.GetContentType(contentTypeKey);
         }

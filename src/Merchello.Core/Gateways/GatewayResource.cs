@@ -14,8 +14,8 @@ namespace Merchello.Core.Gateways
     {
         public GatewayResource(string serviceCode, string name)
         {
-            Mandate.ParameterNotNullOrEmpty(serviceCode, "serviceCode");
-            Mandate.ParameterNotNullOrEmpty(name, "name");
+            Ensure.ParameterNotNullOrEmpty(serviceCode, "serviceCode");
+            Ensure.ParameterNotNullOrEmpty(name, "name");
 
             ServiceCode = serviceCode;
             Name = name;

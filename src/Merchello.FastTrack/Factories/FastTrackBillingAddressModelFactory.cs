@@ -36,7 +36,7 @@
         /// </param>
         public FastTrackBillingAddressModelFactory(IStoreSettingService storeSettingService)
         {
-            Mandate.ParameterNotNull(storeSettingService, "storeSettingService");
+            Ensure.ParameterNotNull(storeSettingService, "storeSettingService");
             _storeSettingService = storeSettingService;
         }
 

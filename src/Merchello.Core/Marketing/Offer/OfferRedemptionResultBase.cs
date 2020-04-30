@@ -33,7 +33,7 @@
         /// </param>
         protected OfferRedemptionResultBase(TAward award, IEnumerable<string> messages = null)
         {
-            Mandate.ParameterNotNull(award, "award");
+            Ensure.ParameterNotNull(award, "award");
             Award = award;
             Success = true;
         }
@@ -49,7 +49,7 @@
         /// </param>
         protected OfferRedemptionResultBase(Exception exception, IEnumerable<string> messages = null)
         {
-            Mandate.ParameterNotNull(exception, "exception");            
+            Ensure.ParameterNotNull(exception, "exception");            
             Exception = exception;
             Success = false;
         }

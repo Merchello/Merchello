@@ -40,7 +40,7 @@
         /// </param>
         public PatternReplaceFormatter(IDictionary<string, IReplaceablePattern> patterns)
         {
-            Mandate.ParameterNotNull(patterns, "patterns");
+            Ensure.ParameterNotNull(patterns, "patterns");
             _patterns = patterns;
         }
 

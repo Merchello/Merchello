@@ -84,7 +84,7 @@
         public EntityCollectionApiController(IMerchelloContext merchelloContext, UmbracoContext umbracoContext)
             : base(merchelloContext, umbracoContext)
         {
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
 
             _entityCollectionService = merchelloContext.Services.EntityCollectionService;
             

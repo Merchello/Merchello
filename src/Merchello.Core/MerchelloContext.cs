@@ -52,9 +52,9 @@
         /// </param>
         internal MerchelloContext(IServiceContext serviceContext, IGatewayContext gatewayContext, CacheHelper cache)
         {
-            Mandate.ParameterNotNull(serviceContext, "serviceContext");
-            Mandate.ParameterNotNull(gatewayContext, "gatewayContext");
-            Mandate.ParameterNotNull(cache, "cache");
+            Ensure.ParameterNotNull(serviceContext, "serviceContext");
+            Ensure.ParameterNotNull(gatewayContext, "gatewayContext");
+            Ensure.ParameterNotNull(cache, "cache");
             
             _services = serviceContext;
             _gateways = gatewayContext;

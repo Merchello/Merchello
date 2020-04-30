@@ -472,7 +472,7 @@ namespace Merchello.Core
         /// <returns>The <see cref="IPaymentResult"/></returns>
         public static IPaymentResult AuthorizePayment(this IInvoice invoice, IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args)
         {
-            Mandate.ParameterNotNull(paymentGatewayMethod, "paymentGatewayMethod");
+            Ensure.ParameterNotNull(paymentGatewayMethod, "paymentGatewayMethod");
 
             return paymentGatewayMethod.AuthorizePayment(invoice, args);
         }
@@ -485,8 +485,8 @@ namespace Merchello.Core
         /// <returns>The <see cref="IPaymentResult"/></returns>
         public static IPaymentResult AuthorizePayment(this IInvoice invoice, IPaymentGatewayMethod paymentGatewayMethod)
         {
-            Mandate.ParameterCondition(invoice.HasIdentity, "The invoice must be saved before a payment can be authorized.");
-            Mandate.ParameterNotNull(paymentGatewayMethod, "paymentGatewayMethod");
+            Ensure.ParameterCondition(invoice.HasIdentity, "The invoice must be saved before a payment can be authorized.");
+            Ensure.ParameterNotNull(paymentGatewayMethod, "paymentGatewayMethod");
 
             return invoice.AuthorizePayment(paymentGatewayMethod, new ProcessorArgumentCollection());
         }
@@ -538,7 +538,7 @@ namespace Merchello.Core
         /// <returns>A <see cref="IPaymentResult"/></returns>
         public static IPaymentResult AuthorizeCapturePayment(this IInvoice invoice, IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args)
         {
-            Mandate.ParameterNotNull(paymentGatewayMethod, "paymentGatewayMethod");
+            Ensure.ParameterNotNull(paymentGatewayMethod, "paymentGatewayMethod");
 
             return paymentGatewayMethod.AuthorizeCapturePayment(invoice, invoice.Total, args);
         }

@@ -96,7 +96,7 @@
         /// </param>
         internal CachedQueryProvider(IMerchelloContext merchelloContext, bool enableDataModifiers, DetachedValuesConversionType conversionType)
         {
-            Mandate.ParameterNotNull(merchelloContext, "MerchelloContext is not initialized");
+            Ensure.ParameterNotNull(merchelloContext, "MerchelloContext is not initialized");
             this.DataModifiersEnabled = enableDataModifiers;
             _conversionType = conversionType;
             InitializeProvider(merchelloContext);

@@ -39,7 +39,7 @@
         /// </param>
         public ItemCacheModelFactory(MerchelloHelper merchello)
         {
-            Mandate.ParameterNotNull(merchello, "merchello");
+            Ensure.ParameterNotNull(merchello, "merchello");
             _merchello = merchello;
         }
 

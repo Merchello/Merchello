@@ -18,7 +18,7 @@
         /// </param>
         protected CheckoutManagerInvoiceCreationAttemptChainTaskBase(ICheckoutManagerBase checkoutManager)
         {
-            Mandate.ParameterNotNull(checkoutManager, "checkoutManger");
+            Ensure.ParameterNotNull(checkoutManager, "checkoutManger");
 
             this.CheckoutManager = checkoutManager;
         }

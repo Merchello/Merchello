@@ -39,7 +39,7 @@ namespace Merchello.Core.Persistence.UnitOfWork
 		/// <param name="dbFactory"></param>
 	    public PetaPocoUnitOfWorkProvider(IDatabaseFactory dbFactory)
 	    {
-		    Mandate.ParameterNotNull(dbFactory, "dbFactory");
+		    Ensure.ParameterNotNull(dbFactory, "dbFactory");
 		    _dbFactory = dbFactory;
 	    }
 

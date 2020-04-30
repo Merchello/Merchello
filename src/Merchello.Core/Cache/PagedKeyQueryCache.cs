@@ -28,7 +28,7 @@
         /// </param>
         public PagedKeyQueryCache(CacheHelper cache)
         {
-            Mandate.ParameterNotNull(cache, "cache");
+            Ensure.ParameterNotNull(cache, "cache");
             this._cache = cache.RequestCache;
         }
 

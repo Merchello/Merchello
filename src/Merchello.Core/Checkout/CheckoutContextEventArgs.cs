@@ -29,8 +29,8 @@
         public CheckoutEventArgs(ICustomerBase customer, T item)
             : base(item, true)
         {
-            Mandate.ParameterNotNull(customer, "customer");
-            Mandate.ParameterNotNull(item, "item");
+            Ensure.ParameterNotNull(customer, "customer");
+            Ensure.ParameterNotNull(item, "item");
 
             this.Customer = customer;
         }

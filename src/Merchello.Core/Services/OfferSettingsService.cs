@@ -196,10 +196,10 @@
             OfferComponentDefinitionCollection componentDefinitions,
             bool raiseEvents = true)
         {
-            Mandate.ParameterNotNullOrEmpty(name, "name");
-            Mandate.ParameterNotNullOrEmpty(offerCode, "offerCode");
-            Mandate.ParameterCondition(!Guid.Empty.Equals(offerProviderKey), "offerProviderKey");
-            Mandate.ParameterNotNull(componentDefinitions, "componentDefinitions");
+            Ensure.ParameterNotNullOrEmpty(name, "name");
+            Ensure.ParameterNotNullOrEmpty(offerCode, "offerCode");
+            Ensure.ParameterCondition(!Guid.Empty.Equals(offerProviderKey), "offerProviderKey");
+            Ensure.ParameterNotNull(componentDefinitions, "componentDefinitions");
 
             var offerSettings = new OfferSettings(name, offerCode, offerProviderKey, componentDefinitions);
 

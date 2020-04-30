@@ -27,7 +27,7 @@
         /// </param>
         public RazorFormatter(object model)
         {
-            Mandate.ParameterNotNull(model, "model");
+            Ensure.ParameterNotNull(model, "model");
 
             _model = model;
         }

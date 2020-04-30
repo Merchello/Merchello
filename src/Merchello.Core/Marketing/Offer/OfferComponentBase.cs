@@ -27,7 +27,7 @@
         /// </param>
         protected OfferComponentBase(OfferComponentDefinition definition)
         {
-            Mandate.ParameterNotNull(definition, "definition");
+            Ensure.ParameterNotNull(definition, "definition");
 
             this._definition = definition;
         }

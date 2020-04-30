@@ -20,8 +20,8 @@
         /// </param>
         public OfferConstraintChainForAttribute(Type constraintType, Type rewardType)
         {
-            Mandate.ParameterNotNull(constraintType, "constraintType");
-            Mandate.ParameterNotNull(rewardType, "rewardType");
+            Ensure.ParameterNotNull(constraintType, "constraintType");
+            Ensure.ParameterNotNull(rewardType, "rewardType");
 
             ConstraintType = constraintType;
             RewardType = rewardType;

@@ -47,7 +47,7 @@ namespace Merchello.Core.Persistence
 		public DefaultDatabaseFactory(string connectionStringName, ILogger logger)
 		{
 	        if (logger == null) throw new ArgumentNullException("logger");
-	        Mandate.ParameterNotNullOrEmpty(connectionStringName, "connectionStringName");
+	        Ensure.ParameterNotNullOrEmpty(connectionStringName, "connectionStringName");
 			_connectionStringName = connectionStringName;
 	        _logger = logger;
 		}
@@ -61,8 +61,8 @@ namespace Merchello.Core.Persistence
 	    public DefaultDatabaseFactory(string connectionString, string providerName, ILogger logger)
 		{
 	        if (logger == null) throw new ArgumentNullException("logger");
-	        Mandate.ParameterNotNullOrEmpty(connectionString, "connectionString");
-			Mandate.ParameterNotNullOrEmpty(providerName, "providerName");
+	        Ensure.ParameterNotNullOrEmpty(connectionString, "connectionString");
+			Ensure.ParameterNotNullOrEmpty(providerName, "providerName");
 			ConnectionString = connectionString;
 			ProviderName = providerName;
             _logger = logger;

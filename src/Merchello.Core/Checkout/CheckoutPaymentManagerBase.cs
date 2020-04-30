@@ -36,7 +36,7 @@
         protected CheckoutPaymentManagerBase(ICheckoutContext context, IBuilderChain<IInvoice> invoiceBuilder)
             : base(context)
         {
-            Mandate.ParameterNotNull(invoiceBuilder, "invoiceBuilder");
+            Ensure.ParameterNotNull(invoiceBuilder, "invoiceBuilder");
             this._invoiceBuilder = invoiceBuilder;
             this.Initialize();
         }

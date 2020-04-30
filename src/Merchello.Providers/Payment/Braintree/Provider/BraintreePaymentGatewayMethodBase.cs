@@ -34,7 +34,7 @@
         protected BraintreePaymentGatewayMethodBase(IGatewayProviderService gatewayProviderService, IPaymentMethod paymentMethod, IBraintreeApiService braintreeApiService)
             : base(gatewayProviderService, paymentMethod)
         {
-            Mandate.ParameterNotNull(braintreeApiService, "braintreeApiService");
+            Ensure.ParameterNotNull(braintreeApiService, "braintreeApiService");
 
             this.BraintreeApiService = braintreeApiService;
             this.Initialize();

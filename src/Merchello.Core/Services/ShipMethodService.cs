@@ -341,10 +341,10 @@
         /// </returns>
         internal Attempt<IShipMethod> CreateShipMethodWithKey(Guid providerKey, IShipCountry shipCountry, string name, string serviceCode, bool raiseEvents = true)
         {
-            Mandate.ParameterCondition(providerKey != Guid.Empty, "providerKey");
-            Mandate.ParameterNotNull(shipCountry, "shipCountry");
-            Mandate.ParameterNotNullOrEmpty(name, "name");
-            Mandate.ParameterNotNullOrEmpty(serviceCode, "serviceCode");
+            Ensure.ParameterCondition(providerKey != Guid.Empty, "providerKey");
+            Ensure.ParameterNotNull(shipCountry, "shipCountry");
+            Ensure.ParameterNotNullOrEmpty(name, "name");
+            Ensure.ParameterNotNullOrEmpty(serviceCode, "serviceCode");
 
             if (ShipMethodExists(providerKey, shipCountry.Key, serviceCode))
                 return Attempt<IShipMethod>.Fail(new ConstraintException("A Shipmethod already exists for this ShipCountry with this ServiceCode"));

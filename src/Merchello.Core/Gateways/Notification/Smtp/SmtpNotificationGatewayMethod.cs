@@ -44,7 +44,7 @@
         public SmtpNotificationGatewayMethod(IGatewayProviderService gatewayProviderService, INotificationMethod notificationMethod, ExtendedDataCollection extendedData) 
             : base(gatewayProviderService, notificationMethod)
         {
-            Mandate.ParameterNotNull(extendedData, "extendedData");
+            Ensure.ParameterNotNull(extendedData, "extendedData");
 
             _settings = extendedData.GetSmtpProviderSettings();
             _settings.Port = _settings.Port == 0 ? 25 : _settings.Port;

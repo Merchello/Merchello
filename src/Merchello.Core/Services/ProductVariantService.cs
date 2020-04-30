@@ -488,14 +488,14 @@ namespace Merchello.Core.Services
         internal IProductVariant CreateProductVariant(IProduct product, List<IProductVariant> variants, string name,
             string sku, decimal price, ProductAttributeCollection attributes)
         {
-            Mandate.ParameterNotNull(product, "product");
-            Mandate.ParameterNotNull(attributes, "attributes");
-            Mandate.ParameterCondition(attributes.Count >= product.ProductOptions.Count(x => x.Required),
+            Ensure.ParameterNotNull(product, "product");
+            Ensure.ParameterNotNull(attributes, "attributes");
+            Ensure.ParameterCondition(attributes.Count >= product.ProductOptions.Count(x => x.Required),
                 "An attribute must be assigned for every required option");
 
             //// http://issues.merchello.com/youtrack/issue/M-740
             // verify there is not already a variant with these attributes
-            ////Mandate.ParameterCondition(false == ProductVariantWithAttributesExists(product, attributes), "A ProductVariant already exists for the ProductAttributeCollection");
+            ////Ensure.ParameterCondition(false == ProductVariantWithAttributesExists(product, attributes), "A ProductVariant already exists for the ProductAttributeCollection");
             if (ProductVariantWithAttributesExists(product, variants, attributes))
             {
                 LogHelper.Debug<ProductVariantService>(

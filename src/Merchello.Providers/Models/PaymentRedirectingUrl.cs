@@ -15,7 +15,7 @@
         /// </param>
         public PaymentRedirectingUrl(string responseFor)
         {
-            Mandate.ParameterNotNullOrEmpty(responseFor, "responseFor");
+            Ensure.ParameterNotNullOrEmpty(responseFor, "responseFor");
             this.ResponseFor = responseFor;
             this.RedirectingToUrl = "/";
         }

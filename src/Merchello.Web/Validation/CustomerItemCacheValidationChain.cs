@@ -46,7 +46,7 @@
         /// </param>
         public CustomerItemCacheValidationChain(IMerchelloContext merchelloContext)
         {
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
             _merchelloContext = merchelloContext;
             ResolveChain(Core.Constants.TaskChainAlias.ItemCacheValidation);
         }

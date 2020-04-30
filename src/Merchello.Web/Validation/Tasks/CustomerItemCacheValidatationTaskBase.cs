@@ -45,7 +45,7 @@
         /// </param>
         protected CustomerItemCacheValidatationTaskBase(IMerchelloContext merchelloContext, bool enableDataModifiers)
         {
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
             _merchelloContext = merchelloContext;
             this._enableDataModifiers = enableDataModifiers;
             this.Initialize();

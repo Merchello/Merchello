@@ -133,7 +133,7 @@ namespace Merchello.Core.Services
         public ProductService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory, IProductVariantService productVariantService)
             : base(provider, repositoryFactory, logger, eventMessagesFactory)
         {
-            Mandate.ParameterNotNull(productVariantService, "productVariantService");
+            Ensure.ParameterNotNull(productVariantService, "productVariantService");
             _productVariantService = productVariantService;
         }
 

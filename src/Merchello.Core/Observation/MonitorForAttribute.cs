@@ -26,9 +26,9 @@
         /// </param>
         public MonitorForAttribute(string key, Type observableTrigger, string name, bool useCodeEditor = false)
         {
-            Mandate.ParameterNotNullOrEmpty(key, "key");
-            Mandate.ParameterNotNull(observableTrigger, "observableTrigger");
-            Mandate.ParameterNotNullOrEmpty(name, "name");
+            Ensure.ParameterNotNullOrEmpty(key, "key");
+            Ensure.ParameterNotNull(observableTrigger, "observableTrigger");
+            Ensure.ParameterNotNullOrEmpty(name, "name");
 
             Key = new Guid(key);
             ObservableTrigger = observableTrigger;

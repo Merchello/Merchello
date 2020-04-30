@@ -39,7 +39,7 @@ namespace Merchello.Core.Observation
         /// <param name="handleEvent">The event to be handled</param>
         internal TriggerForAttribute(string alias, Topic topic, Type type, string handleEvent)
         {
-            Mandate.ParameterNotNullOrEmpty(alias, "alias");
+            Ensure.ParameterNotNullOrEmpty(alias, "alias");
            
             Alias = alias;
             Topic = topic;

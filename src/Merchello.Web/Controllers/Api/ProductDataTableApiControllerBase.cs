@@ -59,8 +59,8 @@
             MerchelloHelper merchelloHelper,
             ProductDataTableFactory<TTable, TRow> productDataTableFactory)
         {
-            Mandate.ParameterNotNull(merchelloHelper, "merchell");
-            Mandate.ParameterNotNull(productDataTableFactory, "productDataTableFactory");
+            Ensure.ParameterNotNull(merchelloHelper, "merchell");
+            Ensure.ParameterNotNull(productDataTableFactory, "productDataTableFactory");
 
             this._merchelloHelper = merchelloHelper;
             this._productDataTableFactory = productDataTableFactory;

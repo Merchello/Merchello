@@ -41,8 +41,8 @@
         /// </param>
         public OrderBuilderChain(IOrderStatus orderStatus, IInvoice invoice)
         {
-            Mandate.ParameterNotNull(orderStatus, "orderStatus");
-            Mandate.ParameterNotNull(invoice, "invoice");
+            Ensure.ParameterNotNull(orderStatus, "orderStatus");
+            Ensure.ParameterNotNull(invoice, "invoice");
 
             _orderStatus = orderStatus;
             _invoice = invoice;

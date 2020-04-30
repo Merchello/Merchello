@@ -88,8 +88,8 @@ namespace Merchello.Web.Pluggable
         /// </param>
         protected CustomerContextBase(IMerchelloContext merchelloContext, UmbracoContext umbracoContext)
         {
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
-            Mandate.ParameterNotNull(umbracoContext, "umbracoContext");
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterNotNull(umbracoContext, "umbracoContext");
            
             this._merchelloContext = merchelloContext;
             this._umbracoContext = umbracoContext;

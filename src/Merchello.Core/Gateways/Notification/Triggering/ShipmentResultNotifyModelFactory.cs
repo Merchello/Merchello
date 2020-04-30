@@ -49,7 +49,7 @@
         /// </param>
         public ShipmentResultNotifyModelFactory(IMerchelloContext merchelloContext)
         {
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
 
             _invoiceService = merchelloContext.Services.InvoiceService;
             _orderService = merchelloContext.Services.OrderService;

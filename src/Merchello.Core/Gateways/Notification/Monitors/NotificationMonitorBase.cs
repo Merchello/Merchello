@@ -39,7 +39,7 @@
         /// </param>
         protected NotificationMonitorBase(INotificationContext notificationContext)
         {
-            Mandate.ParameterNotNull(notificationContext, "notificationContext");
+            Ensure.ParameterNotNull(notificationContext, "notificationContext");
             _notificationContext = notificationContext;
 
             Initialize();

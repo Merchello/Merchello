@@ -82,8 +82,8 @@ namespace Merchello.Core.Marketing.Offer
         /// </param>
         public OfferComponentAttribute(string key, string name, string description, string editorView, Type restrictToType)
         {
-            Mandate.ParameterNotNullOrEmpty(key, "key");
-            Mandate.ParameterNotNullOrEmpty(name, "name");
+            Ensure.ParameterNotNullOrEmpty(key, "key");
+            Ensure.ParameterNotNullOrEmpty(name, "name");
 
             this.Key = new Guid(key);
             this.Name = name;

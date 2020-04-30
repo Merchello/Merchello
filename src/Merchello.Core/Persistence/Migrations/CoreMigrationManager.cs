@@ -54,9 +54,9 @@
         /// </param>
         public CoreMigrationManager(Database database, ISqlSyntaxProvider sqlSyntaxProvider, ILogger logger)
         {
-            Mandate.ParameterNotNull(database, "database");
-            Mandate.ParameterNotNull(sqlSyntaxProvider, "sqlSyntaxProvider");
-            Mandate.ParameterNotNull(logger, "logger");
+            Ensure.ParameterNotNull(database, "database");
+            Ensure.ParameterNotNull(sqlSyntaxProvider, "sqlSyntaxProvider");
+            Ensure.ParameterNotNull(logger, "logger");
             
             _database = database;
             _sqlSyntaxProvider = sqlSyntaxProvider;

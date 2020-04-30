@@ -146,7 +146,7 @@
         internal PaymentService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory, IAppliedPaymentService appliedPaymentService)
             : base(provider, repositoryFactory, logger, eventMessagesFactory)
         {
-            Mandate.ParameterNotNull(appliedPaymentService, "appliedPaymentService");
+            Ensure.ParameterNotNull(appliedPaymentService, "appliedPaymentService");
             _appliedPaymentService = appliedPaymentService;
         }
 
@@ -493,7 +493,7 @@
         /// <returns>Returns <see cref="IPayment"/></returns>
         internal IPayment CreatePaymentWithKey(Guid paymentTfKey, decimal amount, Guid? paymentMethodKey, bool raiseEvents = true)
         {
-            Mandate.ParameterCondition(!Guid.Empty.Equals(paymentTfKey), "paymentTfKey");
+            Ensure.ParameterCondition(!Guid.Empty.Equals(paymentTfKey), "paymentTfKey");
 
 
             var payment = new Payment(paymentTfKey, amount, paymentMethodKey, new ExtendedDataCollection());

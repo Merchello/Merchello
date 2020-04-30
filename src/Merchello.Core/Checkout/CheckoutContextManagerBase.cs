@@ -18,7 +18,7 @@
         /// </param>
         protected CheckoutContextManagerBase(ICheckoutContext context)
         {
-            Mandate.ParameterNotNull(context, "context");
+            Ensure.ParameterNotNull(context, "context");
 
             this.Context = context;
         }

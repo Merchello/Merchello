@@ -66,7 +66,7 @@
             IPublishedContent parent = null,
             bool isPreviewing = false)
         {
-            Mandate.ParameterNotNull(display, "display");
+            Ensure.ParameterNotNull(display, "display");
             _contentType = contentType;
             _display = display;
             _parent = parent;

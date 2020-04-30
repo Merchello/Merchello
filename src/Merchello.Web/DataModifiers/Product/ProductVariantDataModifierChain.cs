@@ -40,7 +40,7 @@
         /// </param>
         public ProductVariantDataModifierChain(IMerchelloContext merchelloContext)
         {
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
             this._merchelloContext = merchelloContext;
             this.ResolveChain(Core.Constants.TaskChainAlias.MerchelloHelperProductDataModifiers);
         }

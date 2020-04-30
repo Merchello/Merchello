@@ -62,7 +62,7 @@
         public ProductOptionApiController(IMerchelloContext merchelloContext, IContentTypeService contentTypeService)
              : base(merchelloContext)
         {
-            Mandate.ParameterNotNull(contentTypeService, "contentTypeService");
+            Ensure.ParameterNotNull(contentTypeService, "contentTypeService");
             _contentTypeService = contentTypeService;
             _productOptionService = merchelloContext.Services.ProductOptionService;
             

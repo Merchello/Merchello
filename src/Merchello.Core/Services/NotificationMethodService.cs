@@ -106,8 +106,8 @@ namespace Merchello.Core.Services
         /// <returns>An Attempt{<see cref="INotificationMethod"/>}</returns>
         public Attempt<INotificationMethod> CreateNotificationMethodWithKey(Guid providerKey, string name, string serviceCode, bool raiseEvents = true)
         {
-            Mandate.ParameterNotNullOrEmpty(name, "name");
-            Mandate.ParameterNotNullOrEmpty(serviceCode, "serviceCode");
+            Ensure.ParameterNotNullOrEmpty(name, "name");
+            Ensure.ParameterNotNullOrEmpty(serviceCode, "serviceCode");
 
             var notificationMethod = new NotificationMethod(providerKey)
             {

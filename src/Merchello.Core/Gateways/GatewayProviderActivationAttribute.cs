@@ -27,9 +27,9 @@ namespace Merchello.Core.Gateways
 
         public GatewayProviderActivationAttribute(string key, string name, string description)
         {            
-            Mandate.ParameterNotNullOrEmpty(key, "key");
-            Mandate.ParameterNotNullOrEmpty(name, "name");
-            Mandate.ParameterNotNullOrEmpty(description, "description");
+            Ensure.ParameterNotNullOrEmpty(key, "key");
+            Ensure.ParameterNotNullOrEmpty(name, "name");
+            Ensure.ParameterNotNullOrEmpty(description, "description");
 
             Key = new Guid(key);
             Name = name;
@@ -38,8 +38,8 @@ namespace Merchello.Core.Gateways
 
         public GatewayProviderActivationAttribute(string key, string name)
         {
-            Mandate.ParameterNotNullOrEmpty(key, "key");
-            Mandate.ParameterNotNullOrEmpty(name, "name");
+            Ensure.ParameterNotNullOrEmpty(key, "key");
+            Ensure.ParameterNotNullOrEmpty(name, "name");
 
             Key = new Guid(key);
             Name = name;

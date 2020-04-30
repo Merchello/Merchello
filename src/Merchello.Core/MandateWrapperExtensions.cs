@@ -20,7 +20,7 @@
         /// </param>
         public static void ParameterNotEmptyGuid(this Guid value, string parameterName)
         {
-            Mandate.ParameterCondition(!Guid.Empty.Equals(value), parameterName);
+            Ensure.ParameterCondition(!Guid.Empty.Equals(value), parameterName);
         }
     }
 }

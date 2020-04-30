@@ -35,10 +35,10 @@
         /// </param>
         public BackOfficeTreeAttribute(string routeId, string parentRouteId, string title, string icon, string routePath, int sortOrder)
         {            
-            Mandate.ParameterNotNullOrEmpty(routeId, "routeId");
-            Mandate.ParameterNotNullOrEmpty(title, "title");
-            Mandate.ParameterNotNullOrEmpty(icon, "icon");
-            Mandate.ParameterNotNullOrEmpty(routePath, "routePath");
+            Ensure.ParameterNotNullOrEmpty(routeId, "routeId");
+            Ensure.ParameterNotNullOrEmpty(title, "title");
+            Ensure.ParameterNotNullOrEmpty(icon, "icon");
+            Ensure.ParameterNotNullOrEmpty(routePath, "routePath");
 
             RouteId = routeId;
             ParentRouteId = parentRouteId;

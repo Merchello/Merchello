@@ -55,7 +55,7 @@
         /// </param>
         protected ProductContentBase(ProductDisplayBase productBase, PublishedContentType contentType, IDictionary<Guid, PublishedContentType> optionContentTypes, string specificCulture)
         {
-            Mandate.ParameterNotNull(productBase, "productBase");
+            Ensure.ParameterNotNull(productBase, "productBase");
             _productBase = productBase;
             this.CultureName = specificCulture;
             _contentType = contentType;

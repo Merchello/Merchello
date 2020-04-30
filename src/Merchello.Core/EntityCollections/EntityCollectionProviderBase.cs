@@ -38,8 +38,8 @@
         /// </param>
         protected EntityCollectionProviderBase(IMerchelloContext merchelloContext, Guid collectionKey)
         {
-            Mandate.ParameterCondition(!Guid.Empty.Equals(collectionKey), "collectionKey");
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterCondition(!Guid.Empty.Equals(collectionKey), "collectionKey");
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
             MerchelloContext = merchelloContext;
             this.CollectionKey = collectionKey;
             this.Initialize();

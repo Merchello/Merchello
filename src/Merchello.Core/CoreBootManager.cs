@@ -79,8 +79,8 @@
         /// </param>
         internal CoreBootManager(ILogger logger, ISqlSyntaxProvider sqlSyntaxProvider)
         {
-            Mandate.ParameterNotNull(logger, "Logger");
-            Mandate.ParameterNotNull(sqlSyntaxProvider, "sqlSyntaxProvider");
+            Ensure.ParameterNotNull(logger, "Logger");
+            Ensure.ParameterNotNull(sqlSyntaxProvider, "sqlSyntaxProvider");
 
             _logger = logger;
             _sqlSyntaxProvider = sqlSyntaxProvider;

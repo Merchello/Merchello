@@ -55,7 +55,7 @@
         /// </param>
         protected VirtualContentCache(CacheHelper cache, Func<Guid, TContent> fetch, bool modified)
         {
-            Mandate.ParameterNotNull(cache, "cache");
+            Ensure.ParameterNotNull(cache, "cache");
             _cache = cache;
             _fetch = fetch;
             ModifiedVersion = modified;

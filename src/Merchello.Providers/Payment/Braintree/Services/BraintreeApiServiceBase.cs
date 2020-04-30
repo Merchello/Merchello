@@ -38,8 +38,8 @@
         /// </param>
         protected BraintreeApiServiceBase(IMerchelloContext merchelloContext, BraintreeProviderSettings settings)
         {
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
-            Mandate.ParameterNotNull(settings, "settings");
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterNotNull(settings, "settings");
 
             this.MerchelloContext = merchelloContext;
 

@@ -40,7 +40,7 @@
         /// </param>
         public BasketModelFactory(MerchelloHelper merchello)
         {
-            Mandate.ParameterNotNull(merchello, "merchello");
+            Ensure.ParameterNotNull(merchello, "merchello");
             this._merchello = merchello;
         }
 

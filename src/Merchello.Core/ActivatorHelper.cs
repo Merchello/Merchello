@@ -33,9 +33,9 @@
         /// <returns>An instantiated type of T</returns>
         public static T CreateInstance<T>(Type type, Type[] ctrArgs, object[] ctrValues)
         {
-            Mandate.ParameterNotNull(type, "type");
-            Mandate.ParameterNotNull(ctrArgs, "ctrArgs");
-            Mandate.ParameterNotNull(ctrValues, "ctrValues");
+            Ensure.ParameterNotNull(type, "type");
+            Ensure.ParameterNotNull(ctrArgs, "ctrArgs");
+            Ensure.ParameterNotNull(ctrValues, "ctrValues");
             
             var constructor = type.GetConstructor(ctrArgs);
             if (constructor == null) return default(T);
@@ -51,8 +51,8 @@
         /// <returns>The result of the <see cref="Attempt{T}"/> to instantiate the object</returns>
         public static Attempt<T> CreateInstance<T>(string typeName, object[] constructorArgumentValues) where T : class
         {
-            Mandate.ParameterNotNullOrEmpty(typeName, "typName");
-            Mandate.ParameterNotNull(constructorArgumentValues, "constructorParameterValues");
+            Ensure.ParameterNotNullOrEmpty(typeName, "typName");
+            Ensure.ParameterNotNull(constructorArgumentValues, "constructorParameterValues");
 
             return CreateInstance<T>(Type.GetType(typeName), constructorArgumentValues);
         }
