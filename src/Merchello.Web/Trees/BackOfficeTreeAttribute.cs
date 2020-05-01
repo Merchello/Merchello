@@ -1,12 +1,9 @@
-﻿using Merchello.Core;
-
-namespace Merchello.Web.Trees
+﻿namespace Merchello.Web.Trees
 {
     using System;
 
+    using Merchello.Core;
     using Merchello.Core.Configuration;
-
-    using Umbraco.Core;
 
     /// <summary>
     /// The report view attribute.

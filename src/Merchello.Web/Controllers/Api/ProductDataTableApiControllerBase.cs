@@ -1,11 +1,11 @@
-﻿using Merchello.Core;
-
-namespace Merchello.Web.Controllers.Api
+﻿namespace Merchello.Web.Controllers.Api
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Http;
+
+    using Merchello.Core;
 
     using Merchello.Web;
     using Merchello.Web.Factories;

@@ -1,9 +1,8 @@
-﻿using Merchello.Core;
-
-namespace Merchello.Web.Controllers
+﻿namespace Merchello.Web.Controllers
 {
     using System.Web.Mvc;
 
+    using Merchello.Core;
     using Merchello.Core.Checkout;
     using Merchello.Core.Gateways;
     using Merchello.Core.Models;

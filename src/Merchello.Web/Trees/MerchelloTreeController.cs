@@ -1,6 +1,4 @@
-﻿using Merchello.Core;
-
-namespace Merchello.Web.Trees
+﻿namespace Merchello.Web.Trees
 {
     using System;
     using System.Collections.Generic;
@@ -10,6 +8,7 @@ namespace Merchello.Web.Trees
     using Core.Configuration;
     using Core.Configuration.Outline;
 
+    using Merchello.Core;
     using Merchello.Core.EntityCollections;
     using Merchello.Core.EntityCollections.Providers;
     using Merchello.Web.Models.ContentEditing.Collections;

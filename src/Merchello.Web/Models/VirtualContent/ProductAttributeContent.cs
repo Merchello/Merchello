@@ -1,11 +1,10 @@
-﻿using Merchello.Core;
-
-namespace Merchello.Web.Models.VirtualContent
+﻿namespace Merchello.Web.Models.VirtualContent
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
+    using Merchello.Core;
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Models.ContentEditing.Content;
 

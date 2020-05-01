@@ -1,11 +1,10 @@
-﻿using Merchello.Core;
-
-namespace Merchello.Web.Controllers
+﻿namespace Merchello.Web.Controllers
 {
     using System;
     using System.Linq;
     using System.Web.Mvc;
 
+    using Merchello.Core;
     using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Web.Factories;

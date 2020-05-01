@@ -1,14 +1,11 @@
-﻿using Merchello.Core;
-
-namespace Merchello.Web.Workflow.Notification
+﻿namespace Merchello.Web.Workflow.Notification
 {
     using System;
     using System.Web.Mvc;
 
+    using Merchello.Core;
     using Merchello.Core.Formatters;
     using Merchello.Web.Mvc;
-
-    using Umbraco.Core;
 
     /// <summary>
     /// A formatter to for razor based messages.
