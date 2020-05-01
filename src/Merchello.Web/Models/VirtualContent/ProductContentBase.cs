@@ -1,4 +1,6 @@
-﻿namespace Merchello.Web.Models.VirtualContent
+﻿using Merchello.Core;
+
+namespace Merchello.Web.Models.VirtualContent
 {
     using System;
     using System.Collections.Generic;

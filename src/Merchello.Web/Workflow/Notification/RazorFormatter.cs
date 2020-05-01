@@ -1,4 +1,6 @@
-﻿namespace Merchello.Web.Workflow.Notification
+﻿using Merchello.Core;
+
+namespace Merchello.Web.Workflow.Notification
 {
     using System;
     using System.Web.Mvc;

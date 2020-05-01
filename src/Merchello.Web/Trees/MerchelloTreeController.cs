@@ -1,4 +1,6 @@
-﻿namespace Merchello.Web.Trees
+﻿using Merchello.Core;
+
+namespace Merchello.Web.Trees
 {
     using System;
     using System.Collections.Generic;

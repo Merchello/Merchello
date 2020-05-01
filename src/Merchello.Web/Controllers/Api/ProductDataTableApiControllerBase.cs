@@ -1,4 +1,6 @@
-﻿namespace Merchello.Web.Controllers.Api
+﻿using Merchello.Core;
+
+namespace Merchello.Web.Controllers.Api
 {
     using System;
     using System.Collections.Generic;

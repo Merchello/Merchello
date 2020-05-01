@@ -1,4 +1,6 @@
-﻿namespace Merchello.Web.Controllers
+﻿using Merchello.Core;
+
+namespace Merchello.Web.Controllers
 {
     using System;
     using System.Web.Mvc;
