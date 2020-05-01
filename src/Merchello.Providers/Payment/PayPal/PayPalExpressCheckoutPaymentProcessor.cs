@@ -2,11 +2,10 @@
 {
     using System;
 
+    using Merchello.Core;
     using Merchello.Core.Models;
     using Merchello.Providers.Payment.PayPal.Models;
     using Merchello.Providers.Payment.PayPal.Services;
-
-    using Umbraco.Core;
 
     /// <summary>
 	/// The PayPal payment processor

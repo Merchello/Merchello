@@ -2,11 +2,10 @@
 {
     using System;
 
+    using Merchello.Core;
     using Merchello.Providers.Payment.PayPal.Models;
 
     using global::PayPal;
-
-    using Umbraco.Core;
 
     /// <summary>
     /// Represents a PayPal API Service.

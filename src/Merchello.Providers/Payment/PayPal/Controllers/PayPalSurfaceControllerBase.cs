@@ -2,13 +2,12 @@
 {
     using System;
     using System.Web.Mvc;
-
+    
+    using Merchello.Core;
     using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Web.Mvc;
-
-    using Umbraco.Core;
 
     /// <summary>
     /// The pay pal surface controller base.

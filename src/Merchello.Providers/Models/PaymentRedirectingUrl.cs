@@ -1,8 +1,8 @@
 ﻿namespace Merchello.Providers.Models
 {
-    using Umbraco.Core;
+	using Merchello.Core;
 
-    /// <summary>
+	/// <summary>
     /// Allows for overriding default redirections for Success and Cancel responses for API returns.
     /// </summary>
     public class PaymentRedirectingUrl
