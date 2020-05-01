@@ -8,8 +8,6 @@
     using Merchello.Web.Factories;
     using Merchello.Web.Models.Ui;
 
-    using Umbraco.Core;
-
     /// <summary>
     /// A base controller responsible for resolving the payment controller and method to be used in payment operations.
     /// </summary>

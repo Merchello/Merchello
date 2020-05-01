@@ -8,8 +8,6 @@
     using Merchello.Web.Factories;
     using Merchello.Web.Models.Ui;
 
-    using Umbraco.Core;
-
     /// <summary>
     /// A base controller for checkout summary rendering and operations.
     /// </summary>

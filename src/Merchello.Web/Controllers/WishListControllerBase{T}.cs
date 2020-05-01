@@ -11,7 +11,6 @@
     using Merchello.Web.Models.Ui;
     using Merchello.Web.Workflow;
 
-    using Umbraco.Core;
     using Umbraco.Web.Mvc;
 
     /// <summary>

@@ -13,8 +13,6 @@
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Models.Ui;
 
-    using Umbraco.Core;
-
     /// <summary>
     /// A base checkout discount controller.
     /// </summary>

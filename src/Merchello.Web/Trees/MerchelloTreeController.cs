@@ -1,4 +1,6 @@
-﻿namespace Merchello.Web.Trees
+﻿using Umbraco.Core;
+
+namespace Merchello.Web.Trees
 {
     using System;
     using System.Collections.Generic;
@@ -17,7 +19,6 @@
 
     using umbraco.BusinessLogic.Actions;
 
-    using Umbraco.Core;
     using Umbraco.Core.Services;
     using Umbraco.Web;
     using Umbraco.Web.Models.Trees;
