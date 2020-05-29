@@ -899,8 +899,8 @@
 
                 sql.Append("SELECT SUM([merchInvoice].total) FROM merchInvoice WHERE [merchInvoice].invoiceDate BETWEEN @starts and @ends AND [merchInvoice].currencyCode = @cc", new
                 {
-                    @starts = startDate.GetDateForSqlStartOfDay(),
-                    @ends = endDate.GetDateForSqlEndOfDay(),
+                    @starts = startDate.GetStartOfDay(),
+                    @ends = endDate.GetEndOfDay(),
                     @cc = currencyCode
                 });
 
