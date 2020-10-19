@@ -51,9 +51,6 @@
 
         <div class="umb-table-head">
             <div class="umb-table-row">
-                <div class="umb-table-cell not-fixed">
-                    Box
-                </div>
                 <div class="umb-table-cell not-fixed" data-ng-repeat="col in config.columns" ng-class="{'umb-table__name': col == config.columns[0]}">
                     <a href="#" data-ng-click="sort(col.name, !col.resultColumn)" prevent-default data-ng-class="{sortable : !col.resultColumn }" data-ng-hide="col.localizeKey === ''" class="umb-table-head__link">
                         <span><localize key="{{ col.localizeKey }}"/></span>
@@ -78,9 +75,6 @@
             </div>
 
             <div class="umb-table-row" ng-repeat="result in listViewResultSet.items" data-ng-class="{selected:result.selected}">
-                <div class="umb-table-cell not-fixed">
-                    box
-                </div>
                 <div class="umb-table-cell not-fixed" data-ng-repeat="col in config.columns" ng-class="{'umb-table__name': col == config.columns[0]}">
                     <span data-ng-bind-html="getColumnValue()(result, col)"></span>
                 </div>

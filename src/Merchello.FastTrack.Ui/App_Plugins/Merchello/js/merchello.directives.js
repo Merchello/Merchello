@@ -1879,8 +1879,7 @@ angular.module('merchello.directives').directive('merchelloListView',
                 noTitle: '@?',
                 noFilter: '@?',
                 filterOptions: '=?',
-                settingsComponent: '=?',
-                batchDelete: '&'
+                settingsComponent: '=?'
             },
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/merchellolistview.tpl.html',
             link: function (scope, elm, attr) {
