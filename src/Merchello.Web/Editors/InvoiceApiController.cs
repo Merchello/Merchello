@@ -399,7 +399,16 @@
 
                     var success = ((InvoiceService)_invoiceService).AdjustInvoice(invoice, invoiceItems.ToArray());
 
-                    if (success) return response;
+                    if (success)
+                    {
+                        if (CurrentUser != null)
+                        {
+                            // Set an audit log
+                            var message = string.Format("Invoice {0} adjusted by {1}", invoice.InvoiceNumber, CurrentUser.Name);
+                            _auditLogService.CreateAuditLogWithKey(invoice.Key, EntityType.Invoice, message);
+                        }
+                        return response;
+                    }
 
                     return Request.CreateResponse(HttpStatusCode.InternalServerError, "Did not successfully adjust invoice");
                 }
@@ -432,6 +441,7 @@
             {
                 // Get the invoice
                 var invoice = _invoiceService.GetByKey(id);
+                var invoiceNumber = invoice.InvoiceNumber;
 
                 // Cancel all orders
                 var orders = _orderService.GetOrdersByInvoiceKey(id);
@@ -479,9 +489,12 @@
                 // Save the invoice
                 _invoiceService.Save(invoice);
 
-                // Set an audit log
-                var message = string.Format("Order cancelled by {0}", CurrentUser != null ? CurrentUser.Name : "Unable to get user");
-                _auditLogService.CreateAuditLogWithKey(invoice.Key, EntityType.Invoice, message);
+                if (CurrentUser != null)
+                {
+                    // Set an audit log
+                    var message = string.Format("Invoice {0} cancelled by {1}", invoiceNumber, CurrentUser.Name);
+                    _auditLogService.CreateAuditLogWithKey(invoice.Key, EntityType.Invoice, message);
+                }
             }
             catch (Exception ex)
             {
@@ -696,6 +709,12 @@
             // Set to true
             invoiceAdjustmentResult.Success = true;
 
+            if (CurrentUser != null)
+            {
+                var message = string.Format("Updated lineitems on {0} by {1}", invoiceOrderShipment.Invoice.InvoiceNumber, CurrentUser.Name);
+                _auditLogService.CreateAuditLogWithKey(invoiceOrderShipment.Invoice.Key, EntityType.Invoice, message);
+            }
+
             return invoiceAdjustmentResult;
         }
 
@@ -772,6 +791,12 @@
             {
                 // Now update invoice and save as well as doing the tax
                 ((InvoiceService)_invoiceService).ReSyncInvoiceTotal(invoiceOrderShipment.Invoice, true);
+
+                if (CurrentUser != null)
+                {
+                    var message = string.Format("Lineitems deleted from {0} by {1}", invoiceOrderShipment.Invoice.InvoiceNumber, CurrentUser.Name);
+                    _auditLogService.CreateAuditLogWithKey(invoiceOrderShipment.Invoice.Key, EntityType.Invoice, message);
+                }
 
                 // Set to true
                 invoiceAdjustmentResult.Success = true;
@@ -866,6 +891,12 @@
                 // Now update invoice and save
                 ((InvoiceService)_invoiceService).ReSyncInvoiceTotal(invoiceOrderShipment.Invoice, true);
 
+                if (CurrentUser != null)
+                {
+                    var message = string.Format("Lineitems added to {0} by {1}", invoiceOrderShipment.Invoice.InvoiceNumber, CurrentUser.Name);
+                    _auditLogService.CreateAuditLogWithKey(invoiceOrderShipment.Invoice.Key, EntityType.Invoice, message);
+                }
+
                 invoiceAdjustmentResult.Success = true;
             }
             else
@@ -904,7 +935,7 @@
                 }
                 else
                 {
-                   // Problem. There is no shipping line item when there should be! Needs more investigating as this does very, very occasionally happen
+                    // Problem. There is no shipping line item when there should be! Needs more investigating as this does very, very occasionally happen
                     MultiLogHelper.Warn<InvoiceApiController>(string.Format("No shipping address line item when trying to save shipping address for {0}", invoice.PrefixedInvoiceNumber()));
                 }
 
@@ -939,6 +970,12 @@
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             }
 
+            if (CurrentUser != null)
+            {
+                var message = string.Format("Invoice {0} deleted by {1}", invoiceToDelete.InvoiceNumber, CurrentUser.Name);
+                _auditLogService.CreateAuditLogWithKey(invoiceToDelete.Key, EntityType.Invoice, message);
+            }
+
             _invoiceService.Delete(invoiceToDelete);
 
             return Request.CreateResponse(HttpStatusCode.OK);
@@ -971,6 +1008,13 @@
 
                 // Resync the invoice (And save)
                 ((InvoiceService)_invoiceService).ReSyncInvoiceTotal(invoice, true);
+            }
+
+
+            if (CurrentUser != null)
+            {
+                var message = string.Format("Discount {0} deleted by {1}", invoice.InvoiceNumber, CurrentUser.Name);
+                _auditLogService.CreateAuditLogWithKey(invoice.Key, EntityType.Invoice, message);
             }
 
             return Request.CreateResponse(HttpStatusCode.OK);
