@@ -20,12 +20,12 @@ namespace Merchello.Web.Models.ContentEditing
 	{
 		#region AppliedPayment
 
-		internal static AppliedPaymentDisplay ToAppliedPaymentDisplay(this IAppliedPayment appliedPayment)
+		public static AppliedPaymentDisplay ToAppliedPaymentDisplay(this IAppliedPayment appliedPayment)
 		{
 			return AutoMapper.Mapper.Map<AppliedPaymentDisplay>(appliedPayment);
 		}
 
-		internal static IAppliedPayment ToAppliedPayment(this AppliedPaymentDisplay appliedPaymentDisplay, IAppliedPayment destination)
+		public static IAppliedPayment ToAppliedPayment(this AppliedPaymentDisplay appliedPaymentDisplay, IAppliedPayment destination)
 		{
 			if (appliedPaymentDisplay.Key != Guid.Empty) destination.Key = appliedPaymentDisplay.Key;
 
@@ -40,7 +40,7 @@ namespace Merchello.Web.Models.ContentEditing
 
 		#region CatalogInventoryDisplay
 
-		internal static CatalogInventoryDisplay ToCatalogInventoryDisplay(this ICatalogInventory catalogInventory)
+		public static CatalogInventoryDisplay ToCatalogInventoryDisplay(this ICatalogInventory catalogInventory)
 		{            
 			return AutoMapper.Mapper.Map<CatalogInventoryDisplay>(catalogInventory);
 		}
@@ -49,7 +49,7 @@ namespace Merchello.Web.Models.ContentEditing
 
 		#region ShipCountryDisplay
 
-		internal static ShipCountryDisplay ToShipCountryDisplay(this IShipCountry shipCountry)
+		public static ShipCountryDisplay ToShipCountryDisplay(this IShipCountry shipCountry)
 		{            
 			return AutoMapper.Mapper.Map<ShipCountryDisplay>(shipCountry);
 		}
@@ -58,7 +58,7 @@ namespace Merchello.Web.Models.ContentEditing
 
 		#region IShipCountry
 
-		internal static IShipCountry ToShipCountry(this ShipCountryDisplay shipCountryDisplay, IShipCountry destination)
+		public static IShipCountry ToShipCountry(this ShipCountryDisplay shipCountryDisplay, IShipCountry destination)
 		{
 			// May not be any mapping
 
@@ -69,7 +69,7 @@ namespace Merchello.Web.Models.ContentEditing
 
 		#region GatewayResourceDisplay
 
-		internal static GatewayResourceDisplay ToGatewayResourceDisplay(this IGatewayResource gatewayResource)
+		public static GatewayResourceDisplay ToGatewayResourceDisplay(this IGatewayResource gatewayResource)
 		{
 			return AutoMapper.Mapper.Map<GatewayResourceDisplay>(gatewayResource);
 		}
@@ -78,12 +78,12 @@ namespace Merchello.Web.Models.ContentEditing
 
 		#region Payment
 
-		internal static PaymentDisplay ToPaymentDisplay(this IPayment payment)
+		public static PaymentDisplay ToPaymentDisplay(this IPayment payment)
 		{
 			return AutoMapper.Mapper.Map<PaymentDisplay>(payment);
 		}
 
-		internal static IPayment ToPayment(this PaymentDisplay paymentDisplay, IPayment destination)
+		public static IPayment ToPayment(this PaymentDisplay paymentDisplay, IPayment destination)
 		{
 			if (paymentDisplay.Key != Guid.Empty) destination.Key = paymentDisplay.Key;
 			destination.PaymentMethodName = paymentDisplay.PaymentMethodName;
@@ -99,17 +99,17 @@ namespace Merchello.Web.Models.ContentEditing
 
 		#region PaymentMethod
 
-		internal static PaymentMethodDisplay ToPaymentMethodDisplay(this IPaymentMethod paymentMethod)
+		public static PaymentMethodDisplay ToPaymentMethodDisplay(this IPaymentMethod paymentMethod)
 		{
 			return AutoMapper.Mapper.Map<PaymentMethodDisplay>(paymentMethod);
 		}
 
-		internal static PaymentMethodDisplay ToPaymentMethodDisplay(this IPaymentGatewayMethod paymentGatewayMethod)
+		public static PaymentMethodDisplay ToPaymentMethodDisplay(this IPaymentGatewayMethod paymentGatewayMethod)
 		{
 			return AutoMapper.Mapper.Map<PaymentMethodDisplay>(paymentGatewayMethod);
 		}
 
-		internal static IPaymentMethod ToPaymentMethod(this PaymentMethodDisplay paymentMethodDisplay, IPaymentMethod destination)
+		public static IPaymentMethod ToPaymentMethod(this PaymentMethodDisplay paymentMethodDisplay, IPaymentMethod destination)
 		{
 			if (paymentMethodDisplay.Key != Guid.Empty) destination.Key = paymentMethodDisplay.Key;
 
@@ -124,7 +124,7 @@ namespace Merchello.Web.Models.ContentEditing
 
 		#region ShipGatewayProviderDisplay
 
-		internal static ShippingGatewayProviderDisplay ToShipGatewayProviderDisplay(this ShippingGatewayProviderBase shipGatewayProvider)
+		public static ShippingGatewayProviderDisplay ToShipGatewayProviderDisplay(this ShippingGatewayProviderBase shipGatewayProvider)
 		{
 			return AutoMapper.Mapper.Map<ShippingGatewayProviderDisplay>(shipGatewayProvider); 
 		}
@@ -139,7 +139,7 @@ namespace Merchello.Web.Models.ContentEditing
 
 		#region IShipMethod
 
-		internal static IShipMethod ToShipMethod(this ShipMethodDisplay shipMethodDisplay, IShipMethod destination)
+		public static IShipMethod ToShipMethod(this ShipMethodDisplay shipMethodDisplay, IShipMethod destination)
 		{
 			if (shipMethodDisplay.Key != Guid.Empty)
 			{
@@ -175,7 +175,7 @@ namespace Merchello.Web.Models.ContentEditing
 
 		#region ShipProvinceDisplay
 
-		internal static ShipProvinceDisplay ToShipProvinceDisplay(this IShipProvince shipProvince)
+		public static ShipProvinceDisplay ToShipProvinceDisplay(this IShipProvince shipProvince)
 		{            
 			return AutoMapper.Mapper.Map<ShipProvinceDisplay>(shipProvince);
 		}
@@ -184,7 +184,7 @@ namespace Merchello.Web.Models.ContentEditing
 
 		#region IShipProvince
 
-		internal static IShipProvince ToShipProvince(this ShipProvinceDisplay shipProvinceDisplay, IShipProvince destination)
+		public static IShipProvince ToShipProvince(this ShipProvinceDisplay shipProvinceDisplay, IShipProvince destination)
 		{
 			destination.AllowShipping = shipProvinceDisplay.AllowShipping;
 			destination.RateAdjustment = shipProvinceDisplay.RateAdjustment;
@@ -210,7 +210,7 @@ namespace Merchello.Web.Models.ContentEditing
             return mappedInvoice;
 		}
 
-		internal static IInvoice ToInvoice(this InvoiceDisplay invoiceDisplay, IInvoice destination)
+		public static IInvoice ToInvoice(this InvoiceDisplay invoiceDisplay, IInvoice destination)
 		{
 			if (invoiceDisplay.Key != Guid.Empty) destination.Key = invoiceDisplay.Key;
 			destination.InvoiceNumberPrefix = invoiceDisplay.InvoiceNumberPrefix;
@@ -264,7 +264,7 @@ namespace Merchello.Web.Models.ContentEditing
             return destination;
 		}
 
-		internal static IInvoiceStatus ToInvoiceStatus(this InvoiceStatusDisplay invoiceStatusDisplay)
+		public static IInvoiceStatus ToInvoiceStatus(this InvoiceStatusDisplay invoiceStatusDisplay)
 		{
 			return new InvoiceStatus
 			{
@@ -281,12 +281,12 @@ namespace Merchello.Web.Models.ContentEditing
 
 		#region NotificationMessage
 
-		internal static NotificationMessageDisplay ToNotificationMessageDisplay(this INotificationMessage message)
+		public static NotificationMessageDisplay ToNotificationMessageDisplay(this INotificationMessage message)
 		{
 			return AutoMapper.Mapper.Map<NotificationMessageDisplay>(message);
 		}
 
-		internal static INotificationMessage ToNotificationMessage(this NotificationMessageDisplay notificationMessageDisplay, INotificationMessage destination)
+		public static INotificationMessage ToNotificationMessage(this NotificationMessageDisplay notificationMessageDisplay, INotificationMessage destination)
 		{
 			if (notificationMessageDisplay.Key != Guid.Empty) destination.Key = notificationMessageDisplay.Key;
 		    destination.Name = notificationMessageDisplay.Name;
@@ -305,7 +305,7 @@ namespace Merchello.Web.Models.ContentEditing
 			return destination;
 		}
 
-		internal static INotificationMethod ToNotificationMethod(this NotificationMethodDisplay notificationMethodDisplay, INotificationMethod destination)
+		public static INotificationMethod ToNotificationMethod(this NotificationMethodDisplay notificationMethodDisplay, INotificationMethod destination)
 		{
 			if (notificationMethodDisplay.Key != Guid.Empty) destination.Key = notificationMethodDisplay.Key;
 			destination.Name = notificationMethodDisplay.Name;
@@ -315,7 +315,7 @@ namespace Merchello.Web.Models.ContentEditing
 			return destination;
 		}
 
-		internal static NotificationMethodDisplay ToNotificationMethodDisplay(this INotificationGatewayMethod method)
+		public static NotificationMethodDisplay ToNotificationMethodDisplay(this INotificationGatewayMethod method)
 		{
 			return AutoMapper.Mapper.Map<NotificationMethodDisplay>(method);
 		}
@@ -324,13 +324,13 @@ namespace Merchello.Web.Models.ContentEditing
 
 		#region Order
 
-		internal static OrderDisplay ToOrderDisplay(this IOrder order)
+		public static OrderDisplay ToOrderDisplay(this IOrder order)
 		{
 			return AutoMapper.Mapper.Map<OrderDisplay>(order);
 		}
 
 
-		internal static IOrder ToOrder(this OrderDisplay orderDisplay, IOrder destination)
+		public static IOrder ToOrder(this OrderDisplay orderDisplay, IOrder destination)
 		{
 			if (orderDisplay.Key != Guid.Empty) destination.Key = orderDisplay.Key;
 			destination.OrderNumberPrefix = orderDisplay.OrderNumberPrefix;
@@ -352,7 +352,7 @@ namespace Merchello.Web.Models.ContentEditing
 			return destination;
 		}
 
-		internal static IOrderStatus ToOrderStatus(this OrderStatusDisplay orderStatusDisplay)
+		public static IOrderStatus ToOrderStatus(this OrderStatusDisplay orderStatusDisplay)
 		{
 			return new OrderStatus()
 				{
@@ -365,7 +365,7 @@ namespace Merchello.Web.Models.ContentEditing
 				};
 		}
 
-		internal static OrderLineItemDisplay ToOrderLineItemDisplay(this IOrderLineItem orderLineItem)
+		public static OrderLineItemDisplay ToOrderLineItemDisplay(this IOrderLineItem orderLineItem)
 		{
 			return AutoMapper.Mapper.Map<OrderLineItemDisplay>(orderLineItem);
 		}
@@ -374,7 +374,7 @@ namespace Merchello.Web.Models.ContentEditing
 
 		#region Shipment
 
-		internal static ShipmentDisplay ToShipmentDisplay(this IShipment shipment)
+		public static ShipmentDisplay ToShipmentDisplay(this IShipment shipment)
 		{
 			var shipmentDisplay = AutoMapper.Mapper.Map<ShipmentDisplay>(shipment);
 
@@ -391,7 +391,7 @@ namespace Merchello.Web.Models.ContentEditing
             return shipmentDisplay;
 		}
 
-		internal static IShipment ToShipment(this ShipmentDisplay shipmentDisplay, IShipment destination)
+		public static IShipment ToShipment(this ShipmentDisplay shipmentDisplay, IShipment destination)
 		{
 			if (shipmentDisplay.Key != Guid.Empty) destination.Key = shipmentDisplay.Key;
 			destination.ShippedDate = shipmentDisplay.ShippedDate;
@@ -435,7 +435,7 @@ namespace Merchello.Web.Models.ContentEditing
 			return destination;
 		}
 
-	    internal static ShipmentStatus ToShipmentStatus(this ShipmentStatusDisplay status)
+	    public static ShipmentStatus ToShipmentStatus(this ShipmentStatusDisplay status)
 	    {
 	        return AutoMapper.Mapper.Map<ShipmentStatus>(status);
 	    }
@@ -444,7 +444,7 @@ namespace Merchello.Web.Models.ContentEditing
 
 		#region ShipFixedRateTableDisplay
 
-		internal static ShipFixedRateTableDisplay ToShipFixedRateTableDisplay(this IShippingFixedRateTable shippingFixedRateTable)
+		public static ShipFixedRateTableDisplay ToShipFixedRateTableDisplay(this IShippingFixedRateTable shippingFixedRateTable)
 		{            
 			return AutoMapper.Mapper.Map<ShipFixedRateTableDisplay>(shippingFixedRateTable);
 		}
@@ -466,7 +466,7 @@ namespace Merchello.Web.Models.ContentEditing
 		/// * For testing you will have to use the static .Save(IGatewayProviderService ..., as MerchelloContext.Current will likely be null
 		/// 
 		/// </remarks>
-		internal static IShippingFixedRateTable ToShipRateTable(this ShipFixedRateTableDisplay shipFixedRateTableDisplay, IShippingFixedRateTable destination)
+		public static IShippingFixedRateTable ToShipRateTable(this ShipFixedRateTableDisplay shipFixedRateTableDisplay, IShippingFixedRateTable destination)
 		{
 
 			// determine if any rows were deleted
@@ -524,7 +524,7 @@ namespace Merchello.Web.Models.ContentEditing
 
 		#region ShipRateTierDisplay
 
-		internal static ShipRateTierDisplay ToShipRateTierDisplay(this IShipRateTier shipRateTier)
+		public static ShipRateTierDisplay ToShipRateTierDisplay(this IShipRateTier shipRateTier)
 		{            
 			return AutoMapper.Mapper.Map<ShipRateTierDisplay>(shipRateTier);
 		}
@@ -533,7 +533,7 @@ namespace Merchello.Web.Models.ContentEditing
 
 		#region IShipRateTier
 
-		internal static IShipRateTier ToShipRateTier(this ShipRateTierDisplay shipRateTierDisplay, IShipRateTier destination)
+		public static IShipRateTier ToShipRateTier(this ShipRateTierDisplay shipRateTierDisplay, IShipRateTier destination)
 		{
 			if (shipRateTierDisplay.Key != Guid.Empty)
 			{
@@ -550,7 +550,7 @@ namespace Merchello.Web.Models.ContentEditing
 
 		#region TaxProvinceDisplay
 
-		internal static TaxProvinceDisplay ToTaxProvinceDisplay(this ITaxProvince taxProvince)
+		public static TaxProvinceDisplay ToTaxProvinceDisplay(this ITaxProvince taxProvince)
 		{            
 			return AutoMapper.Mapper.Map<TaxProvinceDisplay>(taxProvince);
 		}
@@ -559,7 +559,7 @@ namespace Merchello.Web.Models.ContentEditing
 
 		#region WarehouseDisplay
 
-		internal static WarehouseDisplay ToWarehouseDisplay(this IWarehouse warehouse)
+		public static WarehouseDisplay ToWarehouseDisplay(this IWarehouse warehouse)
 		{
 			return AutoMapper.Mapper.Map<WarehouseDisplay>(warehouse);
 		}
@@ -568,7 +568,7 @@ namespace Merchello.Web.Models.ContentEditing
 
 		#region IWarehouse
 
-		internal static IWarehouse ToWarehouse(this WarehouseDisplay warehouseDisplay, IWarehouse destination)
+		public static IWarehouse ToWarehouse(this WarehouseDisplay warehouseDisplay, IWarehouse destination)
 		{
 			if (warehouseDisplay.Key != Guid.Empty)
 			{
