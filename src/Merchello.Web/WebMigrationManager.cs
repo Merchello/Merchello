@@ -132,35 +132,39 @@
         /// <returns>
         /// The <see cref="Task"/>.
         /// </returns>
-        public async Task<HttpResponseMessage> PostDomainRecord(MigrationDomain record)
+        public HttpResponseMessage PostDomainRecord(MigrationDomain record)
         {
-            if (!MerchelloConfiguration.Current.Section.EnableInstallTracking)
-                return new HttpResponseMessage(HttpStatusCode.OK);
+            //if (!MerchelloConfiguration.Current.Section.EnableInstallTracking)
+            //    return new HttpResponseMessage(HttpStatusCode.OK);
 
-            var data = JsonConvert.SerializeObject(record);
+            //var data = JsonConvert.SerializeObject(record);
 
-            using (var client = new HttpClient())
+            //using (var client = new HttpClient())
+            //{
+            //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            //    HttpResponseMessage responseMessage = null;
+            //    try
+            //    {
+            //        responseMessage = await client.PostAsync(RecordDomainUrl, new StringContent(data, Encoding.UTF8, "application/json"));
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        if (responseMessage == null)
+            //        {
+            //            responseMessage = new HttpResponseMessage();
+            //        }
+
+            //        responseMessage.StatusCode = HttpStatusCode.InternalServerError;
+            //        responseMessage.ReasonPhrase = string.Format("PostDomainRecord failed: {0}", ex);
+            //    }
+
+            var responseMessage = new HttpResponseMessage
             {
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                HttpResponseMessage responseMessage = null;
-                try
-                {
-                    responseMessage = await client.PostAsync(RecordDomainUrl, new StringContent(data, Encoding.UTF8, "application/json"));
-                }
-                catch (Exception ex)
-                {
-                    if (responseMessage == null)
-                    {
-                        responseMessage = new HttpResponseMessage();
-                    }
-
-                    responseMessage.StatusCode = HttpStatusCode.InternalServerError;
-                    responseMessage.ReasonPhrase = string.Format("PostDomainRecord failed: {0}", ex);
-                }
-
-                return responseMessage;
-            }
+                StatusCode = HttpStatusCode.OK
+            };
+            return responseMessage;
+            //}
         }
     }
 }
