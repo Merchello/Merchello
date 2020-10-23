@@ -281,7 +281,7 @@
                 try
                 {
                     var migrationManager = new WebMigrationManager(UmbracoContext.Application);
-                    var response = await migrationManager.PostDomainRecord(record);
+                    var response = migrationManager.PostDomainRecord(record);
 
                     if (response.StatusCode != HttpStatusCode.OK)
                     {
