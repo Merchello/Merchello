@@ -274,33 +274,33 @@
         [HttpPost]
         public async Task<HttpResponseMessage> RecordDomain(MigrationDomain record)
         {
-            var setting = _storeSettingService.GetByKey(Constants.StoreSetting.HasDomainRecordKey);
+            //var setting = _storeSettingService.GetByKey(Constants.StoreSetting.HasDomainRecordKey);
 
-            if (setting != null && setting.Value == "False")
-            {
-                try
-                {
-                    var migrationManager = new WebMigrationManager(UmbracoContext.Application);
-                    var response = migrationManager.PostDomainRecord(record);
+            //if (setting != null && setting.Value == "False")
+            //{
+            //    try
+            //    {
+            //        var migrationManager = new WebMigrationManager(UmbracoContext.Application);
+            //        var response = migrationManager.PostDomainRecord(record);
 
-                    if (response.StatusCode != HttpStatusCode.OK)
-                    {
-                        var ex = new Exception(response.ReasonPhrase);
-                        MultiLogHelper.Error<SettingsApiController>("Failed to record domain analytic", ex);
-                    }
+            //        if (response.StatusCode != HttpStatusCode.OK)
+            //        {
+            //            var ex = new Exception(response.ReasonPhrase);
+            //            MultiLogHelper.Error<SettingsApiController>("Failed to record domain analytic", ex);
+            //        }
 
-                    setting.Value = true.ToString();
-                    _storeSettingService.Save(setting);
+            //        setting.Value = true.ToString();
+            //        _storeSettingService.Save(setting);
 
-                    return response;
-                }
-                catch (Exception ex)
-                {
-                    // this is for analytics only and we don't want to throw
-                    MultiLogHelper.Error<SettingsApiController>("Failed to record analytics (Domain)", ex);
-                }
+            //        return response;
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        // this is for analytics only and we don't want to throw
+            //        MultiLogHelper.Error<SettingsApiController>("Failed to record analytics (Domain)", ex);
+            //    }
 
-            }
+            //}
 
             return Request.CreateResponse(HttpStatusCode.OK);
         }
