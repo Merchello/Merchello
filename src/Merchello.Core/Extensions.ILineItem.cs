@@ -79,12 +79,12 @@ namespace Merchello.Core
         {
             var extendedData = new ExtendedDataCollection();
             extendedData.AddShipment(shipmentRateQuote.Shipment);
-
+            var sku = shipmentRateQuote.Shipment.ShipmentNumberPrefix.IsNullOrWhiteSpace() ? shipmentRateQuote.ShipMethod.ServiceCode : shipmentRateQuote.Shipment.ShipmentNumberPrefix;
             var ctrValues = new object[]
                 {
                     EnumTypeFieldConverter.LineItemType.Shipping.TypeKey,
                     shipmentRateQuote.ShipmentLineItemName(),
-                    shipmentRateQuote.ShipMethod.ServiceCode, // TODO this may not be unique (SKU) once multiple shipments are exposed
+                    sku, // TODO this may not be unique (SKU) once multiple shipments are exposed
                     1,
                     shipmentRateQuote.Rate,
                     extendedData
