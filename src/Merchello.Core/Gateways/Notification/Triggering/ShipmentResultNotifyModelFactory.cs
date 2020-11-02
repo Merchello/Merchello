@@ -91,9 +91,7 @@
                         notifyModel.Invoice = invoice;
                         if (invoice.Items.Any())
                         {
-                            var currencyCode =
-                                invoice.Items.First()
-                                    .ExtendedData.GetValue(Core.Constants.ExtendedDataKeys.CurrencyCode);
+                            var currencyCode = invoice.Items.First().ExtendedData.GetValue(Core.Constants.ExtendedDataKeys.CurrencyCode);
                             var currency = _storeSettingService.GetCurrencyByCode(currencyCode);
                             notifyModel.CurrencySymbol = currency != null ? currency.Symbol : "£";
                         }
