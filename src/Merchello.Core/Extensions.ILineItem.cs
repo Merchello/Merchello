@@ -51,7 +51,7 @@ namespace Merchello.Core
                     lineItem.Sku,
                     lineItem.Quantity,
                     lineItem.Price,
-                    lineItem.ExtendedData
+                    new ExtendedDataCollection(lineItem.ExtendedData)
                 };
 
 
