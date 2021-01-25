@@ -143,6 +143,11 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                         icon = 'icon-truck';
                         text = fulfilled;
                         break;
+                    case 'Ordered':
+                        //cssClass = 'label-success';
+                        icon = 'icon-thumb-up';
+                        text = 'Ordered';
+                        break;
                     case 'Open':
                         //cssClass = 'label-default';
                         icon = 'icon-loading';
