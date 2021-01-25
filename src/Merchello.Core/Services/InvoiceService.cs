@@ -1336,7 +1336,7 @@
         /// <returns>
         /// The <see cref="Page"/>.
         /// </returns>
-        internal Page<IInvoice> GetInvoicesMatchingInvoiceStatus(
+        public Page<IInvoice> GetInvoicesMatchingInvoiceStatus(
             string searchTerm,
             Guid invoiceStatusKey,
             long page,
@@ -1380,7 +1380,7 @@
         /// <returns>
         /// The <see cref="Page"/>.
         /// </returns>
-        internal Page<Guid> GetInvoiceKeysMatchingInvoiceStatus(
+        public Page<Guid> GetInvoiceKeysMatchingInvoiceStatus(
             string searchTerm,
             Guid invoiceStatusKey,
             long page,
@@ -1424,7 +1424,7 @@
         /// <returns>
         /// The <see cref="Page"/>.
         /// </returns>
-        internal Page<IInvoice> GetInvoicesMatchingTermNotInvoiceStatus(
+        public Page<IInvoice> GetInvoicesMatchingTermNotInvoiceStatus(
             string searchTerm,
             Guid invoiceStatusKey,
             long page,
@@ -1468,7 +1468,7 @@
         /// <returns>
         /// The <see cref="Page"/>.
         /// </returns>
-        internal Page<Guid> GetInvoiceKeysMatchingTermNotInvoiceStatus(
+        public Page<Guid> GetInvoiceKeysMatchingTermNotInvoiceStatus(
             string searchTerm,
             Guid invoiceStatusKey,
             long page,
@@ -1512,7 +1512,7 @@
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        internal Page<IInvoice> GetInvoicesMatchingOrderStatus(
+        public Page<IInvoice> GetInvoicesMatchingOrderStatus(
             string searchTerm,
             Guid orderStatusKey,
             long page,
@@ -1553,7 +1553,7 @@
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        internal Page<Guid> GetInvoiceKeysMatchingOrderStatus(
+        public Page<Guid> GetInvoiceKeysMatchingOrderStatus(
             Guid orderStatusKey,
             long page,
             long itemsPerPage,
@@ -1595,7 +1595,7 @@
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        internal Page<Guid> GetInvoiceKeysMatchingOrderStatus(
+        public Page<Guid> GetInvoiceKeysMatchingOrderStatus(
             string searchTerm,
             Guid orderStatusKey,
             long page,
@@ -1639,7 +1639,7 @@
         /// <returns>
         /// The <see cref="Page{IInvoice}"/>.
         /// </returns>
-        internal Page<IInvoice> GetInvoicesMatchingTermNotOrderStatus(
+        public Page<IInvoice> GetInvoicesMatchingTermNotOrderStatus(
             string searchTerm,
             Guid orderStatusKey,
             long page,
@@ -1680,7 +1680,7 @@
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        internal Page<Guid> GetInvoiceKeysMatchingTermNotOrderStatus(
+        public Page<Guid> GetInvoiceKeysMatchingTermNotOrderStatus(
             Guid orderStatusKey,
             long page,
             long itemsPerPage,
@@ -1722,7 +1722,7 @@
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        internal Page<Guid> GetInvoiceKeysMatchingTermNotOrderStatus(
+        public Page<Guid> GetInvoiceKeysMatchingTermNotOrderStatus(
             string searchTerm,
             Guid orderStatusKey,
             long page,
@@ -1756,7 +1756,7 @@
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        internal bool AdjustInvoice(IInvoice invoice, IEnumerable<IInvoiceLineItem> adjustments)
+        public bool AdjustInvoice(IInvoice invoice, IEnumerable<IInvoiceLineItem> adjustments)
         {
             if (invoice != null)
             {
@@ -1797,7 +1797,7 @@
         /// If set to true, this will rework out the tax for the invoice and update the tax items
         /// </param>
         /// <param name="invoice"></param>
-        internal void ReSyncInvoiceTotal(IInvoice invoice, bool applyTaxationMethod = false)
+        public void ReSyncInvoiceTotal(IInvoice invoice, bool applyTaxationMethod = false)
         {
             // TODO - Work out Tax!!
             //&& MerchelloContext.Current.Gateways.Taxation.TaxationApplication == TaxationApplication.Invoice
@@ -1881,7 +1881,7 @@
         /// <returns>
         /// The collection of all <see cref="IInvoice"/>.
         /// </returns>
-        internal IEnumerable<IInvoice> GetAll()
+        public IEnumerable<IInvoice> GetAll()
         {
             using (var repository = RepositoryFactory.CreateInvoiceRepository(UowProvider.GetUnitOfWork()))
             {
@@ -1912,7 +1912,7 @@
         /// <returns>
         /// The currency code saved in the store settings.
         /// </returns>
-        internal string GetDefaultCurrencyCode()
+        public string GetDefaultCurrencyCode()
         {
             return this._storeSettingService.GetByKey(Core.Constants.StoreSetting.CurrencyCodeKey).Value;
         }
