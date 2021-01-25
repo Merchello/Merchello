@@ -126,7 +126,7 @@
         /// <returns>
         /// The <see cref="Page{TEntity}"/>.
         /// </returns>
-        internal Page<TEntity> GetPageFromKeyPage(Page<Guid> keyPage, Func<IEnumerable<TEntity>> getter)
+        public Page<TEntity> GetPageFromKeyPage(Page<Guid> keyPage, Func<IEnumerable<TEntity>> getter)
         {
             return new Page<TEntity>()
                        {
