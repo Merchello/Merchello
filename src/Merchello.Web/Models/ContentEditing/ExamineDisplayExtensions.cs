@@ -130,34 +130,34 @@
         internal static InvoiceDisplay ToInvoiceDisplay(this SearchResult result, Func<Guid, IEnumerable<OrderDisplay>> getOrders)
         {
             var invoice = new InvoiceDisplay()
-                {
-                    Key = FieldAsGuid(result, "invoiceKey"),
-                    InvoiceNumberPrefix = FieldAsString(result, "invoiceNumberPrefix"),
-                    InvoiceNumber = FieldAsInteger(result, "invoiceNumber"),
-                    InvoiceDate = FieldAsDateTime(result, "invoiceDate"),
-                    InvoiceStatusKey = FieldAsGuid(result, "invoiceStatusKey"),
-                    CustomerKey = FieldAsGuid(result, "customerKey"),
-                    VersionKey = FieldAsGuid(result, "versionKey"),
-                    BillToName = FieldAsString(result, "billToName"),
-                    BillToAddress1 = FieldAsString(result, "billToAddress1"),
-                    BillToAddress2 = FieldAsString(result, "billToAddress2"),
-                    BillToLocality = FieldAsString(result, "billToLocality"),
-                    BillToRegion = FieldAsString(result, "billToRegion"),
-                    BillToCountryCode = FieldAsString(result, "billToCountryCode"),
-                    BillToPostalCode = FieldAsString(result, "billToPostalCode"),
-                    BillToCompany = FieldAsString(result, "billToCompany"),
-                    BillToPhone = FieldAsString(result, "billToPhone"),
-                    BillToEmail = FieldAsString(result, "billToEmail"),
-                    CurrencyCode = FieldAsString(result, "currencyCode"),
-                    PoNumber = FieldAsString(result, "poNumber"),
-                    Exported = FieldAsBoolean(result.Fields["exported"]),
-                    Archived = FieldAsBoolean(result.Fields["archived"]),
-                    Total = FieldAsDecimal(result, "total"),
-                    InvoiceStatus = JsonFieldAs<InvoiceStatusDisplay>(result, "invoiceStatus"),
-                    Currency = JsonFieldAs<CurrencyDisplay>(result, "currency"),
-                    Notes = RawJsonFieldAsCollection<NoteDisplay>(result, "notes"),
-                    Items = RawJsonFieldAsCollection<InvoiceLineItemDisplay>(result, "invoiceItems")                  
-                };
+            {
+                Key = FieldAsGuid(result, "invoiceKey"),
+                InvoiceNumberPrefix = FieldAsString(result, "invoiceNumberPrefix"),
+                InvoiceNumber = FieldAsInteger(result, "invoiceNumber"),
+                InvoiceDate = FieldAsDateTime(result, "invoiceDate"),
+                InvoiceStatusKey = FieldAsGuid(result, "invoiceStatusKey"),
+                CustomerKey = FieldAsGuid(result, "customerKey"),
+                VersionKey = FieldAsGuid(result, "versionKey"),
+                BillToName = FieldAsString(result, "billToName"),
+                BillToAddress1 = FieldAsString(result, "billToAddress1"),
+                BillToAddress2 = FieldAsString(result, "billToAddress2"),
+                BillToLocality = FieldAsString(result, "billToLocality"),
+                BillToRegion = FieldAsString(result, "billToRegion"),
+                BillToCountryCode = FieldAsString(result, "billToCountryCode"),
+                BillToPostalCode = FieldAsString(result, "billToPostalCode"),
+                BillToCompany = FieldAsString(result, "billToCompany"),
+                BillToPhone = FieldAsString(result, "billToPhone"),
+                BillToEmail = FieldAsString(result, "billToEmail"),
+                CurrencyCode = FieldAsString(result, "currencyCode"),
+                PoNumber = FieldAsString(result, "poNumber"),
+                Exported = FieldAsBoolean(result.Fields["exported"]),
+                Archived = FieldAsBoolean(result.Fields["archived"]),
+                Total = FieldAsDecimal(result, "total"),
+                InvoiceStatus = JsonFieldAs<InvoiceStatusDisplay>(result, "invoiceStatus"),
+                Currency = JsonFieldAs<CurrencyDisplay>(result, "currency"),
+                Notes = RawJsonFieldAsCollection<NoteDisplay>(result, "notes"),
+                Items = RawJsonFieldAsCollection<InvoiceLineItemDisplay>(result, "invoiceItems")
+            };
 
 
             invoice.Orders = getOrders(invoice.Key);
@@ -177,18 +177,18 @@
         internal static OrderDisplay ToOrderDisplay(this SearchResult result)
         {
             return new OrderDisplay()
-                {
-                    Key = FieldAsGuid(result, "orderKey"),
-                    InvoiceKey = FieldAsGuid(result, "invoiceKey"),
-                    OrderNumberPrefix = FieldAsString(result, "orderNumberPrefix"),
-                    OrderNumber = FieldAsInteger(result, "orderNumber"),
-                    OrderDate = FieldAsDateTime(result, "orderDate"),
-                    OrderStatusKey = FieldAsGuid(result, "orderStatusKey"),
-                    VersionKey = FieldAsGuid(result, "versionKey"),
-                    Exported = FieldAsBoolean(result.Fields["exported"]),
-                    OrderStatus = JsonFieldAs<OrderStatusDisplay>(result, "orderStatus"),
-                    Items = RawJsonFieldAsCollection<OrderLineItemDisplay>(result, "orderItems")
-                };
+            {
+                Key = FieldAsGuid(result, "orderKey"),
+                InvoiceKey = FieldAsGuid(result, "invoiceKey"),
+                OrderNumberPrefix = FieldAsString(result, "orderNumberPrefix"),
+                OrderNumber = FieldAsInteger(result, "orderNumber"),
+                OrderDate = FieldAsDateTime(result, "orderDate"),
+                OrderStatusKey = FieldAsGuid(result, "orderStatusKey"),
+                VersionKey = FieldAsGuid(result, "versionKey"),
+                Exported = FieldAsBoolean(result.Fields["exported"]),
+                OrderStatus = JsonFieldAs<OrderStatusDisplay>(result, "orderStatus"),
+                Items = RawJsonFieldAsCollection<OrderLineItemDisplay>(result, "orderItems")
+            };
         }
 
         /// <summary>
@@ -268,9 +268,9 @@
             if (!result.Fields.ContainsKey(alias)) return Enumerable.Empty<ProductVariantDetachedContentDisplay>();
 
             var jarray = JArray.Parse(result.Fields[alias]);
-            
+
             var contents = new List<ProductVariantDetachedContentDisplay>();
-            
+
             // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var j in jarray)
             {
@@ -279,14 +279,14 @@
 
                 var dataValues = jtoken.GetValue("DetachedDataValues").ToObject<IEnumerable<KeyValuePair<string, string>>>();
                 var pvdc = new ProductVariantDetachedContent(jtoken.GetValue("ProductVariantKey").ToObject<Guid>(), contentType, j.Value<string>("CultureName"), new DetachedDataValuesCollection(dataValues))
-                        {
-                            Key = jtoken.GetValue("Key").ToObject<Guid>(),
-                            Slug = jtoken.SelectToken("Slug").ToString(),
-                            TemplateId = (int)j.SelectToken("TemplateId"),
-                            CanBeRendered = bool.Parse(jtoken.SelectToken("CanBeRendered").ToString()),
-                            CreateDate = contentType.CreateDate,
-                            UpdateDate = contentType.UpdateDate
-                        };
+                {
+                    Key = jtoken.GetValue("Key").ToObject<Guid>(),
+                    Slug = jtoken.SelectToken("Slug").ToString(),
+                    TemplateId = (int)j.SelectToken("TemplateId"),
+                    CanBeRendered = bool.Parse(jtoken.SelectToken("CanBeRendered").ToString()),
+                    CreateDate = contentType.CreateDate,
+                    UpdateDate = contentType.UpdateDate
+                };
 
                 contents.Add(pvdc.ToProductVariantDetachedContentDisplay());
             }
@@ -395,13 +395,12 @@
         {
             if (!result.Fields.ContainsKey(alias)) return DateTime.MinValue;
             var value = result.Fields[alias];
-            
             DateTime converted;
-            if (value.Length > 8) value = value.Substring(0, 8);
 
             // http://our.umbraco.org/forum/core/general/12331-Examine-date-fields-in-wrong-culture
-            return DateTime.TryParseExact(value, "yyyyMMdd", CultureInfo.CurrentCulture, DateTimeStyles.None, out converted) 
+            return DateTime.TryParseExact(value, "yyyyMMddHHmmssfff", CultureInfo.CurrentCulture, DateTimeStyles.None, out converted)
                 ? converted : DateTime.MinValue;
+
         }
 
         /// <summary>
