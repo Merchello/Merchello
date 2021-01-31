@@ -53,7 +53,7 @@
         /// The store setting service.
         /// </summary>
         private readonly IStoreSettingService _storeSettingService;
-        
+
         #endregion
 
         #region Constructors
@@ -63,7 +63,7 @@
         /// </summary>
         public InvoiceService()
             : this(LoggerResolver.Current.Logger)
-        {            
+        {
         }
 
         /// <summary>
@@ -111,10 +111,10 @@
         /// The store setting service.
         /// </param>
         internal InvoiceService(
-            Persistence.RepositoryFactory repositoryFactory, 
+            Persistence.RepositoryFactory repositoryFactory,
             ILogger logger,
-            IAppliedPaymentService appliedPaymentService, 
-            IOrderService orderService, 
+            IAppliedPaymentService appliedPaymentService,
+            IOrderService orderService,
             IStoreSettingService storeSettingService)
             : this(new PetaPocoUnitOfWorkProvider(logger), repositoryFactory, logger, appliedPaymentService, orderService, storeSettingService)
         {
@@ -177,11 +177,11 @@
         /// The store setting service.
         /// </param>
         internal InvoiceService(
-            IDatabaseUnitOfWorkProvider provider, 
-            Persistence.RepositoryFactory repositoryFactory, 
-            ILogger logger, 
-            IEventMessagesFactory eventMessagesFactory, 
-            IAppliedPaymentService appliedPaymentService, 
+            IDatabaseUnitOfWorkProvider provider,
+            Persistence.RepositoryFactory repositoryFactory,
+            ILogger logger,
+            IEventMessagesFactory eventMessagesFactory,
+            IAppliedPaymentService appliedPaymentService,
             IOrderService orderService,
             IStoreSettingService storeSettingService)
             : base(provider, repositoryFactory, logger, eventMessagesFactory)
@@ -306,10 +306,10 @@
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         public void Save(IInvoice invoice, bool raiseEvents = true)
         {
-            if (!((Invoice) invoice).HasIdentity && invoice.InvoiceNumber <= 0)
+            if (!((Invoice)invoice).HasIdentity && invoice.InvoiceNumber <= 0)
             {
                 // We have to generate a new 'unique' invoice number off the configurable value
-                ((Invoice) invoice).InvoiceNumber = _storeSettingService.GetNextInvoiceNumber();
+                ((Invoice)invoice).InvoiceNumber = _storeSettingService.GetNextInvoiceNumber();
             }
 
             var includesStatusChange = ((Invoice)invoice).IsPropertyDirty("InvoiceStatus") &&
@@ -356,9 +356,9 @@
             {
                 var lastInvoiceNumber =
                     _storeSettingService.GetNextInvoiceNumber(newInvoiceCount);
-                foreach (var newInvoice in invoicesArray.Where(x => x.InvoiceNumber <= 0 && !((Invoice) x).HasIdentity))
+                foreach (var newInvoice in invoicesArray.Where(x => x.InvoiceNumber <= 0 && !((Invoice)x).HasIdentity))
                 {
-                    ((Invoice) newInvoice).InvoiceNumber = lastInvoiceNumber;
+                    ((Invoice)newInvoice).InvoiceNumber = lastInvoiceNumber;
                     lastInvoiceNumber = lastInvoiceNumber - 1;
                 }
             }
@@ -772,7 +772,7 @@
                 // Create the model
                 invOrderShip.Invoice = invoice;
                 invOrderShip.Orders = orders;
-           
+
                 // Add the invoice items
                 foreach (var invLineItem in invoice.Items.Where(x => x.LineItemType == LineItemType.Product))
                 {
@@ -1222,7 +1222,7 @@
                     this.ValidateSortByField(sortBy),
                     sortDirection);
             }
-        }       
+        }
 
         /// <summary>
         /// The get invoice keys from static collection.
@@ -1571,6 +1571,46 @@
             }
         }
 
+
+        /// <summary>
+        /// Gets invoice keys matching the search term and the order status keys.
+        /// </summary>
+        /// <param name="orderStatusKeys">
+        /// The order status key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort field.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public Page<Guid> GetInvoiceKeysMatchingOrderStatuses(
+        List<Guid> orderStatusKeys,
+        long page,
+        long itemsPerPage,
+        string sortBy = "",
+        SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = RepositoryFactory.CreateInvoiceRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetInvoiceKeysMatchingOrderStatuses(
+                    orderStatusKeys,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        }
+
         /// <summary>
         /// Gets invoice keys matching the search term and the order status key.
         /// </summary>
@@ -1608,6 +1648,50 @@
                 return repository.GetInvoiceKeysMatchingOrderStatus(
                     searchTerm,
                     orderStatusKey,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// Gets invoice keys matching the search term and the order status keys.
+        /// </summary>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="orderStatusKeys">
+        /// The order status key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort field.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public Page<Guid> GetInvoiceKeysMatchingOrderStatuses(
+        string searchTerm,
+        List<Guid> orderStatusKeys,
+        long page,
+        long itemsPerPage,
+        string sortBy = "",
+        SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = RepositoryFactory.CreateInvoiceRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetInvoiceKeysMatchingOrderStatuses(
+                    searchTerm,
+                    orderStatusKeys,
                     page,
                     itemsPerPage,
                     this.ValidateSortByField(sortBy),
@@ -1699,6 +1783,45 @@
         }
 
         /// <summary>
+        /// Gets invoice keys matching the search term but not the order status keys.
+        /// </summary>
+        /// <param name="orderStatusKeys">
+        /// The order status key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort field.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public Page<Guid> GetInvoiceKeysMatchingTermNotOrderStatuses(
+        List<Guid> orderStatusKeys,
+        long page,
+        long itemsPerPage,
+        string sortBy = "",
+        SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = RepositoryFactory.CreateInvoiceRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetInvoiceKeysMatchingTermNotOrderStatuses(
+                    orderStatusKeys,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        }
+
+        /// <summary>
         /// Gets invoice keys matching the search term but not the order status key.
         /// </summary>
         /// <param name="searchTerm">
@@ -1735,6 +1858,50 @@
                 return repository.GetInvoiceKeysMatchingTermNotOrderStatus(
                     searchTerm,
                     orderStatusKey,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// Gets invoice keys matching the search term but not the order status keys.
+        /// </summary>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="orderStatusKeys">
+        /// The order status key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort field.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public Page<Guid> GetInvoiceKeysMatchingTermNotOrderStatuses(
+        string searchTerm,
+        List<Guid> orderStatusKeys,
+        long page,
+        long itemsPerPage,
+        string sortBy = "",
+        SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = RepositoryFactory.CreateInvoiceRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetInvoiceKeysMatchingTermNotOrderStatuses(
+                    searchTerm,
+                    orderStatusKeys,
                     page,
                     itemsPerPage,
                     this.ValidateSortByField(sortBy),
@@ -1841,7 +2008,7 @@
             var discounts = invoice.Items.Where(x => x.LineItemType == LineItemType.Discount).Sum(x => x.TotalPrice);
 
             // Calculate a new total
-            decimal converted;            
+            decimal converted;
             invoice.Total = Math.Round(decimal.TryParse((charges - discounts).ToString(CultureInfo.InvariantCulture), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture.NumberFormat, out converted) ? converted : 0, 2);
 
             // Save the invoice
@@ -1886,7 +2053,7 @@
             using (var repository = RepositoryFactory.CreateInvoiceRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll();
-            } 
+            }
         }
 
         /// <summary>
