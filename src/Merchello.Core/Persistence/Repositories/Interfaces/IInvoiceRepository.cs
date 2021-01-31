@@ -234,6 +234,30 @@
         /// </returns>
         Page<Guid> GetInvoiceKeysMatchingOrderStatus(Guid orderStatusKey, long page, long itemsPerPage, string orderExpression, SortDirection sortDirection = SortDirection.Descending);
 
+
+        /// <summary>
+        /// Gets invoice keys matching the search term and the order status keys.
+        /// </summary>
+        /// <param name="orderStatusKeys">
+        /// The order status key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        Page<Guid> GetInvoiceKeysMatchingOrderStatuses(List<Guid> orderStatusKeys, long page, long itemsPerPage, string orderExpression, SortDirection sortDirection = SortDirection.Descending);
+
         /// <summary>
         /// Gets invoices matching the search term and the order status key.
         /// </summary>
@@ -286,6 +310,9 @@
         /// </returns>
         Page<Guid> GetInvoiceKeysMatchingOrderStatus(string searchTerm, Guid orderStatusKey, long page, long itemsPerPage, string orderExpression, SortDirection sortDirection = SortDirection.Descending);
 
+        Page<Guid> GetInvoiceKeysMatchingOrderStatuses(string searchTerm, List<Guid> orderStatusKeys, long page, long itemsPerPage, string orderExpression, SortDirection sortDirection = SortDirection.Descending);
+
+
         /// <summary>
         /// Gets invoices matching the search term but not the order status key.
         /// </summary>
@@ -308,6 +335,7 @@
         /// The <see cref="Page"/>.
         /// </returns>
         Page<Guid> GetInvoiceKeysMatchingTermNotOrderStatus(Guid orderStatusKey, long page, long itemsPerPage, string orderExpression, SortDirection sortDirection = SortDirection.Descending);
+        Page<Guid> GetInvoiceKeysMatchingTermNotOrderStatuses(List<Guid> orderStatusKeys, long page, long itemsPerPage, string orderExpression, SortDirection sortDirection = SortDirection.Descending);
 
         /// <summary>
         /// Gets invoices matching the search term but not the order status key.
@@ -360,6 +388,7 @@
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
         Page<Guid> GetInvoiceKeysMatchingTermNotOrderStatus(string searchTerm, Guid orderStatusKey, long page, long itemsPerPage, string orderExpression, SortDirection sortDirection = SortDirection.Descending);
+        Page<Guid> GetInvoiceKeysMatchingTermNotOrderStatuses(string searchTerm, List<Guid> orderStatusKeys, long page, long itemsPerPage, string orderExpression, SortDirection sortDirection = SortDirection.Descending);
         #endregion
     }
 }
