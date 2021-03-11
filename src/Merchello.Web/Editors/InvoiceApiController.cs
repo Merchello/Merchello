@@ -675,7 +675,10 @@
                             orderItem.Name = invoiceAddItem.Name;
                             orderItem.Quantity = invoiceAddItem.Quantity;
                             orderItem.Price = invoiceAddItem.Price;
-
+                            if (orderItem.Price != invoiceAddItem.OriginalPrice)
+                            {
+                                orderItem.ExtendedData.SetValue("manuallyAdjustedPrice", "true");
+                            }
                             break;
                         }
                     }
@@ -690,7 +693,10 @@
                         invoiceItem.Name = invoiceAddItem.Name;
                         invoiceItem.Quantity = invoiceAddItem.Quantity;
                         invoiceItem.Price = invoiceAddItem.Price;
-
+                        if(invoiceAddItem.Price != invoiceAddItem.OriginalPrice)
+                        {
+                            invoiceItem.ExtendedData.SetValue("manuallyAdjustedPrice", "true");
+                        }
                         break;
                     }
                 }
