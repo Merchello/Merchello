@@ -220,6 +220,19 @@
         }
 
         /// <summary>
+        /// Adds a <see cref="IProduct"/> to the item cache
+        /// </summary>
+        /// <param name="product">The <see cref="IProduct"/> to be added</param>
+        /// <param name="extendedData">The <see cref="ExtendedDataCollection"/>.</param>
+        /// <remarks>
+        /// If the product has variants, the "first" variant found will be added.
+        /// </remarks>
+        public void AddItem(IProduct product, ExtendedDataCollection extendedData)
+        {
+            AddItem(product, product.Name, 1, extendedData);
+        }
+
+        /// <summary>
         /// Intended to be used by a <see cref="IProduct"/>s without options.  If the product does have options and a collection of <see cref="IProductVariant"/>s, the first
         /// <see cref="IProductVariant"/> is added to the customer item cache item collection
         /// </summary>
@@ -232,6 +245,20 @@
         public void AddItem(IProduct product, int quantity)
         {
             AddItem(product, product.Name, quantity);
+        }
+
+        /// <summary>
+        /// Adds a <see cref="IProduct"/> to the item cache
+        /// </summary>
+        /// <param name="product">The <see cref="IProduct"/> to be added</param>
+        /// <param name="quantity">The quantity to be represented</param>
+        /// <param name="extendedData">The <see cref="ExtendedDataCollection"/>.</param>
+        /// <remarks>
+        /// If the product has variants, the "first" variant found will be added.
+        /// </remarks>
+        public void AddItem(IProduct product, int quantity, ExtendedDataCollection extendedData)
+        {
+            AddItem(product, product.Name, quantity, extendedData);
         }
 
         /// <summary>
@@ -339,7 +366,6 @@
 
         #endregion
 
-
         #region IProductVariant
 
         /// <summary>
@@ -354,6 +380,16 @@
         }
 
         /// <summary>
+        /// Adds a <see cref="IProductVariant"/> to the item cache
+        /// </summary>
+        /// <param name="productVariant">The product variant to be added</param>
+        /// <param name="extendedData">The <see cref="ExtendedDataCollection"/>.</param>
+        public void AddItem(IProductVariant productVariant, ExtendedDataCollection extendedData)
+        {
+            AddItem(productVariant, productVariant.Name, 1, extendedData);
+        }
+
+        /// <summary>
         /// Adds a line item to the customer item cache
         /// </summary>
         /// <param name="productVariant">
@@ -365,6 +401,17 @@
         public void AddItem(IProductVariant productVariant, int quantity)
         {
             AddItem(productVariant, productVariant.Name, quantity);
+        }
+
+        /// <summary>
+        /// Adds a <see cref="IProductVariant"/> to the item cache
+        /// </summary>
+        /// <param name="productVariant">The product variant to be added</param>
+        /// <param name="quantity">The quantity to be represented</param>
+        /// <param name="extendedData">The <see cref="ExtendedDataCollection"/>.</param>
+        public void AddItem(IProductVariant productVariant, int quantity, ExtendedDataCollection extendedData)
+        {
+            AddItem(productVariant, productVariant.Name, quantity, extendedData);
         }
 
         /// <summary>
@@ -421,6 +468,16 @@
         /// Adds a <see cref="ProductVariantDisplay"/> to the item cache
         /// </summary>
         /// <param name="productVariant">The product variant to be added</param>
+        /// <param name="extendedData">The <see cref="ExtendedDataCollection"/>.</param>
+        public void AddItem(ProductVariantDisplay productVariant, ExtendedDataCollection extendedData)
+        {
+            AddItem(productVariant, productVariant.Name, 1, extendedData);
+        }
+
+        /// <summary>
+        /// Adds a <see cref="ProductVariantDisplay"/> to the item cache
+        /// </summary>
+        /// <param name="productVariant">The product variant to be added</param>
         /// <param name="quantity">The quantity to be represented</param>
         public void AddItem(ProductVariantDisplay productVariant, int quantity)
         {
@@ -442,6 +499,17 @@
         public void AddItem(ProductVariantDisplay productVariant, string name, int quantity)
         {
             AddItem(productVariant, name, quantity, new ExtendedDataCollection());
+        }
+
+        /// <summary>
+        /// Adds a <see cref="ProductVariantDisplay"/> to the item cache
+        /// </summary>
+        /// <param name="productVariant">The product variant to be added</param>
+        /// <param name="quantity">The quantity to be represented</param>
+        /// <param name="extendedData">The <see cref="ExtendedDataCollection"/>.</param>
+        public void AddItem(ProductVariantDisplay productVariant, int quantity, ExtendedDataCollection extendedData)
+        {
+            AddItem(productVariant, productVariant.Name, quantity, extendedData);
         }
 
         /// <summary>
@@ -790,7 +858,5 @@
             _itemCache.Items.AddingItem += ItemsOnAddingItem;
             Validated += OnValidated;
         }
-
-
     }
 }

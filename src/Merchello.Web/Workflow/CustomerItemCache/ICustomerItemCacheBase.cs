@@ -65,11 +65,32 @@
         /// Adds a <see cref="IProduct"/> to the item cache
         /// </summary>
         /// <param name="product">The <see cref="IProduct"/> to be added</param>
+        /// <param name="extendedData">The <see cref="ExtendedDataCollection"/>.</param>
+        /// <remarks>
+        /// If the product has variants, the "first" variant found will be added.
+        /// </remarks>
+        void AddItem(IProduct product, ExtendedDataCollection extendedData);
+
+        /// <summary>
+        /// Adds a <see cref="IProduct"/> to the item cache
+        /// </summary>
+        /// <param name="product">The <see cref="IProduct"/> to be added</param>
         /// <param name="quantity">The quantity to be represented</param>
         /// <remarks>
         /// If the product has variants, the "first" variant found will be added.
         /// </remarks>
         void AddItem(IProduct product, int quantity);
+
+        /// <summary>
+        /// Adds a <see cref="IProduct"/> to the item cache
+        /// </summary>
+        /// <param name="product">The <see cref="IProduct"/> to be added</param>
+        /// <param name="quantity">The quantity to be represented</param>
+        /// <param name="extendedData">The <see cref="ExtendedDataCollection"/>.</param>
+        /// <remarks>
+        /// If the product has variants, the "first" variant found will be added.
+        /// </remarks>
+        void AddItem(IProduct product, int quantity, ExtendedDataCollection extendedData);
 
         /// <summary>
         /// Adds a <see cref="IProduct"/> to the item cache
@@ -171,8 +192,23 @@
         /// Adds a <see cref="IProductVariant"/> to the item cache
         /// </summary>
         /// <param name="productVariant">The product variant to be added</param>
+        /// <param name="extendedData">The <see cref="ExtendedDataCollection"/>.</param>
+        void AddItem(IProductVariant productVariant, ExtendedDataCollection extendedData);
+
+        /// <summary>
+        /// Adds a <see cref="IProductVariant"/> to the item cache
+        /// </summary>
+        /// <param name="productVariant">The product variant to be added</param>
         /// <param name="quantity">The quantity to be represented</param>
         void AddItem(IProductVariant productVariant, int quantity);
+
+        /// <summary>
+        /// Adds a <see cref="IProductVariant"/> to the item cache
+        /// </summary>
+        /// <param name="productVariant">The product variant to be added</param>
+        /// <param name="quantity">The quantity to be represented</param>
+        /// <param name="extendedData">The <see cref="ExtendedDataCollection"/>.</param>
+        void AddItem(IProductVariant productVariant, int quantity, ExtendedDataCollection extendedData);
 
         /// <summary>
         /// Adds a <see cref="IProductVariant"/> to the item cache
@@ -219,8 +255,23 @@
         /// Adds a <see cref="ProductVariantDisplay"/> to the item cache
         /// </summary>
         /// <param name="productVariant">The product variant to be added</param>
+        /// <param name="extendedData">The <see cref="ExtendedDataCollection"/>.</param>
+        void AddItem(ProductVariantDisplay productVariant, ExtendedDataCollection extendedData);
+
+        /// <summary>
+        /// Adds a <see cref="ProductVariantDisplay"/> to the item cache
+        /// </summary>
+        /// <param name="productVariant">The product variant to be added</param>
         /// <param name="quantity">The quantity to be represented</param>
         void AddItem(ProductVariantDisplay productVariant, int quantity);
+
+        /// <summary>
+        /// Adds a <see cref="ProductVariantDisplay"/> to the item cache
+        /// </summary>
+        /// <param name="productVariant">The product variant to be added</param>
+        /// <param name="quantity">The quantity to be represented</param>
+        /// <param name="extendedData">The <see cref="ExtendedDataCollection"/>.</param>
+        void AddItem(ProductVariantDisplay productVariant, int quantity, ExtendedDataCollection extendedData);
 
         /// <summary>
         /// Adds a <see cref="ProductVariantDisplay"/> to the item cache
