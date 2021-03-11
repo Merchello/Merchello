@@ -671,10 +671,10 @@
                     {
                         if (orderItem.Sku == invoiceAddItem.OriginalSku)
                         {
-                            orderItem.Sku = invoiceAddItem.OriginalSku;
-                            orderItem.Name = invoiceAddItem.OriginalName;
+                            orderItem.Sku = invoiceAddItem.Sku;
+                            orderItem.Name = invoiceAddItem.Name;
                             orderItem.Quantity = invoiceAddItem.Quantity;
-                            orderItem.Price = invoiceAddItem.OriginalPrice;
+                            orderItem.Price = invoiceAddItem.Price;
 
                             break;
                         }
@@ -686,10 +686,10 @@
                 {
                     if (invoiceItem.Sku == invoiceAddItem.OriginalSku)
                     {
-                        invoiceItem.Sku = invoiceAddItem.OriginalSku;
-                        invoiceItem.Name = invoiceAddItem.OriginalName;
+                        invoiceItem.Sku = invoiceAddItem.Sku;
+                        invoiceItem.Name = invoiceAddItem.Name;
                         invoiceItem.Quantity = invoiceAddItem.Quantity;
-                        invoiceItem.Price = invoiceAddItem.OriginalPrice;
+                        invoiceItem.Price = invoiceAddItem.Price;
 
                         break;
                     }
