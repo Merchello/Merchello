@@ -4972,8 +4972,7 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                             lineItem: lineItem,
                             deleteLineItem: false,
                             canDelete: scope.invoice.items.length > 1,
-                            lineItemType: lineItemType,
-                            editAllowed: lineItem.extendedData.getValue('merchCustomProduct') !== ''
+                            lineItemType: lineItemType
                         };
 
                         dialogService.open({
