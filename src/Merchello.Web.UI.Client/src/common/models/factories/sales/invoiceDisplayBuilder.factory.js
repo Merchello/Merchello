@@ -23,12 +23,14 @@
                     transform: function(jsonResult) {
                         var invoices = genericModelBuilder.transform(jsonResult, Constructor);
                         if (angular.isArray(invoices)) {
-                            for(var i = 0; i < invoices.length; i++) {
-                                invoices[ i ].invoiceStatus = invoiceStatusDisplayBuilder.transform(jsonResult[ i ].invoiceStatus);
-                                invoices[ i ].items = invoiceLineItemDisplayBuilder.transform(jsonResult[ i ].items);
-                                invoices[ i ].orders = orderDisplayBuilder.transform(jsonResult[ i ].orders);
-                                invoices[ i ].currency = currencyDisplayBuilder.transform(jsonResult[ i ].currency);
-                                invoices[ i ].notes = noteDisplayBuilder.transform(jsonResult[i].notes);
+                            for (var i = 0; i < invoices.length; i++) {
+                                if (invoices[i].key !== "") {
+                                    invoices[i].invoiceStatus = invoiceStatusDisplayBuilder.transform(jsonResult[i].invoiceStatus);
+                                    invoices[i].items = invoiceLineItemDisplayBuilder.transform(jsonResult[i].items);
+                                    invoices[i].orders = orderDisplayBuilder.transform(jsonResult[i].orders);
+                                    invoices[i].currency = currencyDisplayBuilder.transform(jsonResult[i].currency);
+                                    invoices[i].notes = noteDisplayBuilder.transform(jsonResult[i].notes);
+                                }
                             }
                         } else {
                             //jsonResult = JSON.stringify(jsonResult);
