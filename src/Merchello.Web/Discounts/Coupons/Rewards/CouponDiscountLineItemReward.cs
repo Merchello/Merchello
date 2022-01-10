@@ -1,14 +1,11 @@
 ﻿namespace Merchello.Web.Discounts.Coupons.Rewards
 {
-    using System;
-    using System.Globalization;
-    using System.Linq;
-
     using Merchello.Core;
     using Merchello.Core.Exceptions;
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models;
-
+    using System.Globalization;
+    using System.Linq;
     using Umbraco.Core;
 
     /// <summary>
@@ -64,7 +61,7 @@
             get
             {
                 return AdjustmentType != Adjustment.NotSet;
-            }    
+            }
         }
 
         /// <summary>
@@ -75,7 +72,7 @@
             get
             {
                 decimal converted;
-                return decimal.TryParse(this.GetConfigurationValue("amount"), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out converted) ? converted : 0;                                
+                return decimal.TryParse(this.GetConfigurationValue("amount"), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out converted) ? converted : 0;
             }
         }
 
@@ -137,6 +134,7 @@
             var discountLineItem = CreateTemplateDiscountLineItem(visitor.Audits);
             discountLineItem.ExtendedData.SetValue(Core.Constants.ExtendedDataKeys.CouponAdjustedProductPreTaxTotal, visitor.AdjustedProductPreTaxTotal.ToString(CultureInfo.InvariantCulture));
             discountLineItem.ExtendedData.SetValue(Core.Constants.ExtendedDataKeys.CouponAdjustedProductTaxTotal, visitor.AdjustedTaxTotal.ToString(CultureInfo.InvariantCulture));
+            discountLineItem.ExtendedData.SetValue(Core.Constants.ExtendedDataKeys.Taxable, true.ToString());
             discountLineItem.Price = discount;
 
             return Attempt<ILineItem>.Succeed(discountLineItem);
