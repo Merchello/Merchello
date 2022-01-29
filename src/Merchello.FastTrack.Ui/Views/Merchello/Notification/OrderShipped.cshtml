@@ -3,23 +3,18 @@
 @using Merchello.Core.Models
 @using Merchello.FastTrack.Factories
 @*
-     MerchelloHelperViewPage<T> inherits from UmbracoViewPage<t> and exposes the MerchelloHelper as 'Merchello'
-     Example usage:  var product = Merchello.TypedProductContent(YOURPRODUCTKEY);
+    MerchelloHelperViewPage<T> inherits from UmbracoViewPage<t> and exposes the MerchelloHelper as 'Merchello'
+    Example usage:  var product = Merchello.TypedProductContent(YOURPRODUCTKEY);
+    Note: This exposure of Merchello causes ambiguity with the Merchello.Core namespace hence use of global:: below.
 *@
-
 @{
+    Layout = null; // Avoid using the Master.cshtml layout which inherits from UmbracoTemplatePage and hence RenderModel
     var destination = Model.Shipment.GetDestinationAddress();
 
 }
-
 <p>Dear @Model.Invoice.BillToName</p>
-
-
-
-<p>We have just shipped the following order:</p>
-
+<p>We have just @(Model.Shipment.ShipmentStatus.Key == global::Merchello.Core.Constants.ShipmentStatus.Shipped ? "shipped" : "delivered") the following order:</p>
 @Html.Partial("_Address", destination)
-
 <table>
     <tr>
         <td>Invoice No:</td>

@@ -6,6 +6,10 @@
      Example usage:  var product = Merchello.TypedProductContent(YOURPRODUCTKEY);
 *@
 @{
+    // Avoid any impact from a Layout assigned in the _ViewStart.cshtml
+    // If such a Layout is assigned and it is derived from UmbracoTemplatePage
+    // it will cause a model binding error.
+    Layout = null;
     var invoice = Model.Invoice;
     var billingAddress = invoice.GetBillingAddress();
     var customerName = billingAddress.Name;
