@@ -1,6 +1,6 @@
 /*! MUI
  * https://merchello.com
- * Copyright (c) 2020 Across the Pond, LLC.
+ * Copyright (c) 2021 Across the Pond, LLC.
  * Licensed 
  */
 

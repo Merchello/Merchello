@@ -11,7 +11,7 @@
     /// <summary>
     /// Builds a shipment
     /// </summary>
-    internal sealed class ShipmentBuilderChain : BuildChainBase<IShipment>
+    public sealed class ShipmentBuilderChain : BuildChainBase<IShipment>
     {
         /// <summary>
         /// The shipment status key.

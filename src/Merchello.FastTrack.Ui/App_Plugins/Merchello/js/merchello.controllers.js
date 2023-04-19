@@ -1,6 +1,6 @@
 /*! Merchello
  * https://github.com/meritage/Merchello
- * Copyright (c) 2020 Across the Pond, LLC.
+ * Copyright (c) 2021 Across the Pond, LLC.
  * Licensed MIT
  */
 
@@ -11893,6 +11893,11 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                         //cssClass = 'label-success';
                         icon = 'icon-truck';
                         text = fulfilled;
+                        break;
+                    case 'Ordered':
+                        //cssClass = 'label-success';
+                        icon = 'icon-thumb-up';
+                        text = 'Ordered';
                         break;
                     case 'Open':
                         //cssClass = 'label-default';

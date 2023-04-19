@@ -80,8 +80,7 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                             lineItem: lineItem,
                             deleteLineItem: false,
                             canDelete: scope.invoice.items.length > 1,
-                            lineItemType: lineItemType,
-                            editAllowed: lineItem.extendedData.getValue('merchCustomProduct') !== ''
+                            lineItemType: lineItemType
                         };
 
                         dialogService.open({
@@ -166,7 +165,7 @@ angular.module('merchello.directives').directive('invoiceItemizationTable',
                                     1500);
                             },
                             function(reason) {
-                                notificationsService.error("Failed to update invoice", reason.message);
+                                notificationsService.error("Failed", reason.data);
                             });
 
 

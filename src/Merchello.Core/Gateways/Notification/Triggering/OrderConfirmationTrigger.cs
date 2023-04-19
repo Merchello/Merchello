@@ -60,7 +60,7 @@
         /// </param>
         protected override void Notify(IPaymentResult model, IEnumerable<string> contacts)
         {
-            var symbol = string.Empty;
+            var symbol = "£";
             IShipment shipment = null;
             IShipMethod shipMethod = null;
 
@@ -68,10 +68,15 @@
             {
                 if (model.Invoice.Items.Any())
                 {
-                    var currencyCode =
-                        model.Invoice.Items.First().ExtendedData.GetValue(Core.Constants.ExtendedDataKeys.CurrencyCode);
-                    var currency = _storeSettingService.GetCurrencyByCode(currencyCode);
-                    symbol = currency.Symbol;
+                    var currencyCode = model.Invoice.Items.First().ExtendedData.GetValue(Core.Constants.ExtendedDataKeys.CurrencyCode);
+                    if(!currencyCode.IsNullOrWhiteSpace())
+                    {
+                        var currency = _storeSettingService.GetCurrencyByCode(currencyCode);
+                        if(currency != null)
+                        {
+                            symbol = currency.Symbol;
+                        }
+                    }
                 }
 
 
