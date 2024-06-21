@@ -2,12 +2,14 @@
 {
     using System;
     using System.Collections.Concurrent;
+    using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.IO;
     using System.Linq;
     using System.Runtime.Serialization;
     using System.Xml;
     using System.Xml.Linq;
+    using Umbraco.Core;
 
     /// <summary>
     /// Represents an ExtendedDataCollection
@@ -40,6 +42,20 @@
             foreach (var el in extendedData.Elements())
             {
                 SetValue(el.Name.LocalName, el.Value);                 
+            }
+        }
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExtendedDataCollection"/> class.
+        /// </summary>
+        /// <param name="dictionary">A dictionary with data to copy to the new collection</param>
+        internal ExtendedDataCollection(IDictionary<string, string> dictionary)
+        {
+            Mandate.ParameterNotNull(dictionary, "dictionary");
+
+            foreach(var pair in dictionary)
+            {
+                SetValue(pair.Key, pair.Value);
             }
         }
 
